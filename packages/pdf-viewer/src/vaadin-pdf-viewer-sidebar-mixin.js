@@ -55,6 +55,9 @@ export const PdfViewerSidebarMixin = (superClass) =>
       const list = this.$.thumbnails;
       list.addEventListener('click', (event) => this.#onThumbnailClick(event));
       list.addEventListener('keydown', (event) => this.#onThumbnailKeyDown(event));
+      this.shadowRoot
+        .querySelector('[part="sidebar"]')
+        .addEventListener('keydown', (event) => this.#onSidebarKeyDown(event));
     }
 
     /** @protected */
@@ -62,6 +65,8 @@ export const PdfViewerSidebarMixin = (superClass) =>
       super.disconnectedCallback();
       this.#observer?.disconnect();
       this.#observer = null;
+      // Stop rendering. The observer adds the visible thumbnails again when attached.
+      this.#visibleThumbnails.clear();
     }
 
     /** @protected */
@@ -74,10 +79,25 @@ export const PdfViewerSidebarMixin = (superClass) =>
     }
 
     /** @protected */
+    willUpdate(props) {
+      super.willUpdate(props);
+
+      // Focus inside the sidebar would be lost when it hides, so move it to the toggle button.
+      if (props.has('sidebarOpened') && !this.sidebarOpened && props.get('sidebarOpened')) {
+        this.#moveFocusOutOfSidebar();
+      }
+    }
+
+    /** @protected */
     updated(props) {
       super.updated(props);
 
-      if ((props.has('pageCount') || props.has('sidebarOpened')) && this.sidebarOpened && this.pageCount) {
+      const isShowingThumbnails = props.has('__sidebarView') && this.__sidebarView === 'thumbnails';
+      if (
+        (props.has('pageCount') || props.has('sidebarOpened') || isShowingThumbnails) &&
+        this.sidebarOpened &&
+        this.pageCount
+      ) {
         if (!this.#thumbnails.length) {
           this.#createThumbnails();
         }
@@ -101,12 +121,40 @@ export const PdfViewerSidebarMixin = (superClass) =>
      */
     _documentUnloaded() {
       super._documentUnloaded();
+      this.#moveFocusOutOfSidebar();
       this.#observer?.disconnect();
       this.#observer = null;
       this.#thumbnails.forEach((thumbnail) => this.#releaseThumbnail(thumbnail));
       this.#thumbnails = [];
       this.#visibleThumbnails.clear();
       this.$.thumbnails.replaceChildren();
+    }
+
+    /**
+     * Moves focus from the sidebar to the sidebar toggle button, when focus is
+     * in the sidebar.
+     * @private
+     */
+    #moveFocusOutOfSidebar() {
+      const sidebar = this.shadowRoot && this.shadowRoot.querySelector('[part="sidebar"]');
+      const active = this.shadowRoot && this.shadowRoot.activeElement;
+      if (sidebar && active && sidebar.contains(active)) {
+        const toggle = this.querySelector(':scope > vaadin-pdf-viewer-button[icon="sidebar"]');
+        (toggle && !toggle.disabled ? toggle : this.$.content).focus({ focusVisible: isKeyboardActive() });
+      }
+    }
+
+    /**
+     * Closes the sidebar with Escape when it covers the pages on narrow viewers.
+     * @private
+     */
+    #onSidebarKeyDown(event) {
+      const sidebar = event.currentTarget;
+      if (event.key === 'Escape' && getComputedStyle(sidebar).position === 'absolute') {
+        event.stopPropagation();
+        this.#moveFocusOutOfSidebar();
+        this.sidebarOpened = false;
+      }
     }
 
     /** @private */
@@ -181,7 +229,7 @@ export const PdfViewerSidebarMixin = (superClass) =>
       }
       const thumbnail = [...this.#visibleThumbnails]
         .sort((a, b) => a.pageNumber - b.pageNumber)
-        .find((item) => !item.canvas);
+        .find((item) => !item.canvas && !item.failed);
       const pdfDocument = this._pdfDocument;
       if (!thumbnail || !pdfDocument) {
         return;
@@ -210,9 +258,12 @@ export const PdfViewerSidebarMixin = (superClass) =>
           image.replaceChildren(canvas);
           thumbnail.canvas = canvas;
         }
-      } catch {
-        // A cancelled or failed thumbnail stays empty.
+      } catch (error) {
+        // A failed thumbnail stays empty, and is not tried again until it is released.
         thumbnail.renderTask = null;
+        if (!error || error.name !== 'RenderingCancelledException') {
+          thumbnail.failed = true;
+        }
       } finally {
         this.#isRenderingThumbnail = false;
       }
@@ -221,6 +272,7 @@ export const PdfViewerSidebarMixin = (superClass) =>
 
     /** @private */
     #releaseThumbnail(thumbnail) {
+      thumbnail.failed = false;
       thumbnail.renderTask?.cancel();
       thumbnail.renderTask = null;
       if (thumbnail.canvas) {
@@ -240,7 +292,12 @@ export const PdfViewerSidebarMixin = (superClass) =>
       const focused = this.#getFocusedThumbnail();
       this.#thumbnails.forEach(({ element, pageNumber }) => {
         const isCurrent = pageNumber === this.page;
-        element.setAttribute('aria-selected', isCurrent ? 'true' : 'false');
+        // Only the current page is marked, so that screen readers don't say "not selected" for every page.
+        if (isCurrent) {
+          element.setAttribute('aria-selected', 'true');
+        } else {
+          element.removeAttribute('aria-selected');
+        }
         element.part.toggle('current', isCurrent);
         // Keep the focused thumbnail as the tab stop while the user is in the list.
         if (!focused) {
@@ -266,6 +323,16 @@ export const PdfViewerSidebarMixin = (superClass) =>
       }
     }
 
+    /**
+     * Makes the given thumbnail the only one in the tab order.
+     * @private
+     */
+    #setTabStop(element) {
+      this.#thumbnails.forEach((thumbnail) => {
+        thumbnail.element.setAttribute('tabindex', thumbnail.element === element ? '0' : '-1');
+      });
+    }
+
     /** @private */
     #getFocusedThumbnail() {
       const active = this.shadowRoot.activeElement;
@@ -276,6 +343,7 @@ export const PdfViewerSidebarMixin = (superClass) =>
     #onThumbnailClick(event) {
       const element = event.target.closest('[part~="thumbnail"]');
       if (element) {
+        this.#setTabStop(element);
         this._goToPage(Number(element.dataset.page));
       }
     }
@@ -296,8 +364,7 @@ export const PdfViewerSidebarMixin = (superClass) =>
 
       if (event.key in targets) {
         const target = this.#thumbnails[Math.min(Math.max(targets[event.key], 0), last)].element;
-        focused.setAttribute('tabindex', '-1');
-        target.setAttribute('tabindex', '0');
+        this.#setTabStop(target);
         target.focus({ focusVisible: isKeyboardActive() });
         this.#scrollThumbnailIntoView(target);
       } else if (event.key === 'Enter' || event.key === ' ') {

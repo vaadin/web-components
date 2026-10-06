@@ -150,16 +150,6 @@ const pdfViewerBaseStyles = css`
     display: none;
   }
 
-  ::slotted(vaadin-button[slot='sidebar-header']) {
-    min-width: 0;
-    max-width: 100%;
-  }
-
-  ::slotted(vaadin-button[aria-pressed='true']) {
-    --vaadin-button-tertiary-background: var(--vaadin-background-container-strong);
-    background: var(--vaadin-background-container-strong);
-  }
-
   [part='outline'] {
     flex: 1 1 auto;
     min-height: 0;
@@ -186,6 +176,10 @@ const pdfViewerBaseStyles = css`
   [part='outline-item']:focus-visible > [part='outline-item-content'] {
     outline: var(--vaadin-focus-ring-width) solid var(--vaadin-focus-ring-color);
     outline-offset: calc(var(--vaadin-focus-ring-width) * -1);
+  }
+
+  [part='outline-item'][aria-disabled='true'] > [part='outline-item-content'] {
+    cursor: default;
   }
 
   @media (any-hover: hover) {
@@ -246,6 +240,12 @@ const pdfViewerBaseStyles = css`
     color: var(--vaadin-text-color-secondary);
   }
 
+  @media (any-hover: hover) {
+    [part~='thumbnail']:hover:not([part~='current']) {
+      background: var(--vaadin-background-container);
+    }
+  }
+
   [part~='thumbnail']:focus-visible {
     outline: var(--vaadin-focus-ring-width) solid var(--vaadin-focus-ring-color);
   }
@@ -253,6 +253,19 @@ const pdfViewerBaseStyles = css`
   [part~='thumbnail'][part~='current'] {
     background: var(--vaadin-pdf-viewer-thumbnail-current-background, var(--vaadin-background-container-strong));
     color: var(--vaadin-text-color);
+    font-weight: 600;
+  }
+
+  /* Not only a background color, which can have low contrast */
+  [part~='thumbnail'][part~='current'] .thumbnail-image {
+    outline: 2px solid var(--vaadin-pdf-viewer-thumbnail-current-color, var(--vaadin-text-color));
+    outline-offset: 2px;
+  }
+
+  @media (forced-colors: active) {
+    [part~='thumbnail'][part~='current'] .thumbnail-image {
+      outline-color: Highlight;
+    }
   }
 
   .thumbnail-image {
@@ -266,6 +279,30 @@ const pdfViewerBaseStyles = css`
     display: block;
     width: 100%;
     height: 100%;
+  }
+
+  [part='print-progress'] {
+    position: absolute;
+    inset: 50% auto auto 50%;
+    translate: -50% -50%;
+    z-index: 3;
+    display: flex;
+    flex-direction: column;
+    align-items: center;
+    gap: var(--vaadin-gap-s);
+    width: min(20rem, 80%);
+    padding: var(--vaadin-padding-l);
+    border-radius: var(--vaadin-radius-l);
+    background: var(--vaadin-background-color);
+    box-shadow: 0 4px 16px rgba(0, 0, 0, 0.2);
+  }
+
+  [part='print-progress'][hidden] {
+    display: none;
+  }
+
+  ::slotted(vaadin-progress-bar) {
+    width: 100%;
   }
 
   .content-area {

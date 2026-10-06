@@ -72,7 +72,7 @@ describe('pdf-viewer', () => {
   it('content-focus', async () => {
     element.src = fixtureUrl('multi-page.pdf');
     await nextRenderIdle(element);
-    element.querySelector<HTMLElement>('vaadin-pdf-viewer-button[icon="find"]')!.focus();
+    element.querySelector<HTMLElement>('vaadin-pdf-viewer-button[icon="print"]')!.focus();
     await sendKeys({ press: 'Tab' });
     await visualDiff(div, 'content-focus');
   });
@@ -92,6 +92,8 @@ describe('pdf-viewer', () => {
 
   it('sidebar', async () => {
     element.src = fixtureUrl('multi-page.pdf');
+    await nextRenderIdle(element);
+    // Opened after loading, so that the pages fit the smaller width
     element.sidebarOpened = true;
     await nextRenderIdle(element);
     element.page = 2;
@@ -118,10 +120,10 @@ describe('pdf-viewer', () => {
     element.src = fixtureUrl('outline.pdf');
     element.sidebarOpened = true;
     await nextRenderIdle(element);
-    for (let i = 0; i < 50 && !element.querySelector('vaadin-button[slot="sidebar-header"]'); i++) {
+    for (let i = 0; i < 50 && !element.querySelector('vaadin-pdf-viewer-button[slot="sidebar-header"]'); i++) {
       await nextFrame();
     }
-    element.querySelectorAll<HTMLElement>('vaadin-button[slot="sidebar-header"]')[1].click();
+    element.querySelectorAll<HTMLElement>('vaadin-pdf-viewer-button[slot="sidebar-header"]')[1].click();
     await nextRender();
     element.shadowRoot!.querySelector<HTMLElement>('[part="outline-toggle"]')!.click();
     await nextRender();

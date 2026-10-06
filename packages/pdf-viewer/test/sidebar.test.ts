@@ -51,6 +51,7 @@ describe('sidebar', () => {
     expect(viewer.sidebarOpened).to.be.true;
     expect(getSidebar().hidden).to.be.false;
     expect(getToggle().getAttribute('aria-pressed')).to.equal('true');
+    expect(getToggle().getAttribute('aria-label')).to.equal('Sidebar');
   });
 
   it('should fire sidebar-opened-changed event when toggled with the toolbar button', async () => {
@@ -65,6 +66,16 @@ describe('sidebar', () => {
     viewer.sidebarOpened = true;
     await nextRender();
     expect(viewer.hasAttribute('sidebar-opened')).to.be.true;
+  });
+
+  it('should fit the pages to the width left by the sidebar', async () => {
+    const content = viewer.shadowRoot!.querySelector<HTMLElement>('[part="content"]')!;
+    const idle = nextRenderIdle(viewer);
+    viewer.sidebarOpened = true;
+    await idle;
+    const page = viewer.shadowRoot!.querySelector<HTMLElement>('[part~="page"]')!;
+    const padding = parseFloat(getComputedStyle(content).paddingLeft);
+    expect(page.offsetWidth).to.be.closeTo(content.clientWidth - 2 * padding, 1);
   });
 
   describe('opened', () => {
@@ -88,7 +99,7 @@ describe('sidebar', () => {
       const thumbnails = getThumbnails();
       expect(thumbnails[2].getAttribute('aria-selected')).to.equal('true');
       expect(thumbnails[2].part.contains('current')).to.be.true;
-      expect(thumbnails[0].getAttribute('aria-selected')).to.equal('false');
+      expect(thumbnails[0].hasAttribute('aria-selected')).to.be.false;
     });
 
     it('should go to the page of a clicked thumbnail', async () => {
@@ -128,11 +139,27 @@ describe('sidebar', () => {
       it('should go to the page of the focused thumbnail with Enter', async () => {
         await sendKeys({ press: 'ArrowDown' });
         await sendKeys({ press: 'ArrowDown' });
+        const idle = nextRenderIdle(viewer);
         await sendKeys({ press: 'Enter' });
-        await nextRenderIdle(viewer);
+        await idle;
         expect(viewer.page).to.equal(3);
         expect(viewer.shadowRoot!.activeElement).to.equal(getThumbnails()[2]);
       });
+    });
+
+    it('should keep one tab stop after clicking a thumbnail and moving focus', async () => {
+      getThumbnails()[3].focus();
+      getThumbnails()[3].click();
+      await sendKeys({ press: 'ArrowDown' });
+      const tabStops = getThumbnails().filter((thumbnail) => thumbnail.getAttribute('tabindex') === '0');
+      expect(tabStops).to.deep.equal([getThumbnails()[4]]);
+    });
+
+    it('should move focus to the toggle button when the sidebar closes', async () => {
+      getThumbnails()[0].focus();
+      viewer.sidebarOpened = false;
+      await nextRender();
+      expect(document.activeElement).to.equal(getToggle());
     });
 
     it('should remove the thumbnails when another document loads', async () => {
@@ -151,6 +178,14 @@ describe('sidebar', () => {
 
     it('should show the sidebar over the pages', () => {
       expect(getComputedStyle(getSidebar()).position).to.equal('absolute');
+    });
+
+    it('should close the sidebar with Escape and focus the toggle button', async () => {
+      getThumbnails()[0].focus();
+      await sendKeys({ press: 'Escape' });
+      await nextRender();
+      expect(viewer.sidebarOpened).to.be.false;
+      expect(document.activeElement).to.equal(getToggle());
     });
 
     it('should keep the width of the pages', () => {

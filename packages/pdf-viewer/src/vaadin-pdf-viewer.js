@@ -18,6 +18,7 @@ import { pdfViewerStyles } from './styles/vaadin-pdf-viewer-base-styles.js';
 import { PdfViewerFindMixin } from './vaadin-pdf-viewer-find-mixin.js';
 import { PdfViewerMixin } from './vaadin-pdf-viewer-mixin.js';
 import { PdfViewerOutlineMixin } from './vaadin-pdf-viewer-outline-mixin.js';
+import { PdfViewerPrintMixin } from './vaadin-pdf-viewer-print-mixin.js';
 import { PdfViewerSidebarMixin } from './vaadin-pdf-viewer-sidebar-mixin.js';
 import { PdfViewerToolbarMixin } from './vaadin-pdf-viewer-toolbar-mixin.js';
 
@@ -25,6 +26,8 @@ const DEFAULT_I18N = {
   loadError: 'The document could not be loaded.',
   passwordError: 'Password-protected documents are not supported.',
   toolbar: 'PDF toolbar',
+  sidebar: 'Sidebar',
+  sidebarView: 'Sidebar view',
   thumbnails: 'Page thumbnails',
   thumbnailsView: 'Thumbnails',
   outline: 'Outline',
@@ -45,6 +48,10 @@ const DEFAULT_I18N = {
   findResult: '{current} of {total}',
   findResultAnnouncement: '{current} of {total}, page {page}',
   findNoMatches: 'No matches',
+  download: 'Download',
+  print: 'Print',
+  printing: 'Preparing to print…',
+  cancelPrint: 'Cancel',
   document: 'PDF document',
   pages: 'Pages',
   pageLabel: 'Page {page}',
@@ -82,6 +89,7 @@ const DEFAULT_I18N = {
  * `page`                 | A page of the document.
  * `error-message`        | The message shown when the document could not be loaded.
  * `loader`               | The loading indicator shown while the document loads.
+ * `print-progress`       | The progress shown while the document is prepared for printing.
  *
  * The following state attributes are available for styling:
  *
@@ -102,13 +110,17 @@ const DEFAULT_I18N = {
  * | `--vaadin-pdf-viewer-error-color`                  |
  * | `--vaadin-pdf-viewer-find-field-width`             |
  * | `--vaadin-pdf-viewer-icon-close`                   |
+ * | `--vaadin-pdf-viewer-icon-download`                |
  * | `--vaadin-pdf-viewer-icon-find`                    |
  * | `--vaadin-pdf-viewer-icon-next-page`               |
  * | `--vaadin-pdf-viewer-icon-previous-page`           |
+ * | `--vaadin-pdf-viewer-icon-print`                   |
  * | `--vaadin-pdf-viewer-icon-sidebar`                 |
  * | `--vaadin-pdf-viewer-icon-zoom-in`                 |
  * | `--vaadin-pdf-viewer-icon-zoom-out`                |
  * | `--vaadin-pdf-viewer-match-background`             |
+ * | `--vaadin-pdf-viewer-outline-font-size`            |
+ * | `--vaadin-pdf-viewer-outline-indent`               |
  * | `--vaadin-pdf-viewer-padding`                      |
  * | `--vaadin-pdf-viewer-page-background`              |
  * | `--vaadin-pdf-viewer-page-field-width`             |
@@ -141,9 +153,11 @@ const DEFAULT_I18N = {
  * @extends HTMLElement
  */
 class PdfViewer extends PdfViewerToolbarMixin(
-  PdfViewerOutlineMixin(
-    PdfViewerSidebarMixin(
-      PdfViewerFindMixin(PdfViewerMixin(I18nMixin(ElementMixin(PolylitMixin(LumoInjectionMixin(LitElement)))))),
+  PdfViewerPrintMixin(
+    PdfViewerOutlineMixin(
+      PdfViewerSidebarMixin(
+        PdfViewerFindMixin(PdfViewerMixin(I18nMixin(ElementMixin(PolylitMixin(LumoInjectionMixin(LitElement)))))),
+      ),
     ),
   ),
 ) {
@@ -186,7 +200,11 @@ class PdfViewer extends PdfViewerToolbarMixin(
    *   passwordError: 'Password-protected documents are not supported.',
    *   // Accessible label of the toolbar.
    *   toolbar: 'PDF toolbar',
-   *   // Accessible label and tooltip of the sidebar button, and accessible label of the thumbnail list.
+   *   // Accessible label and tooltip of the sidebar button.
+   *   sidebar: 'Sidebar',
+   *   // Accessible label of the group of buttons that switch the sidebar view.
+   *   sidebarView: 'Sidebar view',
+   *   // Accessible label of the thumbnail list.
    *   thumbnails: 'Page thumbnails',
    *   // Labels of the buttons that switch the sidebar between the thumbnails and the outline,
    *   // and accessible label of the outline.
@@ -222,6 +240,12 @@ class PdfViewer extends PdfViewerToolbarMixin(
    *   // Announced when moving to a match. {page} is replaced with the page of the match.
    *   findResultAnnouncement: '{current} of {total}, page {page}',
    *   findNoMatches: 'No matches',
+   *   // Accessible labels and tooltips of the download and print buttons.
+   *   download: 'Download',
+   *   print: 'Print',
+   *   // Shown while the pages are prepared for printing, and the button that cancels it.
+   *   printing: 'Preparing to print…',
+   *   cancelPrint: 'Cancel',
    *   // Accessible name of the viewer when the document has no title
    *   // and the application has not set aria-label or aria-labelledby.
    *   document: 'PDF document',
@@ -267,7 +291,7 @@ class PdfViewer extends PdfViewerToolbarMixin(
       <div part="loader"></div>
       <div class="main">
         <div part="sidebar" ?hidden="${!this.sidebarOpened}">
-          <div part="sidebar-header" ?hidden="${!this.__outline}">
+          <div part="sidebar-header" role="group" aria-label="${i18n.sidebarView}" ?hidden="${!this.__outline}">
             <slot name="sidebar-header"></slot>
           </div>
           <div
@@ -290,6 +314,10 @@ class PdfViewer extends PdfViewerToolbarMixin(
             <div id="pages"></div>
           </div>
           <div class="content-focus-ring"></div>
+          <div part="print-progress" ?hidden="${this.__printProgress < 0}">
+            <span>${i18n.printing}</span>
+            <slot name="print-progress"></slot>
+          </div>
         </div>
       </div>
       <div part="error-message" ?hidden="${!this.__hasError}">

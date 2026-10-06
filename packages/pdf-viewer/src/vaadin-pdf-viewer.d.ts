@@ -11,6 +11,8 @@
 import { ElementMixin } from '@vaadin/component-base/src/element-mixin.js';
 import { I18nMixin } from '@vaadin/component-base/src/i18n-mixin.js';
 import { PdfViewerMixin, type PdfViewerZoom } from './vaadin-pdf-viewer-mixin.js';
+import { PdfViewerPrintMixin } from './vaadin-pdf-viewer-print-mixin.js';
+import { PdfViewerSidebarMixin } from './vaadin-pdf-viewer-sidebar-mixin.js';
 
 export type { PdfViewerZoom } from './vaadin-pdf-viewer-mixin.js';
 
@@ -18,6 +20,8 @@ export interface PdfViewerI18n {
   loadError?: string;
   passwordError?: string;
   toolbar?: string;
+  sidebar?: string;
+  sidebarView?: string;
   thumbnails?: string;
   thumbnailsView?: string;
   outline?: string;
@@ -38,6 +42,10 @@ export interface PdfViewerI18n {
   findResult?: string;
   findResultAnnouncement?: string;
   findNoMatches?: string;
+  download?: string;
+  print?: string;
+  printing?: string;
+  cancelPrint?: string;
   document?: string;
   pages?: string;
   pageLabel?: string;
@@ -114,6 +122,7 @@ export interface PdfViewerEventMap extends HTMLElementEventMap, PdfViewerCustomE
  * `page`                 | A page of the document.
  * `error-message`        | The message shown when the document could not be loaded.
  * `loader`               | The loading indicator shown while the document loads.
+ * `print-progress`       | The progress shown while the document is prepared for printing.
  *
  * The following state attributes are available for styling:
  *
@@ -134,13 +143,17 @@ export interface PdfViewerEventMap extends HTMLElementEventMap, PdfViewerCustomE
  * | `--vaadin-pdf-viewer-error-color`                  |
  * | `--vaadin-pdf-viewer-find-field-width`             |
  * | `--vaadin-pdf-viewer-icon-close`                   |
+ * | `--vaadin-pdf-viewer-icon-download`                |
  * | `--vaadin-pdf-viewer-icon-find`                    |
  * | `--vaadin-pdf-viewer-icon-next-page`               |
  * | `--vaadin-pdf-viewer-icon-previous-page`           |
+ * | `--vaadin-pdf-viewer-icon-print`                   |
  * | `--vaadin-pdf-viewer-icon-sidebar`                 |
  * | `--vaadin-pdf-viewer-icon-zoom-in`                 |
  * | `--vaadin-pdf-viewer-icon-zoom-out`                |
  * | `--vaadin-pdf-viewer-match-background`             |
+ * | `--vaadin-pdf-viewer-outline-font-size`            |
+ * | `--vaadin-pdf-viewer-outline-indent`               |
  * | `--vaadin-pdf-viewer-padding`                      |
  * | `--vaadin-pdf-viewer-page-background`              |
  * | `--vaadin-pdf-viewer-page-field-width`             |
@@ -169,8 +182,8 @@ export interface PdfViewerEventMap extends HTMLElementEventMap, PdfViewerCustomE
  * @fires {CustomEvent} sidebar-opened-changed - Fired when the `sidebarOpened` property changes.
  * @fires {CustomEvent} zoom-changed - Fired when the `zoom` property changes.
  */
-declare class PdfViewer extends PdfViewerMixin(
-  ElementMixin(I18nMixin<typeof HTMLElement, PdfViewerI18n>(HTMLElement)),
+declare class PdfViewer extends PdfViewerPrintMixin(
+  PdfViewerSidebarMixin(PdfViewerMixin(ElementMixin(I18nMixin<typeof HTMLElement, PdfViewerI18n>(HTMLElement)))),
 ) {
   /**
    * The object used to localize this component. To change the default
@@ -187,7 +200,11 @@ declare class PdfViewer extends PdfViewerMixin(
    *   passwordError: 'Password-protected documents are not supported.',
    *   // Accessible label of the toolbar.
    *   toolbar: 'PDF toolbar',
-   *   // Accessible label and tooltip of the sidebar button, and accessible label of the thumbnail list.
+   *   // Accessible label and tooltip of the sidebar button.
+   *   sidebar: 'Sidebar',
+   *   // Accessible label of the group of buttons that switch the sidebar view.
+   *   sidebarView: 'Sidebar view',
+   *   // Accessible label of the thumbnail list.
    *   thumbnails: 'Page thumbnails',
    *   // Labels of the buttons that switch the sidebar between the thumbnails and the outline,
    *   // and accessible label of the outline.
@@ -223,6 +240,12 @@ declare class PdfViewer extends PdfViewerMixin(
    *   // Announced when moving to a match. {page} is replaced with the page of the match.
    *   findResultAnnouncement: '{current} of {total}, page {page}',
    *   findNoMatches: 'No matches',
+   *   // Accessible labels and tooltips of the download and print buttons.
+   *   download: 'Download',
+   *   print: 'Print',
+   *   // Shown while the pages are prepared for printing, and the button that cancels it.
+   *   printing: 'Preparing to print…',
+   *   cancelPrint: 'Cancel',
    *   // Accessible name of the viewer when the document has no title
    *   // and the application has not set aria-label or aria-labelledby.
    *   document: 'PDF document',
@@ -241,13 +264,6 @@ declare class PdfViewer extends PdfViewerMixin(
    * ```
    */
   i18n: PdfViewerI18n | undefined;
-
-  /**
-   * Whether the sidebar with the page thumbnails is shown.
-   *
-   * @attr {boolean} sidebar-opened
-   */
-  sidebarOpened: boolean;
 
   addEventListener<K extends keyof PdfViewerEventMap>(
     type: K,

@@ -10,6 +10,7 @@
  */
 import { html, nothing } from 'lit';
 import { isKeyboardActive } from '@vaadin/a11y-base/src/focus-utils.js';
+import { isAllowedLinkUrl } from './vaadin-pdf-viewer-mixin.js';
 
 /**
  * @typedef {Object} OutlineItem
@@ -30,6 +31,7 @@ function createOutlineItems(pdfItems, parent = null, prefix = '') {
       id: `${prefix}${index}`,
       title: pdfItem.title,
       destination: { dest: pdfItem.dest, action: pdfItem.action },
+      url: pdfItem.url && isAllowedLinkUrl(pdfItem.url) ? pdfItem.url : null,
       items: [],
       parent,
     };
@@ -143,10 +145,12 @@ export const PdfViewerOutlineMixin = (superClass) =>
             role="treeitem"
             part="outline-item"
             data-id="${item.id}"
+            aria-label="${item.title}"
             aria-level="${level}"
             aria-setsize="${items.length}"
             aria-posinset="${index + 1}"
             aria-expanded="${hasChildren ? String(expanded) : nothing}"
+            aria-disabled="${this.#hasTarget(item) ? nothing : 'true'}"
             tabindex="${item === focused ? '0' : '-1'}"
           >
             <div part="outline-item-content" style="--_level: ${level - 1}">
@@ -157,6 +161,26 @@ export const PdfViewerOutlineMixin = (superClass) =>
           </div>
         `;
       });
+    }
+
+    /**
+     * Whether the item goes somewhere when activated.
+     * @private
+     */
+    #hasTarget(item) {
+      return !!(item.url || item.destination.dest || item.destination.action);
+    }
+
+    /**
+     * Goes to the destination of an item, or opens its URL in a new tab.
+     * @private
+     */
+    #activateItem(item) {
+      if (item.url) {
+        window.open(item.url, '_blank', 'noopener,noreferrer');
+      } else if (this.#hasTarget(item)) {
+        this._goToDestination(item.destination);
+      }
     }
 
     /** @private */
@@ -244,7 +268,7 @@ export const PdfViewerOutlineMixin = (superClass) =>
       if (isToggle) {
         this.#setExpanded(item, !this.__expandedOutlineItems.has(item));
       } else {
-        this._goToDestination(item.destination);
+        this.#activateItem(item);
       }
     }
 
@@ -293,7 +317,7 @@ export const PdfViewerOutlineMixin = (superClass) =>
           }
           break;
         case 'Enter':
-          this._goToDestination(item.destination);
+          this.#activateItem(item);
           break;
         default:
           return;

@@ -112,8 +112,9 @@ describe('toolbar', () => {
         field.focus();
         (field.inputElement as HTMLInputElement).select();
         await sendKeys({ type: '4' });
+        const idle = nextRenderIdle(viewer);
         await sendKeys({ press: 'Enter' });
-        await nextRenderIdle(viewer);
+        await idle;
         expect(viewer.page).to.equal(4);
       });
 

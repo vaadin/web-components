@@ -45,7 +45,7 @@ const SUPPORTED_LINK_ACTIONS = ['FirstPage', 'LastPage', 'NextPage', 'PrevPage']
  * @param {string} url
  * @return {boolean}
  */
-function isAllowedLinkUrl(url) {
+export function isAllowedLinkUrl(url) {
   try {
     return ALLOWED_LINK_PROTOCOLS.includes(new URL(url).protocol);
   } catch {
@@ -203,6 +203,9 @@ export const PdfViewerMixin = (superClass) =>
 
     #scrollFrame = 0;
 
+    /** @type {ResizeObserver | null} */
+    #contentObserver = null;
+
     /** The scroll position while the viewer had a size, to restore it when shown again. */
     #savedScroll = { top: 0, left: 0 };
 
@@ -227,6 +230,10 @@ export const PdfViewerMixin = (superClass) =>
       super.connectedCallback();
 
       this.#watchPixelRatio();
+      // The pages area also changes size without the host, e.g. when the sidebar opens.
+      if (this.#contentObserver) {
+        this.#contentObserver.observe(this.$.content);
+      }
 
       if (this.#released) {
         this.#released = false;
@@ -239,6 +246,7 @@ export const PdfViewerMixin = (superClass) =>
       super.disconnectedCallback();
 
       this.#unwatchPixelRatio();
+      this.#contentObserver?.disconnect();
       cancelAnimationFrame(this.#scrollFrame);
       this.#scrollFrame = 0;
 
@@ -262,6 +270,8 @@ export const PdfViewerMixin = (superClass) =>
       }
 
       this.$.content.addEventListener('scroll', () => this.#onScroll(), { passive: true });
+      this.#contentObserver = new ResizeObserver(() => this._onResize());
+      this.#contentObserver.observe(this.$.content);
       this.$.content.addEventListener('keydown', (event) => this.#onContentKeyDown(event));
       this.addEventListener('keydown', (event) => this.#onKeyDown(event));
     }

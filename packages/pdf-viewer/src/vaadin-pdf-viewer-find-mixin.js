@@ -86,13 +86,18 @@ export const PdfViewerFindMixin = (superClass) =>
 
     #lastAnnouncement = '';
 
+    /** The current match when the find bar was closed, to continue from it when reopened. */
+    #closedMatchIndex = -1;
+
     /** @protected */
     firstUpdated() {
       super.firstUpdated();
 
       this.addEventListener('keydown', (event) => {
         const isShortcut = (event.ctrlKey || event.metaKey) && !event.altKey && !event.shiftKey;
-        const isF = event.key.toLowerCase() === 'f' || event.code === 'KeyF';
+        // The key code is for keyboard layouts without Latin letters.
+        const isLatinLetter = /^[a-z]$/iu.test(event.key);
+        const isF = event.key.toLowerCase() === 'f' || (!isLatinLetter && event.code === 'KeyF');
         if (isShortcut && isF && this.pageCount > 0) {
           event.preventDefault();
           this._openFind();
@@ -122,7 +127,8 @@ export const PdfViewerFindMixin = (superClass) =>
           active = this.shadowRoot.activeElement;
         }
         this.#returnFocus = active && (this.contains(active) || this.shadowRoot.contains(active)) ? active : null;
-        // Show the results of the query entered before closing the find bar.
+        // Show and announce the results of the query entered before closing the find bar.
+        this.#lastAnnouncement = '';
         if (this.__findQuery.trim()) {
           this.#search();
         }
@@ -146,6 +152,7 @@ export const PdfViewerFindMixin = (superClass) =>
         return;
       }
       this.__findOpened = false;
+      this.#closedMatchIndex = this.__findCurrentIndex;
       this.#resetSearch();
       this.#highlightPages();
 
@@ -175,6 +182,7 @@ export const PdfViewerFindMixin = (superClass) =>
      */
     _setFindQuery(query) {
       this.__findQuery = query;
+      this.#closedMatchIndex = -1;
       this.#search();
     }
 
@@ -255,7 +263,6 @@ export const PdfViewerFindMixin = (superClass) =>
 
     /** @private */
     async #search() {
-      const previousMatches = this.#matches;
       this.#resetSearch();
       const searchId = this.#searchId;
       const query = this.__findQuery;
@@ -280,10 +287,17 @@ export const PdfViewerFindMixin = (superClass) =>
       this.#matches = matches;
       this.__findSearching = false;
       this.__findMatchCount = matches.length;
-      // Start from the first match on or after the current page.
-      const index = matches.findIndex((match) => match.pageIndex >= this.page - 1);
+      // Continue from the match before closing the find bar, or start from the
+      // first match on or after the current page.
+      const closedIndex = this.#closedMatchIndex;
+      this.#closedMatchIndex = -1;
+      const index =
+        closedIndex >= 0 && closedIndex < matches.length
+          ? closedIndex
+          : matches.findIndex((match) => match.pageIndex >= this.page - 1);
       this.__findCurrentIndex = matches.length ? Math.max(index, 0) : -1;
-      this.#highlightPages([...previousMatches, ...matches]);
+      // Also clears the highlights of a previous search on other pages.
+      this.#highlightPages();
 
       if (matches.length) {
         this.#showCurrentMatch(null, { delayed: true });

@@ -10,6 +10,7 @@
  */
 import '@vaadin/button/src/vaadin-button.js';
 import '@vaadin/integer-field/src/vaadin-integer-field.js';
+import '@vaadin/progress-bar/src/vaadin-progress-bar.js';
 import '@vaadin/select/src/vaadin-select.js';
 import '@vaadin/text-field/src/vaadin-text-field.js';
 import '@vaadin/tooltip/src/vaadin-tooltip.js';
@@ -37,6 +38,14 @@ export const PdfViewerToolbarMixin = (superClass) =>
     }
 
     /** @protected */
+    disconnectedCallback() {
+      super.disconnectedCallback();
+      // A tooltip that is open when removed keeps listening to Escape on the document.
+      const tooltip = this.querySelector(':scope > vaadin-tooltip[slot="toolbar-tooltip"]');
+      tooltip?._stateController.close(true);
+    }
+
+    /** @protected */
     updated(props) {
       super.updated(props);
 
@@ -53,6 +62,7 @@ export const PdfViewerToolbarMixin = (superClass) =>
         props.has('__findMatchCount') ||
         props.has('__findSearching') ||
         props.has('__findQuery') ||
+        props.has('__printProgress') ||
         props.has('__findCurrentIndex')
       ) {
         this.#renderToolbar();
@@ -75,7 +85,7 @@ export const PdfViewerToolbarMixin = (superClass) =>
             slot="toolbar-start"
             icon="sidebar"
             theme="tertiary icon"
-            aria-label="${i18n.thumbnails}"
+            aria-label="${i18n.sidebar}"
             aria-pressed="${this.sidebarOpened ? 'true' : 'false'}"
             .disabled="${!hasDocument}"
             @click="${this.#onSidebarToggleClick}"
@@ -143,7 +153,23 @@ export const PdfViewerToolbarMixin = (superClass) =>
             .disabled="${!hasDocument}"
             @click="${this.#onFindToggleClick}"
           ></vaadin-pdf-viewer-button>
-          ${this.#renderFindBar(i18n)} ${this.#renderSidebarHeader(i18n)}
+          <vaadin-pdf-viewer-button
+            slot="toolbar-actions"
+            icon="download"
+            theme="tertiary icon"
+            aria-label="${i18n.download}"
+            .disabled="${!hasDocument}"
+            @click="${this.#onDownloadClick}"
+          ></vaadin-pdf-viewer-button>
+          <vaadin-pdf-viewer-button
+            slot="toolbar-actions"
+            icon="print"
+            theme="tertiary icon"
+            aria-label="${i18n.print}"
+            .disabled="${!hasDocument || this.__printProgress >= 0}"
+            @click="${this.#onPrintClick}"
+          ></vaadin-pdf-viewer-button>
+          ${this.#renderFindBar(i18n)} ${this.#renderSidebarHeader(i18n)} ${this.#renderPrintProgress(i18n)}
           <vaadin-tooltip slot="toolbar-tooltip" .ariaLinkMode="${'none'}"></vaadin-tooltip>
         `,
         this,
@@ -227,20 +253,22 @@ export const PdfViewerToolbarMixin = (superClass) =>
       }
       const view = this.__sidebarView;
       return html`
-        <vaadin-button
+        <vaadin-pdf-viewer-button
           slot="sidebar-header"
-          theme="tertiary small"
+          icon="thumbnails"
+          theme="tertiary icon"
+          aria-label="${i18n.thumbnailsView}"
           aria-pressed="${view === 'thumbnails' ? 'true' : 'false'}"
           @click="${this.#onThumbnailsViewClick}"
-          >${i18n.thumbnailsView}</vaadin-button
-        >
-        <vaadin-button
+        ></vaadin-pdf-viewer-button>
+        <vaadin-pdf-viewer-button
           slot="sidebar-header"
-          theme="tertiary small"
+          icon="outline"
+          theme="tertiary icon"
+          aria-label="${i18n.outline}"
           aria-pressed="${view === 'outline' ? 'true' : 'false'}"
           @click="${this.#onOutlineViewClick}"
-          >${i18n.outline}</vaadin-button
-        >
+        ></vaadin-pdf-viewer-button>
       `;
     }
 
@@ -261,6 +289,38 @@ export const PdfViewerToolbarMixin = (superClass) =>
      */
     _getFindField() {
       return this.querySelector(':scope > vaadin-text-field[slot="find"]');
+    }
+
+    /** @private */
+    #renderPrintProgress(i18n) {
+      if (this.__printProgress < 0) {
+        return nothing;
+      }
+      return html`
+        <vaadin-progress-bar
+          slot="print-progress"
+          aria-label="${i18n.printing}"
+          .value="${this.__printProgress}"
+        ></vaadin-progress-bar>
+        <vaadin-button slot="print-progress" theme="small" @click="${this.#onCancelPrintClick}"
+          >${i18n.cancelPrint}</vaadin-button
+        >
+      `;
+    }
+
+    /** @private */
+    #onDownloadClick() {
+      this._download();
+    }
+
+    /** @private */
+    #onPrintClick() {
+      this.print();
+    }
+
+    /** @private */
+    #onCancelPrintClick() {
+      this._cancelPrint();
     }
 
     /** @private */

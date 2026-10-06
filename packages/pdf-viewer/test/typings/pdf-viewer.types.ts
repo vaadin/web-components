@@ -8,10 +8,13 @@ import type {
   PdfViewerDocumentLoadEvent,
   PdfViewerI18n,
   PdfViewerPageChangedEvent,
+  PdfViewerSidebarOpenedChangedEvent,
   PdfViewerZoom,
   PdfViewerZoomChangedEvent,
 } from '../../src/vaadin-pdf-viewer.js';
 import type { PdfViewerMixinClass } from '../../src/vaadin-pdf-viewer-mixin.js';
+import type { PdfViewerPrintMixinClass } from '../../src/vaadin-pdf-viewer-print-mixin.js';
+import type { PdfViewerSidebarMixinClass } from '../../src/vaadin-pdf-viewer-sidebar-mixin.js';
 
 const assertType = <TExpected>(actual: TExpected) => actual;
 
@@ -24,6 +27,9 @@ assertType<string | null | undefined>(viewer.src);
 assertType<number>(viewer.pageCount);
 assertType<number>(viewer.page);
 assertType<PdfViewerZoom>(viewer.zoom);
+assertType<boolean>(viewer.sidebarOpened);
+assertType<string | null | undefined>(viewer.fileName);
+assertType<Promise<void>>(viewer.print());
 viewer.zoom = 'page-fit';
 viewer.zoom = 'page-width';
 viewer.zoom = 1.5;
@@ -37,6 +43,8 @@ assertType<PdfViewerI18n>({ loadError: 'Error', passwordError: 'Password' });
 assertType<ElementMixinClass>(viewer);
 assertType<I18nMixinClass<PdfViewerI18n>>(viewer);
 assertType<PdfViewerMixinClass>(viewer);
+assertType<PdfViewerPrintMixinClass>(viewer);
+assertType<PdfViewerSidebarMixinClass>(viewer);
 assertType<ResizeMixinClass>(viewer);
 
 // Events
@@ -73,4 +81,9 @@ assertType<PdfViewerI18n>({
   zoomOut: 'Out',
   pageWidth: 'Width',
   pageFit: 'Fit',
+});
+
+viewer.addEventListener('sidebar-opened-changed', (event) => {
+  assertType<PdfViewerSidebarOpenedChangedEvent>(event);
+  assertType<boolean>(event.detail.value);
 });

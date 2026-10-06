@@ -22,7 +22,7 @@ describe('outline', () => {
   }
 
   function getViewButtons() {
-    return [...viewer.querySelectorAll<HTMLElement>('vaadin-button[slot="sidebar-header"]')];
+    return [...viewer.querySelectorAll<HTMLElement>('vaadin-pdf-viewer-button[slot="sidebar-header"]')];
   }
 
   async function waitForOutline() {
@@ -82,6 +82,12 @@ describe('outline', () => {
         ]);
         expect(getItem('Chapter 1').getAttribute('aria-expanded')).to.equal('false');
         expect(getItem('Chapter 2').hasAttribute('aria-expanded')).to.be.false;
+      });
+
+      it('should name an item by its title only, also when expanded', async () => {
+        getItem('Chapter 1').querySelector<HTMLElement>('[part="outline-toggle"]')!.click();
+        await nextRender();
+        expect(getItem('Chapter 1').getAttribute('aria-label')).to.equal('Chapter 1');
       });
 
       it('should set the level and position of the items', () => {
@@ -154,8 +160,9 @@ describe('outline', () => {
         it('should go to the destination with Enter and keep focus in the outline', async () => {
           await sendKeys({ press: 'ArrowDown' });
           await nextRender();
+          const idle = nextRenderIdle(viewer);
           await sendKeys({ press: 'Enter' });
-          await nextRenderIdle(viewer);
+          await idle;
           expect(viewer.page).to.equal(2);
           expect(viewer.shadowRoot!.activeElement).to.equal(getItem('Chapter 2'));
         });

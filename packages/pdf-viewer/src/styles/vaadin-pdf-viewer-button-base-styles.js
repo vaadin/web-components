@@ -52,6 +52,22 @@ export const pdfViewerButtonStyles = css`
     --_icon: var(--vaadin-pdf-viewer-icon-sidebar, var(--_vaadin-icon-sidebar));
   }
 
+  :host([icon='download']) {
+    --_icon: var(--vaadin-pdf-viewer-icon-download, var(--_vaadin-icon-download));
+  }
+
+  :host([icon='print']) {
+    --_icon: var(--vaadin-pdf-viewer-icon-print, var(--_vaadin-icon-print));
+  }
+
+  :host([icon='thumbnails']) {
+    --_icon: var(--vaadin-pdf-viewer-icon-thumbnails, var(--_vaadin-icon-layout-grid));
+  }
+
+  :host([icon='outline']) {
+    --_icon: var(--vaadin-pdf-viewer-icon-outline, var(--_vaadin-icon-list-tree));
+  }
+
   :host([icon='find']) {
     --_icon: var(--vaadin-pdf-viewer-icon-find, var(--_vaadin-icon-search));
   }
@@ -62,6 +78,14 @@ export const pdfViewerButtonStyles = css`
 
   :host([aria-pressed='true']) {
     background: var(--vaadin-background-container-strong);
+    /* Not only a background color, which can have low contrast */
+    box-shadow: inset 0 -2px 0 currentColor;
+  }
+
+  @media (forced-colors: active) {
+    :host([aria-pressed='true']) {
+      border: 2px solid ButtonText;
+    }
   }
 
   @media (forced-colors: active) {

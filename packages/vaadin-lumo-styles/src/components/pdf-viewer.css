@@ -42,6 +42,7 @@
     --vaadin-pdf-viewer-icon-zoom-out: var(--lumo-icons-minus);
     --vaadin-pdf-viewer-icon-zoom-in: var(--lumo-icons-plus);
     --vaadin-pdf-viewer-icon-find: var(--lumo-icons-search);
+    --vaadin-pdf-viewer-icon-download: var(--lumo-icons-download);
     --vaadin-pdf-viewer-icon-sidebar: var(--lumo-icons-menu);
     --vaadin-pdf-viewer-icon-close: var(--lumo-icons-cross);
   }

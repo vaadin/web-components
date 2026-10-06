@@ -96,7 +96,7 @@ describe('accessibility', () => {
     });
 
     it('should make the pages focusable after the toolbar controls', async () => {
-      viewer.querySelector<HTMLElement>('vaadin-pdf-viewer-button[icon="find"]')!.focus();
+      viewer.querySelector<HTMLElement>('vaadin-pdf-viewer-button[icon="print"]')!.focus();
       await sendKeys({ press: 'Tab' });
       expect(viewer.shadowRoot!.activeElement).to.equal(getContent());
     });
@@ -144,8 +144,9 @@ describe('accessibility', () => {
 
     it('should go to the last page with Ctrl+End', async () => {
       getContent().focus();
+      const idle = nextRenderIdle(viewer);
       await sendKeys({ press: 'Control+End' });
-      await nextRenderIdle(viewer);
+      await idle;
       expect(viewer.page).to.equal(6);
     });
 

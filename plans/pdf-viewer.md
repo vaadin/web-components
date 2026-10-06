@@ -19,18 +19,18 @@ specific to the PDF viewer. It does not repeat those documents.
 
 Status values: `todo`, `in progress`, `in review`, `done`, `blocked`.
 
-| #   | Slice                                    | Status | Reviews (code / visual) | Notes                  |
-| --- | ---------------------------------------- | ------ | ----------------------- | ---------------------- |
-| 0   | Tracer bullet: package + first page      | done   | ✅ / ✅                 | 561906b4d0, 59ff4a2850 |
-| 1   | Continuous scroll, zoom, page tracking   | done   | ✅ / ✅ (+ re-review)   | 1e173c331e, b2d2a73c16 |
-| 2   | Toolbar: page navigation + zoom controls | done   | – / –                   |                        |
-| 3   | Text layer, links, keyboard, a11y basics | todo   | – / –                   |                        |
-| 4   | Find                                     | done   | – / –                   |                        |
-| 5   | Sidebar: thumbnails                      | todo   | – / –                   |                        |
-| 6   | Sidebar: outline                         | todo   | – / –                   |                        |
-| 7   | Download and print                       | todo   | – / –                   |                        |
-| 8   | Tagged PDFs, AT audit, forced colors     | todo   | – / –                   |                        |
-| 9   | API docs, typings, README, release prep  | todo   | – / –                   |                        |
+| #   | Slice                                    | Status    | Reviews (code / visual) | Notes                  |
+| --- | ---------------------------------------- | --------- | ----------------------- | ---------------------- |
+| 0   | Tracer bullet: package + first page      | done      | ✅ / ✅                 | 561906b4d0, 59ff4a2850 |
+| 1   | Continuous scroll, zoom, page tracking   | done      | ✅ / ✅ (+ re-review)   | 1e173c331e, b2d2a73c16 |
+| 2   | Toolbar: page navigation + zoom controls | done      | – / –                   |                        |
+| 3   | Text layer, links, keyboard, a11y basics | todo      | – / –                   |                        |
+| 4   | Find                                     | done      | – / –                   |                        |
+| 5   | Sidebar: thumbnails                      | todo      | – / –                   |                        |
+| 6   | Sidebar: outline                         | todo      | – / –                   |                        |
+| 7   | Download and print                       | in review | – / –                   |                        |
+| 8   | Tagged PDFs, AT audit, forced colors     | todo      | – / –                   |                        |
+| 9   | API docs, typings, README, release prep  | todo      | – / –                   |                        |
 
 ---
 
@@ -247,12 +247,23 @@ how most business documents are read. `page-width` and `page-fit` fit the **firs
 
 **D14 — Download.** An `<a href=src download=fileName>`. `fileName` defaults to the last
 path segment of `src`, or the document title if there is none.
+**As built in slice 7:** the link points to a Blob of `pdfDocument.getData()` instead of `src`,
+because the `download` attribute does nothing for `src` URLs from other origins. The data is the
+original file, byte for byte (tested).
 
 **D15 — Print.** `print()` renders every page at about 150 DPI into a hidden `<iframe>`
 created for printing, calls `iframe.contentWindow.print()`, and removes the iframe
 afterwards. Pages render one after another to keep memory use bounded. The
 component shows progress and allows cancelling. If `print()` is called while not
 connected or with no document loaded, it does nothing (see `CONVENTIONS.md`).
+**As built in slice 7:** pages are rendered with `intent: 'print'` at 150 DPI to PNG images in a
+hidden iframe (off-screen, not `display: none`, which prints blank pages in some browsers). Each
+image gets the paper size of its page in `pt`, and a named `@page` with the same size, so mixed
+page sizes print correctly (verified in Chromium by printing the frame to PDF: 5 × A4 portrait and
+1 × A4 landscape). The frame is removed on `afterprint`, on cancel, on disconnect and when the
+document changes. Progress is a `vaadin-progress-bar` with a Cancel `vaadin-button` in a
+`print-progress` part over the pages. Firefox and Safari print previews still need a manual check
+(slice 8).
 
 **D16 — Find.** Search the text from `page.getTextContent()`, normalized for case,
 diacritics and whitespace (port the normalization from pdf.js `PDFFindController`).
@@ -665,6 +676,28 @@ Newest entry at the top. Format:
 - Visual review: <summary>
 - Follow-ups: …
 ```
+
+### 2026-10-06 — Slices 5 and 6: Sidebar thumbnails and outline — done
+
+- Base commit: f4ac2da176 Head: 5266a798ad, review fixes committed together with slice 7
+- Shipped: `sidebarOpened`, thumbnails listbox with lazy rendering, overlay on narrow viewers,
+  outline tree, view switch, slice 4 review fixes.
+- Code review: 0 blockers, 7 should-fix (flaky tests registering `render-idle` after `sendKeys`,
+  failed thumbnails retried forever, two tab stops after clicking, typings in the wrong `.d.ts`,
+  undocumented CSS properties, outline items with URLs doing nothing, missing typings test). All
+  fixed: outline URLs open like external links, items without a target are `aria-disabled`.
+- Visual review: 0 blockers, 2 should-fix (page-width not refitted when the sidebar opens, header
+  buttons wrapping). Fixed: the viewer also observes the pages area's size; the header has two icon
+  buttons with tooltips. Nits fixed: Escape closes the overlay, reopened find keeps its position,
+  toggle named "Sidebar", hover on thumbnails.
+- A11y review: 0 blockers, 4 should-fix (current page / pressed state shown by color only, outline
+  item names including children, focus lost when the sidebar hides, no Escape for the overlay).
+  All fixed (outline ring on the current thumbnail, inset bar on pressed buttons, forced-colors
+  rules, `aria-label` on tree items, focus to the toggle). Also: `aria-selected` only on the current
+  option, header group named "Sidebar view". Deferred to slice 8: current outline entry marker,
+  PDF page labels, real AT runs of the listbox.
+- Also fixed: the toolbar tooltip is closed when the viewer is removed, because an open
+  `vaadin-tooltip` keeps a document-level Escape listener after removal.
 
 ### 2026-10-06 — Slice 4: Find — done
 

@@ -5,7 +5,7 @@ snapshots["vaadin-pdf-viewer host default"] =
 `<vaadin-pdf-viewer role="region">
   <vaadin-pdf-viewer-button
     aria-disabled="true"
-    aria-label="Page thumbnails"
+    aria-label="Sidebar"
     aria-pressed="false"
     disabled=""
     icon="sidebar"
@@ -230,6 +230,28 @@ snapshots["vaadin-pdf-viewer host default"] =
     aria-pressed="false"
     disabled=""
     icon="find"
+    role="button"
+    slot="toolbar-actions"
+    tabindex="-1"
+    theme="tertiary icon"
+  >
+  </vaadin-pdf-viewer-button>
+  <vaadin-pdf-viewer-button
+    aria-disabled="true"
+    aria-label="Download"
+    disabled=""
+    icon="download"
+    role="button"
+    slot="toolbar-actions"
+    tabindex="-1"
+    theme="tertiary icon"
+  >
+  </vaadin-pdf-viewer-button>
+  <vaadin-pdf-viewer-button
+    aria-disabled="true"
+    aria-label="Print"
+    disabled=""
+    icon="print"
     role="button"
     slot="toolbar-actions"
     tabindex="-1"
@@ -258,7 +280,7 @@ snapshots["vaadin-pdf-viewer host error"] =
 >
   <vaadin-pdf-viewer-button
     aria-disabled="true"
-    aria-label="Page thumbnails"
+    aria-label="Sidebar"
     aria-pressed="false"
     disabled=""
     icon="sidebar"
@@ -489,6 +511,28 @@ snapshots["vaadin-pdf-viewer host error"] =
     theme="tertiary icon"
   >
   </vaadin-pdf-viewer-button>
+  <vaadin-pdf-viewer-button
+    aria-disabled="true"
+    aria-label="Download"
+    disabled=""
+    icon="download"
+    role="button"
+    slot="toolbar-actions"
+    tabindex="-1"
+    theme="tertiary icon"
+  >
+  </vaadin-pdf-viewer-button>
+  <vaadin-pdf-viewer-button
+    aria-disabled="true"
+    aria-label="Print"
+    disabled=""
+    icon="print"
+    role="button"
+    slot="toolbar-actions"
+    tabindex="-1"
+    theme="tertiary icon"
+  >
+  </vaadin-pdf-viewer-button>
   <vaadin-tooltip
     modeless=""
     slot="toolbar-tooltip"
@@ -510,7 +554,7 @@ snapshots["vaadin-pdf-viewer find bar host"] =
   role="region"
 >
   <vaadin-pdf-viewer-button
-    aria-label="Page thumbnails"
+    aria-label="Sidebar"
     aria-pressed="false"
     icon="sidebar"
     role="button"
@@ -728,6 +772,24 @@ snapshots["vaadin-pdf-viewer find bar host"] =
     theme="tertiary icon"
   >
   </vaadin-pdf-viewer-button>
+  <vaadin-pdf-viewer-button
+    aria-label="Download"
+    icon="download"
+    role="button"
+    slot="toolbar-actions"
+    tabindex="0"
+    theme="tertiary icon"
+  >
+  </vaadin-pdf-viewer-button>
+  <vaadin-pdf-viewer-button
+    aria-label="Print"
+    icon="print"
+    role="button"
+    slot="toolbar-actions"
+    tabindex="0"
+    theme="tertiary icon"
+  >
+  </vaadin-pdf-viewer-button>
   <vaadin-text-field
     accessible-name="Find in document"
     focused=""
@@ -853,8 +915,10 @@ snapshots["vaadin-pdf-viewer shadow default"] =
     part="sidebar"
   >
     <div
+      aria-label="Sidebar view"
       hidden=""
       part="sidebar-header"
+      role="group"
     >
       <slot name="sidebar-header">
       </slot>
@@ -887,6 +951,16 @@ snapshots["vaadin-pdf-viewer shadow default"] =
       </div>
     </div>
     <div class="content-focus-ring">
+    </div>
+    <div
+      hidden=""
+      part="print-progress"
+    >
+      <span>
+        Preparing to print…
+      </span>
+      <slot name="print-progress">
+      </slot>
     </div>
   </div>
 </div>
@@ -945,8 +1019,10 @@ snapshots["vaadin-pdf-viewer shadow document"] =
     part="sidebar"
   >
     <div
+      aria-label="Sidebar view"
       hidden=""
       part="sidebar-header"
+      role="group"
     >
       <slot name="sidebar-header">
       </slot>
@@ -1106,6 +1182,16 @@ snapshots["vaadin-pdf-viewer shadow document"] =
     </div>
     <div class="content-focus-ring">
     </div>
+    <div
+      hidden=""
+      part="print-progress"
+    >
+      <span>
+        Preparing to print…
+      </span>
+      <slot name="print-progress">
+      </slot>
+    </div>
   </div>
 </div>
 <div
@@ -1163,8 +1249,10 @@ snapshots["vaadin-pdf-viewer shadow error"] =
     part="sidebar"
   >
     <div
+      aria-label="Sidebar view"
       hidden=""
       part="sidebar-header"
+      role="group"
     >
       <slot name="sidebar-header">
       </slot>
@@ -1197,6 +1285,16 @@ snapshots["vaadin-pdf-viewer shadow error"] =
       </div>
     </div>
     <div class="content-focus-ring">
+    </div>
+    <div
+      hidden=""
+      part="print-progress"
+    >
+      <span>
+        Preparing to print…
+      </span>
+      <slot name="print-progress">
+      </slot>
     </div>
   </div>
 </div>

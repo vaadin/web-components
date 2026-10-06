@@ -1,6 +1,6 @@
 import { expect } from '@vaadin/chai-plugins';
 import { sendKeys } from '@vaadin/test-runner-commands';
-import { fixtureSync, nextFrame, nextRender } from '@vaadin/testing-helpers';
+import { fixtureSync, nextFrame, nextRender, nextUpdate } from '@vaadin/testing-helpers';
 import sinon from 'sinon';
 import './enable-feature-flag.js';
 import '../vaadin-pdf-viewer.js';
@@ -237,6 +237,19 @@ describe('find', () => {
         expect(region.textContent).to.equal('2 of 5, page 2');
       });
 
+      it('should continue from the same match when reopened', async () => {
+        await search('unique word');
+        getButton('next-match').click();
+        getButton('next-match').click();
+        await nextFrame();
+        getButton('close').click();
+        await nextRender();
+        getButton('find').click();
+        await nextRender();
+        await waitForResult();
+        expect(getResultText()).to.equal('3 of 5');
+      });
+
       it('should show the results again when reopened', async () => {
         await search('marker1');
         getButton('close').click();
@@ -268,9 +281,10 @@ describe('find', () => {
         const field = getFindField();
         field.value = 'quick';
         field.inputElement.dispatchEvent(new Event('input', { bubbles: true, composed: true }));
-        await nextFrame();
+        await nextUpdate(viewer);
+        // The search has not gone through all pages yet
         const result = viewer.querySelector<HTMLElement>('span[slot="find-actions"]')!;
-        expect(result.hidden || result.textContent!.trim() !== 'No matches').to.be.true;
+        expect(result.hidden).to.be.true;
       });
 
       it('should keep the highlights over the text right after zooming', async () => {
