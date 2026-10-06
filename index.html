@@ -18,6 +18,11 @@
           monospace;
         white-space: pre-wrap;
       }
+
+      /* Optional band edges, for comparing a higher-contrast range band */
+      .band-edges vaadin-month-calendar::part(in-range) {
+        --vaadin-date-picker-date-in-range-border-width: 2px;
+      }
     </style>
   </head>
   <body>
@@ -44,6 +49,11 @@
         <li>With the overlay closed, Escape clears both dates when the clear button is visible.</li>
       </ul>
     </div>
+
+    <label class="notes">
+      <input type="checkbox" id="band-edges">
+      Show edges along the range band (higher contrast)
+    </label>
 
     <h2 class="heading">Basic</h2>
     <section class="section">
@@ -75,7 +85,7 @@
     
   
 
-<script type="module" src="./common.js"></script><script type="module" src="./inline-module-dfdaec1a726820cfd11c310cdd2dca7f.js"></script>
+<script type="module" src="./common.js"></script><script type="module" src="./inline-module-62e7ad801b88ba4a3770a086a92cfe53.js"></script>
     <style>
       body:not(.resolved) {
         opacity: 0;

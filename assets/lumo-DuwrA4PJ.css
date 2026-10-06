@@ -4948,7 +4948,7 @@ vaadin-ai-field-marker :is(.badge, .actions > button):focus-visible {
   }
 
   [part~="in-range"] {
-    --_range-band: var(--vaadin-date-picker-date-in-range-background, var(--lumo-primary-color-10pct));
+    --_range-band: var(--vaadin-date-picker-date-in-range-background, color-mix(in srgb, var(--lumo-primary-color) 18%, transparent));
     --_range-edge: var(--vaadin-date-picker-date-in-range-border-color, var(--_selection-color));
     --_range-band-height: 80%;
   }
@@ -4962,8 +4962,8 @@ vaadin-ai-field-marker :is(.badge, .actions > button):focus-visible {
   }
 
   [part~="range-editing"]:after, [part~="range-editing"]:hover:after {
+    background: var(--lumo-base-color);
     box-shadow: inset 0 0 0 2px var(--_range-edge);
-    background: none;
   }
 
   [part~="range-editing"][part~="focused"]:after {
