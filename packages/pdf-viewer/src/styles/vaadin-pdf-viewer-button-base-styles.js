@@ -78,13 +78,15 @@ export const pdfViewerButtonStyles = css`
 
   :host([aria-pressed='true']) {
     background: var(--vaadin-background-container-strong);
-    /* Not only a background color, which can have low contrast */
-    box-shadow: inset 0 -2px 0 currentColor;
   }
 
   @media (forced-colors: active) {
     :host([aria-pressed='true']) {
-      border: 2px solid ButtonText;
+      background: Highlight;
+    }
+
+    :host([aria-pressed='true']) [part='icon'] {
+      background: HighlightText;
     }
 
     [part='icon'] {

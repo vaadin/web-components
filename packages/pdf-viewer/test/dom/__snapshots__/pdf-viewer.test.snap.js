@@ -33,7 +33,7 @@ snapshots["vaadin-pdf-viewer host default"] =
     max="1"
     min="1"
     slot="toolbar-navigation"
-    theme="align-center"
+    theme="align-right"
   >
     <span
       aria-hidden="true"
@@ -308,7 +308,7 @@ snapshots["vaadin-pdf-viewer host error"] =
     max="1"
     min="1"
     slot="toolbar-navigation"
-    theme="align-center"
+    theme="align-right"
   >
     <span
       aria-hidden="true"
@@ -580,7 +580,7 @@ snapshots["vaadin-pdf-viewer find bar host"] =
     max="6"
     min="1"
     slot="toolbar-navigation"
-    theme="align-center"
+    theme="align-right"
   >
     <span
       aria-hidden="true"

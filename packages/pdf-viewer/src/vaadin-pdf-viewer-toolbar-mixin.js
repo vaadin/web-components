@@ -101,7 +101,7 @@ export const PdfViewerToolbarMixin = (superClass) =>
           ></vaadin-pdf-viewer-button>
           <vaadin-integer-field
             slot="toolbar-navigation"
-            theme="align-center"
+            theme="align-right"
             accessible-name="${hasDocument ? i18n.pageOf.replace('{pageCount}', pageCount) : i18n.page}"
             min="1"
             max="${pageCount || 1}"

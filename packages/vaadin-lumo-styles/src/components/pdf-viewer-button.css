@@ -85,6 +85,19 @@
     :host([disabled]:is([icon='print'], [icon='thumbnails'], [icon='outline'])) [part='icon'] {
       background: GrayText;
     }
+
+    /* Font icons are colored by the text color, not by a background */
+    :host([aria-pressed='true']) {
+      color: HighlightText;
+    }
+
+    :host([aria-pressed='true']) [part='icon'] {
+      background: none;
+    }
+
+    :host([aria-pressed='true']:is([icon='print'], [icon='thumbnails'], [icon='outline'])) [part='icon'] {
+      background: HighlightText;
+    }
   }
 
   :host([icon='find']) {
@@ -97,6 +110,5 @@
 
   :host([aria-pressed='true']) {
     --vaadin-button-tertiary-background: var(--lumo-contrast-10pct);
-    box-shadow: inset 0 -2px 0 currentColor;
   }
 }
