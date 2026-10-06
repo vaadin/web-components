@@ -1,0 +1,56 @@
+<!doctype html>
+<html lang="en">
+  <head>
+    <meta charset="UTF-8" />
+    <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+    <title>PDF Viewer</title>
+    <script type="module" src="./common.js"></script>
+    <script>
+      window.Vaadin = window.Vaadin || {};
+      window.Vaadin.featureFlags = window.Vaadin.featureFlags || {};
+      window.Vaadin.featureFlags.pdfViewerComponent = true;
+    </script>
+    <script type="module">
+      import '@vaadin/pdf-viewer';
+
+      const fixtures = '/packages/pdf-viewer/test/fixtures/';
+      const viewer = document.querySelector('#viewer');
+      const select = document.querySelector('#src');
+      const log = document.querySelector('#log');
+
+      select.addEventListener('change', () => {
+        viewer.src = select.value.startsWith('/') ? select.value : fixtures + select.value;
+      });
+
+      viewer.addEventListener('document-load', (e) => {
+        log.textContent = `document-load: ${JSON.stringify(e.detail)}`;
+      });
+      viewer.addEventListener('document-error', (e) => {
+        log.textContent = `document-error: ${e.detail.reason}`;
+      });
+    </script>
+    <style>
+      vaadin-pdf-viewer {
+        height: 600px;
+      }
+    </style>
+  </head>
+  <body>
+    <p>
+      <label>
+        Document
+        <select id="src">
+          <option value="multi-page.pdf">multi-page.pdf</option>
+          <option value="links.pdf">links.pdf</option>
+          <option value="outline.pdf">outline.pdf</option>
+          <option value="tagged.pdf">tagged.pdf</option>
+          <option value="encrypted.pdf">encrypted.pdf (password)</option>
+          <option value="invalid.pdf">invalid.pdf</option>
+          <option value="/does-not-exist.pdf">Missing file</option>
+        </select>
+      </label>
+      <output id="log"></output>
+    </p>
+    <vaadin-pdf-viewer id="viewer" src="/packages/pdf-viewer/test/fixtures/multi-page.pdf"></vaadin-pdf-viewer>
+  </body>
+</html>

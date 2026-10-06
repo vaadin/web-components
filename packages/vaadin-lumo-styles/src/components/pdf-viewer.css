@@ -1,0 +1,21 @@
+/**
+ * @license
+ * Copyright (c) 2000 - 2026 Vaadin Ltd.
+ * This program is available under Apache License Version 2.0, available at https://vaadin.com/license/
+ */
+@media lumo_components_pdf-viewer {
+  :host {
+    font-family: var(--lumo-font-family);
+    font-size: var(--lumo-font-size-m);
+    line-height: var(--lumo-line-height-m);
+    -webkit-font-smoothing: antialiased;
+    -moz-osx-font-smoothing: grayscale;
+    --vaadin-pdf-viewer-border-color: var(--lumo-contrast-10pct);
+    --vaadin-pdf-viewer-border-radius: var(--lumo-border-radius-m);
+    --vaadin-pdf-viewer-background: var(--lumo-contrast-5pct);
+    --vaadin-pdf-viewer-padding: var(--lumo-space-m);
+    --vaadin-pdf-viewer-page-gap: var(--lumo-space-m);
+    --vaadin-pdf-viewer-page-shadow: var(--lumo-box-shadow-xs);
+    --vaadin-pdf-viewer-error-color: var(--lumo-secondary-text-color);
+  }
+}

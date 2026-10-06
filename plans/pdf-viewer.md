@@ -19,18 +19,18 @@ specific to the PDF viewer. It does not repeat those documents.
 
 Status values: `todo`, `in progress`, `in review`, `done`, `blocked`.
 
-| #   | Slice                                    | Status | Reviews (code / visual) | Notes |
-| --- | ---------------------------------------- | ------ | ----------------------- | ----- |
-| 0   | Tracer bullet: package + first page      | todo   | – / –                   |       |
-| 1   | Continuous scroll, zoom, page tracking   | todo   | – / –                   |       |
-| 2   | Toolbar: page navigation + zoom controls | todo   | – / –                   |       |
-| 3   | Text layer, links, keyboard, a11y basics | todo   | – / –                   |       |
-| 4   | Find                                     | todo   | – / –                   |       |
-| 5   | Sidebar: thumbnails                      | todo   | – / –                   |       |
-| 6   | Sidebar: outline                         | todo   | – / –                   |       |
-| 7   | Download and print                       | todo   | – / –                   |       |
-| 8   | Tagged PDFs, AT audit, forced colors     | todo   | – / –                   |       |
-| 9   | API docs, typings, README, release prep  | todo   | – / –                   |       |
+| #   | Slice                                    | Status    | Reviews (code / visual) | Notes |
+| --- | ---------------------------------------- | --------- | ----------------------- | ----- |
+| 0   | Tracer bullet: package + first page      | in review | – / –                   |       |
+| 1   | Continuous scroll, zoom, page tracking   | todo      | – / –                   |       |
+| 2   | Toolbar: page navigation + zoom controls | todo      | – / –                   |       |
+| 3   | Text layer, links, keyboard, a11y basics | todo      | – / –                   |       |
+| 4   | Find                                     | todo      | – / –                   |       |
+| 5   | Sidebar: thumbnails                      | todo      | – / –                   |       |
+| 6   | Sidebar: outline                         | todo      | – / –                   |       |
+| 7   | Download and print                       | todo      | – / –                   |       |
+| 8   | Tagged PDFs, AT audit, forced colors     | todo      | – / –                   |       |
+| 9   | API docs, typings, README, release prep  | todo      | – / –                   |       |
 
 ---
 
@@ -84,8 +84,10 @@ uses no `document`-level lookups.
 
 **D4 — Pin an exact pdf.js version, ≥ 6.2.108.** Pin exactly, like `ol` and `highcharts`.
 6.2.108 fixes GHSA-hq66-cqwq-w95j (code execution via PDF scripting). At the time
-of writing the latest version is 6.4.299. Note the pinned version here when slice 0 picks it:
-`pdfjs-dist@_____`.
+of writing the latest version is 6.4.299. **Pinned: `pdfjs-dist@6.3.289`** (slice 0,
+2026-10-06). 6.4.299 was only three days old, and the user's npm config has a release-age
+cooldown (`before=`) that refuses it. Respect that cooldown when upgrading: only move to a
+version that `npm install` accepts with the user's config.
 
 **D5 — Use the legacy build (`pdfjs-dist/legacy/build/*`).** Vaadin 25 supports
 Safari / iOS Safari 17+ and evergreen Chrome / Firefox / Edge (`README.md`). The
@@ -115,11 +117,18 @@ minimum. Document this in the README (slice 9). Don't add polyfills for Safari 1
   Do **not** set `GlobalWorkerOptions`, which is global state shared with any other pdf.js user on the page.
 - Bare-specifier `new URL('pdfjs-dist/...', import.meta.url)` does **not** work inside a dependency
   under Vite (vitejs/vite#10837). That's why we use a relative file of our own.
-- Vite dev pre-bundling (`optimizeDeps`) can still break the relative URL. Slice 0 must verify a
-  Vite **dev** and **production** build. If it needs `optimizeDeps.exclude: ['@vaadin/pdf-viewer']`
-  (or similar), record that here. It has to go into Flow's Vite config.
-- An escape hatch for apps with unusual bundlers or a strict CSP: a static
-  `PdfViewer.workerSrc` (URL string) override. Only add it if slice 0 shows it is needed (no bloat).
+- **Verified in slice 0** with Vite 8.3.2, installing the packed tarballs into a throwaway app
+  (so the package sits in `node_modules` and is pre-bundled, as in a Flow app): dev server and
+  production build (`vite build` + `vite preview`) both load the worker with **no Vite config**.
+  Vite rewrites the pattern to `pdf-viewer-worker.js?worker_file&type=module` in dev, and emits
+  `assets/pdf-viewer-worker-<hash>.js` in production. `@web/dev-server` (`yarn start`) works as well.
+- The worker is shared by all viewers on the page (`pdfjs-loader.js`), counted per document,
+  and terminated when the last document is destroyed.
+- pdf.js does not notice when a worker passed as a port fails to load. The loader listens to the
+  worker's `error` event and fails the load, so the viewer fires `document-error` instead of
+  waiting forever.
+- No `workerSrc` escape hatch for now (not needed by Vite or `@web/dev-server`). Add one only if
+  a real bundler or CSP needs it.
 
 **D7 — Lazy loading.** Importing `@vaadin/pdf-viewer` must not load pdf.js. Load it with
 dynamic `import()` the first time `src` is set on a connected element, and cache the
@@ -128,9 +137,12 @@ module promise at module level.
 **D8 — Static assets (`cmaps/`, `standard_fonts/`, `wasm/`).** The worker needs these for
 CJK text, PDFs without embedded standard fonts, and fast JPEG2000/JBIG2 decoding. Without
 them pdf.js still renders most business PDFs, but with warnings and slower or degraded
-output in those cases. Slice 0 decides how to ship them. Record the outcome here:
-`________`. Default if nothing better works: don't ship them, leave them unset, and
-add a static config property later only if real documents need it.
+output in those cases. **Outcome of slice 0: don't ship them.** Together they are about
+4 MB, and a bundler can't pick up a folder through `import.meta.url`. A PDF with a
+non-embedded Helvetica (`test/fixtures/standard-font.pdf`, typical of report generators)
+renders correctly with the browser's font fallback and no warnings. Revisit if real
+documents with CJK text or JPEG2000/JBIG2 images need it. The fix then is a static
+config property for the asset base URLs.
 
 **D9 — Security settings.**
 
@@ -151,7 +163,10 @@ canvas size (pdf.js `maxCanvasPixels`, about 16M pixels) so iOS doesn't run out 
 
 **D11 — Toolbar built from Vaadin components.** Use `vaadin-button` (icon buttons),
 `vaadin-integer-field` (page number), `vaadin-select` (zoom), and `vaadin-text-field`
-(find). They are rendered in the viewer's shadow DOM. Add them as package dependencies,
+(find). **They must be rendered in the viewer's light DOM and slotted** (like the buttons of
+`vaadin-menu-bar`, see `guidelines/dom.md`, "Internal elements in light DOM"). Aura styles
+components with global CSS that targets their tag names, which does not reach into a shadow
+root. Never apply hard-coded ids to them (`CONVENTIONS.md`). Add them as package dependencies,
 as `crud` does with its dependencies. Pass the host `theme` on to the inner components
 where that makes sense (`ifDefined(this._theme)`). Icons: use the shared
 `--_vaadin-icon-*` masks where they exist (plus, minus, chevron-down/right, file,
@@ -236,11 +251,18 @@ because reviewers check against it.
 | property   | `i18n: PdfViewerI18n`                                                                                  | Partial object, deep-merged with the defaults.                                                                                                                     |
 | method     | `print(): void`                                                                                        | See D15.                                                                                                                                                           |
 | event      | `page-changed`                                                                                         | From `notify`. Documented with `@fires`.                                                                                                                           |
-| event      | `load`                                                                                                 | Document loaded. `detail: { pageCount, title }`.                                                                                                                   |
-| event      | `error`                                                                                                | Load failed. `detail: { reason: 'network' \| 'invalid' \| 'password', error }`.                                                                                    |
+| event      | `document-load`                                                                                        | Document loaded. `detail: { pageCount, title }`.                                                                                                                   |
+| event      | `document-error`                                                                                       | Load failed. `detail: { reason: 'network' \| 'invalid' \| 'password', error }`.                                                                                    |
 | state attr | `loading`, `has-error`                                                                                 | For styling.                                                                                                                                                       |
 | parts      | `toolbar`, `sidebar`, `content`, `page`                                                                | Final list decided per slice.                                                                                                                                      |
 | CSS props  | `--vaadin-pdf-viewer-background`, `--vaadin-pdf-viewer-page-gap`, `--vaadin-pdf-viewer-page-shadow`, … | Full names only, each falling back to a shared token.                                                                                                              |
+
+The load events are called `document-load` / `document-error` and not `load` / `error`, because
+`HTMLElementEventMap` already types `load` as `Event` and `error` as `ErrorEvent`, so the typed
+event map would not compile (found in slice 0).
+
+The internal `render-idle` event (marked `@internal`) fires when the viewer has finished rendering
+what it currently shows. Tests and visual tests wait for it instead of using timeouts (R3).
 
 Every event must follow the `CONVENTIONS.md` checklist: `@fires` in both `.js` and
 `.d.ts`, an exported event type, an entry in the `*CustomEventMap`, and a typings test.
@@ -259,6 +281,12 @@ Every event must follow the `CONVENTIONS.md` checklist: `@fires` in both `.js` a
   and to update screenshots `yarn update:base|update:lumo|update:aura --group pdf-viewer`.
 - Unit tests: `yarn test --group pdf-viewer`, plus `yarn test:firefox` and `yarn test:webkit`.
   Snapshots: `yarn test:snapshots --group pdf-viewer`.
+- **Playwright's Firefox does not start on the user's machine** (macOS 27 beta, "Could not find
+  profile folder", for every package and also outside the sandbox). Run `yarn test` (Chromium)
+  and `yarn test:webkit` locally, and say in reviews that Firefox was not run. CI covers it.
+- Visual tests need Docker Desktop running (`open -a Docker`).
+- The dev server for the in-app browser is configured in `.claude/launch.json` as `dev`
+  (port 8000). That file is local and not committed.
 - Lint before every review: `yarn lint:js`, `yarn lint:css`, `yarn lint:types`.
 - Lumo styles go in `packages/vaadin-lumo-styles/{components,src/components}/pdf-viewer.css`.
   Aura styles go in `packages/aura/src/components/pdf-viewer.css`, imported from `packages/aura/aura.css`.
@@ -480,7 +508,8 @@ every page at the right size in Chromium, Firefox and WebKit. Cancelling release
 - ~~Q1: Safari 17~~ — resolved 2026-10-06: Safari 18+ is the minimum for this component (D5).
 - **R1:** Vite pre-bundling and the worker URL (D6). Mitigation: slice 0 verifies it, with a
   `workerSrc` escape hatch.
-- **R2:** Bundle size. About 530 KB gzipped (main + worker) when pdf.js loads lazily.
+- **R2:** Bundle size. Measured in slice 0 (Vite 8 production build, gzipped): viewer chunk
+  16 KB, pdf.js main chunk 148 KB (loaded on first `src`), worker 374 KB.
   Report the actual number in slice 0.
 - **R3:** Flaky visual tests from canvas rendering. Mitigation: the "render idle" hook and simple fixtures.
 - **R4:** Memory on iOS with large pages and high zoom. Mitigation: `maxCanvasPixels` and releasing canvases (D10).

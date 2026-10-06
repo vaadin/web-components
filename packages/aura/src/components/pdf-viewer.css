@@ -1,0 +1,4 @@
+:where(:root),
+:where(:host) {
+  --vaadin-pdf-viewer-page-shadow: var(--aura-shadow-s);
+}
