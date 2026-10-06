@@ -19,6 +19,7 @@
     --vaadin-pdf-viewer-error-color: var(--lumo-secondary-text-color);
     --vaadin-pdf-viewer-toolbar-background: var(--lumo-base-color);
     --vaadin-pdf-viewer-toolbar-padding: var(--lumo-space-xs);
+    --vaadin-pdf-viewer-selection-background: color-mix(in srgb, var(--lumo-primary-color) 30%, transparent);
     --vaadin-pdf-viewer-icon-previous-page: var(--lumo-icons-angle-up);
     --vaadin-pdf-viewer-icon-next-page: var(--lumo-icons-angle-down);
     --vaadin-pdf-viewer-icon-zoom-out: var(--lumo-icons-minus);

@@ -5,17 +5,21 @@
  */
 @media lumo_components_pdf-viewer-button {
   [part='icon'] {
+    display: flex;
+    align-items: center;
+    justify-content: center;
     width: var(--lumo-icon-size-m);
     height: var(--lumo-icon-size-m);
     mask: none;
     background: none;
+  }
+
+  /* The font size is set here, so that the icon part is sized relative to the button font size */
+  [part='icon']::before {
+    content: var(--_icon);
     font-family: 'lumo-icons';
     font-size: var(--lumo-icon-size-m);
     line-height: 1;
-  }
-
-  [part='icon']::before {
-    content: var(--_icon);
   }
 
   :host([icon='previous-page']) {

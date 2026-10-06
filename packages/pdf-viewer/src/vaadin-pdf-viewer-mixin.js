@@ -12,6 +12,7 @@ import { announce } from '@vaadin/a11y-base/src/announce.js';
 import { ResizeMixin } from '@vaadin/component-base/src/resize-mixin.js';
 import { issueWarning } from '@vaadin/component-base/src/warnings.js';
 import { MAX_CANVAS_PIXELS, PdfViewerPage } from './pdf-viewer-page.js';
+import { formatZoom, getZoomInLevel, getZoomOutLevel } from './pdf-viewer-zoom.js';
 import { acquireWorker, loadPdfjs, releaseWorker } from './pdfjs-loader.js';
 
 /** PDF units are points (1/72 inch), CSS pixels are 1/96 inch. */
@@ -32,6 +33,25 @@ const MAX_TOTAL_CANVAS_PIXELS = 3 * MAX_CANVAS_PIXELS;
 
 /** The number of pages whose size is requested at a time after loading. */
 const PAGE_SIZE_BATCH = 10;
+
+/** The protocols of external links that the viewer opens. Links with other URLs are left out. */
+const ALLOWED_LINK_PROTOCOLS = ['http:', 'https:', 'mailto:'];
+
+/** The `annotationType` of link annotations in pdf.js. */
+const LINK_ANNOTATION_TYPE = 2;
+
+/**
+ * Returns whether the URL of a link is safe to open.
+ * @param {string} url
+ * @return {boolean}
+ */
+function isAllowedLinkUrl(url) {
+  try {
+    return ALLOWED_LINK_PROTOCOLS.includes(new URL(url).protocol);
+  } catch {
+    return false;
+  }
+}
 
 /**
  * Maps a pdf.js loading error to the `reason` reported in the `document-error`
@@ -133,8 +153,14 @@ export const PdfViewerMixin = (superClass) =>
       };
     }
 
+    /** @type {typeof import('pdfjs-dist') | null} */
+    #pdfjs = null;
+
     /** @type {import('pdfjs-dist').PDFDocumentLoadingTask | null} */
     #loadingTask = null;
+
+    /** The accessible name the viewer set on itself, to know it can replace it. */
+    #ownAccessibleName = null;
 
     /** @type {ReturnType<typeof acquireWorker> | null} */
     #workerHandle = null;
@@ -231,7 +257,38 @@ export const PdfViewerMixin = (superClass) =>
     firstUpdated() {
       super.firstUpdated();
 
+      if (!this.hasAttribute('role')) {
+        this.setAttribute('role', 'region');
+      }
+
       this.$.content.addEventListener('scroll', () => this.#onScroll(), { passive: true });
+      this.$.content.addEventListener('keydown', (event) => this.#onContentKeyDown(event));
+      this.addEventListener('keydown', (event) => this.#onKeyDown(event));
+    }
+
+    /**
+     * Goes to the given page and announces it, for page changes caused by
+     * the user through the viewer's own controls.
+     * @param {number} page
+     * @protected
+     */
+    _goToPage(page) {
+      this.page = page;
+      const i18n = this.__effectiveI18n;
+      announce(i18n.pageAnnouncement.replace('{page}', page).replace('{pageCount}', this.pageCount));
+    }
+
+    /**
+     * Zooms in or out to the next zoom level, and announces the new zoom.
+     * @param {1 | -1} direction
+     * @protected
+     */
+    _stepZoom(direction) {
+      const zoom = direction > 0 ? getZoomInLevel(this._zoomFactor) : getZoomOutLevel(this._zoomFactor);
+      if (zoom) {
+        this.zoom = zoom;
+        announce(formatZoom(zoom));
+      }
     }
 
     /** @protected */
@@ -330,6 +387,7 @@ export const PdfViewerMixin = (superClass) =>
         if (loadId !== this.#loadId) {
           return;
         }
+        this.#pdfjs = pdfjs;
 
         const [{ info }, page] = await Promise.all([pdfDocument.getMetadata(), pdfDocument.getPage(1)]);
         if (loadId !== this.#loadId) {
@@ -358,8 +416,11 @@ export const PdfViewerMixin = (superClass) =>
       this.#idle = false;
       this.#pendingPage = this.page;
 
-      this.#loadPageSizes(loadId);
+      // Rendering waits for the page sizes, see #notifyIdle().
+      this.#pageSizesLoaded = false;
       this.#refresh();
+      this.#loadPageSizes(loadId);
+      this.#updateAccessibleName(title);
 
       this.dispatchEvent(new CustomEvent('document-load', { detail: { pageCount: pdfDocument.numPages, title } }));
     }
@@ -369,7 +430,6 @@ export const PdfViewerMixin = (superClass) =>
      * @private
      */
     #loadPageSizes(loadId) {
-      this.#pageSizesLoaded = false;
       const pdfDocument = this.#document;
       const pages = this.#pages.slice(1);
       (async () => {
@@ -378,7 +438,6 @@ export const PdfViewerMixin = (superClass) =>
         for (let start = 0; start < pages.length; start += PAGE_SIZE_BATCH) {
           const batch = pages.slice(start, start + PAGE_SIZE_BATCH);
           // A page that fails to load reports the error when it is rendered.
-
           await Promise.allSettled(
             batch.map((page) =>
               pdfDocument.getPage(page.pageNumber).then((pdfPage) => {
@@ -435,6 +494,7 @@ export const PdfViewerMixin = (superClass) =>
       this.#pages.forEach((page) => page.release());
       this.#pages = [];
       this.#document = null;
+      this.#pdfjs = null;
       this.#scale = 0;
       this._zoomFactor = 0;
       this.#currentIndex = 0;
@@ -803,12 +863,171 @@ export const PdfViewerMixin = (superClass) =>
           }
         }
         await page.render(outputScale);
+        // The page may have been released or unloaded meanwhile.
+        if (loadId !== this.#loadId || !page.isRendered(outputScale)) {
+          return;
+        }
+        await page.renderTextLayer(this.#pdfjs);
+        if (!page.linkLayerElement) {
+          const annotations = await page.pdfPage.getAnnotations({ intent: 'display' });
+          if (loadId !== this.#loadId || !page.canvas || page.linkLayerElement) {
+            return;
+          }
+          page.renderLinks(
+            annotations.filter((annotation) => annotation.annotationType === LINK_ANNOTATION_TYPE),
+            (annotation) => this.#createLink(annotation),
+          );
+          page.linkLayerElement.querySelectorAll('a').forEach((link) => {
+            link.setAttribute('aria-label', page.getTextInside(link) || link.dataset.label);
+            delete link.dataset.label;
+          });
+        }
       } catch (error) {
-        if (loadId === this.#loadId && error && error.name !== 'RenderingCancelledException') {
+        const isCancelled = error && (error.name === 'RenderingCancelledException' || error.name === 'AbortException');
+        if (loadId === this.#loadId && !isCancelled) {
           page.renderFailed = true;
           issueWarning(`Failed to render page ${page.pageNumber} of the PDF document: ${error.message}`);
         }
       }
+    }
+
+    /**
+     * Creates the link element for a link annotation, or returns null for
+     * links that the viewer does not support or does not consider safe.
+     * @private
+     */
+    #createLink(annotation) {
+      const link = document.createElement('a');
+      if (annotation.url) {
+        if (!isAllowedLinkUrl(annotation.url)) {
+          return null;
+        }
+        link.href = annotation.url;
+        link.target = '_blank';
+        link.rel = 'noopener noreferrer';
+        link.dataset.label = annotation.url;
+      } else if (annotation.dest || annotation.action) {
+        link.href = '#';
+        link.dataset.label = this.__effectiveI18n.link;
+        link.addEventListener('click', (event) => {
+          event.preventDefault();
+          this.#followLink(annotation);
+        });
+      } else {
+        return null;
+      }
+      return link;
+    }
+
+    /**
+     * Goes to the destination of an internal link.
+     * @private
+     */
+    async #followLink({ dest, action }) {
+      const pageCount = this.#pages.length;
+      const actions = { FirstPage: 1, LastPage: pageCount, NextPage: this.page + 1, PrevPage: this.page - 1 };
+      if (action) {
+        const page = actions[action];
+        if (page >= 1 && page <= pageCount) {
+          this._goToPage(page);
+        }
+        return;
+      }
+
+      const loadId = this.#loadId;
+      const pdfDocument = this.#document;
+      try {
+        const explicitDest = typeof dest === 'string' ? await pdfDocument.getDestination(dest) : dest;
+        if (!Array.isArray(explicitDest)) {
+          return;
+        }
+        const [ref] = explicitDest;
+        const pageIndex = Number.isInteger(ref) ? ref : await pdfDocument.getPageIndex(ref);
+        if (loadId === this.#loadId && pageIndex >= 0 && pageIndex < pageCount) {
+          this._goToPage(pageIndex + 1);
+        }
+      } catch {
+        // A broken destination does nothing, like in other PDF viewers.
+      }
+    }
+
+    /**
+     * Sets the title of the document as the accessible name of the viewer,
+     * unless the application has set one.
+     * @private
+     */
+    #updateAccessibleName(title) {
+      const ownName = this.#ownAccessibleName;
+      const hasAppName =
+        this.hasAttribute('aria-labelledby') ||
+        (this.hasAttribute('aria-label') && this.getAttribute('aria-label') !== ownName);
+      if (hasAppName) {
+        return;
+      }
+      this.#ownAccessibleName = title || this.__effectiveI18n.document;
+      this.setAttribute('aria-label', this.#ownAccessibleName);
+    }
+
+    /**
+     * Handles the keyboard shortcuts of the viewer.
+     * @private
+     */
+    #onKeyDown(event) {
+      const isShortcut = (event.ctrlKey || event.metaKey) && !event.altKey;
+      if (!isShortcut || !this.#pages.length) {
+        return;
+      }
+
+      let handled = true;
+      if (event.key === '+' || event.key === '=') {
+        this._stepZoom(1);
+      } else if (event.key === '-') {
+        this._stepZoom(-1);
+      } else if (event.key === '0') {
+        this.zoom = 'page-width';
+        announce(this.__effectiveI18n.pageWidth);
+      } else if ((event.key === 'Home' || event.key === 'End') && event.composedPath().includes(this.$.content)) {
+        this._goToPage(event.key === 'Home' ? 1 : this.#pages.length);
+      } else {
+        handled = false;
+      }
+
+      if (handled) {
+        event.preventDefault();
+      }
+    }
+
+    /**
+     * Scrolls the pages with the keyboard. Browsers do this natively for a
+     * focused scroll container, except Safari, so the viewer does it itself
+     * for consistent behavior.
+     * @private
+     */
+    #onContentKeyDown(event) {
+      if (event.defaultPrevented || event.ctrlKey || event.metaKey || event.altKey) {
+        return;
+      }
+
+      const { content } = this.$;
+      const lineHeight = 40;
+      const pageHeight = content.clientHeight * 0.9;
+      const scrolls = {
+        ArrowDown: { top: lineHeight },
+        ArrowUp: { top: -lineHeight },
+        ArrowRight: { left: lineHeight },
+        ArrowLeft: { left: -lineHeight },
+        PageDown: { top: pageHeight },
+        PageUp: { top: -pageHeight },
+        ' ': { top: event.shiftKey ? -pageHeight : pageHeight },
+      };
+      if (event.key === 'Home' || event.key === 'End') {
+        content.scrollTop = event.key === 'Home' ? 0 : content.scrollHeight;
+      } else if (scrolls[event.key]) {
+        content.scrollBy(scrolls[event.key]);
+      } else {
+        return;
+      }
+      event.preventDefault();
     }
 
     /** @private */

@@ -1,6 +1,6 @@
 import { expect } from '@vaadin/chai-plugins';
 import { resetMouse, sendKeys, sendMouseToElement } from '@vaadin/test-runner-commands';
-import { fixtureSync, nextFrame, nextRender } from '@vaadin/testing-helpers';
+import { fixtureSync, nextFrame, nextRender, oneEvent } from '@vaadin/testing-helpers';
 import sinon from 'sinon';
 import './enable-feature-flag.js';
 import '../vaadin-pdf-viewer.js';
@@ -8,7 +8,7 @@ import type { IntegerField } from '@vaadin/integer-field';
 import type { Select } from '@vaadin/select';
 import { Tooltip } from '@vaadin/tooltip/src/vaadin-tooltip.js';
 import type { PdfViewer } from '../vaadin-pdf-viewer.js';
-import { loadDocument, nextRenderIdle } from './helpers.js';
+import { fixtureUrl, loadDocument, nextRenderIdle } from './helpers.js';
 
 describe('toolbar', () => {
   let viewer: PdfViewer;
@@ -34,13 +34,30 @@ describe('toolbar', () => {
     await nextRender();
   });
 
+  function expectControlsDisabled() {
+    ['previous-page', 'next-page', 'zoom-out', 'zoom-in'].forEach((icon) => {
+      expect(getButton(icon).disabled).to.be.true;
+    });
+    expect(getPageField().disabled).to.be.true;
+    expect(getZoomSelect().disabled).to.be.true;
+  }
+
   describe('without document', () => {
     it('should disable the controls', () => {
-      ['previous-page', 'next-page', 'zoom-out', 'zoom-in'].forEach((icon) => {
-        expect(getButton(icon).disabled).to.be.true;
-      });
-      expect(getPageField().disabled).to.be.true;
-      expect(getZoomSelect().disabled).to.be.true;
+      expectControlsDisabled();
+    });
+
+    it('should disable the controls while a document loads', async () => {
+      viewer.src = fixtureUrl('multi-page.pdf');
+      await nextFrame();
+      expectControlsDisabled();
+    });
+
+    it('should disable the controls when the document could not be loaded', async () => {
+      viewer.src = fixtureUrl('invalid.pdf');
+      await oneEvent(viewer, 'document-error');
+      await nextFrame();
+      expectControlsDisabled();
     });
   });
 
@@ -100,6 +117,34 @@ describe('toolbar', () => {
         expect(viewer.page).to.equal(4);
       });
 
+      it('should include the page count in the accessible name of the page field', () => {
+        expect(getPageField().accessibleName).to.equal('Page of 6');
+      });
+
+      it('should not let the change event of the page field reach the application', async () => {
+        const spy = sinon.spy();
+        viewer.addEventListener('change', spy);
+        const field = getPageField();
+        field.focus();
+        (field.inputElement as HTMLInputElement).select();
+        await sendKeys({ type: '4' });
+        await sendKeys({ press: 'Enter' });
+        await nextFrame();
+        expect(spy).to.be.not.called;
+      });
+
+      it('should leave the page field empty for a page out of range', async () => {
+        const stub = sinon.stub(console, 'warn');
+        try {
+          viewer.page = 10;
+          await nextFrame();
+          expect(getPageField().value).to.equal('');
+          expect(getPageField().invalid).to.be.false;
+        } finally {
+          stub.restore();
+        }
+      });
+
       it('should restore the current page for a page out of range', async () => {
         const field = getPageField();
         field.focus();
@@ -141,10 +186,38 @@ describe('toolbar', () => {
 
       it('should set the zoom selected in the zoom select', async () => {
         const select = getZoomSelect();
-        select.value = '2';
-        select.dispatchEvent(new CustomEvent('change'));
+        select.opened = true;
+        await nextRender();
+        const item = [...select.querySelectorAll('vaadin-select-item')].find(
+          (element) => element.textContent === '200%',
+        )!;
+        item.click();
         await nextRenderIdle(viewer);
         expect(viewer.zoom).to.equal(2);
+      });
+
+      it('should not let the change event of the zoom select reach the application', async () => {
+        const spy = sinon.spy();
+        viewer.addEventListener('change', spy);
+        const select = getZoomSelect();
+        select.opened = true;
+        await nextRender();
+        [...select.querySelectorAll('vaadin-select-item')].find((element) => element.textContent === '200%')!.click();
+        await nextRenderIdle(viewer);
+        expect(spy).to.be.not.called;
+      });
+
+      it('should announce the zoom when zooming with the zoom buttons', async () => {
+        viewer.zoom = 1;
+        await nextRenderIdle(viewer);
+        const clock = sinon.useFakeTimers({ shouldClearNativeTimers: true });
+        try {
+          getButton('zoom-in').click();
+          await clock.tickAsync(200);
+          expect(getAnnouncement()).to.equal('125%');
+        } finally {
+          clock.restore();
+        }
       });
 
       it('should show a zoom that is not one of the levels', async () => {
@@ -207,10 +280,10 @@ describe('toolbar', () => {
 
     describe('i18n', () => {
       it('should use i18n for the accessible names', async () => {
-        viewer.i18n = { nextPage: 'Nästa sida', page: 'Sida', zoom: 'Zooma' };
+        viewer.i18n = { nextPage: 'Nästa sida', page: 'Sida', pageOf: 'av {pageCount}', zoom: 'Zooma' };
         await nextFrame();
         expect(getButton('next-page').getAttribute('aria-label')).to.equal('Nästa sida');
-        expect(getPageField().accessibleName).to.equal('Sida');
+        expect(getPageField().accessibleName).to.equal('Sida av 6');
         expect(getZoomSelect().accessibleName).to.equal('Zooma');
       });
 
@@ -238,11 +311,21 @@ describe('toolbar', () => {
       });
 
       beforeEach(() => {
-        tooltip = viewer.querySelector('vaadin-tooltip')!;
+        tooltip = viewer.querySelector('vaadin-tooltip[slot="toolbar-tooltip"]')!;
       });
 
       afterEach(async () => {
         await resetMouse();
+      });
+
+      it('should not use a tooltip of the application', async () => {
+        const appTooltip = document.createElement('vaadin-tooltip');
+        appTooltip.slot = 'tooltip';
+        viewer.prepend(appTooltip);
+        await sendMouseToElement({ type: 'move', element: getButton('next-page') });
+        await nextRender();
+        expect(appTooltip.target).to.be.not.ok;
+        expect(tooltip.text).to.equal('Next page');
       });
 
       it('should show the button label as tooltip on hover', async () => {

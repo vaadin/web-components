@@ -21,12 +21,16 @@ export interface PdfViewerI18n {
   previousPage?: string;
   nextPage?: string;
   page?: string;
+  pageOf?: string;
   pageAnnouncement?: string;
   zoom?: string;
   zoomIn?: string;
   zoomOut?: string;
   pageWidth?: string;
   pageFit?: string;
+  document?: string;
+  pages?: string;
+  link?: string;
 }
 
 /**
@@ -90,26 +94,30 @@ export interface PdfViewerEventMap extends HTMLElementEventMap, PdfViewerCustomE
  *
  * The following custom CSS properties are available for styling:
  *
- * Custom CSS property                       |
- * :------------------------------------------|
- * | `--vaadin-pdf-viewer-background`         |
- * | `--vaadin-pdf-viewer-border-color`       |
- * | `--vaadin-pdf-viewer-border-radius`      |
- * | `--vaadin-pdf-viewer-error-color`        |
- * | `--vaadin-pdf-viewer-icon-next-page`     |
- * | `--vaadin-pdf-viewer-icon-previous-page` |
- * | `--vaadin-pdf-viewer-icon-zoom-in`       |
- * | `--vaadin-pdf-viewer-icon-zoom-out`      |
- * | `--vaadin-pdf-viewer-padding`            |
- * | `--vaadin-pdf-viewer-page-background`    |
- * | `--vaadin-pdf-viewer-page-field-width`   |
- * | `--vaadin-pdf-viewer-page-gap`           |
- * | `--vaadin-pdf-viewer-page-shadow`        |
- * | `--vaadin-pdf-viewer-text-color`         |
- * | `--vaadin-pdf-viewer-toolbar-background` |
- * | `--vaadin-pdf-viewer-toolbar-gap`        |
- * | `--vaadin-pdf-viewer-toolbar-padding`    |
- * | `--vaadin-pdf-viewer-zoom-select-width`  |
+ * Custom CSS property                         |
+ * :--------------------------------------------|
+ * | `--vaadin-pdf-viewer-background`           |
+ * | `--vaadin-pdf-viewer-border-color`         |
+ * | `--vaadin-pdf-viewer-border-radius`        |
+ * | `--vaadin-pdf-viewer-error-color`          |
+ * | `--vaadin-pdf-viewer-icon-next-page`       |
+ * | `--vaadin-pdf-viewer-icon-previous-page`   |
+ * | `--vaadin-pdf-viewer-icon-zoom-in`         |
+ * | `--vaadin-pdf-viewer-icon-zoom-out`        |
+ * | `--vaadin-pdf-viewer-padding`              |
+ * | `--vaadin-pdf-viewer-page-background`      |
+ * | `--vaadin-pdf-viewer-page-field-width`     |
+ * | `--vaadin-pdf-viewer-page-gap`             |
+ * | `--vaadin-pdf-viewer-page-shadow`          |
+ * | `--vaadin-pdf-viewer-selection-background` |
+ * | `--vaadin-pdf-viewer-text-color`           |
+ * | `--vaadin-pdf-viewer-toolbar-background`   |
+ * | `--vaadin-pdf-viewer-toolbar-gap`          |
+ * | `--vaadin-pdf-viewer-toolbar-padding`      |
+ * | `--vaadin-pdf-viewer-zoom-select-width`    |
+ *
+ * The `--vaadin-pdf-viewer-icon-*` properties take an image (e.g. an SVG data URL) used as a mask.
+ * In the Lumo theme, they take a glyph of the `lumo-icons` font instead, like the icons of `<vaadin-map>`.
  *
  * See [Styling Components](https://vaadin.com/docs/latest/styling/styling-components) documentation.
  *
@@ -139,8 +147,10 @@ declare class PdfViewer extends PdfViewerMixin(
    *   // Accessible labels and tooltips of the page navigation buttons.
    *   previousPage: 'Previous page',
    *   nextPage: 'Next page',
-   *   // Accessible label of the page number field.
+   *   // Accessible label of the page number field, followed by `pageOf`.
+   *   // {pageCount} is replaced with the number of pages.
    *   page: 'Page',
+   *   pageOf: 'of {pageCount}',
    *   // Announced when a toolbar control changes the page.
    *   // {page} and {pageCount} are replaced with the page number and the number of pages.
    *   pageAnnouncement: 'Page {page} of {pageCount}',
@@ -151,7 +161,15 @@ declare class PdfViewer extends PdfViewerMixin(
    *   zoomOut: 'Zoom out',
    *   // Labels of the zoom levels that fit the page to the viewer.
    *   pageWidth: 'Page width',
-   *   pageFit: 'Page fit'
+   *   pageFit: 'Page fit',
+   *   // Accessible name of the viewer when the document has no title
+   *   // and the application has not set aria-label or aria-labelledby.
+   *   document: 'PDF document',
+   *   // Accessible name of the scrollable area that contains the pages.
+   *   pages: 'Pages',
+   *   // Accessible name of a link to another place in the document,
+   *   // used when the link has no text.
+   *   link: 'Link'
    * }
    * ```
    */

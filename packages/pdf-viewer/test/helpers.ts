@@ -2,7 +2,14 @@ import { oneEvent } from '@vaadin/testing-helpers';
 import type { PdfViewer } from '../vaadin-pdf-viewer.js';
 
 export type Fixture =
-  'encrypted.pdf' | 'invalid.pdf' | 'links.pdf' | 'multi-page.pdf' | 'outline.pdf' | 'standard-font.pdf' | 'tagged.pdf';
+  | 'encrypted.pdf'
+  | 'invalid.pdf'
+  | 'links.pdf'
+  | 'multi-page.pdf'
+  | 'outline.pdf'
+  | 'standard-font.pdf'
+  | 'tagged.pdf'
+  | 'unsafe-links.pdf';
 
 export function fixtureUrl(name: Fixture): string {
   return new URL(`./fixtures/${name}`, import.meta.url).href;

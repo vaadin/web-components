@@ -48,6 +48,28 @@ describe('pdf-viewer', () => {
     await visualDiff(div, 'narrow');
   });
 
+  it('text-selection', async () => {
+    element.src = fixtureUrl('multi-page.pdf');
+    await nextRenderIdle(element);
+    const textLayer = element.shadowRoot!.querySelector('.text-layer')!;
+    const span = [...textLayer.querySelectorAll('span')].find((item) => item.textContent!.startsWith('The quick'))!;
+    const range = document.createRange();
+    range.selectNodeContents(span);
+    const selection = window.getSelection()!;
+    selection.removeAllRanges();
+    selection.addRange(range);
+    await visualDiff(div, 'text-selection');
+    selection.removeAllRanges();
+  });
+
+  it('link-focus', async () => {
+    element.src = fixtureUrl('links.pdf');
+    await nextRenderIdle(element);
+    element.shadowRoot!.querySelector<HTMLElement>('[part="content"]')!.focus();
+    await sendKeys({ press: 'Tab' });
+    await visualDiff(div, 'link-focus');
+  });
+
   it('rtl', async () => {
     div.setAttribute('dir', 'rtl');
     element.src = fixtureUrl('multi-page.pdf');

@@ -14,18 +14,8 @@ import '@vaadin/tooltip/src/vaadin-tooltip.js';
 import './vaadin-pdf-viewer-button.js';
 import { html, render } from 'lit';
 import { live } from 'lit/directives/live.js';
-import { announce } from '@vaadin/a11y-base/src/announce.js';
 import { isKeyboardActive } from '@vaadin/a11y-base/src/focus-utils.js';
-
-/** The zoom levels of the zoom select and of the zoom in / out buttons. */
-const ZOOM_LEVELS = [0.25, 0.5, 0.75, 1, 1.25, 1.5, 2, 3, 4];
-
-/** Tolerance for comparing zoom factors, which come from computed scales. */
-const ZOOM_EPSILON = 0.001;
-
-function formatZoom(zoom) {
-  return `${Math.round(zoom * 100)}%`;
-}
+import { formatZoom, getZoomInLevel, getZoomOutLevel, ZOOM_LEVELS } from './pdf-viewer-zoom.js';
 
 /**
  * Renders the toolbar of the PDF viewer. Its controls are Vaadin components,
@@ -65,6 +55,9 @@ export const PdfViewerToolbarMixin = (superClass) =>
       const { page, pageCount } = this;
       const hasDocument = pageCount > 0;
       const zoomFactor = this._zoomFactor;
+      // The page field only shows a page that exists. A page out of range set by
+      // the application would make the field invalid.
+      const pageValue = hasDocument && page >= 1 && page <= pageCount ? String(page) : '';
 
       render(
         html`
@@ -79,12 +72,13 @@ export const PdfViewerToolbarMixin = (superClass) =>
           <vaadin-integer-field
             slot="toolbar-navigation"
             theme="align-center"
-            accessible-name="${i18n.page}"
+            accessible-name="${hasDocument ? `${i18n.page} ${i18n.pageOf.replace('{pageCount}', pageCount)}` : i18n.page}"
             min="1"
             max="${pageCount || 1}"
-            .value="${live(hasDocument ? String(page) : '')}"
+            .value="${live(pageValue)}"
             .disabled="${!hasDocument}"
             @change="${this.#onPageFieldChange}"
+            @keydown="${this.#onPageFieldKeyDown}"
           >
             <span slot="suffix" aria-hidden="true">${hasDocument ? `/ ${pageCount}` : ''}</span>
           </vaadin-integer-field>
@@ -101,7 +95,7 @@ export const PdfViewerToolbarMixin = (superClass) =>
             icon="zoom-out"
             theme="tertiary icon"
             aria-label="${i18n.zoomOut}"
-            .disabled="${!hasDocument || !this.#getZoomOutLevel(zoomFactor)}"
+            .disabled="${!hasDocument || !getZoomOutLevel(zoomFactor)}"
             @click="${this.#onZoomOutClick}"
           ></vaadin-pdf-viewer-button>
           <vaadin-select
@@ -117,23 +111,25 @@ export const PdfViewerToolbarMixin = (superClass) =>
             icon="zoom-in"
             theme="tertiary icon"
             aria-label="${i18n.zoomIn}"
-            .disabled="${!hasDocument || !this.#getZoomInLevel(zoomFactor)}"
+            .disabled="${!hasDocument || !getZoomInLevel(zoomFactor)}"
             @click="${this.#onZoomInClick}"
           ></vaadin-pdf-viewer-button>
-          <vaadin-tooltip slot="tooltip" .ariaLinkMode="${'none'}"></vaadin-tooltip>
+          <vaadin-tooltip slot="toolbar-tooltip" .ariaLinkMode="${'none'}"></vaadin-tooltip>
         `,
         this,
         { host: this },
       );
 
-      // A button that gets disabled while focused (e.g. "next page" on the
-      // last page) loses keyboard focus. Move it to the next control instead.
+      // A button that gets disabled while focused with the keyboard (e.g. "next
+      // page" on the last page) loses focus. Move it to the field or select of
+      // the same group instead. Pointer users keep their focus where it is, so
+      // that touch devices don't open the on-screen keyboard.
       const focusedButton = this.querySelector(':scope > vaadin-pdf-viewer-button[disabled]:focus');
-      if (focusedButton) {
+      if (focusedButton && isKeyboardActive()) {
         const next = this.querySelector(
           `:scope > [slot="${focusedButton.slot}"]:not([disabled], vaadin-pdf-viewer-button)`,
         );
-        next?.focus({ focusVisible: isKeyboardActive() });
+        next?.focus({ focusVisible: true });
       }
     }
 
@@ -153,37 +149,22 @@ export const PdfViewerToolbarMixin = (superClass) =>
     }
 
     /** @private */
-    #getZoomInLevel(zoomFactor) {
-      return zoomFactor > 0 ? ZOOM_LEVELS.find((level) => level > zoomFactor + ZOOM_EPSILON) : undefined;
-    }
-
-    /** @private */
-    #getZoomOutLevel(zoomFactor) {
-      return zoomFactor > 0 ? ZOOM_LEVELS.findLast((level) => level < zoomFactor - ZOOM_EPSILON) : undefined;
-    }
-
-    /** @private */
-    #goToPage(page) {
-      this.page = page;
-      const i18n = this.__effectiveI18n;
-      announce(i18n.pageAnnouncement.replace('{page}', page).replace('{pageCount}', this.pageCount));
-    }
-
-    /** @private */
     #onPreviousPageClick() {
-      this.#goToPage(Math.min(this.page, this.pageCount) - 1);
+      this._goToPage(Math.min(this.page, this.pageCount) - 1);
     }
 
     /** @private */
     #onNextPageClick() {
-      this.#goToPage(Math.max(this.page, 0) + 1);
+      this._goToPage(Math.max(this.page, 0) + 1);
     }
 
     /** @private */
     #onPageFieldChange(event) {
+      // The change is internal to the viewer. Applications listen to `page-changed`.
+      event.stopPropagation();
       const page = Number(event.target.value);
       if (Number.isInteger(page) && page >= 1 && page <= this.pageCount) {
-        this.#goToPage(page);
+        this._goToPage(page);
       } else {
         // Show the current page again
         event.target.value = String(this.page);
@@ -192,23 +173,27 @@ export const PdfViewerToolbarMixin = (superClass) =>
     }
 
     /** @private */
-    #setZoom(zoom) {
-      this.zoom = zoom;
-      announce(formatZoom(zoom));
+    #onPageFieldKeyDown(event) {
+      // Don't submit a form that contains the viewer.
+      if (event.key === 'Enter') {
+        event.preventDefault();
+      }
     }
 
     /** @private */
     #onZoomInClick() {
-      this.#setZoom(this.#getZoomInLevel(this._zoomFactor));
+      this._stepZoom(1);
     }
 
     /** @private */
     #onZoomOutClick() {
-      this.#setZoom(this.#getZoomOutLevel(this._zoomFactor));
+      this._stepZoom(-1);
     }
 
     /** @private */
     #onZoomSelectChange(event) {
+      // The change is internal to the viewer. Applications listen to `zoom-changed`.
+      event.stopPropagation();
       const { value } = event.target;
       this.zoom = value === 'page-width' || value === 'page-fit' ? value : Number(value);
     }
@@ -225,7 +210,7 @@ export const PdfViewerToolbarMixin = (superClass) =>
       if (type === 'focusin' && !isKeyboardActive()) {
         return;
       }
-      const tooltip = this.querySelector(':scope > vaadin-tooltip');
+      const tooltip = this.querySelector(':scope > vaadin-tooltip[slot="toolbar-tooltip"]');
       tooltip.target = target;
       tooltip.text = target.getAttribute('aria-label');
       tooltip._stateController.open({

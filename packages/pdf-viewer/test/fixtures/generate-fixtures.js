@@ -150,6 +150,32 @@ function createStandardFontPdf() {
 }
 
 /**
+ * Builds a PDF with link annotations to URLs that the viewer must not open,
+ * next to one safe link.
+ */
+function createUnsafeLinksPdf() {
+  // The viewer must not create links for these URLs, except the first one.
+  // eslint-disable-next-line no-script-url
+  const urls = ['https://vaadin.com/', 'javascript:alert(1)', 'ftp://example.com/', 'tel:123456'];
+  const content = urls.map((url, index) => `BT /F1 14 Tf 72 ${720 - index * 40} Td (${url}) Tj ET`).join(' ');
+  const links = urls.map(
+    (url, index) =>
+      `<< /Type /Annot /Subtype /Link /Rect [72 ${715 - index * 40} 300 ${735 - index * 40}] /Border [0 0 0] /A << /S /URI /URI (${url}) >> >>`,
+  );
+  return assemblePdf(
+    [
+      '<< /Type /Catalog /Pages 2 0 R >>',
+      '<< /Type /Pages /Kids [3 0 R] /Count 1 >>',
+      `<< /Type /Page /Parent 2 0 R /MediaBox [0 0 612 792] /Resources << /Font << /F1 5 0 R >> >> /Contents 4 0 R /Annots [${links.map((_, index) => `${index + 6} 0 R`).join(' ')}] >>`,
+      `<< /Length ${content.length} >>\nstream\n${content}\nendstream`,
+      '<< /Type /Font /Subtype /Type1 /BaseFont /Helvetica /Encoding /WinAnsiEncoding >>',
+      ...links,
+    ],
+    '',
+  );
+}
+
+/**
  * Builds a PDF that uses the standard security handler with a user password,
  * so that pdf.js asks for a password. The document itself is never readable.
  */
@@ -182,4 +208,5 @@ await browser.close();
 
 writeFileSync(join(dir, 'encrypted.pdf'), createEncryptedPdf(), 'latin1');
 writeFileSync(join(dir, 'standard-font.pdf'), createStandardFontPdf(), 'latin1');
+writeFileSync(join(dir, 'unsafe-links.pdf'), createUnsafeLinksPdf(), 'latin1');
 writeFileSync(join(dir, 'invalid.pdf'), 'This file is not a PDF document.\n');

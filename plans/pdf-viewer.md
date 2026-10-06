@@ -19,18 +19,18 @@ specific to the PDF viewer. It does not repeat those documents.
 
 Status values: `todo`, `in progress`, `in review`, `done`, `blocked`.
 
-| #   | Slice                                    | Status    | Reviews (code / visual) | Notes                  |
-| --- | ---------------------------------------- | --------- | ----------------------- | ---------------------- |
-| 0   | Tracer bullet: package + first page      | done      | ✅ / ✅                 | 561906b4d0, 59ff4a2850 |
-| 1   | Continuous scroll, zoom, page tracking   | done      | ✅ / ✅ (+ re-review)   | 1e173c331e, b2d2a73c16 |
-| 2   | Toolbar: page navigation + zoom controls | in review | – / –                   |                        |
-| 3   | Text layer, links, keyboard, a11y basics | todo      | – / –                   |                        |
-| 4   | Find                                     | todo      | – / –                   |                        |
-| 5   | Sidebar: thumbnails                      | todo      | – / –                   |                        |
-| 6   | Sidebar: outline                         | todo      | – / –                   |                        |
-| 7   | Download and print                       | todo      | – / –                   |                        |
-| 8   | Tagged PDFs, AT audit, forced colors     | todo      | – / –                   |                        |
-| 9   | API docs, typings, README, release prep  | todo      | – / –                   |                        |
+| #   | Slice                                    | Status | Reviews (code / visual) | Notes                  |
+| --- | ---------------------------------------- | ------ | ----------------------- | ---------------------- |
+| 0   | Tracer bullet: package + first page      | done   | ✅ / ✅                 | 561906b4d0, 59ff4a2850 |
+| 1   | Continuous scroll, zoom, page tracking   | done   | ✅ / ✅ (+ re-review)   | 1e173c331e, b2d2a73c16 |
+| 2   | Toolbar: page navigation + zoom controls | done   | – / –                   |                        |
+| 3   | Text layer, links, keyboard, a11y basics | todo   | – / –                   |                        |
+| 4   | Find                                     | todo   | – / –                   |                        |
+| 5   | Sidebar: thumbnails                      | todo   | – / –                   |                        |
+| 6   | Sidebar: outline                         | todo   | – / –                   |                        |
+| 7   | Download and print                       | todo   | – / –                   |                        |
+| 8   | Tagged PDFs, AT audit, forced colors     | todo   | – / –                   |                        |
+| 9   | API docs, typings, README, release prep  | todo   | – / –                   |                        |
 
 ---
 
@@ -151,6 +151,14 @@ config property for the asset base URLs.
 - `AnnotationLayer` renders links only. No form or editor layers.
 - External links: `target="_blank"` and `rel="noopener noreferrer"`. Only allow
   `http:`, `https:` and `mailto:` URLs, and ignore anything else.
+- **As built in slice 3:** links don't use pdf.js `AnnotationLayer` (it needs a full link service
+  and does `document`-level lookups). The viewer reads `page.getAnnotations()` and creates its
+  own `<a>` elements for link annotations, positioned in % of the page. pdf.js already drops
+  `javascript:` URLs but passes `ftp:` and `tel:`, which the allowlist removes
+  (`test/fixtures/unsafe-links.pdf`). Internal links (`dest`, and the named actions
+  First/Last/Next/PrevPage) use `href="#"` with a click handler, so the page URL never changes.
+  A link's accessible name is the text of the text layer inside it, with the URL or the
+  `link` i18n string as fallback.
 - `isEvalSupported` no longer exists in 6.x, so don't set it.
 
 **D10 — Layout: continuous vertical scroll only.** All pages are stacked in one scroller.
@@ -206,9 +214,23 @@ As built in slice 2:
   it contains a text field and a select that use the arrow keys themselves.
 - One shared `vaadin-tooltip` (with `ariaLinkMode = 'none'`) shows the button labels on hover
   and keyboard focus, like the Rich Text Editor toolbar.
-- The toolbar wraps onto more rows when narrow (`flex-wrap`). At 375 px it fits on one row.
-- When a focused button becomes disabled (e.g. "next page" on the last page), focus moves to the
-  next control in its group.
+- The toolbar wraps onto more rows when narrow (`flex-wrap`). Whether it fits one row at 375 px
+  depends on the theme and fonts; wrapping is clean in all themes.
+- When a focused button becomes disabled (e.g. "next page" on the last page) while the keyboard
+  is used, focus moves to the field or select of its group. Pointer users keep their focus, so
+  touch devices don't open the on-screen keyboard (slice 2 review).
+- The tooltip uses its own slot `toolbar-tooltip`, so that a `vaadin-tooltip slot="tooltip"`
+  of the application (e.g. Flow's `Tooltip.forComponent`) is not taken over.
+- The `change` events of the page field and the zoom select are stopped at the viewer. Apps
+  listen to `page-changed` / `zoom-changed`. Enter in the page field does not submit a form.
+- The page field's accessible name includes the page count ("Page of 6", i18n `pageOf`), since
+  the visible "/ 6" suffix is hidden from assistive technology.
+- Percentages are formatted with `Intl.NumberFormat` in the language of the page.
+- The host `theme` is **not** forwarded to the toolbar controls in v1, as the viewer defines no
+  theme variants (decided in slice 2 review). Revisit if a compact variant is needed.
+- `--vaadin-pdf-viewer-icon-*` take a mask image in base and Aura, but a `lumo-icons` glyph in
+  Lumo, like `vaadin-map`. This is documented in the class JSDoc.
+- Prev / next use up / down chevrons, so they don't need mirroring in RTL.
 - `zoom` is `notify: true`, because the toolbar changes it. Zoom in / out step through
   25 % – 400 % (`ZOOM_LEVELS`). A zoom set by the app that is not a level is added to the select.
 - Announcements: "Page {page} of {pageCount}" after page changes from the toolbar, and the zoom
@@ -262,6 +284,19 @@ On narrow viewports the sidebar overlays the pages instead of pushing them aside
 - Page changes caused by toolbar actions are announced with `announce()` ("Page 3 of 12").
   Plain scrolling is **not** announced, to avoid noise.
 - All built-in strings go through `I18nMixin` (`i18n` property).
+
+As built in slice 3:
+
+- The host gets `role="region"` and, unless the app set `aria-label` or `aria-labelledby`, an
+  `aria-label` with the PDF title (fallback: i18n `document`). The viewer only replaces a name it
+  set itself.
+- The scroller (`content` part) has `tabindex="0"`, `role="document"` and the i18n `pages` name.
+  The viewer handles the arrow keys, PageUp / PageDown, Space / Shift+Space and Home / End on it
+  itself, because Safari does not scroll a focused scroll container with the keyboard.
+- Ctrl/Cmd + `+` / `=` / `-` / `0` zoom anywhere in the viewer. Ctrl/Cmd + Home / End on the
+  scroller go to the first / last page and announce it.
+- Only rendered pages (visible ±1) have a text layer, like the pdf.js viewer. A screen reader in
+  browse mode therefore only reaches the text of pages near the view. Revisit in slice 8.
 
 **D19 — Testing fixtures.** Store small PDFs we generated ourselves in
 `packages/pdf-viewer/test/fixtures/` (each ideally under 50 KB):
@@ -575,6 +610,23 @@ Newest entry at the top. Format:
 - Visual review: <summary>
 - Follow-ups: …
 ```
+
+### 2026-10-06 — Slice 2: Toolbar — done
+
+- Base commit: b2d2a73c16 Head: 538b068c2c, review fixes committed together with slice 3
+- Shipped: toolbar with previous / next page, page field, zoom out / select / in, shared tooltip,
+  i18n, announcements, internal `vaadin-pdf-viewer-button`, Lumo and Aura styling, `zoom-changed`.
+  Also slice 1 re-review fixes: relayout while hidden, batched page size requests, render budget.
+- Code review: 0 blockers, 7 should-fix (app tooltip taken over, internal `change` events
+  leaking, page count hidden from screen readers, focus moved into the field after pointer clicks,
+  theme not forwarded, icon property meaning differs per theme, test gaps), 6 nits. Fixed, except:
+  theme forwarding (decided against, D11), icon property per theme (documented, like map),
+  `_requestValidation()` kept because the repo's lint rule forbids calling `validate()`.
+- Visual review: 0 blockers, 4 should-fix (Lumo buttons too wide with icons too high, Aura icons
+  accent-colored because the button was missing from `aura/src/color.css`, page count, icon
+  property). Fixed. Nits: plan text on 375 px corrected, select widened, RTL note added.
+- Follow-ups: Lumo toolbar background and button color differ from the RTE toolbar (kept as
+  standard tertiary buttons). Page field digits follow RTL in base but not in Lumo (field behavior).
 
 ### 2026-10-06 — Slice 1: Continuous scroll, zoom, page tracking — done
 

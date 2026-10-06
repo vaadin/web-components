@@ -2,7 +2,7 @@
 export const snapshots = {};
 
 snapshots["vaadin-pdf-viewer host default"] = 
-`<vaadin-pdf-viewer>
+`<vaadin-pdf-viewer role="region">
   <vaadin-pdf-viewer-button
     aria-disabled="true"
     aria-label="Previous page"
@@ -214,7 +214,7 @@ snapshots["vaadin-pdf-viewer host default"] =
   </vaadin-pdf-viewer-button>
   <vaadin-tooltip
     modeless=""
-    slot="tooltip"
+    slot="toolbar-tooltip"
   >
     <div
       id="vaadin-tooltip-8"
@@ -228,7 +228,10 @@ snapshots["vaadin-pdf-viewer host default"] =
 /* end snapshot vaadin-pdf-viewer host default */
 
 snapshots["vaadin-pdf-viewer host error"] = 
-`<vaadin-pdf-viewer has-error="">
+`<vaadin-pdf-viewer
+  has-error=""
+  role="region"
+>
   <vaadin-pdf-viewer-button
     aria-disabled="true"
     aria-label="Previous page"
@@ -440,7 +443,7 @@ snapshots["vaadin-pdf-viewer host error"] =
   </vaadin-pdf-viewer-button>
   <vaadin-tooltip
     modeless=""
-    slot="tooltip"
+    slot="toolbar-tooltip"
   >
     <div
       id="vaadin-tooltip-8"
@@ -468,13 +471,16 @@ snapshots["vaadin-pdf-viewer shadow default"] =
     </slot>
   </div>
 </div>
-<slot name="tooltip">
+<slot name="toolbar-tooltip">
 </slot>
 <div part="loader">
 </div>
 <div
+  aria-label="Pages"
   id="content"
   part="content"
+  role="document"
+  tabindex="0"
 >
   <div id="pages">
   </div>
@@ -503,22 +509,111 @@ snapshots["vaadin-pdf-viewer shadow document"] =
     </slot>
   </div>
 </div>
-<slot name="tooltip">
+<slot name="toolbar-tooltip">
 </slot>
 <div part="loader">
 </div>
 <div
+  aria-label="Pages"
   id="content"
   part="content"
+  role="document"
+  tabindex="0"
 >
   <div id="pages">
     <div part="page">
       <canvas aria-hidden="true">
       </canvas>
+      <div
+        class="text-layer"
+        data-main-rotation="0"
+      >
+        <span
+          dir="ltr"
+          role="presentation"
+        >
+          Page 1
+        </span>
+        <br role="presentation">
+        <span
+          dir="ltr"
+          role="presentation"
+        >
+          The quick brown fox jumps over the lazy dog. Pack my box with five dozen
+        </span>
+        <br role="presentation">
+        <span
+          dir="ltr"
+          role="presentation"
+        >
+          liquor jugs. How vexingly quick daft zebras jump. Sphinx of black quartz,
+        </span>
+        <br role="presentation">
+        <span
+          dir="ltr"
+          role="presentation"
+        >
+          judge my vow.
+        </span>
+        <br role="presentation">
+        <span
+          dir="ltr"
+          role="presentation"
+        >
+          Unique word on this page: marker1.
+        </span>
+        <div class="end-of-content">
+        </div>
+      </div>
+      <div class="link-layer">
+      </div>
     </div>
     <div part="page">
       <canvas aria-hidden="true">
       </canvas>
+      <div
+        class="text-layer"
+        data-main-rotation="0"
+      >
+        <span
+          dir="ltr"
+          role="presentation"
+        >
+          Page 2
+        </span>
+        <br role="presentation">
+        <span
+          dir="ltr"
+          role="presentation"
+        >
+          The quick brown fox jumps over the lazy dog. Pack my box with five dozen
+        </span>
+        <br role="presentation">
+        <span
+          dir="ltr"
+          role="presentation"
+        >
+          liquor jugs. How vexingly quick daft zebras jump. Sphinx of black quartz,
+        </span>
+        <br role="presentation">
+        <span
+          dir="ltr"
+          role="presentation"
+        >
+          judge my vow.
+        </span>
+        <br role="presentation">
+        <span
+          dir="ltr"
+          role="presentation"
+        >
+          Unique word on this page: marker2.
+        </span>
+        <div class="end-of-content">
+        </div>
+      </div>
+      <div class="link-layer">
+      </div>
     </div>
     <div part="page">
     </div>
@@ -554,13 +649,16 @@ snapshots["vaadin-pdf-viewer shadow error"] =
     </slot>
   </div>
 </div>
-<slot name="tooltip">
+<slot name="toolbar-tooltip">
 </slot>
 <div part="loader">
 </div>
 <div
+  aria-label="Pages"
   id="content"
   part="content"
+  role="document"
+  tabindex="0"
 >
   <div id="pages">
   </div>

@@ -52,16 +52,22 @@ const pdfViewerBaseStyles = css`
   }
 
   ::slotted(vaadin-select) {
-    width: var(--vaadin-pdf-viewer-zoom-select-width, 8.5em);
+    width: var(--vaadin-pdf-viewer-zoom-select-width, 9em);
   }
 
   [part='content'] {
     position: relative;
+    outline: none;
     flex: 1 1 auto;
     min-height: 0;
     overflow: auto;
     scrollbar-gutter: stable;
     padding: var(--vaadin-pdf-viewer-padding, var(--vaadin-padding-m));
+  }
+
+  [part='content']:focus-visible {
+    outline: var(--vaadin-focus-ring-width) solid var(--vaadin-focus-ring-color);
+    outline-offset: calc(var(--vaadin-focus-ring-width) * -1);
   }
 
   #pages {
@@ -78,6 +84,9 @@ const pdfViewerBaseStyles = css`
     /* PDF content is laid out left to right. pdf.js draws text glyph by glyph,
        which goes wrong when the canvas inherits a right-to-left direction. */
     direction: ltr;
+    /* Used by the text layer of pdf.js */
+    --scale-round-x: 1px;
+    --scale-round-y: 1px;
     /* Pages are paper: white unless the document paints a background itself. */
     background: var(--vaadin-pdf-viewer-page-background, #fff);
     box-shadow: var(--vaadin-pdf-viewer-page-shadow, 0 0 0 1px var(--vaadin-border-color-secondary));
@@ -87,6 +96,96 @@ const pdfViewerBaseStyles = css`
     display: block;
     width: 100%;
     height: 100%;
+  }
+
+  /*
+   * Text layer, adapted from pdf_viewer.css of pdf.js (Apache License 2.0,
+   * Copyright Mozilla Foundation). The text is transparent and placed over
+   * the same text on the canvas, so that it can be selected and read by
+   * assistive technology.
+   */
+  .text-layer {
+    position: absolute;
+    inset: 0;
+    overflow: clip;
+    line-height: 1;
+    text-align: initial;
+    letter-spacing: normal;
+    word-spacing: normal;
+    text-size-adjust: none;
+    forced-color-adjust: none;
+    transform-origin: 0 0;
+    caret-color: CanvasText;
+    z-index: 0;
+    --min-font-size: 1;
+    --text-scale-factor: calc(var(--total-scale-factor) * var(--min-font-size));
+    --min-font-size-inv: calc(1 / var(--min-font-size));
+  }
+
+  .text-layer :is(span, br) {
+    position: absolute;
+    color: transparent;
+    white-space: pre;
+    cursor: text;
+    transform-origin: 0% 0%;
+  }
+
+  .text-layer > :not(.markedContent),
+  .text-layer .markedContent span:not(.markedContent) {
+    z-index: 1;
+    --font-height: 0;
+    font-size: calc(var(--text-scale-factor) * var(--font-height));
+    --scale-x: 1;
+    --rotate: 0deg;
+    transform: rotate(var(--rotate)) scaleX(var(--scale-x)) scale(var(--min-font-size-inv));
+  }
+
+  .text-layer .markedContent {
+    display: contents;
+  }
+
+  .text-layer ::selection {
+    color: transparent;
+    background: var(
+      --vaadin-pdf-viewer-selection-background,
+      color-mix(in srgb, var(--vaadin-focus-ring-color) 35%, transparent)
+    );
+  }
+
+  .text-layer br::selection {
+    background: transparent;
+  }
+
+  /* Keeps the selection from jumping to other pages when dragging over empty space. */
+  .text-layer .end-of-content {
+    display: block;
+    position: absolute;
+    inset: 100% 0 0;
+    z-index: 0;
+    cursor: default;
+    user-select: none;
+  }
+
+  .text-layer:active .end-of-content {
+    top: 0;
+  }
+
+  .link-layer {
+    position: absolute;
+    inset: 0;
+    z-index: 1;
+    pointer-events: none;
+  }
+
+  .link-layer a {
+    position: absolute;
+    pointer-events: auto;
+    cursor: var(--vaadin-clickable-cursor, pointer);
+  }
+
+  .link-layer a:focus-visible {
+    outline: var(--vaadin-focus-ring-width) solid var(--vaadin-focus-ring-color);
+    outline-offset: 1px;
   }
 
   [part='loader'] {

@@ -7,11 +7,12 @@ third-party content. To regenerate them, run from the repository root:
 node packages/pdf-viewer/test/fixtures/generate-fixtures.js
 ```
 
-| File             | Contents                                                             | How it is made                                  |
-| ---------------- | -------------------------------------------------------------------- | ----------------------------------------------- |
-| `multi-page.pdf` | 6 pages of plain text, pages 1–5 A4 portrait, page 6 A4 landscape    | HTML printed with Chromium                      |
-| `links.pdf`      | Page 1 has an internal link to page 2 and an external link           | HTML printed with Chromium                      |
-| `outline.pdf`    | 3 pages with a nested outline (bookmarks)                            | HTML printed with Chromium, tagged with outline |
-| `tagged.pdf`     | Tagged PDF with headings, a list, a table and a figure with alt text | HTML printed with Chromium, tagged              |
-| `encrypted.pdf`  | Encrypted with a user password, so pdf.js asks for a password        | Written by hand in the script                   |
-| `invalid.pdf`    | Plain text, not a PDF                                                | Written by the script                           |
+| File               | Contents                                                             | How it is made                                  |
+| ------------------ | -------------------------------------------------------------------- | ----------------------------------------------- |
+| `multi-page.pdf`   | 6 pages of plain text, pages 1–5 A4 portrait, page 6 A4 landscape    | HTML printed with Chromium                      |
+| `links.pdf`        | Page 1 has an internal link to page 2 and an external link           | HTML printed with Chromium                      |
+| `outline.pdf`      | 3 pages with a nested outline (bookmarks)                            | HTML printed with Chromium, tagged with outline |
+| `tagged.pdf`       | Tagged PDF with headings, a list, a table and a figure with alt text | HTML printed with Chromium, tagged              |
+| `unsafe-links.pdf` | Links to `https:`, `javascript:`, `ftp:` and `tel:` URLs             | Written by hand in the script                   |
+| `encrypted.pdf`    | Encrypted with a user password, so pdf.js asks for a password        | Written by hand in the script                   |
+| `invalid.pdf`      | Plain text, not a PDF                                                | Written by the script                           |
