@@ -670,6 +670,17 @@ export const DateRangePickerMixin = (superClass) =>
         }
       });
 
+      // Picked by dragging across dates, or by dragging an end of the range.
+      content.addEventListener('range-drag-end', (event) => {
+        const { start, end } = event.detail;
+        this._startDate = start;
+        this._endDate = end;
+        this.__applyInputValue(this._startInput, start);
+        this.__applyInputValue(this._endInput, end);
+        this.__focusActiveInput();
+        this.close();
+      });
+
       // Picked with Enter, Space or the Today button. The overlay content closes
       // itself after Enter and Today, unless the pick only set the start.
       content.addEventListener('date-selected', (event) => {

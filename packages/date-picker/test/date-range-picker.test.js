@@ -180,6 +180,119 @@ describe('date-range-picker', () => {
     });
   });
 
+  describe('dragging', () => {
+    function center(day) {
+      const rect = getCell(day).getBoundingClientRect();
+      return [Math.round(rect.left + rect.width / 2), Math.round(rect.top + rect.height / 2)];
+    }
+
+    async function drag(from, to, { release = true, via = [] } = {}) {
+      await sendMouse({ type: 'move', position: center(from) });
+      await sendMouse({ type: 'down' });
+      for (const day of [...via, to]) {
+        await sendMouse({ type: 'move', position: center(day) });
+      }
+      if (release) {
+        await sendMouse({ type: 'up' });
+        await untilOverlayRendered(picker);
+      }
+    }
+
+    describe('with an empty range', () => {
+      beforeEach(async () => {
+        await openFrom(startInput);
+      });
+
+      it('should select the dragged range, close the overlay and fire change once', async () => {
+        const spy = sinon.spy();
+        picker.addEventListener('change', spy);
+        await drag(8, 16);
+        expect(picker.startValue).to.equal('2026-03-08');
+        expect(picker.endValue).to.equal('2026-03-16');
+        expect(picker.opened).to.be.false;
+        expect(spy).to.be.calledOnce;
+      });
+
+      it('should select the range when dragging backwards', async () => {
+        await drag(20, 5);
+        expect(picker.startValue).to.equal('2026-03-05');
+        expect(picker.endValue).to.equal('2026-03-20');
+      });
+
+      it('should preview the dragged range before releasing', async () => {
+        await drag(8, 12, { release: false });
+        expect(getParts(8)).to.include('range-start');
+        expect(getParts(10)).to.include('in-range');
+        expect(getParts(12)).to.include.members(['range-end', 'range-editing']);
+        expect(picker.startValue).to.equal('');
+        await sendMouse({ type: 'up' });
+      });
+
+      it('should not use a disabled date as an end of the range', async () => {
+        picker.isDateDisabled = (date) => date.day === 16;
+        // The range keeps the last allowed date the pointer was on.
+        await drag(8, 16, { via: [15] });
+        expect(picker.startValue).to.equal('2026-03-08');
+        expect(picker.endValue).to.equal('2026-03-15');
+      });
+
+      it('should treat a press and release on the same date as a pick', async () => {
+        await drag(8, 8);
+        expect(picker.startValue).to.equal('2026-03-08');
+        expect(picker.endValue).to.equal('');
+        expect(picker.opened).to.be.true;
+      });
+
+      it('should not ignore a pick after a drag', async () => {
+        await drag(8, 16);
+        await openFrom(startInput);
+        await pick(10);
+        expect(picker.startValue).to.equal('2026-03-10');
+        expect(picker.endValue).to.equal('2026-03-16');
+      });
+    });
+
+    describe('with an existing range', () => {
+      beforeEach(async () => {
+        picker.startValue = '2026-03-10';
+        picker.endValue = '2026-03-15';
+        await openFrom(startInput);
+      });
+
+      it('should move the end when dragging it', async () => {
+        await drag(15, 20);
+        expect(picker.startValue).to.equal('2026-03-10');
+        expect(picker.endValue).to.equal('2026-03-20');
+        expect(picker.opened).to.be.false;
+      });
+
+      it('should move the start when dragging it', async () => {
+        await drag(10, 12);
+        expect(picker.startValue).to.equal('2026-03-12');
+        expect(picker.endValue).to.equal('2026-03-15');
+      });
+
+      it('should turn the range around when dragging the start past the end', async () => {
+        await drag(10, 20);
+        expect(picker.startValue).to.equal('2026-03-15');
+        expect(picker.endValue).to.equal('2026-03-20');
+      });
+
+      it('should mark the dragged end as being edited', async () => {
+        await drag(15, 18, { release: false });
+        expect(getParts(18)).to.include.members(['range-end', 'range-editing']);
+        expect(getParts(10)).to.not.include('range-editing');
+        await sendMouse({ type: 'up' });
+      });
+
+      it('should select a new range when dragging from a date inside the range', async () => {
+        await drag(12, 25);
+        expect(picker.startValue).to.equal('2026-03-12');
+        expect(picker.endValue).to.equal('2026-03-25');
+      });
+    });
+  });
+
   describe('picking the end first', () => {
     it('should keep the end when picking a start before it afterwards', async () => {
       await openFrom(endInput);
