@@ -1230,6 +1230,15 @@ vaadin-month-calendar::part(in-range) {
   --vaadin-date-picker-date-in-range-background: color-mix(in srgb, var(--aura-accent-color) 14%, transparent);
 }
 
+vaadin-month-calendar::part(range-editing) {
+  color: var(--vaadin-text-color);
+}
+
+vaadin-month-calendar::part(range-editing):after, vaadin-month-calendar::part(range-editing):hover:after {
+  box-shadow: inset 0 0 0 2px var(--aura-accent-color);
+  background: none;
+}
+
 :where(:root), :where(:host) {
   --vaadin-dashboard-widget-title-font-weight: var(--aura-font-weight-medium);
   --vaadin-dashboard-widget-header-padding: var(--vaadin-padding-s) var(--vaadin-padding-m);
