@@ -37,8 +37,8 @@ const PAGE_SIZE_BATCH = 10;
 /** The protocols of external links that the viewer opens. Links with other URLs are left out. */
 const ALLOWED_LINK_PROTOCOLS = ['http:', 'https:', 'mailto:'];
 
-/** The `annotationType` of link annotations in pdf.js. */
-const LINK_ANNOTATION_TYPE = 2;
+/** The named actions of internal links that the viewer supports. */
+const SUPPORTED_LINK_ACTIONS = ['FirstPage', 'LastPage', 'NextPage', 'PrevPage'];
 
 /**
  * Returns whether the URL of a link is safe to open.
@@ -266,34 +266,13 @@ export const PdfViewerMixin = (superClass) =>
       this.addEventListener('keydown', (event) => this.#onKeyDown(event));
     }
 
-    /**
-     * Goes to the given page and announces it, for page changes caused by
-     * the user through the viewer's own controls.
-     * @param {number} page
-     * @protected
-     */
-    _goToPage(page) {
-      this.page = page;
-      const i18n = this.__effectiveI18n;
-      announce(i18n.pageAnnouncement.replace('{page}', page).replace('{pageCount}', this.pageCount));
-    }
-
-    /**
-     * Zooms in or out to the next zoom level, and announces the new zoom.
-     * @param {1 | -1} direction
-     * @protected
-     */
-    _stepZoom(direction) {
-      const zoom = direction > 0 ? getZoomInLevel(this._zoomFactor) : getZoomOutLevel(this._zoomFactor);
-      if (zoom) {
-        this.zoom = zoom;
-        announce(formatZoom(zoom));
-      }
-    }
-
     /** @protected */
     updated(props) {
       super.updated(props);
+
+      if (props.has('__effectiveI18n')) {
+        this.#updatePageLabels();
+      }
 
       if (props.has('src')) {
         // A new document starts from the first page, unless a page is set together with it.
@@ -334,6 +313,80 @@ export const PdfViewerMixin = (superClass) =>
     }
 
     /**
+     * Goes to the given page and announces it, for page changes caused by
+     * the user through the viewer's own controls.
+     * @param {number} page
+     * @protected
+     */
+    _goToPage(page) {
+      this.page = page;
+      const i18n = this.__effectiveI18n;
+      announce(i18n.pageAnnouncement.replace('{page}', page).replace('{pageCount}', this.pageCount));
+    }
+
+    /**
+     * The loaded document, or null.
+     * @return {import('pdfjs-dist').PDFDocumentProxy | null}
+     * @protected
+     */
+    get _pdfDocument() {
+      return this.#document;
+    }
+
+    /**
+     * Returns the view of a page of the loaded document.
+     * @param {number} pageNumber
+     * @return {PdfViewerPage | undefined}
+     * @protected
+     */
+    _getPageView(pageNumber) {
+      return this.#pages[pageNumber - 1];
+    }
+
+    /**
+     * Called when a page has been rendered, including its text layer.
+     * @param {PdfViewerPage} _page
+     * @protected
+     */
+    _pageRendered(_page) {}
+
+    /**
+     * Called when the document is unloaded, e.g. before another one loads.
+     * @protected
+     */
+    _documentUnloaded() {}
+
+    /**
+     * Scrolls the pages so that the given client rectangle is visible, if it
+     * is not already.
+     * @param {DOMRect} rect
+     * @protected
+     */
+    _scrollRectIntoView(rect) {
+      const { content } = this.$;
+      const view = content.getBoundingClientRect();
+      if (rect.top < view.top || rect.bottom > view.top + content.clientHeight) {
+        content.scrollTop += rect.top + rect.height / 2 - (view.top + content.clientHeight / 2);
+      }
+      if (rect.left < view.left || rect.right > view.left + content.clientWidth) {
+        content.scrollLeft += rect.left + rect.width / 2 - (view.left + content.clientWidth / 2);
+      }
+    }
+
+    /**
+     * Zooms in or out to the next zoom level, and announces the new zoom.
+     * @param {1 | -1} direction
+     * @protected
+     */
+    _stepZoom(direction) {
+      const zoom = direction > 0 ? getZoomInLevel(this._zoomFactor) : getZoomOutLevel(this._zoomFactor);
+      if (zoom) {
+        this.zoom = zoom;
+        announce(formatZoom(zoom, this));
+      }
+    }
+
+    /**
      * Applies changes to the zoom or size, and scrolls to a page that was set
      * while the pages could not be laid out.
      * @private
@@ -356,6 +409,7 @@ export const PdfViewerMixin = (superClass) =>
       this.#unload();
 
       this._setPageCount(0);
+      this.#resetAccessibleName();
       this.__hasError = false;
       this.__errorReason = undefined;
 
@@ -409,6 +463,7 @@ export const PdfViewerMixin = (superClass) =>
       this.#document = pdfDocument;
       const size = firstPage.getViewport({ scale: 1 });
       this.#pages = Array.from({ length: pdfDocument.numPages }, (_, index) => new PdfViewerPage(index + 1, size));
+      this.#updatePageLabels();
       this.#pages[0].setPdfPage(firstPage);
       this.$.pages.replaceChildren(...this.#pages.map((page) => page.element));
       this._setPageCount(pdfDocument.numPages);
@@ -491,6 +546,9 @@ export const PdfViewerMixin = (superClass) =>
 
     /** @private */
     #unload() {
+      if (this.#document) {
+        this._documentUnloaded();
+      }
       this.#pages.forEach((page) => page.release());
       this.#pages = [];
       this.#document = null;
@@ -677,8 +735,12 @@ export const PdfViewerMixin = (superClass) =>
       content.scrollLeft += pageRect.left + ratio * pageRect.width - (contentRect.left + content.clientWidth / 2);
     }
 
-    /** @private */
-    #scrollToPage(page) {
+    /**
+     * Scrolls to the start of a page, or to a position on it given in PDF
+     * units from the bottom of the page, like in link destinations.
+     * @private
+     */
+    #scrollToPage(page, top) {
       if (!this.#hasLayout() || this.#scale <= 0) {
         // Scroll once the pages can be laid out.
         this.#pendingPage = page;
@@ -694,8 +756,14 @@ export const PdfViewerMixin = (superClass) =>
           `The page ${page} is out of range for <vaadin-pdf-viewer>, the document has ${this.#pages.length} pages.`,
         );
       } else {
-        content.scrollTop =
-          this.#pages[page - 1].element.offsetTop - parseFloat(getComputedStyle(content).paddingBlockStart);
+        const pageView = this.#pages[page - 1];
+        let offset = -parseFloat(getComputedStyle(content).paddingBlockStart);
+        if (top !== undefined) {
+          offset = pageView.pdfPage
+            ? pageView.pdfPage.getViewport({ scale: this.#scale }).convertToViewportPoint(0, top)[1]
+            : (pageView.unscaledHeight - top) * this.#scale;
+        }
+        content.scrollTop = pageView.element.offsetTop + (top === undefined ? offset : Math.max(offset, 0));
         this.#scrolledPage = page;
       }
 
@@ -814,7 +882,7 @@ export const PdfViewerMixin = (superClass) =>
         const pageDistance = distance(page.pageNumber - 1);
         if (pageDistance > KEEP_RENDERED || (pageDistance > 0 && totalPixels > MAX_TOTAL_CANVAS_PIXELS)) {
           totalPixels -= page.canvasPixels;
-          page.release();
+          this.#releasePage(page);
         }
       });
     }
@@ -873,15 +941,13 @@ export const PdfViewerMixin = (superClass) =>
           if (loadId !== this.#loadId || !page.canvas || page.linkLayerElement) {
             return;
           }
-          page.renderLinks(
-            annotations.filter((annotation) => annotation.annotationType === LINK_ANNOTATION_TYPE),
+          const links = page.renderLinks(
+            annotations.filter((annotation) => annotation.annotationType === this.#pdfjs.AnnotationType.LINK),
             (annotation) => this.#createLink(annotation),
           );
-          page.linkLayerElement.querySelectorAll('a').forEach((link) => {
-            link.setAttribute('aria-label', page.getTextInside(link) || link.dataset.label);
-            delete link.dataset.label;
-          });
+          await Promise.all(links.map(({ link, annotation }) => this.#placeLink(page, link, annotation)));
         }
+        this._pageRendered(page);
       } catch (error) {
         const isCancelled = error && (error.name === 'RenderingCancelledException' || error.name === 'AbortException');
         if (loadId === this.#loadId && !isCancelled) {
@@ -905,10 +971,8 @@ export const PdfViewerMixin = (superClass) =>
         link.href = annotation.url;
         link.target = '_blank';
         link.rel = 'noopener noreferrer';
-        link.dataset.label = annotation.url;
-      } else if (annotation.dest || annotation.action) {
+      } else if (annotation.dest || SUPPORTED_LINK_ACTIONS.includes(annotation.action)) {
         link.href = '#';
-        link.dataset.label = this.__effectiveI18n.link;
         link.addEventListener('click', (event) => {
           event.preventDefault();
           this.#followLink(annotation);
@@ -916,39 +980,84 @@ export const PdfViewerMixin = (superClass) =>
       } else {
         return null;
       }
+      link.className = 'link';
       return link;
     }
 
     /**
-     * Goes to the destination of an internal link.
+     * Gives a link its accessible name, and moves it into the text layer next
+     * to the text it covers, so that assistive technology reads the link once,
+     * in reading order, instead of the text and then the link.
      * @private
      */
-    async #followLink({ dest, action }) {
+    async #placeLink(page, link, annotation) {
+      const i18n = this.__effectiveI18n;
+      const textElements = page.getTextElementsInside(link);
+      let label = textElements.map((element) => element.textContent.trim()).join(' ');
+      if (!label && annotation.url) {
+        label = annotation.url;
+      } else if (!label) {
+        const target = await this.#resolveLinkTarget(annotation);
+        label = target ? i18n.goToPage.replace('{page}', target.page) : i18n.link;
+      }
+      link.setAttribute('aria-label', annotation.url ? i18n.externalLink.replace('{text}', label) : label);
+
+      if (textElements.length) {
+        textElements.forEach((element) => element.setAttribute('aria-hidden', 'true'));
+        textElements[textElements.length - 1].after(link);
+      }
+    }
+
+    /**
+     * Returns the page and the position on the page that an internal link
+     * points to, or null when it cannot be resolved.
+     * @return {Promise<{ page: number, top?: number } | null>}
+     * @private
+     */
+    async #resolveLinkTarget({ dest, action }) {
       const pageCount = this.#pages.length;
-      const actions = { FirstPage: 1, LastPage: pageCount, NextPage: this.page + 1, PrevPage: this.page - 1 };
       if (action) {
-        const page = actions[action];
-        if (page >= 1 && page <= pageCount) {
-          this._goToPage(page);
-        }
-        return;
+        const pages = { FirstPage: 1, LastPage: pageCount, NextPage: this.page + 1, PrevPage: this.page - 1 };
+        const page = pages[action];
+        return page >= 1 && page <= pageCount ? { page } : null;
       }
 
-      const loadId = this.#loadId;
       const pdfDocument = this.#document;
       try {
         const explicitDest = typeof dest === 'string' ? await pdfDocument.getDestination(dest) : dest;
         if (!Array.isArray(explicitDest)) {
-          return;
+          return null;
         }
-        const [ref] = explicitDest;
+        const [ref, { name }, , top] = explicitDest;
         const pageIndex = Number.isInteger(ref) ? ref : await pdfDocument.getPageIndex(ref);
-        if (loadId === this.#loadId && pageIndex >= 0 && pageIndex < pageCount) {
-          this._goToPage(pageIndex + 1);
+        if (pageIndex < 0 || pageIndex >= pageCount) {
+          return null;
         }
+        // Only "XYZ" and "FitH" destinations have a position on the page.
+        const hasTop = (name === 'XYZ' || name === 'FitH') && typeof top === 'number';
+        return { page: pageIndex + 1, top: hasTop ? top : undefined };
       } catch {
         // A broken destination does nothing, like in other PDF viewers.
+        return null;
       }
+    }
+
+    /**
+     * Goes to the destination of an internal link, and moves focus to the
+     * pages, as the page with the link may not stay rendered.
+     * @private
+     */
+    async #followLink(annotation) {
+      const loadId = this.#loadId;
+      const target = await this.#resolveLinkTarget(annotation);
+      if (loadId !== this.#loadId || !target) {
+        return;
+      }
+      this._goToPage(target.page);
+      if (target.top !== undefined) {
+        this.#scrollToPage(target.page, target.top);
+      }
+      this.$.content.focus({ preventScroll: true });
     }
 
     /**
@@ -957,15 +1066,31 @@ export const PdfViewerMixin = (superClass) =>
      * @private
      */
     #updateAccessibleName(title) {
-      const ownName = this.#ownAccessibleName;
-      const hasAppName =
-        this.hasAttribute('aria-labelledby') ||
-        (this.hasAttribute('aria-label') && this.getAttribute('aria-label') !== ownName);
-      if (hasAppName) {
+      if (this.hasAttribute('aria-labelledby') || this.hasAttribute('aria-label')) {
         return;
       }
       this.#ownAccessibleName = title || this.__effectiveI18n.document;
       this.setAttribute('aria-label', this.#ownAccessibleName);
+    }
+
+    /**
+     * Labels the pages, so that assistive technology tells where pages start.
+     * @private
+     */
+    #updatePageLabels() {
+      const label = this.__effectiveI18n.pageLabel;
+      this.#pages.forEach((page) => page.element.setAttribute('aria-label', label.replace('{page}', page.pageNumber)));
+    }
+
+    /**
+     * Removes the accessible name that the viewer set for the previous document.
+     * @private
+     */
+    #resetAccessibleName() {
+      if (this.#ownAccessibleName !== null && this.getAttribute('aria-label') === this.#ownAccessibleName) {
+        this.removeAttribute('aria-label');
+      }
+      this.#ownAccessibleName = null;
     }
 
     /**
@@ -974,16 +1099,20 @@ export const PdfViewerMixin = (superClass) =>
      */
     #onKeyDown(event) {
       const isShortcut = (event.ctrlKey || event.metaKey) && !event.altKey;
-      if (!isShortcut || !this.#pages.length) {
+      // Text fields keep the browser zoom, which low vision users may rely on.
+      const isInField = event.composedPath().some((element) => element.localName === 'input');
+      if (!isShortcut || isInField || !this.#pages.length) {
         return;
       }
 
+      // Check the key code too, for keyboard layouts that need Shift for these keys.
+      const { key, code } = event;
       let handled = true;
-      if (event.key === '+' || event.key === '=') {
+      if (key === '+' || key === '=' || code === 'NumpadAdd') {
         this._stepZoom(1);
-      } else if (event.key === '-') {
+      } else if (key === '-' || code === 'NumpadSubtract') {
         this._stepZoom(-1);
-      } else if (event.key === '0') {
+      } else if (key === '0' || code === 'Digit0' || code === 'Numpad0') {
         this.zoom = 'page-width';
         announce(this.__effectiveI18n.pageWidth);
       } else if ((event.key === 'Home' || event.key === 'End') && event.composedPath().includes(this.$.content)) {
@@ -1004,7 +1133,9 @@ export const PdfViewerMixin = (superClass) =>
      * @private
      */
     #onContentKeyDown(event) {
-      if (event.defaultPrevented || event.ctrlKey || event.metaKey || event.altKey) {
+      // Shift with the arrow keys extends a text selection.
+      const isSelecting = event.shiftKey && event.key !== ' ';
+      if (event.defaultPrevented || event.ctrlKey || event.metaKey || event.altKey || isSelecting) {
         return;
       }
 
@@ -1028,6 +1159,23 @@ export const PdfViewerMixin = (superClass) =>
         return;
       }
       event.preventDefault();
+    }
+
+    /**
+     * Releases a page, moving focus from a link on the page to the pages, so
+     * that keyboard users stay in the viewer.
+     * @private
+     */
+    #releasePage(page) {
+      if (page.element.contains(this.shadowRoot.activeElement)) {
+        // WebKit scrolls the focused scroll container despite preventScroll.
+        const { content } = this.$;
+        const { scrollTop, scrollLeft } = content;
+        content.focus({ preventScroll: true });
+        content.scrollTop = scrollTop;
+        content.scrollLeft = scrollLeft;
+      }
+      page.release();
     }
 
     /** @private */

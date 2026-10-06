@@ -41,8 +41,31 @@ const pdfViewerBaseStyles = css`
     background: var(--vaadin-pdf-viewer-toolbar-background, var(--vaadin-background-color));
   }
 
+  [part='find-bar'] {
+    display: flex;
+    flex-wrap: wrap;
+    align-items: center;
+    justify-content: center;
+    gap: var(--vaadin-gap-xs);
+    padding: var(--vaadin-pdf-viewer-toolbar-padding, var(--vaadin-padding-xs));
+    border-block-end: 1px solid var(--vaadin-pdf-viewer-border-color, var(--vaadin-border-color-secondary));
+    background: var(--vaadin-pdf-viewer-toolbar-background, var(--vaadin-background-color));
+  }
+
+  [part='find-bar'][hidden] {
+    display: none;
+  }
+
+  ::slotted(vaadin-text-field) {
+    width: var(--vaadin-pdf-viewer-find-field-width, 14em);
+    max-width: 100%;
+  }
+
   [part='toolbar-group'] {
     display: flex;
+    flex-wrap: wrap;
+    justify-content: center;
+    max-width: 100%;
     align-items: center;
     gap: var(--vaadin-gap-xs);
   }
@@ -53,19 +76,36 @@ const pdfViewerBaseStyles = css`
 
   ::slotted(vaadin-select) {
     width: var(--vaadin-pdf-viewer-zoom-select-width, 9em);
+    max-width: 100%;
   }
 
   [part='content'] {
     position: relative;
     outline: none;
     flex: 1 1 auto;
+    min-width: 0;
     min-height: 0;
     overflow: auto;
     scrollbar-gutter: stable;
     padding: var(--vaadin-pdf-viewer-padding, var(--vaadin-padding-m));
   }
 
-  [part='content']:focus-visible {
+  .content-area {
+    position: relative;
+    display: flex;
+    flex: 1 1 auto;
+    min-height: 0;
+  }
+
+  /* Drawn over the pages, which would cover an outline of the scroll container itself */
+  .content-focus-ring {
+    position: absolute;
+    inset: 0;
+    z-index: 1;
+    pointer-events: none;
+  }
+
+  [part='content']:focus-visible + .content-focus-ring {
     outline: var(--vaadin-focus-ring-width) solid var(--vaadin-focus-ring-color);
     outline-offset: calc(var(--vaadin-focus-ring-width) * -1);
   }
@@ -99,8 +139,8 @@ const pdfViewerBaseStyles = css`
   }
 
   /*
-   * Text layer, adapted from pdf_viewer.css of pdf.js (Apache License 2.0,
-   * Copyright Mozilla Foundation). The text is transparent and placed over
+   * Text layer, adapted from pdf_viewer.css of pdf.js 6.3.289 (Apache License
+   * 2.0, Copyright Mozilla Foundation). The text is transparent and placed over
    * the same text on the canvas, so that it can be selected and read by
    * assistive technology.
    */
@@ -130,7 +170,7 @@ const pdfViewerBaseStyles = css`
     transform-origin: 0% 0%;
   }
 
-  .text-layer > :not(.markedContent),
+  .text-layer > :not(.markedContent, .link),
   .text-layer .markedContent span:not(.markedContent) {
     z-index: 1;
     --font-height: 0;
@@ -146,10 +186,7 @@ const pdfViewerBaseStyles = css`
 
   .text-layer ::selection {
     color: transparent;
-    background: var(
-      --vaadin-pdf-viewer-selection-background,
-      color-mix(in srgb, var(--vaadin-focus-ring-color) 35%, transparent)
-    );
+    background: var(--vaadin-pdf-viewer-selection-background, color-mix(in srgb, Highlight 40%, transparent));
   }
 
   .text-layer br::selection {
@@ -166,8 +203,39 @@ const pdfViewerBaseStyles = css`
     user-select: none;
   }
 
-  .text-layer:active .end-of-content {
+  .text-layer.selecting .end-of-content {
     top: 0;
+  }
+
+  .find-layer {
+    position: absolute;
+    inset: 0;
+    pointer-events: none;
+    /* Keeps the text under the highlights readable */
+    mix-blend-mode: multiply;
+  }
+
+  .find-match {
+    position: absolute;
+    border-radius: 2px;
+    background: var(--vaadin-pdf-viewer-match-background, color-mix(in srgb, Mark 40%, transparent));
+  }
+
+  .find-match.current {
+    background: var(--vaadin-pdf-viewer-current-match-background, color-mix(in srgb, Mark 85%, orange));
+    outline: 1px solid color-mix(in srgb, Mark, black 40%);
+  }
+
+  @media (forced-colors: active) {
+    .find-match {
+      forced-color-adjust: none;
+      background: color-mix(in srgb, Highlight 40%, transparent);
+    }
+
+    .find-match.current {
+      background: color-mix(in srgb, Highlight 70%, transparent);
+      outline-color: CanvasText;
+    }
   }
 
   .link-layer {
@@ -177,13 +245,15 @@ const pdfViewerBaseStyles = css`
     pointer-events: none;
   }
 
-  .link-layer a {
+  /* Links are in the text layer, next to their text, or in the link layer when they have no text */
+  .link {
     position: absolute;
+    z-index: 2;
     pointer-events: auto;
     cursor: var(--vaadin-clickable-cursor, pointer);
   }
 
-  .link-layer a:focus-visible {
+  .link:focus-visible {
     outline: var(--vaadin-focus-ring-width) solid var(--vaadin-focus-ring-color);
     outline-offset: 1px;
   }

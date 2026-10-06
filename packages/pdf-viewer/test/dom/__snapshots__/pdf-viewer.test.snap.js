@@ -212,6 +212,18 @@ snapshots["vaadin-pdf-viewer host default"] =
     theme="tertiary icon"
   >
   </vaadin-pdf-viewer-button>
+  <vaadin-pdf-viewer-button
+    aria-disabled="true"
+    aria-label="Find in document"
+    aria-pressed="false"
+    disabled=""
+    icon="find"
+    role="button"
+    slot="toolbar-actions"
+    tabindex="-1"
+    theme="tertiary icon"
+  >
+  </vaadin-pdf-viewer-button>
   <vaadin-tooltip
     modeless=""
     slot="toolbar-tooltip"
@@ -441,6 +453,18 @@ snapshots["vaadin-pdf-viewer host error"] =
     theme="tertiary icon"
   >
   </vaadin-pdf-viewer-button>
+  <vaadin-pdf-viewer-button
+    aria-disabled="true"
+    aria-label="Find in document"
+    aria-pressed="false"
+    disabled=""
+    icon="find"
+    role="button"
+    slot="toolbar-actions"
+    tabindex="-1"
+    theme="tertiary icon"
+  >
+  </vaadin-pdf-viewer-button>
   <vaadin-tooltip
     modeless=""
     slot="toolbar-tooltip"
@@ -470,19 +494,35 @@ snapshots["vaadin-pdf-viewer shadow default"] =
     <slot name="toolbar-zoom">
     </slot>
   </div>
+  <div part="toolbar-group">
+    <slot name="toolbar-actions">
+    </slot>
+  </div>
+</div>
+<div
+  hidden=""
+  part="find-bar"
+  role="search"
+>
+  <slot name="find">
+  </slot>
 </div>
 <slot name="toolbar-tooltip">
 </slot>
 <div part="loader">
 </div>
-<div
-  aria-label="Pages"
-  id="content"
-  part="content"
-  role="document"
-  tabindex="0"
->
-  <div id="pages">
+<div class="content-area">
+  <div
+    aria-label="Pages"
+    id="content"
+    part="content"
+    role="document"
+    tabindex="-1"
+  >
+    <div id="pages">
+    </div>
+  </div>
+  <div class="content-focus-ring">
   </div>
 </div>
 <div
@@ -508,121 +548,161 @@ snapshots["vaadin-pdf-viewer shadow document"] =
     <slot name="toolbar-zoom">
     </slot>
   </div>
+  <div part="toolbar-group">
+    <slot name="toolbar-actions">
+    </slot>
+  </div>
+</div>
+<div
+  hidden=""
+  part="find-bar"
+  role="search"
+>
+  <slot name="find">
+  </slot>
 </div>
 <slot name="toolbar-tooltip">
 </slot>
 <div part="loader">
 </div>
-<div
-  aria-label="Pages"
-  id="content"
-  part="content"
-  role="document"
-  tabindex="0"
->
-  <div id="pages">
-    <div part="page">
-      <canvas aria-hidden="true">
-      </canvas>
+<div class="content-area">
+  <div
+    aria-label="Pages"
+    id="content"
+    part="content"
+    role="document"
+    tabindex="0"
+  >
+    <div id="pages">
       <div
-        class="text-layer"
-        data-main-rotation="0"
+        aria-label="Page 1"
+        part="page"
+        role="group"
       >
-        <span
-          dir="ltr"
-          role="presentation"
+        <canvas aria-hidden="true">
+        </canvas>
+        <div
+          class="text-layer"
+          data-main-rotation="0"
         >
-          Page 1
-        </span>
-        <br role="presentation">
-        <span
-          dir="ltr"
-          role="presentation"
-        >
-          The quick brown fox jumps over the lazy dog. Pack my box with five dozen
-        </span>
-        <br role="presentation">
-        <span
-          dir="ltr"
-          role="presentation"
-        >
-          liquor jugs. How vexingly quick daft zebras jump. Sphinx of black quartz,
-        </span>
-        <br role="presentation">
-        <span
-          dir="ltr"
-          role="presentation"
-        >
-          judge my vow.
-        </span>
-        <br role="presentation">
-        <span
-          dir="ltr"
-          role="presentation"
-        >
-          Unique word on this page: marker1.
-        </span>
-        <div class="end-of-content">
+          <span
+            dir="ltr"
+            role="presentation"
+          >
+            Page 1
+          </span>
+          <br role="presentation">
+          <span
+            dir="ltr"
+            role="presentation"
+          >
+            The quick brown fox jumps over the lazy dog. Pack my box with five dozen
+          </span>
+          <br role="presentation">
+          <span
+            dir="ltr"
+            role="presentation"
+          >
+            liquor jugs. How vexingly quick daft zebras jump. Sphinx of black quartz,
+          </span>
+          <br role="presentation">
+          <span
+            dir="ltr"
+            role="presentation"
+          >
+            judge my vow.
+          </span>
+          <br role="presentation">
+          <span
+            dir="ltr"
+            role="presentation"
+          >
+            Unique word on this page: marker1.
+          </span>
+          <div class="end-of-content">
+          </div>
+        </div>
+        <div class="link-layer">
         </div>
       </div>
-      <div class="link-layer">
-      </div>
-    </div>
-    <div part="page">
-      <canvas aria-hidden="true">
-      </canvas>
       <div
-        class="text-layer"
-        data-main-rotation="0"
+        aria-label="Page 2"
+        part="page"
+        role="group"
       >
-        <span
-          dir="ltr"
-          role="presentation"
+        <canvas aria-hidden="true">
+        </canvas>
+        <div
+          class="text-layer"
+          data-main-rotation="0"
         >
-          Page 2
-        </span>
-        <br role="presentation">
-        <span
-          dir="ltr"
-          role="presentation"
-        >
-          The quick brown fox jumps over the lazy dog. Pack my box with five dozen
-        </span>
-        <br role="presentation">
-        <span
-          dir="ltr"
-          role="presentation"
-        >
-          liquor jugs. How vexingly quick daft zebras jump. Sphinx of black quartz,
-        </span>
-        <br role="presentation">
-        <span
-          dir="ltr"
-          role="presentation"
-        >
-          judge my vow.
-        </span>
-        <br role="presentation">
-        <span
-          dir="ltr"
-          role="presentation"
-        >
-          Unique word on this page: marker2.
-        </span>
-        <div class="end-of-content">
+          <span
+            dir="ltr"
+            role="presentation"
+          >
+            Page 2
+          </span>
+          <br role="presentation">
+          <span
+            dir="ltr"
+            role="presentation"
+          >
+            The quick brown fox jumps over the lazy dog. Pack my box with five dozen
+          </span>
+          <br role="presentation">
+          <span
+            dir="ltr"
+            role="presentation"
+          >
+            liquor jugs. How vexingly quick daft zebras jump. Sphinx of black quartz,
+          </span>
+          <br role="presentation">
+          <span
+            dir="ltr"
+            role="presentation"
+          >
+            judge my vow.
+          </span>
+          <br role="presentation">
+          <span
+            dir="ltr"
+            role="presentation"
+          >
+            Unique word on this page: marker2.
+          </span>
+          <div class="end-of-content">
+          </div>
+        </div>
+        <div class="link-layer">
         </div>
       </div>
-      <div class="link-layer">
+      <div
+        aria-label="Page 3"
+        part="page"
+        role="group"
+      >
+      </div>
+      <div
+        aria-label="Page 4"
+        part="page"
+        role="group"
+      >
+      </div>
+      <div
+        aria-label="Page 5"
+        part="page"
+        role="group"
+      >
+      </div>
+      <div
+        aria-label="Page 6"
+        part="page"
+        role="group"
+      >
       </div>
     </div>
-    <div part="page">
-    </div>
-    <div part="page">
-    </div>
-    <div part="page">
-    </div>
-    <div part="page">
-    </div>
+  </div>
+  <div class="content-focus-ring">
   </div>
 </div>
 <div
@@ -648,19 +728,35 @@ snapshots["vaadin-pdf-viewer shadow error"] =
     <slot name="toolbar-zoom">
     </slot>
   </div>
+  <div part="toolbar-group">
+    <slot name="toolbar-actions">
+    </slot>
+  </div>
+</div>
+<div
+  hidden=""
+  part="find-bar"
+  role="search"
+>
+  <slot name="find">
+  </slot>
 </div>
 <slot name="toolbar-tooltip">
 </slot>
 <div part="loader">
 </div>
-<div
-  aria-label="Pages"
-  id="content"
-  part="content"
-  role="document"
-  tabindex="0"
->
-  <div id="pages">
+<div class="content-area">
+  <div
+    aria-label="Pages"
+    id="content"
+    part="content"
+    role="document"
+    tabindex="-1"
+  >
+    <div id="pages">
+    </div>
+  </div>
+  <div class="content-focus-ring">
   </div>
 </div>
 <div part="error-message">

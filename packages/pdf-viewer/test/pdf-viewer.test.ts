@@ -114,7 +114,7 @@ describe('vaadin-pdf-viewer', () => {
       const loaded = oneEvent(element, 'document-load');
       document.body.appendChild(element);
       await loaded;
-      expect(element.pageCount).to.equal(2);
+      expect(element.pageCount).to.equal(4);
     });
   });
 
@@ -130,7 +130,7 @@ describe('vaadin-pdf-viewer', () => {
       parent.appendChild(viewer);
       await nextFrame();
       expect(spy).to.be.not.called;
-      expect(viewer.pageCount).to.equal(2);
+      expect(viewer.pageCount).to.equal(4);
     });
 
     it('should not load the document when detached during loading', async () => {
@@ -168,7 +168,7 @@ describe('vaadin-pdf-viewer', () => {
       const loaded = oneEvent(viewer, 'document-load');
       parent.appendChild(viewer);
       await loaded;
-      expect(viewer.pageCount).to.equal(2);
+      expect(viewer.pageCount).to.equal(4);
     });
   });
 

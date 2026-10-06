@@ -69,6 +69,27 @@ describe('pdf-viewer', () => {
     await visualDiff(div, 'link-focus');
   });
 
+  it('content-focus', async () => {
+    element.src = fixtureUrl('multi-page.pdf');
+    await nextRenderIdle(element);
+    element.querySelector<HTMLElement>('vaadin-pdf-viewer-button[icon="find"]')!.focus();
+    await sendKeys({ press: 'Tab' });
+    await visualDiff(div, 'content-focus');
+  });
+
+  it('find', async () => {
+    element.src = fixtureUrl('multi-page.pdf');
+    await nextRenderIdle(element);
+    element.querySelector<HTMLElement>('vaadin-pdf-viewer-button[icon="find"]')!.click();
+    await nextRender();
+    await sendKeys({ type: 'quick' });
+    // Wait for the search and the highlights
+    for (let i = 0; i < 50 && !element.shadowRoot!.querySelector('.find-match.current'); i++) {
+      await nextFrame();
+    }
+    await visualDiff(div, 'find');
+  });
+
   it('rtl', async () => {
     div.setAttribute('dir', 'rtl');
     element.src = fixtureUrl('multi-page.pdf');

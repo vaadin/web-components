@@ -63,6 +63,8 @@ const fixtures = {
         <h1 id="target">Link target</h1>
         <p>${paragraph}</p>
       </section>
+      <section class="page"><p>Page 3</p></section>
+      <section class="page"><p>Page 4</p></section>
     `,
   },
   'outline.pdf': {

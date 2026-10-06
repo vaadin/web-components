@@ -280,7 +280,7 @@ describe('toolbar', () => {
 
     describe('i18n', () => {
       it('should use i18n for the accessible names', async () => {
-        viewer.i18n = { nextPage: 'Nästa sida', page: 'Sida', pageOf: 'av {pageCount}', zoom: 'Zooma' };
+        viewer.i18n = { nextPage: 'Nästa sida', page: 'Sida', pageOf: 'Sida av {pageCount}', zoom: 'Zooma' };
         await nextFrame();
         expect(getButton('next-page').getAttribute('aria-label')).to.equal('Nästa sida');
         expect(getPageField().accessibleName).to.equal('Sida av 6');

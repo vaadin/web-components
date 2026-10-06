@@ -40,6 +40,26 @@ export const pdfViewerButtonStyles = css`
     --_icon: var(--vaadin-pdf-viewer-icon-zoom-in, var(--_vaadin-icon-plus));
   }
 
+  :host([icon='previous-match']) {
+    --_icon: var(--vaadin-pdf-viewer-icon-previous-page, var(--_vaadin-icon-chevron-up));
+  }
+
+  :host([icon='next-match']) {
+    --_icon: var(--vaadin-pdf-viewer-icon-next-page, var(--_vaadin-icon-chevron-down));
+  }
+
+  :host([icon='find']) {
+    --_icon: var(--vaadin-pdf-viewer-icon-find, var(--_vaadin-icon-search));
+  }
+
+  :host([icon='close']) {
+    --_icon: var(--vaadin-pdf-viewer-icon-close, var(--_vaadin-icon-cross));
+  }
+
+  :host([aria-pressed='true']) {
+    background: var(--vaadin-background-container-strong);
+  }
+
   @media (forced-colors: active) {
     [part='icon'] {
       background: CanvasText;

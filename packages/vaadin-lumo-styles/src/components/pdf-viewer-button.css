@@ -37,4 +37,24 @@
   :host([icon='zoom-in']) {
     --_icon: var(--vaadin-pdf-viewer-icon-zoom-in);
   }
+
+  :host([icon='previous-match']) {
+    --_icon: var(--vaadin-pdf-viewer-icon-previous-page);
+  }
+
+  :host([icon='next-match']) {
+    --_icon: var(--vaadin-pdf-viewer-icon-next-page);
+  }
+
+  :host([icon='find']) {
+    --_icon: var(--vaadin-pdf-viewer-icon-find);
+  }
+
+  :host([icon='close']) {
+    --_icon: var(--vaadin-pdf-viewer-icon-close);
+  }
+
+  :host([aria-pressed='true']) {
+    --vaadin-button-tertiary-background: var(--lumo-contrast-10pct);
+  }
 }

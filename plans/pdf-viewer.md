@@ -19,18 +19,18 @@ specific to the PDF viewer. It does not repeat those documents.
 
 Status values: `todo`, `in progress`, `in review`, `done`, `blocked`.
 
-| #   | Slice                                    | Status | Reviews (code / visual) | Notes                  |
-| --- | ---------------------------------------- | ------ | ----------------------- | ---------------------- |
-| 0   | Tracer bullet: package + first page      | done   | ✅ / ✅                 | 561906b4d0, 59ff4a2850 |
-| 1   | Continuous scroll, zoom, page tracking   | done   | ✅ / ✅ (+ re-review)   | 1e173c331e, b2d2a73c16 |
-| 2   | Toolbar: page navigation + zoom controls | done   | – / –                   |                        |
-| 3   | Text layer, links, keyboard, a11y basics | todo   | – / –                   |                        |
-| 4   | Find                                     | todo   | – / –                   |                        |
-| 5   | Sidebar: thumbnails                      | todo   | – / –                   |                        |
-| 6   | Sidebar: outline                         | todo   | – / –                   |                        |
-| 7   | Download and print                       | todo   | – / –                   |                        |
-| 8   | Tagged PDFs, AT audit, forced colors     | todo   | – / –                   |                        |
-| 9   | API docs, typings, README, release prep  | todo   | – / –                   |                        |
+| #   | Slice                                    | Status    | Reviews (code / visual) | Notes                  |
+| --- | ---------------------------------------- | --------- | ----------------------- | ---------------------- |
+| 0   | Tracer bullet: package + first page      | done      | ✅ / ✅                 | 561906b4d0, 59ff4a2850 |
+| 1   | Continuous scroll, zoom, page tracking   | done      | ✅ / ✅ (+ re-review)   | 1e173c331e, b2d2a73c16 |
+| 2   | Toolbar: page navigation + zoom controls | done      | – / –                   |                        |
+| 3   | Text layer, links, keyboard, a11y basics | todo      | – / –                   |                        |
+| 4   | Find                                     | in review | – / –                   |                        |
+| 5   | Sidebar: thumbnails                      | todo      | – / –                   |                        |
+| 6   | Sidebar: outline                         | todo      | – / –                   |                        |
+| 7   | Download and print                       | todo      | – / –                   |                        |
+| 8   | Tagged PDFs, AT audit, forced colors     | todo      | – / –                   |                        |
+| 9   | API docs, typings, README, release prep  | todo      | – / –                   |                        |
 
 ---
 
@@ -260,6 +260,25 @@ Do not search the DOM. Highlight matches by wrapping text-layer spans. Ctrl/Cmd+
 opens find **only when focus is inside the viewer**. Enter / Shift+Enter in the find
 field go to the next / previous match. The "N of M" result is announced with `announce()`.
 
+As built in slice 4 (`src/vaadin-pdf-viewer-find-mixin.js`, `src/pdf-viewer-find.js`):
+
+- The text of each page comes from `getTextContent()` with the same options as the text layer,
+  so its text items map 1:1 to the text layer's `textDivs`. Items are joined with a line break
+  after items that end a line.
+- Normalization (`normalizeText`): case, diacritics (NFKD without marks), ligatures and runs of
+  white space, keeping a map back to the original offsets.
+- Highlights are separate boxes in a `.find-layer` below the text layer, from
+  `Range.getClientRects()` over the text nodes, so the text layer itself stays unchanged for
+  selection and assistive technology. Colors use the `Mark` system color with
+  `mix-blend-mode: multiply`. They are redrawn when a page renders (e.g. after zoom).
+- Searching walks all pages and caches their text per document. A new query or document drops
+  the results of the previous search. A match on a page that is not rendered scrolls to the
+  page, then to the match once rendered.
+- The find bar is a `role="search"` part below the toolbar with a text field, "N of M", previous /
+  next match and close buttons. Its controls are rendered by the toolbar mixin, because all light
+  DOM controls come from a single Lit `render()`. Escape closes it and returns focus to where it
+  was before opening. `input` / `change` events of the field are stopped at the viewer.
+
 **D17 — Sidebar.** Hidden by default and opened with a toolbar toggle. Two views:
 
 - **Thumbnails:** low-resolution renders of the pages, made only when they scroll
@@ -297,6 +316,14 @@ As built in slice 3:
   scroller go to the first / last page and announce it.
 - Only rendered pages (visible ±1) have a text layer, like the pdf.js viewer. A screen reader in
   browse mode therefore only reaches the text of pages near the view. Revisit in slice 8.
+- After the slice 3 reviews: links are moved into the text layer right after the text they cover,
+  and that text gets `aria-hidden`, so each link is read once, in reading order. Links without
+  text get "Go to page {page}"; external links get "(opens in a new tab)". Each page is a
+  `role="group"` named "Page {page}". The page area is not focusable while there is no document.
+  Releasing a page that contains the focused link moves focus to the page area (restoring the
+  scroll position, which WebKit would otherwise reset). Following an internal link moves focus
+  to the page area too. Ctrl/Cmd zoom shortcuts don't apply inside text fields, so the browser
+  zoom stays available there. The page area's focus ring is an overlay above the pages.
 
 **D19 — Testing fixtures.** Store small PDFs we generated ourselves in
 `packages/pdf-viewer/test/fixtures/` (each ideally under 50 KB):
@@ -610,6 +637,29 @@ Newest entry at the top. Format:
 - Visual review: <summary>
 - Follow-ups: …
 ```
+
+### 2026-10-06 — Slice 3: Text layer, links, keyboard, a11y basics — done
+
+- Base commit: 538b068c2c Head: a4f29b51f9, review fixes committed together with slice 4
+- Shipped: pdf.js text layer per rendered page, own link elements with a URL allowlist, internal
+  link navigation, host region and name, focusable page area with keyboard scrolling, Ctrl/Cmd
+  shortcuts, `unsafe-links.pdf` fixture, slice 2 review fixes.
+- Code review: 0 blockers, 6 should-fix (stale text layer scale, ligatures in copied text, focus
+  lost on release, stale host name after error, links for unsupported actions, pdf.js measuring
+  canvas left in the document), several nits. All fixed (`TextLayer.cleanup()` on the last
+  worker release, `pdfjs.AnnotationType.LINK`, XYZ / FitH link targets, `event.code` for zoom
+  keys, Shift+Arrow left for selection, `lang` from the element's ancestors).
+- Visual review: 1 blocker (no focus ring on the page area and links in Lumo), 3 should-fix
+  (selection lost when dragging into blank space, focus ring covered by pages, toolbar clipped
+  with large text on narrow viewers). All fixed.
+- A11y review: 2 blockers (Lumo focus ring, focus lost on release), 3 should-fix (links read
+  twice and out of order, fallback link names, empty state focusable). All fixed. Deferred to
+  slice 8: text only near the view, reading order of untagged PDFs, links on far pages, forced
+  colors details, loading state announcement, real AT audit.
+- Note for the user: the viewer handles arrow keys / PageUp / PageDown / Space / Home / End on
+  the page area itself (Safari does not scroll a focused scroll container), which replaces the
+  original D18 wording "don't override the browser's default Space / arrow scrolling". The
+  behavior is the same as native scrolling.
 
 ### 2026-10-06 — Slice 2: Toolbar — done
 

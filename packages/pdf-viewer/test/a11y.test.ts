@@ -1,6 +1,7 @@
 import { expect } from '@vaadin/chai-plugins';
 import { sendKeys } from '@vaadin/test-runner-commands';
 import { fixtureSync, nextFrame, nextRender, oneEvent } from '@vaadin/testing-helpers';
+import sinon from 'sinon';
 import './enable-feature-flag.js';
 import '../vaadin-pdf-viewer.js';
 import type { PdfViewer } from '../vaadin-pdf-viewer.js';
@@ -45,6 +46,31 @@ describe('accessibility', () => {
       expect(viewer.getAttribute('aria-label')).to.equal('Invoice');
     });
 
+    it('should remove its own accessible name when the next document fails to load', async () => {
+      await loadDocument(viewer, 'multi-page.pdf');
+      viewer.src = new URL('./fixtures/invalid.pdf', import.meta.url).href;
+      await oneEvent(viewer, 'document-error');
+      expect(viewer.hasAttribute('aria-label')).to.be.false;
+    });
+
+    it('should remove its own accessible name when src is cleared', async () => {
+      await loadDocument(viewer, 'multi-page.pdf');
+      viewer.src = '';
+      await nextFrame();
+      expect(viewer.hasAttribute('aria-label')).to.be.false;
+    });
+
+    it('should not make the empty page area focusable', () => {
+      expect(getContent().getAttribute('tabindex')).to.equal('-1');
+    });
+
+    it('should label each page', async () => {
+      await loadDocument(viewer, 'multi-page.pdf');
+      const pages = viewer.shadowRoot!.querySelectorAll('[part~="page"]');
+      expect(pages[2].getAttribute('role')).to.equal('group');
+      expect(pages[2].getAttribute('aria-label')).to.equal('Page 3');
+    });
+
     it('should not set an accessible name when aria-labelledby is set', async () => {
       viewer.setAttribute('aria-labelledby', 'heading');
       await loadDocument(viewer, 'multi-page.pdf');
@@ -70,7 +96,7 @@ describe('accessibility', () => {
     });
 
     it('should make the pages focusable after the toolbar controls', async () => {
-      viewer.querySelector<HTMLElement>('vaadin-pdf-viewer-button[icon="zoom-in"]')!.focus();
+      viewer.querySelector<HTMLElement>('vaadin-pdf-viewer-button[icon="find"]')!.focus();
       await sendKeys({ press: 'Tab' });
       expect(viewer.shadowRoot!.activeElement).to.equal(getContent());
     });
@@ -81,6 +107,39 @@ describe('accessibility', () => {
       await sendKeys({ press: 'ArrowDown' });
       await scrolled;
       expect(getContent().scrollTop).to.be.greaterThan(0);
+    });
+
+    it('should scroll by a page with PageDown', async () => {
+      getContent().focus();
+      const scrolled = oneEvent(getContent(), 'scroll');
+      await sendKeys({ press: 'PageDown' });
+      await scrolled;
+      expect(getContent().scrollTop).to.be.closeTo(getContent().clientHeight * 0.9, 2);
+    });
+
+    it('should scroll to the end with End', async () => {
+      getContent().focus();
+      const scrolled = oneEvent(getContent(), 'scroll');
+      await sendKeys({ press: 'End' });
+      await scrolled;
+      const content = getContent();
+      expect(content.scrollTop).to.be.closeTo(content.scrollHeight - content.clientHeight, 2);
+    });
+
+    it('should not scroll with Shift+ArrowDown, which extends a text selection', async () => {
+      getContent().focus();
+      await sendKeys({ press: 'Shift+ArrowDown' });
+      await nextFrame();
+      expect(getContent().scrollTop).to.equal(0);
+    });
+
+    it('should not zoom with Ctrl+= in the page field', async () => {
+      const spy = sinon.spy();
+      viewer.addEventListener('zoom-changed', spy);
+      viewer.querySelector<HTMLElement>('vaadin-integer-field')!.focus();
+      await sendKeys({ press: 'Control+Equal' });
+      await nextFrame();
+      expect(spy).to.be.not.called;
     });
 
     it('should go to the last page with Ctrl+End', async () => {

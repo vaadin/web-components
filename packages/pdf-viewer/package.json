@@ -40,6 +40,7 @@
     "@vaadin/component-base": "25.4.0-alpha1",
     "@vaadin/integer-field": "25.4.0-alpha1",
     "@vaadin/select": "25.4.0-alpha1",
+    "@vaadin/text-field": "25.4.0-alpha1",
     "@vaadin/tooltip": "25.4.0-alpha1",
     "@vaadin/vaadin-themable-mixin": "25.4.0-alpha1",
     "lit": "^3.0.0",

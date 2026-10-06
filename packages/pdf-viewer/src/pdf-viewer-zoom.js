@@ -34,12 +34,13 @@ export function getZoomOutLevel(zoomFactor) {
 }
 
 /**
- * Formats a zoom factor as a percentage in the language of the page, e.g.
+ * Formats a zoom factor as a percentage in the language of the element, e.g.
  * `1.5` as `150%`.
  * @param {number} zoom
+ * @param {Element} element
  * @return {string}
  */
-export function formatZoom(zoom) {
-  const locale = document.documentElement.lang || undefined;
+export function formatZoom(zoom, element) {
+  const locale = element.closest('[lang]')?.lang || undefined;
   return new Intl.NumberFormat(locale, { style: 'percent', maximumFractionDigits: 0 }).format(zoom);
 }

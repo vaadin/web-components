@@ -15,6 +15,7 @@ import { I18nMixin } from '@vaadin/component-base/src/i18n-mixin.js';
 import { PolylitMixin } from '@vaadin/component-base/src/polylit-mixin.js';
 import { LumoInjectionMixin } from '@vaadin/vaadin-themable-mixin/lumo-injection-mixin.js';
 import { pdfViewerStyles } from './styles/vaadin-pdf-viewer-base-styles.js';
+import { PdfViewerFindMixin } from './vaadin-pdf-viewer-find-mixin.js';
 import { PdfViewerMixin } from './vaadin-pdf-viewer-mixin.js';
 import { PdfViewerToolbarMixin } from './vaadin-pdf-viewer-toolbar-mixin.js';
 
@@ -25,16 +26,25 @@ const DEFAULT_I18N = {
   previousPage: 'Previous page',
   nextPage: 'Next page',
   page: 'Page',
-  pageOf: 'of {pageCount}',
+  pageOf: 'Page of {pageCount}',
   pageAnnouncement: 'Page {page} of {pageCount}',
   zoom: 'Zoom',
   zoomIn: 'Zoom in',
   zoomOut: 'Zoom out',
   pageWidth: 'Page width',
   pageFit: 'Page fit',
+  find: 'Find in document',
+  previousMatch: 'Previous match',
+  nextMatch: 'Next match',
+  closeFind: 'Close find',
+  findResult: '{current} of {total}',
+  findNoMatches: 'No matches',
   document: 'PDF document',
   pages: 'Pages',
+  pageLabel: 'Page {page}',
   link: 'Link',
+  goToPage: 'Go to page {page}',
+  externalLink: '{text} (opens in a new tab)',
 };
 
 /**
@@ -52,6 +62,7 @@ const DEFAULT_I18N = {
  * ----------------|------------
  * `toolbar`       | The toolbar above the pages.
  * `toolbar-group` | A group of related controls in the toolbar.
+ * `find-bar`      | The bar with the controls for finding text, below the toolbar.
  * `content`       | The scrollable area that contains the pages.
  * `page`          | A page of the document.
  * `error-message` | The message shown when the document could not be loaded.
@@ -66,27 +77,32 @@ const DEFAULT_I18N = {
  *
  * The following custom CSS properties are available for styling:
  *
- * Custom CSS property                         |
- * :--------------------------------------------|
- * | `--vaadin-pdf-viewer-background`           |
- * | `--vaadin-pdf-viewer-border-color`         |
- * | `--vaadin-pdf-viewer-border-radius`        |
- * | `--vaadin-pdf-viewer-error-color`          |
- * | `--vaadin-pdf-viewer-icon-next-page`       |
- * | `--vaadin-pdf-viewer-icon-previous-page`   |
- * | `--vaadin-pdf-viewer-icon-zoom-in`         |
- * | `--vaadin-pdf-viewer-icon-zoom-out`        |
- * | `--vaadin-pdf-viewer-padding`              |
- * | `--vaadin-pdf-viewer-page-background`      |
- * | `--vaadin-pdf-viewer-page-field-width`     |
- * | `--vaadin-pdf-viewer-page-gap`             |
- * | `--vaadin-pdf-viewer-page-shadow`          |
- * | `--vaadin-pdf-viewer-selection-background` |
- * | `--vaadin-pdf-viewer-text-color`           |
- * | `--vaadin-pdf-viewer-toolbar-background`   |
- * | `--vaadin-pdf-viewer-toolbar-gap`          |
- * | `--vaadin-pdf-viewer-toolbar-padding`      |
- * | `--vaadin-pdf-viewer-zoom-select-width`    |
+ * Custom CSS property                             |
+ * :------------------------------------------------|
+ * | `--vaadin-pdf-viewer-background`               |
+ * | `--vaadin-pdf-viewer-border-color`             |
+ * | `--vaadin-pdf-viewer-border-radius`            |
+ * | `--vaadin-pdf-viewer-current-match-background` |
+ * | `--vaadin-pdf-viewer-error-color`              |
+ * | `--vaadin-pdf-viewer-find-field-width`         |
+ * | `--vaadin-pdf-viewer-icon-close`               |
+ * | `--vaadin-pdf-viewer-icon-find`                |
+ * | `--vaadin-pdf-viewer-icon-next-page`           |
+ * | `--vaadin-pdf-viewer-icon-previous-page`       |
+ * | `--vaadin-pdf-viewer-icon-zoom-in`             |
+ * | `--vaadin-pdf-viewer-icon-zoom-out`            |
+ * | `--vaadin-pdf-viewer-match-background`         |
+ * | `--vaadin-pdf-viewer-padding`                  |
+ * | `--vaadin-pdf-viewer-page-background`          |
+ * | `--vaadin-pdf-viewer-page-field-width`         |
+ * | `--vaadin-pdf-viewer-page-gap`                 |
+ * | `--vaadin-pdf-viewer-page-shadow`              |
+ * | `--vaadin-pdf-viewer-selection-background`     |
+ * | `--vaadin-pdf-viewer-text-color`               |
+ * | `--vaadin-pdf-viewer-toolbar-background`       |
+ * | `--vaadin-pdf-viewer-toolbar-gap`              |
+ * | `--vaadin-pdf-viewer-toolbar-padding`          |
+ * | `--vaadin-pdf-viewer-zoom-select-width`        |
  *
  * The `--vaadin-pdf-viewer-icon-*` properties take an image (e.g. an SVG data URL) used as a mask.
  * In the Lumo theme, they take a glyph of the `lumo-icons` font instead, like the icons of `<vaadin-map>`.
@@ -102,7 +118,7 @@ const DEFAULT_I18N = {
  * @extends HTMLElement
  */
 class PdfViewer extends PdfViewerToolbarMixin(
-  PdfViewerMixin(I18nMixin(ElementMixin(PolylitMixin(LumoInjectionMixin(LitElement))))),
+  PdfViewerFindMixin(PdfViewerMixin(I18nMixin(ElementMixin(PolylitMixin(LumoInjectionMixin(LitElement)))))),
 ) {
   static get is() {
     return 'vaadin-pdf-viewer';
@@ -146,10 +162,10 @@ class PdfViewer extends PdfViewerToolbarMixin(
    *   // Accessible labels and tooltips of the page navigation buttons.
    *   previousPage: 'Previous page',
    *   nextPage: 'Next page',
-   *   // Accessible label of the page number field, followed by `pageOf`.
+   *   // Accessible label of the page number field, without and with a document.
    *   // {pageCount} is replaced with the number of pages.
    *   page: 'Page',
-   *   pageOf: 'of {pageCount}',
+   *   pageOf: 'Page of {pageCount}',
    *   // Announced when a toolbar control changes the page.
    *   // {page} and {pageCount} are replaced with the page number and the number of pages.
    *   pageAnnouncement: 'Page {page} of {pageCount}',
@@ -161,14 +177,30 @@ class PdfViewer extends PdfViewerToolbarMixin(
    *   // Labels of the zoom levels that fit the page to the viewer.
    *   pageWidth: 'Page width',
    *   pageFit: 'Page fit',
+   *   // Accessible label of the find button and the find field.
+   *   find: 'Find in document',
+   *   // Accessible labels and tooltips of the find bar buttons.
+   *   previousMatch: 'Previous match',
+   *   nextMatch: 'Next match',
+   *   closeFind: 'Close find',
+   *   // Shown and announced when finding text.
+   *   // {current} and {total} are replaced with the number of the current match and the number of matches.
+   *   findResult: '{current} of {total}',
+   *   findNoMatches: 'No matches',
    *   // Accessible name of the viewer when the document has no title
    *   // and the application has not set aria-label or aria-labelledby.
    *   document: 'PDF document',
    *   // Accessible name of the scrollable area that contains the pages.
    *   pages: 'Pages',
-   *   // Accessible name of a link to another place in the document,
-   *   // used when the link has no text.
-   *   link: 'Link'
+   *   // Accessible name of each page. {page} is replaced with the page number.
+   *   pageLabel: 'Page {page}',
+   *   // Accessible names of links to another place in the document that have no text.
+   *   // {page} is replaced with the number of the page the link goes to.
+   *   goToPage: 'Go to page {page}',
+   *   link: 'Link',
+   *   // Accessible name of links that open in a new tab.
+   *   // {text} is replaced with the text of the link, or its URL.
+   *   externalLink: '{text} (opens in a new tab)'
    * }
    * ```
    *
@@ -189,11 +221,24 @@ class PdfViewer extends PdfViewerToolbarMixin(
       <div part="toolbar" role="toolbar" aria-label="${i18n.toolbar}">
         <div part="toolbar-group"><slot name="toolbar-navigation"></slot></div>
         <div part="toolbar-group"><slot name="toolbar-zoom"></slot></div>
+        <div part="toolbar-group"><slot name="toolbar-actions"></slot></div>
+      </div>
+      <div part="find-bar" role="search" ?hidden="${!this.__findOpened}">
+        <slot name="find"></slot>
       </div>
       <slot name="toolbar-tooltip"></slot>
       <div part="loader"></div>
-      <div id="content" part="content" tabindex="0" role="document" aria-label="${i18n.pages}">
-        <div id="pages"></div>
+      <div class="content-area">
+        <div
+          id="content"
+          part="content"
+          tabindex="${this.pageCount ? '0' : '-1'}"
+          role="document"
+          aria-label="${i18n.pages}"
+        >
+          <div id="pages"></div>
+        </div>
+        <div class="content-focus-ring"></div>
       </div>
       <div part="error-message" ?hidden="${!this.__hasError}">
         ${this.__errorReason === 'password' ? i18n.passwordError : i18n.loadError}

@@ -35,8 +35,12 @@ export class PdfViewerPage {
     this.unscaledWidth = size.width;
     this.unscaledHeight = size.height;
 
+    /** The size of user space units, see `PageViewport.userUnit`. */
+    this.userUnit = 1;
+
     this.element = document.createElement('div');
     this.element.setAttribute('part', 'page');
+    this.element.setAttribute('role', 'group');
 
     /** @type {number} */
     this.scale = 0;
@@ -92,7 +96,9 @@ export class PdfViewerPage {
    */
   setPdfPage(pdfPage) {
     this.pdfPage = pdfPage;
-    const { width, height } = pdfPage.getViewport({ scale: 1 });
+    const { width, height, userUnit } = pdfPage.getViewport({ scale: 1 });
+    this.userUnit = userUnit;
+    this.#updateTextScale();
     if (width === this.unscaledWidth && height === this.unscaledHeight) {
       return false;
     }
@@ -115,6 +121,16 @@ export class PdfViewerPage {
     this.renderFailed = false;
     this.element.style.width = `${this.width}px`;
     this.element.style.height = `${this.height}px`;
+    this.#updateTextScale();
+  }
+
+  /**
+   * Sizes the text layer with the page, also before the page renders again
+   * at the new scale. The text layer of pdf.js reads this property.
+   * @private
+   */
+  #updateTextScale() {
+    this.element.style.setProperty('--total-scale-factor', String(this.scale * this.userUnit));
   }
 
   /**
@@ -180,7 +196,6 @@ export class PdfViewerPage {
    */
   async renderTextLayer(pdfjs) {
     const viewport = this.pdfPage.getViewport({ scale: this.scale });
-    this.element.style.setProperty('--total-scale-factor', String(viewport.scale * viewport.userUnit));
 
     if (this.textLayer) {
       this.textLayer.update({ viewport });
@@ -189,10 +204,16 @@ export class PdfViewerPage {
 
     const container = document.createElement('div');
     container.className = 'text-layer';
+    // While selecting, the end-of-content element covers the page, so that
+    // dragging over empty space does not lose the selection.
+    container.addEventListener('pointerdown', () => {
+      container.classList.add('selecting');
+      window.addEventListener('pointerup', () => container.classList.remove('selecting'), { once: true });
+    });
     this.element.append(container);
 
     const textLayer = new pdfjs.TextLayer({
-      textContentSource: this.pdfPage.streamTextContent({ includeMarkedContent: true, disableNormalization: true }),
+      textContentSource: this.pdfPage.streamTextContent({ includeMarkedContent: true }),
       container,
       viewport,
     });
@@ -209,13 +230,16 @@ export class PdfViewerPage {
   }
 
   /**
-   * Adds the links of the page, positioned relative to the page size so that
-   * they need no update when the scale changes.
+   * Adds the links of the page to a layer over the page, positioned relative
+   * to the page size so that they need no update when the scale changes.
+   * Returns the links with their annotations.
    *
    * @param {Array<{ rect: number[] }>} annotations the link annotations of the page
    * @param {(annotation: object) => HTMLAnchorElement | null} createLink
+   * @return {Array<{ link: HTMLAnchorElement, annotation: object }>}
    */
   renderLinks(annotations, createLink) {
+    const links = [];
     const viewport = this.pdfPage.getViewport({ scale: 1 });
     const layer = document.createElement('div');
     layer.className = 'link-layer';
@@ -234,34 +258,32 @@ export class PdfViewerPage {
       link.style.width = `${(Math.abs(x2 - x1) / viewport.width) * 100}%`;
       link.style.height = `${(Math.abs(y2 - y1) / viewport.height) * 100}%`;
       layer.append(link);
+      links.push({ link, annotation });
     });
 
     this.element.append(layer);
     this.linkLayerElement = layer;
+    return links;
   }
 
   /**
-   * Returns the text of the text layer that is inside the given element, e.g.
-   * the text of a link.
+   * Returns the elements of the text layer that are inside the given element,
+   * e.g. the text of a link.
    *
    * @param {Element} element
-   * @return {string}
+   * @return {HTMLElement[]}
    */
-  getTextInside(element) {
-    if (!this.textLayerElement) {
-      return '';
+  getTextElementsInside(element) {
+    if (!this.textLayer) {
+      return [];
     }
     const rect = element.getBoundingClientRect();
-    return [...this.textLayerElement.querySelectorAll('span:not(.markedContent)')]
-      .filter((span) => {
-        const spanRect = span.getBoundingClientRect();
-        const x = spanRect.left + spanRect.width / 2;
-        const y = spanRect.top + spanRect.height / 2;
-        return x >= rect.left && x <= rect.right && y >= rect.top && y <= rect.bottom;
-      })
-      .map((span) => span.textContent.trim())
-      .join(' ')
-      .trim();
+    return this.textLayer.textDivs.filter((span) => {
+      const spanRect = span.getBoundingClientRect();
+      const x = spanRect.left + spanRect.width / 2;
+      const y = spanRect.top + spanRect.height / 2;
+      return span.textContent.trim() && x >= rect.left && x <= rect.right && y >= rect.top && y <= rect.bottom;
+    });
   }
 
   /** Cancels a pending render. */
@@ -281,6 +303,7 @@ export class PdfViewerPage {
     this.textLayerElement = null;
     this.linkLayerElement?.remove();
     this.linkLayerElement = null;
+    this.element.querySelector(':scope > .find-layer')?.remove();
     if (this.canvas) {
       this.#freeCanvas(this.canvas);
       this.canvas = null;
