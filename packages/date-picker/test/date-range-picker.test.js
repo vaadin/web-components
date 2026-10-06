@@ -293,6 +293,49 @@ describe('date-range-picker', () => {
     });
   });
 
+  describe('picking with the calendar button', () => {
+    async function openWithButton() {
+      const toggle = picker.shadowRoot.querySelector('[part~="toggle-button"]');
+      await sendMouseToElement({ type: 'click', element: toggle });
+      await untilOverlayRendered(picker);
+    }
+
+    beforeEach(() => {
+      picker.startValue = '2026-03-10';
+      picker.endValue = '2026-03-15';
+    });
+
+    it('should pick the start and then the end, even when the start alone would keep the range valid', async () => {
+      await openWithButton();
+      await pick(9);
+      expect(picker.startValue).to.equal('2026-03-09');
+      expect(picker.opened).to.be.true;
+      expect(document.activeElement).to.equal(endInput);
+
+      await pick(14);
+      expect(picker.startValue).to.equal('2026-03-09');
+      expect(picker.endValue).to.equal('2026-03-14');
+      expect(picker.opened).to.be.false;
+    });
+
+    it('should clear the end when the picked start is after it', async () => {
+      await openWithButton();
+      await pick(20);
+      expect(picker.endValue).to.equal('');
+      expect(picker.opened).to.be.true;
+    });
+
+    it('should change only the start again when later opened from the start input', async () => {
+      await openWithButton();
+      await sendKeys({ press: 'Escape' });
+      await openFrom(startInput);
+      await pick(9);
+      expect(picker.startValue).to.equal('2026-03-09');
+      expect(picker.endValue).to.equal('2026-03-15');
+      expect(picker.opened).to.be.false;
+    });
+  });
+
   describe('picking the end first', () => {
     beforeEach(async () => {
       await openFrom(endInput);
@@ -524,6 +567,19 @@ describe('date-range-picker', () => {
       expect(picker.opened).to.be.true;
       expect(document.activeElement).to.equal(startInput);
       expect(picker.getAttribute('active-part')).to.equal('start');
+    });
+
+    it('should highlight the input whose date a pick sets while the overlay is open', async () => {
+      const background = (input) => getComputedStyle(input).backgroundColor;
+      const idle = background(startInput);
+      await openFrom(startInput);
+      expect(background(startInput)).to.not.equal(idle);
+      expect(background(endInput)).to.equal(idle);
+
+      endInput.focus();
+      await nextRender();
+      expect(background(endInput)).to.not.equal(idle);
+      expect(background(startInput)).to.equal(idle);
     });
 
     it('should toggle aria-expanded on both inputs', async () => {

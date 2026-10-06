@@ -107,10 +107,11 @@
   [part~='in-range'] {
     --_range-band: var(
       --vaadin-date-picker-date-in-range-background,
-      color-mix(in srgb, var(--lumo-primary-color) 18%, transparent)
+      color-mix(in srgb, var(--lumo-primary-color) 10%, transparent)
     );
     --_range-edge: var(--vaadin-date-picker-date-in-range-border-color, var(--_selection-color));
-    --_range-band-height: 80%;
+    --_range-band-height: 100%;
+    border-radius: 0;
   }
 
   [part~='in-range']::after {
@@ -123,15 +124,10 @@
 
   [part~='range-editing']::after,
   [part~='range-editing']:hover::after {
-    background: var(--lumo-base-color);
-    box-shadow: inset 0 0 0 2px var(--_range-edge);
-  }
-
-  [part~='range-editing'][part~='focused']::after {
-    box-shadow:
-      inset 0 0 0 2px var(--_range-edge),
-      0 0 0 1px var(--lumo-base-color),
-      0 0 0 calc(var(--_focus-ring-width) + 1px) var(--_focus-ring-color);
+    background: var(
+      --vaadin-date-picker-date-range-editing-background,
+      color-mix(in srgb, var(--_selection-color) 35%, var(--lumo-base-color))
+    );
   }
 
   :host(:not([focused])) [part~='date'][part~='focused']::after {

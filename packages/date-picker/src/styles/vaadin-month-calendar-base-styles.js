@@ -119,7 +119,7 @@ export const monthCalendarStyles = css`
   [part~='in-range'] {
     --_range-band: var(
       --vaadin-date-picker-date-in-range-background,
-      color-mix(in srgb, var(--vaadin-date-picker-date-selected-background, var(--vaadin-text-color)) 20%, transparent)
+      color-mix(in srgb, var(--vaadin-date-picker-date-selected-background, var(--vaadin-text-color)) 12%, transparent)
     );
     --_range-edge: var(
       --vaadin-date-picker-date-in-range-border-color,
@@ -127,7 +127,8 @@ export const monthCalendarStyles = css`
     );
     /* Optional edges along the band, off by default */
     --_range-edge-width: var(--vaadin-date-picker-date-in-range-border-width, 0px);
-    --_range-band-height: min(2em, 100%);
+    /* Full height, so that the weeks of a range join into one calm area */
+    --_range-band-height: 100%;
     isolation: isolate;
     border-radius: 0;
     background: linear-gradient(
@@ -174,14 +175,19 @@ export const monthCalendarStyles = css`
     cursor: grab;
   }
 
-  /* The end of the range being edited is outlined, the other end stays filled */
+  /*
+   * The end of the range being edited gets a lighter fill than the other end. An
+   * outline would look like the focus indicator.
+   */
   [part~='range-editing'] {
     color: var(--vaadin-date-picker-date-range-editing-color, var(--vaadin-text-color));
   }
 
   [part~='range-editing']::after {
-    background: var(--vaadin-background-color);
-    box-shadow: inset 0 0 0 2px var(--_range-edge);
+    background: var(
+      --vaadin-date-picker-date-range-editing-background,
+      color-mix(in srgb, var(--_range-edge) 35%, var(--vaadin-background-color))
+    );
   }
 
   [disabled] {

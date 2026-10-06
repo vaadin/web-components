@@ -35,4 +35,10 @@
     [part~='clear-button'][part~='end-clear-button'] {
     display: none;
   }
+
+  :host([opened][active-part='start']) ::slotted([slot='input']),
+  :host([opened][active-part='end']) ::slotted([slot='end-input']) {
+    border-radius: var(--lumo-border-radius-s);
+    background: var(--vaadin-date-range-picker-active-input-background, var(--lumo-primary-color-10pct));
+  }
 }

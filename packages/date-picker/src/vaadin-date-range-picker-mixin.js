@@ -541,6 +541,7 @@ export const DateRangePickerMixin = (superClass) =>
     /** @protected */
     _onOverlayClosing() {
       this._overlayContent?.cancelLoadVisibleDateMetadata();
+      this.__pickingWholeRange = false;
 
       if (this.__showOthers) {
         this.__showOthers();
@@ -582,8 +583,9 @@ export const DateRangePickerMixin = (superClass) =>
       if (this.opened) {
         this.close();
       } else {
-        // The calendar button always starts from the start date, for predictability.
+        // The calendar button always picks the whole range: the start, then the end.
         this._activePart = 'start';
+        this.__pickingWholeRange = true;
         this.__focusActiveInput();
         this.open();
       }
@@ -745,7 +747,18 @@ export const DateRangePickerMixin = (superClass) =>
         return true;
       }
 
-      // Changing only the start keeps the end, as long as the range stays valid.
+      // When picking the whole range, the start is followed by the end. The current
+      // end stays as long as the range stays valid, until a new end is picked.
+      if (this._activePart === 'start' && this.__pickingWholeRange && this._endDate && date <= this._endDate) {
+        this._startDate = date;
+        this._activePart = 'end';
+        this.__focusActiveInput();
+        announce(`${this.__effectiveI18n.startAccessibleName}: ${this.__formatDate(date)}`);
+        return false;
+      }
+
+      // Opened from the start input, changing only the start keeps the end, as long as
+      // the range stays valid.
       if (this._activePart === 'start' && this._endDate && date <= this._endDate) {
         this._startDate = date;
         return true;

@@ -38,4 +38,14 @@ export const dateRangePickerStyles = css`
     [part~='clear-button'][part~='end-clear-button'] {
     display: none;
   }
+
+  /* Highlight the input whose date a pick in the calendar sets */
+  :host([opened][active-part='start']) ::slotted([slot='input']),
+  :host([opened][active-part='end']) ::slotted([slot='end-input']) {
+    border-radius: var(--vaadin-radius-s);
+    background: var(
+      --vaadin-date-range-picker-active-input-background,
+      color-mix(in srgb, var(--vaadin-focus-ring-color, currentColor) 12%, transparent)
+    );
+  }
 `;
