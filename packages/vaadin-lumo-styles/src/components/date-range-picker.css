@@ -13,23 +13,24 @@
     display: flex;
     align-items: center;
     align-self: stretch;
-    padding: 0 0.25em;
-    min-height: 0;
+    /* Important for the same reason as for the start clear button below */
+    padding: 0 0.25em !important;
+    min-height: 0 !important;
+    mask-image: none !important;
     color: var(--lumo-secondary-text-color);
   }
 
-  /* The overflow fade of slotted content does not apply here */
-  [part='separator'],
+  /*
+   * The start clear button sits between the inputs, not in the suffix, so undo the
+   * input sizing that the input container applies to such slotted content. Marked
+   * important, as browsers differ in whether the container's ::slotted() rule or
+   * this rule wins, and only an important declaration wins in all of them.
+   */
   [part~='start-clear-button'] {
-    mask-image: none;
-  }
-
-  /* The start clear button sits between the inputs, not in the suffix, so undo the
-     input sizing that the input container applies to such slotted content */
-  [part~='start-clear-button'] {
-    align-self: center;
-    min-height: 0;
-    padding: 0;
+    align-self: center !important;
+    min-height: 0 !important;
+    padding: 0 !important;
+    mask-image: none !important;
   }
 
   [part='input-field'] ::slotted(input) {
