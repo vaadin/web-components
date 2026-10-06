@@ -683,12 +683,18 @@ export const DateRangePickerMixin = (superClass) =>
         this.__focusActiveInput();
       });
 
-      content.addEventListener('click', (event) => {
-        if (event.composedPath().includes(content._cancelButton)) {
-          this.__cancelled = true;
-        }
-        event.stopPropagation();
-      });
+      // Capture phase, so that the flag is set before the Cancel button closes the overlay.
+      content.addEventListener(
+        'click',
+        (event) => {
+          if (event.composedPath().includes(content._cancelButton)) {
+            this.__cancelled = true;
+          }
+        },
+        true,
+      );
+
+      content.addEventListener('click', (event) => event.stopPropagation());
 
       content.addEventListener('focus-input', () => this.__focusActiveInput());
 

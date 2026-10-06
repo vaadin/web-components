@@ -122,6 +122,22 @@ describe('date-range-picker', () => {
       expect(getParts(15)).to.not.include('selected');
     });
 
+    it('should not mark the previous start while previewing a new start', async () => {
+      await openFrom(startInput);
+      await sendMouseToElement({ type: 'move', element: getCell(12) });
+      expect(getParts(12)).to.include.members(['range-start', 'selected']);
+      expect(getParts(15)).to.include('range-end');
+      expect(getParts(10)).to.not.include('range-start');
+      expect(getParts(10)).to.not.include('selected');
+    });
+
+    it('should not preview a new start after the end', async () => {
+      await openFrom(startInput);
+      await sendMouseToElement({ type: 'move', element: getCell(20) });
+      expect(getParts(10)).to.include('range-start');
+      expect(getParts(20)).to.not.include('range-start');
+    });
+
     it('should restore the range on Escape', async () => {
       await openFrom(startInput);
       await pick(20);
@@ -129,6 +145,95 @@ describe('date-range-picker', () => {
       expect(picker.opened).to.be.false;
       expect(picker.startValue).to.equal('2026-03-10');
       expect(picker.endValue).to.equal('2026-03-15');
+    });
+
+    it('should restore the range on Cancel', async () => {
+      await openFrom(startInput);
+      await pick(20);
+      await sendMouseToElement({ type: 'click', element: picker._overlayContent._cancelButton });
+      expect(picker.opened).to.be.false;
+      expect(picker.startValue).to.equal('2026-03-10');
+      expect(picker.endValue).to.equal('2026-03-15');
+    });
+
+    it('should show both dates in the inputs', () => {
+      expect(startInput.value).to.equal('3/10/2026');
+      expect(endInput.value).to.equal('3/15/2026');
+    });
+  });
+
+  describe('values', () => {
+    it('should not fire change when setting values programmatically', () => {
+      const spy = sinon.spy();
+      picker.addEventListener('change', spy);
+      picker.startValue = '2026-03-10';
+      picker.endValue = '2026-03-15';
+      expect(spy).to.be.not.called;
+    });
+
+    it('should fire start-value-changed and end-value-changed when picking', async () => {
+      const startSpy = sinon.spy();
+      const endSpy = sinon.spy();
+      picker.addEventListener('start-value-changed', startSpy);
+      picker.addEventListener('end-value-changed', endSpy);
+      await openFrom(startInput);
+      await pick(10);
+      expect(startSpy).to.be.calledOnce;
+      await pick(12);
+      expect(endSpy).to.be.calledOnce;
+    });
+
+    it('should ignore an unparsable value', () => {
+      picker.startValue = 'foo';
+      expect(startInput.value).to.equal('');
+    });
+  });
+
+  describe('clear buttons', () => {
+    let startClear, endClear;
+
+    beforeEach(async () => {
+      picker.clearButtonVisible = true;
+      await nextRender();
+      startClear = picker.shadowRoot.querySelector('[part~="start-clear-button"]');
+      endClear = picker.shadowRoot.querySelector('[part~="end-clear-button"]');
+    });
+
+    it('should show each clear button only when its own date is set', async () => {
+      const isVisible = (button) => getComputedStyle(button).display !== 'none';
+      expect(isVisible(startClear)).to.be.false;
+      expect(isVisible(endClear)).to.be.false;
+
+      picker.endValue = '2026-03-15';
+      await nextRender();
+      expect(isVisible(startClear)).to.be.false;
+      expect(isVisible(endClear)).to.be.true;
+
+      picker.startValue = '2026-03-10';
+      await nextRender();
+      expect(isVisible(startClear)).to.be.true;
+    });
+
+    it('should clear only the start and fire change on start clear button click', async () => {
+      picker.startValue = '2026-03-10';
+      picker.endValue = '2026-03-15';
+      await nextRender();
+      const spy = sinon.spy();
+      picker.addEventListener('change', spy);
+      await sendMouseToElement({ type: 'click', element: startClear });
+      expect(picker.startValue).to.equal('');
+      expect(picker.endValue).to.equal('2026-03-15');
+      expect(startInput.value).to.equal('');
+      expect(spy).to.be.calledOnce;
+    });
+
+    it('should clear only the end on end clear button click', async () => {
+      picker.startValue = '2026-03-10';
+      picker.endValue = '2026-03-15';
+      await nextRender();
+      await sendMouseToElement({ type: 'click', element: endClear });
+      expect(picker.startValue).to.equal('2026-03-10');
+      expect(picker.endValue).to.equal('');
     });
   });
 
@@ -143,6 +248,49 @@ describe('date-range-picker', () => {
       expect(picker.endValue).to.equal('');
     });
 
+    it('should revert unparsed text on Escape when the clear button is not visible', async () => {
+      picker.startValue = '2026-03-10';
+      startInput.focus();
+      startInput.value = 'foo';
+      await sendKeys({ press: 'Escape' });
+      expect(startInput.value).to.equal('3/10/2026');
+      expect(picker.startValue).to.equal('2026-03-10');
+    });
+
+    it('should pick a range with the keyboard only', async () => {
+      startInput.focus();
+      await sendKeys({ press: 'ArrowDown' });
+      await untilOverlayRendered(picker);
+      expect(picker.opened).to.be.true;
+      // Focus starts at the initial position, March 31 (max).
+      await sendKeys({ press: 'ArrowLeft' });
+      await sendKeys({ press: 'Enter' });
+      await untilOverlayRendered(picker);
+      expect(picker.startValue).to.equal('2026-03-30');
+      expect(document.activeElement).to.equal(endInput);
+
+      await sendKeys({ press: 'ArrowDown' });
+      await untilOverlayRendered(picker);
+      await sendKeys({ press: 'ArrowRight' });
+      await sendKeys({ press: 'Enter' });
+      await untilOverlayRendered(picker);
+      expect(picker.endValue).to.equal('2026-03-31');
+      expect(picker.opened).to.be.false;
+    });
+
+    it('should move focus from the start input to the end input and into the calendar on Tab', async () => {
+      await openFrom(startInput);
+      await sendKeys({ press: 'Tab' });
+      expect(document.activeElement).to.equal(endInput);
+      expect(picker.getAttribute('active-part')).to.equal('end');
+      await sendKeys({ press: 'Tab' });
+      await untilOverlayRendered(picker);
+      const calendar = document.activeElement;
+      expect(calendar.localName).to.equal('vaadin-month-calendar');
+      expect(calendar.shadowRoot.activeElement.getAttribute('part')).to.include('date');
+      expect(picker.opened).to.be.true;
+    });
+
     it('should keep focus in the overlay on Shift+Tab from the start input', async () => {
       await openFrom(startInput);
       await sendKeys({ press: 'Shift+Tab' });
@@ -151,7 +299,58 @@ describe('date-range-picker', () => {
     });
   });
 
+  describe('state', () => {
+    it('should not open when disabled', async () => {
+      picker.disabled = true;
+      picker.click();
+      await nextRender();
+      expect(picker.opened).to.be.not.ok;
+    });
+
+    it('should not open when read-only', async () => {
+      picker.readonly = true;
+      startInput.click();
+      await nextRender();
+      expect(picker.opened).to.be.not.ok;
+    });
+
+    it('should toggle aria-expanded on both inputs', async () => {
+      expect(startInput.getAttribute('aria-expanded')).to.equal('false');
+      await openFrom(startInput);
+      expect(startInput.getAttribute('aria-expanded')).to.equal('true');
+      expect(endInput.getAttribute('aria-expanded')).to.equal('true');
+    });
+
+    it('should open the overlay at the month of the date being picked', async () => {
+      picker.startValue = '2026-01-10';
+      picker.endValue = '2026-03-15';
+      await openFrom(endInput);
+      expect(picker._overlayContent.focusedDate.getMonth()).to.equal(2);
+    });
+  });
+
   describe('accessibility', () => {
+    it('should name the inputs after the label and the part', async () => {
+      picker.label = 'Trip dates';
+      await nextRender();
+      expect(startInput.getAttribute('aria-label')).to.equal('Trip dates Start date');
+      expect(endInput.getAttribute('aria-label')).to.equal('Trip dates End date');
+    });
+
+    it('should use the part names from i18n', async () => {
+      picker.i18n = { startAccessibleName: 'Departure', endAccessibleName: 'Return' };
+      await nextRender();
+      expect(startInput.getAttribute('aria-label')).to.equal('Departure');
+      expect(endInput.getAttribute('aria-label')).to.equal('Return');
+    });
+
+    it('should link the helper text to the group', async () => {
+      picker.helperText = 'Pick both dates';
+      await nextRender();
+      const helper = picker.querySelector('[slot=helper]');
+      expect(picker.getAttribute('aria-describedby')).to.include(helper.id);
+    });
+
     it('should be a group labelled by the label', async () => {
       picker.label = 'Trip dates';
       await nextRender();
@@ -170,6 +369,37 @@ describe('date-range-picker', () => {
       await sendKeys({ press: 'Enter' });
       expect(picker.endValue).to.equal('2026-03-05');
       expect(picker.invalid).to.be.true;
+    });
+
+    it('should be invalid when a date is outside of min and max', async () => {
+      picker.startValue = '2025-12-10';
+      startInput.focus();
+      await sendKeys({ press: 'Enter' });
+      expect(picker.checkValidity()).to.be.false;
+    });
+
+    it('should be invalid when a date is disabled', () => {
+      picker.isDateDisabled = (date) => date.day === 10;
+      picker.startValue = '2026-03-10';
+      expect(picker.checkValidity()).to.be.false;
+    });
+
+    it('should be invalid with unparsable text', async () => {
+      startInput.focus();
+      startInput.value = 'foo';
+      await sendKeys({ press: 'Enter' });
+      expect(picker.startValue).to.equal('');
+      expect(picker.invalid).to.be.true;
+    });
+
+    it('should commit typed text when focus leaves the field', () => {
+      const spy = sinon.spy();
+      picker.addEventListener('change', spy);
+      startInput.focus();
+      startInput.value = '3/10/2026';
+      startInput.blur();
+      expect(picker.startValue).to.equal('2026-03-10');
+      expect(spy).to.be.calledOnce;
     });
 
     it('should require both dates when required', () => {
