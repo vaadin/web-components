@@ -390,6 +390,9 @@ const pdfViewerBaseStyles = css`
     forced-color-adjust: none;
     transform-origin: 0 0;
     caret-color: CanvasText;
+    /* The page is white paper, so use the light system colors (Highlight)
+       also in a dark color scheme. */
+    color-scheme: light;
     z-index: 0;
     --min-font-size: 1;
     --text-scale-factor: calc(var(--total-scale-factor) * var(--min-font-size));

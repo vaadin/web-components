@@ -19,18 +19,18 @@ specific to the PDF viewer. It does not repeat those documents.
 
 Status values: `todo`, `in progress`, `in review`, `done`, `blocked`.
 
-| #   | Slice                                    | Status      | Reviews (code / visual) | Notes                                    |
-| --- | ---------------------------------------- | ----------- | ----------------------- | ---------------------------------------- |
-| 0   | Tracer bullet: package + first page      | done        | ✅ / ✅                 | 561906b4d0, 59ff4a2850                   |
-| 1   | Continuous scroll, zoom, page tracking   | done        | ✅ / ✅ + re-review     | 1e173c331e, b2d2a73c16                   |
-| 2   | Toolbar: page navigation + zoom controls | done        | ✅ / ✅                 | 538b068c2c, fixes in a4f29b51f9          |
-| 3   | Text layer, links, keyboard, a11y basics | done        | ✅ / ✅ + a11y          | a4f29b51f9, fixes in f4ac2da176          |
-| 4   | Find                                     | done        | ✅ / ✅ + a11y          | f4ac2da176, fixes in 5266a798ad          |
-| 5   | Sidebar: thumbnails                      | done        | ✅ / ✅ + a11y          | 5266a798ad (with 6), fixes in 5651cb1492 |
-| 6   | Sidebar: outline                         | done        | ✅ / ✅ + a11y          | 5266a798ad (with 5), fixes in 5651cb1492 |
-| 7   | Download and print                       | done        | ✅ / ✅                 | 5651cb1492, fixes in 3d2039d73f          |
-| 8   | Tagged PDFs, AT audit, forced colors     | done        | ✅ / ✅ + a11y          | 3d2039d73f; manual AT run open           |
-| 9   | API docs, typings, README, release prep  | in progress | – / –                   |                                          |
+| #   | Slice                                    | Status | Reviews (code / visual) | Notes                                    |
+| --- | ---------------------------------------- | ------ | ----------------------- | ---------------------------------------- |
+| 0   | Tracer bullet: package + first page      | done   | ✅ / ✅                 | 561906b4d0, 59ff4a2850                   |
+| 1   | Continuous scroll, zoom, page tracking   | done   | ✅ / ✅ + re-review     | 1e173c331e, b2d2a73c16                   |
+| 2   | Toolbar: page navigation + zoom controls | done   | ✅ / ✅                 | 538b068c2c, fixes in a4f29b51f9          |
+| 3   | Text layer, links, keyboard, a11y basics | done   | ✅ / ✅ + a11y          | a4f29b51f9, fixes in f4ac2da176          |
+| 4   | Find                                     | done   | ✅ / ✅ + a11y          | f4ac2da176, fixes in 5266a798ad          |
+| 5   | Sidebar: thumbnails                      | done   | ✅ / ✅ + a11y          | 5266a798ad (with 6), fixes in 5651cb1492 |
+| 6   | Sidebar: outline                         | done   | ✅ / ✅ + a11y          | 5266a798ad (with 5), fixes in 5651cb1492 |
+| 7   | Download and print                       | done   | ✅ / ✅                 | 5651cb1492, fixes in 3d2039d73f          |
+| 8   | Tagged PDFs, AT audit, forced colors     | done   | ✅ / ✅ + a11y          | 3d2039d73f; manual AT run open           |
+| 9   | API docs, typings, README, release prep  | done   | ✅ / ✅                 | 70ad31381b, 567b9adc1b + final fixes     |
 
 ---
 
@@ -401,6 +401,7 @@ because reviewers check against it.
 | method     | `print(): Promise<void>`                                                                               | See D15.                                                                                                                                                           |
 | event      | `zoom-changed`                                                                                         | From `notify` (the toolbar changes `zoom`).                                                                                                                        |
 | event      | `page-changed`                                                                                         | From `notify`. Documented with `@fires`.                                                                                                                           |
+| event      | `sidebar-opened-changed`                                                                               | From `notify` (the toolbar toggles the sidebar).                                                                                                                   |
 | event      | `document-load`                                                                                        | Document loaded. `detail: { pageCount, title }`.                                                                                                                   |
 | event      | `document-error`                                                                                       | Load failed. `detail: { reason: 'network' \| 'invalid' \| 'password', error }`.                                                                                    |
 | state attr | `loading`, `has-error`                                                                                 | For styling.                                                                                                                                                       |
@@ -690,6 +691,30 @@ Newest entry at the top. Format:
 - Visual review: <summary>
 - Follow-ups: …
 ```
+
+### 2026-10-06 — Slice 9: API docs, typings, README, release prep — done
+
+- Base commit: 3d2039d73f Head: 70ad31381b, 567b9adc1b, final visual review fixes in the next commit
+- Shipped: package README (feature flag, worker and Vite, CSP, install size, Safari 18+ minimum,
+  known limitations), JSDoc styling tables complete (outline `current` / `expanded` part names,
+  outline / thumbnails icons, thumbnail current color), pdf-viewer added to the Pro license
+  headers in `eslint.config.js` and to `dev/package.json`. CEM and web-types regenerated and checked:
+  attributes `src`, `page`, `zoom`, `sidebar-opened`, `file-name`; properties incl. `i18n`;
+  `print()`; events `document-load`, `document-error`, `page-changed`, `zoom-changed`,
+  `sidebar-opened-changed` (added to the API draft).
+- Code review fixes (567b9adc1b): sidebar overlay closes after choosing a thumbnail or outline
+  entry on narrow viewers, thumbnails are kept while the outline is shown, numeric `zoom`
+  attributes become numbers, loading pdf.js can be retried after a failure, download ignores a
+  document unloaded meanwhile, find close selects the match after moving focus. Five regression
+  tests, each checked to fail without the fix.
+- Visual review: 0 blockers, 2 should-fix (Lumo focus ring missing on the current outline entry,
+  faint text selection on dark color schemes from the dark `Highlight`), 3 nits (outline tab stop
+  not following the current page, empty zoom select for an invalid zoom, smaller sidebar labels in
+  Aura). Fixed all but the Aura label size, which is intended (Aura's small text size).
+- Firefox not run locally (does not start on this machine); Chromium and WebKit 236/236, snapshots
+  and base / Lumo / Aura visual tests pass.
+- Open: the manual AT and High Contrast run (`plans/pdf-viewer-at-checklist.md`), Firefox / Safari
+  print previews, and removing this file before merge.
 
 ### 2026-10-06 — Slice 8: Tagged PDFs, AT audit, forced colors — done (manual AT run open)
 

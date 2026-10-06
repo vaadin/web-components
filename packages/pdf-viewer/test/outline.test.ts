@@ -107,6 +107,24 @@ describe('outline', () => {
         expect(getItem('Chapter 1').hasAttribute('aria-current')).to.be.false;
       });
 
+      it('should move the tab stop to the item of the current page', async () => {
+        viewer.page = 3;
+        await nextRenderIdle(viewer);
+        await nextRender();
+        const tabStops = getItems().filter((item) => item.getAttribute('tabindex') === '0');
+        expect(tabStops).to.deep.equal([getItem('Chapter 3')]);
+      });
+
+      it('should keep the tab stop on the focused item while focus is in the outline', async () => {
+        getItem('Chapter 2').focus();
+        getItem('Chapter 2').click();
+        await nextRender();
+        viewer.page = 3;
+        await nextRenderIdle(viewer);
+        await nextRender();
+        expect(getItem('Chapter 2').getAttribute('tabindex')).to.equal('0');
+      });
+
       it('should add the current part name to the item of the current page', async () => {
         await nextRender();
         expect(getItem('Chapter 1').part.contains('current')).to.be.true;

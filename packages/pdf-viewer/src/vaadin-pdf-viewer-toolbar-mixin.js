@@ -133,7 +133,7 @@ export const PdfViewerToolbarMixin = (superClass) =>
             slot="toolbar-zoom"
             accessible-name="${i18n.zoom}"
             .items="${this.#getZoomItems(i18n)}"
-            .value="${live(String(this.zoom))}"
+            .value="${live(this.#getZoomValue())}"
             .disabled="${!hasDocument}"
             @change="${this.#onZoomSelectChange}"
           ></vaadin-select>
@@ -391,6 +391,16 @@ export const PdfViewerToolbarMixin = (superClass) =>
     /** @private */
     #onCloseFindClick() {
       this._closeFind();
+    }
+
+    /**
+     * Returns the value of the zoom select, `page-width` for an invalid zoom,
+     * as the pages are then shown at page width.
+     * @private
+     */
+    #getZoomValue() {
+      const zoom = this.zoom;
+      return zoom === 'page-fit' || Number(zoom) > 0 ? String(zoom) : 'page-width';
     }
 
     /** @private */

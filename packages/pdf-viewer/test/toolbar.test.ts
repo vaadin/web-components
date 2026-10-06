@@ -185,6 +185,19 @@ describe('toolbar', () => {
         expect(getZoomSelect().value).to.equal('page-width');
       });
 
+      it('should show page width in the zoom select for an invalid zoom', async () => {
+        const stub = sinon.stub(console, 'warn');
+        try {
+          viewer.zoom = 2;
+          await nextRenderIdle(viewer);
+          viewer.zoom = 0;
+          await nextRenderIdle(viewer);
+          expect(getZoomSelect().value).to.equal('page-width');
+        } finally {
+          stub.restore();
+        }
+      });
+
       it('should set the zoom selected in the zoom select', async () => {
         const select = getZoomSelect();
         select.opened = true;

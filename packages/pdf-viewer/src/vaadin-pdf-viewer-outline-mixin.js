@@ -123,6 +123,10 @@ export const PdfViewerOutlineMixin = (superClass) =>
      */
     _renderOutline() {
       const outline = this.__outline;
+      const current = outline && this.#getCurrentItem();
+      // The tab stop follows the current page, like the thumbnails, while focus is outside the outline.
+      const hasFocus = !!this.shadowRoot.activeElement?.closest('[part="outline"]');
+      const focused = (hasFocus && this.__focusedOutlineItem) || current || this.__focusedOutlineItem || outline?.[0];
       return html`
         <div
           id="outline"
@@ -133,14 +137,13 @@ export const PdfViewerOutlineMixin = (superClass) =>
           @click="${this.#onOutlineClick}"
           @keydown="${this.#onOutlineKeyDown}"
         >
-          ${outline ? this.#renderOutlineItems(outline, 1) : nothing}
+          ${outline ? this.#renderOutlineItems(outline, 1, current, focused) : nothing}
         </div>
       `;
     }
 
     /** @private */
-    #renderOutlineItems(items, level, current = this.#getCurrentItem()) {
-      const focused = this.__focusedOutlineItem || (this.__outline && this.__outline[0]);
+    #renderOutlineItems(items, level, current, focused) {
       return items.map((item, index) => {
         const hasChildren = item.items.length > 0;
         const expanded = hasChildren && this.__expandedOutlineItems.has(item);
@@ -166,7 +169,7 @@ export const PdfViewerOutlineMixin = (superClass) =>
               ></span>
               <span part="outline-item-title">${item.title}</span>
             </div>
-            ${expanded ? html`<div role="group">${this.#renderOutlineItems(item.items, level + 1, current)}</div>` : nothing}
+            ${expanded ? html`<div role="group">${this.#renderOutlineItems(item.items, level + 1, current, focused)}</div>` : nothing}
           </div>
         `;
       });

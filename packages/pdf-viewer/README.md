@@ -64,9 +64,9 @@ The viewer has a default height of 400px. Set its `height` to fit your layout.
 - **pdf.js:** the component uses [pdf.js](https://mozilla.github.io/pdf.js/) (legacy build).
   It is only loaded when a `src` is first set, so importing the component costs little.
 - **Worker:** pdf.js runs in a module worker that the component creates from a file in this
-  package (`new Worker(new URL('...', import.meta.url), { type: 'module' })`). This works with Vite (dev server and
-  production build) without configuration. Other bundlers must support module workers created
-  with `new URL(..., import.meta.url)`.
+  package (`new Worker(new URL('...', import.meta.url), { type: 'module' })`). This works with
+  Vite (dev server and production build) without configuration. Other bundlers must support
+  module workers created with `new URL(..., import.meta.url)`.
 - **Content Security Policy:** the worker is a same-origin script (`worker-src 'self'`).
   Downloading and printing use `blob:` URLs, and printing shows them as images
   (`img-src blob:`). Inline scripts and styles are not needed.
