@@ -468,7 +468,7 @@ export const PdfViewerMixin = (superClass) =>
         this.#loadingTask = pdfjs.getDocument({
           url: this.src,
           worker: this.#workerHandle.worker,
-          // Security, see D9 in plans/pdf-viewer.md.
+          // Security: no XFA forms. Scripting (pdf.sandbox) is never loaded either.
           enableXfa: false,
         });
 
