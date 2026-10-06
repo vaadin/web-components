@@ -28,8 +28,11 @@
     min-width: 0;
   }
 
-  :host(:not([has-start-value])) [part~='start-clear-button'],
-  :host(:not([has-end-value])) [part~='end-clear-button'] {
+  /* Show each clear button only for its own value, overriding the shared has-value rule */
+  :host([clear-button-visible][has-value]:not([has-start-value]):not([disabled]))
+    [part~='clear-button'][part~='start-clear-button'],
+  :host([clear-button-visible][has-value]:not([has-end-value]):not([disabled]))
+    [part~='clear-button'][part~='end-clear-button'] {
     display: none;
   }
 

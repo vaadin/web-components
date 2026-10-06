@@ -121,11 +121,21 @@ export const monthCalendarStyles = css`
       --vaadin-date-picker-date-in-range-background,
       color-mix(in srgb, var(--vaadin-date-picker-date-selected-background, var(--vaadin-text-color)) 12%, transparent)
     );
+    /* Edges in the selection color keep the band distinguishable for low vision (WCAG 1.4.11) */
+    --_range-edge: var(
+      --vaadin-date-picker-date-in-range-border-color,
+      var(--vaadin-date-picker-date-selected-background, var(--vaadin-text-color))
+    );
+    --_range-edge-width: 2px;
     --_range-band-height: min(2em, 100%);
     isolation: isolate;
     border-radius: 0;
-    background: linear-gradient(var(--_range-band), var(--_range-band)) center / 100% var(--_range-band-height)
-      no-repeat;
+    background: linear-gradient(
+        var(--_range-edge) var(--_range-edge-width),
+        var(--_range-band) var(--_range-edge-width) calc(100% - var(--_range-edge-width)),
+        var(--_range-edge) calc(100% - var(--_range-edge-width))
+      )
+      center / 100% var(--_range-band-height) no-repeat;
   }
 
   [part~='in-range'][part~='range-start'] {

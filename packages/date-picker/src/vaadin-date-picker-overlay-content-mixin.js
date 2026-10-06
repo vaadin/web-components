@@ -67,12 +67,11 @@ export const DatePickerOverlayContentMixin = (superClass) =>
         },
 
         /**
-         * When true, hovering or focusing a date on or after `rangeStart`
-         * previews the range that would be selected by picking that date.
+         * The end of the range that a pick sets: `start` or `end`. While set,
+         * hovering or focusing a date previews the range that picking it would select.
          */
         rangePreview: {
-          type: Boolean,
-          value: false,
+          type: String,
           sync: true,
         },
 
@@ -528,16 +527,17 @@ export const DatePickerOverlayContentMixin = (superClass) =>
         return;
       }
 
+      let displayedStart = rangeStart;
       let displayedEnd = rangeEnd;
-      if (rangePreview && rangeStart) {
-        const previewEnd = hoveredDate || (calendarFocused ? focusedDate : null);
-        if (previewEnd && previewEnd >= rangeStart) {
-          displayedEnd = previewEnd;
-        }
+      const previewDate = hoveredDate || (calendarFocused ? focusedDate : null);
+      if (previewDate && rangePreview === 'end' && rangeStart && previewDate >= rangeStart) {
+        displayedEnd = previewDate;
+      } else if (previewDate && rangePreview === 'start' && rangeEnd && previewDate <= rangeEnd) {
+        displayedStart = previewDate;
       }
 
       calendars.forEach((calendar) => {
-        calendar.rangeStart = rangeStart;
+        calendar.rangeStart = displayedStart;
         calendar.rangeEnd = displayedEnd;
       });
     }

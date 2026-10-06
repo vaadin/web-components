@@ -97,21 +97,68 @@ describe('date-range-picker', () => {
       expect(picker.endValue).to.equal('2026-03-20');
     });
 
-    it('should clear the end when picking a new start', async () => {
+    it('should change only the start and close when the new start is not after the end', async () => {
       await openFrom(startInput);
       await pick(12);
       expect(picker.startValue).to.equal('2026-03-12');
+      expect(picker.endValue).to.equal('2026-03-15');
+      expect(picker.opened).to.be.false;
+    });
+
+    it('should clear the end and continue with the end when the new start is after the end', async () => {
+      await openFrom(startInput);
+      await pick(20);
+      expect(picker.startValue).to.equal('2026-03-20');
       expect(picker.endValue).to.equal('');
-      expect(getParts(15)).to.not.include('range-end');
+      expect(picker.opened).to.be.true;
+      expect(document.activeElement).to.equal(endInput);
+    });
+
+    it('should not mark the previous end while previewing a new end', async () => {
+      await openFrom(endInput);
+      await sendMouseToElement({ type: 'move', element: getCell(20) });
+      expect(getParts(20)).to.include.members(['range-end', 'selected']);
+      expect(getParts(15)).to.not.include.members(['range-end']);
+      expect(getParts(15)).to.not.include('selected');
     });
 
     it('should restore the range on Escape', async () => {
       await openFrom(startInput);
-      await pick(12);
+      await pick(20);
       await sendKeys({ press: 'Escape' });
       expect(picker.opened).to.be.false;
       expect(picker.startValue).to.equal('2026-03-10');
       expect(picker.endValue).to.equal('2026-03-15');
+    });
+  });
+
+  describe('keyboard', () => {
+    it('should clear both dates on Escape when the overlay is closed and the clear button is visible', async () => {
+      picker.clearButtonVisible = true;
+      picker.startValue = '2026-03-10';
+      picker.endValue = '2026-03-15';
+      endInput.focus();
+      await sendKeys({ press: 'Escape' });
+      expect(picker.startValue).to.equal('');
+      expect(picker.endValue).to.equal('');
+    });
+
+    it('should keep focus in the overlay on Shift+Tab from the start input', async () => {
+      await openFrom(startInput);
+      await sendKeys({ press: 'Shift+Tab' });
+      expect(picker.opened).to.be.true;
+      expect(picker._overlayContent.contains(document.activeElement)).to.be.true;
+    });
+  });
+
+  describe('accessibility', () => {
+    it('should be a group labelled by the label', async () => {
+      picker.label = 'Trip dates';
+      await nextRender();
+      const label = picker.querySelector('[slot=label]');
+      expect(picker.getAttribute('role')).to.equal('group');
+      expect(picker.getAttribute('aria-labelledby')).to.equal(label.id);
+      expect(label.hasAttribute('for')).to.be.false;
     });
   });
 

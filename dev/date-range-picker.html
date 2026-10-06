@@ -31,12 +31,15 @@
         date a pick sets:
       </p>
       <ul>
-        <li>Picking the start clears the old end, keeps the overlay open and moves focus to the end input.</li>
-        <li>While picking the end, hovering or focusing a date previews the range.</li>
+        <li>
+          Picking the start keeps the end when the range stays valid, and closes the overlay. If there is no end, or the
+          new start is after it, the end is cleared and focus moves to the end input.
+        </li>
+        <li>Hovering or focusing a date previews the range that picking it would select.</li>
         <li>Picking the end commits the range and closes the overlay.</li>
         <li>While picking the end, a date before the start becomes the new start instead.</li>
-        <li>Clicking the end input directly lets you change only the end.</li>
         <li>Escape or Cancel restores the range from when the overlay was opened.</li>
+        <li>With the overlay closed, Escape clears both dates when the clear button is visible.</li>
       </ul>
     </div>
 

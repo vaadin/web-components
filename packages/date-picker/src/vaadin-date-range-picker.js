@@ -13,7 +13,6 @@ import { ElementMixin } from '@vaadin/component-base/src/element-mixin.js';
 import { PolylitMixin } from '@vaadin/component-base/src/polylit-mixin.js';
 import { SlotController } from '@vaadin/component-base/src/slot-controller.js';
 import { TooltipController } from '@vaadin/component-base/src/tooltip-controller.js';
-import { LabelledInputController } from '@vaadin/field-base/src/labelled-input-controller.js';
 import { inputFieldShared } from '@vaadin/field-base/src/styles/input-field-shared-styles.js';
 import { LumoInjectionMixin } from '@vaadin/vaadin-themable-mixin/lumo-injection-mixin.js';
 import { ThemableMixin } from '@vaadin/vaadin-themable-mixin/vaadin-themable-mixin.js';
@@ -91,7 +90,7 @@ class DateRangePicker extends DateRangePickerMixin(
   render() {
     return html`
       <div class="vaadin-date-range-picker-container">
-        <div part="label">
+        <div part="label" @click="${this.focus}">
           <slot name="label"></slot>
           <span part="required-indicator" aria-hidden="true" @click="${this.focus}"></span>
         </div>
@@ -178,7 +177,6 @@ class DateRangePicker extends DateRangePickerMixin(
     );
 
     this._setFocusElement(this._startInput);
-    this.addController(new LabelledInputController(this._startInput, this._labelController));
 
     this._tooltipController = new TooltipController(this);
     this.addController(this._tooltipController);

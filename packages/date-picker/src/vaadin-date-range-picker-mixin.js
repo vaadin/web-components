@@ -264,6 +264,13 @@ export const DateRangePickerMixin = (superClass) =>
     ready() {
       super.ready();
 
+      // Like the date time picker, the field is a group labelled by its label and
+      // described by its helper and error message, see `FieldMixin`.
+      if (!this.hasAttribute('role')) {
+        this.setAttribute('role', 'group');
+      }
+      this.ariaTarget = this;
+
       this.addEventListener('click', (event) => this.__onHostClick(event));
       this.addEventListener('focusin', (event) => this.__onFocusIn(event));
 
@@ -438,6 +445,13 @@ export const DateRangePickerMixin = (superClass) =>
             event.stopPropagation();
             this._overlayContent.focusDateElement();
           }
+          // Shift+Tab from the start input moves focus to the overlay's last button,
+          // like in the date picker, instead of leaving the field with the overlay open.
+          if (this.opened && event.shiftKey && event.target === this._startInput) {
+            event.preventDefault();
+            event.stopPropagation();
+            this._overlayContent.focusCancel();
+          }
           break;
         default:
           break;
@@ -473,6 +487,18 @@ export const DateRangePickerMixin = (superClass) =>
         event.stopPropagation();
         this.__cancelled = true;
         this.close();
+        return;
+      }
+
+      const hasText = !!(this._startInput?.value || this._endInput?.value);
+      if (this.clearButtonVisible && hasText && !this.readonly) {
+        // Stop propagation to not close a dialog when clearing on Escape.
+        event.stopPropagation();
+        this._startDate = null;
+        this._endDate = null;
+        this.__applyInputValue(this._startInput, null);
+        this.__applyInputValue(this._endInput, null);
+        this.__commitValueChange();
         return;
       }
 
@@ -690,8 +716,14 @@ export const DateRangePickerMixin = (superClass) =>
         return true;
       }
 
-      // Picking the start, or a date before the start while picking the end,
-      // sets a new start and clears the previous end.
+      // Changing only the start keeps the end, as long as the range stays valid.
+      if (this._activePart === 'start' && this._endDate && date <= this._endDate) {
+        this._startDate = date;
+        return true;
+      }
+
+      // Otherwise the pick starts a new range: a start after the end, or a date
+      // before the start while picking the end, sets a new start and clears the end.
       this._startDate = date;
       this._endDate = null;
       this.__applyInputValue(this._endInput, null);
@@ -748,11 +780,8 @@ export const DateRangePickerMixin = (superClass) =>
         // Do not show the virtual keyboard when the overlay covers the screen.
         setOrRemoveAttribute(input, 'inputmode', this._fullscreen ? 'none' : null);
         input.setAttribute('aria-expanded', String(!!this.opened));
-        input.setAttribute('aria-label', this.label ? `${this.label}, ${partName}` : partName);
-        setOrRemoveAttribute(input, 'aria-required', this.required ? 'true' : null);
-        setOrRemoveAttribute(input, 'aria-invalid', this.invalid ? 'true' : null);
-        const describedBy = [this._helperNode?.id, this.invalid && this.errorMessage && this._errorNode?.id];
-        setOrRemoveAttribute(input, 'aria-describedby', describedBy.filter(Boolean).join(' ') || null);
+        // The host is a group labelled by the field label, see `ready()`.
+        input.setAttribute('aria-label', this.label ? `${this.label} ${partName}` : partName);
       });
     }
 
@@ -768,10 +797,12 @@ export const DateRangePickerMixin = (superClass) =>
       content.maxDate = this.__maxDate;
       content.isDateDisabled = this.isDateDisabled;
       content.showWeekNumbers = this.showWeekNumbers;
-      content.selectedDate = this.__activeDate;
+      // The range marks both of its ends as selected. A lone end date is marked
+      // through `selectedDate`, which the range does not cover.
+      content.selectedDate = this._startDate ? null : this._endDate;
       content.rangeStart = this._startDate;
       content.rangeEnd = this._endDate;
-      content.rangePreview = this._activePart === 'end';
+      content.rangePreview = this._activePart;
       content.toggleAttribute('fullscreen', this._fullscreen);
       setOrRemoveAttribute(content, 'theme', this._theme);
     }

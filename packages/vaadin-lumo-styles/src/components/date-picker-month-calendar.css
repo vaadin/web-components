@@ -106,6 +106,7 @@
 
   [part~='in-range'] {
     --_range-band: var(--vaadin-date-picker-date-in-range-background, var(--lumo-primary-color-10pct));
+    --_range-edge: var(--vaadin-date-picker-date-in-range-border-color, var(--_selection-color));
     --_range-band-height: 80%;
   }
 
