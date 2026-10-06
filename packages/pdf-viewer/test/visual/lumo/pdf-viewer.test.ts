@@ -25,6 +25,13 @@ describe('pdf-viewer', () => {
     await visualDiff(div, 'document');
   });
 
+  it('zoom', async () => {
+    element.zoom = 0.25;
+    element.src = fixtureUrl('multi-page.pdf');
+    await nextRenderIdle(element);
+    await visualDiff(div, 'zoom');
+  });
+
   it('rtl', async () => {
     div.setAttribute('dir', 'rtl');
     element.src = fixtureUrl('multi-page.pdf');

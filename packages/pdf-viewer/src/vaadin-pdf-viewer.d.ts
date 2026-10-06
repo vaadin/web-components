@@ -12,6 +12,8 @@ import { ElementMixin } from '@vaadin/component-base/src/element-mixin.js';
 import { I18nMixin } from '@vaadin/component-base/src/i18n-mixin.js';
 import { PdfViewerMixin } from './vaadin-pdf-viewer-mixin.js';
 
+export type { PdfViewerZoom } from './vaadin-pdf-viewer-mixin.js';
+
 export interface PdfViewerI18n {
   loadError?: string;
   passwordError?: string;
@@ -27,10 +29,17 @@ export type PdfViewerDocumentLoadEvent = CustomEvent<{ pageCount: number; title:
  */
 export type PdfViewerDocumentErrorEvent = CustomEvent<{ reason: 'invalid' | 'network' | 'password'; error: unknown }>;
 
+/**
+ * Fired when the `page` property changes.
+ */
+export type PdfViewerPageChangedEvent = CustomEvent<{ value: number }>;
+
 export interface PdfViewerCustomEventMap {
   'document-load': PdfViewerDocumentLoadEvent;
 
   'document-error': PdfViewerDocumentErrorEvent;
+
+  'page-changed': PdfViewerPageChangedEvent;
 }
 
 export interface PdfViewerEventMap extends HTMLElementEventMap, PdfViewerCustomEventMap {}
@@ -51,6 +60,7 @@ export interface PdfViewerEventMap extends HTMLElementEventMap, PdfViewerCustomE
  * `content`       | The scrollable area that contains the pages.
  * `page`          | A page of the document.
  * `error-message` | The message shown when the document could not be loaded.
+ * `loader`        | The loading indicator shown while the document loads.
  *
  * The following state attributes are available for styling:
  *
@@ -77,6 +87,7 @@ export interface PdfViewerEventMap extends HTMLElementEventMap, PdfViewerCustomE
  *
  * @fires {CustomEvent} document-load - Fired when the document has loaded.
  * @fires {CustomEvent} document-error - Fired when the document could not be loaded.
+ * @fires {CustomEvent} page-changed - Fired when the `page` property changes.
  */
 declare class PdfViewer extends PdfViewerMixin(
   ElementMixin(I18nMixin<typeof HTMLElement, PdfViewerI18n>(HTMLElement)),

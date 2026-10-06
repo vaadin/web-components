@@ -38,6 +38,7 @@ const DEFAULT_I18N = {
  * `content`       | The scrollable area that contains the pages.
  * `page`          | A page of the document.
  * `error-message` | The message shown when the document could not be loaded.
+ * `loader`        | The loading indicator shown while the document loads.
  *
  * The following state attributes are available for styling:
  *
@@ -64,6 +65,7 @@ const DEFAULT_I18N = {
  *
  * @fires {CustomEvent} document-load - Fired when the document has loaded.
  * @fires {CustomEvent} document-error - Fired when the document could not be loaded.
+ * @fires {CustomEvent} page-changed - Fired when the `page` property changes.
  *
  * @customElement vaadin-pdf-viewer
  * @extends HTMLElement
@@ -123,6 +125,7 @@ class PdfViewer extends PdfViewerMixin(I18nMixin(ElementMixin(PolylitMixin(LumoI
   render() {
     const i18n = this.__effectiveI18n;
     return html`
+      <div part="loader"></div>
       <div id="content" part="content">
         <div id="pages"></div>
       </div>

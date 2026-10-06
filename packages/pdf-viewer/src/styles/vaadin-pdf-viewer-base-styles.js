@@ -10,8 +10,9 @@
  */
 import '@vaadin/component-base/src/styles/style-props.js';
 import { css } from 'lit';
+import { loaderStyles } from '@vaadin/component-base/src/styles/loader-styles.js';
 
-export const pdfViewerStyles = css`
+const pdfViewerBaseStyles = css`
   :host {
     display: flex;
     flex-direction: column;
@@ -30,6 +31,7 @@ export const pdfViewerStyles = css`
   }
 
   [part='content'] {
+    position: relative;
     flex: 1 1 auto;
     min-height: 0;
     overflow: auto;
@@ -40,7 +42,8 @@ export const pdfViewerStyles = css`
   #pages {
     display: flex;
     flex-direction: column;
-    align-items: center;
+    /* Pages wider than the view start at the edge, so that they can be scrolled to both edges. */
+    align-items: safe center;
     gap: var(--vaadin-pdf-viewer-page-gap, var(--vaadin-gap-m));
   }
 
@@ -61,6 +64,12 @@ export const pdfViewerStyles = css`
     height: 100%;
   }
 
+  [part='loader'] {
+    position: absolute;
+    inset: 50% auto auto 50%;
+    translate: -50% -50%;
+  }
+
   [part='error-message'] {
     position: absolute;
     inset: 0;
@@ -78,3 +87,5 @@ export const pdfViewerStyles = css`
     display: none;
   }
 `;
+
+export const pdfViewerStyles = [loaderStyles, pdfViewerBaseStyles];

@@ -55,9 +55,7 @@ describe('vaadin-pdf-viewer', () => {
     it('should render the first page', async () => {
       viewer.src = fixtureUrl('multi-page.pdf');
       await nextRenderIdle(viewer);
-      const pages = getPages();
-      expect(pages).to.have.lengthOf(1);
-      expect(pages[0].querySelector('canvas')).to.be.ok;
+      expect(getPages()[0].querySelector('canvas')).to.be.ok;
     });
 
     it('should toggle loading attribute while the document loads', async () => {
@@ -98,7 +96,7 @@ describe('vaadin-pdf-viewer', () => {
       viewer.addEventListener('document-error', errorSpy);
       viewer.src = fixtureUrl('multi-page.pdf');
       await nextRenderIdle(viewer);
-      expect(getPages()).to.be.empty;
+      expect(viewer.shadowRoot!.querySelector('canvas')).to.be.null;
       expect(errorSpy).to.be.not.called;
     });
   });

@@ -19,18 +19,18 @@ specific to the PDF viewer. It does not repeat those documents.
 
 Status values: `todo`, `in progress`, `in review`, `done`, `blocked`.
 
-| #   | Slice                                    | Status | Reviews (code / visual) | Notes                                   |
-| --- | ---------------------------------------- | ------ | ----------------------- | --------------------------------------- |
-| 0   | Tracer bullet: package + first page      | done   | ✅ / ✅                 | 561906b4d0, review fixes in next commit |
-| 1   | Continuous scroll, zoom, page tracking   | todo   | – / –                   |                                         |
-| 2   | Toolbar: page navigation + zoom controls | todo   | – / –                   |                                         |
-| 3   | Text layer, links, keyboard, a11y basics | todo   | – / –                   |                                         |
-| 4   | Find                                     | todo   | – / –                   |                                         |
-| 5   | Sidebar: thumbnails                      | todo   | – / –                   |                                         |
-| 6   | Sidebar: outline                         | todo   | – / –                   |                                         |
-| 7   | Download and print                       | todo   | – / –                   |                                         |
-| 8   | Tagged PDFs, AT audit, forced colors     | todo   | – / –                   |                                         |
-| 9   | API docs, typings, README, release prep  | todo   | – / –                   |                                         |
+| #   | Slice                                    | Status    | Reviews (code / visual) | Notes                                   |
+| --- | ---------------------------------------- | --------- | ----------------------- | --------------------------------------- |
+| 0   | Tracer bullet: package + first page      | done      | ✅ / ✅                 | 561906b4d0, review fixes in next commit |
+| 1   | Continuous scroll, zoom, page tracking   | in review | – / –                   |                                         |
+| 2   | Toolbar: page navigation + zoom controls | todo      | – / –                   |                                         |
+| 3   | Text layer, links, keyboard, a11y basics | todo      | – / –                   |                                         |
+| 4   | Find                                     | todo      | – / –                   |                                         |
+| 5   | Sidebar: thumbnails                      | todo      | – / –                   |                                         |
+| 6   | Sidebar: outline                         | todo      | – / –                   |                                         |
+| 7   | Download and print                       | todo      | – / –                   |                                         |
+| 8   | Tagged PDFs, AT audit, forced colors     | todo      | – / –                   |                                         |
+| 9   | API docs, typings, README, release prep  | todo      | – / –                   |                                         |
 
 ---
 
@@ -242,7 +242,7 @@ because reviewers check against it.
 
 | Kind       | Name                                                                                                   | Notes                                                                                                                                                              |
 | ---------- | ------------------------------------------------------------------------------------------------------ | ------------------------------------------------------------------------------------------------------------------------------------------------------------------ |
-| property   | `src: string`                                                                                          | Document URL. Changing it loads a new document and resets page and zoom state.                                                                                     |
+| property   | `src: string`                                                                                          | Document URL. Changing it loads a new document and resets `page` to 1 (unless `page` is set in the same update). `zoom` is kept.                                   |
 | property   | `page: number`                                                                                         | Current page, 1-based. `notify: true` (changed by scrolling). Setting it scrolls to that page. Out-of-range values are kept and a warning is logged (no clamping). |
 | property   | `pageCount: number`                                                                                    | Read-only, 0 until loaded.                                                                                                                                         |
 | property   | `zoom: string \| number`                                                                               | `'page-width'` (default), `'page-fit'`, or a scale factor (`1` = 100%).                                                                                            |
