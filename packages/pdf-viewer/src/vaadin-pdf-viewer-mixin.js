@@ -11,7 +11,7 @@
 import { announce } from '@vaadin/a11y-base/src/announce.js';
 import { ResizeMixin } from '@vaadin/component-base/src/resize-mixin.js';
 import { issueWarning } from '@vaadin/component-base/src/warnings.js';
-import { PdfViewerPage } from './pdf-viewer-page.js';
+import { MAX_CANVAS_PIXELS, PdfViewerPage } from './pdf-viewer-page.js';
 import { acquireWorker, loadPdfjs, releaseWorker } from './pdfjs-loader.js';
 
 /** PDF units are points (1/72 inch), CSS pixels are 1/96 inch. */
@@ -21,7 +21,13 @@ const PDF_TO_CSS_UNITS = 96 / 72;
 const RENDER_AHEAD = 1;
 
 /** The number of pages before and after the visible ones that keep their canvas. */
-const KEEP_RENDERED = 2;
+const KEEP_RENDERED = 1;
+
+/**
+ * The number of canvas pixels that pages outside the view may use in total.
+ * Mobile Safari limits the total canvas memory of a page.
+ */
+const MAX_TOTAL_CANVAS_PIXELS = 3 * MAX_CANVAS_PIXELS;
 
 /**
  * Maps a pdf.js loading error to the `reason` reported in the `document-error`
@@ -117,11 +123,17 @@ export const PdfViewerMixin = (superClass) =>
     /** @type {ReturnType<typeof acquireWorker> | null} */
     #workerHandle = null;
 
+    /** @type {import('pdfjs-dist').PDFDocumentProxy | null} */
+    #document = null;
+
     /** @type {PdfViewerPage[]} */
     #pages = [];
 
     /** The scale of the pages in CSS pixels per PDF unit, or 0 before the pages are laid out. */
     #scale = 0;
+
+    /** The index of the page that takes up most of the view, updated with the visible pages. */
+    #currentIndex = 0;
 
     /** The pages to render, in order of priority. */
     #renderQueue = [];
@@ -129,16 +141,32 @@ export const PdfViewerMixin = (superClass) =>
     /** @type {PdfViewerPage | null} */
     #renderingPage = null;
 
-    /** Whether the viewer is known to have nothing left to render. */
+    /** Whether the viewer has rendered everything that an action (load, zoom, resize, page change) asked for. */
     #idle = true;
 
-    /** The last page that the viewer set from scrolling, to not scroll to it again. */
+    /** The last page that the viewer set itself, to not scroll to it again. */
     #scrolledPage = 1;
 
-    /** A page that was scrolled to, kept as the current page while it is visible. */
+    /** A page that was scrolled to, kept as the current page until the user scrolls. */
     #pinnedPage = 0;
 
+    /** The scroll position set when scrolling to the pinned page. */
+    #pinnedScrollTop = 0;
+
+    /** A page to scroll to once the pages can be laid out. */
+    #pendingPage = 0;
+
     #scrollFrame = 0;
+
+    /** The scroll position while the viewer had a size, to restore it when shown again. */
+    #savedScroll = { top: 0, left: 0 };
+
+    #hadLayout = false;
+
+    #relayoutFrame = 0;
+
+    /** Whether all pages have their own size, see `#loadPageSizes()`. */
+    #pageSizesLoaded = true;
 
     /** @type {MediaQueryList | null} */
     #pixelRatioQuery = null;
@@ -166,6 +194,8 @@ export const PdfViewerMixin = (superClass) =>
       super.disconnectedCallback();
 
       this.#unwatchPixelRatio();
+      cancelAnimationFrame(this.#scrollFrame);
+      this.#scrollFrame = 0;
 
       // Wait a microtask so that moving the element in the DOM does not reload the document.
       queueMicrotask(() => {
@@ -198,10 +228,11 @@ export const PdfViewerMixin = (superClass) =>
       }
 
       if (props.has('zoom') && this.#pages.length) {
-        this.#updateScale();
+        this.#idle = false;
+        this.#refresh();
       }
 
-      if (props.has('page') && this.page !== this.#scrolledPage && this.#scale > 0) {
+      if (props.has('page') && this.page !== this.#scrolledPage && this.#pages.length) {
         this.#scrollToPage(this.page);
       }
     }
@@ -212,7 +243,32 @@ export const PdfViewerMixin = (superClass) =>
      * @override
      */
     _onResize() {
-      if (!this.#updateScale()) {
+      // Hiding the viewer (e.g. in an inactive tab) resets its scroll position.
+      const hasLayout = this.#hasLayout();
+      if (hasLayout && !this.#hadLayout) {
+        this.$.content.scrollTop = this.#savedScroll.top;
+        this.$.content.scrollLeft = this.#savedScroll.left;
+      }
+      this.#hadLayout = hasLayout;
+
+      if (this.#pages.length) {
+        this.#idle = false;
+      }
+      this.#refresh();
+    }
+
+    /**
+     * Applies changes to the zoom or size, and scrolls to a page that was set
+     * while the pages could not be laid out.
+     * @private
+     */
+    #refresh() {
+      if (this.#updateScale()) {
+        return;
+      }
+      if (this.#pendingPage && this.#scale > 0) {
+        this.#scrollToPage(this.#pendingPage);
+      } else {
         this.#updateVisiblePages();
       }
     }
@@ -236,7 +292,7 @@ export const PdfViewerMixin = (superClass) =>
 
       let pdfDocument;
       let title;
-      let pdfPages;
+      let firstPage;
       try {
         const pdfjs = await loadPdfjs();
         if (loadId !== this.#loadId) {
@@ -256,15 +312,12 @@ export const PdfViewerMixin = (superClass) =>
           return;
         }
 
-        const [{ info }, ...pages] = await Promise.all([
-          pdfDocument.getMetadata(),
-          ...Array.from({ length: pdfDocument.numPages }, (_, index) => pdfDocument.getPage(index + 1)),
-        ]);
+        const [{ info }, page] = await Promise.all([pdfDocument.getMetadata(), pdfDocument.getPage(1)]);
         if (loadId !== this.#loadId) {
           return;
         }
         title = (info && info.Title) || '';
-        pdfPages = pages;
+        firstPage = page;
       } catch (error) {
         if (loadId === this.#loadId) {
           this.#unload();
@@ -273,17 +326,66 @@ export const PdfViewerMixin = (superClass) =>
         return;
       }
 
-      this.#pages = pdfPages.map((pdfPage) => new PdfViewerPage(pdfPage));
+      // All pages start with the size of the first page, and get their own
+      // size as they load in the background. This shows the document without
+      // waiting for every page of a long document.
+      this.#document = pdfDocument;
+      const size = firstPage.getViewport({ scale: 1 });
+      this.#pages = Array.from({ length: pdfDocument.numPages }, (_, index) => new PdfViewerPage(index + 1, size));
+      this.#pages[0].setPdfPage(firstPage);
       this.$.pages.replaceChildren(...this.#pages.map((page) => page.element));
       this._setPageCount(pdfDocument.numPages);
       this.__loading = false;
       this.#idle = false;
+      this.#pendingPage = this.page;
 
-      if (!this.#updateScale()) {
-        this.#updateVisiblePages();
-      }
+      this.#loadPageSizes(loadId);
+      this.#refresh();
 
       this.dispatchEvent(new CustomEvent('document-load', { detail: { pageCount: pdfDocument.numPages, title } }));
+    }
+
+    /**
+     * Loads the pages after the first one, and corrects their size.
+     * @private
+     */
+    #loadPageSizes(loadId) {
+      this.#pageSizesLoaded = false;
+      const requests = this.#pages.slice(1).map((page) =>
+        this.#document.getPage(page.pageNumber).then((pdfPage) => {
+          if (loadId === this.#loadId && !page.pdfPage && page.setPdfPage(pdfPage)) {
+            this.#scheduleRelayout();
+          }
+        }),
+      );
+      // A page that fails to load reports the error when it is rendered.
+      Promise.allSettled(requests).then(() => {
+        if (loadId === this.#loadId) {
+          this.#pageSizesLoaded = true;
+          // Notify about being idle, unless a relayout will render again.
+          if (!this.#relayoutFrame) {
+            this.#renderNext();
+          }
+        }
+      });
+    }
+
+    /**
+     * Applies changed page sizes once per frame, keeping the current page in view.
+     * @private
+     */
+    #scheduleRelayout() {
+      if (this.#relayoutFrame) {
+        return;
+      }
+      this.#relayoutFrame = requestAnimationFrame(() => {
+        this.#relayoutFrame = 0;
+        if (this.#scale > 0) {
+          this.#applyScale(this.#scale);
+        } else {
+          this.#renderNext();
+        }
+      });
     }
 
     /** @private */
@@ -302,12 +404,20 @@ export const PdfViewerMixin = (superClass) =>
     #unload() {
       this.#pages.forEach((page) => page.release());
       this.#pages = [];
+      this.#document = null;
       this.#scale = 0;
+      this.#currentIndex = 0;
       this.#renderQueue = [];
       this.#renderingPage = null;
+      this.#idle = true;
       this.#pinnedPage = 0;
+      this.#pendingPage = 0;
+      this.#pageSizesLoaded = true;
+      cancelAnimationFrame(this.#relayoutFrame);
+      this.#relayoutFrame = 0;
       this.$.pages.replaceChildren();
       this.$.content.scrollTop = 0;
+      this.#savedScroll = { top: 0, left: 0 };
 
       const loadingTask = this.#loadingTask;
       const workerHandle = this.#workerHandle;
@@ -332,6 +442,16 @@ export const PdfViewerMixin = (superClass) =>
     }
 
     /**
+     * Whether the viewer has a size, so that pages can be laid out. It has
+     * none e.g. inside a hidden tab.
+     * @private
+     */
+    #hasLayout() {
+      const { content } = this.$;
+      return content.clientWidth > 0 && content.clientHeight > 0;
+    }
+
+    /**
      * Returns the size that pages can use inside the scrollable content area.
      * @private
      */
@@ -350,8 +470,7 @@ export const PdfViewerMixin = (superClass) =>
      */
     #computeScale() {
       const { width, height } = this.#getAvailableSize();
-      // Nothing to lay out while the viewer has no size, e.g. inside a hidden tab.
-      if (width <= 0 || height <= 0) {
+      if (!this.#hasLayout() || width <= 0 || height <= 0) {
         return 0;
       }
 
@@ -362,7 +481,9 @@ export const PdfViewerMixin = (superClass) =>
       }
 
       if (zoom === 'page-width' || zoom === 'page-fit') {
-        const page = this.#pages[this.page - 1] || this.#pages[0];
+        // Fit the first page, so that the scale does not depend on which page is
+        // current. In most documents all pages have the size of the first one.
+        const page = this.#pages[0];
         const widthScale = width / page.unscaledWidth;
         return zoom === 'page-width' ? widthScale : Math.min(widthScale, height / page.unscaledHeight);
       }
@@ -371,9 +492,8 @@ export const PdfViewerMixin = (superClass) =>
     }
 
     /**
-     * Applies the scale for the current `zoom` and size to the pages, keeping
-     * the same part of the current page in view. Returns whether the pages are
-     * laid out with a new scale.
+     * Applies the scale for the current `zoom` and size to the pages. Returns
+     * whether the pages are laid out with a new scale.
      * @private
      */
     #updateScale() {
@@ -386,55 +506,97 @@ export const PdfViewerMixin = (superClass) =>
         return false;
       }
 
-      const { content } = this.$;
-      const anchorPage = this.#scale > 0 ? this.#pages[this.#getCurrentPageIndex()] : null;
-      const offsetInPage = anchorPage ? (content.scrollTop - anchorPage.element.offsetTop) / anchorPage.height : 0;
-      const horizontalCenter = content.scrollWidth
-        ? (content.scrollLeft + content.clientWidth / 2) / content.scrollWidth
-        : 0.5;
+      this.#applyScale(scale);
+      return true;
+    }
 
+    /**
+     * Resizes the pages to the given scale, keeping the same point of the
+     * current page in the middle of the view, then renders what is visible.
+     * @private
+     */
+    #applyScale(scale) {
+      const { content } = this.$;
       const isFirstLayout = this.#scale === 0;
+      const anchor = isFirstLayout ? null : this.#captureAnchor();
+
       this.#scale = scale;
       this.#renderingPage?.cancel();
       this.#pages.forEach((page) => page.setScale(scale));
       this.#idle = false;
 
-      if (anchorPage) {
-        content.scrollTop = anchorPage.element.offsetTop + offsetInPage * anchorPage.height;
-        content.scrollLeft = horizontalCenter * content.scrollWidth - content.clientWidth / 2;
-      } else if (isFirstLayout && this.page !== 1) {
-        // A page set before the pages could be laid out
-        this.#scrollToPage(this.page);
-        return true;
+      if (anchor) {
+        this.#restoreAnchor(anchor);
+      } else {
+        content.scrollTop = 0;
       }
 
-      this.#updateVisiblePages();
-      return true;
+      if (this.#pendingPage) {
+        // A page set before the pages could be laid out
+        this.#scrollToPage(this.#pendingPage);
+      } else {
+        this.#pendingPage = 0;
+        this.#updateVisiblePages();
+      }
     }
 
     /**
-     * Returns the index of the page that `page` refers to, falling back to the first page.
+     * Returns the point of the current page that is in the middle of the view,
+     * relative to the size of the page.
      * @private
      */
-    #getCurrentPageIndex() {
-      const index = this.page - 1;
-      return index >= 0 && index < this.#pages.length ? index : 0;
+    #captureAnchor() {
+      const page = this.#pages[this.#currentIndex];
+      const pageRect = page.element.getBoundingClientRect();
+      const contentRect = this.$.content.getBoundingClientRect();
+      return {
+        page,
+        x: (contentRect.left + contentRect.width / 2 - pageRect.left) / pageRect.width,
+        y: (this.$.content.scrollTop - page.element.offsetTop) / pageRect.height,
+      };
+    }
+
+    /**
+     * Scrolls so that the anchor point of the page is in the same place again.
+     * Pages that fit the width of the view are centered.
+     * @private
+     */
+    #restoreAnchor({ page, x, y }) {
+      const { content } = this.$;
+      content.scrollTop = page.element.offsetTop + y * page.height;
+
+      // Work with rectangles, so that the same code works for any scroll
+      // direction (scrollLeft is 0 or negative in RTL).
+      const pageRect = page.element.getBoundingClientRect();
+      const contentRect = content.getBoundingClientRect();
+      const ratio = pageRect.width <= content.clientWidth ? 0.5 : x;
+      content.scrollLeft += pageRect.left + ratio * pageRect.width - (contentRect.left + content.clientWidth / 2);
     }
 
     /** @private */
     #scrollToPage(page) {
+      if (!this.#hasLayout() || this.#scale <= 0) {
+        // Scroll once the pages can be laid out.
+        this.#pendingPage = page;
+        return;
+      }
+      this.#pendingPage = 0;
+      this.#idle = false;
+
+      const { content } = this.$;
       if (!Number.isInteger(page) || page < 1 || page > this.#pages.length) {
         issueWarning(
           `The page ${page} is out of range for <vaadin-pdf-viewer>, the document has ${this.#pages.length} pages.`,
         );
-        return;
+      } else {
+        content.scrollTop =
+          this.#pages[page - 1].element.offsetTop - parseFloat(getComputedStyle(content).paddingBlockStart);
+        this.#scrolledPage = page;
       }
 
-      const { content } = this.$;
-      content.scrollTop =
-        this.#pages[page - 1].element.offsetTop - parseFloat(getComputedStyle(content).paddingBlockStart);
-      this.#scrolledPage = page;
+      // Keep the page as set until the user scrolls, also when it is out of range.
       this.#pinnedPage = page;
+      this.#pinnedScrollTop = content.scrollTop;
       this.#updateVisiblePages();
     }
 
@@ -456,7 +618,8 @@ export const PdfViewerMixin = (superClass) =>
      */
     #updateVisiblePages() {
       const pages = this.#pages;
-      if (!pages.length || this.#scale <= 0) {
+      // Without layout, all pages have no position, so nothing can be visible.
+      if (!pages.length || this.#scale <= 0 || !this.#hasLayout()) {
         this.#renderQueue = [];
         this.#renderNext();
         return;
@@ -465,6 +628,7 @@ export const PdfViewerMixin = (superClass) =>
       const { content } = this.$;
       const viewTop = content.scrollTop;
       const viewBottom = viewTop + content.clientHeight;
+      this.#savedScroll = { top: viewTop, left: content.scrollLeft };
 
       // Binary search for the first page that ends below the top of the view.
       let low = 0;
@@ -502,29 +666,51 @@ export const PdfViewerMixin = (superClass) =>
       }
       this.#renderQueue = [...byVisibility, ...ahead.filter(Boolean)];
 
-      pages.forEach((page, index) => {
-        if (page.canvas && (index < first - KEEP_RENDERED || index > last + KEEP_RENDERED)) {
-          page.release();
-        }
-      });
-
+      this.#releaseCanvases(first, last);
       this.#renderNext();
     }
 
     /** @private */
     #updateCurrentPage(visible) {
+      // The page that takes up most of the view. The first one wins a tie.
+      const mostVisible = visible.reduce((result, item) => (item.height > result.height ? item : result));
+      this.#currentIndex = mostVisible.index;
+
+      // Keep a page that was scrolled to as long as the view has not moved.
+      // E.g. the last page cannot always be scrolled to the top of the view.
       const pinned = this.#pinnedPage;
-      if (pinned && visible.some(({ index }) => index === pinned - 1)) {
+      if (pinned && Math.abs(this.$.content.scrollTop - this.#pinnedScrollTop) < 1) {
+        if (pinned >= 1 && pinned <= this.#pages.length) {
+          this.#currentIndex = pinned - 1;
+        }
         return;
       }
       this.#pinnedPage = 0;
 
-      // The page that takes up most of the view. The first one wins a tie.
-      const mostVisible = visible.reduce((result, item) => (item.height > result.height ? item : result));
       const page = mostVisible.index + 1;
       if (page !== this.page) {
         this.#setPageFromViewer(page);
       }
+    }
+
+    /**
+     * Frees the canvases of pages that are far from the view, and of the
+     * pages furthest away when the canvases use too much memory in total.
+     * @private
+     */
+    #releaseCanvases(first, last) {
+      const distance = (index) => (index < first ? first - index : Math.max(0, index - last));
+      const rendered = this.#pages.filter((page) => page.canvas);
+      rendered.sort((a, b) => distance(b.pageNumber - 1) - distance(a.pageNumber - 1));
+
+      let totalPixels = rendered.reduce((total, page) => total + page.canvasPixels, 0);
+      rendered.forEach((page) => {
+        const pageDistance = distance(page.pageNumber - 1);
+        if (pageDistance > KEEP_RENDERED || (pageDistance > 0 && totalPixels > MAX_TOTAL_CANVAS_PIXELS)) {
+          totalPixels -= page.canvasPixels;
+          page.release();
+        }
+      });
     }
 
     /**
@@ -546,25 +732,40 @@ export const PdfViewerMixin = (superClass) =>
 
       this.#renderingPage = page;
       this.#idle = false;
-      page
-        .render(outputScale)
-        .catch((error) => {
-          if (error && error.name !== 'RenderingCancelledException') {
-            page.renderFailed = true;
-            issueWarning(`Failed to render page ${page.pageNumber} of the PDF document: ${error.message}`);
+      this.#renderPage(page, outputScale).finally(() => {
+        if (this.#renderingPage === page) {
+          this.#renderingPage = null;
+          this.#renderNext();
+        }
+      });
+    }
+
+    /** @private */
+    async #renderPage(page, outputScale) {
+      const loadId = this.#loadId;
+      try {
+        if (!page.pdfPage) {
+          const pdfPage = await this.#document.getPage(page.pageNumber);
+          if (loadId !== this.#loadId) {
+            return;
           }
-        })
-        .finally(() => {
-          if (this.#renderingPage === page) {
-            this.#renderingPage = null;
-            this.#renderNext();
+          if (page.setPdfPage(pdfPage)) {
+            this.#scheduleRelayout();
           }
-        });
+        }
+        await page.render(outputScale);
+      } catch (error) {
+        if (loadId === this.#loadId && error && error.name !== 'RenderingCancelledException') {
+          page.renderFailed = true;
+          issueWarning(`Failed to render page ${page.pageNumber} of the PDF document: ${error.message}`);
+        }
+      }
     }
 
     /** @private */
     #notifyIdle() {
-      if (!this.#idle) {
+      // The layout is not final while pages get their own sizes.
+      if (!this.#idle && this.#pageSizesLoaded) {
         this.#idle = true;
         /** @internal to not document it in CEM */
         this.dispatchEvent(new CustomEvent('render-idle'));
@@ -588,7 +789,9 @@ export const PdfViewerMixin = (superClass) =>
     #onPixelRatioChange = () => {
       // The query only matches the previous ratio, so watch the new one.
       this.#watchPixelRatio();
-      this.#idle = false;
+      if (this.#pages.length) {
+        this.#idle = false;
+      }
       this.#updateVisiblePages();
     };
   };

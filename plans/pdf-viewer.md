@@ -19,18 +19,18 @@ specific to the PDF viewer. It does not repeat those documents.
 
 Status values: `todo`, `in progress`, `in review`, `done`, `blocked`.
 
-| #   | Slice                                    | Status    | Reviews (code / visual) | Notes                                   |
-| --- | ---------------------------------------- | --------- | ----------------------- | --------------------------------------- |
-| 0   | Tracer bullet: package + first page      | done      | ✅ / ✅                 | 561906b4d0, review fixes in next commit |
-| 1   | Continuous scroll, zoom, page tracking   | in review | – / –                   |                                         |
-| 2   | Toolbar: page navigation + zoom controls | todo      | – / –                   |                                         |
-| 3   | Text layer, links, keyboard, a11y basics | todo      | – / –                   |                                         |
-| 4   | Find                                     | todo      | – / –                   |                                         |
-| 5   | Sidebar: thumbnails                      | todo      | – / –                   |                                         |
-| 6   | Sidebar: outline                         | todo      | – / –                   |                                         |
-| 7   | Download and print                       | todo      | – / –                   |                                         |
-| 8   | Tagged PDFs, AT audit, forced colors     | todo      | – / –                   |                                         |
-| 9   | API docs, typings, README, release prep  | todo      | – / –                   |                                         |
+| #   | Slice                                    | Status | Reviews (code / visual) | Notes                  |
+| --- | ---------------------------------------- | ------ | ----------------------- | ---------------------- |
+| 0   | Tracer bullet: package + first page      | done   | ✅ / ✅                 | 561906b4d0, 59ff4a2850 |
+| 1   | Continuous scroll, zoom, page tracking   | done   | – / –                   |                        |
+| 2   | Toolbar: page navigation + zoom controls | todo   | – / –                   |                        |
+| 3   | Text layer, links, keyboard, a11y basics | todo   | – / –                   |                        |
+| 4   | Find                                     | todo   | – / –                   |                        |
+| 5   | Sidebar: thumbnails                      | todo   | – / –                   |                        |
+| 6   | Sidebar: outline                         | todo   | – / –                   |                        |
+| 7   | Download and print                       | todo   | – / –                   |                        |
+| 8   | Tagged PDFs, AT audit, forced colors     | todo   | – / –                   |                        |
+| 9   | API docs, typings, README, release prep  | todo   | – / –                   |                        |
 
 ---
 
@@ -161,6 +161,24 @@ canvas. Re-render on zoom change, on `devicePixelRatio` change, and on resize wh
 is `page-width` / `page-fit` (use `ResizeMixin` from component-base). Cap the
 canvas size (pdf.js `maxCanvasPixels`, about 16M pixels) so iOS doesn't run out of memory.
 
+As built in slice 1 (`src/vaadin-pdf-viewer-mixin.js`, `src/pdf-viewer-page.js`):
+
+- **Progressive sizing:** after load, every placeholder gets the size of page 1, and the real
+  sizes arrive in the background (`getPage()` per page). Changed sizes are applied once per
+  frame while keeping the current page anchored. This shows long documents right away.
+- Rendering is one page at a time: the visible pages by visibility, then one page ahead on each
+  side. Canvases are kept for ±1 page around the view, and pages outside the view are released
+  further when all canvases together exceed 3 × 16M pixels.
+- A viewer without a size (hidden tab, `display: none`) does nothing. It remembers its scroll
+  position and a `page` set meanwhile, and applies them when it gets a size again.
+- A `page` set by the app (also out of range) stays as set until the user scrolls, so pages that
+  can't scroll to the top of the view (the last ones) and relayouts don't overwrite it.
+- Zoom keeps the point of the current page that is in the middle of the view. Horizontally it
+  works with element rectangles, so RTL (negative `scrollLeft`) works the same, and a page that
+  fits the width is centered.
+- The internal `render-idle` event only fires after actions (load, zoom, resize, page change,
+  device pixel ratio change) or renders, and only once all page sizes are known.
+
 **D11 — Toolbar built from Vaadin components.** Use `vaadin-button` (icon buttons),
 `vaadin-integer-field` (page number), `vaadin-select` (zoom), and `vaadin-text-field`
 (find). **They must be rendered in the viewer's light DOM and slotted** (like the buttons of
@@ -179,7 +197,9 @@ resource URL. `withCredentials` and range requests are left at pdf.js defaults
 (range requests need `Accept-Ranges: bytes` from the server).
 
 **D13 — Default zoom is `page-width`.** It works best on narrow screens and matches
-how most business documents are read.
+how most business documents are read. `page-width` and `page-fit` fit the **first page**
+(decided in slice 1 review), so the scale does not change with the current page. Wider pages
+(e.g. a landscape page in a portrait document) then scroll horizontally.
 
 **D14 — Download.** An `<a href=src download=fileName>`. `fileName` defaults to the last
 path segment of `src`, or the document title if there is none.
@@ -532,6 +552,24 @@ Newest entry at the top. Format:
 - Visual review: <summary>
 - Follow-ups: …
 ```
+
+### 2026-10-06 — Slice 1: Continuous scroll, zoom, page tracking — done
+
+- Base commit: 59ff4a2850 Head: 1e173c331e + review fix commit
+- Shipped: all pages in one scroller with progressive sizing, rendering of visible pages only,
+  canvas release with a memory budget, `page` (notify) and `zoom` (`page-width`, `page-fit`,
+  number) properties, re-render on resize and device pixel ratio change, loader, visual `zoom` test.
+- Decisions added or changed: D10 details, D13 fits the first page, `src` resets only `page`.
+- Code review: 0 blockers, 5 should-fix (stray page change when hidden, out-of-range page with
+  `src` left the view blank, pin blocked page tracking, RTL zoom position, all pages fetched
+  before first paint), 7 nits (idle firing early or hanging, canvas reattached after release,
+  scroll frame not cancelled, anchor for out-of-range page, scale depending on current page,
+  iOS memory budget, test gaps). All fixed, with tests.
+- Visual review: 0 blockers, 2 should-fix (page-width depending on current page, horizontal
+  position on zoom / RTL), both fixed. Found that `render-idle` could fire before page sizes
+  arrived, which made the RTL baseline flaky; fixed.
+- Follow-ups: pages wider than the view have no end padding when scrolled fully sideways (nit).
+  Background contrast against white pages in Lumo / Aura light (judgement, revisit in slice 8).
 
 ### 2026-10-06 — Slice 0: Tracer bullet — done
 
