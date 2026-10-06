@@ -5267,10 +5267,6 @@ vaadin-ai-field-marker :is(.badge, .actions > button):focus-visible {
   :host([clear-button-visible][has-value]:not([has-start-value]):not([disabled])) [part~="clear-button"][part~="start-clear-button"], :host([clear-button-visible][has-value]:not([has-end-value]):not([disabled])) [part~="clear-button"][part~="end-clear-button"] {
     display: none;
   }
-
-  :host([opened][active-part="start"]) ::slotted([slot="input"]), :host([opened][active-part="end"]) ::slotted([slot="end-input"]) {
-    box-shadow: inset 0 -2px 0 var(--vaadin-date-range-picker-active-input-indicator-color, var(--lumo-primary-color));
-  }
 }
 
 :root, :host {
