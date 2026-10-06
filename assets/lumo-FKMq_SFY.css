@@ -5243,23 +5243,21 @@ vaadin-ai-field-marker :is(.badge, .actions > button):focus-visible {
   }
 
   [part="separator"] {
-    min-height: 0;
     color: var(--lumo-secondary-text-color);
     flex: none;
     align-self: stretch;
     align-items: center;
-    padding: 0 .25em;
     display: flex;
-  }
-
-  [part="separator"], [part~="start-clear-button"] {
-    mask-image: none;
+    min-height: 0 !important;
+    padding: 0 .25em !important;
+    mask-image: none !important;
   }
 
   [part~="start-clear-button"] {
-    align-self: center;
-    min-height: 0;
-    padding: 0;
+    align-self: center !important;
+    min-height: 0 !important;
+    padding: 0 !important;
+    mask-image: none !important;
   }
 
   [part="input-field"] ::slotted(input) {
