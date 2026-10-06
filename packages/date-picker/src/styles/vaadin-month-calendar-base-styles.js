@@ -119,14 +119,14 @@ export const monthCalendarStyles = css`
   [part~='in-range'] {
     --_range-band: var(
       --vaadin-date-picker-date-in-range-background,
-      color-mix(in srgb, var(--vaadin-date-picker-date-selected-background, var(--vaadin-text-color)) 12%, transparent)
+      color-mix(in srgb, var(--vaadin-date-picker-date-selected-background, var(--vaadin-text-color)) 20%, transparent)
     );
-    /* Edges in the selection color keep the band distinguishable for low vision (WCAG 1.4.11) */
     --_range-edge: var(
       --vaadin-date-picker-date-in-range-border-color,
       var(--vaadin-date-picker-date-selected-background, var(--vaadin-text-color))
     );
-    --_range-edge-width: 2px;
+    /* Optional edges along the band, off by default */
+    --_range-edge-width: var(--vaadin-date-picker-date-in-range-border-width, 0px);
     --_range-band-height: min(2em, 100%);
     isolation: isolate;
     border-radius: 0;
@@ -138,6 +138,17 @@ export const monthCalendarStyles = css`
       center / 100% var(--_range-band-height) no-repeat;
   }
 
+  /* Round the band where it wraps to the next week, or where the month starts or ends */
+  [part~='in-range']:is(:nth-child(2), td:empty + *) {
+    border-start-start-radius: var(--vaadin-date-picker-date-border-radius, var(--vaadin-radius-m));
+    border-end-start-radius: var(--vaadin-date-picker-date-border-radius, var(--vaadin-radius-m));
+  }
+
+  [part~='in-range']:is(:last-child, :has(+ td:empty)) {
+    border-start-end-radius: var(--vaadin-date-picker-date-border-radius, var(--vaadin-radius-m));
+    border-end-end-radius: var(--vaadin-date-picker-date-border-radius, var(--vaadin-radius-m));
+  }
+
   [part~='in-range'][part~='range-start'] {
     background-position: right center;
     background-size: 50% var(--_range-band-height);
@@ -146,6 +157,11 @@ export const monthCalendarStyles = css`
   [part~='in-range'][part~='range-end'] {
     background-position: left center;
     background-size: 50% var(--_range-band-height);
+  }
+
+  /* Keep the band continuous across disabled dates, only their text is dimmed */
+  [part~='in-range'][disabled] {
+    opacity: 1;
   }
 
   [part~='in-range']::after {
@@ -164,7 +180,7 @@ export const monthCalendarStyles = css`
   }
 
   [part~='range-editing']::after {
-    background: transparent;
+    background: var(--vaadin-background-color);
     box-shadow: inset 0 0 0 2px var(--_range-edge);
   }
 

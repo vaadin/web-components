@@ -20,6 +20,11 @@
           monospace;
         white-space: pre-wrap;
       }
+
+      /* Optional band edges, for comparing a higher-contrast range band */
+      .band-edges vaadin-month-calendar::part(in-range) {
+        --vaadin-date-picker-date-in-range-border-width: 2px;
+      }
     </style>
   </head>
   <body>
@@ -45,6 +50,11 @@
         <li>With the overlay closed, Escape clears both dates when the clear button is visible.</li>
       </ul>
     </div>
+
+    <label class="notes">
+      <input type="checkbox" id="band-edges" />
+      Show edges along the range band (higher contrast)
+    </label>
 
     <h2 class="heading">Basic</h2>
     <section class="section">
@@ -86,6 +96,10 @@
 
     <script type="module">
       import '@vaadin/date-picker/vaadin-date-range-picker.js';
+
+      document.querySelector('#band-edges').addEventListener('change', (event) => {
+        document.documentElement.classList.toggle('band-edges', event.target.checked);
+      });
 
       const toISO = (date) => {
         const d = new Date(date);
