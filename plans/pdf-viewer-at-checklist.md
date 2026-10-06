@@ -100,7 +100,9 @@ VoiceOver + Safari (macOS), VoiceOver + Safari (iOS).
 Test in Windows with a dark and a light contrast theme, in Chrome / Edge and Firefox.
 
 - [ ] Toolbar icons, disabled states and pressed states ("Sidebar", "Find in document",
-      thumbnails / outline view buttons) are visible.
+      thumbnails / outline view buttons) are visible. A pressed button has a `Highlight`
+      background with its icon in `HighlightText`, in Lumo, Aura and base (Lumo draws most
+      icons as font glyphs, check that the icon is not a filled square).
 - [ ] Focus rings are visible on all controls, the page area, links, thumbnails and outline
       items.
 - [ ] Pages and thumbnails have a visible border; the current thumbnail stands out.
