@@ -3,7 +3,7 @@
     <meta http-equiv="X-UA-Compatible" content="IE=edge">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
     <title>Date Range Picker (prototype)</title>
-    <link rel="stylesheet" href="assets/lumo-oLYjmq_3.css">
+    <link rel="stylesheet" href="assets/lumo-DnjZ_kl-.css">
     
     <style>
       .notes {
@@ -41,8 +41,14 @@
           new start is after it, the end is cleared and focus moves to the end input.
         </li>
         <li>Hovering or focusing a date previews the range that picking it would select.</li>
-        <li>In the calendar, the date being edited is outlined, while the other end of the range stays filled.</li>
-        <li>The calendar button always opens the overlay for picking the start.</li>
+        <li>
+          The input whose date a pick sets is highlighted. In the calendar, the date being edited has a lighter fill
+          than the other end of the range.
+        </li>
+        <li>
+          Clicking the start or end input changes only that date. The calendar button picks the whole range: the start,
+          then the end.
+        </li>
         <li>With a mouse, drag across dates to select a range, or drag the start or end of a range to move it.</li>
         <li>Picking the end commits the range and closes the overlay. Picking the end first continues with the start.</li>
         <li>While picking the end, a date before the start becomes the new start instead.</li>
