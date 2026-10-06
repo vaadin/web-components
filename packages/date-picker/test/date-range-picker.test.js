@@ -1,5 +1,5 @@
 import { expect } from '@vaadin/chai-plugins';
-import { resetMouse, sendKeys, sendMouseToElement } from '@vaadin/test-runner-commands';
+import { resetMouse, sendKeys, sendMouse, sendMouseToElement } from '@vaadin/test-runner-commands';
 import { fixtureSync, nextRender } from '@vaadin/testing-helpers';
 import sinon from 'sinon';
 import '../src/vaadin-date-range-picker.js';
@@ -296,6 +296,39 @@ describe('date-range-picker', () => {
       await sendKeys({ press: 'Shift+Tab' });
       expect(picker.opened).to.be.true;
       expect(picker._overlayContent.contains(document.activeElement)).to.be.true;
+    });
+  });
+
+  describe('field frame', () => {
+    let inputField;
+
+    // Clicks the frame of the field, in its top padding, outside of the inputs.
+    async function clickFrame(x) {
+      const rect = inputField.getBoundingClientRect();
+      await sendMouse({ type: 'click', position: [Math.round(x), Math.round(rect.top + 2)] });
+      await untilOverlayRendered(picker);
+    }
+
+    beforeEach(() => {
+      inputField = picker.shadowRoot.querySelector('[part="input-field"]');
+    });
+
+    it('should focus the start input and pick the start when clicking the frame next to the start input', async () => {
+      await clickFrame(startInput.getBoundingClientRect().left + 4);
+      expect(picker.opened).to.be.true;
+      expect(document.activeElement).to.equal(startInput);
+      expect(picker.getAttribute('active-part')).to.equal('start');
+      await pick(10);
+      expect(picker.startValue).to.equal('2026-03-10');
+      expect(picker.endValue).to.equal('');
+      expect(picker.opened).to.be.true;
+    });
+
+    it('should focus the end input when clicking the frame next to the end input', async () => {
+      await clickFrame(endInput.getBoundingClientRect().left + 4);
+      expect(picker.opened).to.be.true;
+      expect(document.activeElement).to.equal(endInput);
+      expect(picker.getAttribute('active-part')).to.equal('end');
     });
   });
 

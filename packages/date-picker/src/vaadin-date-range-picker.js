@@ -89,7 +89,7 @@ class DateRangePicker extends DateRangePickerMixin(
   /** @protected */
   render() {
     return html`
-      <div class="vaadin-date-range-picker-container">
+      <div class="vaadin-date-range-picker-container" @click="${this.__inputFieldClickCapture}">
         <div part="label" @click="${this.focus}">
           <slot name="label"></slot>
           <span part="required-indicator" aria-hidden="true" @click="${this.focus}"></span>
@@ -158,6 +158,13 @@ class DateRangePicker extends DateRangePickerMixin(
     `;
   }
 
+  constructor() {
+    super();
+
+    // Capture phase, to run before the input container's own click listener.
+    this.__inputFieldClickCapture = { handleEvent: (event) => this.__onInputFieldClick(event), capture: true };
+  }
+
   /** @protected */
   ready() {
     super.ready();
@@ -204,6 +211,24 @@ class DateRangePicker extends DateRangePickerMixin(
   /** @private */
   __onEndClearClick(event) {
     this._onClearButtonClick(event, 'end');
+  }
+
+  /**
+   * Handles clicks on the field frame around the inputs. The input container would
+   * otherwise focus each of its inputs in turn, which leaves the end input focused.
+   * @private
+   */
+  __onInputFieldClick(event) {
+    if (event.composedPath()[0] !== this._positionTarget) {
+      return;
+    }
+    event.stopPropagation();
+
+    // Focus the input on the side of the separator that was clicked.
+    const separator = this.shadowRoot.querySelector('[part="separator"]').getBoundingClientRect();
+    const input = event.clientX < separator.left + separator.width / 2 ? this._startInput : this._endInput;
+    input.focus({ focusVisible: false });
+    this.open();
   }
 
   /** @private */
