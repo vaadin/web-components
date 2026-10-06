@@ -8,7 +8,8 @@ import { css } from 'lit';
 
 export const dateRangePickerStyles = css`
   :host {
-    width: var(--vaadin-field-default-width, 18em);
+    /* Fits two full dates with their clear buttons */
+    width: var(--vaadin-date-range-picker-default-width, 20em);
   }
 
   [part='separator'] {

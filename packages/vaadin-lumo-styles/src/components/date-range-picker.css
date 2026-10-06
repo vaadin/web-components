@@ -5,7 +5,7 @@
  */
 @media lumo_components_date-range-picker {
   :host {
-    width: calc(var(--vaadin-field-default-width, 12em) * 1.5);
+    width: var(--vaadin-date-range-picker-default-width, 19em);
   }
 
   [part='separator'] {
@@ -13,7 +13,7 @@
     display: flex;
     align-items: center;
     align-self: stretch;
-    padding: 0;
+    padding: 0 0.25em;
     min-height: 0;
     color: var(--lumo-secondary-text-color);
   }
@@ -22,6 +22,14 @@
   [part='separator'],
   [part~='start-clear-button'] {
     mask-image: none;
+  }
+
+  /* The start clear button sits between the inputs, not in the suffix, so undo the
+     input sizing that the input container applies to such slotted content */
+  [part~='start-clear-button'] {
+    align-self: center;
+    min-height: 0;
+    padding: 0;
   }
 
   [part='input-field'] ::slotted(input) {
