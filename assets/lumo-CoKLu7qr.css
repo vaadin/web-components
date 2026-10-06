@@ -4949,6 +4949,7 @@ vaadin-ai-field-marker :is(.badge, .actions > button):focus-visible {
 
   [part~="in-range"] {
     --_range-band: var(--vaadin-date-picker-date-in-range-background, var(--lumo-primary-color-10pct));
+    --_range-edge: var(--vaadin-date-picker-date-in-range-border-color, var(--_selection-color));
     --_range-band-height: 80%;
   }
 
@@ -5250,7 +5251,7 @@ vaadin-ai-field-marker :is(.badge, .actions > button):focus-visible {
     min-width: 0;
   }
 
-  :host(:not([has-start-value])) [part~="start-clear-button"], :host(:not([has-end-value])) [part~="end-clear-button"] {
+  :host([clear-button-visible][has-value]:not([has-start-value]):not([disabled])) [part~="clear-button"][part~="start-clear-button"], :host([clear-button-visible][has-value]:not([has-end-value]):not([disabled])) [part~="clear-button"][part~="end-clear-button"] {
     display: none;
   }
 
