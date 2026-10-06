@@ -208,7 +208,13 @@ export class PdfViewerPage {
     // dragging over empty space does not lose the selection.
     container.addEventListener('pointerdown', () => {
       container.classList.add('selecting');
-      window.addEventListener('pointerup', () => container.classList.remove('selecting'), { once: true });
+      const controller = new AbortController();
+      const stop = () => {
+        container.classList.remove('selecting');
+        controller.abort();
+      };
+      window.addEventListener('pointerup', stop, { signal: controller.signal });
+      window.addEventListener('pointercancel', stop, { signal: controller.signal });
     });
     this.element.append(container);
 

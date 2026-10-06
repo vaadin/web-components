@@ -10,7 +10,15 @@
  */
 import { announce } from '@vaadin/a11y-base/src/announce.js';
 import { isKeyboardActive } from '@vaadin/a11y-base/src/focus-utils.js';
+import { timeOut } from '@vaadin/component-base/src/async.js';
+import { Debouncer } from '@vaadin/component-base/src/debounce.js';
 import { createPageText, findInText, getMatchParts, normalizeText } from './pdf-viewer-find.js';
+
+/** The number of pages whose text is loaded at a time when searching. */
+const SEARCH_BATCH = 10;
+
+/** The delay of announcing the result while typing, so that not every keystroke is announced. */
+const ANNOUNCE_DELAY = 500;
 
 /**
  * Finds text in the document and highlights the matches. The find bar itself
@@ -41,6 +49,12 @@ export const PdfViewerFindMixin = (superClass) =>
         },
 
         /** @private */
+        __findSearching: {
+          type: Boolean,
+          value: false,
+        },
+
+        /** @private */
         __findCurrentIndex: {
           type: Number,
           value: -1,
@@ -67,13 +81,19 @@ export const PdfViewerFindMixin = (superClass) =>
     /** @type {HTMLElement | null} */
     #returnFocus = null;
 
+    /** @type {Debouncer | null} */
+    #announceDebouncer = null;
+
+    #lastAnnouncement = '';
+
     /** @protected */
     firstUpdated() {
       super.firstUpdated();
 
       this.addEventListener('keydown', (event) => {
         const isShortcut = (event.ctrlKey || event.metaKey) && !event.altKey && !event.shiftKey;
-        if (isShortcut && event.key.toLowerCase() === 'f' && this.pageCount > 0) {
+        const isF = event.key.toLowerCase() === 'f' || event.code === 'KeyF';
+        if (isShortcut && isF && this.pageCount > 0) {
           event.preventDefault();
           this._openFind();
         }
@@ -96,8 +116,16 @@ export const PdfViewerFindMixin = (superClass) =>
      */
     async _openFind() {
       if (!this.__findOpened) {
-        const active = this.getRootNode().activeElement;
-        this.#returnFocus = active && this.contains(active) ? active : null;
+        let active = this.getRootNode().activeElement;
+        // Focus inside the shadow root shows as the host in the root's active element.
+        if (active === this) {
+          active = this.shadowRoot.activeElement;
+        }
+        this.#returnFocus = active && (this.contains(active) || this.shadowRoot.contains(active)) ? active : null;
+        // Show the results of the query entered before closing the find bar.
+        if (this.__findQuery.trim()) {
+          this.#search();
+        }
       }
       this.__findOpened = true;
       await this.updateComplete;
@@ -118,16 +146,16 @@ export const PdfViewerFindMixin = (superClass) =>
         return;
       }
       this.__findOpened = false;
-      this.#searchId += 1;
-      this.#matches = [];
-      this.__findMatchCount = 0;
-      this.__findCurrentIndex = -1;
-      this.#highlightRenderedPages();
+      this.#resetSearch();
+      this.#highlightPages();
 
+      // Return focus to where it was, or to the pages when that element is
+      // gone, e.g. a link on a page that was released meanwhile.
       const returnFocus = this.#returnFocus;
       this.#returnFocus = null;
-      if (returnFocus && returnFocus.isConnected) {
-        returnFocus.focus({ focusVisible: isKeyboardActive() });
+      const target = returnFocus && returnFocus.isConnected ? returnFocus : this.pageCount && this.$.content;
+      if (target) {
+        target.focus({ focusVisible: isKeyboardActive() });
       }
     }
 
@@ -158,10 +186,14 @@ export const PdfViewerFindMixin = (superClass) =>
     _findNext(direction) {
       const count = this.#matches.length;
       if (!count) {
+        if (this.__findQuery.trim() && !this.__findSearching) {
+          this.#announce(this.__effectiveI18n.findNoMatches);
+        }
         return;
       }
+      const previous = this.#matches[this.__findCurrentIndex];
       this.__findCurrentIndex = (this.__findCurrentIndex + direction + count) % count;
-      this.#showCurrentMatch();
+      this.#showCurrentMatch(previous);
     }
 
     /**
@@ -184,41 +216,79 @@ export const PdfViewerFindMixin = (superClass) =>
     _documentUnloaded() {
       super._documentUnloaded();
       this.#pageTexts.clear();
+      this.#resetSearch();
+    }
+
+    /**
+     * Drops the results and stops a running search.
+     * @private
+     */
+    #resetSearch() {
       this.#searchId += 1;
       this.#matches = [];
       this.__findMatchCount = 0;
       this.__findCurrentIndex = -1;
+      this.__findSearching = false;
+      this.#scrollToMatchPending = false;
+      this.#announceDebouncer?.cancel();
+    }
+
+    /**
+     * Announces a find result. Results while typing are announced after a
+     * delay, and only when they differ from the previous announcement.
+     * @private
+     */
+    #announce(text, { delayed = false } = {}) {
+      this.#announceDebouncer?.cancel();
+      if (!delayed) {
+        this.#lastAnnouncement = text;
+        announce(text);
+        return;
+      }
+      this.#announceDebouncer = Debouncer.debounce(this.#announceDebouncer, timeOut.after(ANNOUNCE_DELAY), () => {
+        if (text !== this.#lastAnnouncement) {
+          this.#lastAnnouncement = text;
+          announce(text);
+        }
+      });
     }
 
     /** @private */
     async #search() {
-      this.#searchId += 1;
+      const previousMatches = this.#matches;
+      this.#resetSearch();
       const searchId = this.#searchId;
       const query = this.__findQuery;
       const pageCount = this.pageCount;
       const matches = [];
 
       if (query.trim() && this._pdfDocument) {
-        for (let pageIndex = 0; pageIndex < pageCount; pageIndex++) {
-          const { normalized } = await this.#getPageText(pageIndex);
+        this.__findSearching = true;
+        for (let start = 0; start < pageCount; start += SEARCH_BATCH) {
+          const pageIndexes = Array.from({ length: Math.min(SEARCH_BATCH, pageCount - start) }, (_, i) => start + i);
+
+          const texts = await Promise.all(pageIndexes.map((pageIndex) => this.#getPageText(pageIndex)));
           if (searchId !== this.#searchId) {
             return;
           }
-          findInText(normalized, query).forEach((match) => matches.push({ pageIndex, ...match }));
+          texts.forEach(({ normalized }, i) => {
+            findInText(normalized, query).forEach((match) => matches.push({ pageIndex: pageIndexes[i], ...match }));
+          });
         }
       }
 
       this.#matches = matches;
+      this.__findSearching = false;
       this.__findMatchCount = matches.length;
       // Start from the first match on or after the current page.
       const index = matches.findIndex((match) => match.pageIndex >= this.page - 1);
       this.__findCurrentIndex = matches.length ? Math.max(index, 0) : -1;
-      this.#highlightRenderedPages();
+      this.#highlightPages([...previousMatches, ...matches]);
 
       if (matches.length) {
-        this.#showCurrentMatch();
+        this.#showCurrentMatch(null, { delayed: true });
       } else if (query.trim()) {
-        announce(this.__effectiveI18n.findNoMatches);
+        this.#announce(this.__effectiveI18n.findNoMatches, { delayed: true });
       }
     }
 
@@ -231,7 +301,8 @@ export const PdfViewerFindMixin = (superClass) =>
         const pdfDocument = this._pdfDocument;
         const promise = pdfDocument
           .getPage(pageIndex + 1)
-          // Same options as the text layer, so that the text items match its elements.
+          // The same text items as the text layer, which also gets marked content.
+          // The marked content items have no text and are skipped by `createPageText()`.
           .then((pdfPage) => pdfPage.getTextContent())
           .then(({ items }) => {
             const pageText = createPageText(items);
@@ -248,18 +319,24 @@ export const PdfViewerFindMixin = (superClass) =>
 
     /**
      * Scrolls to the current match and announces it.
+     * @param {{ pageIndex: number } | null} previousMatch the previously current match, to update its highlight
      * @private
      */
-    #showCurrentMatch() {
+    #showCurrentMatch(previousMatch, { delayed = false } = {}) {
       const match = this.#matches[this.__findCurrentIndex];
       const i18n = this.__effectiveI18n;
-      announce(
-        i18n.findResult.replace('{current}', this.__findCurrentIndex + 1).replace('{total}', this.#matches.length),
+      this.#announce(
+        i18n.findResultAnnouncement
+          .replace('{current}', this.__findCurrentIndex + 1)
+          .replace('{total}', this.#matches.length)
+          .replace('{page}', match.pageIndex + 1),
+        { delayed },
       );
 
-      this.#highlightRenderedPages();
+      this.#highlightPages(previousMatch ? [previousMatch, match] : [match]);
       const currentElement = this.#getCurrentMatchElement();
       if (currentElement) {
+        this.#scrollToMatchPending = false;
         this._scrollRectIntoView(currentElement.getBoundingClientRect());
       } else {
         // Scroll to the page, and to the match once the page is rendered.
@@ -275,14 +352,22 @@ export const PdfViewerFindMixin = (superClass) =>
       return page ? page.element.querySelector('.find-match.current') : null;
     }
 
-    /** @private */
-    #highlightRenderedPages() {
-      for (let pageNumber = 1; pageNumber <= this.pageCount; pageNumber++) {
-        const page = this._getPageView(pageNumber);
+    /**
+     * Updates the highlights of the rendered pages that have the given
+     * matches, or of all rendered pages.
+     * @param {Array<{ pageIndex: number }>} [matches]
+     * @private
+     */
+    #highlightPages(matches) {
+      const pageIndexes = matches
+        ? new Set(matches.map((match) => match.pageIndex))
+        : Array.from({ length: this.pageCount }, (_, index) => index);
+      pageIndexes.forEach((pageIndex) => {
+        const page = this._getPageView(pageIndex + 1);
         if (page && page.textLayer) {
           this.#highlightPage(page);
         }
-      }
+      });
     }
 
     /**
@@ -309,6 +394,7 @@ export const PdfViewerFindMixin = (superClass) =>
       page.element.querySelector(':scope > .find-layer')?.remove();
       const layer = document.createElement('div');
       layer.className = 'find-layer';
+      // Positioned in % of the page, so that they stay in place when zooming.
       const pageRect = page.element.getBoundingClientRect();
       const currentMatch = this.#matches[this.__findCurrentIndex];
 
@@ -324,10 +410,10 @@ export const PdfViewerFindMixin = (superClass) =>
           [...range.getClientRects()].forEach((rect) => {
             const highlight = document.createElement('div');
             highlight.className = match === currentMatch ? 'find-match current' : 'find-match';
-            highlight.style.left = `${rect.left - pageRect.left}px`;
-            highlight.style.top = `${rect.top - pageRect.top}px`;
-            highlight.style.width = `${rect.width}px`;
-            highlight.style.height = `${rect.height}px`;
+            highlight.style.left = `${((rect.left - pageRect.left) / pageRect.width) * 100}%`;
+            highlight.style.top = `${((rect.top - pageRect.top) / pageRect.height) * 100}%`;
+            highlight.style.width = `${(rect.width / pageRect.width) * 100}%`;
+            highlight.style.height = `${(rect.height / pageRect.height) * 100}%`;
             layer.append(highlight);
           });
         });

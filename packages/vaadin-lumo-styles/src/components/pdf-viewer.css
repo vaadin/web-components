@@ -9,6 +9,14 @@
     outline-offset: -2px;
   }
 
+  [part~='thumbnail']:focus-visible {
+    outline: 2px solid var(--lumo-primary-color-50pct);
+  }
+
+  [part='outline-item']:focus-visible > [part='outline-item-content'] {
+    outline: 2px solid var(--lumo-primary-color-50pct);
+  }
+
   .link:focus-visible {
     outline: 2px solid var(--lumo-primary-color-50pct);
   }
@@ -34,6 +42,7 @@
     --vaadin-pdf-viewer-icon-zoom-out: var(--lumo-icons-minus);
     --vaadin-pdf-viewer-icon-zoom-in: var(--lumo-icons-plus);
     --vaadin-pdf-viewer-icon-find: var(--lumo-icons-search);
+    --vaadin-pdf-viewer-icon-sidebar: var(--lumo-icons-menu);
     --vaadin-pdf-viewer-icon-close: var(--lumo-icons-cross);
   }
 }

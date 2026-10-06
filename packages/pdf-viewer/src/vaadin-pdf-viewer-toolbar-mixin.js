@@ -8,6 +8,7 @@
  * See https://vaadin.com/commercial-license-and-service-terms for the full
  * license.
  */
+import '@vaadin/button/src/vaadin-button.js';
 import '@vaadin/integer-field/src/vaadin-integer-field.js';
 import '@vaadin/select/src/vaadin-select.js';
 import '@vaadin/text-field/src/vaadin-text-field.js';
@@ -40,6 +41,9 @@ export const PdfViewerToolbarMixin = (superClass) =>
       super.updated(props);
 
       if (
+        props.has('sidebarOpened') ||
+        props.has('__outline') ||
+        props.has('__sidebarView') ||
         props.has('page') ||
         props.has('pageCount') ||
         props.has('zoom') ||
@@ -47,6 +51,8 @@ export const PdfViewerToolbarMixin = (superClass) =>
         props.has('__effectiveI18n') ||
         props.has('__findOpened') ||
         props.has('__findMatchCount') ||
+        props.has('__findSearching') ||
+        props.has('__findQuery') ||
         props.has('__findCurrentIndex')
       ) {
         this.#renderToolbar();
@@ -65,6 +71,15 @@ export const PdfViewerToolbarMixin = (superClass) =>
 
       render(
         html`
+          <vaadin-pdf-viewer-button
+            slot="toolbar-start"
+            icon="sidebar"
+            theme="tertiary icon"
+            aria-label="${i18n.thumbnails}"
+            aria-pressed="${this.sidebarOpened ? 'true' : 'false'}"
+            .disabled="${!hasDocument}"
+            @click="${this.#onSidebarToggleClick}"
+          ></vaadin-pdf-viewer-button>
           <vaadin-pdf-viewer-button
             slot="toolbar-navigation"
             icon="previous-page"
@@ -128,7 +143,7 @@ export const PdfViewerToolbarMixin = (superClass) =>
             .disabled="${!hasDocument}"
             @click="${this.#onFindToggleClick}"
           ></vaadin-pdf-viewer-button>
-          ${this.#renderFindBar(i18n, hasDocument)}
+          ${this.#renderFindBar(i18n)} ${this.#renderSidebarHeader(i18n)}
           <vaadin-tooltip slot="toolbar-tooltip" .ariaLinkMode="${'none'}"></vaadin-tooltip>
         `,
         this,
@@ -149,50 +164,94 @@ export const PdfViewerToolbarMixin = (superClass) =>
     }
 
     /** @private */
-    #renderFindBar(i18n, hasDocument) {
+    #renderFindBar(i18n) {
       if (!this.__findOpened) {
         return nothing;
       }
       const count = this.__findMatchCount;
-      const result = count
+      let result = count
         ? i18n.findResult.replace('{current}', this.__findCurrentIndex + 1).replace('{total}', count)
         : i18n.findNoMatches;
+      // Show no result until the search has gone through all pages.
+      if (this.__findSearching || !this.__findQuery.trim()) {
+        result = '';
+      }
       return html`
         <vaadin-text-field
           slot="find"
           accessible-name="${i18n.find}"
           placeholder="${i18n.find}"
           .value="${live(this.__findQuery)}"
-          .disabled="${!hasDocument}"
           @input="${this.#onFindInput}"
           @change="${this.#stopEvent}"
           @keydown="${this.#onFindKeyDown}"
         ></vaadin-text-field>
-        <span slot="find" aria-hidden="true" ?hidden="${!this.__findQuery.trim()}">${result}</span>
+        <span slot="find-actions" dir="auto" aria-hidden="true" ?hidden="${!result}">${result}</span>
         <vaadin-pdf-viewer-button
-          slot="find"
+          slot="find-actions"
           icon="previous-match"
           theme="tertiary icon"
           aria-label="${i18n.previousMatch}"
           .disabled="${count === 0}"
           @click="${this.#onPreviousMatchClick}"
+          @keydown="${this.#onFindButtonKeyDown}"
         ></vaadin-pdf-viewer-button>
         <vaadin-pdf-viewer-button
-          slot="find"
+          slot="find-actions"
           icon="next-match"
           theme="tertiary icon"
           aria-label="${i18n.nextMatch}"
           .disabled="${count === 0}"
           @click="${this.#onNextMatchClick}"
+          @keydown="${this.#onFindButtonKeyDown}"
         ></vaadin-pdf-viewer-button>
         <vaadin-pdf-viewer-button
-          slot="find"
+          slot="find-actions"
           icon="close"
           theme="tertiary icon"
           aria-label="${i18n.closeFind}"
           @click="${this.#onCloseFindClick}"
+          @keydown="${this.#onFindButtonKeyDown}"
         ></vaadin-pdf-viewer-button>
       `;
+    }
+
+    /**
+     * Renders the buttons that switch the sidebar between the thumbnails and
+     * the outline, when the document has an outline.
+     * @private
+     */
+    #renderSidebarHeader(i18n) {
+      if (!this.__outline) {
+        return nothing;
+      }
+      const view = this.__sidebarView;
+      return html`
+        <vaadin-button
+          slot="sidebar-header"
+          theme="tertiary small"
+          aria-pressed="${view === 'thumbnails' ? 'true' : 'false'}"
+          @click="${this.#onThumbnailsViewClick}"
+          >${i18n.thumbnailsView}</vaadin-button
+        >
+        <vaadin-button
+          slot="sidebar-header"
+          theme="tertiary small"
+          aria-pressed="${view === 'outline' ? 'true' : 'false'}"
+          @click="${this.#onOutlineViewClick}"
+          >${i18n.outline}</vaadin-button
+        >
+      `;
+    }
+
+    /** @private */
+    #onThumbnailsViewClick() {
+      this._setSidebarView('thumbnails');
+    }
+
+    /** @private */
+    #onOutlineViewClick() {
+      this._setSidebarView('outline');
     }
 
     /**
@@ -202,6 +261,11 @@ export const PdfViewerToolbarMixin = (superClass) =>
      */
     _getFindField() {
       return this.querySelector(':scope > vaadin-text-field[slot="find"]');
+    }
+
+    /** @private */
+    #onSidebarToggleClick() {
+      this.sidebarOpened = !this.sidebarOpened;
     }
 
     /** @private */
@@ -227,6 +291,14 @@ export const PdfViewerToolbarMixin = (superClass) =>
         this._findNext(event.shiftKey ? -1 : 1);
       } else if (event.key === 'Escape') {
         // Don't close a dialog that contains the viewer.
+        event.stopPropagation();
+        this._closeFind();
+      }
+    }
+
+    /** @private */
+    #onFindButtonKeyDown(event) {
+      if (event.key === 'Escape') {
         event.stopPropagation();
         this._closeFind();
       }

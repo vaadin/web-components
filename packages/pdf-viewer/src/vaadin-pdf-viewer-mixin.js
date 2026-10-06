@@ -357,20 +357,42 @@ export const PdfViewerMixin = (superClass) =>
     _documentUnloaded() {}
 
     /**
-     * Scrolls the pages so that the given client rectangle is visible, if it
-     * is not already.
+     * Scrolls the pages so that the given client rectangle is in the middle
+     * of the view, unless it is well inside the view already.
      * @param {DOMRect} rect
      * @protected
      */
     _scrollRectIntoView(rect) {
       const { content } = this.$;
       const view = content.getBoundingClientRect();
-      if (rect.top < view.top || rect.bottom > view.top + content.clientHeight) {
+      // Also scroll when the rectangle is close to an edge, where it is easy to miss.
+      const margin = Math.min(64, content.clientHeight / 4);
+      if (rect.top < view.top + margin || rect.bottom > view.top + content.clientHeight - margin) {
         content.scrollTop += rect.top + rect.height / 2 - (view.top + content.clientHeight / 2);
       }
       if (rect.left < view.left || rect.right > view.left + content.clientWidth) {
         content.scrollLeft += rect.left + rect.width / 2 - (view.left + content.clientWidth / 2);
       }
+    }
+
+    /**
+     * Goes to the destination of an internal link or an outline item, and
+     * announces the page. Returns whether the destination could be resolved.
+     * @param {{ dest?: string | Array, action?: string }} destination
+     * @return {Promise<boolean>}
+     * @protected
+     */
+    async _goToDestination(destination) {
+      const loadId = this.#loadId;
+      const target = await this.#resolveLinkTarget(destination);
+      if (loadId !== this.#loadId || !target) {
+        return false;
+      }
+      this._goToPage(target.page);
+      if (target.top !== undefined) {
+        this.#scrollToPage(target.page, target.top);
+      }
+      return true;
     }
 
     /**
@@ -1048,16 +1070,9 @@ export const PdfViewerMixin = (superClass) =>
      * @private
      */
     async #followLink(annotation) {
-      const loadId = this.#loadId;
-      const target = await this.#resolveLinkTarget(annotation);
-      if (loadId !== this.#loadId || !target) {
-        return;
+      if (await this._goToDestination(annotation)) {
+        this.$.content.focus({ preventScroll: true });
       }
-      this._goToPage(target.page);
-      if (target.top !== undefined) {
-        this.#scrollToPage(target.page, target.top);
-      }
-      this.$.content.focus({ preventScroll: true });
     }
 
     /**

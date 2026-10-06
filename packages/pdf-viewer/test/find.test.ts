@@ -72,7 +72,7 @@ describe('find', () => {
     }
 
     function getResultText() {
-      return viewer.querySelector('span[slot="find"]')!.textContent!.trim();
+      return viewer.querySelector('span[slot="find-actions"]')!.textContent!.trim();
     }
 
     function getMatches(pageNumber?: number) {
@@ -132,6 +132,16 @@ describe('find', () => {
       getButton('find').click();
       await nextRender();
       expect(getButton('find').getAttribute('aria-pressed')).to.equal('false');
+    });
+
+    it('should return focus to the pages when closing find opened from the pages', async () => {
+      const content = viewer.shadowRoot!.querySelector<HTMLElement>('[part="content"]')!;
+      content.focus();
+      await sendKeys({ press: 'Control+KeyF' });
+      await nextRender();
+      await sendKeys({ press: 'Escape' });
+      await nextRender();
+      expect(viewer.shadowRoot!.activeElement).to.equal(content);
     });
 
     it('should open the find bar with Ctrl+F inside the viewer', async () => {
@@ -224,7 +234,55 @@ describe('find', () => {
         getButton('next-match').click();
         await clock.tickAsync(200);
         const region = [...document.body.children].find((element) => element.hasAttribute('aria-live'))!;
-        expect(region.textContent).to.equal('2 of 5');
+        expect(region.textContent).to.equal('2 of 5, page 2');
+      });
+
+      it('should show the results again when reopened', async () => {
+        await search('marker1');
+        getButton('close').click();
+        await nextRender();
+        getButton('find').click();
+        await nextRender();
+        await waitForResult();
+        expect(getResultText()).to.equal('1 of 1');
+        expect(getMatches(1)).to.have.lengthOf(1);
+      });
+
+      it('should close the find bar with Escape on the find bar buttons', async () => {
+        await search('unique word');
+        getButton('next-match').focus();
+        await sendKeys({ press: 'Escape' });
+        await nextRender();
+        expect(getFindBar().hidden).to.be.true;
+      });
+
+      it('should show the result of the last query when typing quickly', async () => {
+        const field = getFindField();
+        field.focus();
+        await sendKeys({ type: 'unique word on this page: marker2' });
+        await waitForResult();
+        expect(getResultText()).to.equal('1 of 1');
+      });
+
+      it('should show no result while searching', async () => {
+        const field = getFindField();
+        field.value = 'quick';
+        field.inputElement.dispatchEvent(new Event('input', { bubbles: true, composed: true }));
+        await nextFrame();
+        const result = viewer.querySelector<HTMLElement>('span[slot="find-actions"]')!;
+        expect(result.hidden || result.textContent!.trim() !== 'No matches').to.be.true;
+      });
+
+      it('should keep the highlights over the text right after zooming', async () => {
+        await search('marker1');
+        viewer.zoom = 2;
+        await nextFrame();
+        const span = [...viewer.shadowRoot!.querySelectorAll('.text-layer span')].find((element) =>
+          element.textContent!.includes('marker1'),
+        )!;
+        const highlight = getMatches(1)[0].getBoundingClientRect();
+        const text = span.getBoundingClientRect();
+        expect(highlight.top + highlight.height / 2).to.be.within(text.top, text.bottom);
       });
 
       it('should not let input events of the find field reach the application', async () => {

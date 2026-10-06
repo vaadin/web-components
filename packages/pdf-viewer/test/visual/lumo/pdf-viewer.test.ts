@@ -91,6 +91,47 @@ describe('pdf-viewer', () => {
     await visualDiff(div, 'find');
   });
 
+  it('sidebar', async () => {
+    element.src = fixtureUrl('multi-page.pdf');
+    element.sidebarOpened = true;
+    await nextRenderIdle(element);
+    element.page = 2;
+    await nextRenderIdle(element);
+    // Wait for the visible thumbnails
+    for (let i = 0; i < 100 && element.shadowRoot!.querySelectorAll('.thumbnail-image canvas').length < 3; i++) {
+      await nextFrame();
+    }
+    await visualDiff(div, 'sidebar');
+  });
+
+  it('sidebar-narrow', async () => {
+    div.style.width = '375px';
+    element.src = fixtureUrl('multi-page.pdf');
+    element.sidebarOpened = true;
+    await nextRenderIdle(element);
+    for (let i = 0; i < 100 && element.shadowRoot!.querySelectorAll('.thumbnail-image canvas').length < 2; i++) {
+      await nextFrame();
+    }
+    await visualDiff(div, 'sidebar-narrow');
+  });
+
+  it('outline', async () => {
+    element.src = fixtureUrl('outline.pdf');
+    element.sidebarOpened = true;
+    await nextRenderIdle(element);
+    for (let i = 0; i < 50 && !element.querySelector('vaadin-button[slot="sidebar-header"]'); i++) {
+      await nextFrame();
+    }
+    element.querySelectorAll<HTMLElement>('vaadin-button[slot="sidebar-header"]')[1].click();
+    await nextRender();
+    element.shadowRoot!.querySelector<HTMLElement>('[part="outline-toggle"]')!.click();
+    await nextRender();
+    element.shadowRoot!.querySelector<HTMLElement>('[role="treeitem"]')!.focus();
+    await sendKeys({ press: 'ArrowDown' });
+    await nextRender();
+    await visualDiff(div, 'outline');
+  });
+
   it('rtl', async () => {
     div.setAttribute('dir', 'rtl');
     element.src = fixtureUrl('multi-page.pdf');

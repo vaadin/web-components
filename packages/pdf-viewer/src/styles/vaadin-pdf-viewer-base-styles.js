@@ -56,6 +56,19 @@ const pdfViewerBaseStyles = css`
     display: none;
   }
 
+  .find-actions {
+    display: flex;
+    align-items: center;
+    gap: var(--vaadin-gap-xs);
+  }
+
+  ::slotted(span[slot='find-actions']) {
+    min-width: 5em;
+    margin-inline: var(--vaadin-gap-s);
+    text-align: center;
+    white-space: nowrap;
+  }
+
   ::slotted(vaadin-text-field) {
     width: var(--vaadin-pdf-viewer-find-field-width, 14em);
     max-width: 100%;
@@ -75,7 +88,7 @@ const pdfViewerBaseStyles = css`
   }
 
   ::slotted(vaadin-select) {
-    width: var(--vaadin-pdf-viewer-zoom-select-width, 9em);
+    width: var(--vaadin-pdf-viewer-zoom-select-width, 10em);
     max-width: 100%;
   }
 
@@ -90,10 +103,176 @@ const pdfViewerBaseStyles = css`
     padding: var(--vaadin-pdf-viewer-padding, var(--vaadin-padding-m));
   }
 
+  .main {
+    position: relative;
+    display: flex;
+    flex: 1 1 auto;
+    min-height: 0;
+    container-type: inline-size;
+  }
+
+  [part='sidebar'] {
+    display: flex;
+    flex-direction: column;
+    flex: none;
+    width: var(--vaadin-pdf-viewer-sidebar-width, 10rem);
+    border-inline-end: 1px solid var(--vaadin-pdf-viewer-border-color, var(--vaadin-border-color-secondary));
+    background: var(--vaadin-pdf-viewer-sidebar-background, var(--vaadin-background-color));
+  }
+
+  [part='sidebar'][hidden] {
+    display: none;
+  }
+
+  /* On narrow viewers, the sidebar covers the pages instead of taking space from them. */
+  @container (max-width: 30rem) {
+    [part='sidebar'] {
+      position: absolute;
+      inset-block: 0;
+      inset-inline-start: 0;
+      z-index: 2;
+      box-shadow: var(--vaadin-pdf-viewer-sidebar-shadow, 0 0 8px rgba(0, 0, 0, 0.2));
+    }
+  }
+
+  [part='sidebar-header'] {
+    display: flex;
+    flex-wrap: wrap;
+    justify-content: center;
+    gap: var(--vaadin-gap-xs);
+    padding: var(--vaadin-padding-xs);
+    border-block-end: 1px solid var(--vaadin-pdf-viewer-border-color, var(--vaadin-border-color-secondary));
+  }
+
+  [part='sidebar-header'][hidden],
+  [part='thumbnails'][hidden],
+  [part='outline'][hidden] {
+    display: none;
+  }
+
+  ::slotted(vaadin-button[slot='sidebar-header']) {
+    min-width: 0;
+    max-width: 100%;
+  }
+
+  ::slotted(vaadin-button[aria-pressed='true']) {
+    --vaadin-button-tertiary-background: var(--vaadin-background-container-strong);
+    background: var(--vaadin-background-container-strong);
+  }
+
+  [part='outline'] {
+    flex: 1 1 auto;
+    min-height: 0;
+    overflow: auto;
+    padding: var(--vaadin-padding-xs);
+  }
+
+  [part='outline-item'] {
+    outline: none;
+  }
+
+  [part='outline-item-content'] {
+    display: flex;
+    align-items: flex-start;
+    gap: var(--vaadin-gap-xs);
+    padding: var(--vaadin-padding-xs);
+    padding-inline-start: calc(var(--_level) * var(--vaadin-pdf-viewer-outline-indent, 1em) + var(--vaadin-padding-xs));
+    border-radius: var(--vaadin-radius-s);
+    cursor: var(--vaadin-clickable-cursor);
+    font-size: var(--vaadin-pdf-viewer-outline-font-size, 0.875em);
+    line-height: 1.4;
+  }
+
+  [part='outline-item']:focus-visible > [part='outline-item-content'] {
+    outline: var(--vaadin-focus-ring-width) solid var(--vaadin-focus-ring-color);
+    outline-offset: calc(var(--vaadin-focus-ring-width) * -1);
+  }
+
+  @media (any-hover: hover) {
+    [part='outline-item-content']:hover {
+      background: var(--vaadin-background-container);
+    }
+  }
+
+  [part='outline-toggle'] {
+    flex: none;
+    width: 1lh;
+    height: 1lh;
+    background: currentColor;
+    mask: var(--_vaadin-icon-chevron-right) 50% / 80% no-repeat;
+  }
+
+  [part='outline-toggle'][expanded] {
+    rotate: 90deg;
+  }
+
+  [part='outline-toggle']:dir(rtl):not([expanded]) {
+    scale: -1 1;
+  }
+
+  [part='outline-toggle'][hidden] {
+    display: block;
+    visibility: hidden;
+  }
+
+  @media (forced-colors: active) {
+    [part='outline-toggle'] {
+      background: CanvasText;
+    }
+  }
+
+  [part='thumbnails'] {
+    display: flex;
+    flex-direction: column;
+    align-items: center;
+    gap: var(--vaadin-gap-s);
+    flex: 1 1 auto;
+    min-height: 0;
+    overflow: auto;
+    padding: var(--vaadin-padding-s);
+    outline: none;
+  }
+
+  [part~='thumbnail'] {
+    display: flex;
+    flex-direction: column;
+    align-items: center;
+    gap: var(--vaadin-gap-xs);
+    flex: none;
+    padding: var(--vaadin-padding-xs);
+    border-radius: var(--vaadin-radius-m);
+    cursor: var(--vaadin-clickable-cursor);
+    font-size: var(--vaadin-pdf-viewer-thumbnail-font-size, 0.875em);
+    color: var(--vaadin-text-color-secondary);
+  }
+
+  [part~='thumbnail']:focus-visible {
+    outline: var(--vaadin-focus-ring-width) solid var(--vaadin-focus-ring-color);
+  }
+
+  [part~='thumbnail'][part~='current'] {
+    background: var(--vaadin-pdf-viewer-thumbnail-current-background, var(--vaadin-background-container-strong));
+    color: var(--vaadin-text-color);
+  }
+
+  .thumbnail-image {
+    width: 96px;
+    direction: ltr;
+    background: var(--vaadin-pdf-viewer-page-background, #fff);
+    box-shadow: var(--vaadin-pdf-viewer-page-shadow, 0 0 0 1px var(--vaadin-border-color-secondary));
+  }
+
+  .thumbnail-image canvas {
+    display: block;
+    width: 100%;
+    height: 100%;
+  }
+
   .content-area {
     position: relative;
     display: flex;
     flex: 1 1 auto;
+    min-width: 0;
     min-height: 0;
   }
 
@@ -221,20 +400,26 @@ const pdfViewerBaseStyles = css`
     background: var(--vaadin-pdf-viewer-match-background, color-mix(in srgb, Mark 40%, transparent));
   }
 
+  /* Orange, like the current match of browser find, with an outline of at least 3:1 contrast */
   .find-match.current {
-    background: var(--vaadin-pdf-viewer-current-match-background, color-mix(in srgb, Mark 85%, orange));
-    outline: 1px solid color-mix(in srgb, Mark, black 40%);
+    background: var(--vaadin-pdf-viewer-current-match-background, #ff9632);
+    outline: 2px solid color-mix(in srgb, #ff9632, black 50%);
   }
 
   @media (forced-colors: active) {
+    .find-layer {
+      mix-blend-mode: normal;
+    }
+
     .find-match {
       forced-color-adjust: none;
-      background: color-mix(in srgb, Highlight 40%, transparent);
+      background: transparent;
+      outline: 1px solid Highlight;
     }
 
     .find-match.current {
-      background: color-mix(in srgb, Highlight 70%, transparent);
-      outline-color: CanvasText;
+      background: transparent;
+      outline: 3px solid Highlight;
     }
   }
 

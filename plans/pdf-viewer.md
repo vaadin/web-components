@@ -19,18 +19,18 @@ specific to the PDF viewer. It does not repeat those documents.
 
 Status values: `todo`, `in progress`, `in review`, `done`, `blocked`.
 
-| #   | Slice                                    | Status    | Reviews (code / visual) | Notes                  |
-| --- | ---------------------------------------- | --------- | ----------------------- | ---------------------- |
-| 0   | Tracer bullet: package + first page      | done      | ✅ / ✅                 | 561906b4d0, 59ff4a2850 |
-| 1   | Continuous scroll, zoom, page tracking   | done      | ✅ / ✅ (+ re-review)   | 1e173c331e, b2d2a73c16 |
-| 2   | Toolbar: page navigation + zoom controls | done      | – / –                   |                        |
-| 3   | Text layer, links, keyboard, a11y basics | todo      | – / –                   |                        |
-| 4   | Find                                     | in review | – / –                   |                        |
-| 5   | Sidebar: thumbnails                      | todo      | – / –                   |                        |
-| 6   | Sidebar: outline                         | todo      | – / –                   |                        |
-| 7   | Download and print                       | todo      | – / –                   |                        |
-| 8   | Tagged PDFs, AT audit, forced colors     | todo      | – / –                   |                        |
-| 9   | API docs, typings, README, release prep  | todo      | – / –                   |                        |
+| #   | Slice                                    | Status | Reviews (code / visual) | Notes                  |
+| --- | ---------------------------------------- | ------ | ----------------------- | ---------------------- |
+| 0   | Tracer bullet: package + first page      | done   | ✅ / ✅                 | 561906b4d0, 59ff4a2850 |
+| 1   | Continuous scroll, zoom, page tracking   | done   | ✅ / ✅ (+ re-review)   | 1e173c331e, b2d2a73c16 |
+| 2   | Toolbar: page navigation + zoom controls | done   | – / –                   |                        |
+| 3   | Text layer, links, keyboard, a11y basics | todo   | – / –                   |                        |
+| 4   | Find                                     | done   | – / –                   |                        |
+| 5   | Sidebar: thumbnails                      | todo   | – / –                   |                        |
+| 6   | Sidebar: outline                         | todo   | – / –                   |                        |
+| 7   | Download and print                       | todo   | – / –                   |                        |
+| 8   | Tagged PDFs, AT audit, forced colors     | todo   | – / –                   |                        |
+| 9   | API docs, typings, README, release prep  | todo   | – / –                   |                        |
 
 ---
 
@@ -274,6 +274,14 @@ As built in slice 4 (`src/vaadin-pdf-viewer-find-mixin.js`, `src/pdf-viewer-find
 - Searching walks all pages and caches their text per document. A new query or document drops
   the results of the previous search. A match on a page that is not rendered scrolls to the
   page, then to the match once rendered.
+- After the slice 4 reviews: the find bar has an accessible name; Escape works on all its
+  controls; focus returns to the element in the shadow DOM that had it (or to the page area);
+  reopening searches the kept query again; the result is hidden while searching (pages are searched
+  in batches of 10); announcements while typing are delayed by 500 ms and repeated only when they
+  change, and include the page ("2 of 5, page 2"); Enter with no matches announces "No matches";
+  highlights are positioned in % so they follow zoom at once; the current match is orange
+  (`#ff9632`, like browser find) with a 2px outline; forced colors use outlines only.
+  Known limitation: words hyphenated at a line break are not found.
 - The find bar is a `role="search"` part below the toolbar with a text field, "N of M", previous /
   next match and close buttons. Its controls are rendered by the toolbar mixin, because all light
   DOM controls come from a single Lit `render()`. Escape closes it and returns focus to where it
@@ -288,6 +296,26 @@ As built in slice 4 (`src/vaadin-pdf-viewer-find-mixin.js`, `src/pdf-viewer-find
   has no outline.
 
 On narrow viewports the sidebar overlays the pages instead of pushing them aside.
+
+As built in slices 5 and 6 (`src/vaadin-pdf-viewer-sidebar-mixin.js`, `src/vaadin-pdf-viewer-outline-mixin.js`):
+
+- `sidebarOpened` (`sidebar-opened`, reflected, `notify: true` since the toolbar toggles it) and a
+  toolbar button with `aria-pressed`.
+- Thumbnails are not `vaadin-virtual-list`: a placeholder per page in a `role="listbox"` with
+  `role="option"` items ("Page {page}"), `aria-selected` on the current page, one tab stop,
+  arrow keys / Home / End move focus, Enter / Space / click go to the page. An
+  `IntersectionObserver` on the list renders thumbnails near the visible part one at a time and
+  releases the ones that leave it. A 200-page document is tested with a PDF generated in memory.
+- The sidebar overlays the pages when the viewer is narrower than 30rem, using a container query
+  on the area below the toolbar (not on the host, so the host keeps its intrinsic size).
+- The outline is a `role="tree"` with nested `treeitem`s (`aria-level`, `aria-setsize`,
+  `aria-posinset`, `aria-expanded`), one tab stop, and the APG keys (Up / Down / Home / End,
+  Right expands or moves to the first child, Left collapses or moves to the parent, swapped in RTL,
+  Enter goes to the destination). Clicking the chevron toggles, clicking the title navigates.
+  Focus stays in the outline after navigating.
+- The sidebar header with "Thumbnails" / "Outline" buttons (`vaadin-button`, `aria-pressed`) is
+  only shown when the document has an outline. Tabs were not used, because their panels would be
+  in the shadow DOM and `aria-controls` can't point across the shadow boundary.
 
 **D18 — Accessibility model.**
 
@@ -637,6 +665,25 @@ Newest entry at the top. Format:
 - Visual review: <summary>
 - Follow-ups: …
 ```
+
+### 2026-10-06 — Slice 4: Find — done
+
+- Base commit: a4f29b51f9 Head: f4ac2da176, review fixes committed together with slices 5 and 6
+- Shipped: find bar, normalized search across pages, highlights, next / previous, Ctrl/Cmd+F,
+  announcements, slice 3 review fixes.
+- Code review: 0 blockers, 6 should-fix (focus lost when opened from the shadow DOM, stale results
+  on reopen, highlights in px misplaced after zoom, "No matches" while searching, Escape only in the
+  field, test gaps). All fixed.
+- Visual review: 1 blocker (same focus loss), 4 should-fix (stale reopen, missing "No matches",
+  Escape, find bar wrapping on narrow viewers). Fixed; the find bar buttons and result now wrap as
+  one group. With 200% text on a 375px viewer, toolbar and find bar still take most of the height
+  (follow-up, slice 8).
+- A11y re-review: slice 3 fixes confirmed; 2 blockers (focus return, stale reopen) and 6 should-fix
+  (chatty announcements, no page in the announcement, silent Enter, low contrast current match,
+  forced colors blending, Escape on buttons) plus nits. All fixed. Deferred to slice 8: moving the
+  browse-mode / caret position to the current match.
+- Note: slices 5 and 6 were implemented together and committed in one commit, because the outline
+  lives in the sidebar of slice 5. They are reviewed together.
 
 ### 2026-10-06 — Slice 3: Text layer, links, keyboard, a11y basics — done
 

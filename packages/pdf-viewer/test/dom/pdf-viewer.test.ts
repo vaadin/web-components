@@ -28,6 +28,19 @@ describe('vaadin-pdf-viewer', () => {
     });
   });
 
+  describe('find bar', () => {
+    beforeEach(async () => {
+      viewer.src = fixtureUrl('multi-page.pdf');
+      await oneEvent(viewer, 'document-load');
+      viewer.querySelector<HTMLElement>('vaadin-pdf-viewer-button[icon="find"]')!.click();
+      await nextRender();
+    });
+
+    it('host', async () => {
+      await expect(viewer).dom.to.equalSnapshot();
+    });
+  });
+
   describe('shadow', () => {
     it('default', async () => {
       await expect(viewer).shadowDom.to.equalSnapshot();
