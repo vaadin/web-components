@@ -9,21 +9,34 @@
  * license.
  */
 import { announce } from '@vaadin/a11y-base/src/announce.js';
+import { isKeyboardActive } from '@vaadin/a11y-base/src/focus-utils.js';
+import { MAX_CANVAS_PIXELS } from './pdf-viewer-page.js';
 
 /** The resolution that pages are printed at. PDF units are 1/72 inch. */
 const PRINT_DPI = 150;
 
+/** The styles of the print document. */
+const PRINT_STYLES = `
+  @page { margin: 0; }
+  html, body { margin: 0; padding: 0; }
+  img { display: block; break-after: page; }
+  img:last-child { break-after: auto; }
+`;
+
 /**
  * Returns the file name for downloading a document from its URL, or null
- * when the URL has none.
+ * when the URL has none. Only URLs with a path are used, not e.g. `blob:`
+ * or `data:` URLs.
  * @param {string} src
  * @return {string | null}
  */
 function getFileNameFromUrl(src) {
   try {
-    const { pathname } = new URL(src, document.baseURI);
-    const name = decodeURIComponent(pathname.split('/').pop());
-    return name || null;
+    const { protocol, pathname } = new URL(src, document.baseURI);
+    if (!['http:', 'https:', 'file:'].includes(protocol)) {
+      return null;
+    }
+    return decodeURIComponent(pathname.split('/').pop()) || null;
   } catch {
     return null;
   }
@@ -40,7 +53,8 @@ export const PdfViewerPrintMixin = (superClass) =>
       return {
         /**
          * The file name used when the user downloads the document. Defaults to
-         * the last part of the path of `src`, or the title of the document.
+         * the last part of the path of `src`, or the title of the document, with
+         * `.pdf` added when missing.
          *
          * @attr {string} file-name
          */
@@ -65,12 +79,26 @@ export const PdfViewerPrintMixin = (superClass) =>
     /** Cleans up the current print, if any. */
     #cleanupPrint = null;
 
+    /** @type {import('pdfjs-dist').RenderTask | null} */
+    #printRenderTask = null;
+
+    /** @type {HTMLElement | null} */
+    #printReturnFocus = null;
+
     /** @protected */
     firstUpdated() {
       super.firstUpdated();
 
       this.addEventListener('document-load', (event) => {
         this.#title = event.detail.title;
+      });
+
+      this.addEventListener('keydown', (event) => {
+        if (event.key === 'Escape' && this.__printProgress >= 0) {
+          // Don't close a dialog that contains the viewer.
+          event.stopPropagation();
+          this._cancelPrint();
+        }
       });
     }
 
@@ -83,8 +111,8 @@ export const PdfViewerPrintMixin = (superClass) =>
     /**
      * Prints the document. The pages are rendered for printing first, which
      * can take a while for long documents, so the viewer shows the progress
-     * and lets the user cancel. Does nothing when no document is loaded or
-     * the viewer is not attached.
+     * and lets the user cancel. Does nothing when no document is loaded, the
+     * viewer is not attached, or a print is being prepared already.
      */
     async print() {
       const pdfDocument = this._pdfDocument;
@@ -92,9 +120,12 @@ export const PdfViewerPrintMixin = (superClass) =>
         return;
       }
 
+      // Remove the frame of a previous print, in browsers that don't fire `afterprint`.
+      this.#cleanupPrint?.();
       this.#printId += 1;
       const printId = this.#printId;
       const isCancelled = () => printId !== this.#printId || this._pdfDocument !== pdfDocument;
+      this.#printReturnFocus = this.#getFocusedElement();
       this.__printProgress = 0;
       announce(this.__effectiveI18n.printing);
 
@@ -103,29 +134,31 @@ export const PdfViewerPrintMixin = (superClass) =>
       iframe.tabIndex = -1;
       // Not hidden with display or visibility, which would print an empty page in some browsers.
       iframe.style.cssText = 'position: fixed; left: -10000px; top: 0; width: 1px; height: 1px; border: 0;';
-      document.body.append(iframe);
       const imageUrls = [];
-      this.#cleanupPrint = () => {
+      const cleanup = () => {
+        this.#printRenderTask?.cancel();
         iframe.remove();
         imageUrls.forEach((url) => URL.revokeObjectURL(url));
-        this.#cleanupPrint = null;
+        if (this.#cleanupPrint === cleanup) {
+          this.#cleanupPrint = null;
+        }
       };
-
-      const frameDocument = iframe.contentDocument;
-      frameDocument.open();
-      frameDocument.write(
-        '<!doctype html><html><head><style>' +
-          '@page { margin: 0; } html, body { margin: 0; padding: 0; } ' +
-          'img { display: block; break-after: page; } img:last-child { break-after: auto; }' +
-          '</style></head><body></body></html>',
-      );
-      frameDocument.close();
+      this.#cleanupPrint = cleanup;
 
       try {
+        document.body.append(iframe);
+        const frameWindow = iframe.contentWindow;
+        const frameDocument = iframe.contentDocument;
+        // A constructed style sheet, as inline styles may be blocked by a Content Security Policy.
+        const styleSheet = new frameWindow.CSSStyleSheet();
+        styleSheet.replaceSync(PRINT_STYLES);
+        frameDocument.adoptedStyleSheets = [styleSheet];
+
         // Render one page at a time, so that memory use does not grow with the document.
         for (let pageNumber = 1; pageNumber <= pdfDocument.numPages; pageNumber++) {
-          const url = await this.#renderPageForPrint(pdfDocument, pageNumber, frameDocument);
+          const url = await this.#renderPageForPrint(pdfDocument, pageNumber, frameDocument, styleSheet);
           if (isCancelled()) {
+            URL.revokeObjectURL(url);
             return;
           }
           imageUrls.push(url);
@@ -136,19 +169,18 @@ export const PdfViewerPrintMixin = (superClass) =>
         if (isCancelled()) {
           return;
         }
+
+        this.__printProgress = -1;
+        frameWindow.addEventListener('afterprint', cleanup, { once: true });
+        frameWindow.focus();
+        frameWindow.print();
+        this.#restoreFocus();
       } catch {
         if (!isCancelled()) {
           this._cancelPrint();
+          announce(this.__effectiveI18n.printError, { mode: 'alert' });
         }
-        return;
       }
-
-      this.__printProgress = -1;
-      const frameWindow = iframe.contentWindow;
-      const cleanup = this.#cleanupPrint;
-      frameWindow.addEventListener('afterprint', () => cleanup(), { once: true });
-      frameWindow.focus();
-      frameWindow.print();
     }
 
     /**
@@ -156,9 +188,41 @@ export const PdfViewerPrintMixin = (superClass) =>
      * @protected
      */
     _cancelPrint() {
+      const wasPrinting = this.__printProgress >= 0;
       this.#printId += 1;
       this.__printProgress = -1;
       this.#cleanupPrint?.();
+      if (wasPrinting) {
+        this.#restoreFocus();
+      }
+    }
+
+    /**
+     * Returns the focused element when it is in the viewer.
+     * @private
+     */
+    #getFocusedElement() {
+      let active = this.getRootNode().activeElement;
+      if (active === this) {
+        active = this.shadowRoot.activeElement;
+      }
+      return active && (this.contains(active) || this.shadowRoot.contains(active)) ? active : null;
+    }
+
+    /**
+     * Returns focus to where it was before printing, when it was in the viewer
+     * and has been lost meanwhile, e.g. because the cancel button was removed.
+     * @private
+     */
+    async #restoreFocus() {
+      const returnFocus = this.#printReturnFocus;
+      this.#printReturnFocus = null;
+      await this.updateComplete;
+      const active = document.activeElement;
+      const isLost = !active || active === document.body || active.localName === 'iframe';
+      if (returnFocus && returnFocus.isConnected && !returnFocus.disabled && (isLost || this.#getFocusedElement())) {
+        returnFocus.focus({ focusVisible: isKeyboardActive() });
+      }
     }
 
     /**
@@ -206,20 +270,30 @@ export const PdfViewerPrintMixin = (superClass) =>
      * size of the page. Returns the object URL of the image.
      * @private
      */
-    async #renderPageForPrint(pdfDocument, pageNumber, frameDocument) {
+    async #renderPageForPrint(pdfDocument, pageNumber, frameDocument, styleSheet) {
       const pdfPage = await pdfDocument.getPage(pageNumber);
       const unscaled = pdfPage.getViewport({ scale: 1 });
-      const viewport = pdfPage.getViewport({ scale: PRINT_DPI / 72 });
+      // Large pages get a lower resolution, as browsers limit the canvas size.
+      const scale = Math.min(PRINT_DPI / 72, Math.sqrt(MAX_CANVAS_PIXELS / (unscaled.width * unscaled.height)));
+      const viewport = pdfPage.getViewport({ scale });
       const canvas = document.createElement('canvas');
       canvas.width = Math.floor(viewport.width);
       canvas.height = Math.floor(viewport.height);
-      await pdfPage.render({ canvas, viewport, intent: 'print' }).promise;
+      this.#printRenderTask = pdfPage.render({ canvas, viewport, intent: 'print' });
+      try {
+        await this.#printRenderTask.promise;
+      } finally {
+        this.#printRenderTask = null;
+      }
 
       const blob = await new Promise((resolve) => {
         canvas.toBlob(resolve, 'image/png');
       });
       canvas.width = 0;
       canvas.height = 0;
+      if (!blob) {
+        throw new Error(`Failed to print page ${pageNumber}`);
+      }
 
       const url = URL.createObjectURL(blob);
       const image = frameDocument.createElement('img');
@@ -227,13 +301,10 @@ export const PdfViewerPrintMixin = (superClass) =>
       image.alt = '';
       // PDF units are points, so the image gets the paper size of the page.
       // A named page per PDF page gives each printed page the size of its PDF page.
-      const size = `${unscaled.width}pt ${unscaled.height}pt`;
       image.style.width = `${unscaled.width}pt`;
       image.style.height = `${unscaled.height}pt`;
       image.style.page = `page${pageNumber}`;
-      const style = frameDocument.createElement('style');
-      style.textContent = `@page page${pageNumber} { size: ${size}; margin: 0; }`;
-      frameDocument.head.append(style);
+      styleSheet.insertRule(`@page page${pageNumber} { size: ${unscaled.width}pt ${unscaled.height}pt; margin: 0; }`);
       frameDocument.body.append(image);
       return url;
     }

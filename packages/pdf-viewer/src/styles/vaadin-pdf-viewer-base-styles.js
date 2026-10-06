@@ -178,6 +178,16 @@ const pdfViewerBaseStyles = css`
     outline-offset: calc(var(--vaadin-focus-ring-width) * -1);
   }
 
+  /* The item of the current page, marked by more than a color */
+  [part='outline-item'][aria-current] > [part='outline-item-content'] {
+    font-weight: 600;
+    box-shadow: inset 2px 0 0 currentColor;
+  }
+
+  [part='outline-item'][aria-current]:dir(rtl) > [part='outline-item-content'] {
+    box-shadow: inset -2px 0 0 currentColor;
+  }
+
   [part='outline-item'][aria-disabled='true'] > [part='outline-item-content'] {
     cursor: default;
   }
@@ -457,6 +467,22 @@ const pdfViewerBaseStyles = css`
     .find-match.current {
       background: transparent;
       outline: 3px solid Highlight;
+    }
+  }
+
+  /* The structure of tagged PDFs, for assistive technology only. It owns the text layer elements. */
+  .struct-tree {
+    position: absolute;
+    inset: 0;
+    contain: strict;
+    pointer-events: none;
+  }
+
+  @media (forced-colors: active) {
+    /* Pages and thumbnails lose their shadow in forced colors */
+    [part='page'],
+    .thumbnail-image {
+      outline: 1px solid CanvasText;
     }
   }
 

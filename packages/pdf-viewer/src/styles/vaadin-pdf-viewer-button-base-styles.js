@@ -86,9 +86,7 @@ export const pdfViewerButtonStyles = css`
     :host([aria-pressed='true']) {
       border: 2px solid ButtonText;
     }
-  }
 
-  @media (forced-colors: active) {
     [part='icon'] {
       background: CanvasText;
     }

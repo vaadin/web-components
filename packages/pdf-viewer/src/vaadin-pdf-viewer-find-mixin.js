@@ -72,6 +72,9 @@ export const PdfViewerFindMixin = (superClass) =>
     /** @type {Array<{ pageIndex: number, start: number, end: number }>} */
     #matches = [];
 
+    /** The text of the pages that have loaded, by page index. */
+    #loadedPageTexts = new Map();
+
     /** Incremented on every search, to drop results of an outdated search. */
     #searchId = 0;
 
@@ -153,6 +156,9 @@ export const PdfViewerFindMixin = (superClass) =>
       }
       this.__findOpened = false;
       this.#closedMatchIndex = this.__findCurrentIndex;
+      // Select the current match, so that reading with a screen reader or
+      // caret browsing continues from it, like with the find of browsers.
+      this.#selectCurrentMatch();
       this.#resetSearch();
       this.#highlightPages();
 
@@ -163,6 +169,25 @@ export const PdfViewerFindMixin = (superClass) =>
       const target = returnFocus && returnFocus.isConnected ? returnFocus : this.pageCount && this.$.content;
       if (target) {
         target.focus({ focusVisible: isKeyboardActive() });
+      }
+    }
+
+    /** @private */
+    #selectCurrentMatch() {
+      const match = this.#matches[this.__findCurrentIndex];
+      const page = match && this._getPageView(match.pageIndex + 1);
+      const pageText = match && this.#loadedPageTexts.get(match.pageIndex);
+      if (!page || !page.textLayer || !pageText) {
+        return;
+      }
+      const parts = getMatchParts(pageText, match);
+      const { textDivs } = page.textLayer;
+      const first = parts[0];
+      const last = parts[parts.length - 1];
+      const startNode = textDivs[first.itemIndex] && textDivs[first.itemIndex].firstChild;
+      const endNode = textDivs[last.itemIndex] && textDivs[last.itemIndex].firstChild;
+      if (startNode && endNode) {
+        window.getSelection().setBaseAndExtent(startNode, first.start, endNode, last.end);
       }
     }
 
@@ -224,6 +249,7 @@ export const PdfViewerFindMixin = (superClass) =>
     _documentUnloaded() {
       super._documentUnloaded();
       this.#pageTexts.clear();
+      this.#loadedPageTexts.clear();
       this.#resetSearch();
     }
 
@@ -320,6 +346,7 @@ export const PdfViewerFindMixin = (superClass) =>
           .then((pdfPage) => pdfPage.getTextContent())
           .then(({ items }) => {
             const pageText = createPageText(items);
+            this.#loadedPageTexts.set(pageIndex, pageText);
             return { pageText, normalized: normalizeText(pageText.text) };
           })
           .catch(() => {

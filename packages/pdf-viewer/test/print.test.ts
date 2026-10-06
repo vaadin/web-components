@@ -1,4 +1,5 @@
 import { expect } from '@vaadin/chai-plugins';
+import { sendKeys } from '@vaadin/test-runner-commands';
 import { fixtureSync, nextFrame, nextRender } from '@vaadin/testing-helpers';
 import sinon from 'sinon';
 import './enable-feature-flag.js';
@@ -58,6 +59,32 @@ describe('download and print', () => {
     });
 
     it('should use the file name of the URL', async () => {
+      const link = await download();
+      expect(link.download).to.equal('multi-page.pdf');
+    });
+
+    it('should use the title for a blob URL', async () => {
+      const blob = await fetch(fixtureUrl('multi-page.pdf')).then((response) => response.blob());
+      const url = URL.createObjectURL(blob);
+      try {
+        const loaded = new Promise((resolve) => {
+          viewer.addEventListener('document-load', resolve, { once: true });
+        });
+        viewer.src = url;
+        await loaded;
+        const link = await download();
+        expect(link.download).to.equal('Multi-page fixture.pdf');
+      } finally {
+        URL.revokeObjectURL(url);
+      }
+    });
+
+    it('should decode the file name and ignore the query string', async () => {
+      const original = viewer.src;
+      viewer.src = `${original!.replace('multi-page.pdf', 'multi%2Dpage.pdf')}?version=2`;
+      await new Promise((resolve) => {
+        viewer.addEventListener('document-load', resolve, { once: true });
+      });
       const link = await download();
       expect(link.download).to.equal('multi-page.pdf');
     });
@@ -140,6 +167,73 @@ describe('download and print', () => {
       expect(getProgress().hidden).to.be.true;
       await nextFrame();
       expect(printStub?.called).to.not.be.true;
+    });
+
+    it('should remove the frame of a previous print when printing again', async () => {
+      viewer.print();
+      await waitForPrint();
+      const firstFrame = getFrame()!;
+      printStub = undefined;
+      viewer.print();
+      await nextFrame();
+      expect(firstFrame.isConnected).to.be.false;
+      await waitForPrint();
+    });
+
+    it('should release the prepared pages when cancelled', async () => {
+      const revokeSpy = sinon.spy(URL, 'revokeObjectURL');
+      try {
+        viewer.print();
+        // Wait for the first page
+        for (
+          let i = 0;
+          i < 100 &&
+          viewer.shadowRoot!.querySelector('[part="print-progress"]') &&
+          !getFrame()?.contentDocument!.images.length;
+          i++
+        ) {
+          await nextFrame();
+        }
+        const created = getFrame()!.contentDocument!.images.length;
+        viewer.querySelector<HTMLElement>('vaadin-button[slot="print-progress"]')!.click();
+        await nextFrame();
+        await nextFrame();
+        expect(revokeSpy.callCount).to.be.at.least(created);
+        expect(getFrame()).to.be.null;
+      } finally {
+        revokeSpy.restore();
+      }
+    });
+
+    it('should disable the print button while preparing to print', async () => {
+      viewer.print();
+      await nextRender();
+      expect(getButton('print').disabled).to.be.true;
+      await waitForPrint();
+      await nextRender();
+      expect(getButton('print').disabled).to.be.false;
+    });
+
+    it('should move focus to the cancel button and back when printing from the print button', async () => {
+      getButton('print').focus();
+      getButton('print').click();
+      await nextRender();
+      const cancel = viewer.querySelector<HTMLElement>('vaadin-button[slot="print-progress"]')!;
+      expect(document.activeElement).to.equal(cancel);
+      cancel.click();
+      await nextRender();
+      await nextRender();
+      expect(document.activeElement).to.equal(getButton('print'));
+    });
+
+    it('should cancel printing with Escape', async () => {
+      getButton('print').focus();
+      getButton('print').click();
+      await nextRender();
+      await sendKeys({ press: 'Escape' });
+      await nextRender();
+      expect(getFrame()).to.be.null;
+      expect(getProgress().hidden).to.be.true;
     });
 
     it('should not print when not attached', async () => {

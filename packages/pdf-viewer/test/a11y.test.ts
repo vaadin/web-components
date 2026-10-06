@@ -1,6 +1,6 @@
 import { expect } from '@vaadin/chai-plugins';
 import { sendKeys } from '@vaadin/test-runner-commands';
-import { fixtureSync, nextFrame, nextRender, oneEvent } from '@vaadin/testing-helpers';
+import { fixtureSync, nextFrame, nextRender, nextUpdate, oneEvent } from '@vaadin/testing-helpers';
 import sinon from 'sinon';
 import './enable-feature-flag.js';
 import '../vaadin-pdf-viewer.js';
@@ -58,6 +58,16 @@ describe('accessibility', () => {
       viewer.src = '';
       await nextFrame();
       expect(viewer.hasAttribute('aria-label')).to.be.false;
+    });
+
+    it('should mark the page area as busy while loading', async () => {
+      viewer.src = new URL('./fixtures/multi-page.pdf', import.meta.url).href;
+      await nextUpdate(viewer);
+      await nextUpdate(viewer);
+      expect(getContent().getAttribute('aria-busy')).to.equal('true');
+      await oneEvent(viewer, 'document-load');
+      await nextFrame();
+      expect(getContent().getAttribute('aria-busy')).to.equal('false');
     });
 
     it('should not make the empty page area focusable', () => {

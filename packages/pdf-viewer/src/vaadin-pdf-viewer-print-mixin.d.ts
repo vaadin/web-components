@@ -17,7 +17,8 @@ export declare function PdfViewerPrintMixin<T extends Constructor<HTMLElement>>(
 export declare class PdfViewerPrintMixinClass {
   /**
    * The file name used when the user downloads the document. Defaults to
-   * the last part of the path of `src`, or the title of the document.
+   * the last part of the path of `src`, or the title of the document, with
+   * `.pdf` added when missing.
    *
    * @attr {string} file-name
    */
@@ -26,8 +27,8 @@ export declare class PdfViewerPrintMixinClass {
   /**
    * Prints the document. The pages are rendered for printing first, which
    * can take a while for long documents, so the viewer shows the progress
-   * and lets the user cancel. Does nothing when no document is loaded or
-   * the viewer is not attached.
+   * and lets the user cancel. Does nothing when no document is loaded, the
+   * viewer is not attached, or a print is being prepared already.
    */
   print(): Promise<void>;
 }

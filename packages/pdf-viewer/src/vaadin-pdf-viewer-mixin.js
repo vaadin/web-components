@@ -12,6 +12,7 @@ import { announce } from '@vaadin/a11y-base/src/announce.js';
 import { ResizeMixin } from '@vaadin/component-base/src/resize-mixin.js';
 import { issueWarning } from '@vaadin/component-base/src/warnings.js';
 import { MAX_CANVAS_PIXELS, PdfViewerPage } from './pdf-viewer-page.js';
+import { isAllowedLinkUrl } from './pdf-viewer-url.js';
 import { formatZoom, getZoomInLevel, getZoomOutLevel } from './pdf-viewer-zoom.js';
 import { acquireWorker, loadPdfjs, releaseWorker } from './pdfjs-loader.js';
 
@@ -34,24 +35,8 @@ const MAX_TOTAL_CANVAS_PIXELS = 3 * MAX_CANVAS_PIXELS;
 /** The number of pages whose size is requested at a time after loading. */
 const PAGE_SIZE_BATCH = 10;
 
-/** The protocols of external links that the viewer opens. Links with other URLs are left out. */
-const ALLOWED_LINK_PROTOCOLS = ['http:', 'https:', 'mailto:'];
-
 /** The named actions of internal links that the viewer supports. */
 const SUPPORTED_LINK_ACTIONS = ['FirstPage', 'LastPage', 'NextPage', 'PrevPage'];
-
-/**
- * Returns whether the URL of a link is safe to open.
- * @param {string} url
- * @return {boolean}
- */
-export function isAllowedLinkUrl(url) {
-  try {
-    return ALLOWED_LINK_PROTOCOLS.includes(new URL(url).protocol);
-  } catch {
-    return false;
-  }
-}
 
 /**
  * Maps a pdf.js loading error to the `reason` reported in the `document-error`
@@ -383,6 +368,18 @@ export const PdfViewerMixin = (superClass) =>
       if (rect.left < view.left || rect.right > view.left + content.clientWidth) {
         content.scrollLeft += rect.left + rect.width / 2 - (view.left + content.clientWidth / 2);
       }
+    }
+
+    /**
+     * Returns the page number that the destination of an internal link or
+     * an outline item points to, or null when it cannot be resolved.
+     * @param {{ dest?: string | Array, action?: string }} destination
+     * @return {Promise<number | null>}
+     * @protected
+     */
+    async _getDestinationPage(destination) {
+      const target = await this.#resolveLinkTarget(destination);
+      return target ? target.page : null;
     }
 
     /**
@@ -968,6 +965,7 @@ export const PdfViewerMixin = (superClass) =>
           return;
         }
         await page.renderTextLayer(this.#pdfjs);
+        await page.renderStructTree();
         if (!page.linkLayerElement) {
           const annotations = await page.pdfPage.getAnnotations({ intent: 'display' });
           if (loadId !== this.#loadId || !page.canvas || page.linkLayerElement) {

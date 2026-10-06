@@ -133,6 +133,15 @@ describe('pdf-viewer', () => {
     await visualDiff(div, 'outline');
   });
 
+  it('print-progress', async () => {
+    element.src = fixtureUrl('multi-page.pdf');
+    await nextRenderIdle(element);
+    // Show the progress without printing
+    (element as any).__printProgress = 0.4;
+    await nextRender();
+    await visualDiff(div, 'print-progress');
+  });
+
   it('rtl', async () => {
     div.setAttribute('dir', 'rtl');
     element.src = fixtureUrl('multi-page.pdf');

@@ -46,6 +46,7 @@ export interface PdfViewerI18n {
   print?: string;
   printing?: string;
   cancelPrint?: string;
+  printError?: string;
   document?: string;
   pages?: string;
   pageLabel?: string;
@@ -246,6 +247,8 @@ declare class PdfViewer extends PdfViewerPrintMixin(
    *   // Shown while the pages are prepared for printing, and the button that cancels it.
    *   printing: 'Preparing to print…',
    *   cancelPrint: 'Cancel',
+   *   // Announced when printing fails.
+   *   printError: 'The document could not be printed.',
    *   // Accessible name of the viewer when the document has no title
    *   // and the application has not set aria-label or aria-labelledby.
    *   document: 'PDF document',

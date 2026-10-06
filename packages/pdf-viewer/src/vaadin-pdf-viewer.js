@@ -52,6 +52,7 @@ const DEFAULT_I18N = {
   print: 'Print',
   printing: 'Preparing to print…',
   cancelPrint: 'Cancel',
+  printError: 'The document could not be printed.',
   document: 'PDF document',
   pages: 'Pages',
   pageLabel: 'Page {page}',
@@ -246,6 +247,8 @@ class PdfViewer extends PdfViewerToolbarMixin(
    *   // Shown while the pages are prepared for printing, and the button that cancels it.
    *   printing: 'Preparing to print…',
    *   cancelPrint: 'Cancel',
+   *   // Announced when printing fails.
+   *   printError: 'The document could not be printed.',
    *   // Accessible name of the viewer when the document has no title
    *   // and the application has not set aria-label or aria-labelledby.
    *   document: 'PDF document',
@@ -308,6 +311,7 @@ class PdfViewer extends PdfViewerToolbarMixin(
             id="content"
             part="content"
             tabindex="${this.pageCount ? '0' : '-1'}"
+            aria-busy="${this.__loading ? 'true' : 'false'}"
             role="document"
             aria-label="${i18n.pages}"
           >

@@ -10,7 +10,7 @@
  */
 import { html, nothing } from 'lit';
 import { isKeyboardActive } from '@vaadin/a11y-base/src/focus-utils.js';
-import { isAllowedLinkUrl } from './vaadin-pdf-viewer-mixin.js';
+import { isAllowedLinkUrl } from './pdf-viewer-url.js';
 
 /**
  * @typedef {Object} OutlineItem
@@ -135,7 +135,7 @@ export const PdfViewerOutlineMixin = (superClass) =>
     }
 
     /** @private */
-    #renderOutlineItems(items, level) {
+    #renderOutlineItems(items, level, current = this.#getCurrentItem()) {
       const focused = this.__focusedOutlineItem || (this.__outline && this.__outline[0]);
       return items.map((item, index) => {
         const hasChildren = item.items.length > 0;
@@ -151,13 +151,14 @@ export const PdfViewerOutlineMixin = (superClass) =>
             aria-posinset="${index + 1}"
             aria-expanded="${hasChildren ? String(expanded) : nothing}"
             aria-disabled="${this.#hasTarget(item) ? nothing : 'true'}"
+            aria-current="${item === current ? 'location' : nothing}"
             tabindex="${item === focused ? '0' : '-1'}"
           >
             <div part="outline-item-content" style="--_level: ${level - 1}">
               <span part="outline-toggle" ?hidden="${!hasChildren}" ?expanded="${expanded}"></span>
               <span part="outline-item-title">${item.title}</span>
             </div>
-            ${expanded ? html`<div role="group">${this.#renderOutlineItems(item.items, level + 1)}</div>` : nothing}
+            ${expanded ? html`<div role="group">${this.#renderOutlineItems(item.items, level + 1, current)}</div>` : nothing}
           </div>
         `;
       });
@@ -195,9 +196,20 @@ export const PdfViewerOutlineMixin = (superClass) =>
       if (this._pdfDocument !== pdfDocument) {
         return;
       }
-      this.__outline = pdfOutline && pdfOutline.length ? createOutlineItems(pdfOutline) : null;
-      if (!this.__outline) {
+      const outline = pdfOutline && pdfOutline.length ? createOutlineItems(pdfOutline) : null;
+      if (!outline) {
+        this.__outline = null;
         this.__sidebarView = 'thumbnails';
+        return;
+      }
+      // Resolve the pages of the items, to mark the item of the current page.
+      await Promise.all(
+        this.#getAllItems(outline).map(async (item) => {
+          item.page = item.url ? null : await this._getDestinationPage(item.destination);
+        }),
+      );
+      if (this._pdfDocument === pdfDocument) {
+        this.__outline = outline;
       }
     }
 
@@ -214,6 +226,30 @@ export const PdfViewerOutlineMixin = (superClass) =>
         }
       });
       return result;
+    }
+
+    /** @private */
+    #getAllItems(items, result = []) {
+      items.forEach((item) => {
+        result.push(item);
+        this.#getAllItems(item.items, result);
+      });
+      return result;
+    }
+
+    /**
+     * Returns the visible item for the current page: the first item that
+     * starts on the last page, on or before the current page, that has items.
+     * @private
+     */
+    #getCurrentItem() {
+      let current = null;
+      this.#getVisibleItems().forEach((item) => {
+        if (item.page && item.page <= this.page && (!current || item.page > current.page)) {
+          current = item;
+        }
+      });
+      return current;
     }
 
     /** @private */

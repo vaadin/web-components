@@ -176,6 +176,14 @@ export const PdfViewerToolbarMixin = (superClass) =>
         { host: this },
       );
 
+      // Printing disables the print button. Focus the cancel button instead.
+      const focusedPrintButton = this.querySelector(':scope > vaadin-pdf-viewer-button[icon="print"][disabled]:focus');
+      if (focusedPrintButton) {
+        this.querySelector(':scope > vaadin-button[slot="print-progress"]')?.focus({
+          focusVisible: isKeyboardActive(),
+        });
+      }
+
       // A button that gets disabled while focused with the keyboard (e.g. "next
       // page" on the last page) loses focus. Move it to the field or select of
       // the same group instead. Pointer users keep their focus where it is, so

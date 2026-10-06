@@ -19,18 +19,18 @@ specific to the PDF viewer. It does not repeat those documents.
 
 Status values: `todo`, `in progress`, `in review`, `done`, `blocked`.
 
-| #   | Slice                                    | Status    | Reviews (code / visual) | Notes                  |
-| --- | ---------------------------------------- | --------- | ----------------------- | ---------------------- |
-| 0   | Tracer bullet: package + first page      | done      | ✅ / ✅                 | 561906b4d0, 59ff4a2850 |
-| 1   | Continuous scroll, zoom, page tracking   | done      | ✅ / ✅ (+ re-review)   | 1e173c331e, b2d2a73c16 |
-| 2   | Toolbar: page navigation + zoom controls | done      | – / –                   |                        |
-| 3   | Text layer, links, keyboard, a11y basics | todo      | – / –                   |                        |
-| 4   | Find                                     | done      | – / –                   |                        |
-| 5   | Sidebar: thumbnails                      | todo      | – / –                   |                        |
-| 6   | Sidebar: outline                         | todo      | – / –                   |                        |
-| 7   | Download and print                       | in review | – / –                   |                        |
-| 8   | Tagged PDFs, AT audit, forced colors     | todo      | – / –                   |                        |
-| 9   | API docs, typings, README, release prep  | todo      | – / –                   |                        |
+| #   | Slice                                    | Status | Reviews (code / visual) | Notes                  |
+| --- | ---------------------------------------- | ------ | ----------------------- | ---------------------- |
+| 0   | Tracer bullet: package + first page      | done   | ✅ / ✅                 | 561906b4d0, 59ff4a2850 |
+| 1   | Continuous scroll, zoom, page tracking   | done   | ✅ / ✅ (+ re-review)   | 1e173c331e, b2d2a73c16 |
+| 2   | Toolbar: page navigation + zoom controls | done   | – / –                   |                        |
+| 3   | Text layer, links, keyboard, a11y basics | todo   | – / –                   |                        |
+| 4   | Find                                     | done   | – / –                   |                        |
+| 5   | Sidebar: thumbnails                      | todo   | – / –                   |                        |
+| 6   | Sidebar: outline                         | todo   | – / –                   |                        |
+| 7   | Download and print                       | done   | – / –                   |                        |
+| 8   | Tagged PDFs, AT audit, forced colors     | todo   | – / –                   |                        |
+| 9   | API docs, typings, README, release prep  | todo   | – / –                   |                        |
 
 ---
 
@@ -261,7 +261,13 @@ hidden iframe (off-screen, not `display: none`, which prints blank pages in some
 image gets the paper size of its page in `pt`, and a named `@page` with the same size, so mixed
 page sizes print correctly (verified in Chromium by printing the frame to PDF: 5 × A4 portrait and
 1 × A4 landscape). The frame is removed on `afterprint`, on cancel, on disconnect and when the
-document changes. Progress is a `vaadin-progress-bar` with a Cancel `vaadin-button` in a
+document changes, and before a new print (for browsers that don't fire `afterprint`). After the
+slice 7 review: the frame is built with DOM APIs and a constructed style sheet (no
+`document.write`, so it works with Trusted Types and a CSP without `'unsafe-inline'` styles; the
+images need `img-src blob:`); cancelling cancels the running render task and revokes all image
+URLs; large pages are capped at 16M canvas pixels; failures are announced; focus moves to Cancel
+when printing starts from the print button and returns afterwards; Escape cancels. Progress is a
+`vaadin-progress-bar` with a Cancel `vaadin-button` in a
 `print-progress` part over the pages. Firefox and Safari print previews still need a manual check
 (slice 8).
 
@@ -392,7 +398,7 @@ because reviewers check against it.
 | property   | `sidebarOpened: boolean`                                                                               | `@attr sidebar-opened`. Reflected, used for styling.                                                                                                               |
 | property   | `fileName: string`                                                                                     | Download file name override (`@attr file-name`).                                                                                                                   |
 | property   | `i18n: PdfViewerI18n`                                                                                  | Partial object, deep-merged with the defaults.                                                                                                                     |
-| method     | `print(): void`                                                                                        | See D15.                                                                                                                                                           |
+| method     | `print(): Promise<void>`                                                                               | See D15.                                                                                                                                                           |
 | event      | `zoom-changed`                                                                                         | From `notify` (the toolbar changes `zoom`).                                                                                                                        |
 | event      | `page-changed`                                                                                         | From `notify`. Documented with `@fires`.                                                                                                                           |
 | event      | `document-load`                                                                                        | Document loaded. `detail: { pageCount, title }`.                                                                                                                   |
@@ -636,6 +642,14 @@ every page at the right size in Chromium, Firefox and WebKit. Cancelling release
 
 ### Slice 8 — Tagged PDFs, assistive technology audit, forced colors
 
+As built: `src/pdf-viewer-struct-tree.js` ports the structure tree mapping of pdf.js (roles,
+heading levels, alt text, `lang`, row / column spans, `aria-owns` of the text layer's marked
+content). The page area has `aria-busy` while loading. The outline marks the entry of the current
+page with `aria-current="location"` and a visible bar. Closing find selects the current match,
+so browse mode and caret browsing continue from it. Forced colors: pages and thumbnails get a
+`CanvasText` outline. The manual checklist is `plans/pdf-viewer-at-checklist.md`; its results
+are for the user (or a human tester) to fill in.
+
 - Port the struct-tree to ARIA mapping (headings with `aria-level`, lists, tables, figure
   alt text) without `document` lookups (D3).
 - `@media (forced-colors: active)` rules in base styles.
@@ -676,6 +690,22 @@ Newest entry at the top. Format:
 - Visual review: <summary>
 - Follow-ups: …
 ```
+
+### 2026-10-06 — Slice 7: Download and print — done
+
+- Base commit: 5266a798ad Head: 5651cb1492, review fixes committed together with slice 8
+- Shipped: download of the original bytes, `fileName`, `print()` through a frame with per-page
+  `@page` sizes, progress with Cancel, slices 5–6 review fixes.
+- Code review: 0 blockers, 7 should-fix (TypeError when removed in the outline view, leaks on
+  repeated and cancelled prints, Trusted Types / CSP with `document.write`, file names from
+  `blob:` / `data:` URLs, focus lost while printing, no pixel cap). All fixed, with tests.
+  Nits fixed: `print()` JSDoc, `isAllowedLinkUrl` in its own module, icon order, merged media
+  queries. Kept: the toolbar closes its tooltip on disconnect (a test showed the leak).
+- Visual review: 0 blockers, 4 should-fix (focus after print and cancel, Cancel hard to reach,
+  cancel leak), all fixed; Escape cancels; a `print-progress` baseline was added.
+- Follow-ups: at 375px the toolbar takes 3 rows with all actions (an overflow menu could help);
+  Firefox / Safari print previews are part of the manual checklist; preparing to print is slow in
+  a hidden browser pane (check timing in a visible browser).
 
 ### 2026-10-06 — Slices 5 and 6: Sidebar thumbnails and outline — done
 

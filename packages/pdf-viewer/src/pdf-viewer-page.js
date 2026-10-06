@@ -9,6 +9,8 @@
  * license.
  */
 
+import { createStructTreeElement } from './pdf-viewer-struct-tree.js';
+
 /**
  * The maximum number of pixels of a page canvas. Larger canvases use too much
  * memory, especially on iOS, so pages are rendered at a lower resolution instead.
@@ -62,6 +64,9 @@ export class PdfViewerPage {
 
     /** @type {HTMLElement | null} */
     this.linkLayerElement = null;
+
+    /** @type {HTMLElement | null} */
+    this.structTreeElement = null;
 
     /** The scale and output scale of the current canvas, to know when it is outdated. */
     this.renderedScale = 0;
@@ -236,6 +241,27 @@ export class PdfViewerPage {
   }
 
   /**
+   * Adds the structure of a tagged PDF page, which exposes headings, lists,
+   * tables and figures to assistive technology. Does nothing for untagged
+   * pages, or when the structure was already added.
+   *
+   * @return {Promise<void>}
+   */
+  async renderStructTree() {
+    if (this.structTreeElement || !this.textLayerElement) {
+      return;
+    }
+    const textLayerElement = this.textLayerElement;
+    const tree = await this.pdfPage.getStructTree();
+    const element = createStructTreeElement(tree);
+    // The text layer may have been released meanwhile.
+    if (element && this.textLayerElement === textLayerElement && !this.structTreeElement) {
+      this.structTreeElement = element;
+      textLayerElement.before(element);
+    }
+  }
+
+  /**
    * Adds the links of the page to a layer over the page, positioned relative
    * to the page size so that they need no update when the scale changes.
    * Returns the links with their annotations.
@@ -309,6 +335,8 @@ export class PdfViewerPage {
     this.textLayerElement = null;
     this.linkLayerElement?.remove();
     this.linkLayerElement = null;
+    this.structTreeElement?.remove();
+    this.structTreeElement = null;
     this.element.querySelector(':scope > .find-layer')?.remove();
     if (this.canvas) {
       this.#freeCanvas(this.canvas);

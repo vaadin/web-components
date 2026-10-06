@@ -307,6 +307,14 @@ describe('find', () => {
         expect(spy).to.be.not.called;
       });
 
+      it('should select the current match when closing', async () => {
+        await search('marker1');
+        getButton('close').click();
+        await nextRender();
+        expect(window.getSelection()!.toString()).to.equal('marker1');
+        window.getSelection()!.removeAllRanges();
+      });
+
       it('should close the find bar and remove the highlights with Escape', async () => {
         await search('marker1');
         getFindField().focus();

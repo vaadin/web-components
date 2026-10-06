@@ -941,6 +941,7 @@ snapshots["vaadin-pdf-viewer shadow default"] =
   </div>
   <div class="content-area">
     <div
+      aria-busy="false"
       aria-label="Pages"
       id="content"
       part="content"
@@ -1045,6 +1046,7 @@ snapshots["vaadin-pdf-viewer shadow document"] =
   </div>
   <div class="content-area">
     <div
+      aria-busy="false"
       aria-label="Pages"
       id="content"
       part="content"
@@ -1275,6 +1277,7 @@ snapshots["vaadin-pdf-viewer shadow error"] =
   </div>
   <div class="content-area">
     <div
+      aria-busy="false"
       aria-label="Pages"
       id="content"
       part="content"

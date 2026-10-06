@@ -1,6 +1,7 @@
 import { expect } from '@vaadin/chai-plugins';
 import { sendKeys } from '@vaadin/test-runner-commands';
 import { fixtureSync, nextFrame, nextRender } from '@vaadin/testing-helpers';
+import sinon from 'sinon';
 import './enable-feature-flag.js';
 import '../vaadin-pdf-viewer.js';
 import type { PdfViewer } from '../vaadin-pdf-viewer.js';
@@ -72,6 +73,16 @@ describe('outline', () => {
         expect(getOutline().hidden).to.be.false;
         expect(getOutline().getAttribute('role')).to.equal('tree');
         expect(getOutline().getAttribute('aria-label')).to.equal('Outline');
+      });
+
+      it('should mark the item of the current page', async () => {
+        await nextRender();
+        expect(getItem('Chapter 1').getAttribute('aria-current')).to.equal('location');
+        viewer.page = 3;
+        await nextRenderIdle(viewer);
+        await nextRender();
+        expect(getItem('Chapter 3').getAttribute('aria-current')).to.equal('location');
+        expect(getItem('Chapter 1').hasAttribute('aria-current')).to.be.false;
       });
 
       it('should show the top-level items collapsed', () => {
@@ -167,6 +178,20 @@ describe('outline', () => {
           expect(viewer.shadowRoot!.activeElement).to.equal(getItem('Chapter 2'));
         });
       });
+    });
+
+    it('should not throw when removed while showing the outline', async () => {
+      const errorSpy = sinon.spy();
+      window.addEventListener('error', errorSpy);
+      try {
+        getViewButtons()[1].click();
+        await nextRender();
+        viewer.remove();
+        await nextRender();
+        expect(errorSpy).to.be.not.called;
+      } finally {
+        window.removeEventListener('error', errorSpy);
+      }
     });
 
     it('should hide the outline when a document without outline loads', async () => {

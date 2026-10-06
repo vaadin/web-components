@@ -160,6 +160,10 @@ export const PdfViewerSidebarMixin = (superClass) =>
     /** @private */
     #createThumbnails() {
       const firstPage = this._getPageView(1);
+      // No pages while a document is unloaded or loading
+      if (!firstPage) {
+        return;
+      }
       const ratio = firstPage.unscaledHeight / firstPage.unscaledWidth;
       this.#thumbnails = Array.from({ length: this.pageCount }, (_, index) => {
         const element = document.createElement('div');
