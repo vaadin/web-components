@@ -1,5 +1,5 @@
 import { expect } from '@vaadin/chai-plugins';
-import { fixtureSync, nextFrame, nextRender, oneEvent } from '@vaadin/testing-helpers';
+import { fixtureSync, nextFrame, nextRender, nextUpdate, oneEvent } from '@vaadin/testing-helpers';
 import sinon from 'sinon';
 import './enable-feature-flag.js';
 import '../vaadin-pdf-viewer.js';
@@ -81,11 +81,25 @@ describe('vaadin-pdf-viewer', () => {
       viewer.addEventListener('document-load', spy);
       viewer.src = fixtureUrl('multi-page.pdf');
       await nextFrame();
-      viewer.src = fixtureUrl('links.pdf');
+      viewer.src = fixtureUrl('standard-font.pdf');
       await nextRenderIdle(viewer);
       expect(spy).to.be.calledOnce;
-      expect(viewer.pageCount).to.equal(2);
-      expect(getPages()).to.have.lengthOf(1);
+      expect(viewer.pageCount).to.equal(1);
+      const pages = getPages();
+      expect(pages).to.have.lengthOf(1);
+      // US Letter (standard-font.pdf), not A4 (multi-page.pdf)
+      const { width, height } = pages[0].getBoundingClientRect();
+      expect(height / width).to.be.closeTo(792 / 612, 0.01);
+    });
+
+    it('should not render a page while the viewer is hidden', async () => {
+      viewer.hidden = true;
+      const errorSpy = sinon.spy();
+      viewer.addEventListener('document-error', errorSpy);
+      viewer.src = fixtureUrl('multi-page.pdf');
+      await nextRenderIdle(viewer);
+      expect(getPages()).to.be.empty;
+      expect(errorSpy).to.be.not.called;
     });
   });
 
@@ -119,6 +133,34 @@ describe('vaadin-pdf-viewer', () => {
       await nextFrame();
       expect(spy).to.be.not.called;
       expect(viewer.pageCount).to.equal(2);
+    });
+
+    it('should not load the document when detached during loading', async () => {
+      const spy = sinon.spy();
+      viewer.addEventListener('document-load', spy);
+      const parent = viewer.parentElement!;
+      viewer.src = fixtureUrl('multi-page.pdf');
+      // Detach right after the update that starts loading
+      await nextUpdate(viewer);
+      viewer.remove();
+      // Give an outdated load enough time to complete
+      await loadDocument(fixtureSync<PdfViewer>('<vaadin-pdf-viewer></vaadin-pdf-viewer>'), 'multi-page.pdf');
+      expect(spy).to.be.not.called;
+      expect(viewer.hasAttribute('loading')).to.be.false;
+      parent.appendChild(viewer);
+    });
+
+    it('should load a document set while detached once attached', async () => {
+      const parent = viewer.parentElement!;
+      viewer.remove();
+      await nextFrame();
+      viewer.src = fixtureUrl('multi-page.pdf');
+      await nextFrame();
+      expect(viewer.pageCount).to.equal(0);
+      const loaded = oneEvent(viewer, 'document-load');
+      parent.appendChild(viewer);
+      await loaded;
+      expect(viewer.pageCount).to.equal(6);
     });
 
     it('should reload the document when attached again after detach', async () => {

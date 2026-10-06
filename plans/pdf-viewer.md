@@ -19,18 +19,18 @@ specific to the PDF viewer. It does not repeat those documents.
 
 Status values: `todo`, `in progress`, `in review`, `done`, `blocked`.
 
-| #   | Slice                                    | Status    | Reviews (code / visual) | Notes |
-| --- | ---------------------------------------- | --------- | ----------------------- | ----- |
-| 0   | Tracer bullet: package + first page      | in review | – / –                   |       |
-| 1   | Continuous scroll, zoom, page tracking   | todo      | – / –                   |       |
-| 2   | Toolbar: page navigation + zoom controls | todo      | – / –                   |       |
-| 3   | Text layer, links, keyboard, a11y basics | todo      | – / –                   |       |
-| 4   | Find                                     | todo      | – / –                   |       |
-| 5   | Sidebar: thumbnails                      | todo      | – / –                   |       |
-| 6   | Sidebar: outline                         | todo      | – / –                   |       |
-| 7   | Download and print                       | todo      | – / –                   |       |
-| 8   | Tagged PDFs, AT audit, forced colors     | todo      | – / –                   |       |
-| 9   | API docs, typings, README, release prep  | todo      | – / –                   |       |
+| #   | Slice                                    | Status | Reviews (code / visual) | Notes                                   |
+| --- | ---------------------------------------- | ------ | ----------------------- | --------------------------------------- |
+| 0   | Tracer bullet: package + first page      | done   | ✅ / ✅                 | 561906b4d0, review fixes in next commit |
+| 1   | Continuous scroll, zoom, page tracking   | todo   | – / –                   |                                         |
+| 2   | Toolbar: page navigation + zoom controls | todo   | – / –                   |                                         |
+| 3   | Text layer, links, keyboard, a11y basics | todo   | – / –                   |                                         |
+| 4   | Find                                     | todo   | – / –                   |                                         |
+| 5   | Sidebar: thumbnails                      | todo   | – / –                   |                                         |
+| 6   | Sidebar: outline                         | todo   | – / –                   |                                         |
+| 7   | Download and print                       | todo   | – / –                   |                                         |
+| 8   | Tagged PDFs, AT audit, forced colors     | todo   | – / –                   |                                         |
+| 9   | API docs, typings, README, release prep  | todo   | – / –                   |                                         |
 
 ---
 
@@ -321,10 +321,13 @@ it adds. Never leave theming or tests to "later".
 - [ ] Acceptance criteria of the slice met, and verified by hand on the dev page.
 - [ ] Unit tests for new behavior. DOM snapshot updated. Visual tests (base, Lumo, Aura)
       for every new visual state.
+- [ ] Detach / reattach, setting properties while detached, and a hidden (zero-size) viewer
+      are covered by tests for any new async work.
 - [ ] `.d.ts` matches `.js`. Typings tests cover new properties and events.
 - [ ] JSDoc styling tables list every new part, state attribute and CSS property.
 - [ ] Every new string goes through `i18n`.
-- [ ] RTL works (logical properties, mirrored directional icons).
+- [ ] RTL works (logical properties, mirrored directional icons). Visual tests include an `rtl`
+      case, and `yarn update:aura:dark` is run for Aura dark baselines.
 - [ ] Usable at 375 px width.
 - [ ] `yarn lint` passes. Tests pass in Chromium, Firefox and WebKit.
 - [ ] This plan is updated (API draft, decisions, tracker, log).
@@ -529,6 +532,27 @@ Newest entry at the top. Format:
 - Visual review: <summary>
 - Follow-ups: …
 ```
+
+### 2026-10-06 — Slice 0: Tracer bullet — done
+
+- Base commit: 794e89c348 Head: 561906b4d0 + review fix commit
+- Shipped: package scaffold (commercial license, experimental flag), lazy pdf.js loading,
+  shared worker with reference counting, first page rendered sharp at the device pixel ratio,
+  `document-load` / `document-error` events, `loading` / `has-error` state attributes, error
+  message with i18n and `announce()`, Lumo and Aura files, dev page, generated fixtures,
+  unit / snapshot / typings / visual tests (base, Lumo, Aura light + dark, RTL).
+- Decisions added or changed: D4 pinned 6.3.289 (npm cooldown), D6 verified with Vite 8 dev +
+  build without config, D8 don't ship assets, D11 toolbar components go in light DOM, events
+  renamed to `document-load` / `document-error`, internal `render-idle` event.
+- Code review: 0 blockers, 4 should-fix (leaks when detached during load or when `src` is set
+  while detached, zero-width render, missing tests), 6 nits (failed worker reused, sync
+  `getDocument` throw leaking a worker count, render errors reported as load errors, stale
+  comment, hard-coded page color, error not announced). All fixed.
+- Visual review: 1 blocker, RTL garbled text because the canvas inherited `direction: rtl`;
+  fixed with `direction: ltr` on pages and an `rtl` visual test. Nits fixed: error message
+  wrapping at huge font sizes, `--vaadin-pdf-viewer-page-background`, Aura dark baselines.
+- Follow-ups: focusable scroller and host `role="region"` (slice 3, D18). Re-render on resize
+  (slice 1). Firefox not run locally (environment).
 
 ### 2026-10-06 — Planning
 

@@ -68,6 +68,7 @@ export interface PdfViewerEventMap extends HTMLElementEventMap, PdfViewerCustomE
  * | `--vaadin-pdf-viewer-border-radius`     |
  * | `--vaadin-pdf-viewer-error-color`       |
  * | `--vaadin-pdf-viewer-padding`           |
+ * | `--vaadin-pdf-viewer-page-background`  |
  * | `--vaadin-pdf-viewer-page-gap`          |
  * | `--vaadin-pdf-viewer-page-shadow`       |
  * | `--vaadin-pdf-viewer-text-color`        |

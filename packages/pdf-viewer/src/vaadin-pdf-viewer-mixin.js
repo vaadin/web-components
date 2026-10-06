@@ -8,10 +8,14 @@
  * See https://vaadin.com/commercial-license-and-service-terms for the full
  * license.
  */
+import { announce } from '@vaadin/a11y-base/src/announce.js';
+import { issueWarning } from '@vaadin/component-base/src/warnings.js';
 import { acquireWorker, loadPdfjs, releaseWorker } from './pdfjs-loader.js';
 
 /**
- * Maps a pdf.js loading error to the `reason` reported in the `error` event.
+ * Maps a pdf.js loading error to the `reason` reported in the `document-error`
+ * event. Any failure other than a password or an invalid file is reported as
+ * `network`, since the file could not be fetched or read.
  * @param {Error} error
  * @return {'invalid' | 'network' | 'password'}
  */
@@ -75,6 +79,9 @@ export const PdfViewerMixin = (superClass) =>
     /** @type {import('pdfjs-dist').PDFDocumentLoadingTask | null} */
     #loadingTask = null;
 
+    /** @type {ReturnType<typeof acquireWorker> | null} */
+    #workerHandle = null;
+
     /** @type {import('pdfjs-dist').PDFDocumentProxy | null} */
     #document = null;
 
@@ -84,7 +91,7 @@ export const PdfViewerMixin = (superClass) =>
     /** Incremented on every load, to detect results that belong to an outdated load. */
     #loadId = 0;
 
-    /** Set when the document was released on disconnect, to load it again on reconnect. */
+    /** Set when the document is not loaded because the element is detached, to load it on attach. */
     #released = false;
 
     /** @protected */
@@ -103,10 +110,11 @@ export const PdfViewerMixin = (superClass) =>
 
       // Wait a microtask so that moving the element in the DOM does not reload the document.
       queueMicrotask(() => {
-        if (!this.isConnected && this.#loadingTask) {
-          this.#released = true;
+        if (!this.isConnected && this.src && !this.#released) {
           this.#loadId += 1;
           this.#unload();
+          this.#released = true;
+          this.__loading = false;
         }
       });
     }
@@ -129,28 +137,30 @@ export const PdfViewerMixin = (superClass) =>
       this._setPageCount(0);
       this.__hasError = false;
       this.__errorReason = undefined;
-      this.__loading = !!this.src;
 
-      if (!this.src) {
+      // A detached element does not hold on to a document. It loads it once attached.
+      this.#released = !!this.src && !this.isConnected;
+      this.__loading = !!this.src && !this.#released;
+      if (!this.__loading) {
         return;
       }
 
+      let pdfDocument;
       try {
         const pdfjs = await loadPdfjs();
         if (loadId !== this.#loadId) {
           return;
         }
 
-        const { worker, failed } = acquireWorker(pdfjs);
-        const loadingTask = pdfjs.getDocument({
+        this.#workerHandle = acquireWorker(pdfjs);
+        this.#loadingTask = pdfjs.getDocument({
           url: this.src,
-          worker,
+          worker: this.#workerHandle.worker,
           // Security, see D9 in plans/pdf-viewer.md.
           enableXfa: false,
         });
-        this.#loadingTask = loadingTask;
 
-        const pdfDocument = await Promise.race([loadingTask.promise, failed]);
+        pdfDocument = await Promise.race([this.#loadingTask.promise, this.#workerHandle.failed]);
         if (loadId !== this.#loadId) {
           return;
         }
@@ -168,21 +178,39 @@ export const PdfViewerMixin = (superClass) =>
             detail: { pageCount: pdfDocument.numPages, title: (info && info.Title) || '' },
           }),
         );
-
-        await this.#renderFirstPage(loadId);
+      } catch (error) {
         if (loadId === this.#loadId) {
-          /** @internal to not document it in CEM */
-          this.dispatchEvent(new CustomEvent('render-idle'));
+          this.#unload();
+          this.#onLoadError(error);
         }
+        return;
+      }
+
+      try {
+        await this.#renderFirstPage(loadId);
       } catch (error) {
         if (loadId !== this.#loadId || (error && error.name === 'RenderingCancelledException')) {
           return;
         }
-        this.__loading = false;
-        this.__hasError = true;
-        this.__errorReason = getErrorReason(error);
-        this.dispatchEvent(new CustomEvent('document-error', { detail: { reason: this.__errorReason, error } }));
+        issueWarning(`Failed to render the PDF document: ${error && error.message}`);
       }
+
+      if (loadId === this.#loadId) {
+        /** @internal to not document it in CEM */
+        this.dispatchEvent(new CustomEvent('render-idle'));
+      }
+    }
+
+    /** @private */
+    #onLoadError(error) {
+      this.__loading = false;
+      this.__hasError = true;
+      this.__errorReason = getErrorReason(error);
+
+      const i18n = this.__effectiveI18n;
+      announce(this.__errorReason === 'password' ? i18n.passwordError : i18n.loadError, { mode: 'alert' });
+
+      this.dispatchEvent(new CustomEvent('document-error', { detail: { reason: this.__errorReason, error } }));
     }
 
     /** @private */
@@ -193,11 +221,15 @@ export const PdfViewerMixin = (superClass) =>
       this.$.pages.replaceChildren();
 
       const loadingTask = this.#loadingTask;
+      const workerHandle = this.#workerHandle;
+      this.#loadingTask = null;
+      this.#workerHandle = null;
       if (loadingTask) {
-        this.#loadingTask = null;
         // Destroying the loading task also destroys its document. Release
         // the worker only afterwards, as destroying talks to the worker.
-        loadingTask.destroy().finally(() => releaseWorker());
+        loadingTask.destroy().finally(() => releaseWorker(workerHandle));
+      } else if (workerHandle) {
+        releaseWorker(workerHandle);
       }
     }
 
@@ -214,12 +246,14 @@ export const PdfViewerMixin = (superClass) =>
     /** @private */
     async #renderFirstPage(loadId) {
       const page = await this.#document.getPage(1);
-      if (loadId !== this.#loadId) {
+      const availableWidth = this.#getAvailableWidth();
+      // Nothing to render into while the viewer has no layout, e.g. inside a hidden tab.
+      if (loadId !== this.#loadId || availableWidth <= 0) {
         return;
       }
 
       const unscaledViewport = page.getViewport({ scale: 1 });
-      const scale = this.#getAvailableWidth() / unscaledViewport.width;
+      const scale = availableWidth / unscaledViewport.width;
       const viewport = page.getViewport({ scale });
       const outputScale = window.devicePixelRatio || 1;
 

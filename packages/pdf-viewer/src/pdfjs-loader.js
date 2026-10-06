@@ -22,46 +22,64 @@ export function loadPdfjs() {
   return pdfjsPromise;
 }
 
+/**
+ * The worker shared by all viewers on the page, with the number of documents
+ * that use it.
+ *
+ * @type {{ worker: import('pdfjs-dist').PDFWorker, port: Worker, failed: Promise<never>, users: number } | null}
+ */
 let sharedWorker = null;
-let sharedWorkerError = null;
-let workerUsers = 0;
 
 /**
  * Returns the pdf.js worker shared by all viewers on the page, creating it
- * when needed. Every call must be balanced by a call to `releaseWorker()`.
+ * when needed. Every call must be balanced by a call to `releaseWorker()`
+ * with the returned handle.
  *
  * The worker is passed to each document explicitly, so that pdf.js'
  * `GlobalWorkerOptions` stay untouched for any other pdf.js user on the page.
  *
  * @param {typeof import('pdfjs-dist')} pdfjs
- * @return {{ worker: import('pdfjs-dist').PDFWorker, failed: Promise<never> }}
  */
 export function acquireWorker(pdfjs) {
   if (!sharedWorker) {
     const port = new Worker(new URL('./pdf-viewer-worker.js', import.meta.url), { type: 'module' });
+    const handle = { worker: null, port, failed: null, users: 0 };
     // pdf.js does not notice when a worker passed as a port fails to load,
-    // so loading would wait forever. Expose the failure to the caller instead.
-    sharedWorkerError = new Promise((_, reject) => {
-      port.addEventListener('error', () => reject(new Error('The pdf.js worker failed to load')), { once: true });
+    // so loading would wait forever. Expose the failure to the caller instead,
+    // and make sure that the next document gets a new worker.
+    handle.failed = new Promise((_, reject) => {
+      port.addEventListener(
+        'error',
+        () => {
+          if (sharedWorker === handle) {
+            sharedWorker = null;
+          }
+          reject(new Error('The pdf.js worker failed to load'));
+        },
+        { once: true },
+      );
     });
-    sharedWorkerError.catch(() => {});
-    sharedWorker = new pdfjs.PDFWorker({ port });
+    handle.failed.catch(() => {});
+    handle.worker = new pdfjs.PDFWorker({ port });
+    sharedWorker = handle;
   }
-  workerUsers += 1;
-  return { worker: sharedWorker, failed: sharedWorkerError };
+  sharedWorker.users += 1;
+  return sharedWorker;
 }
 
 /**
- * Releases a worker obtained with `acquireWorker()`, and terminates it when
- * no viewer uses it anymore.
+ * Releases a worker handle obtained with `acquireWorker()`, and terminates
+ * the worker when no document uses it anymore.
+ *
+ * @param {ReturnType<typeof acquireWorker>} handle
  */
-export function releaseWorker() {
-  workerUsers -= 1;
-  if (workerUsers === 0 && sharedWorker) {
-    const { port } = sharedWorker;
-    sharedWorker.destroy();
-    port.terminate();
-    sharedWorker = null;
-    sharedWorkerError = null;
+export function releaseWorker(handle) {
+  handle.users -= 1;
+  if (handle.users === 0) {
+    handle.worker.destroy();
+    handle.port.terminate();
+    if (sharedWorker === handle) {
+      sharedWorker = null;
+    }
   }
 }

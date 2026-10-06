@@ -47,7 +47,11 @@ export const pdfViewerStyles = css`
   [part='page'] {
     position: relative;
     flex: none;
-    background: #fff;
+    /* PDF content is laid out left to right. pdf.js draws text glyph by glyph,
+       which goes wrong when the canvas inherits a right-to-left direction. */
+    direction: ltr;
+    /* Pages are paper: white unless the document paints a background itself. */
+    background: var(--vaadin-pdf-viewer-page-background, #fff);
     box-shadow: var(--vaadin-pdf-viewer-page-shadow, 0 0 0 1px var(--vaadin-border-color-secondary));
   }
 
@@ -64,6 +68,8 @@ export const pdfViewerStyles = css`
     align-items: center;
     justify-content: center;
     padding: var(--vaadin-padding-l);
+    overflow: auto;
+    overflow-wrap: anywhere;
     text-align: center;
     color: var(--vaadin-pdf-viewer-error-color, var(--vaadin-text-color-secondary));
   }

@@ -25,6 +25,13 @@ describe('pdf-viewer', () => {
     await visualDiff(div, 'document');
   });
 
+  it('rtl', async () => {
+    div.setAttribute('dir', 'rtl');
+    element.src = fixtureUrl('multi-page.pdf');
+    await nextRenderIdle(element);
+    await visualDiff(div, 'rtl');
+  });
+
   it('error', async () => {
     element.src = fixtureUrl('invalid.pdf');
     await oneEvent(element, 'document-error');
