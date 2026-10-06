@@ -1,0 +1,88 @@
+<!DOCTYPE html><html lang="en"><head>
+    <meta charset="UTF-8">
+    <meta http-equiv="X-UA-Compatible" content="IE=edge">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Date Range Picker (prototype)</title>
+    
+    <style>
+      .notes {
+        max-width: 42rem;
+        font-size: 0.875rem;
+      }
+
+      output {
+        display: block;
+        margin-top: 0.5rem;
+        font:
+          0.8125rem/1.4 ui-monospace,
+          monospace;
+        white-space: pre-wrap;
+      }
+    </style>
+  </head>
+  <body>
+    <h1 class="heading">Date Range Picker — clickable prototype</h1>
+    <p class="notes">Theme: <a href="date-range-picker.html">Base</a> · <a href="date-range-picker-lumo.html">Lumo</a> · <a href="date-range-picker-aura.html">Aura</a></p>
+
+    <div class="notes">
+      <p>
+        One field with a start and an end input that share a single calendar overlay. The focused input decides which
+        date a pick sets:
+      </p>
+      <ul>
+        <li>Picking the start clears the old end, keeps the overlay open and moves focus to the end input.</li>
+        <li>While picking the end, hovering or focusing a date previews the range.</li>
+        <li>Picking the end commits the range and closes the overlay.</li>
+        <li>While picking the end, a date before the start becomes the new start instead.</li>
+        <li>Clicking the end input directly lets you change only the end.</li>
+        <li>Escape or Cancel restores the range from when the overlay was opened.</li>
+      </ul>
+    </div>
+
+    <h2 class="heading">Basic</h2>
+    <section class="section">
+      <vaadin-date-range-picker id="basic" label="Trip dates" helper-text="Pick departure and return" start-placeholder="Departure" end-placeholder="Return" clear-button-visible=""></vaadin-date-range-picker>
+    </section>
+    <output id="basic-log"></output>
+
+    <h2 class="heading">Pre-filled, min/max and disabled weekends</h2>
+    <section class="section">
+      <vaadin-date-range-picker id="constrained" label="Report period" helper-text="Weekends are disabled, but a range can span them"></vaadin-date-range-picker>
+    </section>
+
+    <h2 class="heading">Required, with validation messages</h2>
+    <section class="section">
+      <vaadin-date-range-picker id="required" label="Stay" required="" clear-button-visible=""></vaadin-date-range-picker>
+    </section>
+
+    <h2 class="heading">Narrow (e.g. Grid filter)</h2>
+    <section class="section">
+      <vaadin-date-range-picker id="narrow" style="width: 14em" theme="small"></vaadin-date-range-picker>
+    </section>
+
+    <h2 class="heading">Disabled and read-only</h2>
+    <section class="section">
+      <vaadin-date-range-picker id="disabled" label="Disabled" disabled=""></vaadin-date-range-picker>
+      <vaadin-date-range-picker id="readonly" label="Read-only" readonly=""></vaadin-date-range-picker>
+    </section>
+
+    
+  
+
+<script type="module" src="./common.js"></script><script type="module" src="./inline-module-dfdaec1a726820cfd11c310cdd2dca7f.js"></script>
+    <style>
+      body:not(.resolved) {
+        opacity: 0;
+      }
+
+      body {
+        transition: opacity 0.2s;
+      }
+    </style>
+
+    <script type="module">
+      // It's important to use type module for the script so the timing is correct
+      document.body.classList.add('resolved');
+    </script>
+  
+</body></html>

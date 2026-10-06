@@ -1,0 +1,6 @@
+import{h as e}from"./dom-utils-Y63l1ijb.js";import{S as t}from"./slot-controller-B41Apm_H.js";
+/**
+ * @license
+ * Copyright (c) 2022 - 2026 Vaadin Ltd.
+ * This program is available under Apache License Version 2.0, available at https://vaadin.com/license/
+ */class s extends t{#e;constructor(e,t,s,o={}){super(e,t,s,{...o,useUniqueId:!0})}initCustomNode(e){this.#t(e),this._notifyChange(e)}teardownNode(e){const t=this.getSlotChild();t&&t!==this.defaultNode?this._notifyChange(t):(this.restoreDefaultNode(),this.updateDefaultNode(this.node))}attachDefaultNode(){const e=super.attachDefaultNode();return e&&this.#t(e),e}restoreDefaultNode(){}updateDefaultNode(e){this._notifyChange(e)}observeNode(e){this.#e&&this.#e.disconnect(),this.#e=new MutationObserver(e=>{e.forEach(e=>{const t=e.target,s=t===this.node;"attributes"===e.type?s&&this.#t(t):(s||t.parentElement===this.node)&&this._notifyChange(this.node)})}),this.#e.observe(e,{attributes:!0,attributeFilter:["id"],childList:!0,subtree:!0,characterData:!0})}_notifyChange(t){this.dispatchEvent(new CustomEvent("slot-content-changed",{detail:{hasContent:e(t),node:t}}))}#t(e){const t=!this.nodes||e===this.nodes[0];e.nodeType!==Node.ELEMENT_NODE||this.multiple&&!t||e.id||(e.id=this.defaultId)}}export{s as S};
