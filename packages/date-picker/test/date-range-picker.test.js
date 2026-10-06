@@ -294,16 +294,39 @@ describe('date-range-picker', () => {
   });
 
   describe('picking the end first', () => {
-    it('should keep the end when picking a start before it afterwards', async () => {
+    beforeEach(async () => {
       await openFrom(endInput);
       await pick(20);
-      expect(picker.endValue).to.equal('2026-03-20');
-      expect(picker.opened).to.be.false;
+    });
 
-      await openFrom(startInput);
+    it('should set the end, keep the overlay open and move focus to the start input', () => {
+      expect(picker.endValue).to.equal('2026-03-20');
+      expect(picker.startValue).to.equal('');
+      expect(picker.opened).to.be.true;
+      expect(document.activeElement).to.equal(startInput);
+      expect(picker.getAttribute('active-part')).to.equal('start');
+    });
+
+    it('should keep the end and close the overlay when picking a start before it', async () => {
       await pick(12);
       expect(picker.startValue).to.equal('2026-03-12');
       expect(picker.endValue).to.equal('2026-03-20');
+      expect(picker.opened).to.be.false;
+    });
+
+    it('should clear the end and continue with the end when picking a start after it', async () => {
+      await pick(25);
+      expect(picker.startValue).to.equal('2026-03-25');
+      expect(picker.endValue).to.equal('');
+      expect(picker.opened).to.be.true;
+      expect(document.activeElement).to.equal(endInput);
+    });
+
+    it('should not fire change before the range is complete', async () => {
+      const spy = sinon.spy();
+      picker.addEventListener('change', spy);
+      await pick(12);
+      expect(spy).to.be.calledOnce;
     });
   });
 
@@ -519,11 +542,23 @@ describe('date-range-picker', () => {
   });
 
   describe('accessibility', () => {
-    it('should name the inputs after the label and the part', async () => {
+    it('should name the inputs after their part only, as the group carries the label', async () => {
       picker.label = 'Trip dates';
       await nextRender();
-      expect(startInput.getAttribute('aria-label')).to.equal('Trip dates Start date');
-      expect(endInput.getAttribute('aria-label')).to.equal('Trip dates End date');
+      expect(startInput.getAttribute('aria-label')).to.equal('Start date');
+      expect(endInput.getAttribute('aria-label')).to.equal('End date');
+    });
+
+    it('should toggle aria-required on both inputs', async () => {
+      picker.required = true;
+      await nextRender();
+      expect(startInput.getAttribute('aria-required')).to.equal('true');
+      expect(endInput.getAttribute('aria-required')).to.equal('true');
+
+      picker.required = false;
+      await nextRender();
+      expect(startInput.hasAttribute('aria-required')).to.be.false;
+      expect(endInput.hasAttribute('aria-required')).to.be.false;
     });
 
     it('should use the part names from i18n', async () => {

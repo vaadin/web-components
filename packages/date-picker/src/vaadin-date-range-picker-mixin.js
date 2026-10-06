@@ -730,7 +730,17 @@ export const DateRangePickerMixin = (superClass) =>
         return false;
       }
 
-      if (this._activePart === 'end' && !(this._startDate && date < this._startDate)) {
+      if (this._activePart === 'end' && !this._startDate) {
+        // Picking the end first continues with the start, like picking the start
+        // first continues with the end, instead of leaving half a range.
+        this._endDate = date;
+        this._activePart = 'start';
+        this.__focusActiveInput();
+        announce(`${this.__effectiveI18n.endAccessibleName}: ${this.__formatDate(date)}`);
+        return false;
+      }
+
+      if (this._activePart === 'end' && date >= this._startDate) {
         this._endDate = date;
         return true;
       }
@@ -799,8 +809,11 @@ export const DateRangePickerMixin = (superClass) =>
         // Do not show the virtual keyboard when the overlay covers the screen.
         setOrRemoveAttribute(input, 'inputmode', this._fullscreen ? 'none' : null);
         input.setAttribute('aria-expanded', String(!!this.opened));
-        // The host is a group labelled by the field label, see `ready()`.
-        input.setAttribute('aria-label', this.label ? `${this.label} ${partName}` : partName);
+        // The host is a group labelled by the field label, see `ready()`, so the
+        // inputs only need the name of their part.
+        input.setAttribute('aria-label', partName);
+        // NVDA does not announce aria-required on a group, so set it on the inputs too.
+        setOrRemoveAttribute(input, 'aria-required', this.required ? 'true' : null);
       });
     }
 

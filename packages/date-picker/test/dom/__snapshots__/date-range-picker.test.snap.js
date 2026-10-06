@@ -65,7 +65,7 @@ snapshots["vaadin-date-range-picker host label, helper and placeholders"] =
   <input
     aria-expanded="false"
     aria-haspopup="dialog"
-    aria-label="Trip dates Start date"
+    aria-label="Start date"
     autocomplete="off"
     placeholder="Departure"
     role="combobox"
@@ -75,7 +75,7 @@ snapshots["vaadin-date-range-picker host label, helper and placeholders"] =
   <input
     aria-expanded="false"
     aria-haspopup="dialog"
-    aria-label="Trip dates End date"
+    aria-label="End date"
     autocomplete="off"
     placeholder="Return"
     role="combobox"
