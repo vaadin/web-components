@@ -5239,7 +5239,7 @@ vaadin-ai-field-marker :is(.badge, .actions > button):focus-visible {
 
 @media lumo_components_date-range-picker {
   :host {
-    width: calc(var(--vaadin-field-default-width, 12em) * 1.5);
+    width: var(--vaadin-date-range-picker-default-width, 19em);
   }
 
   [part="separator"] {
@@ -5248,12 +5248,18 @@ vaadin-ai-field-marker :is(.badge, .actions > button):focus-visible {
     flex: none;
     align-self: stretch;
     align-items: center;
-    padding: 0;
+    padding: 0 .25em;
     display: flex;
   }
 
   [part="separator"], [part~="start-clear-button"] {
     mask-image: none;
+  }
+
+  [part~="start-clear-button"] {
+    align-self: center;
+    min-height: 0;
+    padding: 0;
   }
 
   [part="input-field"] ::slotted(input) {
