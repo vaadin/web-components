@@ -1,3 +1,4 @@
+import { sendKeys } from '@vaadin/test-runner-commands';
 import { fixtureSync, nextFrame, nextRender, oneEvent } from '@vaadin/testing-helpers';
 import { visualDiff } from '@web/test-runner-visual-regression';
 import '@vaadin/vaadin-lumo-styles/src/props/index.css';
@@ -30,6 +31,21 @@ describe('pdf-viewer', () => {
     element.src = fixtureUrl('multi-page.pdf');
     await nextRenderIdle(element);
     await visualDiff(div, 'zoom');
+  });
+
+  it('toolbar-focus', async () => {
+    element.src = fixtureUrl('multi-page.pdf');
+    await nextRenderIdle(element);
+    element.querySelector<HTMLElement>('vaadin-integer-field')!.focus();
+    await sendKeys({ press: 'Tab' });
+    await visualDiff(div, 'toolbar-focus');
+  });
+
+  it('narrow', async () => {
+    div.style.width = '375px';
+    element.src = fixtureUrl('multi-page.pdf');
+    await nextRenderIdle(element);
+    await visualDiff(div, 'narrow');
   });
 
   it('rtl', async () => {

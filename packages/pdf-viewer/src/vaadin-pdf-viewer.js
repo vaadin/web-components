@@ -16,10 +16,21 @@ import { PolylitMixin } from '@vaadin/component-base/src/polylit-mixin.js';
 import { LumoInjectionMixin } from '@vaadin/vaadin-themable-mixin/lumo-injection-mixin.js';
 import { pdfViewerStyles } from './styles/vaadin-pdf-viewer-base-styles.js';
 import { PdfViewerMixin } from './vaadin-pdf-viewer-mixin.js';
+import { PdfViewerToolbarMixin } from './vaadin-pdf-viewer-toolbar-mixin.js';
 
 const DEFAULT_I18N = {
   loadError: 'The document could not be loaded.',
   passwordError: 'Password-protected documents are not supported.',
+  toolbar: 'PDF toolbar',
+  previousPage: 'Previous page',
+  nextPage: 'Next page',
+  page: 'Page',
+  pageAnnouncement: 'Page {page} of {pageCount}',
+  zoom: 'Zoom',
+  zoomIn: 'Zoom in',
+  zoomOut: 'Zoom out',
+  pageWidth: 'Page width',
+  pageFit: 'Page fit',
 };
 
 /**
@@ -35,6 +46,8 @@ const DEFAULT_I18N = {
  *
  * Part name       | Description
  * ----------------|------------
+ * `toolbar`       | The toolbar above the pages.
+ * `toolbar-group` | A group of related controls in the toolbar.
  * `content`       | The scrollable area that contains the pages.
  * `page`          | A page of the document.
  * `error-message` | The message shown when the document could not be loaded.
@@ -50,27 +63,39 @@ const DEFAULT_I18N = {
  * The following custom CSS properties are available for styling:
  *
  * Custom CSS property                       |
- * :-----------------------------------------|
- * | `--vaadin-pdf-viewer-background`        |
- * | `--vaadin-pdf-viewer-border-color`      |
- * | `--vaadin-pdf-viewer-border-radius`     |
- * | `--vaadin-pdf-viewer-error-color`       |
- * | `--vaadin-pdf-viewer-padding`           |
- * | `--vaadin-pdf-viewer-page-background`  |
- * | `--vaadin-pdf-viewer-page-gap`          |
- * | `--vaadin-pdf-viewer-page-shadow`       |
- * | `--vaadin-pdf-viewer-text-color`        |
+ * :------------------------------------------|
+ * | `--vaadin-pdf-viewer-background`         |
+ * | `--vaadin-pdf-viewer-border-color`       |
+ * | `--vaadin-pdf-viewer-border-radius`      |
+ * | `--vaadin-pdf-viewer-error-color`        |
+ * | `--vaadin-pdf-viewer-icon-next-page`     |
+ * | `--vaadin-pdf-viewer-icon-previous-page` |
+ * | `--vaadin-pdf-viewer-icon-zoom-in`       |
+ * | `--vaadin-pdf-viewer-icon-zoom-out`      |
+ * | `--vaadin-pdf-viewer-padding`            |
+ * | `--vaadin-pdf-viewer-page-background`    |
+ * | `--vaadin-pdf-viewer-page-field-width`   |
+ * | `--vaadin-pdf-viewer-page-gap`           |
+ * | `--vaadin-pdf-viewer-page-shadow`        |
+ * | `--vaadin-pdf-viewer-text-color`         |
+ * | `--vaadin-pdf-viewer-toolbar-background` |
+ * | `--vaadin-pdf-viewer-toolbar-gap`        |
+ * | `--vaadin-pdf-viewer-toolbar-padding`    |
+ * | `--vaadin-pdf-viewer-zoom-select-width`  |
  *
  * See [Styling Components](https://vaadin.com/docs/latest/styling/styling-components) documentation.
  *
  * @fires {CustomEvent} document-load - Fired when the document has loaded.
  * @fires {CustomEvent} document-error - Fired when the document could not be loaded.
  * @fires {CustomEvent} page-changed - Fired when the `page` property changes.
+ * @fires {CustomEvent} zoom-changed - Fired when the `zoom` property changes.
  *
  * @customElement vaadin-pdf-viewer
  * @extends HTMLElement
  */
-class PdfViewer extends PdfViewerMixin(I18nMixin(ElementMixin(PolylitMixin(LumoInjectionMixin(LitElement))))) {
+class PdfViewer extends PdfViewerToolbarMixin(
+  PdfViewerMixin(I18nMixin(ElementMixin(PolylitMixin(LumoInjectionMixin(LitElement))))),
+) {
   static get is() {
     return 'vaadin-pdf-viewer';
   }
@@ -107,7 +132,25 @@ class PdfViewer extends PdfViewerMixin(I18nMixin(ElementMixin(PolylitMixin(LumoI
    *   // Message shown when the document could not be loaded.
    *   loadError: 'The document could not be loaded.',
    *   // Message shown when the document is password-protected.
-   *   passwordError: 'Password-protected documents are not supported.'
+   *   passwordError: 'Password-protected documents are not supported.',
+   *   // Accessible label of the toolbar.
+   *   toolbar: 'PDF toolbar',
+   *   // Accessible labels and tooltips of the page navigation buttons.
+   *   previousPage: 'Previous page',
+   *   nextPage: 'Next page',
+   *   // Accessible label of the page number field.
+   *   page: 'Page',
+   *   // Announced when a toolbar control changes the page.
+   *   // {page} and {pageCount} are replaced with the page number and the number of pages.
+   *   pageAnnouncement: 'Page {page} of {pageCount}',
+   *   // Accessible label of the zoom select.
+   *   zoom: 'Zoom',
+   *   // Accessible labels and tooltips of the zoom buttons.
+   *   zoomIn: 'Zoom in',
+   *   zoomOut: 'Zoom out',
+   *   // Labels of the zoom levels that fit the page to the viewer.
+   *   pageWidth: 'Page width',
+   *   pageFit: 'Page fit'
    * }
    * ```
    *
@@ -125,6 +168,11 @@ class PdfViewer extends PdfViewerMixin(I18nMixin(ElementMixin(PolylitMixin(LumoI
   render() {
     const i18n = this.__effectiveI18n;
     return html`
+      <div part="toolbar" role="toolbar" aria-label="${i18n.toolbar}">
+        <div part="toolbar-group"><slot name="toolbar-navigation"></slot></div>
+        <div part="toolbar-group"><slot name="toolbar-zoom"></slot></div>
+      </div>
+      <slot name="tooltip"></slot>
       <div part="loader"></div>
       <div id="content" part="content">
         <div id="pages"></div>

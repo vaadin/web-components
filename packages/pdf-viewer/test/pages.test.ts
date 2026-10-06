@@ -226,6 +226,30 @@ describe('pages', () => {
     });
   });
 
+  describe('hidden before page sizes are known', () => {
+    beforeEach(async () => {
+      await createViewer();
+      viewer.page = 6;
+      viewer.src = fixtureUrl('multi-page.pdf');
+      await oneEvent(viewer, 'document-load');
+      // Hide before the size of the landscape page 6 is applied
+      viewer.hidden = true;
+      await nextResize(viewer);
+      await nextFrame();
+    });
+
+    it('should show the set page when shown again', async () => {
+      viewer.hidden = false;
+      await nextResize(viewer);
+      await nextFrame();
+      expect(viewer.page).to.equal(6);
+      const pageRect = getPages()[5].getBoundingClientRect();
+      const contentRect = getContent().getBoundingClientRect();
+      expect(pageRect.bottom).to.be.greaterThan(contentRect.top);
+      expect(pageRect.top).to.be.lessThan(contentRect.bottom);
+    });
+  });
+
   describe('hidden viewer', () => {
     beforeEach(async () => {
       await createViewer('hidden');

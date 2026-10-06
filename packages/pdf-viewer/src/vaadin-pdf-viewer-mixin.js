@@ -24,10 +24,14 @@ const RENDER_AHEAD = 1;
 const KEEP_RENDERED = 1;
 
 /**
- * The number of canvas pixels that pages outside the view may use in total.
- * Mobile Safari limits the total canvas memory of a page.
+ * The number of canvas pixels that all pages may use together before pages
+ * outside the view are released, or not rendered ahead. Mobile Safari limits
+ * the total canvas memory of a page.
  */
 const MAX_TOTAL_CANVAS_PIXELS = 3 * MAX_CANVAS_PIXELS;
+
+/** The number of pages whose size is requested at a time after loading. */
+const PAGE_SIZE_BATCH = 10;
 
 /**
  * Maps a pdf.js loading error to the `reason` reported in the `document-error`
@@ -82,6 +86,18 @@ export const PdfViewerMixin = (superClass) =>
          */
         zoom: {
           value: 'page-width',
+          notify: true,
+        },
+
+        /**
+         * The zoom level the pages are shown at, as a factor of their actual
+         * size, or 0 while no pages are laid out.
+         * @protected
+         */
+        _zoomFactor: {
+          type: Number,
+          value: 0,
+          attribute: false,
         },
 
         /**
@@ -137,6 +153,9 @@ export const PdfViewerMixin = (superClass) =>
 
     /** The pages to render, in order of priority. */
     #renderQueue = [];
+
+    /** The number of visible pages at the start of the render queue. */
+    #visibleQueueLength = 0;
 
     /** @type {PdfViewerPage | null} */
     #renderingPage = null;
@@ -351,23 +370,34 @@ export const PdfViewerMixin = (superClass) =>
      */
     #loadPageSizes(loadId) {
       this.#pageSizesLoaded = false;
-      const requests = this.#pages.slice(1).map((page) =>
-        this.#document.getPage(page.pageNumber).then((pdfPage) => {
-          if (loadId === this.#loadId && !page.pdfPage && page.setPdfPage(pdfPage)) {
-            this.#scheduleRelayout();
-          }
-        }),
-      );
-      // A page that fails to load reports the error when it is rendered.
-      Promise.allSettled(requests).then(() => {
-        if (loadId === this.#loadId) {
-          this.#pageSizesLoaded = true;
-          // Notify about being idle, unless a relayout will render again.
-          if (!this.#relayoutFrame) {
-            this.#renderNext();
+      const pdfDocument = this.#document;
+      const pages = this.#pages.slice(1);
+      (async () => {
+        // Request a few pages at a time, so that requests for pages to
+        // render do not wait behind the requests for all page sizes.
+        for (let start = 0; start < pages.length; start += PAGE_SIZE_BATCH) {
+          const batch = pages.slice(start, start + PAGE_SIZE_BATCH);
+          // A page that fails to load reports the error when it is rendered.
+
+          await Promise.allSettled(
+            batch.map((page) =>
+              pdfDocument.getPage(page.pageNumber).then((pdfPage) => {
+                if (loadId === this.#loadId && !page.pdfPage && page.setPdfPage(pdfPage)) {
+                  this.#scheduleRelayout();
+                }
+              }),
+            ),
+          );
+          if (loadId !== this.#loadId) {
+            return;
           }
         }
-      });
+        this.#pageSizesLoaded = true;
+        // Notify about being idle, unless a relayout will render again.
+        if (!this.#relayoutFrame) {
+          this.#renderNext();
+        }
+      })();
     }
 
     /**
@@ -406,8 +436,10 @@ export const PdfViewerMixin = (superClass) =>
       this.#pages = [];
       this.#document = null;
       this.#scale = 0;
+      this._zoomFactor = 0;
       this.#currentIndex = 0;
       this.#renderQueue = [];
+      this.#visibleQueueLength = 0;
       this.#renderingPage = null;
       this.#idle = true;
       this.#pinnedPage = 0;
@@ -517,10 +549,22 @@ export const PdfViewerMixin = (superClass) =>
      */
     #applyScale(scale) {
       const { content } = this.$;
+
+      if (!this.#hasLayout()) {
+        // Page sizes arrived while the viewer is hidden. Positions cannot be
+        // measured now, so go back to the current page once shown again.
+        this.#scale = scale;
+        this.#pages.forEach((page) => page.setScale(scale));
+        this.#pendingPage ||= this.page;
+        this.#renderNext();
+        return;
+      }
+
       const isFirstLayout = this.#scale === 0;
       const anchor = isFirstLayout ? null : this.#captureAnchor();
 
       this.#scale = scale;
+      this._zoomFactor = scale / PDF_TO_CSS_UNITS;
       this.#renderingPage?.cancel();
       this.#pages.forEach((page) => page.setScale(scale));
       this.#idle = false;
@@ -552,7 +596,7 @@ export const PdfViewerMixin = (superClass) =>
       return {
         page,
         x: (contentRect.left + contentRect.width / 2 - pageRect.left) / pageRect.width,
-        y: (this.$.content.scrollTop - page.element.offsetTop) / pageRect.height,
+        y: (this.$.content.scrollTop - page.element.offsetTop) / page.height,
       };
     }
 
@@ -578,6 +622,7 @@ export const PdfViewerMixin = (superClass) =>
       if (!this.#hasLayout() || this.#scale <= 0) {
         // Scroll once the pages can be laid out.
         this.#pendingPage = page;
+        this.#renderNext();
         return;
       }
       this.#pendingPage = 0;
@@ -665,6 +710,7 @@ export const PdfViewerMixin = (superClass) =>
         ahead.push(pages[last + distance], pages[first - distance]);
       }
       this.#renderQueue = [...byVisibility, ...ahead.filter(Boolean)];
+      this.#visibleQueueLength = byVisibility.length;
 
       this.#releaseCanvases(first, last);
       this.#renderNext();
@@ -703,7 +749,7 @@ export const PdfViewerMixin = (superClass) =>
       const rendered = this.#pages.filter((page) => page.canvas);
       rendered.sort((a, b) => distance(b.pageNumber - 1) - distance(a.pageNumber - 1));
 
-      let totalPixels = rendered.reduce((total, page) => total + page.canvasPixels, 0);
+      let totalPixels = this.#getTotalCanvasPixels();
       rendered.forEach((page) => {
         const pageDistance = distance(page.pageNumber - 1);
         if (pageDistance > KEEP_RENDERED || (pageDistance > 0 && totalPixels > MAX_TOTAL_CANVAS_PIXELS)) {
@@ -724,8 +770,11 @@ export const PdfViewerMixin = (superClass) =>
       }
 
       const outputScale = window.devicePixelRatio || 1;
-      const page = this.#renderQueue.find((item) => !item.isRendered(outputScale) && !item.renderFailed);
-      if (!page) {
+      const index = this.#renderQueue.findIndex((item) => !item.isRendered(outputScale) && !item.renderFailed);
+      const page = this.#renderQueue[index];
+      // Render pages ahead of the view only while memory allows it.
+      const isAhead = index >= this.#visibleQueueLength;
+      if (!page || (isAhead && this.#getTotalCanvasPixels() > MAX_TOTAL_CANVAS_PIXELS - MAX_CANVAS_PIXELS)) {
         this.#notifyIdle();
         return;
       }
@@ -760,6 +809,11 @@ export const PdfViewerMixin = (superClass) =>
           issueWarning(`Failed to render page ${page.pageNumber} of the PDF document: ${error.message}`);
         }
       }
+    }
+
+    /** @private */
+    #getTotalCanvasPixels() {
+      return this.#pages.reduce((total, page) => total + page.canvasPixels, 0);
     }
 
     /** @private */

@@ -22,19 +22,6 @@
         viewer.src = select.value.startsWith('/') ? select.value : fixtures + select.value;
       });
 
-      const zoom = document.querySelector('#zoom');
-      zoom.addEventListener('change', () => {
-        viewer.zoom = Number(zoom.value) || zoom.value;
-      });
-
-      const page = document.querySelector('#page');
-      page.addEventListener('change', () => {
-        viewer.page = Number(page.value);
-      });
-      viewer.addEventListener('page-changed', (e) => {
-        page.value = e.detail.value;
-      });
-
       viewer.addEventListener('document-load', (e) => {
         log.textContent = `document-load: ${JSON.stringify(e.detail)}`;
       });
@@ -61,20 +48,6 @@
           <option value="invalid.pdf">invalid.pdf</option>
           <option value="/does-not-exist.pdf">Missing file</option>
         </select>
-      </label>
-      <label>
-        Zoom
-        <select id="zoom">
-          <option value="page-width">Page width</option>
-          <option value="page-fit">Page fit</option>
-          <option value="0.5">50%</option>
-          <option value="1">100%</option>
-          <option value="2">200%</option>
-        </select>
-      </label>
-      <label>
-        Page
-        <input id="page" type="number" min="1" value="1" style="width: 4em" />
       </label>
       <output id="log"></output>
     </p>

@@ -17,5 +17,11 @@
     --vaadin-pdf-viewer-page-gap: var(--lumo-space-m);
     --vaadin-pdf-viewer-page-shadow: var(--lumo-box-shadow-xs);
     --vaadin-pdf-viewer-error-color: var(--lumo-secondary-text-color);
+    --vaadin-pdf-viewer-toolbar-background: var(--lumo-base-color);
+    --vaadin-pdf-viewer-toolbar-padding: var(--lumo-space-xs);
+    --vaadin-pdf-viewer-icon-previous-page: var(--lumo-icons-angle-up);
+    --vaadin-pdf-viewer-icon-next-page: var(--lumo-icons-angle-down);
+    --vaadin-pdf-viewer-icon-zoom-out: var(--lumo-icons-minus);
+    --vaadin-pdf-viewer-icon-zoom-in: var(--lumo-icons-plus);
   }
 }

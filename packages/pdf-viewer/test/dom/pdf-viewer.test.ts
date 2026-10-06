@@ -2,6 +2,7 @@ import { expect } from '@vaadin/chai-plugins';
 import { fixtureSync, nextFrame, nextRender, oneEvent } from '@vaadin/testing-helpers';
 import '../enable-feature-flag.js';
 import '../../vaadin-pdf-viewer.js';
+import { resetUniqueId } from '@vaadin/component-base/src/unique-id-utils.js';
 import type { PdfViewer } from '../../vaadin-pdf-viewer.js';
 import { fixtureUrl, nextRenderIdle } from '../helpers.js';
 
@@ -9,6 +10,7 @@ describe('vaadin-pdf-viewer', () => {
   let viewer: PdfViewer;
 
   beforeEach(async () => {
+    resetUniqueId();
     viewer = fixtureSync('<vaadin-pdf-viewer></vaadin-pdf-viewer>');
     await nextRender();
   });

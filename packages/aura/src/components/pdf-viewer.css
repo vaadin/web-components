@@ -2,3 +2,9 @@
 :where(:host) {
   --vaadin-pdf-viewer-page-shadow: var(--aura-shadow-s);
 }
+
+/* Neutral toolbar buttons, like the drawer toggle */
+vaadin-pdf-viewer-button {
+  --aura-accent-color-light: var(--aura-neutral);
+  --aura-accent-color-dark: var(--aura-neutral);
+}

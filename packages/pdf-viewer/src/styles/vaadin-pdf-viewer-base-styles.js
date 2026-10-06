@@ -30,6 +30,31 @@ const pdfViewerBaseStyles = css`
     display: none !important;
   }
 
+  [part='toolbar'] {
+    display: flex;
+    flex-wrap: wrap;
+    align-items: center;
+    justify-content: center;
+    gap: var(--vaadin-pdf-viewer-toolbar-gap, var(--vaadin-gap-s));
+    padding: var(--vaadin-pdf-viewer-toolbar-padding, var(--vaadin-padding-xs));
+    border-block-end: 1px solid var(--vaadin-pdf-viewer-border-color, var(--vaadin-border-color-secondary));
+    background: var(--vaadin-pdf-viewer-toolbar-background, var(--vaadin-background-color));
+  }
+
+  [part='toolbar-group'] {
+    display: flex;
+    align-items: center;
+    gap: var(--vaadin-gap-xs);
+  }
+
+  ::slotted(vaadin-integer-field) {
+    width: var(--vaadin-pdf-viewer-page-field-width, 6em);
+  }
+
+  ::slotted(vaadin-select) {
+    width: var(--vaadin-pdf-viewer-zoom-select-width, 8.5em);
+  }
+
   [part='content'] {
     position: relative;
     flex: 1 1 auto;

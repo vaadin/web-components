@@ -19,18 +19,18 @@ specific to the PDF viewer. It does not repeat those documents.
 
 Status values: `todo`, `in progress`, `in review`, `done`, `blocked`.
 
-| #   | Slice                                    | Status | Reviews (code / visual) | Notes                  |
-| --- | ---------------------------------------- | ------ | ----------------------- | ---------------------- |
-| 0   | Tracer bullet: package + first page      | done   | ✅ / ✅                 | 561906b4d0, 59ff4a2850 |
-| 1   | Continuous scroll, zoom, page tracking   | done   | – / –                   |                        |
-| 2   | Toolbar: page navigation + zoom controls | todo   | – / –                   |                        |
-| 3   | Text layer, links, keyboard, a11y basics | todo   | – / –                   |                        |
-| 4   | Find                                     | todo   | – / –                   |                        |
-| 5   | Sidebar: thumbnails                      | todo   | – / –                   |                        |
-| 6   | Sidebar: outline                         | todo   | – / –                   |                        |
-| 7   | Download and print                       | todo   | – / –                   |                        |
-| 8   | Tagged PDFs, AT audit, forced colors     | todo   | – / –                   |                        |
-| 9   | API docs, typings, README, release prep  | todo   | – / –                   |                        |
+| #   | Slice                                    | Status    | Reviews (code / visual) | Notes                  |
+| --- | ---------------------------------------- | --------- | ----------------------- | ---------------------- |
+| 0   | Tracer bullet: package + first page      | done      | ✅ / ✅                 | 561906b4d0, 59ff4a2850 |
+| 1   | Continuous scroll, zoom, page tracking   | done      | ✅ / ✅ (+ re-review)   | 1e173c331e, b2d2a73c16 |
+| 2   | Toolbar: page navigation + zoom controls | in review | – / –                   |                        |
+| 3   | Text layer, links, keyboard, a11y basics | todo      | – / –                   |                        |
+| 4   | Find                                     | todo      | – / –                   |                        |
+| 5   | Sidebar: thumbnails                      | todo      | – / –                   |                        |
+| 6   | Sidebar: outline                         | todo      | – / –                   |                        |
+| 7   | Download and print                       | todo      | – / –                   |                        |
+| 8   | Tagged PDFs, AT audit, forced colors     | todo      | – / –                   |                        |
+| 9   | API docs, typings, README, release prep  | todo      | – / –                   |                        |
 
 ---
 
@@ -192,6 +192,28 @@ fullscreen). Any icon that's missing (print, download, search, sidebar, chevron-
 is added to component-base's icon set the same way as the existing ones.
 Don't use an icon font or SVG files.
 
+As built in slice 2:
+
+- Icon buttons are an internal `vaadin-pdf-viewer-button` (`ButtonMixin`, like `vaadin-drawer-toggle`),
+  rendered with `theme="tertiary icon"`. The `icon` attribute selects the icon. Base styles use
+  `mask` with `--vaadin-pdf-viewer-icon-<name>` falling back to `--_vaadin-icon-*` (a
+  `--_vaadin-icon-chevron-up` was added to component-base). Lumo replaces the base styles of the
+  button, so its own `pdf-viewer-button` module shows `lumo-icons` font glyphs, like `vaadin-map`.
+  Aura lists the button next to `vaadin-drawer-toggle` in `aura/src/components/button.css`.
+- The controls are rendered with Lit `render()` into the host's light DOM, assigned to named
+  slots (`toolbar-navigation`, `toolbar-zoom`, later more), each slot inside a `toolbar-group` part.
+- The toolbar has `role="toolbar"` but keeps plain Tab navigation (no roving tabindex), because
+  it contains a text field and a select that use the arrow keys themselves.
+- One shared `vaadin-tooltip` (with `ariaLinkMode = 'none'`) shows the button labels on hover
+  and keyboard focus, like the Rich Text Editor toolbar.
+- The toolbar wraps onto more rows when narrow (`flex-wrap`). At 375 px it fits on one row.
+- When a focused button becomes disabled (e.g. "next page" on the last page), focus moves to the
+  next control in its group.
+- `zoom` is `notify: true`, because the toolbar changes it. Zoom in / out step through
+  25 % – 400 % (`ZOOM_LEVELS`). A zoom set by the app that is not a level is added to the select.
+- Announcements: "Page {page} of {pageCount}" after page changes from the toolbar, and the zoom
+  percentage after zoom button clicks.
+
 **D12 — `src` is a URL only.** Flow serves the file through a `DownloadHandler` /
 resource URL. `withCredentials` and range requests are left at pdf.js defaults
 (range requests need `Accept-Ranges: bytes` from the server).
@@ -270,6 +292,7 @@ because reviewers check against it.
 | property   | `fileName: string`                                                                                     | Download file name override (`@attr file-name`).                                                                                                                   |
 | property   | `i18n: PdfViewerI18n`                                                                                  | Partial object, deep-merged with the defaults.                                                                                                                     |
 | method     | `print(): void`                                                                                        | See D15.                                                                                                                                                           |
+| event      | `zoom-changed`                                                                                         | From `notify` (the toolbar changes `zoom`).                                                                                                                        |
 | event      | `page-changed`                                                                                         | From `notify`. Documented with `@fires`.                                                                                                                           |
 | event      | `document-load`                                                                                        | Document loaded. `detail: { pageCount, title }`.                                                                                                                   |
 | event      | `document-error`                                                                                       | Load failed. `detail: { reason: 'network' \| 'invalid' \| 'password', error }`.                                                                                    |

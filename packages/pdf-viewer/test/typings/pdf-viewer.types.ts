@@ -9,6 +9,7 @@ import type {
   PdfViewerI18n,
   PdfViewerPageChangedEvent,
   PdfViewerZoom,
+  PdfViewerZoomChangedEvent,
 } from '../../src/vaadin-pdf-viewer.js';
 import type { PdfViewerMixinClass } from '../../src/vaadin-pdf-viewer-mixin.js';
 
@@ -53,4 +54,23 @@ viewer.addEventListener('document-error', (event) => {
 viewer.addEventListener('page-changed', (event) => {
   assertType<PdfViewerPageChangedEvent>(event);
   assertType<number>(event.detail.value);
+});
+
+viewer.addEventListener('zoom-changed', (event) => {
+  assertType<PdfViewerZoomChangedEvent>(event);
+  assertType<PdfViewerZoom>(event.detail.value);
+});
+
+// I18n for the toolbar
+assertType<PdfViewerI18n>({
+  toolbar: 'Toolbar',
+  previousPage: 'Previous',
+  nextPage: 'Next',
+  page: 'Page',
+  pageAnnouncement: 'Page {page} of {pageCount}',
+  zoom: 'Zoom',
+  zoomIn: 'In',
+  zoomOut: 'Out',
+  pageWidth: 'Width',
+  pageFit: 'Fit',
 });
