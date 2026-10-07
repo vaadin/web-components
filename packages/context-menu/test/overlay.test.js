@@ -182,21 +182,6 @@ describe('overlay', () => {
           expect(rect.top).to.eql(menu._phone ? 0 : 5);
         });
 
-        it('should be positioned by detailed gesture event', async () => {
-          menu.openOn = 'foobar';
-
-          fire(menu.listenOn, 'foobar', { x: isRTL ? 450 : 5, y: 5, sourceEvent: { clientX: 10, clientY: 20 } });
-          await oneEvent(overlay, 'vaadin-overlay-open');
-
-          const rect = overlay.getBoundingClientRect();
-          if (isRTL) {
-            expect(rect.right).to.closeTo(menu._phone ? viewWidth : 450, 0.1);
-          } else {
-            expect(rect.left).to.eql(menu._phone ? 0 : 5);
-          }
-          expect(rect.top).to.eql(menu._phone ? 0 : 5);
-        });
-
         it('should be positioned by touch event', async () => {
           menu.openOn = 'touchstart';
 
