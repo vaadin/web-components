@@ -530,14 +530,14 @@ export const DateRangePickerMixin = (superClass) =>
     }
 
     /**
-     * Override method from `KeyboardMixin` to cancel the selection on Escape.
+     * Override method from `KeyboardMixin` to close the overlay on Escape, keeping
+     * what was picked, such as a start date without an end.
      * @protected
      * @override
      */
     _onEscape(event) {
       if (this.opened) {
         event.stopPropagation();
-        this.__cancelled = true;
         this.close();
         return;
       }
@@ -569,7 +569,7 @@ export const DateRangePickerMixin = (superClass) =>
       const content = this._overlayContent;
       content.reset();
 
-      // Snapshot the range so that Escape and Cancel can restore it.
+      // Snapshot the range so that Cancel can restore it.
       this.__datesOnOpen = [this._startDate, this._endDate];
       this.__committedValue = this.__getRangeString();
 
@@ -757,15 +757,20 @@ export const DateRangePickerMixin = (superClass) =>
         }
       });
 
-      // Picked by dragging across dates, or by dragging an end of the range.
+      // Picked by dragging across dates, which completes the range, or by dragging an
+      // end of the range, which keeps the overlay open for further adjustments. The
+      // overlay is then closed with Escape or by clicking outside, or, after moving a
+      // lone start or end, by picking the other end.
       content.addEventListener('range-drag-end', (event) => {
-        const { start, end } = event.detail;
+        const { start, end, mode } = event.detail;
         this._startDate = start;
         this._endDate = end;
         this.__applyInputValue(this._startInput, start);
         this.__applyInputValue(this._endInput, end);
         this.__focusActiveInput();
-        this.close();
+        if (mode === 'select') {
+          this.close();
+        }
       });
 
       // Picked with Enter, Space or the Today button. The overlay content closes

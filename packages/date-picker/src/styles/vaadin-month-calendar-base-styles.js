@@ -169,9 +169,9 @@ export const monthCalendarStyles = css`
     border-radius: var(--vaadin-date-picker-date-border-radius, var(--vaadin-radius-m));
   }
 
-  /* The ends of a range can be dragged to move them */
-  [part~='in-range'][part~='range-start'],
-  [part~='in-range'][part~='range-end'] {
+  /* The ends of a range, or a lone start, can be dragged to move them */
+  [part~='range-start'],
+  [part~='range-end'] {
     cursor: grab;
   }
 

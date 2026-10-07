@@ -613,7 +613,8 @@ export const DatePickerOverlayContentMixin = (superClass) =>
         return;
       }
 
-      const hasRange = this.rangeStart && this.rangeEnd && !dateEquals(this.rangeStart, this.rangeEnd);
+      // A lone start or end, picked before the other end, can be dragged as well.
+      const hasRange = !dateEquals(this.rangeStart, this.rangeEnd);
       if (hasRange && dateEquals(date, this.rangeStart)) {
         this._dragMode = 'start';
       } else if (hasRange && dateEquals(date, this.rangeEnd)) {
@@ -644,13 +645,13 @@ export const DatePickerOverlayContentMixin = (superClass) =>
         // The release would otherwise also count as a tap on the date below the pointer.
         this.__suppressTap = true;
         /** @internal to not document it in CEM */
-        this.dispatchEvent(new CustomEvent('range-drag-end', { detail: { start: range.start, end: range.end } }));
+        this.dispatchEvent(new CustomEvent('range-drag-end', { detail: range }));
       }
     }
 
     /**
      * The range shown while dragging, or `null` if the pointer has not moved to
-     * another date yet.
+     * another date yet. Includes the drag mode, see `_dragMode`.
      * @private
      */
     __getDragRange() {
@@ -669,11 +670,11 @@ export const DatePickerOverlayContentMixin = (superClass) =>
       }
 
       // Dragging an end past the other one turns the range around.
-      if (start > end) {
+      if (start && end && start > end) {
         [start, end] = [end, start];
         editing = editing === 'start' ? 'end' : 'start';
       }
-      return { start, end, editing };
+      return { start, end, editing, mode };
     }
 
     /** @private */

@@ -169,13 +169,13 @@ describe('date-range-picker', () => {
       expect(getParts(15)).to.not.include('range-end');
     });
 
-    it('should restore the range on Escape', async () => {
+    it('should close and keep a picked start on Escape', async () => {
       await openFrom(startInput);
       await pick(20);
       await sendKeys({ press: 'Escape' });
       expect(picker.opened).to.be.false;
-      expect(picker.startValue).to.equal('2026-03-10');
-      expect(picker.endValue).to.equal('2026-03-15');
+      expect(picker.startValue).to.equal('2026-03-20');
+      expect(picker.endValue).to.equal('');
     });
 
     it('should restore the range on Cancel', async () => {
@@ -256,6 +256,20 @@ describe('date-range-picker', () => {
         expect(picker.opened).to.be.true;
       });
 
+      it('should move a picked start by dragging it and keep picking the end', async () => {
+        await pick(8);
+        await drag(8, 12);
+        expect(picker.startValue).to.equal('2026-03-12');
+        expect(picker.endValue).to.equal('');
+        expect(picker.opened).to.be.true;
+        expect(document.activeElement).to.equal(endInput);
+
+        await pick(15);
+        expect(picker.startValue).to.equal('2026-03-12');
+        expect(picker.endValue).to.equal('2026-03-15');
+        expect(picker.opened).to.be.false;
+      });
+
       it('should not ignore a pick after a drag', async () => {
         await drag(8, 16);
         await openFrom(startInput);
@@ -272,11 +286,19 @@ describe('date-range-picker', () => {
         await openFrom(startInput);
       });
 
-      it('should move the end when dragging it', async () => {
+      it('should move the end when dragging it and keep the overlay open', async () => {
+        const spy = sinon.spy();
+        picker.addEventListener('change', spy);
         await drag(15, 20);
         expect(picker.startValue).to.equal('2026-03-10');
         expect(picker.endValue).to.equal('2026-03-20');
+        expect(picker.opened).to.be.true;
+
+        // Closing manually keeps the moved range.
+        await sendKeys({ press: 'Escape' });
         expect(picker.opened).to.be.false;
+        expect(picker.endValue).to.equal('2026-03-20');
+        expect(spy).to.be.calledOnce;
       });
 
       it('should move the start when dragging it', async () => {
