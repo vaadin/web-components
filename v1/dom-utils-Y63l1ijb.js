@@ -1,0 +1,6 @@
+/**
+ * @license
+ * Copyright (c) 2021 - 2026 Vaadin Ltd.
+ * This program is available under Apache License Version 2.0, available at https://vaadin.com/license/
+ */
+function t(t){const e=[];for(;t;){if(t.nodeType===Node.DOCUMENT_NODE){e.push(t);break}t.nodeType!==Node.DOCUMENT_FRAGMENT_NODE?t=t.assignedSlot?t.assignedSlot:t.parentNode:(e.push(t),t=t.host)}return e}function e(t){const n=[];let o;return"slot"===t.localName?o=t.assignedElements():(n.push(t),o=[...t.children]),o.forEach(t=>n.push(...e(t))),n}function n(t,e){return e?e.closest?.(t)||n(t,e.getRootNode().host):null}function o(t){return new Set(t?t.split(" ").filter(Boolean):[])}function r(t){return t?[...t].join(" "):""}function s(t,e,n){n?t.setAttribute(e,n):t.removeAttribute(e)}function i(t){return o(Array.isArray(t)?t.join(" "):t)}function u(t,e,n){n=i(n);const u=o(t.getAttribute(e));n.forEach(t=>u.add(t)),s(t,e,r(u))}function a(t,e,n){n=i(n);const u=o(t.getAttribute(e));n.forEach(t=>u.delete(t)),s(t,e,r(u))}function c(t){return t.nodeType===Node.TEXT_NODE&&""===t.textContent.trim()}function l(t){return!!t&&Boolean(t.nodeType===Node.ELEMENT_NODE&&(customElements.get(t.localName)||t.children.length>0)||t.textContent?.trim())}export{e as a,n as b,u as c,t as g,l as h,c as i,a as r,s};

@@ -1,0 +1,2303 @@
+:where(:root), :where(:host) {
+  --aura-contrast-level: 1;
+  --aura-accent-color-light: var(--aura-blue);
+  --aura-accent-color-dark: var(--aura-blue);
+  --aura-accent-color-light-initial: var(--aura-accent-color-light);
+  --aura-accent-color-dark-initial: var(--aura-accent-color-dark);
+  --aura-background-color-light: oklch(95% .005 248);
+  --aura-background-color-dark: oklch(20% .01 260);
+  --aura-app-background: var(--aura-background-color);
+  --vaadin-focus-ring-color: light-dark(oklch(from var(--aura-accent-color-light) min(l, .62) c h), oklch(from var(--aura-accent-color-dark) max(l, .62) c h));
+  --vaadin-user-color: var(--aura-blue);
+  color: var(--vaadin-text-color);
+  background: var(--aura-app-background);
+  background-size: 100vw 100vh;
+  background-attachment: fixed;
+}
+
+@supports (color: hsl(0 0 0)) {
+  @scope (:root) {
+    :where(:scope) {
+      --_bg-alt: light-dark(oklch(from var(--aura-background-color-light) calc(l + c) min(c, c * 2 - l / 20) calc(h + 180 * var(--_vaadin-safari-17-deg, 1) * l * c * 4)), oklch(from var(--aura-background-color-dark) calc(l + c) min(c, c * 2 - l / 20) calc(h + 180 * var(--_vaadin-safari-17-deg, 1) * l * c * 4)));
+      --_bg-accent: radial-gradient(circle at 0% 0%, light-dark(oklch(from var(--aura-background-color-light) min(1, l + c * 3) min(c, c * 3) h), oklch(from var(--aura-background-color-dark) min(1, l + c) clamp(0, c * 1.5, .4) h)), transparent 30%);
+      --aura-app-background: var(--_bg-accent), radial-gradient(circle at 25% 0% in xyz, var(--aura-background-color) 33%, var(--_bg-alt)) var(--aura-background-color);
+    }
+  }
+}
+
+:where(:root), :where(:host), vaadin-app-layout::part(content), vaadin-avatar, vaadin-badge, vaadin-button, vaadin-upload-button, vaadin-context-menu-item, vaadin-confirm-dialog, vaadin-crud-edit, vaadin-drawer-toggle, vaadin-dialog, vaadin-menu-bar-button, vaadin-menu-bar-item, vaadin-message, vaadin-message::part(attachment), vaadin-notification-container, vaadin-notification-card, vaadin-notification-card::part(overlay), vaadin-checkbox::part(checkbox), vaadin-radio-button::part(radio), vaadin-side-nav-item::part(content), vaadin-select-item, vaadin-tab, vaadin-upload-file, :where(.aura-accent-surface, .aura-accent-surface-solid, .aura-accent-color, .aura-accent-neutral, .aura-accent-red, .aura-accent-orange, .aura-accent-yellow, .aura-accent-green, .aura-accent-blue, .aura-accent-purple, .v-info, .v-success, .v-warning, .v-error) {
+  --aura-neutral-light: oklch(from var(--aura-background-color-light) calc(.2 - .05 * var(--aura-contrast-level)) calc(c * l * .8) h);
+  --aura-neutral-dark: oklch(from var(--aura-background-color-dark) calc(.9 + .1 * var(--aura-contrast-level)) calc(c * l) h);
+  --aura-neutral: light-dark(var(--aura-neutral-light), var(--aura-neutral-dark));
+  --vaadin-text-color: light-dark(var(--aura-neutral-light), var(--aura-neutral-dark));
+  --vaadin-text-color-secondary: color-mix(in oklch, var(--vaadin-text-color) min(95%, 60% + 5% * var(--aura-contrast-level)), transparent);
+  --vaadin-text-color-disabled: color-mix(in oklch, var(--vaadin-text-color) min(95%, 30% + 3% * var(--aura-contrast-level)), transparent);
+  --_border-color-base: light-dark(oklch(from var(--aura-background-color-light) .1 c h), oklch(from var(--aura-background-color-dark) calc(.8 + max(0, .2 - l)  + c / 2) calc(c - l / 4) h));
+  --vaadin-border-color: color-mix(in srgb, var(--_border-color-base) calc(14% + 6% * var(--aura-contrast-level)), transparent);
+  --vaadin-border-color-secondary: light-dark(color-mix(in srgb, var(--_border-color-base) max(6%, 5% + 3% * var(--aura-contrast-level)), transparent), color-mix(in srgb, var(--_border-color-base) max(8%, 7% + 3% * var(--aura-contrast-level)), transparent));
+  --aura-accent-contrast-color-light: oklch(from var(--aura-accent-color-light) clamp(.26, (.62 - l) * 1000, 1) min(clamp(0, (l - .62) * 1000, .05), c) h);
+  --aura-accent-contrast-color-dark: oklch(from var(--aura-accent-color-dark) clamp(.26, (.62 - l) * 1000, 1) min(clamp(0, (l - .62) * 1000, .05), c) h);
+  --aura-accent-text-color-light: oklch(from var(--aura-accent-color-light) min(.55, .35 - .05 * var(--aura-contrast-level)  + c) calc(c * .9) h);
+  --aura-accent-text-color-dark: oklch(from var(--aura-accent-color-dark) max(.8, .9 + .1 * var(--aura-contrast-level)  - c * 2) calc(c * .9) h);
+  --aura-accent-color: light-dark(var(--aura-accent-color-light), var(--aura-accent-color-dark));
+  --aura-accent-contrast-color: light-dark(var(--aura-accent-contrast-color-light), var(--aura-accent-contrast-color-dark));
+  --aura-accent-text-color: light-dark(var(--aura-accent-text-color-light), var(--aura-accent-text-color-dark));
+  --_accent-surface-light: color-mix(in srgb, color-mix(in srgb, oklch(from var(--aura-accent-color-light) calc(l + c / 2) calc(c - l / 10) h / min(max(c / .4, 0), 1)) calc(23% - 4% * var(--aura-surface-level)), var(--aura-surface-color-solid)) calc(100% * var(--aura-surface-opacity)), transparent);
+  --_accent-surface-dark: color-mix(in srgb, color-mix(in srgb, oklch(from var(--aura-accent-color-dark) calc(l - c / 4) calc(c + l / 10) h / min(max(c / .4, 0), 1)) calc(23% - 3% * var(--aura-surface-level)), var(--aura-surface-color-solid)) calc(100% * var(--aura-surface-opacity)), transparent);
+  --aura-accent-surface: light-dark(var(--_accent-surface-light), var(--_accent-surface-dark));
+}
+
+@supports (color: hsl(0 0 0)) {
+  :where(:root), :where(:host), vaadin-app-layout::part(content), vaadin-avatar, vaadin-badge, vaadin-button, vaadin-upload-button, vaadin-context-menu-item, vaadin-confirm-dialog, vaadin-crud-edit, vaadin-drawer-toggle, vaadin-dialog, vaadin-menu-bar-button, vaadin-menu-bar-item, vaadin-message, vaadin-message::part(attachment), vaadin-notification-container, vaadin-notification-card, vaadin-notification-card::part(overlay), vaadin-checkbox::part(checkbox), vaadin-radio-button::part(radio), vaadin-side-nav-item::part(content), vaadin-select-item, vaadin-tab, vaadin-upload-file, :where(.aura-accent-surface, .aura-accent-surface-solid, .aura-accent-color, .aura-accent-neutral, .aura-accent-red, .aura-accent-orange, .aura-accent-yellow, .aura-accent-green, .aura-accent-blue, .aura-accent-purple, .v-info, .v-success, .v-warning, .v-error) {
+    --aura-accent-surface: oklch(from light-dark(var(--_accent-surface-light), var(--_accent-surface-dark))l c h / var(--aura-surface-opacity));
+  }
+}
+
+:where(:root), :where(:host), vaadin-app-layout::part(content), vaadin-avatar, vaadin-badge, vaadin-button, vaadin-upload-button, vaadin-context-menu-item, vaadin-confirm-dialog, vaadin-crud-edit, vaadin-drawer-toggle, vaadin-dialog, vaadin-menu-bar-button, vaadin-menu-bar-item, vaadin-message, vaadin-message::part(attachment), vaadin-notification-container, vaadin-notification-card, vaadin-notification-card::part(overlay), vaadin-checkbox::part(checkbox), vaadin-radio-button::part(radio), vaadin-side-nav-item::part(content), vaadin-select-item, vaadin-tab, vaadin-upload-file, :where(.aura-accent-surface, .aura-accent-surface-solid, .aura-accent-color, .aura-accent-neutral, .aura-accent-red, .aura-accent-orange, .aura-accent-yellow, .aura-accent-green, .aura-accent-blue, .aura-accent-purple, .v-info, .v-success, .v-warning, .v-error) {
+  --_accent-border: light-dark(oklch(from var(--aura-accent-color-light) .8 calc(c * 1.1) h / min(1, c + (1 - l) / 10)), oklch(from var(--aura-accent-color-dark) .8 calc(c * 1.1) h / min(1, c + (1 - l) / 10)));
+  --aura-accent-border-color: color-mix(in srgb, var(--_accent-border) calc(30% - 1% * var(--aura-surface-level)  + 1% * var(--aura-contrast-level)), var(--vaadin-border-color) 60%);
+  --_color-base: light-dark(oklch(from var(--aura-background-color-light) .1 calc(c / 2 + c * (1 - c)) h), oklch(from var(--aura-background-color-dark) 1 c h));
+  --aura-background-color: light-dark(var(--aura-background-color-light), var(--aura-background-color-dark));
+  --vaadin-background-container: color-mix(in srgb, var(--_color-base) calc(3% + min(3%, 1% * var(--aura-contrast-level))), transparent);
+  --vaadin-background-container-strong: color-mix(in srgb, var(--_color-base) calc(7% + min(8%, 1.5% * var(--aura-contrast-level))), transparent);
+  accent-color: var(--aura-accent-color);
+  --_aura-highlight-color: light-dark(oklch(from var(--aura-accent-color-light) min(.9, l) c h / max(.05, l / 4)), oklch(from var(--aura-accent-color-dark) max(.6, l) c h / max(.2, l / 4)));
+}
+
+:where(h1, h2, h3, h4, h5, h6) {
+  color: var(--vaadin-text-color);
+}
+
+:where(a:any-link) {
+  color: var(--aura-accent-text-color);
+}
+
+:is(#id, .aura-accent-color) {
+  --aura-accent-color-light: var(--aura-accent-color-light-initial);
+  --aura-accent-color-dark: var(--aura-accent-color-dark-initial);
+  --aura-accent-color: light-dark(var(--aura-accent-color-light), var(--aura-accent-color-dark));
+}
+
+:is(#id, .aura-accent-neutral, .v-neutral) {
+  --aura-accent-color-light: var(--aura-neutral-light);
+  --aura-accent-color-dark: var(--aura-neutral-dark);
+  --aura-accent-color: light-dark(var(--aura-accent-color-light), var(--aura-accent-color-dark));
+}
+
+:is(#id, [theme~="danger"], [theme~="error"], .aura-accent-red, .v-error) {
+  --aura-accent-color-light: var(--aura-red);
+  --aura-accent-color-dark: var(--aura-red);
+  --aura-accent-color: light-dark(var(--aura-accent-color-light), var(--aura-accent-color-dark));
+}
+
+:is(#id, [theme~="success"], .aura-accent-green, .v-success) {
+  --aura-accent-color-light: var(--aura-green);
+  --aura-accent-color-dark: var(--aura-green);
+  --aura-accent-color: light-dark(var(--aura-accent-color-light), var(--aura-accent-color-dark));
+}
+
+:is(#id, [theme~="warning"], .aura-accent-yellow, .v-warning) {
+  --aura-accent-color-light: var(--aura-yellow);
+  --aura-accent-color-dark: var(--aura-yellow);
+  --aura-accent-color: light-dark(var(--aura-accent-color-light), var(--aura-accent-color-dark));
+}
+
+:is(#id, .aura-accent-orange) {
+  --aura-accent-color-light: var(--aura-orange);
+  --aura-accent-color-dark: var(--aura-orange);
+  --aura-accent-color: light-dark(var(--aura-accent-color-light), var(--aura-accent-color-dark));
+}
+
+:is(#id, .aura-accent-purple) {
+  --aura-accent-color-light: var(--aura-purple);
+  --aura-accent-color-dark: var(--aura-purple);
+  --aura-accent-color: light-dark(var(--aura-accent-color-light), var(--aura-accent-color-dark));
+}
+
+:is(#id, [theme~="info"], .aura-accent-blue, .v-info) {
+  --aura-accent-color-light: var(--aura-blue);
+  --aura-accent-color-dark: var(--aura-blue);
+  --aura-accent-color: light-dark(var(--aura-accent-color-light), var(--aura-accent-color-dark));
+}
+
+:where(:root), :where(:host) {
+  --aura-content-color-scheme: inherit;
+  --aura-notification-color-scheme: inherit;
+  --aura-red: oklch(59% .2 25);
+  --aura-orange: oklch(61% .35 87);
+  --aura-yellow: oklch(89% .3 98);
+  --aura-green: oklch(60% .2 155);
+  --aura-blue: oklch(55% .2 264);
+  --aura-purple: oklch(58% .22 290);
+  --aura-red-text: light-dark(oklch(from var(--aura-red) min(.55, .35 - .05 * var(--aura-contrast-level)  + c * .75) calc(c * .9) h), oklch(from var(--aura-red) max(.8, .9 + .05 * var(--aura-contrast-level)  - c * .75) calc(c * .9) h));
+  --aura-orange-text: light-dark(oklch(from var(--aura-orange) min(.55, .35 - .05 * var(--aura-contrast-level)  + c * .75) calc(c * .9) h), oklch(from var(--aura-orange) max(.8, .9 + .05 * var(--aura-contrast-level)  - c * .75) calc(c * .9) h));
+  --aura-yellow-text: light-dark(oklch(from var(--aura-yellow) min(.55, .35 - .05 * var(--aura-contrast-level)  + c * .75) calc(c * .9) h), oklch(from var(--aura-yellow) max(.8, .9 + .05 * var(--aura-contrast-level)  - c * .75) calc(c * .9) h));
+  --aura-green-text: light-dark(oklch(from var(--aura-green) min(.55, .35 - .05 * var(--aura-contrast-level)  + c * .75) calc(c * .9) h), oklch(from var(--aura-green) max(.8, .9 + .05 * var(--aura-contrast-level)  - c * .75) calc(c * .9) h));
+  --aura-blue-text: light-dark(oklch(from var(--aura-blue) min(.55, .35 - .05 * var(--aura-contrast-level)  + c * .75) calc(c * .9) h), oklch(from var(--aura-blue) max(.8, .9 + .05 * var(--aura-contrast-level)  - c * .75) calc(c * .9) h));
+  --aura-purple-text: light-dark(oklch(from var(--aura-purple) min(.55, .35 - .05 * var(--aura-contrast-level)  + c * .75) calc(c * .9) h), oklch(from var(--aura-purple) max(.8, .9 + .05 * var(--aura-contrast-level)  - c * .75) calc(c * .9) h));
+  --aura-shadow-color: light-dark(oklch(from var(--aura-background-color-light) calc(l - l * .8) calc(c / 10) h / .2), oklch(from var(--aura-background-color-dark) calc(l - l * .8) calc(c / 10) h / .2));
+  --aura-shadow-xs: 0 1px 4px -2px var(--aura-shadow-color);
+  --aura-shadow-s: 0 2px 5px -1px var(--aura-shadow-color);
+  --aura-shadow-m: 0 8px 16px -3px var(--aura-shadow-color);
+  --aura-base-size: 16;
+  --_base-size-m: var(--aura-base-size);
+  --aura-base-radius: 3;
+  --vaadin-radius-s: min(.25lh, round(var(--aura-base-radius) * 1px + 2px, 1px));
+  --vaadin-radius-m: round(var(--aura-base-radius) * 2px + 3px, 1px);
+  --vaadin-radius-l: round(var(--aura-base-radius) * 1.5px + 10px, 1px);
+  --vaadin-icon-stroke-width: 1.75;
+}
+
+:where(:root), :where(:host), :where([theme]) {
+  --vaadin-gap-xs: round(var(--aura-base-size) * .25 * 1px, 1px);
+  --vaadin-gap-s: round(var(--aura-base-size) * .5 * 1px, 1px);
+  --vaadin-gap-m: round(var(--aura-base-size) * .75 * 1px, 1px);
+  --vaadin-gap-l: round(var(--aura-base-size) * 1px, 1px);
+  --vaadin-gap-xl: round(var(--aura-base-size) * 1.5 * 1px, 1px);
+  --vaadin-padding-block-container: round(var(--vaadin-padding-s) / 1.4, 1px);
+  --vaadin-padding-inline-container: var(--vaadin-padding-s);
+  --vaadin-padding-xs: round(var(--aura-base-size) * .25 * 1px, 1px);
+  --vaadin-padding-s: round(var(--aura-base-size) * .5 * 1px, 1px);
+  --vaadin-padding-m: round(var(--aura-base-size) * .75 * 1px, 1px);
+  --vaadin-padding-l: round(var(--aura-base-size) * 1px, 1px);
+  --vaadin-padding-xl: round(var(--aura-base-size) * 1.5 * 1px, 1px);
+  --_base-size-xs: round(var(--_base-size-m) * .75, 1);
+  --_base-size-s: round(var(--_base-size-m) * .875, 1);
+  --_base-size-l: round(var(--_base-size-m) * 1.125, 1);
+  --_base-size-xl: round(var(--_base-size-m) * 1.25, 1);
+}
+
+@media (pointer: coarse) {
+  :where(:root), :where(:host) {
+    --aura-base-size: 18;
+  }
+}
+
+[theme~="xsmall"] {
+  --aura-base-size: var(--_base-size-xs);
+}
+
+[theme~="small"] {
+  --aura-base-size: var(--_base-size-s);
+}
+
+[theme~="medium"] {
+  --aura-base-size: var(--_base-size-m);
+}
+
+[theme~="large"] {
+  --aura-base-size: var(--_base-size-l);
+}
+
+[theme~="xlarge"] {
+  --aura-base-size: var(--_base-size-xl);
+}
+
+:where(:root), :where(:host) {
+  --aura-surface-level: 1;
+}
+
+:root, :host, .aura-surface, .aura-surface-solid, vaadin-accordion-panel[theme~="filled"], vaadin-app-layout, vaadin-app-layout::part(navbar), vaadin-app-layout::part(drawer), vaadin-button, vaadin-upload-button, vaadin-card, vaadin-checkbox::part(checkbox), vaadin-details[theme~="filled"], vaadin-dashboard-widget, vaadin-grid, vaadin-grid-pro, vaadin-master-detail-layout::part(detail), vaadin-menu-bar-button, vaadin-message, vaadin-message::part(attachment), vaadin-message-input, vaadin-radio-button::part(radio), vaadin-range-slider, vaadin-rich-text-editor, vaadin-side-nav-item::part(content), vaadin-slider, vaadin-tab, vaadin-tabs, vaadin-upload, vaadin-upload-file, ::part(input-field), :where(vaadin-avatar-group, vaadin-combo-box, vaadin-confirm-dialog, vaadin-context-menu, vaadin-crud, vaadin-date-picker, vaadin-date-range-picker, vaadin-dialog, vaadin-login-overlay, vaadin-menu-bar-submenu, vaadin-multi-select-combo-box, vaadin-notification-card, vaadin-popover, vaadin-rich-text-editor-popup, vaadin-select, vaadin-slider-bubble, vaadin-time-picker, vaadin-tooltip)::part(overlay) {
+  --aura-surface-opacity: .5;
+  --_up: clamp(0, var(--aura-surface-level), 4);
+  --_down: clamp(0, calc(-1 * var(--aura-surface-level)), 4);
+  --_u: calc(var(--_up) / 4);
+  --_e-light: clamp(0, calc(4 * var(--_u)  - (8 * var(--_u) * var(--_u))  + (6.5 * var(--_u) * var(--_u) * var(--_u))), 1);
+  --_e-dark: calc(var(--_down) / 20);
+  --aura-surface-color-solid: light-dark(oklch(from var(--aura-background-color-light) clamp(0, calc(l + (1 - l) * var(--_e-light)  - l * var(--_e-dark)), 1) clamp(0, calc(c * (1 - .5 * var(--_e-light)  - .15 * var(--aura-surface-level)) * (1 - .35 * var(--_e-dark))), .4) h), oklch(from var(--aura-background-color-dark) calc(max(.03, l)  + .03 * var(--aura-surface-level)  + max(0, .2 - max(.03, l)) * (1.1 - .06 * var(--aura-surface-level))) clamp(0, c * (1 + l), .2) h));
+  --aura-surface-color: color-mix(in oklab, var(--aura-surface-color-solid) calc(100% * var(--aura-surface-opacity)), transparent);
+  --vaadin-background-color: var(--aura-surface-color-solid);
+}
+
+.aura-surface {
+  background: var(--aura-surface-color) padding-box;
+}
+
+.aura-surface-solid {
+  --aura-surface-opacity: 1;
+  background: var(--aura-surface-color-solid) padding-box;
+}
+
+.aura-accent-surface {
+  background: var(--aura-accent-surface) padding-box;
+}
+
+.aura-accent-surface-solid {
+  background: var(--aura-accent-surface) padding-box;
+  --aura-surface-opacity: 1;
+}
+
+:where(.vaadin-themed-html table:not(.vaadin-unthemed-html), table.vaadin-themed-html) {
+  --_inner-radius: max(0px, calc(var(--vaadin-radius-m)  - 1px));
+  background: var(--vaadin-background-color);
+  border: 1px solid var(--vaadin-border-color);
+  border-radius: var(--vaadin-radius-m);
+  border-spacing: 0;
+}
+
+:where(.vaadin-themed-html table:not(.vaadin-unthemed-html), table.vaadin-themed-html) caption {
+  color: var(--vaadin-text-color-secondary);
+  text-align: start;
+  padding-block-end: var(--vaadin-gap-s);
+}
+
+:where(.vaadin-themed-html table:not(.vaadin-unthemed-html), table.vaadin-themed-html) :is(th, td) {
+  padding: var(--vaadin-padding-block-container) var(--vaadin-padding-inline-container);
+  text-align: start;
+}
+
+:where(.vaadin-themed-html table:not(.vaadin-unthemed-html), table.vaadin-themed-html) th {
+  font-weight: var(--aura-font-weight-medium);
+}
+
+:where(.vaadin-themed-html table:not(.vaadin-unthemed-html), table.vaadin-themed-html) :is(thead, tfoot) :is(th, td) {
+  background: var(--vaadin-background-container);
+}
+
+:where(.vaadin-themed-html table:not(.vaadin-unthemed-html), table.vaadin-themed-html) :where(tr:not(:first-child) :is(th, td)), :where(.vaadin-themed-html table:not(.vaadin-unthemed-html), table.vaadin-themed-html) :where(:is(thead, tbody, tfoot) ~ :is(tbody, tfoot) tr:first-child :is(th, td)) {
+  border-block-start: 1px solid var(--vaadin-border-color);
+}
+
+:where(.vaadin-themed-html table:not(.vaadin-unthemed-html), table.vaadin-themed-html) :where(thead:first-of-type tr:first-child :is(th, td):first-child) {
+  border-start-start-radius: var(--_inner-radius);
+}
+
+:where(.vaadin-themed-html table:not(.vaadin-unthemed-html), table.vaadin-themed-html) :where(thead:first-of-type tr:first-child :is(th, td):last-child) {
+  border-start-end-radius: var(--_inner-radius);
+}
+
+:where(.vaadin-themed-html table:not(.vaadin-unthemed-html), table.vaadin-themed-html) :where(:is(tbody, tfoot):last-of-type tr:last-child :is(th, td):first-child) {
+  border-end-start-radius: var(--_inner-radius);
+}
+
+:where(.vaadin-themed-html table:not(.vaadin-unthemed-html), table.vaadin-themed-html) :where(:is(tbody, tfoot):last-of-type tr:last-child :is(th, td):last-child) {
+  border-end-end-radius: var(--_inner-radius);
+}
+
+@font-face {
+  font-family: Instrument Sans;
+  src: url("assets/InstrumentSans-C02vnGmI.woff2") format("woff2");
+  font-display: swap;
+  font-style: normal;
+  font-weight: 400 700;
+}
+
+:where(:root), :where(:host) {
+  --aura-font-family-system: system-ui, ui-sans-serif, sans-serif;
+  --aura-font-family-instrument-sans: "Instrument Sans", var(--aura-font-family-system);
+  --aura-font-family: var(--aura-font-family-instrument-sans);
+  --vaadin-icon-baseline-font-family: var(--aura-font-family);
+  --aura-base-font-size: 14;
+  --_base-font-size-m: var(--aura-base-font-size);
+  --aura-base-line-height: 1.4;
+  --aura-font-weight-regular: 400;
+  --aura-font-weight-medium: 500;
+  --aura-font-weight-semibold: 600;
+}
+
+@media (pointer: coarse) {
+  :where(:root), :where(:host) {
+    --vaadin-input-field-value-font-size: max(16px, var(--aura-font-size-m));
+  }
+}
+
+@supports (-webkit-touch-callout: none) {
+  @media (pointer: coarse) {
+    :where(:root), :where(:host) {
+      font: -apple-system-body;
+    }
+  }
+}
+
+:where(:root), :where(:host), :where([theme]) {
+  --aura-font-size-xs: clamp(.625rem, round(var(--aura-font-size-m) * .85, .0625rem), .8125rem);
+  --aura-font-size-s: round((var(--aura-font-size-m)  + var(--aura-font-size-xs)) / 2, .0625rem);
+  --aura-font-size-m: round(var(--aura-base-font-size) / 16 * 1rem, .0625rem);
+  --aura-font-size-l: round(var(--aura-font-size-m) * 1.125, .0625rem);
+  --aura-font-size-xl: round(var(--aura-font-size-l) * 1.125, .0625rem);
+  --_base-font-size-xs: clamp(10, round(var(--_base-font-size-m) * .75, 1), 13);
+  --_base-font-size-s: round((var(--_base-font-size-m)  + var(--_base-font-size-xs)) / 2, 1);
+  --_base-font-size-l: round(var(--_base-font-size-m) * 1.125, 1);
+  --_base-font-size-xl: round(var(--_base-font-size-l) * 1.125, 1);
+  --aura-line-height-xs: round(var(--aura-font-size-xs) * var(--aura-base-line-height), .125rem);
+  --aura-line-height-s: round(var(--aura-font-size-s) * var(--aura-base-line-height), .125rem);
+  --aura-line-height-m: round(var(--aura-font-size-m) * var(--aura-base-line-height), .125rem);
+  --aura-line-height-l: round(var(--aura-font-size-l) * var(--aura-base-line-height), .125rem);
+  --aura-line-height-xl: round(var(--aura-font-size-xl) * var(--aura-base-line-height), .125rem);
+}
+
+:where(body), :where(:host) {
+  font-family: var(--aura-font-family);
+  font-optical-sizing: auto;
+  font-style: normal;
+  font-weight: var(--aura-font-weight-regular);
+  -webkit-font-smoothing: var(--aura-font-smoothing, antialiased);
+  -moz-osx-font-smoothing: var(--aura-font-smoothing, grayscale);
+  text-size-adjust: none;
+}
+
+:where(body), :where(:host), :where([theme]:not(html)) {
+  font-size: var(--aura-font-size-m);
+  line-height: var(--aura-line-height-m);
+}
+
+[theme~="xsmall"] {
+  --aura-base-font-size: var(--_base-font-size-xs);
+}
+
+[theme~="small"] {
+  --aura-base-font-size: var(--_base-font-size-s);
+}
+
+[theme~="medium"] {
+  --aura-base-font-size: var(--_base-font-size-m);
+}
+
+[theme~="large"] {
+  --aura-base-font-size: var(--_base-font-size-l);
+}
+
+[theme~="xlarge"] {
+  --aura-base-font-size: var(--_base-font-size-xl);
+}
+
+:where(h1, h2, h3, h4, h5, h6) {
+  text-wrap: balance;
+  font-weight: var(--aura-font-weight-semibold);
+  margin: 0;
+}
+
+:where(h1) {
+  font-size: round(var(--aura-font-size-xl) * 1.75, .0625rem);
+  line-height: round(var(--aura-line-height-xl) * 1.25, .125rem);
+}
+
+:where(h2) {
+  font-size: round(var(--aura-font-size-xl) * 1.25, .0625rem);
+  line-height: round(var(--aura-line-height-xl) * 1.125, .125rem);
+}
+
+:where(h3) {
+  font-size: var(--aura-font-size-xl);
+  line-height: var(--aura-line-height-xl);
+}
+
+:where(h4) {
+  font-size: var(--aura-font-size-l);
+  line-height: var(--aura-line-height-l);
+}
+
+:where(h5) {
+  font-size: var(--aura-font-size-m);
+  line-height: var(--aura-line-height-m);
+}
+
+:where(h6) {
+  font-size: var(--aura-font-size-s);
+  line-height: var(--aura-line-height-s);
+}
+
+:where(b, strong) {
+  font-weight: var(--aura-font-weight-semibold);
+}
+
+:where(:root), :where(:host) {
+  --vaadin-overlay-border-width: 0px;
+  --vaadin-overlay-backdrop-background: light-dark(oklch(from var(--aura-background-color-light) calc(l * .5) min(.05, c * 4) h / .3), oklch(from var(--aura-background-color-dark) calc(l * .5) min(.05, c * 4) h / .3));
+  --aura-overlay-outline-color: light-dark(oklch(from var(--aura-background-color-light) .1 c h / max(.04, .03 + .04 * var(--aura-contrast-level))), oklch(from var(--aura-background-color-dark) .1 c h / max(.04, .03 + .04 * var(--aura-contrast-level))));
+  --aura-overlay-inner-outline-color: hsla(0deg, 0%, 100%, max(3%, 2% + 4% * var(--aura-contrast-level)));
+  --aura-overlay-outline-shadow: inset 0 0 0 1px var(--aura-overlay-inner-outline-color), 0 0 0 1px var(--aura-overlay-outline-color);
+  --aura-overlay-shadow: var(--aura-shadow-m);
+  --aura-overlay-backdrop-filter: blur(20px) brightness(1.1) saturate(1.2);
+  --aura-overlay-surface-opacity: .85;
+}
+
+@media (prefers-reduced-transparency: reduce) {
+  :where(:root), :where(:host) {
+    --aura-overlay-surface-opacity: 1 !important;
+  }
+}
+
+:where(:root), :where(:host) {
+  --vaadin-popover-arrow-size: 8px;
+  --vaadin-popover-arrow-inset: var(--vaadin-gap-l);
+  --vaadin-popover-border-radius: var(--vaadin-radius-l);
+  --vaadin-slider-bubble-arrow-size: 6px;
+}
+
+:where(vaadin-avatar-group, vaadin-breadcrumbs, vaadin-combo-box, vaadin-confirm-dialog, vaadin-context-menu, vaadin-crud, vaadin-date-picker, vaadin-date-range-picker, vaadin-dialog, vaadin-login-overlay, vaadin-menu-bar-submenu, vaadin-multi-select-combo-box, vaadin-notification-card, vaadin-popover, vaadin-rich-text-editor-popup, vaadin-select, vaadin-slider-bubble, vaadin-time-picker, vaadin-tooltip)::part(overlay) {
+  background: var(--vaadin-overlay-background, var(--aura-surface-color));
+  --aura-surface-level: 4;
+  --aura-surface-opacity: var(--aura-overlay-surface-opacity);
+  box-shadow: var(--aura-overlay-outline-shadow), var(--vaadin-overlay-shadow, var(--aura-overlay-shadow));
+  -webkit-backdrop-filter: var(--aura-overlay-backdrop-filter);
+  backdrop-filter: var(--aura-overlay-backdrop-filter);
+}
+
+:where(vaadin-combo-box, vaadin-date-picker, vaadin-date-range-picker, vaadin-menu-bar-submenu, vaadin-multi-select-combo-box, vaadin-rich-text-editor-popup, vaadin-time-picker)[top-aligned]::part(overlay) {
+  margin-top: calc(var(--vaadin-focus-ring-width, 2px)  + 1px);
+}
+
+:where(vaadin-combo-box, vaadin-date-picker, vaadin-date-range-picker, vaadin-menu-bar-submenu, vaadin-multi-select-combo-box, vaadin-rich-text-editor-popup, vaadin-time-picker)[bottom-aligned]::part(overlay) {
+  margin-bottom: calc(var(--vaadin-focus-ring-width, 2px)  + 1px);
+}
+
+:not(vaadin-tooltip, vaadin-slider-bubble)::part(overlay) {
+  font-family: var(--aura-font-family);
+  font-size: var(--aura-font-size-m);
+  font-weight: var(--aura-font-weight-regular);
+  line-height: var(--aura-line-height-m);
+  color: var(--vaadin-text-color);
+}
+
+@container style(--aura-overlay-surface-opacity: 1) {
+  :not(vaadin-tooltip, vaadin-slider-bubble)::part(overlay) html {
+    --aura-overlay-backdrop-filter: none;
+  }
+}
+
+:is(vaadin-popover, vaadin-slider-bubble)::part(arrow) {
+  background: var(--aura-surface-color-solid);
+  margin: 1px;
+}
+
+:where(:root), :where(:host) {
+  --aura-item-overlay-padding-inline: var(--vaadin-padding-xs);
+  --aura-item-overlay-padding-block: var(--vaadin-padding-xs);
+  --vaadin-item-overlay-padding: var(--aura-item-overlay-padding-block) var(--aura-item-overlay-padding-inline);
+  --vaadin-item-border-radius: clamp(0px, var(--aura-item-overlay-padding-inline) * 100, var(--vaadin-radius-m)  - min(var(--aura-item-overlay-padding-inline), var(--aura-item-overlay-padding-block)));
+  --vaadin-item-gap: var(--vaadin-gap-s);
+}
+
+vaadin-avatar-group-menu-item, vaadin-combo-box-item, vaadin-context-menu-item, vaadin-time-picker-item, vaadin-item:where([role]), vaadin-menu-bar-item, vaadin-multi-select-combo-box-item, vaadin-select-item:where([role]) {
+  font-weight: var(--aura-font-weight-medium);
+  -webkit-user-select: none;
+  user-select: none;
+  gap: 0;
+  padding-inline-start: max(0px, var(--vaadin-padding-inline-container)  - var(--aura-item-overlay-padding-inline));
+}
+
+:is(vaadin-avatar-group-menu-item, vaadin-combo-box-item, vaadin-context-menu-item, vaadin-time-picker-item, vaadin-item:where([role]), vaadin-menu-bar-item, vaadin-multi-select-combo-box-item, vaadin-select-item:where([role]))::part(checkmark) {
+  color: var(--vaadin-item-checkmark-color, var(--aura-accent-text-color));
+  --vaadin-icon-visual-size: 75%;
+}
+
+:is(vaadin-avatar-group-menu-item, vaadin-combo-box-item, vaadin-context-menu-item, vaadin-time-picker-item, vaadin-item:where([role]), vaadin-menu-bar-item, vaadin-multi-select-combo-box-item, vaadin-select-item:where([role]))[aria-haspopup="true"] {
+  padding-inline-end: max(0px, var(--vaadin-padding-inline-container)  - var(--aura-item-overlay-padding-inline));
+}
+
+:is(vaadin-avatar-group-menu-item, vaadin-combo-box-item, vaadin-context-menu-item, vaadin-time-picker-item, vaadin-item:where([role]), vaadin-menu-bar-item, vaadin-multi-select-combo-box-item, vaadin-select-item:where([role]))[aria-haspopup="true"]:after {
+  --vaadin-icon-visual-size: 90%;
+}
+
+:is(vaadin-avatar-group-menu-item, vaadin-combo-box-item, vaadin-context-menu-item, vaadin-time-picker-item, vaadin-item:where([role]), vaadin-menu-bar-item, vaadin-multi-select-combo-box-item, vaadin-select-item:where([role]))::part(content) {
+  padding-inline: var(--vaadin-gap-xs);
+  gap: var(--vaadin-item-gap);
+}
+
+@media (any-hover: hover) {
+  :is(vaadin-avatar-group-menu-item, vaadin-combo-box-item, vaadin-context-menu-item, vaadin-time-picker-item, vaadin-item:where([role]), vaadin-menu-bar-item, vaadin-multi-select-combo-box-item, vaadin-select-item:where([role])):not([disabled], [aria-disabled="true"]):hover {
+    background: var(--_aura-highlight-color);
+  }
+
+  :is(vaadin-avatar-group-menu-item, vaadin-combo-box-item, vaadin-context-menu-item, vaadin-time-picker-item, vaadin-item:where([role]), vaadin-menu-bar-item, vaadin-multi-select-combo-box-item, vaadin-select-item:where([role])):not([disabled], [aria-disabled="true"]):hover[theme~="filled"] {
+    background: var(--aura-accent-color);
+    color: var(--aura-accent-contrast-color);
+    --vaadin-text-color: var(--aura-accent-contrast-color);
+    --vaadin-text-color-secondary: color-mix(in srgb, var(--aura-accent-contrast-color) 70%, transparent);
+    --vaadin-text-color-disabled: color-mix(in srgb, var(--aura-accent-contrast-color) 50%, transparent);
+    --vaadin-icon-color: var(--aura-accent-contrast-color);
+    --vaadin-item-checkmark-color: var(--aura-accent-contrast-color);
+  }
+}
+
+:is(vaadin-avatar-group-menu-item, vaadin-combo-box-item, vaadin-context-menu-item, vaadin-time-picker-item, vaadin-item:where([role]), vaadin-menu-bar-item, vaadin-multi-select-combo-box-item, vaadin-select-item:where([role])):not([disabled], [aria-disabled="true"]):active {
+  background: var(--_aura-highlight-color);
+}
+
+:is(vaadin-avatar-group-menu-item, vaadin-combo-box-item, vaadin-context-menu-item, vaadin-time-picker-item, vaadin-item:where([role]), vaadin-menu-bar-item, vaadin-multi-select-combo-box-item, vaadin-select-item:where([role])):not([disabled], [aria-disabled="true"]):active[theme~="filled"] {
+  background: var(--aura-accent-color);
+  color: var(--aura-accent-contrast-color);
+  --vaadin-text-color: var(--aura-accent-contrast-color);
+  --vaadin-text-color-secondary: color-mix(in srgb, var(--aura-accent-contrast-color) 70%, transparent);
+  --vaadin-text-color-disabled: color-mix(in srgb, var(--aura-accent-contrast-color) 50%, transparent);
+  --vaadin-icon-color: var(--aura-accent-contrast-color);
+  --vaadin-item-checkmark-color: var(--aura-accent-contrast-color);
+}
+
+:is(vaadin-avatar-group-menu-item, vaadin-combo-box-item, vaadin-context-menu-item, vaadin-time-picker-item, vaadin-item:where([role]), vaadin-menu-bar-item, vaadin-multi-select-combo-box-item, vaadin-select-item:where([role]))[aria-expanded="true"]:not(:hover) {
+  background: var(--vaadin-background-container-strong);
+}
+
+:is(vaadin-avatar-group-menu-item, vaadin-combo-box-item, vaadin-context-menu-item, vaadin-time-picker-item, vaadin-item:where([role]), vaadin-menu-bar-item, vaadin-multi-select-combo-box-item, vaadin-select-item:where([role])):where([theme~="danger"], .aura-accent-color, .aura-accent-red, .aura-accent-orange, .aura-accent-yellow, .aura-accent-green, .aura-accent-blue, .aura-accent-purple, .v-info, .v-success, .v-warning, .v-error) {
+  color: var(--aura-accent-text-color);
+}
+
+:is(vaadin-avatar-group-menu-item, vaadin-combo-box-item, vaadin-context-menu-item, vaadin-time-picker-item, vaadin-item:where([role]), vaadin-menu-bar-item, vaadin-multi-select-combo-box-item, vaadin-select-item:where([role])):where([theme~="danger"], .aura-accent-color, .aura-accent-red, .aura-accent-orange, .aura-accent-yellow, .aura-accent-green, .aura-accent-blue, .aura-accent-purple, .v-info, .v-success, .v-warning, .v-error) > * {
+  --aura-accent-color-light: var(--aura-accent-color-light-initial);
+  --aura-accent-color-dark: var(--aura-accent-color-dark-initial);
+  --aura-accent-color: light-dark(var(--aura-accent-color-light-initial), var(--aura-accent-color-dark-initial));
+}
+
+@media (any-hover: hover) {
+  vaadin-select[theme~="filled"] > [slot="overlay"] [role="option"]:not([disabled], [aria-disabled="true"]):hover {
+    background: var(--aura-accent-color);
+    color: var(--aura-accent-contrast-color);
+    --vaadin-text-color: var(--aura-accent-contrast-color);
+    --vaadin-text-color-secondary: color-mix(in srgb, var(--aura-accent-contrast-color) 70%, transparent);
+    --vaadin-text-color-disabled: color-mix(in srgb, var(--aura-accent-contrast-color) 50%, transparent);
+    --vaadin-icon-color: var(--aura-accent-contrast-color);
+    --vaadin-item-checkmark-color: var(--aura-accent-contrast-color);
+  }
+}
+
+vaadin-select[theme~="filled"] > [slot="overlay"] [role="option"]:not([disabled], [aria-disabled="true"]):active {
+  background: var(--aura-accent-color);
+  color: var(--aura-accent-contrast-color);
+  --vaadin-text-color: var(--aura-accent-contrast-color);
+  --vaadin-text-color-secondary: color-mix(in srgb, var(--aura-accent-contrast-color) 70%, transparent);
+  --vaadin-text-color-disabled: color-mix(in srgb, var(--aura-accent-contrast-color) 50%, transparent);
+  --vaadin-icon-color: var(--aura-accent-contrast-color);
+  --vaadin-item-checkmark-color: var(--aura-accent-contrast-color);
+}
+
+[role="menu"] [role="separator"] {
+  margin-block: var(--vaadin-gap-xs);
+  margin-inline: calc(var(--vaadin-gap-xs)  + var(--vaadin-padding-inline-container));
+  border-color: var(--vaadin-border-color);
+}
+
+:is(vaadin-avatar-group, vaadin-breadcrumbs, vaadin-combo-box, vaadin-multi-select-combo-box, vaadin-date-picker, vaadin-date-range-picker, vaadin-time-picker, vaadin-select, vaadin-menu-bar-submenu, vaadin-context-menu, vaadin-popover)[closing] {
+  --vaadin-overlay-animation-duration: .1s;
+  --vaadin-overlay-animation-delay: 60ms;
+  --vaadin-overlay-animation-timing-function: ease-in;
+}
+
+:where(:root), :where(:host), :where([theme]) {
+  --vaadin-input-field-error-color: var(--aura-red-text);
+}
+
+::part(input-field), vaadin-message-input, vaadin-input-container {
+  background: var(--vaadin-input-field-background, var(--aura-surface-color));
+  --aura-surface-level: 4;
+  --aura-surface-opacity: .7;
+  caret-color: var(--vaadin-focus-ring-color);
+  background-clip: padding-box;
+}
+
+:not([readonly], [disabled])::part(input-field), vaadin-message-input:not([readonly], [disabled]) {
+  box-shadow: var(--aura-shadow-xs);
+}
+
+[readonly]::part(input-field) {
+  --aura-surface-opacity: 0;
+}
+
+[disabled]::part(input-field) {
+  background-color: var(--vaadin-input-field-disabled-background, var(--vaadin-background-container));
+}
+
+[disabled]::part(helper-text) {
+  opacity: .5;
+}
+
+::part(field-button) {
+  --vaadin-icon-visual-size: 90%;
+  transition: color .1s;
+}
+
+::part(clear-button) {
+  --vaadin-icon-visual-size: 75%;
+}
+
+:not([readonly], [disabled])::part(field-button):active {
+  color: var(--vaadin-text-color);
+}
+
+@media (any-hover: hover) {
+  :not([readonly], [disabled])::part(field-button):hover {
+    color: var(--vaadin-text-color);
+  }
+}
+
+:where(:root), :where(:host) {
+  --vaadin-accordion-heading-gap: var(--vaadin-gap-xs);
+  --vaadin-details-summary-gap: var(--vaadin-gap-xs);
+}
+
+:is(vaadin-details, vaadin-accordion-panel):not([theme~="no-padding"])::part(content) {
+  padding: var(--vaadin-padding-block-container) var(--vaadin-padding-inline-container);
+  padding-top: 0;
+}
+
+vaadin-details:not([theme~="no-padding"], [theme~="reverse"])::part(content) {
+  margin-inline-start: calc(var(--vaadin-icon-size, 1lh)  + var(--vaadin-details-summary-gap));
+}
+
+vaadin-accordion-panel:not([theme~="no-padding"], [theme~="reverse"])::part(content) {
+  margin-inline-start: calc(var(--vaadin-icon-size, 1lh)  + var(--vaadin-accordion-heading-gap));
+}
+
+:is(vaadin-details, vaadin-accordion-panel)[theme~="reverse"] > [slot="summary"]::part(content) {
+  width: 100%;
+}
+
+:is(vaadin-details, vaadin-accordion-panel)[theme~="reverse"] > [slot="summary"]::part(toggle) {
+  order: 1;
+  margin-inline-start: auto;
+}
+
+:is(vaadin-details, vaadin-accordion-panel)[theme~="filled"] {
+  background: var(--aura-surface-color) padding-box;
+  border-radius: var(--vaadin-radius-m);
+  border: 1px solid var(--vaadin-border-color-secondary);
+}
+
+:is(vaadin-details, vaadin-accordion-panel)[theme~="filled"]:has( + :is(vaadin-details, vaadin-accordion-panel)[theme~="filled"]) {
+  border-bottom-right-radius: 0;
+  border-bottom-left-radius: 0;
+}
+
+:is(vaadin-details, vaadin-accordion-panel)[theme~="filled"] + :is(vaadin-details, vaadin-accordion-panel)[theme~="filled"] {
+  border-top-color: #0000;
+  border-top-left-radius: 0;
+  border-top-right-radius: 0;
+  margin-top: -1px;
+}
+
+:has( > vaadin-ai-field-marker) {
+  --vaadin-ai-field-marker-confidence-low-color: var(--aura-red-text);
+  --vaadin-ai-field-marker-confidence-medium-color: var(--aura-yellow-text);
+  --vaadin-ai-field-marker-confidence-high-color: var(--aura-green-text);
+}
+
+:where(:root), :where(:host) {
+  --aura-app-layout-inset: 1.5vmin;
+  --aura-app-layout-radius: var(--vaadin-radius-l);
+  --aura-app-layout-border-width: 1px;
+  --vaadin-app-layout-navbar-padding-top: max(var(--aura-app-layout-inset), var(--vaadin-padding-s));
+  --vaadin-app-layout-navbar-padding-inline-start: max(var(--aura-app-layout-inset), var(--vaadin-padding-s));
+  --vaadin-app-layout-navbar-padding-inline-end: max(var(--aura-app-layout-inset), var(--vaadin-padding-s));
+}
+
+@media (width <= 800px), (height <= 600px) {
+  :where(:root), :where(:host) {
+    --aura-app-layout-inset: 0px !important;
+  }
+
+  vaadin-app-layout {
+    --_app-layout-border-width: 0px;
+  }
+}
+
+vaadin-app-layout {
+  --_app-layout-border-width: var(--aura-app-layout-border-width);
+  --_app-layout-radius: clamp(0px, var(--aura-app-layout-radius), var(--aura-app-layout-inset) * 100);
+  padding-top: max(var(--aura-app-layout-inset), var(--vaadin-app-layout-navbar-offset-top));
+  padding-bottom: max(var(--aura-app-layout-inset), var(--vaadin-app-layout-navbar-offset-bottom));
+  padding-inline-end: var(--aura-app-layout-inset);
+}
+
+vaadin-app-layout[overlay]::part(drawer) {
+  background: var(--vaadin-app-layout-drawer-background, var(--aura-surface-color));
+  --aura-surface-opacity: var(--aura-overlay-surface-opacity);
+  -webkit-backdrop-filter: var(--aura-overlay-backdrop-filter);
+  backdrop-filter: var(--aura-overlay-backdrop-filter);
+}
+
+vaadin-app-layout:is([overlay], :not([drawer-opened])), vaadin-app-layout:not([has-drawer]) {
+  padding-inline-start: var(--aura-app-layout-inset);
+}
+
+vaadin-app-layout::part(navbar) {
+  background: var(--vaadin-app-layout-navbar-background, transparent);
+  -webkit-backdrop-filter: blur(20px);
+  backdrop-filter: blur(20px);
+}
+
+vaadin-app-layout:not([overlay])::part(drawer) {
+  padding-block: var(--aura-app-layout-inset);
+  padding-inline: max(0px, var(--aura-app-layout-inset)  - var(--vaadin-padding-s));
+}
+
+vaadin-app-layout[has-navbar]::part(drawer) {
+  padding-top: var(--safe-area-inset-top);
+}
+
+vaadin-app-layout > vaadin-scroller[slot="drawer"] {
+  --vaadin-scroller-padding-inline: var(--vaadin-padding-m);
+  --vaadin-scroller-padding-block: var(--vaadin-padding-s);
+  scrollbar-width: thin;
+  padding-inline-start: max(0px, var(--vaadin-padding-m)  - var(--safe-area-inset-inline-start));
+}
+
+vaadin-app-layout::part(content) {
+  color-scheme: var(--aura-content-color-scheme);
+  color: var(--vaadin-text-color);
+  background: linear-gradient(var(--aura-surface-color), var(--aura-surface-color)), var(--aura-app-background);
+  box-sizing: border-box;
+  border-radius: var(--_app-layout-radius);
+  border: min(var(--aura-app-layout-inset), var(--_app-layout-border-width)) solid var(--vaadin-border-color-secondary);
+  background-origin: border-box;
+  background-clip: padding-box;
+  min-height: 1lh;
+}
+
+vaadin-app-layout[has-drawer][drawer-opened]:not([overlay])::part(content) {
+  border-inline-start-width: var(--_app-layout-border-width);
+}
+
+vaadin-app-layout[has-navbar][has-drawer][drawer-opened]:not([overlay])::part(content) {
+  border-start-start-radius: var(--aura-app-layout-radius);
+}
+
+vaadin-app-layout[has-navbar]::part(content) {
+  border-top-width: var(--_app-layout-border-width);
+}
+
+vaadin-drawer-toggle {
+  --aura-accent-color-light: var(--aura-neutral);
+  --aura-accent-color-dark: var(--aura-neutral);
+}
+
+:where(:root), :where(:host) {
+  --vaadin-avatar-border-color: var(--aura-accent-border-color);
+  --vaadin-avatar-font-weight: var(--aura-font-weight-medium);
+  --vaadin-avatar-group-gap: 0px;
+  --vaadin-avatar-group-overlap: 6px;
+}
+
+vaadin-avatar {
+  font-size: var(--vaadin-avatar-font-size, 16px);
+  color: var(--vaadin-avatar-text-color, var(--aura-accent-text-color));
+  --_shade: color-mix(in srgb, var(--vaadin-border-color) 20%, transparent);
+  background: var(--vaadin-avatar-background, linear-gradient(light-dark(transparent, var(--_shade)), transparent 50%, light-dark(var(--_shade), transparent)), var(--aura-accent-surface));
+  background-clip: content-box;
+}
+
+vaadin-avatar:where([has-color-index]) {
+  --aura-accent-color-light: var(--vaadin-avatar-user-color);
+  --aura-accent-color-dark: var(--vaadin-avatar-user-color);
+  --aura-accent-color: light-dark(var(--aura-accent-color-light), var(--aura-accent-color-dark));
+  --vaadin-avatar-border-color: var(--aura-accent-border-color);
+  --vaadin-avatar-border-width: 1px;
+}
+
+vaadin-avatar[img][has-color-index] {
+  --vaadin-avatar-border-color: var(--aura-accent-color);
+  --vaadin-avatar-border-width: 2px;
+}
+
+vaadin-avatar[theme~="filled"] {
+  background: var(--aura-accent-color) content-box;
+  color: var(--aura-accent-contrast-color);
+}
+
+vaadin-avatar-group[theme~="filled"] {
+  --vaadin-avatar-group-gap: 2px;
+  --vaadin-avatar-group-overlap: 8px;
+}
+
+vaadin-badge {
+  color: var(--vaadin-badge-text-color, var(--aura-accent-text-color));
+  background: var(--vaadin-badge-background, var(--aura-accent-surface) padding-box);
+  border-color: var(--vaadin-badge-border-color, var(--aura-accent-border-color));
+  font-size: var(--vaadin-badge-font-size, var(--aura-font-size-s));
+  --aura-surface-level: 1;
+}
+
+vaadin-badge:is([theme~="filled"], [theme~="dot"]) {
+  background: var(--aura-accent-color);
+  color: var(--aura-accent-contrast-color);
+}
+
+:is(vaadin-button, vaadin-upload-button, vaadin-menu-bar-button, vaadin-drawer-toggle)[theme~="primary"] > *, vaadin-tabs[theme~="filled"] > vaadin-tab[selected] > :not([slot="tooltip"]), vaadin-side-nav[theme~="filled"] > vaadin-side-nav-item[current] > :not([slot="children"]):not([slot="tooltip"]), :is(vaadin-combo-box-item, vaadin-context-menu-item, vaadin-item, vaadin-menu-bar-item, vaadin-multi-select-combo-box-item, vaadin-select-item[role])[theme~="filled"]:not([disabled], [aria-disabled="true"]):hover > vaadin-badge {
+  --vaadin-icon-color: currentColor;
+  --aura-surface-opacity: 1;
+  --aura-surface-level: 3;
+}
+
+:is(:is(vaadin-button, vaadin-upload-button, vaadin-menu-bar-button, vaadin-drawer-toggle)[theme~="primary"] > *, vaadin-tabs[theme~="filled"] > vaadin-tab[selected] > :not([slot="tooltip"]), vaadin-side-nav[theme~="filled"] > vaadin-side-nav-item[current] > :not([slot="children"]):not([slot="tooltip"]), :is(vaadin-combo-box-item, vaadin-context-menu-item, vaadin-item, vaadin-menu-bar-item, vaadin-multi-select-combo-box-item, vaadin-select-item[role])[theme~="filled"]:not([disabled], [aria-disabled="true"]):hover > vaadin-badge):not(.aura-accent-color, .aura-accent-red, .aura-accent-orange, .aura-accent-yellow, .aura-accent-green, .aura-accent-blue, .aura-accent-purple, [theme~="info"], [theme~="success"], [theme~="warning"], [theme~="error"]) {
+  --aura-surface-opacity: .5;
+  --aura-surface-level: 1;
+  --aura-accent-text-color: currentColor;
+  --aura-accent-border-color: color-mix(in srgb, currentColor 30%, transparent);
+  --aura-accent-surface: color-mix(in srgb, currentColor 10%, transparent);
+}
+
+:is(:is(vaadin-button, vaadin-upload-button, vaadin-menu-bar-button, vaadin-drawer-toggle)[theme~="primary"] > *, vaadin-tabs[theme~="filled"] > vaadin-tab[selected] > :not([slot="tooltip"]), vaadin-side-nav[theme~="filled"] > vaadin-side-nav-item[current] > :not([slot="children"]):not([slot="tooltip"]), :is(vaadin-combo-box-item, vaadin-context-menu-item, vaadin-item, vaadin-menu-bar-item, vaadin-multi-select-combo-box-item, vaadin-select-item[role])[theme~="filled"]:not([disabled], [aria-disabled="true"]):hover > vaadin-badge):not(.aura-accent-color, .aura-accent-red, .aura-accent-orange, .aura-accent-yellow, .aura-accent-green, .aura-accent-blue, .aura-accent-purple, [theme~="info"], [theme~="success"], [theme~="warning"], [theme~="error"])[theme~="filled"] {
+  background: var(--aura-accent-contrast-color);
+  color: var(--aura-accent-color);
+  border-color: #0000;
+}
+
+:where(:root), :where(:host) {
+  --vaadin-breadcrumbs-font-weight: var(--aura-font-weight-medium);
+  --vaadin-breadcrumbs-link-color: "inherit";
+}
+
+vaadin-breadcrumbs[theme~="accent"] {
+  --vaadin-breadcrumbs-link-color: var(--aura-accent-text-color);
+}
+
+vaadin-breadcrumbs-item:not([slot="overlay"])::part(link), vaadin-breadcrumbs::part(overflow-button) {
+  transition: color 80ms, background-color 80ms;
+}
+
+vaadin-breadcrumbs-item[current] {
+  font-weight: var(--aura-font-weight-semibold);
+}
+
+@media (any-hover: hover) {
+  vaadin-breadcrumbs-item:not([slot="overlay"], [disabled])::part(link):hover, vaadin-breadcrumbs::part(overflow-button):hover {
+    color: var(--vaadin-text-color);
+  }
+
+  vaadin-breadcrumbs-item[slot="overlay"]:not([disabled])::part(link):hover {
+    background: var(--_aura-highlight-color);
+  }
+}
+
+vaadin-breadcrumbs-item[slot="overlay"]::part(link) {
+  --vaadin-breadcrumbs-item-border-radius: var(--vaadin-item-border-radius);
+  font-weight: var(--aura-font-weight-medium);
+  -webkit-user-select: none;
+  user-select: none;
+}
+
+vaadin-breadcrumbs-item:not([disabled], [slot="overlay"])::part(link):active, vaadin-breadcrumbs::part(overflow-button):active {
+  background: var(--vaadin-background-container-strong);
+  color: var(--vaadin-text-color);
+}
+
+vaadin-breadcrumbs-item[slot="overlay"]:not([disabled])::part(link):active {
+  background: var(--_aura-highlight-color);
+}
+
+:where(:root), :where(:host) {
+  --vaadin-button-shadow: var(--aura-shadow-xs);
+}
+
+:is(vaadin-button, vaadin-upload-button, vaadin-menu-bar-button, vaadin-drawer-toggle, vaadin-crud-edit) {
+  --_background: var(--aura-accent-surface) padding-box;
+  color: var(--vaadin-button-text-color, var(--aura-accent-text-color));
+  transition: scale .18s;
+  position: relative;
+}
+
+vaadin-drawer-toggle[theme~="tertiary"]::part(icon) {
+  opacity: .6;
+}
+
+:is(vaadin-button, vaadin-upload-button, vaadin-menu-bar-button, vaadin-drawer-toggle, vaadin-crud-edit):where(:not([theme~="tertiary"])) {
+  --aura-surface-level: 4;
+  --aura-surface-opacity: .5;
+  box-shadow: var(--vaadin-button-shadow);
+}
+
+:is(vaadin-button, vaadin-upload-button, vaadin-menu-bar-button, vaadin-drawer-toggle, vaadin-crud-edit):not([theme~="primary"], [theme~="tertiary"]) {
+  background: var(--vaadin-button-background, var(--_background));
+  border-color: var(--vaadin-button-border-color, var(--aura-accent-border-color));
+}
+
+:is(vaadin-button, vaadin-upload-button, vaadin-menu-bar-button, vaadin-drawer-toggle, vaadin-crud-edit):where(:not([theme~="primary"])) {
+  outline-offset: calc(var(--vaadin-button-border-width, 1px) * -1);
+}
+
+:is(vaadin-button, vaadin-upload-button, vaadin-menu-bar-button, vaadin-crud-edit):not(:has( > :is(vaadin-icon, vaadin-badge, svg, i[class*="fa-"], vaadin-avatar):not([slot]))) {
+  --vaadin-button-padding: var(--vaadin-padding-block-container) var(--vaadin-padding-m);
+}
+
+:is(vaadin-button, vaadin-upload-button, vaadin-menu-bar-button)[theme~="tertiary"], :is(vaadin-button, vaadin-upload-button, vaadin-menu-bar-button):has( > [slot="prefix"]:is(vaadin-icon, vaadin-badge, svg, i[class*="fa-"], vaadin-avatar)) {
+  padding-inline-start: var(--vaadin-padding-s);
+}
+
+:is(vaadin-button, vaadin-upload-button, vaadin-menu-bar-button)[theme~="tertiary"], :is(vaadin-button, vaadin-upload-button, vaadin-menu-bar-button):has( > [slot="suffix"]:is(vaadin-icon, vaadin-badge, svg, i[class*="fa-"], vaadin-avatar)), vaadin-menu-bar-button[aria-haspopup="true"]:not([slot="overflow"]) {
+  padding-inline-end: var(--vaadin-padding-s);
+}
+
+:is(vaadin-button, vaadin-upload-button, vaadin-menu-bar-button, vaadin-drawer-toggle, vaadin-crud-edit):where([theme~="primary"]) {
+  outline-offset: 2px;
+  --vaadin-button-font-weight: var(--aura-font-weight-semibold);
+  --vaadin-button-text-color: var(--aura-accent-contrast-color);
+  --vaadin-button-background: var(--aura-accent-color);
+  --vaadin-button-border-color: var(--vaadin-border-color-secondary);
+  --vaadin-button-shadow: var(--aura-shadow-s);
+}
+
+:is(vaadin-button, vaadin-upload-button, vaadin-menu-bar-button)[disabled][theme~="primary"]::part(label) {
+  color: color-mix(in srgb, currentColor 50%, transparent);
+}
+
+:is(vaadin-button, vaadin-upload-button, vaadin-menu-bar-button, vaadin-drawer-toggle, vaadin-crud-edit):not([disabled]):before {
+  content: "";
+  inset: calc(var(--vaadin-button-border-width, 1px) * -1);
+  pointer-events: none;
+  border-radius: inherit;
+  opacity: 0;
+  background-color: currentColor;
+  transition: opacity .1s, background-color .1s;
+  position: absolute;
+}
+
+@supports (color: hsl(0 0 0)) {
+  :is(vaadin-button, vaadin-upload-button, vaadin-menu-bar-button, vaadin-drawer-toggle, vaadin-crud-edit):not([disabled]):before {
+    background-color: oklch(from currentColor calc(l + .4 - c) c h / calc(1 - l / 2));
+  }
+}
+
+@media (any-hover: hover) {
+  :is(vaadin-button, vaadin-upload-button, vaadin-menu-bar-button, vaadin-drawer-toggle, vaadin-crud-edit):hover:not([disabled], [active]):before {
+    opacity: .03;
+  }
+
+  :is(vaadin-button, vaadin-upload-button, vaadin-menu-bar-button, vaadin-drawer-toggle, vaadin-crud-edit)[theme~="primary"]:hover:not([disabled], [active]):before {
+    opacity: .12;
+  }
+}
+
+@media (resolution >= 2x) {
+  :is(vaadin-button, vaadin-upload-button, vaadin-menu-bar-button[first-visible][last-visible], vaadin-drawer-toggle)[active]:not([disabled], [aria-disabled="true"]) {
+    transition-duration: 50ms;
+    scale: .98;
+  }
+}
+
+:is(vaadin-button, vaadin-upload-button, vaadin-menu-bar-button, vaadin-drawer-toggle, vaadin-crud-edit)[active]:not([disabled]) {
+  box-shadow: none;
+}
+
+:is(vaadin-button, vaadin-upload-button, vaadin-menu-bar-button, vaadin-drawer-toggle, vaadin-crud-edit)[active]:not([disabled]):before {
+  opacity: .08;
+  background: oklch(from currentColor min(c, 1 - l + c) calc(c * .9) h);
+  transition-duration: 0s;
+}
+
+:is(vaadin-button, vaadin-upload-button, vaadin-menu-bar-button, vaadin-drawer-toggle, vaadin-crud-edit)[theme~="primary"][active]:not([disabled]):before {
+  opacity: .16;
+}
+
+:where(:root), :where(:host) {
+  --vaadin-card-title-font-weight: var(--aura-font-weight-medium);
+  --vaadin-card-title-font-size: var(--aura-font-size-l);
+  --vaadin-card-title-line-height: var(--aura-line-height-l);
+  --vaadin-card-padding: calc(var(--vaadin-padding-l)  - var(--vaadin-card-border-width));
+  --vaadin-card-gap: var(--vaadin-gap-m) var(--vaadin-gap-l);
+  --vaadin-card-border-width: 1px;
+}
+
+vaadin-card {
+  background: var(--vaadin-card-background, var(--aura-surface-color) padding-box);
+  --aura-surface-level: 2;
+  --aura-surface-opacity: .5;
+  background-clip: padding-box;
+}
+
+vaadin-card[theme~="elevated"] {
+  --aura-surface-opacity: .7;
+  --aura-surface-level: 3;
+  background: var(--aura-surface-color) padding-box;
+  box-shadow: var(--vaadin-card-shadow, var(--aura-shadow-xs));
+  --vaadin-card-border-color: light-dark(color-mix(in srgb, var(--vaadin-border-color-secondary) 70%, var(--aura-shadow-color)), var(--vaadin-border-color-secondary));
+}
+
+vaadin-card[theme~="outlined"] {
+  --vaadin-card-border-color: var(--vaadin-border-color);
+}
+
+vaadin-card[theme~="stretch-media"]:not([theme~="cover-media"]) [slot="media"]:is(img, video, svg, vaadin-icon) {
+  border-radius: var(--vaadin-radius-s);
+}
+
+:where(:root), :where(:host) {
+  --vaadin-charts-background: transparent;
+  --vaadin-charts-surface: var(--vaadin-background-color);
+  --vaadin-charts-button-active-background: var(--aura-accent-color);
+  --vaadin-charts-button-active-label: var(--aura-accent-contrast-color);
+  --vaadin-radio-button-marker-size: 6px;
+  --vaadin-checkbox-size: round(1.25em, 2px);
+  --vaadin-radio-button-size: round(1.25em, 2px);
+}
+
+vaadin-checkbox::part(checkbox), vaadin-radio-button::part(radio) {
+  transition: background-color .1s;
+}
+
+vaadin-checkbox:not([disabled], [readonly])::part(checkbox) {
+  background: var(--vaadin-checkbox-background, var(--aura-surface-color));
+}
+
+vaadin-radio-button:not([disabled], [readonly])::part(radio) {
+  background: var(--vaadin-radio-button-background, var(--aura-surface-color));
+}
+
+vaadin-checkbox:not([readonly], [disabled])::part(checkbox), vaadin-radio-button:not([disabled])::part(radio) {
+  --aura-surface-level: 4;
+  --aura-surface-opacity: .7;
+  box-shadow: var(--aura-shadow-xs);
+}
+
+vaadin-checkbox:not([checked], [indeterminate])::part(checkbox), vaadin-radio-button:not([checked])::part(radio) {
+  background-clip: padding-box;
+}
+
+vaadin-checkbox:is([checked], [indeterminate]):not([readonly], [disabled])::part(checkbox) {
+  --vaadin-checkbox-background: var(--aura-accent-color);
+  --_marker-color: var(--vaadin-checkbox-marker-color, var(--aura-accent-contrast-color));
+  --_marker-filter: none;
+  --vaadin-checkbox-border-color: var(--vaadin-border-color-secondary);
+  box-shadow: var(--aura-shadow-s);
+}
+
+vaadin-radio-button[checked]:not([readonly], [disabled])::part(radio) {
+  --vaadin-radio-button-background: var(--aura-accent-color);
+  --_marker-color: var(--vaadin-radio-button-marker-color, var(--aura-accent-contrast-color));
+  --_marker-filter: none;
+  --vaadin-radio-button-border-color: var(--vaadin-border-color-secondary);
+  box-shadow: var(--aura-shadow-s);
+}
+
+vaadin-checkbox:not([readonly], [disabled])::part(checkbox):before, vaadin-radio-button:not([disabled])::part(radio):before, vaadin-switch:not([readonly], [disabled])::part(switch):before {
+  content: "";
+  inset: calc(var(--vaadin-input-field-border-width, 1px) * -1);
+  border-radius: inherit;
+  opacity: 0;
+  background-color: currentColor;
+  transition: opacity .1s, background-color .1s;
+  position: absolute;
+}
+
+vaadin-switch:not([disabled])::part(switch):before {
+  inset: 0;
+}
+
+@media (any-hover: hover) {
+  vaadin-checkbox:hover:not([readonly], [disabled], [active])::part(checkbox):before, vaadin-radio-button:hover:not([disabled], [active])::part(radio):before, vaadin-switch:hover:not([readonly], [disabled], [active])::part(switch):before {
+    opacity: .04;
+  }
+}
+
+vaadin-checkbox[active]:not([readonly], [disabled])::part(checkbox):before, vaadin-radio-button[active]:not([disabled])::part(radio):before, vaadin-switch[active]:not([readonly], [disabled])::part(switch):before {
+  opacity: .1;
+  background: #000;
+}
+
+vaadin-confirm-dialog::part(footer) {
+  width: fit-content;
+  margin-inline-start: auto;
+}
+
+vaadin-confirm-dialog::part(cancel-button), vaadin-confirm-dialog::part(reject-button), vaadin-confirm-dialog::part(confirm-button) {
+  flex: 1;
+}
+
+vaadin-confirm-dialog > :is([slot="cancel-button"], [slot="reject-button"], [slot="confirm-button"]) {
+  display: flex;
+}
+
+:where(:root), :where(:host) {
+  --vaadin-crud-background: var(--aura-surface-color) padding-box;
+}
+
+vaadin-crud-edit {
+  padding: var(--vaadin-padding-xs);
+  --vaadin-icon-visual-size: .75lh;
+}
+
+vaadin-crud::part(editor) {
+  background: var(--aura-surface-color);
+}
+
+vaadin-crud vaadin-confirm-dialog {
+  color-scheme: normal;
+}
+
+:where(:root), :where(:host) {
+  --vaadin-date-picker-year-scroller-background: light-dark(var(--vaadin-background-container), transparent);
+  --vaadin-date-picker-month-header-font-weight: var(--aura-font-weight-semibold);
+  --vaadin-date-picker-date-selected-background: var(--aura-accent-color);
+  --vaadin-date-picker-date-selected-color: var(--aura-accent-contrast-color);
+  --vaadin-date-picker-date-width: round(var(--aura-base-font-size) / 16 * 2rem + var(--vaadin-padding-s), 2px);
+  --vaadin-date-picker-date-height: round(var(--aura-base-font-size) / 16 * 2rem + var(--vaadin-padding-s), 2px);
+  --vaadin-date-picker-year-scroller-width: round(var(--aura-base-font-size) / 16 * 3rem + var(--vaadin-padding-s), 2px);
+}
+
+vaadin-date-picker-month-scroller, vaadin-date-picker-overlay-content::part(toolbar) {
+  background: var(--aura-surface-color);
+}
+
+vaadin-date-picker-year-scroller:before {
+  background: var(--aura-surface-color-solid) padding-box;
+  width: 12px;
+  height: 12px;
+}
+
+vaadin-date-picker-year::part(year-number) {
+  font-size: var(--aura-font-size-s);
+  font-weight: var(--aura-font-weight-medium);
+}
+
+vaadin-date-picker-year[current]::part(year-number) {
+  font-weight: var(--aura-font-weight-semibold);
+}
+
+vaadin-date-picker-year[selected] {
+  position: relative;
+}
+
+vaadin-date-picker-year[selected]::part(year-number) {
+  color: var(--aura-accent-text-color);
+}
+
+vaadin-date-picker-year[selected]:after {
+  content: "";
+  z-index: -1;
+  background: var(--aura-accent-color);
+  border-radius: var(--vaadin-radius-s);
+  top: -.5lh;
+  opacity: .1;
+  height: 100%;
+  position: absolute;
+  inset-inline: 3px;
+}
+
+vaadin-date-picker-year::part(year-separator) {
+  text-align: center;
+  height: 8px;
+  line-height: 0;
+  translate: 0 -50%;
+}
+
+vaadin-date-picker-year::part(year-separator):before {
+  content: "";
+  background: var(--vaadin-text-color-disabled);
+  border-radius: 50%;
+  width: 3px;
+  height: 3px;
+  display: inline-block;
+}
+
+vaadin-month-calendar::part(today) {
+  font-weight: var(--aura-font-weight-semibold);
+}
+
+vaadin-month-calendar::part(today):before {
+  content: "";
+  aspect-ratio: 1;
+  background: color-mix(in srgb, currentColor 7%, transparent);
+  border-radius: 50%;
+  height: 1.75em;
+  position: absolute;
+}
+
+vaadin-month-calendar::part(selected):before {
+  content: none;
+}
+
+vaadin-month-calendar::part(date):hover:after {
+  background: var(--_aura-highlight-color);
+}
+
+vaadin-month-calendar::part(date disabled):hover:after {
+  background: none;
+}
+
+vaadin-month-calendar::part(date selected) {
+  color: var(--aura-accent-contrast-color);
+}
+
+vaadin-month-calendar::part(date selected):hover:after {
+  background: var(--aura-accent-color);
+}
+
+@media (width <= 450px), (height <= 450px) {
+  vaadin-date-picker, vaadin-date-range-picker {
+    --vaadin-overlay-opacity-closed: 1;
+    --vaadin-overlay-translate-closed: 0% 110%;
+  }
+
+  :is(vaadin-date-picker, vaadin-date-range-picker)[opening], :is(vaadin-date-picker, vaadin-date-range-picker)[closing] {
+    --vaadin-overlay-animation-duration: .3s;
+    --vaadin-overlay-animation-timing-function: cubic-bezier(.78, 0, .22, 1);
+  }
+
+  :is(vaadin-date-picker, vaadin-date-range-picker)[closing] {
+    --vaadin-overlay-animation-delay: .1s;
+  }
+}
+
+vaadin-month-calendar::part(in-range) {
+  --vaadin-date-picker-date-in-range-background: color-mix(in srgb, var(--aura-accent-color) 12%, transparent);
+}
+
+vaadin-month-calendar::part(range-editing) {
+  color: var(--vaadin-text-color);
+}
+
+vaadin-month-calendar::part(range-editing):after, vaadin-month-calendar::part(range-editing):hover:after {
+  background: color-mix(in srgb, var(--aura-accent-color) 35%, var(--aura-surface-color-solid));
+}
+
+:where(:root), :where(:host) {
+  --vaadin-dashboard-widget-title-font-weight: var(--aura-font-weight-medium);
+  --vaadin-dashboard-widget-header-padding: var(--vaadin-padding-s) var(--vaadin-padding-m);
+  --vaadin-dashboard-widget-header-gap: var(--vaadin-gap-xs);
+}
+
+vaadin-dashboard-widget {
+  --aura-surface-level: 2;
+  --aura-surface-opacity: .5;
+  background: var(--vaadin-dashboard-widget-background, var(--aura-surface-color) padding-box);
+}
+
+vaadin-dashboard-widget::part(content) {
+  transition: filter .2s, opacity .2s;
+}
+
+vaadin-dashboard-widget:is([resize-mode], [move-mode])::part(content) {
+  opacity: .75;
+  filter: blur(10px);
+  clip-path: inset(0);
+  transition-duration: 50ms;
+}
+
+vaadin-dashboard-widget[theme~="outlined"] {
+  --vaadin-dashboard-widget-border-color: var(--vaadin-border-color);
+}
+
+vaadin-dashboard-widget[theme~="elevated"] {
+  --aura-surface-opacity: .7;
+  --aura-surface-level: 3;
+  --vaadin-dashboard-widget-shadow: var(--aura-shadow-xs);
+  --vaadin-dashboard-widget-border-color: light-dark(color-mix(in srgb, var(--vaadin-border-color-secondary) 70%, var(--aura-shadow-color)), var(--vaadin-border-color-secondary));
+}
+
+vaadin-dashboard-widget[editable] {
+  --vaadin-dashboard-widget-shadow: var(--aura-shadow-s);
+  --vaadin-dashboard-widget-border-color: light-dark(color-mix(in srgb, var(--vaadin-border-color-secondary), var(--aura-shadow-color)), var(--vaadin-border-color-secondary));
+}
+
+vaadin-dashboard-widget[selected] {
+  --vaadin-dashboard-widget-background: var(--aura-accent-surface) padding-box;
+  --vaadin-dashboard-widget-border-color: var(--aura-accent-color);
+  --vaadin-dashboard-widget-shadow: var(--aura-shadow-s);
+}
+
+vaadin-dashboard-section vaadin-dashboard-widget {
+  transition: filter .2s, opacity .2s;
+}
+
+vaadin-dashboard-section[move-mode] vaadin-dashboard-widget {
+  opacity: .75;
+  filter: blur(10px);
+  clip-path: inset(0);
+  transition-duration: 50ms;
+}
+
+:is(vaadin-dashboard-widget, vaadin-dashboard-section)::part(button) {
+  background: var(--aura-surface-color) padding-box;
+  color: var(--vaadin-text-color-secondary);
+  border: 1px solid var(--vaadin-border-color);
+  outline-offset: -1px;
+  transition: color .12s;
+}
+
+:is(vaadin-dashboard-widget, vaadin-dashboard-section)::part(resize-shrink-height-button), :is(vaadin-dashboard-widget, vaadin-dashboard-section)::part(resize-grow-height-button) {
+  border-bottom: 0;
+  margin-top: 0;
+}
+
+:is(vaadin-dashboard-widget, vaadin-dashboard-section)::part(move-forward-button), :is(vaadin-dashboard-widget, vaadin-dashboard-section)::part(resize-shrink-width-button), :is(vaadin-dashboard-widget, vaadin-dashboard-section)::part(resize-grow-width-button) {
+  border-inline-end: 0;
+  margin-inline-start: 0;
+}
+
+:is(vaadin-dashboard-widget, vaadin-dashboard-section)::part(move-backward-button) {
+  border-inline-start: 0;
+  margin-inline-end: 0;
+}
+
+:is(vaadin-dashboard-widget, vaadin-dashboard-section)::part(move-apply-button), :is(vaadin-dashboard-widget, vaadin-dashboard-section)::part(resize-apply-button) {
+  background: var(--aura-accent-color);
+  color: var(--aura-accent-contrast-color);
+  box-shadow: 0 0 0 3px var(--aura-surface-color);
+  outline-offset: 2px;
+}
+
+@media (any-hover: hover) {
+  :is(vaadin-dashboard-widget, vaadin-dashboard-section)::part(button):hover {
+    color: var(--vaadin-text-color);
+  }
+
+  :is(vaadin-dashboard-widget, vaadin-dashboard-section)::part(move-apply-button):hover, :is(vaadin-dashboard-widget, vaadin-dashboard-section)::part(resize-apply-button):hover {
+    color: var(--aura-accent-contrast-color);
+  }
+}
+
+:is(vaadin-dashboard-widget, vaadin-dashboard-section)::part(move-button), :is(vaadin-dashboard-widget, vaadin-dashboard-section)::part(remove-button), :is(vaadin-dashboard-widget, vaadin-dashboard-section)::part(resize-button) {
+  color: var(--vaadin-text-color-disabled);
+  outline-offset: -2px;
+  background: none;
+  border: 0;
+}
+
+:is(vaadin-dashboard-widget, vaadin-dashboard-section)[editable] {
+  --vaadin-dashboard-widget-header-padding: var(--vaadin-padding-xs);
+}
+
+:where(:root), :where(:host) {
+  --vaadin-dialog-title-font-size: var(--aura-font-size-l);
+  --vaadin-dialog-title-line-height: var(--aura-line-height-l);
+  --vaadin-dialog-border-width: 0px;
+}
+
+vaadin-dialog, vaadin-confirm-dialog {
+  color-scheme: var(--aura-content-color-scheme, var(--aura-color-scheme));
+}
+
+vaadin-dialog::part(overlay), vaadin-confirm-dialog::part(overlay) {
+  background: var(--vaadin-dialog-background, var(--vaadin-overlay-background, var(--aura-surface-color)));
+  box-shadow: var(--aura-overlay-outline-shadow), var(--vaadin-dialog-shadow, var(--vaadin-overlay-shadow, var(--aura-overlay-shadow)));
+  --aura-surface-level: 3;
+  --aura-surface-opacity: var(--aura-overlay-surface-opacity);
+}
+
+vaadin-confirm-dialog::part(message) {
+  color: var(--vaadin-text-color-secondary);
+}
+
+vaadin-dialog, vaadin-confirm-dialog, vaadin-crud {
+  --vaadin-overlay-animation-duration: .16s;
+  --vaadin-overlay-scale-closed: .97;
+}
+
+vaadin-dialog[closing], vaadin-confirm-dialog[closing] {
+  --vaadin-overlay-animation-duration: .12s;
+  --vaadin-overlay-animation-delay: 60ms;
+}
+
+:where(:root), :where(:host) {
+  --vaadin-grid-row-selected-background-color: color-mix(in srgb, var(--aura-accent-color) 10%, transparent);
+  --vaadin-grid-background: linear-gradient(var(--aura-surface-color), var(--aura-surface-color)) var(--aura-background-color) padding-box;
+}
+
+:is(vaadin-grid, vaadin-crud-grid, vaadin-grid-pro)::part(empty-state) {
+  justify-content: center;
+  align-items: center;
+  display: flex;
+}
+
+vaadin-grid-sorter::part(indicators) {
+  transition: color .12s;
+}
+
+:is(vaadin-grid, vaadin-crud, vaadin-grid-pro)[theme~="no-row-borders"] {
+  --vaadin-grid-row-border-width: 0px;
+}
+
+:where(:root), :where(:host) {
+  --vaadin-login-form-error-color: var(--aura-red-text);
+  --vaadin-login-form-padding: var(--vaadin-padding-xl);
+  --vaadin-login-overlay-brand-padding: var(--vaadin-padding-xl);
+  --vaadin-login-overlay-brand-background: transparent;
+  --vaadin-login-overlay-title-font-size: 1.5em;
+  --vaadin-login-overlay-title-line-height: 1.2;
+  --vaadin-login-overlay-title-font-weight: var(--aura-font-weight-semibold);
+  --vaadin-login-overlay-title-color: var(--vaadin-text-color);
+  --vaadin-login-overlay-description-color: var(--vaadin-text-color-secondary);
+}
+
+vaadin-login-form::part(error-message) {
+  border-radius: var(--vaadin-radius-m);
+  padding: var(--vaadin-padding-m);
+  background: color-mix(in srgb, var(--aura-red) 10%, transparent);
+}
+
+vaadin-login-form::part(error-message-title) {
+  font-weight: var(--aura-font-weight-semibold);
+}
+
+vaadin-login-overlay {
+  --vaadin-overlay-backdrop-background: var(--aura-app-background);
+}
+
+vaadin-login-overlay[opening] {
+  --vaadin-overlay-scale-closed: .95;
+  --vaadin-overlay-translate-closed: 0 30px;
+  --vaadin-overlay-animation-duration: 1.2s;
+  --vaadin-overlay-animation-delay: .2s;
+  --vaadin-overlay-animation-timing-function: cubic-bezier(.33, 1, .68, 1);
+}
+
+vaadin-login-overlay[opening]::part(overlay) {
+  animation-duration: .3s, var(--vaadin-overlay-animation-duration);
+}
+
+vaadin-login-overlay[opening]::part(backdrop) {
+  --vaadin-overlay-animation-duration: .3s;
+  --vaadin-overlay-animation-delay: 0s;
+}
+
+vaadin-login-overlay[closing] {
+  --vaadin-overlay-animation-duration: .3s;
+  --vaadin-overlay-animation-delay: .3s;
+  --vaadin-overlay-scale-closed: 1.1;
+}
+
+vaadin-login-overlay::part(overlay) {
+  --aura-surface-level: 2;
+  background: var(--vaadin-login-overlay-background, var(--vaadin-overlay-background, var(--aura-surface-color)));
+  box-shadow: var(--aura-overlay-outline-shadow), var(--vaadin-login-overlay-shadow, var(--vaadin-overlay-shadow, var(--aura-overlay-shadow)));
+}
+
+vaadin-login-overlay::part(brand) {
+  text-align: center;
+  padding-bottom: 0;
+}
+
+vaadin-login-overlay::part(form-title) {
+  display: none;
+}
+
+vaadin-login-overlay [slot="title"] {
+  letter-spacing: -.03em;
+}
+
+:where(vaadin-markdown) h1, :where(vaadin-markdown) h2, :where(vaadin-markdown) h3, :where(vaadin-markdown) h4, :where(vaadin-markdown) h5, :where(vaadin-markdown) h6, :where(vaadin-markdown) hr {
+  margin-block: revert-layer;
+}
+
+:where(vaadin-markdown) code {
+  font-size: var(--aura-font-size-s);
+  line-height: var(--aura-line-height-s);
+  font-weight: var(--aura-font-weight-semibold);
+}
+
+:where(vaadin-markdown) pre code, :where(vaadin-markdown) b, :where(vaadin-markdown) strong {
+  font-weight: var(--aura-font-weight-medium);
+}
+
+:where(vaadin-markdown) blockquote {
+  font-weight: var(--aura-font-weight-medium);
+  border-left-color: var(--aura-accent-border-color);
+}
+
+:where(vaadin-markdown) ol li::marker {
+  font-weight: var(--aura-font-weight-regular);
+}
+
+:where(vaadin-markdown) figcaption {
+  font-size: var(--aura-font-size-s);
+  line-height: var(--aura-line-height-s);
+}
+
+:where(vaadin-markdown) th {
+  font-weight: var(--aura-font-weight-medium);
+}
+
+@property --_aura-mdl-page-contained-backdrop {
+  syntax: "<color>";
+  inherits: true;
+  initial-value: #0000;
+}
+
+:where(:root), :where(:host) {
+  --_aura-mdl-page-contained-backdrop: var(--vaadin-overlay-backdrop-background);
+}
+
+vaadin-master-detail-layout::part(detail) {
+  background: var(--vaadin-master-detail-layout-detail-background, var(--aura-surface-color) padding-box);
+}
+
+vaadin-master-detail-layout[has-detail][overlay]::part(detail) {
+  --aura-surface-level: 3;
+  --aura-surface-opacity: var(--aura-overlay-surface-opacity);
+  -webkit-backdrop-filter: var(--aura-overlay-backdrop-filter);
+  backdrop-filter: var(--aura-overlay-backdrop-filter);
+  box-shadow: var(--vaadin-master-detail-layout-detail-shadow, inset 1px 0 0 0 var(--aura-overlay-inner-outline-color), -1px 0 0 0 var(--aura-overlay-outline-color), var(--aura-overlay-shadow));
+  --_inset: var(--aura-master-detail-layout-detail-inset, round(var(--aura-app-layout-inset) / 1.5, 1px));
+  border-radius: clamp(0px, var(--_inset) * 1000, max(var(--vaadin-radius-m), var(--vaadin-radius-l)  - round(var(--_inset) / 2, 1px)));
+}
+
+vaadin-master-detail-layout[has-detail][overlay][orientation="horizontal"]::part(detail) {
+  inset-block: var(--_inset);
+  inset-inline-end: var(--_inset);
+}
+
+vaadin-master-detail-layout[has-detail][overlay][orientation="vertical"]::part(detail) {
+  inset-inline: var(--_inset);
+  inset-block-end: var(--_inset);
+}
+
+vaadin-master-detail-layout[has-detail][overlay][overlay-containment="page"]::part(detail) {
+  border-radius: clamp(0px, var(--_inset) * 1000, var(--vaadin-radius-l));
+}
+
+vaadin-master-detail-layout > vaadin-master-detail-layout, vaadin-master-detail-layout:not([overlay])::part(detail) {
+  border-start-end-radius: var(--_app-layout-radius);
+  border-end-end-radius: var(--_app-layout-radius);
+}
+
+vaadin-master-detail-layout[overlay-containment="page"] {
+  --vaadin-overlay-backdrop-background: var(--_aura-mdl-page-contained-backdrop);
+}
+
+vaadin-menu-bar:not([has-single-button]) vaadin-menu-bar-button:not([first-visible], [focus-ring]) {
+  clip-path: inset(-10px -10px -10px max(-10px, var(--vaadin-menu-bar-gap, 0px) * -1 + .8px));
+}
+
+@media (any-hover: hover) {
+  vaadin-menu-bar-button > vaadin-menu-bar-item:not([disabled]):not([tabindex]):hover {
+    background: none;
+  }
+}
+
+vaadin-menu-bar-button[slot="overflow"] {
+  font-family: system-ui, sans-serif;
+  font-weight: 600;
+}
+
+vaadin-menu-bar-button[aria-haspopup="true"]::part(suffix):after {
+  --vaadin-icon-visual-size: 90%;
+}
+
+vaadin-menu-bar-button > vaadin-menu-bar-item {
+  padding-inline: 0;
+}
+
+vaadin-menu-bar-button > vaadin-menu-bar-item::part(content) {
+  gap: var(--vaadin-button-gap, var(--vaadin-gap-s));
+  padding-inline: 0;
+}
+
+vaadin-message-input > vaadin-text-area::part(input-field) {
+  background: var(--vaadin-input-field-background, transparent);
+}
+
+vaadin-message-input:not([readonly], [disabled]) > vaadin-text-area::part(input-field) {
+  box-shadow: none;
+}
+
+vaadin-message-input[theme~="icon-button"] > vaadin-message-input-button {
+  width: var(--vaadin-icon-size, 1lh);
+  height: var(--vaadin-icon-size, 1lh);
+  color: #0000;
+  contain: strict;
+  position: relative;
+}
+
+vaadin-message-input[theme~="icon-button"] > vaadin-message-input-button:before {
+  content: "";
+  mask-image: var(--_vaadin-icon-paper-airplane);
+  background: var(--vaadin-button-text-color);
+  position: absolute;
+  inset: 0;
+}
+
+vaadin-message-input[theme~="icon-button"][dir="rtl"] > vaadin-message-input-button:before {
+  scale: -1;
+}
+
+@media (forced-colors: active) {
+  vaadin-message-input[theme~="icon-button"] > vaadin-message-input-button {
+    forced-color-adjust: none;
+    --vaadin-button-text-color: CanvasText;
+  }
+}
+
+:where(:root), :where(:host) {
+  --vaadin-message-attachment-font-weight: var(--aura-font-weight-medium);
+  --vaadin-message-attachment-border-width: 1px;
+}
+
+vaadin-message::part(attachment) {
+  --aura-surface-level: 4;
+  background: var(--vaadin-message-attachment-background, var(--aura-surface-color) padding-box);
+}
+
+vaadin-message::part(attachment):hover {
+  --aura-surface-opacity: .7;
+}
+
+vaadin-message::part(attachment):active {
+  --aura-surface-opacity: .4;
+}
+
+vaadin-message::part(attachment-icon) {
+  background: color-mix(in srgb, var(--aura-accent-color) 10%, transparent);
+  color: var(--aura-accent-color);
+}
+
+vaadin-message-list[theme~="bubble"] > vaadin-message:not([theme~="full-width"]) {
+  --aura-surface-level: 3;
+  --aura-surface-opacity: .6;
+}
+
+vaadin-message-list[theme~="bubble"] > vaadin-message:not([theme~="full-width"])::part(content) {
+  background: var(--aura-surface-color) padding-box;
+  border: 1px solid var(--vaadin-border-color-secondary);
+  box-shadow: var(--aura-shadow-xs);
+}
+
+vaadin-message-list[theme~="bubble"] > vaadin-message:not([theme~="full-width"])[theme~="self"] {
+  --aura-accent-color-light: var(--vaadin-message-user-color, var(--vaadin-user-color-0));
+  --aura-accent-color-dark: var(--vaadin-message-user-color, var(--vaadin-user-color-0));
+  --aura-surface-level: 2;
+  --aura-surface-opacity: 1;
+}
+
+vaadin-message-list[theme~="bubble"] > vaadin-message:not([theme~="full-width"])[theme~="self"]::part(content) {
+  background: var(--aura-accent-surface) padding-box;
+  border-color: var(--aura-accent-border-color);
+}
+
+:where(:root), :where(:host) {
+  --vaadin-chip-padding: .4em;
+  --vaadin-chip-background: var(--vaadin-background-container-strong);
+  --vaadin-chip-height: 1lh;
+  --vaadin-chip-border-radius: var(--vaadin-radius-s);
+  --vaadin-chip-border-width: 0px;
+}
+
+vaadin-multi-select-combo-box-chip {
+  --vaadin-icon-size: 1.25em;
+}
+
+vaadin-multi-select-combo-box-select-all-button {
+  padding-inline: max(0px, var(--vaadin-padding-inline-container)  - var(--aura-item-overlay-padding-inline));
+  font-size: var(--aura-font-size-s);
+  color: var(--aura-accent-text-color);
+  font-weight: var(--aura-font-weight-medium);
+}
+
+vaadin-multi-select-combo-box-select-all-button:before {
+  margin-inline-end: var(--vaadin-gap-xs);
+}
+
+@media (any-hover: hover) {
+  vaadin-multi-select-combo-box-select-all-button:hover {
+    background: var(--_aura-highlight-color);
+  }
+}
+
+:where(:root), :where(:host) {
+  --vaadin-notification-border-width: 0px;
+  --vaadin-notification-padding: var(--vaadin-padding-m);
+}
+
+vaadin-notification-container {
+  color-scheme: var(--aura-notification-color-scheme);
+}
+
+vaadin-notification-card::part(overlay) {
+  --aura-surface-level: 3.5;
+  background: var(--vaadin-notification-background, var(--aura-surface-color));
+  box-shadow: var(--aura-overlay-outline-shadow), var(--vaadin-notification-shadow, var(--aura-overlay-shadow));
+}
+
+vaadin-notification-card:is(.aura-accent-color, .aura-accent-red, .aura-accent-orange, .aura-accent-yellow, .aura-accent-green, .aura-accent-blue, .aura-accent-purple, .v-info, .v-success, .v-warning, .v-error, [theme~="info"], [theme~="success"], [theme~="warning"], [theme~="error"])::part(overlay) {
+  --vaadin-notification-background: var(--aura-accent-surface);
+  --vaadin-icon-color: var(--aura-accent-text-color);
+  box-shadow: inset 0 0 0 1px light-dark(transparent, var(--aura-accent-border-color)), 0 0 0 1px light-dark(var(--aura-accent-border-color), transparent), var(--vaadin-notification-shadow, var(--aura-shadow-m));
+}
+
+vaadin-notification-card vaadin-card {
+  --vaadin-card-border-width: 0px;
+  --vaadin-card-gap: var(--vaadin-gap-xs) var(--vaadin-gap-s);
+  color: var(--vaadin-text-color-secondary);
+}
+
+vaadin-notification-card vaadin-button {
+  --aura-surface-level: 6;
+}
+
+vaadin-popover::part(overlay) {
+  background: var(--vaadin-popover-background, var(--vaadin-overlay-background, var(--aura-surface-color)));
+  box-shadow: var(--aura-overlay-outline-shadow), var(--vaadin-popover-shadow, var(--vaadin-overlay-shadow, var(--aura-overlay-shadow)));
+}
+
+vaadin-popover::part(arrow) {
+  background: var(--vaadin-popover-background, var(--vaadin-overlay-background, var(--aura-surface-color)));
+}
+
+:where(:root), :where(:host) {
+  --vaadin-progress-bar-border-width: 0px;
+  --vaadin-progress-bar-height: var(--vaadin-gap-s);
+}
+
+vaadin-progress-bar::part(value) {
+  background: var(--vaadin-progress-bar-value-background, linear-gradient(90deg in oklab, var(--aura-accent-color), light-dark(oklch(from var(--aura-accent-color-light) clamp(.5, l * 1.2, 1) c calc(h - 30 * var(--_vaadin-safari-17-deg, 1))), oklch(from var(--aura-accent-color-dark) clamp(.5, l * 1.2, 1) c calc(h - 30 * var(--_vaadin-safari-17-deg, 1)))))) border-box;
+  box-shadow: inset 0 0 0 1px var(--vaadin-border-color-secondary);
+}
+
+vaadin-progress-bar[dir="rtl"]::part(value) {
+  scale: -1;
+}
+
+:where(:root), :where(:host) {
+  --vaadin-rich-text-editor-toolbar-background: transparent;
+  --vaadin-rich-text-editor-toolbar-padding: var(--vaadin-padding-xs);
+  --vaadin-rich-text-editor-toolbar-gap: var(--vaadin-gap-xs) var(--vaadin-gap-m);
+  --vaadin-rich-text-editor-toolbar-button-background: transparent;
+  --vaadin-rich-text-editor-toolbar-button-border-radius: calc(var(--vaadin-radius-m)  - 2px);
+  --vaadin-rich-text-editor-toolbar-button-padding: var(--vaadin-padding-xs);
+}
+
+vaadin-rich-text-editor {
+  --vaadin-icon-visual-size: 90%;
+  background: var(--vaadin-rich-text-editor-background, var(--aura-surface-color) padding-box);
+  --aura-surface-level: 4;
+  box-shadow: var(--aura-shadow-xs);
+  caret-color: var(--vaadin-focus-ring-color);
+  --aura-surface-opacity: .7 !important;
+}
+
+vaadin-rich-text-editor:not(:focus-within) {
+  --vaadin-rich-text-editor-toolbar-button-text-color: var(--vaadin-text-color-disabled);
+}
+
+vaadin-rich-text-editor::part(toolbar) {
+  contain: paint;
+  border-bottom: 1px solid var(--vaadin-border-color-secondary);
+}
+
+vaadin-rich-text-editor::part(toolbar-group) {
+  align-items: center;
+  gap: 1px;
+}
+
+vaadin-rich-text-editor::part(toolbar-group):before {
+  content: "";
+  background: var(--vaadin-border-color-secondary);
+  width: 1px;
+  height: 1lh;
+  translate: calc(var(--vaadin-gap-m) / -2);
+  position: absolute;
+}
+
+vaadin-rich-text-editor::part(toolbar-button) {
+  outline-offset: calc(var(--vaadin-focus-ring-width) * -1);
+  color: var(--vaadin-rich-text-editor-toolbar-button-text-color, var(--vaadin-text-color-secondary));
+  transition: color 80ms, background-color 80ms, scale .18s;
+  position: relative;
+}
+
+vaadin-rich-text-editor::part(toolbar-button-pressed) {
+  --vaadin-rich-text-editor-toolbar-button-background: transparent;
+}
+
+vaadin-rich-text-editor:focus-within::part(toolbar-button-pressed) {
+  --vaadin-rich-text-editor-toolbar-button-background: var(--vaadin-background-container-strong) padding-box;
+  --vaadin-rich-text-editor-toolbar-button-text-color: var(--vaadin-text-color);
+  border-color: var(--vaadin-text-color-disabled);
+}
+
+vaadin-rich-text-editor::part(toolbar-button):active {
+  transition-duration: 80ms, 80ms, 50ms;
+  scale: .95;
+}
+
+@media (any-hover: hover) {
+  vaadin-rich-text-editor::part(toolbar-button):hover {
+    --vaadin-rich-text-editor-toolbar-button-background: var(--vaadin-background-container);
+    --vaadin-rich-text-editor-toolbar-button-text-color: var(--vaadin-text-color);
+  }
+}
+
+vaadin-rich-text-editor-popup[closing] {
+  --vaadin-overlay-animation-duration: .1s;
+  --vaadin-overlay-animation-delay: 60ms;
+  --vaadin-overlay-animation-timing-function: ease-in;
+}
+
+vaadin-select-value-button {
+  font-weight: var(--aura-font-weight-medium);
+}
+
+:where(:root), :where(:host) {
+  --vaadin-side-nav-label-line-height: var(--aura-line-height-xs);
+  --vaadin-side-nav-label-font-weight: var(--aura-font-weight-medium);
+  --vaadin-side-nav-item-font-weight: var(--aura-font-weight-medium);
+  --vaadin-side-nav-item-border-width: 1px;
+  --vaadin-side-nav-items-gap: var(--vaadin-gap-xs);
+}
+
+vaadin-side-nav + vaadin-side-nav {
+  margin-top: var(--vaadin-gap-l);
+}
+
+vaadin-side-nav::part(label) {
+  gap: var(--vaadin-gap-xs);
+  transition: color 80ms;
+}
+
+vaadin-side-nav-item::part(content) {
+  --aura-surface-level: 4;
+  --aura-surface-opacity: .5;
+  transition: color 80ms;
+}
+
+vaadin-side-nav-item:not([disabled], [current])::part(content):active {
+  --vaadin-side-nav-item-background: var(--vaadin-background-container);
+}
+
+@media (any-hover: hover) {
+  vaadin-side-nav::part(label):hover {
+    --vaadin-side-nav-label-color: var(--vaadin-text-color);
+  }
+
+  vaadin-side-nav-item:not([disabled], [current])::part(content):hover {
+    --vaadin-side-nav-item-text-color: var(--vaadin-text-color);
+  }
+}
+
+vaadin-side-nav-item[current]::part(content) {
+  --vaadin-side-nav-item-background: var(--aura-surface-color) padding-box;
+  --vaadin-side-nav-item-text-color: var(--aura-accent-text-color);
+  --vaadin-side-nav-item-border-color: var(--vaadin-border-color-secondary);
+  transition: none;
+}
+
+vaadin-side-nav::part(toggle-button), vaadin-side-nav-item::part(toggle-button) {
+  --vaadin-icon-visual-size: .9lh;
+}
+
+vaadin-side-nav[theme~="filled"] > vaadin-side-nav-item[current]::part(content) {
+  --vaadin-side-nav-item-background: var(--aura-accent-color) border-box;
+  --vaadin-side-nav-item-text-color: var(--aura-accent-contrast-color);
+  --vaadin-text-color: var(--vaadin-side-nav-item-text-color);
+  --vaadin-text-color-secondary: color-mix(in srgb, var(--aura-accent-contrast-color) 70%, transparent);
+  --vaadin-text-color-disabled: color-mix(in srgb, var(--aura-accent-contrast-color) 50%, transparent);
+  --vaadin-icon-color: var(--aura-accent-contrast-color);
+  outline-offset: 2px;
+}
+
+vaadin-side-nav-item:not([current]) > vaadin-icon[slot="prefix"] {
+  opacity: .8;
+}
+
+:where(:root), :where(:host) {
+  --vaadin-slider-track-background: var(--vaadin-background-container-strong);
+  --vaadin-slider-track-height: var(--vaadin-gap-xs);
+  --vaadin-slider-fill-border-color: var(--vaadin-border-color-secondary);
+  --vaadin-slider-thumb-width: round(1lh - 4px, 2px);
+  --vaadin-slider-thumb-height: round(1lh - 4px, 2px);
+  --vaadin-slider-marks-font-size: var(--aura-font-size-xs);
+}
+
+:is(vaadin-slider, vaadin-range-slider) {
+  --aura-surface-level: 6;
+  --vaadin-slider-fill-background: linear-gradient(var(--_bg-dir, 90deg) in oklab, var(--aura-accent-color), light-dark(oklch(from var(--aura-accent-color-light) clamp(.5, l * 1.2, 1) c calc(h - 30 * var(--_vaadin-safari-17-deg, 1))), oklch(from var(--aura-accent-color-dark) clamp(.5, l * 1.2, 1) c calc(h - 30 * var(--_vaadin-safari-17-deg, 1))))) border-box;
+}
+
+:is(vaadin-slider, vaadin-range-slider):dir(rtl) {
+  --_bg-dir: -90deg;
+}
+
+:is(vaadin-slider, vaadin-range-slider)::part(track-fill) {
+  margin-inline-end: -1px;
+}
+
+:is(vaadin-slider, vaadin-range-slider)::part(thumb) {
+  background: var(--vaadin-slider-thumb-background, linear-gradient(light-dark(transparent, var(--vaadin-border-color-secondary)), transparent 33%, transparent 66%, light-dark(var(--vaadin-border-color-secondary), transparent)) var(--aura-surface-color-solid)) border-box;
+  border-color: var(--vaadin-slider-thumb-border-color, oklch(100% 0 0 / .1));
+  outline-offset: -1px;
+  box-shadow: 0 0 0 1px light-dark(var(--vaadin-border-color), oklch(0% 0 0 / .1)), var(--_thumb-shadow, var(--aura-shadow-s));
+  position: relative;
+}
+
+:is(vaadin-slider, vaadin-range-slider)[readonly] {
+  --aura-surface-level: 4;
+  --vaadin-slider-fill-background: var(--vaadin-text-color-secondary);
+  --vaadin-slider-thumb-background: var(--aura-surface-color-solid);
+  --vaadin-slider-thumb-border-color: oklch(100% 0 0 / .1);
+  --_thumb-shadow: 0 0 0 0 transparent;
+}
+
+:is(vaadin-slider, vaadin-range-slider)[disabled] {
+  --aura-surface-level: 0;
+  --vaadin-slider-track-background: var(--vaadin-background-container);
+  --vaadin-slider-fill-background: var(--vaadin-border-color-secondary);
+  --vaadin-slider-fill-border-color: transparent;
+  --vaadin-slider-thumb-background: linear-gradient(var(--vaadin-background-container), var(--vaadin-background-container)) var(--vaadin-background-color);
+  --vaadin-slider-thumb-border-color: var(--vaadin-border-color-secondary);
+}
+
+:is(vaadin-slider, vaadin-range-slider)[disabled]::part(thumb) {
+  box-shadow: none;
+}
+
+:is(vaadin-slider, vaadin-range-slider)::part(thumb):before {
+  content: "";
+  border-radius: inherit;
+  opacity: 0;
+  background-color: #000;
+  transition: opacity .1s, background-color .1s;
+  position: absolute;
+  inset: -1px;
+}
+
+vaadin-range-slider::part(track-fill) {
+  margin-inline-start: calc(var(--vaadin-slider-thumb-width)  - 1px);
+}
+
+vaadin-slider[active]:not([readonly], [disabled])::part(thumb):before, vaadin-range-slider[start-active]:not([readonly], [disabled])::part(thumb-start):before, vaadin-range-slider[end-active]:not([readonly], [disabled])::part(thumb-end):before {
+  opacity: .1;
+}
+
+:where(:root), :where(:host) {
+  --vaadin-switch-border-width: 0px;
+  --vaadin-switch-width: round(2.6em, 2px);
+  --vaadin-switch-marker-border-radius: calc(var(--vaadin-radius-m) / 2);
+  --vaadin-switch-marker-width: round(1.4em, 2px);
+  --vaadin-switch-marker-height: round(1.25em - 4px, 2px);
+  --vaadin-switch-marker-color: #fff;
+  --vaadin-switch-marker-scale: 1;
+  --vaadin-switch-icon-size: 70% 90%;
+}
+
+vaadin-switch {
+  --vaadin-switch-background: light-dark(var(--vaadin-text-color-secondary), var(--vaadin-border-color));
+  --vaadin-switch-icon-color: light-dark(var(--vaadin-switch-background), var(--vaadin-background-color));
+}
+
+vaadin-switch:not([disabled], [readonly])::part(marker) {
+  box-shadow: var(--aura-shadow-s), 0 2px 2px 0 light-dark(transparent, var(--aura-shadow-color));
+}
+
+vaadin-switch:not([disabled], [readonly])[active] {
+  --vaadin-switch-marker-scale: .9;
+}
+
+vaadin-switch[checked] {
+  --vaadin-switch-background: var(--aura-accent-color);
+  --vaadin-switch-marker-color: var(--aura-accent-contrast-color);
+  --vaadin-switch-icon-color: var(--vaadin-switch-background);
+}
+
+vaadin-switch[disabled] {
+  --vaadin-switch-background: color-mix(in srgb, var(--vaadin-text-color-secondary) 15%, transparent);
+  --vaadin-switch-marker-color: light-dark(#ffffff80, #ffffff1a);
+  --vaadin-switch-icon-color: light-dark(var(--vaadin-switch-background), color-mix(in srgb, var(--vaadin-background-color), transparent));
+}
+
+vaadin-switch[disabled][checked] {
+  --vaadin-switch-background: color-mix(in srgb, var(--aura-accent-color) 20%, transparent);
+  --vaadin-switch-icon-color: light-dark(var(--vaadin-switch-background), color-mix(in srgb, var(--aura-accent-color), var(--vaadin-background-color)));
+}
+
+vaadin-switch[readonly] {
+  --vaadin-switch-background: transparent;
+  --vaadin-switch-border-width: 1px;
+  --vaadin-switch-border-color: var(--vaadin-border-color);
+  --_border-style: solid;
+  --vaadin-switch-marker-color: var(--vaadin-text-color-disabled);
+  --vaadin-switch-icon-color: var(--vaadin-background-color);
+  --vaadin-switch-marker-height: round(1.25em - 6px, 2px);
+}
+
+vaadin-switch[readonly][checked] {
+  --vaadin-switch-border-color: var(--vaadin-text-color-disabled);
+  --vaadin-switch-marker-color: var(--vaadin-text-color-secondary);
+}
+
+:where(:root), :where(:host) {
+  --vaadin-tab-border-radius: var(--vaadin-radius-m);
+  --vaadin-tab-font-weight: var(--aura-font-weight-medium);
+  --vaadin-tabs-gap: 2px;
+  --vaadin-tabs-border-radius: calc(var(--vaadin-tab-border-radius)  + var(--vaadin-tabs-padding));
+  --vaadin-tabs-padding: 3px;
+}
+
+vaadin-tabs {
+  --aura-surface-level: -.5;
+  --aura-surface-opacity: .3;
+  background: var(--vaadin-tabs-background, var(--vaadin-background-container));
+}
+
+vaadin-tabs::part(tabs) {
+  margin: -3px;
+  padding: 3px;
+}
+
+vaadin-tabs[overflow]::part(tabs) {
+  --_mask-fade-start: var(--vaadin-tabs-padding);
+  --_mask-fade-size: 20px;
+  mask-image: linear-gradient(var(--_mask-dir, to right), var(--_mask-start, black) var(--_mask-fade-start), black var(--_mask-fade-size), black calc(100% - var(--_mask-fade-size)), var(--_mask-end, black) calc(100% - var(--_mask-fade-start)));
+}
+
+vaadin-tabs[dir="rtl"]::part(tabs) {
+  --_mask-dir: to left;
+}
+
+vaadin-tabs[orientation="vertical"]::part(tabs) {
+  --_mask-dir: to bottom;
+  --_mask-fade-start: 0px;
+  --_mask-fade-size: .5lh;
+}
+
+vaadin-tabs[overflow~="start"] {
+  --_mask-start: transparent;
+}
+
+vaadin-tabs[overflow~="end"] {
+  --_mask-end: transparent;
+}
+
+vaadin-tabs::part(back-button), vaadin-tabs::part(forward-button) {
+  background: var(--aura-background-color) padding-box;
+  border: 1px solid var(--vaadin-border-color-secondary);
+  border-radius: var(--vaadin-radius-m);
+  padding: var(--vaadin-padding-xs);
+  height: auto;
+  box-shadow: var(--aura-shadow-s);
+  align-self: center;
+  transition: opacity .12s;
+}
+
+vaadin-tabs::part(back-button) {
+  inset-inline-start: 5px;
+}
+
+vaadin-tabs::part(forward-button) {
+  inset-inline-end: 5px;
+}
+
+vaadin-tab {
+  border: var(--vaadin-tab-border-width, 1px) solid var(--vaadin-tab-border-color, transparent);
+  transition: color .12s, border-color .12s, background-color .12s;
+}
+
+vaadin-tab:not([disabled], [selected]):hover {
+  --vaadin-tab-text-color: var(--vaadin-text-color);
+}
+
+vaadin-tab[selected] {
+  --aura-surface-level: 5;
+  --aura-surface-opacity: .8;
+  --vaadin-tab-background: var(--aura-surface-color);
+  --vaadin-tab-text-color: var(--aura-accent-text-color);
+  box-shadow: 0 0 0 1px light-dark(#00000005, #0000), var(--aura-shadow-s);
+  border-color: light-dark(#0000, #ffffff08);
+}
+
+vaadin-tabs[theme~="filled"] > vaadin-tab[selected] {
+  --vaadin-tab-background: var(--aura-accent-color) border-box;
+  --vaadin-tab-text-color: var(--aura-accent-contrast-color);
+  --vaadin-text-color: var(--aura-accent-contrast-color);
+  --vaadin-text-color-secondary: color-mix(in srgb, var(--aura-accent-contrast-color) 70%, transparent);
+  --vaadin-text-color-disabled: color-mix(in srgb, var(--aura-accent-contrast-color) 50%, transparent);
+  --vaadin-icon-color: var(--aura-accent-contrast-color);
+  outline-offset: 1px;
+}
+
+:where(:root), :where(:host) {
+  --vaadin-tooltip-padding: var(--vaadin-padding-xs) calc(var(--vaadin-padding-xs) * 1.4);
+  --vaadin-tooltip-font-size: var(--aura-font-size-s);
+  --vaadin-tooltip-font-weight: var(--aura-font-weight-medium);
+  --vaadin-tooltip-line-height: var(--aura-line-height-s);
+  --vaadin-tooltip-border-radius: var(--vaadin-radius-s);
+}
+
+:is(vaadin-tooltip, vaadin-slider-bubble)::part(overlay) {
+  background: var(--vaadin-tooltip-background, var(--vaadin-overlay-background, var(--aura-surface-color)));
+  box-shadow: var(--aura-overlay-outline-shadow), var(--vaadin-tooltip-shadow, var(--aura-shadow-s));
+}
+
+:where(:root), :where(:host) {
+  --vaadin-upload-background: var(--aura-surface-color) padding-box;
+  --vaadin-upload-border: 1px solid var(--vaadin-border-color-secondary);
+  --vaadin-upload-padding: var(--vaadin-padding-s);
+  --vaadin-upload-file-list-divider-color: var(--vaadin-border-color-secondary);
+  --vaadin-upload-file-list-divider-width: 1px;
+  --vaadin-upload-file-error-color: var(--vaadin-text-color-secondary);
+  --vaadin-upload-file-warning-color: var(--aura-red);
+  --vaadin-upload-file-done-color: var(--aura-green);
+  --vaadin-upload-file-name-font-weight: var(--aura-font-weight-medium);
+  --vaadin-upload-file-padding: var(--vaadin-padding-m) var(--vaadin-padding-s);
+  --vaadin-upload-file-gap: 0 var(--vaadin-gap-s);
+  --vaadin-upload-file-button-border-width: 0;
+  --vaadin-upload-file-status-font-size: var(--aura-font-size-s);
+  --vaadin-upload-file-status-line-height: var(--aura-line-height-s);
+  --vaadin-upload-file-error-font-size: var(--aura-font-size-s);
+  --vaadin-upload-file-error-line-height: var(--aura-line-height-s);
+  --vaadin-upload-drop-label-color: var(--vaadin-text-color-secondary);
+  --vaadin-upload-drop-label-font-weight: var(--aura-font-weight-medium);
+}
+
+vaadin-upload {
+  --_divider-offset-start: calc(var(--vaadin-padding-s)  + var(--vaadin-icon-size, 1lh)  + var(--vaadin-gap-s));
+  --_divider-offset-end: var(--vaadin-padding-s);
+}
+
+vaadin-upload::part(primary-buttons) {
+  gap: var(--vaadin-gap-s) var(--vaadin-gap-m);
+  flex-wrap: wrap;
+}
+
+vaadin-upload:not([nodrop]) vaadin-button[slot="add-button"] {
+  flex-grow: 1;
+}
+
+vaadin-upload::part(drop-label) {
+  padding: var(--vaadin-padding-xs) var(--vaadin-padding-s);
+  min-width: fit-content;
+  flex-grow: 1000;
+  margin-inline-start: calc(var(--vaadin-upload-padding) * -1);
+}
+
+vaadin-upload[dragover-valid] {
+  outline: var(--vaadin-focus-ring-width) solid var(--vaadin-focus-ring-color);
+  outline-offset: -1px;
+}
+
+vaadin-upload-file-list li {
+  margin-inline: var(--_divider-offset-start) var(--_divider-offset-end);
+}
+
+vaadin-upload-file-list li:first-child {
+  margin-top: var(--vaadin-upload-gap, 0);
+}
+
+vaadin-upload:not([theme~="no-border"]) > vaadin-upload-file-list:has( > ul > li) {
+  border-top: 1px solid var(--vaadin-border-color-secondary);
+  margin: calc(var(--vaadin-upload-padding) * -1);
+  margin-top: var(--vaadin-upload-padding);
+}
+
+vaadin-upload-file {
+  --vaadin-icon-visual-size: .75lh;
+  border-radius: var(--vaadin-upload-file-border-radius, var(--vaadin-radius-m));
+  margin-inline: calc(var(--_divider-offset-start, 0) * -1) calc(var(--_divider-offset-end, 0) * -1);
+}
+
+vaadin-upload-file:not([complete], [error])::part(done-icon):before {
+  background: var(--vaadin-border-color-secondary);
+}
+
+vaadin-upload-file::part(start-button), vaadin-upload-file::part(remove-button), vaadin-upload-file::part(retry-button) {
+  color: var(--vaadin-upload-file-button-text-color, var(--vaadin-text-color-secondary));
+  outline-offset: calc(var(--vaadin-focus-ring-width) * -1);
+}
+
+vaadin-upload-file vaadin-progress-bar {
+  --vaadin-progress-bar-height: var(--vaadin-gap-xs);
+  margin-top: var(--vaadin-gap-xs);
+}
+
+vaadin-upload-file:not([error])::part(status) {
+  -webkit-line-clamp: 2;
+  -webkit-box-orient: vertical;
+  max-height: 2lh;
+  display: -webkit-box;
+  overflow: hidden;
+}
+
+vaadin-upload-file[complete]::part(status) {
+  visibility: hidden;
+  height: 1lh;
+  max-height: 0;
+  transition: max-height .2s;
+}
+
+vaadin-upload-file[complete] vaadin-progress-bar {
+  visibility: hidden;
+  --vaadin-progress-bar-height: 0;
+  margin-top: 0;
+  transition: height .2s;
+}
+
+vaadin-upload-file[theme~="thumbnails"] {
+  --aura-surface-level: 3;
+  --vaadin-upload-file-padding: var(--vaadin-padding-s);
+  --vaadin-upload-file-done-color: var(--aura-accent-color);
+  --vaadin-spinner-size: 1em;
+  background: var(--aura-surface-color) padding-box;
+  border: 1px solid light-dark(var(--vaadin-border-color-secondary), transparent);
+}
+
+vaadin-upload-file[theme~="thumbnails"]:before {
+  content: "";
+  border-radius: inherit;
+  border: 1px solid light-dark(transparent, var(--vaadin-border-color-secondary));
+  pointer-events: none;
+  position: absolute;
+  inset: 0;
+}
+
+vaadin-upload-file[theme~="thumbnails"]::part(done-icon), vaadin-upload-file[theme~="thumbnails"]::part(warning-icon) {
+  --vaadin-icon-visual-size: 1lh;
+  background: color-mix(in srgb, var(--aura-accent-color) 10%, transparent);
+}
+
+vaadin-upload-file[theme~="thumbnails"]::part(commands) {
+  gap: 0;
+}
+
+vaadin-upload-file[theme~="thumbnails"]::part(start-button), vaadin-upload-file[theme~="thumbnails"]::part(retry-button), vaadin-upload-file[theme~="thumbnails"]::part(remove-button) {
+  --vaadin-icon-visual-size: .8lh;
+}
+
+vaadin-upload-file[theme~="thumbnails"][error] {
+  --aura-accent-color-light: var(--aura-red);
+  --aura-accent-color-dark: var(--aura-red);
+}
+
+vaadin-upload-file[theme~="thumbnails"] vaadin-progress-bar {
+  --vaadin-progress-bar-height: 2px;
+  --vaadin-border-color-secondary: transparent;
+  align-self: end;
+  margin-top: 0;
+}
+
+vaadin-upload-file[theme~="thumbnails"] vaadin-progress-bar:not([indeterminate]) {
+  opacity: 1;
+}
+
+vaadin-upload[theme~="no-border"] {
+  --vaadin-upload-padding: 0;
+  --vaadin-upload-background: transparent;
+  --vaadin-upload-border-width: 0;
+  --vaadin-upload-file-list-divider-width: 0;
+  --vaadin-upload-file-padding: var(--vaadin-padding-m);
+  --_divider-offset-start: 0px;
+  --_divider-offset-end: 0px;
+  outline-offset: 2px;
+}
+
+vaadin-upload[theme~="no-border"] > vaadin-upload-file-list::part(list) {
+  gap: var(--vaadin-gap-s);
+  flex-direction: column;
+  display: flex;
+}
+
+vaadin-upload[theme~="no-border"] > vaadin-upload-file-list li:first-child {
+  margin-top: var(--vaadin-gap-s);
+}
+
+vaadin-upload[theme~="no-border"] vaadin-upload-file {
+  background: var(--aura-surface-color) padding-box;
+  border: 1px solid var(--vaadin-border-color-secondary);
+}
+
+@media (any-hover: hover) {
+  vaadin-upload-file::part(start-button):hover, vaadin-upload-file::part(remove-button):hover, vaadin-upload-file::part(retry-button):hover {
+    --vaadin-upload-file-button-text-color: var(--vaadin-text-color);
+  }
+}
+
+:where(:root), :where(:host) {
+  cursor: default;
+  --vaadin-aura-theme: 1;
+  --_vaadin-icon-checkmark: url("data:image/svg+xml;utf8,<svg xmlns=\"http://www.w3.org/2000/svg\" width=\"24\" height=\"24\" fill=\"none\" stroke=\"currentColor\" stroke-width=\"2.5\" stroke-linecap=\"round\" stroke-linejoin=\"round\"><path d=\"M20 6 9 17l-5-5\"/></svg>");
+  --_vaadin-icon-menu: url("data:image/svg+xml;utf8,<svg xmlns=\"http://www.w3.org/2000/svg\" viewBox=\"0 0 24 24\" fill=\"none\" stroke=\"currentColor\" stroke-width=\"2\" stroke-linecap=\"round\" stroke-linejoin=\"round\" ><path d=\"M4 5h16\"/><path d=\"M4 12h16\"/><path d=\"M4 19h16\"/></svg>");
+  --vaadin-spinner-color: var(--aura-accent-color);
+  --vaadin-horizontal-layout-margin: var(--vaadin-padding-l);
+  --vaadin-horizontal-layout-padding: var(--vaadin-padding-l);
+  --vaadin-vertical-layout-margin: var(--vaadin-padding-l);
+  --vaadin-vertical-layout-padding: var(--vaadin-padding-l);
+}
+
+vaadin-icon[icon^="vaadin:"] {
+  --vaadin-icon-visual-size: 80%;
+}
