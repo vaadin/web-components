@@ -256,6 +256,16 @@ describe('internal filtering', () => {
       comboBox.filter = '1';
       expect(getViewportItems(comboBox)[0].index).to.equal(0);
     });
+
+    it('should scroll to the exact match when opened on input', async () => {
+      comboBox.items = [...makeItems(50), 'item'];
+      comboBox.inputElement.focus();
+      setInputValue(comboBox, 'item');
+      await nextRender();
+      const focusedItem = getAllItems(comboBox)[getFocusedItemIndex(comboBox)];
+      expect(getViewportItems(comboBox)).to.include(focusedItem);
+      expect(focusedItem.textContent.trim()).to.equal('item');
+    });
   });
 
   describe('setting items when opened', () => {
