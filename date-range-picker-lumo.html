@@ -2,8 +2,8 @@
     <meta charset="UTF-8">
     <meta http-equiv="X-UA-Compatible" content="IE=edge">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>Date Range Picker (prototype)</title>
     <link rel="stylesheet" href="assets/lumo-DkgKAA_I.css">
+    <title>Date Range Picker (prototype)</title>
     
     <style>
       .notes {
@@ -28,7 +28,7 @@
   </head>
   <body>
     <h1 class="heading">Date Range Picker — clickable prototype</h1>
-    <p class="notes">Theme: <a href="date-range-picker.html">Base</a> · <a href="date-range-picker-lumo.html">Lumo</a> · <a href="date-range-picker-aura.html">Aura</a> · <a href="v1/date-range-picker.html">Frozen v1</a></p>
+    <p class="notes">Theme: <a href="date-range-picker.html">Base</a> · <a href="date-range-picker-lumo.html">Lumo</a> · <a href="date-range-picker-aura.html">Aura</a> · Frozen earlier versions: <a href="v1/date-range-picker.html">v1</a>, <a href="v2/date-range-picker.html">v2</a></p>
 
     <div class="notes">
       <p>One field with a start and an end input that share a single calendar overlay:</p>
@@ -43,8 +43,16 @@
           The input whose date a pick sets is highlighted. In the calendar, the date being edited has a lighter fill
           than the other end of the range.
         </li>
-        <li>With a mouse, drag across dates to select a range, or drag the start or end of a range to move it.</li>
-        <li>Escape or Cancel restores the range from when the overlay was opened.</li>
+        <li>
+          With a mouse, drag across dates to select the whole range at once, which closes the overlay like picking the
+          end does.
+        </li>
+        <li>
+          Drag a picked start to move it, then pick the end. Drag the start or end of a range to move it: the overlay
+          stays open for further adjustments, close it with Escape or by clicking outside.
+        </li>
+        <li>Escape and clicking outside close the overlay and keep what was picked, such as a start without an end.</li>
+        <li>Cancel restores the range from when the overlay was opened.</li>
         <li>The clear button, or Escape with the overlay closed, clears both dates.</li>
       </ul>
     </div>
