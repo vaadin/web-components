@@ -5253,19 +5253,8 @@ vaadin-ai-field-marker :is(.badge, .actions > button):focus-visible {
     mask-image: none !important;
   }
 
-  [part~="start-clear-button"] {
-    align-self: center !important;
-    min-height: 0 !important;
-    padding: 0 !important;
-    mask-image: none !important;
-  }
-
   [part="input-field"] ::slotted(input) {
     min-width: 0;
-  }
-
-  :host([clear-button-visible][has-value]:not([has-start-value]):not([disabled])) [part~="clear-button"][part~="start-clear-button"], :host([clear-button-visible][has-value]:not([has-end-value]):not([disabled])) [part~="clear-button"][part~="end-clear-button"] {
-    display: none;
   }
 
   :host([opened][active-part="start"]) ::slotted([slot="input"]), :host([opened][active-part="end"]) ::slotted([slot="end-input"]) {

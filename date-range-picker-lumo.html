@@ -3,7 +3,7 @@
     <meta http-equiv="X-UA-Compatible" content="IE=edge">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
     <title>Date Range Picker (prototype)</title>
-    <link rel="stylesheet" href="assets/lumo-FKMq_SFY.css">
+    <link rel="stylesheet" href="assets/lumo-BEooNppv.css">
     
     <style>
       .notes {
@@ -28,35 +28,32 @@
   </head>
   <body>
     <h1 class="heading">Date Range Picker — clickable prototype</h1>
-    <p class="notes">Theme: <a href="date-range-picker.html">Base</a> · <a href="date-range-picker-lumo.html">Lumo</a> · <a href="date-range-picker-aura.html">Aura</a></p>
+    <p class="notes">Theme: <a href="date-range-picker.html">Base</a> · <a href="date-range-picker-lumo.html">Lumo</a> · <a href="date-range-picker-aura.html">Aura</a> · <a href="v1/date-range-picker.html">Frozen v1</a></p>
 
     <div class="notes">
-      <p>
-        One field with a start and an end input that share a single calendar overlay. The focused input decides which
-        date a pick sets:
-      </p>
+      <p>One field with a start and an end input that share a single calendar overlay:</p>
       <ul>
+        <li>Clicking anywhere in the field picks the whole range: the start, then the end.</li>
+        <li>Moving to the end input with the keyboard, then opening the calendar, edits only the end.</li>
         <li>
-          Picking the start keeps the end when the range stays valid, and closes the overlay. If there is no end, or the
-          new start is after it, the end is cleared and focus moves to the end input.
+          Hovering or focusing a date previews the range that picking it would select. A date that starts a new range,
+          such as one before the start while picking the end, previews as the only date of the range.
         </li>
-        <li>Hovering or focusing a date previews the range that picking it would select.</li>
         <li>
           The input whose date a pick sets is highlighted. In the calendar, the date being edited has a lighter fill
           than the other end of the range.
         </li>
-        <li>
-          Clicking the start or end input changes only that date. The calendar button picks the whole range: the start,
-          then the end.
-        </li>
         <li>With a mouse, drag across dates to select a range, or drag the start or end of a range to move it.</li>
-        <li>Picking the end commits the range and closes the overlay. Picking the end first continues with the start.</li>
-        <li>While picking the end, a date before the start becomes the new start instead.</li>
         <li>Escape or Cancel restores the range from when the overlay was opened.</li>
-        <li>With the overlay closed, Escape clears both dates when the clear button is visible.</li>
+        <li>The clear button, or Escape with the overlay closed, clears both dates.</li>
       </ul>
     </div>
 
+    <label class="notes">
+      <input type="checkbox" id="separate-date-picking">
+      Previous behavior: clicking the start or end input picks only that date
+    </label>
+    <br>
     <label class="notes">
       <input type="checkbox" id="band-edges">
       Show edges along the range band (higher contrast)
@@ -92,7 +89,7 @@
     
   
 
-<script type="module" src="./common.js"></script><script type="module" src="./inline-module-62e7ad801b88ba4a3770a086a92cfe53.js"></script>
+<script type="module" src="./common.js"></script><script type="module" src="./inline-module-7d7ea5be58755ec04c20a013681181fd.js"></script>
     <style>
       body:not(.resolved) {
         opacity: 0;
