@@ -139,4 +139,39 @@ describe('data provider filtering', () => {
       expect(comboBox.$.overlay.opened).to.be.false;
     });
   });
+
+  describe('opening on input', () => {
+    let overlay, openedChangedSpy;
+
+    function syncDataProvider(params, callback) {
+      const items = ['Item 1', 'Item 2', 'Item 3'].filter((item) => item.includes(params.filter));
+      callback(items, items.length);
+    }
+
+    beforeEach(async () => {
+      comboBox = fixtureSync('<vaadin-combo-box></vaadin-combo-box>');
+      await nextRender();
+      overlay = comboBox.$.overlay;
+      openedChangedSpy = sinon.spy();
+      overlay.addEventListener('opened-changed', openedChangedSpy);
+      comboBox.inputElement.focus();
+    });
+
+    it('should not open overlay when no items match the filter with sync data provider', () => {
+      comboBox.dataProvider = syncDataProvider;
+      setInputValue(comboBox, 'no match');
+      expect(comboBox.opened).to.be.true;
+      expect(overlay.opened).to.be.false;
+      expect(openedChangedSpy).to.be.not.called;
+    });
+
+    it('should open overlay while loading with async data provider', () => {
+      // Data provider that does not respond, like a pending server request
+      comboBox.dataProvider = sinon.spy();
+      setInputValue(comboBox, 'Item');
+      expect(comboBox.dataProvider).to.be.calledOnce;
+      expect(comboBox.loading).to.be.true;
+      expect(overlay.opened).to.be.true;
+    });
+  });
 });
