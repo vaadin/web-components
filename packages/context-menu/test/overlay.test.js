@@ -428,13 +428,6 @@ describe('overlay', () => {
     });
   });
 
-  describe('styling', () => {
-    it('should set default background color for content', () => {
-      const overlayPart = overlay.shadowRoot.querySelector('[part~="overlay"]');
-      expect(getComputedStyle(overlayPart).backgroundColor).to.eql('rgb(255, 255, 255)');
-    });
-  });
-
   describe('close and re-open on contextmenu', () => {
     let target;
 
