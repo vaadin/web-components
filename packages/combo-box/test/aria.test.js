@@ -8,7 +8,7 @@ import {
   nextRender,
 } from '@vaadin/testing-helpers';
 import '../src/vaadin-combo-box.js';
-import { getAllItems, getFocusedItemIndex, makeItems, setInputValue } from './helpers.js';
+import { getAllItems, makeItems, setInputValue } from './helpers.js';
 
 describe('ARIA', () => {
   let comboBox, input;
@@ -62,19 +62,22 @@ describe('ARIA', () => {
   });
 
   describe('opened on input', () => {
-    it('should set aria-activedescendant to the item matching the input', () => {
+    it('should set aria-activedescendant to the item matching the input', async () => {
+      comboBox.items = ['bar baz', 'foo', 'bar'];
       setInputValue(comboBox, 'bar');
-      const focusedItem = getAllItems(comboBox)[getFocusedItemIndex(comboBox)];
-      expect(focusedItem.textContent.trim()).to.equal('bar');
-      expect(input.getAttribute('aria-activedescendant')).to.equal(focusedItem.id);
+      await nextRender();
+      const items = getAllItems(comboBox);
+      expect(items.map((item) => item.textContent.trim())).to.eql(['bar baz', 'bar']);
+      expect(input.getAttribute('aria-activedescendant')).to.equal(items[1].id);
     });
 
-    it('should set aria-activedescendant to the item matching the input outside the viewport', () => {
-      comboBox.items = [...makeItems(50), 'item'];
+    it('should set aria-activedescendant to the item matching the input outside the viewport', async () => {
+      comboBox.items = [...makeItems(50), 'other', 'item'];
       setInputValue(comboBox, 'item');
-      const focusedItem = getAllItems(comboBox)[getFocusedItemIndex(comboBox)];
-      expect(focusedItem.textContent.trim()).to.equal('item');
-      expect(input.getAttribute('aria-activedescendant')).to.equal(focusedItem.id);
+      await nextRender();
+      const item = getAllItems(comboBox).find((el) => el.index === 50);
+      expect(item.textContent.trim()).to.equal('item');
+      expect(input.getAttribute('aria-activedescendant')).to.equal(item.id);
     });
   });
 
