@@ -27,6 +27,7 @@ export const dateRangePickerI18nDefaults = Object.freeze({
   ...datePickerI18nDefaults,
   startAccessibleName: 'Start date',
   endAccessibleName: 'End date',
+  rangeAccessibleName: 'Date range',
   rangeStart: 'range start',
   rangeEnd: 'range end',
   inRange: 'in range',
@@ -149,6 +150,18 @@ export const DateRangePickerMixin = (superClass) =>
         },
 
         /**
+         * Set to true to show the range in a single text input, such as
+         * "3/10/2026 – 3/15/2026", instead of separate start and end inputs.
+         * Picking from the calendar always picks the whole range then.
+         * @attr {boolean} single-input
+         */
+        singleInput: {
+          type: Boolean,
+          value: false,
+          reflectToAttribute: true,
+        },
+
+        /**
          * Set true to open the date selector overlay.
          */
         opened: {
@@ -247,7 +260,13 @@ export const DateRangePickerMixin = (superClass) =>
 
     /** @private */
     get __activeInput() {
-      return this._activePart === 'end' ? this._endInput : this._startInput;
+      // With a single input, the start input holds the whole range.
+      return this._activePart === 'end' && !this.singleInput ? this._endInput : this._startInput;
+    }
+
+    /** @private */
+    get __isPickingWholeRange() {
+      return this.singleInput || this.__pickingWholeRange;
     }
 
     /** @private */
@@ -333,6 +352,16 @@ export const DateRangePickerMixin = (superClass) =>
         this.__applyInputValue(this._endInput, this._endDate);
       }
 
+      if (props.has('singleInput')) {
+        // Switching between one and two inputs changes what the inputs show.
+        if (this._endInput) {
+          this._endInput.value = this.__formatDate(this._endDate);
+        }
+        if (this._startInput) {
+          this._startInput.value = this.singleInput ? this.__formatRange() : this.__formatDate(this._startDate);
+        }
+      }
+
       if (props.has('_startDate') || props.has('_endDate')) {
         this.toggleAttribute('has-value', !!(this._startDate || this._endDate));
         this.toggleAttribute('has-start-value', !!this._startDate);
@@ -384,10 +413,12 @@ export const DateRangePickerMixin = (superClass) =>
      * @override
      */
     checkValidity() {
-      const inputsValid = [
-        [this._startInput, this._startDate],
-        [this._endInput, this._endDate],
-      ].every(([input, date]) => !input || !input.value || (!!date && input.value === this.__formatDate(date)));
+      const inputsValid = this.singleInput
+        ? !this._startInput?.value || this._startInput.value === this.__formatRange()
+        : [
+            [this._startInput, this._startDate],
+            [this._endInput, this._endDate],
+          ].every(([input, date]) => !input || !input.value || (!!date && input.value === this.__formatDate(date)));
 
       const datesSelectable = [this._startDate, this._endDate].every(
         (date) => !date || dateSelectable(date, this.__minDate, this.__maxDate, this.isDateDisabled),
@@ -630,7 +661,7 @@ export const DateRangePickerMixin = (superClass) =>
       if (path.includes(this.$.overlay) || path.some((node) => node.part?.contains?.('clear-button'))) {
         return;
       }
-      if (!this.separateDatePicking && !this.opened) {
+      if ((this.singleInput || !this.separateDatePicking) && !this.opened) {
         this._startWholeRangePick();
         return;
       }
@@ -662,7 +693,13 @@ export const DateRangePickerMixin = (superClass) =>
         return;
       }
 
-      if (event.target === this._startInput) {
+      if (event.target === this._startInput && this.singleInput) {
+        // The single input does not tell which end is being picked, so only start over
+        // when the overlay is closed.
+        if (!this.opened) {
+          this._activePart = 'start';
+        }
+      } else if (event.target === this._startInput) {
         this._activePart = 'start';
       } else if (event.target === this._endInput) {
         this._activePart = 'end';
@@ -681,7 +718,9 @@ export const DateRangePickerMixin = (superClass) =>
         this.open();
       }
 
-      const parsedDate = this.__parseDateText(event.target.value);
+      // With a single input, reveal the date being typed, which is the last one.
+      const text = this.singleInput ? this.__splitRangeText(event.target.value).at(-1) : event.target.value;
+      const parsedDate = this.__parseDateText(text);
       if (parsedDate && this._overlayContent) {
         this._overlayContent.focusedDate = parsedDate;
       }
@@ -795,7 +834,7 @@ export const DateRangePickerMixin = (superClass) =>
 
       // When picking the whole range, the start is followed by the end. The current
       // end stays as long as the range stays valid, until a new end is picked.
-      if (this._activePart === 'start' && this.__pickingWholeRange && this._endDate && date <= this._endDate) {
+      if (this._activePart === 'start' && this.__isPickingWholeRange && this._endDate && date <= this._endDate) {
         this._startDate = date;
         this._activePart = 'end';
         this.__focusActiveInput();
@@ -857,12 +896,19 @@ export const DateRangePickerMixin = (superClass) =>
     /** @private */
     __updateInputs() {
       const i18n = this.__effectiveI18n;
+      const { startPlaceholder: start, endPlaceholder: end } = this;
+      const singlePlaceholder = start || end ? `${start || ''} – ${end || ''}` : '';
       [
-        [this._startInput, this.startPlaceholder, i18n.startAccessibleName],
-        [this._endInput, this.endPlaceholder, i18n.endAccessibleName],
+        this.singleInput
+          ? [this._startInput, singlePlaceholder, i18n.rangeAccessibleName]
+          : [this._startInput, start, i18n.startAccessibleName],
+        [this._endInput, end, i18n.endAccessibleName],
       ].forEach(([input, placeholder, partName]) => {
         if (!input) {
           return;
+        }
+        if (input === this._endInput) {
+          input.hidden = this.singleInput;
         }
         input.disabled = !!this.disabled;
         input.readOnly = !!this.readonly;
@@ -906,6 +952,10 @@ export const DateRangePickerMixin = (superClass) =>
      * @private
      */
     __commitInputValues() {
+      if (this.singleInput) {
+        this.__commitRangeText();
+        return;
+      }
       [
         [this._startInput, '_startDate'],
         [this._endInput, '_endDate'],
@@ -968,8 +1018,57 @@ export const DateRangePickerMixin = (superClass) =>
 
     /** @private */
     __applyInputValue(input, date) {
+      if (this.singleInput) {
+        // The single input always shows the whole range.
+        if (this._startInput) {
+          this._startInput.value = this.__formatRange();
+        }
+        return;
+      }
       if (input) {
         input.value = this.__formatDate(date);
       }
+    }
+
+    /**
+     * Formats the range for the single input, for example "3/10/2026 – 3/15/2026".
+     * @private
+     */
+    __formatRange() {
+      const start = this.__formatDate(this._startDate);
+      const end = this.__formatDate(this._endDate);
+      return start || end ? `${start} – ${end}`.trim() : '';
+    }
+
+    /**
+     * Splits the text of the single input into its start and end parts. Accepts an en
+     * or em dash, a hyphen surrounded by spaces, or "to" as the separator.
+     * @private
+     */
+    __splitRangeText(text) {
+      return text.split(/\s*[–—]\s*|\s+-\s+|\s+to\s+/iu, 2).map((part) => part.trim());
+    }
+
+    /**
+     * Parses the text of the single input and applies the result as the range.
+     * Unparsable text is kept in the input, which makes the field invalid.
+     * @private
+     */
+    __commitRangeText() {
+      const input = this._startInput;
+      if (!input || input.value === this.__formatRange()) {
+        return;
+      }
+      const [startText = '', endText = ''] = this.__splitRangeText(input.value);
+      const start = this.__parseDateText(startText) || null;
+      const end = this.__parseDateText(endText) || null;
+      const isParsable = (!startText || start) && (!endText || end);
+      this._startDate = isParsable ? start : null;
+      this._endDate = isParsable ? end : null;
+      if (isParsable) {
+        // Normalize the text of the parsed range.
+        input.value = this.__formatRange();
+      }
+      this.__commitValueChange();
     }
   };

@@ -29,8 +29,13 @@
     min-width: 0;
   }
 
-  :host([opened][active-part='start']) ::slotted([slot='input']),
-  :host([opened][active-part='end']) ::slotted([slot='end-input']) {
+  :host([single-input]) ::slotted([slot='end-input']),
+  :host([single-input]) [part='separator'] {
+    display: none !important;
+  }
+
+  :host([opened][active-part='start']:not([single-input])) ::slotted([slot='input']),
+  :host([opened][active-part='end']:not([single-input])) ::slotted([slot='end-input']) {
     border-radius: var(--lumo-border-radius-s);
     background: var(--vaadin-date-range-picker-active-input-background, var(--lumo-primary-color-10pct));
   }

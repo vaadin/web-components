@@ -206,7 +206,7 @@ class DateRangePicker extends DateRangePickerMixin(
     }
     event.stopPropagation();
 
-    if (!this.separateDatePicking) {
+    if (this.singleInput || !this.separateDatePicking) {
       this._startWholeRangePick();
       return;
     }

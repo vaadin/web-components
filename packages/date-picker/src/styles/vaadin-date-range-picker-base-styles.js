@@ -28,9 +28,15 @@ export const dateRangePickerStyles = css`
     min-width: 0;
   }
 
+  /* With a single input, the start input shows the whole range */
+  :host([single-input]) ::slotted([slot='end-input']),
+  :host([single-input]) [part='separator'] {
+    display: none !important;
+  }
+
   /* Highlight the input whose date a pick in the calendar sets */
-  :host([opened][active-part='start']) ::slotted([slot='input']),
-  :host([opened][active-part='end']) ::slotted([slot='end-input']) {
+  :host([opened][active-part='start']:not([single-input])) ::slotted([slot='input']),
+  :host([opened][active-part='end']:not([single-input])) ::slotted([slot='end-input']) {
     border-radius: var(--vaadin-radius-s);
     background: var(
       --vaadin-date-range-picker-active-input-background,

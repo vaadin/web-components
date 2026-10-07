@@ -366,6 +366,100 @@ describe('date-range-picker', () => {
     });
   });
 
+  describe('single input', () => {
+    beforeEach(async () => {
+      picker.singleInput = true;
+      await nextRender();
+    });
+
+    it('should show only the start input and hide the end input and the separator', () => {
+      expect(getComputedStyle(endInput).display).to.equal('none');
+      expect(getComputedStyle(picker.shadowRoot.querySelector('[part="separator"]')).display).to.equal('none');
+      expect(getComputedStyle(startInput).display).to.not.equal('none');
+    });
+
+    it('should show the whole range in the input', async () => {
+      picker.startValue = '2026-03-10';
+      picker.endValue = '2026-03-15';
+      await nextRender();
+      expect(startInput.value).to.equal('3/10/2026 – 3/15/2026');
+    });
+
+    it('should pick the start and then the end from the calendar, keeping focus in the input', async () => {
+      await openFrom(startInput);
+      await pick(10);
+      expect(picker.opened).to.be.true;
+      expect(document.activeElement).to.equal(startInput);
+      expect(startInput.value).to.equal('3/10/2026 –');
+      await pick(15);
+      expect(picker.startValue).to.equal('2026-03-10');
+      expect(picker.endValue).to.equal('2026-03-15');
+      expect(startInput.value).to.equal('3/10/2026 – 3/15/2026');
+      expect(picker.opened).to.be.false;
+    });
+
+    it('should pick the whole range also when the range has a value', async () => {
+      picker.startValue = '2026-03-10';
+      picker.endValue = '2026-03-15';
+      await openFrom(startInput);
+      await pick(12);
+      expect(picker.opened).to.be.true;
+      await pick(13);
+      expect(picker.startValue).to.equal('2026-03-12');
+      expect(picker.endValue).to.equal('2026-03-13');
+    });
+
+    ['3/10/2026 – 3/15/2026', '3/10/2026 - 3/15/2026', '3/10/2026 to 3/15/2026'].forEach((text) => {
+      it(`should commit a typed range: "${text}"`, async () => {
+        startInput.focus();
+        startInput.value = text;
+        await sendKeys({ press: 'Enter' });
+        expect(picker.startValue).to.equal('2026-03-10');
+        expect(picker.endValue).to.equal('2026-03-15');
+        expect(startInput.value).to.equal('3/10/2026 – 3/15/2026');
+      });
+    });
+
+    it('should commit a typed start without an end', async () => {
+      startInput.focus();
+      startInput.value = '3/10/2026';
+      await sendKeys({ press: 'Enter' });
+      expect(picker.startValue).to.equal('2026-03-10');
+      expect(picker.endValue).to.equal('');
+    });
+
+    it('should keep unparsable text and be invalid', async () => {
+      startInput.focus();
+      startInput.value = '3/10/2026 – foo';
+      await sendKeys({ press: 'Enter' });
+      expect(picker.startValue).to.equal('');
+      expect(startInput.value).to.equal('3/10/2026 – foo');
+      expect(picker.invalid).to.be.true;
+    });
+
+    it('should name the input after the range', () => {
+      expect(startInput.getAttribute('aria-label')).to.equal('Date range');
+    });
+
+    it('should combine the placeholders', async () => {
+      picker.startPlaceholder = 'Departure';
+      picker.endPlaceholder = 'Return';
+      await nextRender();
+      expect(startInput.placeholder).to.equal('Departure – Return');
+    });
+
+    it('should switch back to separate inputs', async () => {
+      picker.startValue = '2026-03-10';
+      picker.endValue = '2026-03-15';
+      await nextRender();
+      picker.singleInput = false;
+      await nextRender();
+      expect(startInput.value).to.equal('3/10/2026');
+      expect(endInput.value).to.equal('3/15/2026');
+      expect(getComputedStyle(endInput).display).to.not.equal('none');
+    });
+  });
+
   describe('picking with the calendar button', () => {
     async function openWithButton() {
       const toggle = picker.shadowRoot.querySelector('[part~="toggle-button"]');

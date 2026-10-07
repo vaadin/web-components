@@ -50,6 +50,11 @@
     </div>
 
     <label class="notes">
+      <input type="checkbox" id="single-input" />
+      Single input: show the range in one text field, such as "3/10/2026 – 3/15/2026"
+    </label>
+    <br />
+    <label class="notes">
       <input type="checkbox" id="separate-date-picking" />
       Previous behavior: clicking the start or end input picks only that date
     </label>
@@ -99,6 +104,12 @@
 
     <script type="module">
       import '@vaadin/date-picker/vaadin-date-range-picker.js';
+
+      document.querySelector('#single-input').addEventListener('change', (event) => {
+        document.querySelectorAll('vaadin-date-range-picker').forEach((picker) => {
+          picker.singleInput = event.target.checked;
+        });
+      });
 
       document.querySelector('#separate-date-picking').addEventListener('change', (event) => {
         document.querySelectorAll('vaadin-date-range-picker').forEach((picker) => {

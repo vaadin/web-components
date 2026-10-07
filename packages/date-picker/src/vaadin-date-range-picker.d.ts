@@ -10,6 +10,7 @@ import type { DatePickerDate, DatePickerI18n } from './vaadin-date-picker.js';
 export interface DateRangePickerI18n extends DatePickerI18n {
   startAccessibleName: string;
   endAccessibleName: string;
+  rangeAccessibleName: string;
   rangeStart: string;
   rangeEnd: string;
   inRange: string;
@@ -40,6 +41,8 @@ declare class DateRangePicker extends ThemableMixin(ElementMixin(HTMLElement)) {
   helperText: string | null | undefined;
   errorMessage: string | null | undefined;
   showWeekNumbers: boolean;
+  separateDatePicking: boolean;
+  singleInput: boolean;
   opened: boolean;
   i18n: Partial<DateRangePickerI18n>;
   open(): void;
