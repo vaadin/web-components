@@ -613,7 +613,8 @@ export const DatePickerOverlayContentMixin = (superClass) =>
         return;
       }
 
-      // A lone start or end, picked before the other end, can be dragged as well.
+      // A lone start or end, picked before the other end, can be dragged as well. A
+      // single-day range is not dragged, as it has no end to move apart from the other.
       const hasRange = !dateEquals(this.rangeStart, this.rangeEnd);
       if (hasRange && dateEquals(date, this.rangeStart)) {
         this._dragMode = 'start';

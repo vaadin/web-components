@@ -305,6 +305,7 @@ describe('date-range-picker', () => {
         await drag(10, 12);
         expect(picker.startValue).to.equal('2026-03-12');
         expect(picker.endValue).to.equal('2026-03-15');
+        expect(picker.opened).to.be.true;
       });
 
       it('should turn the range around when dragging the start past the end', async () => {
