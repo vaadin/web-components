@@ -181,13 +181,8 @@ export const ComboBoxBaseMixin = (superClass) =>
       }
 
       // An item can be highlighted while the overlay is closed, e.g. when filtering
-      // on input. Scroll to it and reference it once the overlay is opened.
-      const isOverlayOpening = props.has('_overlayOpened') && this._overlayOpened;
-      if (isOverlayOpening) {
-        this._scrollIntoView(this._highlightedItemIndex);
-      }
-
-      if (props.has('_highlightState') || isOverlayOpening) {
+      // on input. Reference it once the overlay is opened.
+      if (props.has('_highlightState') || (props.has('_overlayOpened') && this._overlayOpened)) {
         this._updateActiveDescendant();
       }
     }
