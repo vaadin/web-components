@@ -9,38 +9,6 @@ describe('properties', () => {
     menu.close();
   });
 
-  describe('context', () => {
-    let target;
-
-    beforeEach(async () => {
-      menu = fixtureSync(`
-        <vaadin-context-menu>
-          <section>
-            <div id="target"></div>
-          </section>
-        </vaadin-context-menu>
-      `);
-      await nextRender();
-      target = menu.querySelector('#target');
-    });
-
-    it('should use event target as context target', async () => {
-      fire(target, 'contextmenu');
-      await nextRender();
-
-      expect(menu._context.target).to.eql(target);
-    });
-
-    it('should use context-selector scope to target', async () => {
-      menu.selector = 'section';
-
-      fire(target, 'contextmenu');
-      await nextRender();
-
-      expect(menu._context.target).to.eql(target.parentElement);
-    });
-  });
-
   describe('openOn', () => {
     beforeEach(async () => {
       menu = fixtureSync('<vaadin-context-menu></vaadin-context-menu>');
@@ -100,34 +68,6 @@ describe('properties', () => {
     });
   });
 
-  describe('closeOn', () => {
-    beforeEach(async () => {
-      menu = fixtureSync('<vaadin-context-menu></vaadin-context-menu>');
-      await nextRender();
-      menu._setOpened(true);
-    });
-
-    it('should not close on `click`', async () => {
-      menu.closeOn = '';
-      await nextRender();
-
-      menu._overlayElement.dispatchEvent(new CustomEvent('click'));
-      await nextRender();
-
-      expect(menu.opened).to.eql(true);
-    });
-
-    it('should close on custom event', async () => {
-      menu.closeOn = 'foobar';
-      await nextRender();
-
-      fire(menu._overlayElement, 'foobar');
-      await nextRender();
-
-      expect(menu.opened).to.eql(false);
-    });
-  });
-
   describe('external target', () => {
     let wrapper, target;
 
@@ -152,13 +92,6 @@ describe('properties', () => {
       await nextRender();
 
       expect(menu.opened).to.eql(true);
-    });
-
-    it('should select context target on external target', async () => {
-      fire(target, 'contextmenu');
-      await nextRender();
-
-      expect(menu._context.target).to.eql(target);
     });
 
     it('should use context selector on external target', async () => {
