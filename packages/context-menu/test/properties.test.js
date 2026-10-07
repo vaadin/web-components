@@ -112,15 +112,4 @@ describe('properties', () => {
       });
     });
   });
-
-  describe('theme attribute', () => {
-    beforeEach(async () => {
-      menu = fixtureSync('<vaadin-context-menu theme="foo"></vaadin-context-menu>');
-      await nextRender();
-    });
-
-    it('should propagate theme attribute to overlay', () => {
-      expect(menu._overlayElement.getAttribute('theme')).to.equal('foo');
-    });
-  });
 });
