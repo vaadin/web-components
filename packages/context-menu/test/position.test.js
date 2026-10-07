@@ -7,8 +7,8 @@ describe('position', () => {
 
   beforeEach(async () => {
     menu = fixtureSync(`
-      <vaadin-context-menu style="margin: 200px;">
-        <div id="target" style="width: 300px; height: 200px; outline: 1px solid red;"></div>
+      <vaadin-context-menu>
+        <div id="target" style="width: 300px; height: 200px; margin: 200px; outline: 1px solid red;"></div>
       </vaadin-context-menu>
     `);
 
