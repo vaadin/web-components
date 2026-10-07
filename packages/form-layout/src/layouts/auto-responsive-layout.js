@@ -55,6 +55,7 @@ export class AutoResponsiveLayout extends AbstractLayout {
 
     const { host } = this;
     host.style.removeProperty('--_column-width');
+    host.style.removeProperty('--_min-columns');
     host.style.removeProperty('--_max-columns');
     host.removeAttribute('has-labels-aside');
     host.$.layout.style.removeProperty('--_grid-rendered-column-count');

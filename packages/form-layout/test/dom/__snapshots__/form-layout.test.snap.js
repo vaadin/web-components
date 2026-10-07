@@ -655,7 +655,7 @@ snapshots["vaadin-form-layout responsive-steps shadow switching to autoResponsiv
 /* end snapshot vaadin-form-layout responsive-steps shadow switching to autoResponsive */
 
 snapshots["vaadin-form-layout auto-responsive basic host switching to responsiveSteps"] = 
-`<vaadin-form-layout style="--_min-columns: 1;">
+`<vaadin-form-layout style="">
   <input
     placeholder="First name"
     style="width: calc(50% - 8px); margin-left: 0px;"
