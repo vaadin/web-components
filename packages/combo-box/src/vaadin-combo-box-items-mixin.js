@@ -131,8 +131,8 @@ export const ComboBoxItemsMixin = (superClass) =>
     }
 
     /**
-     * Override an event listener from `ComboBoxBaseMixin` to handle
-     * batched setting of both `opened` and `filter` properties.
+     * Override an event listener from `ComboBoxBaseMixin` to update
+     * the filter and open the dropdown on user input.
      * @param {!Event} event
      * @protected
      * @override
@@ -140,25 +140,18 @@ export const ComboBoxItemsMixin = (superClass) =>
     _onInput(event) {
       const filter = this._inputElementValue;
 
-      // When opening dropdown on user input, both `opened` and `filter` properties are set.
-      // Perform a batched property update instead of relying on sync property observers.
-      // This is necessary to avoid an extra data-provider request for loading first page.
-      const props = {};
-
       if (this.filter === filter) {
         // Filter and input value might get out of sync, while keyboard navigating for example.
         // Afterwards, input value might be changed to the same value as used in filtering.
         // In situation like these, we need to make sure all the filter changes handlers are run.
         this._filterChanged(this.filter);
       } else {
-        props.filter = filter;
+        this.filter = filter;
       }
 
       if (!this.opened && !this._isClearButton(event) && !this.autoOpenDisabled) {
-        props.opened = true;
+        this.opened = true;
       }
-
-      this.setProperties(props);
     }
 
     /**

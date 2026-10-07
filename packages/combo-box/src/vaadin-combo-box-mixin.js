@@ -162,6 +162,12 @@ export const ComboBoxMixin = (superClass) =>
         focusedIndex,
         theme,
       });
+
+      // An item can be focused while the dropdown is closed, e.g. when filtering
+      // on input. Reference it once the dropdown is opened and items are rendered.
+      if (opened) {
+        this._updateActiveDescendant(focusedIndex);
+      }
     }
 
     /** @private */
