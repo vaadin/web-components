@@ -654,3 +654,25 @@ snapshots["vaadin-form-layout responsive-steps shadow switching to autoResponsiv
 `;
 /* end snapshot vaadin-form-layout responsive-steps shadow switching to autoResponsive */
 
+snapshots["vaadin-form-layout auto-responsive basic host switching to responsiveSteps"] = 
+`<vaadin-form-layout style="--_min-columns: 1;">
+  <input
+    placeholder="First name"
+    style="width: calc(50% - 8px); margin-left: 0px;"
+  >
+  <input
+    placeholder="Last name"
+    style="width: calc(50% - 8px); margin-right: 0px;"
+  >
+  <input
+    placeholder="Email"
+    style="width: calc(50% - 8px); margin-left: 0px;"
+  >
+  <input
+    placeholder="Phone"
+    style="width: calc(50% - 8px); margin-right: 0px;"
+  >
+</vaadin-form-layout>
+`;
+/* end snapshot vaadin-form-layout auto-responsive basic host switching to responsiveSteps */
+
