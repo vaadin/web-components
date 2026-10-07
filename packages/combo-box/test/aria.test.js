@@ -8,7 +8,7 @@ import {
   nextRender,
 } from '@vaadin/testing-helpers';
 import '../src/vaadin-combo-box.js';
-import { getAllItems, makeItems } from './helpers.js';
+import { getAllItems, makeItems, setInputValue } from './helpers.js';
 
 describe('ARIA', () => {
   let comboBox, input;
@@ -58,6 +58,26 @@ describe('ARIA', () => {
       comboBox.value = 'bar';
       expect(items[0].getAttribute('aria-selected')).to.equal('false');
       expect(items[1].getAttribute('aria-selected')).to.equal('true');
+    });
+  });
+
+  describe('opened on input', () => {
+    it('should set aria-activedescendant to the item matching the input', async () => {
+      comboBox.items = ['bar baz', 'foo', 'bar'];
+      setInputValue(comboBox, 'bar');
+      await nextRender();
+      const items = getAllItems(comboBox);
+      expect(items.map((item) => item.textContent.trim())).to.eql(['bar baz', 'bar']);
+      expect(input.getAttribute('aria-activedescendant')).to.equal(items[1].id);
+    });
+
+    it('should set aria-activedescendant to the item matching the input outside the viewport', async () => {
+      comboBox.items = [...makeItems(50), 'other', 'item'];
+      setInputValue(comboBox, 'item');
+      await nextRender();
+      const item = getAllItems(comboBox).find((el) => el.index === 50);
+      expect(item.textContent.trim()).to.equal('item');
+      expect(input.getAttribute('aria-activedescendant')).to.equal(item.id);
     });
   });
 
