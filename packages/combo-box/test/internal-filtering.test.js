@@ -148,6 +148,17 @@ describe('internal filtering', () => {
       expect(comboBox.filteredItems).to.eql(['bar', 'baz']);
     });
 
+    it('should not open overlay on input when no items match the filter', () => {
+      const openedChangedSpy = sinon.spy();
+      overlay.addEventListener('opened-changed', openedChangedSpy);
+
+      setInputValue(comboBox, 'qux');
+
+      expect(comboBox.opened).to.be.true;
+      expect(overlay.opened).to.be.false;
+      expect(openedChangedSpy).to.be.not.called;
+    });
+
     it('should filter out all items with a invalid filter', () => {
       setInputValue(comboBox, 'qux');
 
