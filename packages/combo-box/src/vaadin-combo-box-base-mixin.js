@@ -186,6 +186,12 @@ export const ComboBoxBaseMixin = (superClass) =>
       if (['_overlayOpened', '_dropdownItems', '_focusedIndex', '_theme'].some((prop) => props.has(prop))) {
         this._updateScroller();
       }
+
+      // An item can be focused while the overlay is closed, e.g. when filtering
+      // on input. Reference it once the overlay is opened.
+      if (props.has('_overlayOpened') && this._overlayOpened) {
+        this._updateActiveDescendant(this._focusedIndex);
+      }
     }
 
     /** @protected */
