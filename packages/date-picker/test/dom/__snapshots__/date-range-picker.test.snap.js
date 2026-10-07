@@ -199,11 +199,6 @@ snapshots["vaadin-date-range-picker shadow default"] =
     </slot>
     <slot name="input">
     </slot>
-    <div
-      aria-hidden="true"
-      part="field-button clear-button start-clear-button"
-    >
-    </div>
     <span
       aria-hidden="true"
       part="separator"
@@ -214,7 +209,7 @@ snapshots["vaadin-date-range-picker shadow default"] =
     </slot>
     <div
       aria-hidden="true"
-      part="field-button clear-button end-clear-button"
+      part="field-button clear-button"
       slot="suffix"
     >
     </div>

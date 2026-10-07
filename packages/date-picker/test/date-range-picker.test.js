@@ -34,6 +34,9 @@ describe('date-range-picker', () => {
     // Makes an empty range open the overlay at March 2026, the closest allowed month.
     picker.min = '2026-01-01';
     picker.max = '2026-03-31';
+    // Most tests cover picking the start and the end separately, by clicking either
+    // input. The default, picking the whole range from any click, has its own tests.
+    picker.separateDatePicking = true;
   });
 
   afterEach(async () => {
@@ -131,11 +134,12 @@ describe('date-range-picker', () => {
       expect(getParts(10)).to.not.include('selected');
     });
 
-    it('should not preview a new start after the end', async () => {
+    it('should preview a new start after the end as the start of a new range', async () => {
       await openFrom(startInput);
       await sendMouseToElement({ type: 'move', element: getCell(20) });
-      expect(getParts(10)).to.include('range-start');
-      expect(getParts(20)).to.not.include('range-start');
+      expect(getParts(20)).to.include('range-start');
+      expect(getParts(10)).to.not.include('range-start');
+      expect(getParts(15)).to.not.include('range-end');
     });
 
     it('should mark the end being edited, depending on the focused input', async () => {
@@ -154,6 +158,15 @@ describe('date-range-picker', () => {
       await sendMouseToElement({ type: 'move', element: getCell(20) });
       expect(getParts(20)).to.include('range-editing');
       expect(getParts(10)).to.not.include('range-editing');
+    });
+
+    it('should preview a date before the start as the start of a new range while picking the end', async () => {
+      await openFrom(endInput);
+      await sendMouseToElement({ type: 'move', element: getCell(5) });
+      expect(getParts(5)).to.include('range-start');
+      expect(getParts(10)).to.not.include('range-start');
+      expect(getParts(12)).to.not.include('in-range');
+      expect(getParts(15)).to.not.include('range-end');
     });
 
     it('should restore the range on Escape', async () => {
@@ -293,6 +306,66 @@ describe('date-range-picker', () => {
     });
   });
 
+  describe('picking the whole range from any click', () => {
+    beforeEach(() => {
+      picker.separateDatePicking = false;
+    });
+
+    async function clickInput(input) {
+      await sendMouseToElement({ type: 'click', element: input });
+      await untilOverlayRendered(picker);
+    }
+
+    it('should start from the start date when clicking the end input of an empty field', async () => {
+      await clickInput(endInput);
+      expect(picker.opened).to.be.true;
+      expect(document.activeElement).to.equal(startInput);
+      expect(picker.getAttribute('active-part')).to.equal('start');
+
+      await pick(10);
+      expect(document.activeElement).to.equal(endInput);
+      await pick(15);
+      expect(picker.startValue).to.equal('2026-03-10');
+      expect(picker.endValue).to.equal('2026-03-15');
+      expect(picker.opened).to.be.false;
+    });
+
+    it('should pick the start and then the end when clicking an input of a filled field', async () => {
+      picker.startValue = '2026-03-10';
+      picker.endValue = '2026-03-15';
+      await clickInput(startInput);
+      await pick(9);
+      expect(picker.opened).to.be.true;
+      await pick(14);
+      expect(picker.startValue).to.equal('2026-03-09');
+      expect(picker.endValue).to.equal('2026-03-14');
+      expect(picker.opened).to.be.false;
+    });
+
+    it('should edit only the end when moving to the end input with the keyboard', async () => {
+      picker.startValue = '2026-03-10';
+      picker.endValue = '2026-03-15';
+      startInput.focus();
+      await sendKeys({ press: 'Tab' });
+      expect(document.activeElement).to.equal(endInput);
+      await sendKeys({ press: 'ArrowDown' });
+      await untilOverlayRendered(picker);
+      await sendKeys({ press: 'ArrowRight' });
+      await sendKeys({ press: 'Enter' });
+      await untilOverlayRendered(picker);
+      expect(picker.startValue).to.equal('2026-03-10');
+      expect(picker.endValue).to.equal('2026-03-16');
+      expect(picker.opened).to.be.false;
+    });
+
+    it('should not redirect focus when clicking the end input while the overlay is open', async () => {
+      await clickInput(startInput);
+      await sendMouseToElement({ type: 'click', element: endInput });
+      expect(document.activeElement).to.equal(endInput);
+      expect(picker.getAttribute('active-part')).to.equal('end');
+    });
+  });
+
   describe('picking with the calendar button', () => {
     async function openWithButton() {
       const toggle = picker.shadowRoot.querySelector('[part~="toggle-button"]');
@@ -400,51 +473,47 @@ describe('date-range-picker', () => {
     });
   });
 
-  describe('clear buttons', () => {
-    let startClear, endClear;
+  describe('clear button', () => {
+    let clearButton;
 
     beforeEach(async () => {
       picker.clearButtonVisible = true;
       await nextRender();
-      startClear = picker.shadowRoot.querySelector('[part~="start-clear-button"]');
-      endClear = picker.shadowRoot.querySelector('[part~="end-clear-button"]');
+      clearButton = picker.shadowRoot.querySelector('[part~="clear-button"]');
     });
 
-    it('should show each clear button only when its own date is set', async () => {
-      const isVisible = (button) => getComputedStyle(button).display !== 'none';
-      expect(isVisible(startClear)).to.be.false;
-      expect(isVisible(endClear)).to.be.false;
+    it('should have a single clear button', () => {
+      expect(picker.shadowRoot.querySelectorAll('[part~="clear-button"]').length).to.equal(1);
+    });
+
+    it('should show the clear button when either date is set', async () => {
+      const isVisible = () => getComputedStyle(clearButton).display !== 'none';
+      expect(isVisible()).to.be.false;
 
       picker.endValue = '2026-03-15';
       await nextRender();
-      expect(isVisible(startClear)).to.be.false;
-      expect(isVisible(endClear)).to.be.true;
-
-      picker.startValue = '2026-03-10';
-      await nextRender();
-      expect(isVisible(startClear)).to.be.true;
+      expect(isVisible()).to.be.true;
     });
 
-    it('should clear only the start and fire change on start clear button click', async () => {
+    it('should clear both dates and fire change once on click', async () => {
       picker.startValue = '2026-03-10';
       picker.endValue = '2026-03-15';
       await nextRender();
       const spy = sinon.spy();
       picker.addEventListener('change', spy);
-      await sendMouseToElement({ type: 'click', element: startClear });
+      await sendMouseToElement({ type: 'click', element: clearButton });
       expect(picker.startValue).to.equal('');
-      expect(picker.endValue).to.equal('2026-03-15');
+      expect(picker.endValue).to.equal('');
       expect(startInput.value).to.equal('');
+      expect(endInput.value).to.equal('');
       expect(spy).to.be.calledOnce;
     });
 
-    it('should clear only the end on end clear button click', async () => {
+    it('should not open the overlay on click', async () => {
       picker.startValue = '2026-03-10';
-      picker.endValue = '2026-03-15';
       await nextRender();
-      await sendMouseToElement({ type: 'click', element: endClear });
-      expect(picker.startValue).to.equal('2026-03-10');
-      expect(picker.endValue).to.equal('');
+      await sendMouseToElement({ type: 'click', element: clearButton });
+      expect(picker.opened).to.be.not.ok;
     });
   });
 

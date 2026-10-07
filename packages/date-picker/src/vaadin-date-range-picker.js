@@ -40,8 +40,6 @@ import { DateRangePickerMixin } from './vaadin-date-range-picker-mixin.js';
  * Part name             | Description
  * ----------------------|----------------------------------------------
  * `separator`           | The separator between the start and the end input
- * `start-clear-button`  | The clear button of the start input
- * `end-clear-button`    | The clear button of the end input
  *
  * Attribute         | Description
  * ------------------|----------------------------------------------
@@ -104,20 +102,14 @@ class DateRangePicker extends DateRangePickerMixin(
         >
           <slot name="prefix" slot="prefix"></slot>
           <slot name="input"></slot>
-          <div
-            part="field-button clear-button start-clear-button"
-            aria-hidden="true"
-            @mousedown="${this.__preventDefault}"
-            @click="${this.__onStartClearClick}"
-          ></div>
           <span part="separator" aria-hidden="true">–</span>
           <slot name="end-input"></slot>
           <div
-            part="field-button clear-button end-clear-button"
+            part="field-button clear-button"
             slot="suffix"
             aria-hidden="true"
             @mousedown="${this.__preventDefault}"
-            @click="${this.__onEndClearClick}"
+            @click="${this._onClearButtonClick}"
           ></div>
           <div
             part="field-button toggle-button"
@@ -203,16 +195,6 @@ class DateRangePicker extends DateRangePickerMixin(
     input.addEventListener('input', (event) => this._onInputTextChange(event));
   }
 
-  /** @private */
-  __onStartClearClick(event) {
-    this._onClearButtonClick(event, 'start');
-  }
-
-  /** @private */
-  __onEndClearClick(event) {
-    this._onClearButtonClick(event, 'end');
-  }
-
   /**
    * Handles clicks on the field frame around the inputs. The input container would
    * otherwise focus each of its inputs in turn, which leaves the end input focused.
@@ -223,6 +205,11 @@ class DateRangePicker extends DateRangePickerMixin(
       return;
     }
     event.stopPropagation();
+
+    if (!this.separateDatePicking) {
+      this._startWholeRangePick();
+      return;
+    }
 
     // Focus the input on the side of the separator that was clicked.
     const separator = this.shadowRoot.querySelector('[part="separator"]').getBoundingClientRect();

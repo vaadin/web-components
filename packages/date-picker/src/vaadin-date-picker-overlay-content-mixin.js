@@ -578,6 +578,14 @@ export const DatePickerOverlayContentMixin = (superClass) =>
         displayedEnd = previewDate;
       } else if (previewDate && rangePreview === 'start' && rangeEnd && previewDate <= rangeEnd) {
         displayedStart = previewDate;
+      } else if (
+        previewDate &&
+        ((rangePreview === 'end' && rangeStart && previewDate < rangeStart) ||
+          (rangePreview === 'start' && rangeEnd && previewDate > rangeEnd))
+      ) {
+        // Picking this date starts a new range, so preview it as the only date of
+        // the range instead of keeping the current range on display.
+        [displayedStart, displayedEnd, editing] = [previewDate, null, 'start'];
       }
 
       calendars.forEach((calendar) => {

@@ -138,6 +138,17 @@ export const DateRangePickerMixin = (superClass) =>
         },
 
         /**
+         * By default, clicking anywhere in the field picks the whole range: the start,
+         * then the end. Set to true to make clicking the start or the end input pick
+         * only that date instead. The calendar button always picks the whole range.
+         * @attr {boolean} separate-date-picking
+         */
+        separateDatePicking: {
+          type: Boolean,
+          value: false,
+        },
+
+        /**
          * Set true to open the date selector overlay.
          */
         opened: {
@@ -289,12 +300,22 @@ export const DateRangePickerMixin = (superClass) =>
         this.__ensureContent();
       }
 
+      // A value that differs from the current dates was set by the application, which
+      // becomes the committed value, so that it does not count as a user change.
+      let isSetByApplication = false;
+
       if (props.has('startValue')) {
+        isSetByApplication ||= this.startValue !== formatISODate(this._startDate);
         this._startDate = this.__parseValue(this.startValue, this._startDate);
       }
 
       if (props.has('endValue')) {
+        isSetByApplication ||= this.endValue !== formatISODate(this._endDate);
         this._endDate = this.__parseValue(this.endValue, this._endDate);
+      }
+
+      if (isSetByApplication) {
+        this.__committedValue = this.__getRangeString();
       }
     }
 
@@ -592,16 +613,14 @@ export const DateRangePickerMixin = (superClass) =>
     }
 
     /** @protected */
-    _onClearButtonClick(event, part) {
+    _onClearButtonClick(event) {
       event.preventDefault();
       event.stopPropagation();
-      if (part === 'start') {
-        this._startDate = null;
-        this.__applyInputValue(this._startInput, null);
-      } else {
-        this._endDate = null;
-        this.__applyInputValue(this._endInput, null);
-      }
+      // The field is one value, so the clear button clears both dates.
+      this._startDate = null;
+      this._endDate = null;
+      this.__applyInputValue(this._startInput, null);
+      this.__applyInputValue(this._endInput, null);
       this.__commitValueChange();
     }
 
@@ -611,11 +630,38 @@ export const DateRangePickerMixin = (superClass) =>
       if (path.includes(this.$.overlay) || path.some((node) => node.part?.contains?.('clear-button'))) {
         return;
       }
+      if (!this.separateDatePicking && !this.opened) {
+        this._startWholeRangePick();
+        return;
+      }
+      this.open();
+    }
+
+    /**
+     * Opens the overlay for picking the whole range, starting from the start date.
+     * @protected
+     */
+    _startWholeRangePick() {
+      if (this.disabled || this.readonly) {
+        return;
+      }
+      this._activePart = 'start';
+      this.__pickingWholeRange = true;
+      this.__focusActiveInput();
       this.open();
     }
 
     /** @private */
     __onFocusIn(event) {
+      // A click on the end input, while the overlay is closed, picks the whole range
+      // from the start, unless dates are picked separately. Moving focus there with
+      // the keyboard still edits only the end.
+      const isClick = !isKeyboardActive() && !this.__focusingProgrammatically;
+      if (event.target === this._endInput && isClick && !this.opened && !this.separateDatePicking) {
+        this._startWholeRangePick();
+        return;
+      }
+
       if (event.target === this._startInput) {
         this._activePart = 'start';
       } else if (event.target === this._endInput) {
@@ -779,7 +825,9 @@ export const DateRangePickerMixin = (superClass) =>
     __focusActiveInput() {
       const input = this.__activeInput;
       if (input && !isElementFocused(input)) {
+        this.__focusingProgrammatically = true;
         input.focus({ focusVisible: isKeyboardActive() });
+        this.__focusingProgrammatically = false;
       }
     }
 

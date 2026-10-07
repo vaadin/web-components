@@ -8,7 +8,7 @@ import { css } from 'lit';
 
 export const dateRangePickerStyles = css`
   :host {
-    /* Fits two full dates with their clear buttons */
+    /* Fits two full dates with the clear button */
     width: var(--vaadin-date-range-picker-default-width, 20em);
   }
 
@@ -19,25 +19,13 @@ export const dateRangePickerStyles = css`
     align-self: stretch;
     padding: 0;
     min-height: 0;
-    color: var(--vaadin-input-field-placeholder-color, var(--vaadin-text-color-secondary));
-  }
-
-  /* Themes may fade out overflowing slotted content, which does not apply here */
-  [part='separator'],
-  [part~='start-clear-button'] {
+    /* Themes may fade out overflowing slotted content, which does not apply here */
     mask-image: none;
+    color: var(--vaadin-input-field-placeholder-color, var(--vaadin-text-color-secondary));
   }
 
   ::slotted(input) {
     min-width: 0;
-  }
-
-  /* Show each clear button only for its own value, overriding the shared has-value rule */
-  :host([clear-button-visible][has-value]:not([has-start-value]):not([disabled]))
-    [part~='clear-button'][part~='start-clear-button'],
-  :host([clear-button-visible][has-value]:not([has-end-value]):not([disabled]))
-    [part~='clear-button'][part~='end-clear-button'] {
-    display: none;
   }
 
   /* Highlight the input whose date a pick in the calendar sets */
