@@ -29,6 +29,10 @@ const PRO_LICENSE_HEADER = `
  */
 `;
 
+// The React wrappers were started in 2022 in the vaadin/react-components repo.
+const REACT_LICENSE_HEADER = LICENSE_HEADER.replace('2000 - ', '2022 - ');
+const REACT_PRO_LICENSE_HEADER = PRO_LICENSE_HEADER.replace('2000 - ', '2022 - ');
+
 const PRO_COMPONENTS = [
   'charts',
   'board',
@@ -194,6 +198,18 @@ export default [
     files: [`packages/@(${PRO_COMPONENTS.join('|')})/src/**/*.{ts,tsx,js}`],
     rules: {
       'custom-rules/license-header': ['error', { licenseHeader: PRO_LICENSE_HEADER }],
+    },
+  },
+  {
+    files: ['packages/react-components/src/**/*.{ts,tsx}'],
+    rules: {
+      'custom-rules/license-header': ['error', { licenseHeader: REACT_LICENSE_HEADER }],
+    },
+  },
+  {
+    files: ['packages/react-components-pro/src/**/*.{ts,tsx}'],
+    rules: {
+      'custom-rules/license-header': ['error', { licenseHeader: REACT_PRO_LICENSE_HEADER }],
     },
   },
   {
