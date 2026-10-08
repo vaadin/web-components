@@ -350,15 +350,6 @@ describe('menu-bar with tooltip', () => {
   });
 
   describe('accessible disabled button', () => {
-    before(() => {
-      window.Vaadin.featureFlags ??= {};
-      window.Vaadin.featureFlags.accessibleDisabledButtons = true;
-    });
-
-    after(() => {
-      window.Vaadin.featureFlags.accessibleDisabledButtons = false;
-    });
-
     beforeEach(async () => {
       menuBar = fixtureSync(
         `<div>
@@ -563,15 +554,6 @@ describe('menu-bar with tooltip', () => {
     });
 
     describe('disabled sub-menu item', () => {
-      before(() => {
-        window.Vaadin.featureFlags ??= {};
-        window.Vaadin.featureFlags.accessibleDisabledMenuItems = true;
-      });
-
-      after(() => {
-        window.Vaadin.featureFlags.accessibleDisabledMenuItems = false;
-      });
-
       it('should show tooltip for disabled sub-menu item on hover', async () => {
         await sendMouseToElement({ type: 'click', element: buttons[0] });
         await nextRender();

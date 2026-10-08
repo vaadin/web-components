@@ -204,15 +204,6 @@ describe('context-menu with tooltip', () => {
   });
 
   describe('disabled item', () => {
-    before(() => {
-      window.Vaadin.featureFlags ??= {};
-      window.Vaadin.featureFlags.accessibleDisabledMenuItems = true;
-    });
-
-    after(() => {
-      window.Vaadin.featureFlags.accessibleDisabledMenuItems = false;
-    });
-
     it('should show tooltip for disabled item on hover', async () => {
       await sendMouseToElement({ type: 'click', element: target });
       await nextRender();
