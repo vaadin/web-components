@@ -179,6 +179,18 @@
       "types": "./CheckboxGroup.d.ts",
       "default": "./CheckboxGroup.js"
     },
+    "./ComboBox.js": {
+      "types": "./ComboBox.d.ts",
+      "default": "./ComboBox.js"
+    },
+    "./ConfirmDialog.js": {
+      "types": "./ConfirmDialog.d.ts",
+      "default": "./ConfirmDialog.js"
+    },
+    "./ContextMenu.js": {
+      "types": "./ContextMenu.d.ts",
+      "default": "./ContextMenu.js"
+    },
     "./ContextMenuItem.js": {
       "types": "./ContextMenuItem.d.ts",
       "default": "./ContextMenuItem.js"
@@ -195,6 +207,10 @@
       "types": "./DatePicker.d.ts",
       "default": "./DatePicker.js"
     },
+    "./DateTimePicker.js": {
+      "types": "./DateTimePicker.d.ts",
+      "default": "./DateTimePicker.js"
+    },
     "./Details.js": {
       "types": "./Details.d.ts",
       "default": "./Details.js"
@@ -202,6 +218,10 @@
     "./DetailsSummary.js": {
       "types": "./DetailsSummary.d.ts",
       "default": "./DetailsSummary.js"
+    },
+    "./Dialog.js": {
+      "types": "./Dialog.d.ts",
+      "default": "./Dialog.js"
     },
     "./DrawerToggle.js": {
       "types": "./DrawerToggle.d.ts",
@@ -291,6 +311,18 @@
       "types": "./LoginForm.d.ts",
       "default": "./LoginForm.js"
     },
+    "./LoginOverlay.js": {
+      "types": "./LoginOverlay.d.ts",
+      "default": "./LoginOverlay.js"
+    },
+    "./Markdown.js": {
+      "types": "./Markdown.d.ts",
+      "default": "./Markdown.js"
+    },
+    "./MenuBar.js": {
+      "types": "./MenuBar.d.ts",
+      "default": "./MenuBar.js"
+    },
     "./Message.js": {
       "types": "./Message.d.ts",
       "default": "./Message.js"
@@ -303,6 +335,14 @@
       "types": "./MessageList.d.ts",
       "default": "./MessageList.js"
     },
+    "./MultiSelectComboBox.js": {
+      "types": "./MultiSelectComboBox.d.ts",
+      "default": "./MultiSelectComboBox.js"
+    },
+    "./Notification.js": {
+      "types": "./Notification.d.ts",
+      "default": "./Notification.js"
+    },
     "./NumberField.js": {
       "types": "./NumberField.d.ts",
       "default": "./NumberField.js"
@@ -310,6 +350,10 @@
     "./PasswordField.js": {
       "types": "./PasswordField.d.ts",
       "default": "./PasswordField.js"
+    },
+    "./Popover.js": {
+      "types": "./Popover.d.ts",
+      "default": "./Popover.js"
     },
     "./ProgressBar.js": {
       "types": "./ProgressBar.d.ts",
@@ -330,6 +374,10 @@
     "./Scroller.js": {
       "types": "./Scroller.d.ts",
       "default": "./Scroller.js"
+    },
+    "./Select.js": {
+      "types": "./Select.d.ts",
+      "default": "./Select.js"
     },
     "./SelectItem.js": {
       "types": "./SelectItem.d.ts",
@@ -375,6 +423,10 @@
       "types": "./TextField.d.ts",
       "default": "./TextField.js"
     },
+    "./TimePicker.js": {
+      "types": "./TimePicker.d.ts",
+      "default": "./TimePicker.js"
+    },
     "./Tooltip.js": {
       "types": "./Tooltip.d.ts",
       "default": "./Tooltip.js"
@@ -399,6 +451,10 @@
       "types": "./VerticalLayout.d.ts",
       "default": "./VerticalLayout.js"
     },
+    "./VirtualList.js": {
+      "types": "./VirtualList.d.ts",
+      "default": "./VirtualList.js"
+    },
     "./Accordion": "./Accordion.js",
     "./AccordionHeading": "./AccordionHeading.js",
     "./AccordionPanel": "./AccordionPanel.js",
@@ -412,12 +468,17 @@
     "./Card": "./Card.js",
     "./Checkbox": "./Checkbox.js",
     "./CheckboxGroup": "./CheckboxGroup.js",
+    "./ComboBox": "./ComboBox.js",
+    "./ConfirmDialog": "./ConfirmDialog.js",
+    "./ContextMenu": "./ContextMenu.js",
     "./ContextMenuItem": "./ContextMenuItem.js",
     "./ContextMenuListBox": "./ContextMenuListBox.js",
     "./CustomField": "./CustomField.js",
     "./DatePicker": "./DatePicker.js",
+    "./DateTimePicker": "./DateTimePicker.js",
     "./Details": "./Details.js",
     "./DetailsSummary": "./DetailsSummary.js",
+    "./Dialog": "./Dialog.js",
     "./DrawerToggle": "./DrawerToggle.js",
     "./EmailField": "./EmailField.js",
     "./FormItem": "./FormItem.js",
@@ -440,16 +501,23 @@
     "./Item": "./Item.js",
     "./ListBox": "./ListBox.js",
     "./LoginForm": "./LoginForm.js",
+    "./LoginOverlay": "./LoginOverlay.js",
+    "./Markdown": "./Markdown.js",
+    "./MenuBar": "./MenuBar.js",
     "./Message": "./Message.js",
     "./MessageInput": "./MessageInput.js",
     "./MessageList": "./MessageList.js",
+    "./MultiSelectComboBox": "./MultiSelectComboBox.js",
+    "./Notification": "./Notification.js",
     "./NumberField": "./NumberField.js",
     "./PasswordField": "./PasswordField.js",
+    "./Popover": "./Popover.js",
     "./ProgressBar": "./ProgressBar.js",
     "./RadioButton": "./RadioButton.js",
     "./RadioGroup": "./RadioGroup.js",
     "./RangeSlider": "./RangeSlider.js",
     "./Scroller": "./Scroller.js",
+    "./Select": "./Select.js",
     "./SelectItem": "./SelectItem.js",
     "./SelectListBox": "./SelectListBox.js",
     "./SideNav": "./SideNav.js",
@@ -461,12 +529,14 @@
     "./Tabs": "./Tabs.js",
     "./TextArea": "./TextArea.js",
     "./TextField": "./TextField.js",
+    "./TimePicker": "./TimePicker.js",
     "./Tooltip": "./Tooltip.js",
     "./Upload": "./Upload.js",
     "./UploadButton": "./UploadButton.js",
     "./UploadDropZone": "./UploadDropZone.js",
     "./UploadFileList": "./UploadFileList.js",
     "./VerticalLayout": "./VerticalLayout.js",
+    "./VirtualList": "./VirtualList.js",
     "./css/lumo/Utility.module.css": "./css/lumo/Utility.module.css",
     "./utils/createComponent.d.ts": "./utils/createComponent.d.ts",
     "./utils/createComponent.d.ts.map": "./utils/createComponent.d.ts.map",
