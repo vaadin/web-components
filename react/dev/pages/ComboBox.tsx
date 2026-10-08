@@ -1,5 +1,5 @@
 import '@vaadin/icons';
-import React, { useCallback, useEffect, useState } from 'react';
+import React, { useCallback, useEffect, useRef, useState } from 'react';
 import type {
   ComboBoxCustomValueSetEvent,
   ComboBoxFilterChangedEvent,
@@ -87,9 +87,11 @@ export default function ComboBoxPage() {
   const [usePrefix, setUsePrefix] = useState(false);
   const [useClassNameGenerator, setUseClassNameGenerator] = useState(false);
 
-  const [eventLog, setEventLog] = useState<string[]>([]);
+  const [eventLog, setEventLog] = useState<Array<{ id: number; text: string }>>([]);
+  const nextLogId = useRef(0);
   const logEvent = useCallback((event: string) => {
-    setEventLog((prev) => [`${new Date().toLocaleTimeString()}: ${event}`, ...prev].slice(0, 100));
+    const text = `${new Date().toLocaleTimeString()}: ${event}`;
+    setEventLog((prev) => [{ id: nextLogId.current++, text }, ...prev].slice(0, 100));
   }, []);
 
   useEffect(() => {
@@ -437,8 +439,8 @@ export default function ComboBoxPage() {
             background: '#f9f9f9',
           }}
         >
-          {eventLog.map((log, index) => (
-            <div key={index}>{log}</div>
+          {eventLog.map((log) => (
+            <div key={log.id}>{log.text}</div>
           ))}
         </div>
       </div>

@@ -1,5 +1,5 @@
 import '@vaadin/icons';
-import { useEffect, useState } from 'react';
+import { useEffect, useRef, useState } from 'react';
 import {
   ContextMenu,
   type ContextMenuItemData,
@@ -76,10 +76,12 @@ export default function ContextMenuPage() {
   const [itemSetType, setItemSetType] = useState<ItemSetType>('basic');
   const [items, setItems] = useState<ContextMenuItemData[]>(initialItemSets.basic);
   const [openOn, setOpenOn] = useState<OpenOnType>('contextmenu');
-  const [eventLog, setEventLog] = useState<string[]>([]);
+  const [eventLog, setEventLog] = useState<Array<{ id: number; text: string }>>([]);
+  const nextLogId = useRef(0);
 
   const logEvent = (event: string) => {
-    setEventLog((prev) => [`${new Date().toLocaleTimeString()}: ${event}`, ...prev].slice(0, 100));
+    const text = `${new Date().toLocaleTimeString()}: ${event}`;
+    setEventLog((prev) => [{ id: nextLogId.current++, text }, ...prev].slice(0, 100));
   };
 
   useEffect(() => {
@@ -120,9 +122,9 @@ export default function ContextMenuPage() {
           color: var(--lumo-error-text-color) !important;
         }
       `}</style>
-      <div style={{ display: 'grid', gridTemplateRows: 'auto auto', gridTemplateColumns: '1fr 1fr', gap: '20px' }}>
+      <div style={{ display: 'flex', flexDirection: 'column', gap: '20px' }}>
         {/* Demo component section */}
-        <div style={{ gridColumn: '1 / -1' }}>
+        <div>
           <h1>ContextMenu</h1>
           <ContextMenu items={items} openOn={openOn} onItemSelected={handleItemSelected}>
             <div
@@ -146,14 +148,7 @@ export default function ContextMenuPage() {
         {/* Configuration section */}
         <div style={{ display: 'flex', flexDirection: 'column', alignItems: 'flex-start', gap: '10px' }}>
           <h2>Configuration</h2>
-          <div
-            style={{
-              display: 'grid',
-              gridTemplateColumns: 'auto 1fr',
-              gap: '10px 20px',
-              alignItems: 'center',
-            }}
-          >
+          <div style={{ display: 'flex', flexDirection: 'column', alignItems: 'flex-start', gap: '10px' }}>
             <label htmlFor="itemset-select" style={{ fontWeight: 500 }}>
               Item Set:
             </label>
@@ -169,8 +164,7 @@ export default function ContextMenuPage() {
               ))}
             </select>
 
-            <label style={{ fontWeight: 500 }}>Open On:</label>
-            <RadioGroup value={openOn} onValueChanged={(e) => setOpenOn(e.detail.value as OpenOnType)}>
+            <RadioGroup label="Open on" value={openOn} onValueChanged={(e) => setOpenOn(e.detail.value as OpenOnType)}>
               <RadioButton value="contextmenu" label="Context Menu (Right-click/Long-press)" />
               <RadioButton value="click" label="Click" />
             </RadioGroup>
@@ -190,8 +184,8 @@ export default function ContextMenuPage() {
               whiteSpace: 'pre-wrap',
             }}
           >
-            {eventLog.map((log, index) => (
-              <div key={index}>{log}</div>
+            {eventLog.map((log) => (
+              <div key={log.id}>{log.text}</div>
             ))}
           </div>
         </div>
