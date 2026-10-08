@@ -1,4 +1,5 @@
 import prettier from 'eslint-config-vaadin/prettier';
+import react from 'eslint-config-vaadin/react';
 import testing from 'eslint-config-vaadin/testing';
 import typescript from 'eslint-config-vaadin/typescript';
 import html from 'eslint-plugin-html';
@@ -28,7 +29,27 @@ const PRO_LICENSE_HEADER = `
  */
 `;
 
-const PRO_COMPONENTS = ['charts', 'board', 'crud', 'dashboard', 'grid-pro', 'rich-text-editor', 'map'];
+const PRO_COMPONENTS = [
+  'charts',
+  'board',
+  'crud',
+  'dashboard',
+  'grid-pro',
+  'rich-text-editor',
+  'map',
+  'react-components-pro',
+];
+
+const REACT_FILES = ['packages/react-components*/**/*.{ts,tsx}', 'react/dev/**/*.tsx'];
+
+/** Turns off every rule of the React preset whose name starts with the given plugin prefix. */
+const reactRulesOff = (prefix) =>
+  Object.fromEntries(
+    react
+      .flatMap((config) => Object.keys(config.rules ?? {}))
+      .filter((rule) => rule.startsWith(prefix))
+      .map((rule) => [rule, 'off']),
+  );
 
 export default [
   {
@@ -40,10 +61,33 @@ export default [
       'packages/**/dist/*.js',
       'packages/**/test/dom/__snapshots__/*.snap.js',
       'packages/**/test/*.generated.test.js',
+      'packages/react-components*/*.{js,d.ts,map}',
+      'packages/react-components*/{generated,renderers,utils,css}/**',
+      'packages/react-components*/src/generated/**',
     ],
   },
   ...typescript,
   ...testing,
+  ...react.map((config) => ({ ...config, files: REACT_FILES })),
+  {
+    files: REACT_FILES,
+    settings: {
+      react: { version: '19' },
+    },
+    rules: {
+      'react/jsx-no-literals': 'off', // Wrappers and tests render plain text
+      'react/destructuring-assignment': 'off', // Wrappers forward props objects as is
+      'react/jsx-pascal-case': 'off', // Generated components use web component class names
+      'react/function-component-definition': 'off', // Wrappers use forwardRef with arrow functions
+      'react/display-name': 'off', // Wrappers set no display name
+      'react/no-this-in-sfc': 'off', // False positives in renderer callbacks
+      '@typescript-eslint/no-empty-object-type': 'off', // Props types extend web component types
+      '@typescript-eslint/explicit-module-boundary-types': 'off', // Return types are inferred from createComponent
+      '@typescript-eslint/no-unsafe-function-type': 'off', // Event handler maps use Function
+      '@typescript-eslint/consistent-type-assertions': 'off', // Ref and element casts are needed
+      ...reactRulesOff('react-perf/'), // Renderer props take inline JSX, functions, arrays and objects
+    },
+  },
   ...prettier,
   {
     plugins: {
@@ -141,13 +185,13 @@ export default [
     },
   },
   {
-    files: ['packages/*/src/**/*.{ts,js}'],
+    files: ['packages/*/src/**/*.{ts,tsx,js}'],
     rules: {
       'custom-rules/license-header': ['error', { licenseHeader: LICENSE_HEADER }],
     },
   },
   {
-    files: [`packages/@(${PRO_COMPONENTS.join('|')})/src/**/*.{ts,js}`],
+    files: [`packages/@(${PRO_COMPONENTS.join('|')})/src/**/*.{ts,tsx,js}`],
     rules: {
       'custom-rules/license-header': ['error', { licenseHeader: PRO_LICENSE_HEADER }],
     },
@@ -160,6 +204,9 @@ export default [
       'wtr-utils.js',
       'custom-rules/**/*.js',
       'api-docs/.eleventy.js',
+      'react/scripts/**/*.{js,ts}',
+      'react/*.ts',
+      'react/dev/*.ts',
     ],
     languageOptions: {
       globals: {
@@ -202,6 +249,19 @@ export default [
           ],
         },
       ],
+    },
+  },
+  {
+    files: ['packages/react-components*/test/**'],
+    rules: {
+      ...reactRulesOff('jsx-a11y/'), // Test fixtures are not real UI
+      'react/button-has-type': 'off',
+    },
+  },
+  {
+    files: ['packages/react-components*/test/typings/**'],
+    rules: {
+      '@typescript-eslint/no-unused-vars': 'off',
     },
   },
 ];

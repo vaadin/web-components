@@ -19,6 +19,7 @@ const blacklistedPackages = [
   /^lit-renderer/u,
   /^overlay/u,
   /^aura/u,
+  /^react-components/u,
 ];
 
 /**
