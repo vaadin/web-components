@@ -16,7 +16,7 @@ Specs live in `packages/react-components*/test/*.spec.tsx` and run in Chromium t
 
 ```sh
 npx playwright install chromium   # once
-yarn release:react                # once, the bare `@vaadin/react-components` import uses the built index.js
+yarn release:react                # once: the wrappers re-export the gitignored `src/generated`, and the bare `@vaadin/react-components` import uses the built `index.js`
 yarn test:react
 ```
 
@@ -26,7 +26,8 @@ Subpath imports such as `@vaadin/react-components/Grid.js` resolve to the source
 ## Dev pages
 
 ```sh
-yarn start:react   # opens /dev/ with one page per file in react/dev/pages/, e.g. /dev/grid.html
+yarn release:react   # once, see above
+yarn start:react     # opens /dev/ with one page per file in react/dev/pages/, e.g. /dev/grid.html
 ```
 
 Add a page for a component by adding `react/dev/pages/<Component>.tsx` with a default export.
