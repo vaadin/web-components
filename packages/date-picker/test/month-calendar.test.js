@@ -378,6 +378,18 @@ describe('vaadin-month-calendar', () => {
       expect(isEditing(10) || isEditing(14)).to.be.false;
     });
 
+    it('should mark the hinted date', async () => {
+      const isHinted = (day) => parts(day).includes('range-hint');
+      monthCalendar.rangeHint = new Date(2016, 1, 12);
+      await nextRender();
+      expect(isHinted(12)).to.be.true;
+      expect(isHinted(10) || isHinted(14)).to.be.false;
+
+      monthCalendar.rangeHint = null;
+      await nextRender();
+      expect(isHinted(12)).to.be.false;
+    });
+
     it('should not mark a single-day range as being edited', async () => {
       monthCalendar.rangeEnd = new Date(2016, 1, 10);
       monthCalendar.rangeEditing = 'end';

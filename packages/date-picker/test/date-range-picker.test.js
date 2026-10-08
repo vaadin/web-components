@@ -133,6 +133,17 @@ describe('date-range-picker', () => {
       });
     });
 
+    it('should keep the range on display and hint at the date focused with the keyboard', async () => {
+      endInput.focus();
+      await sendKeys({ press: 'ArrowDown' });
+      await untilOverlayRendered(picker);
+      await sendKeys({ press: 'ArrowRight' });
+      await untilOverlayRendered(picker);
+      expect(getParts(16)).to.include('range-hint');
+      expect(getParts(16)).to.not.include('range-end');
+      expect(getParts(15)).to.include.members(['range-end', 'in-range']);
+    });
+
     it('should mark the end being edited, depending on the focused input', async () => {
       await openFrom(endInput);
       expect(getParts(15)).to.include('range-editing');
