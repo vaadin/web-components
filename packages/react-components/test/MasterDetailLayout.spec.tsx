@@ -21,10 +21,6 @@ class TestLitElement extends LitElement {
 
 customElements.define('test-lit-element', TestLitElement);
 
-window.Vaadin ||= {};
-window.Vaadin.featureFlags ||= {};
-window.Vaadin.featureFlags.masterDetailLayoutComponent = true;
-
 describe('MasterDetailLayout', () => {
   let startTransitionSpy: sinon.SinonSpy;
   let result: RenderResult;

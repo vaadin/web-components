@@ -7,10 +7,6 @@ import { RadioButton } from '../../../packages/react-components/src/RadioButton.
 import { RadioGroup } from '../../../packages/react-components/src/RadioGroup.js';
 import { TextField } from '../../../packages/react-components/src/TextField.js';
 
-window.Vaadin ||= {};
-window.Vaadin.featureFlags ||= {};
-window.Vaadin.featureFlags.masterDetailLayoutComponent = true;
-
 const lorem =
   'Lorem ipsum dolor sit amet, consectetur adipisicing elit. Eligendi suscipit rem, non temporibus laboriosam maiores distinctio numquam, dolorum ducimus dolores sequi reprehenderit iste consectetur adipisci delectus aperiam voluptatibus! Vitae, adipisci.';
 
