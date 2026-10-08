@@ -647,7 +647,6 @@ export const GridMixin = (superClass) =>
 
     /** @private */
     _resizeHandler() {
-      this._updateDetailsCellHeights();
       this.__updateHorizontalScrollPosition();
     }
 
