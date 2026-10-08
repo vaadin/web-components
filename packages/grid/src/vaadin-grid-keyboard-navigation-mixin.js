@@ -641,6 +641,8 @@ export const KeyboardNavigationMixin = (superClass) =>
 
     /** @private */
     _predictFocusStepTarget(srcElement, step) {
+      this._debounceColumnContentVisibility?.flush();
+
       const tabOrder = [
         this.$.table,
         this._headerFocusable,
@@ -676,8 +678,8 @@ export const KeyboardNavigationMixin = (superClass) =>
           if (focusStepTarget === this._headerFocusable) {
             focusStepTarget = firstVisibleColumn._headerCell;
           } else if (focusStepTarget === this._itemsFocusable) {
-            const rowIndex = focusStepTarget._column._cells.indexOf(focusStepTarget);
-            focusStepTarget = firstVisibleColumn._cells[rowIndex];
+            const row = focusStepTarget.parentElement;
+            focusStepTarget = [...row.children].find((cell) => cell._column === firstVisibleColumn);
           } else if (focusStepTarget === this._footerFocusable) {
             focusStepTarget = firstVisibleColumn._footerCell;
           }
