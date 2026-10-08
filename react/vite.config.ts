@@ -4,9 +4,11 @@ import { readFileSync } from 'node:fs';
 import { dirname, resolve } from 'node:path';
 import { fileURLToPath } from 'node:url';
 import { defineConfig } from 'vitest/config';
+import devPagesPlugin from './dev/dev-pages-plugin.js';
 
-const root = resolve(dirname(fileURLToPath(import.meta.url)), '..');
-const { version } = JSON.parse(readFileSync(resolve(root, 'lerna.json'), 'utf8')) as { version: string };
+const root = dirname(fileURLToPath(import.meta.url));
+const repoRoot = resolve(root, '..');
+const { version } = JSON.parse(readFileSync(resolve(repoRoot, 'lerna.json'), 'utf8')) as { version: string };
 
 export default defineConfig(({ mode }) => ({
   root,
@@ -16,10 +18,13 @@ export default defineConfig(({ mode }) => ({
   build: {
     target: 'esnext',
   },
-  plugins: [react()],
+  plugins: [react(), devPagesPlugin()],
+  server: {
+    // The packages live outside the Vite root.
+    fs: { allow: [repoRoot] },
+  },
   optimizeDeps: {
-    // Limit the dependency scan to the React dev pages instead of every HTML file in the repo.
-    entries: ['react/dev/**/*.html'],
+    entries: ['dev/**/*.html'],
     include: [
       'react',
       'react-dom',
@@ -44,14 +49,15 @@ export default defineConfig(({ mode }) => ({
         ? [
             {
               find: /^@vaadin\/react-components\/(.*)$/u,
-              replacement: resolve(root, 'packages/react-components/src/$1'),
+              replacement: resolve(repoRoot, 'packages/react-components/src/$1'),
             },
           ]
         : [],
   },
   test: {
-    include: ['packages/react-components*/test/**/*.spec.tsx'],
-    setupFiles: ['react/test/setup.ts'],
+    dir: resolve(repoRoot, 'packages'),
+    include: ['react-components*/test/**/*.spec.tsx'],
+    setupFiles: [resolve(root, 'test/setup.ts')],
     testTimeout: 2000,
     hookTimeout: 2000,
     browser: {

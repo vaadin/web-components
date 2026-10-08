@@ -22,3 +22,11 @@ yarn test:react
 
 Subpath imports such as `@vaadin/react-components/Grid.js` resolve to the sources in tests, so changes in
 `packages/react-components/src` are visible without a rebuild.
+
+## Dev pages
+
+```sh
+yarn start:react   # opens /dev/ with one page per file in react/dev/pages/, e.g. /dev/grid.html
+```
+
+Add a page for a component by adding `react/dev/pages/<Component>.tsx` with a default export.

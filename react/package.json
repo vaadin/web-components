@@ -12,6 +12,7 @@
   "type": "module",
   "scripts": {
     "lint:types": "tsc -p tsconfig.json",
+    "start": "vite --open /dev/",
     "test": "vitest run",
     "test:watch": "vitest"
   },
