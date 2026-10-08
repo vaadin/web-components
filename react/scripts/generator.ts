@@ -216,7 +216,7 @@ export async function generate(): Promise<void> {
   if (missing.length > 0) {
     throw new Error(
       `No generated module for src/${missing.join(', src/')}. ` +
-        'Run "yarn release:cem && yarn release:web-types" to refresh the web-types.json inputs.',
+        'Run "yarn build:react" to refresh the web-types.json inputs and rebuild.',
     );
   }
 

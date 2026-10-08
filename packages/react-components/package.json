@@ -1,7 +1,6 @@
 {
   "name": "@vaadin/react-components",
   "version": "25.4.0-alpha2",
-  "private": true,
   "publishConfig": {
     "access": "public"
   },
@@ -17,7 +16,8 @@
   },
   "scripts": {
     "build": "tsx ../../react/scripts/build.ts",
-    "clean": "tsx ../../react/scripts/build.ts --clean"
+    "clean": "tsx ../../react/scripts/build.ts --clean",
+    "prepack": "node -e \"require('fs').accessSync('index.js')\" || (echo 'Run yarn build:react before publishing' && exit 1)"
   },
   "dependencies": {
     "@lit/react": "^1.0.7",
