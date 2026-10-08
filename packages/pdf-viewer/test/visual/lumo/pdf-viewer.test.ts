@@ -143,6 +143,64 @@ describe('pdf-viewer', () => {
     await visualDiff(div, 'print-progress');
   });
 
+  it('file-name', async () => {
+    element.fileNameVisible = true;
+    element.src = fixtureUrl('multi-page.pdf');
+    await nextRenderIdle(element);
+    await visualDiff(div, 'file-name');
+  });
+
+  it('wide', async () => {
+    div.style.width = '900px';
+    element.src = fixtureUrl('multi-page.pdf');
+    await nextRenderIdle(element);
+    await visualDiff(div, 'wide');
+  });
+
+  it('page-error', async () => {
+    element.src = fixtureUrl('multi-page.pdf');
+    await nextRenderIdle(element);
+    const field = element.querySelector<HTMLElement & { inputElement: HTMLInputElement }>('vaadin-integer-field')!;
+    field.focus();
+    field.inputElement.select();
+    await sendKeys({ type: '99' });
+    await sendKeys({ press: 'Enter' });
+    await nextRender();
+    await visualDiff(div, 'page-error');
+  });
+
+  describe('large text', () => {
+    beforeEach(() => {
+      // Like a larger default font size in the browser settings
+      document.documentElement.style.fontSize = '32px';
+      div.style.width = '320px';
+    });
+
+    afterEach(() => {
+      document.documentElement.style.fontSize = '';
+    });
+
+    it('large-text-find', async () => {
+      element.src = fixtureUrl('multi-page.pdf');
+      await nextRenderIdle(element);
+      element.querySelector<HTMLElement>('vaadin-pdf-viewer-button[icon="find"]')!.click();
+      await nextRender();
+      await sendKeys({ type: 'quick' });
+      for (let i = 0; i < 50 && !element.shadowRoot!.querySelector('.find-match.current'); i++) {
+        await nextFrame();
+      }
+      await visualDiff(div, 'large-text-find');
+    });
+
+    it('large-text-print-progress', async () => {
+      element.src = fixtureUrl('multi-page.pdf');
+      await nextRenderIdle(element);
+      (element as any).__printProgress = 0.4;
+      await nextRender();
+      await visualDiff(div, 'large-text-print-progress');
+    });
+  });
+
   it('rtl', async () => {
     div.setAttribute('dir', 'rtl');
     element.src = fixtureUrl('multi-page.pdf');

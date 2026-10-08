@@ -12,6 +12,12 @@
 /** The zoom levels of the zoom select, the zoom buttons and the zoom shortcuts. */
 export const ZOOM_LEVELS = [0.25, 0.5, 0.75, 1, 1.25, 1.5, 2, 3, 4];
 
+/** The smallest zoom of the zoom buttons and pinch-to-zoom. */
+export const MIN_ZOOM = ZOOM_LEVELS[0];
+
+/** The largest zoom of the zoom buttons and pinch-to-zoom. */
+export const MAX_ZOOM = ZOOM_LEVELS[ZOOM_LEVELS.length - 1];
+
 /** Tolerance for comparing zoom factors, which come from computed scales. */
 const ZOOM_EPSILON = 0.001;
 
@@ -43,4 +49,22 @@ export function getZoomOutLevel(zoomFactor) {
 export function formatZoom(zoom, element) {
   const locale = element.closest('[lang]')?.lang || undefined;
   return new Intl.NumberFormat(locale, { style: 'percent', maximumFractionDigits: 0 }).format(zoom);
+}
+
+/**
+ * Whether the value is a supported `zoom`: `page-width`, `page-fit`, or a
+ * finite positive number, also as a string.
+ * @param {unknown} zoom
+ * @return {boolean}
+ */
+export function isValidZoom(zoom) {
+  if (zoom === 'page-width' || zoom === 'page-fit') {
+    return true;
+  }
+  // Other types are not converted, as converting e.g. an object can throw.
+  if (typeof zoom !== 'number' && typeof zoom !== 'string') {
+    return false;
+  }
+  const value = Number(zoom);
+  return Number.isFinite(value) && value > 0;
 }

@@ -9,7 +9,7 @@
  * license.
  */
 import { announce } from '@vaadin/a11y-base/src/announce.js';
-import { isKeyboardActive } from '@vaadin/a11y-base/src/focus-utils.js';
+import { getDeepActiveElement, isKeyboardActive } from '@vaadin/a11y-base/src/focus-utils.js';
 import { timeOut } from '@vaadin/component-base/src/async.js';
 import { Debouncer } from '@vaadin/component-base/src/debounce.js';
 import { createPageText, findInText, getMatchParts, normalizeText } from './pdf-viewer-find.js';
@@ -34,30 +34,35 @@ export const PdfViewerFindMixin = (superClass) =>
         __findOpened: {
           type: Boolean,
           value: false,
+          attribute: false,
         },
 
         /** @private */
         __findQuery: {
           type: String,
           value: '',
+          attribute: false,
         },
 
         /** @private */
         __findMatchCount: {
           type: Number,
           value: 0,
+          attribute: false,
         },
 
         /** @private */
         __findSearching: {
           type: Boolean,
           value: false,
+          attribute: false,
         },
 
         /** @private */
         __findCurrentIndex: {
           type: Number,
           value: -1,
+          attribute: false,
         },
       };
     }
@@ -92,7 +97,11 @@ export const PdfViewerFindMixin = (superClass) =>
     /** The current match when the find bar was closed, to continue from it when reopened. */
     #closedMatchIndex = -1;
 
-    /** @protected */
+    /**
+     * Override method from `LitElement` to open the find bar with Ctrl+F or Cmd+F.
+     * @protected
+     * @override
+     */
     firstUpdated() {
       super.firstUpdated();
 
@@ -108,7 +117,11 @@ export const PdfViewerFindMixin = (superClass) =>
       });
     }
 
-    /** @protected */
+    /**
+     * Override method from `LitElement` to search a newly loaded document for the entered text.
+     * @protected
+     * @override
+     */
     updated(props) {
       super.updated(props);
 
@@ -160,13 +173,16 @@ export const PdfViewerFindMixin = (superClass) =>
       this.#resetSearch();
       this.#highlightPages();
 
-      // Return focus to where it was, or to the pages when that element is
-      // gone, e.g. a link on a page that was released meanwhile.
+      // Return focus to where it was, or to the pages when that element cannot
+      // take focus anymore, e.g. a link on a page that was released meanwhile,
+      // or a button that was disabled when going to a match.
       const returnFocus = this.#returnFocus;
       this.#returnFocus = null;
-      const target = returnFocus && returnFocus.isConnected ? returnFocus : this.pageCount && this.$.content;
-      if (target) {
-        target.focus({ focusVisible: isKeyboardActive() });
+      if (returnFocus && returnFocus.isConnected && !returnFocus.disabled && returnFocus.checkVisibility()) {
+        returnFocus.focus({ focusVisible: isKeyboardActive() });
+      }
+      if (this.pageCount && (!returnFocus || getDeepActiveElement() !== returnFocus)) {
+        this.$.content.focus({ focusVisible: isKeyboardActive() });
       }
 
       // Select the current match, so that reading with a screen reader or caret
@@ -191,11 +207,16 @@ export const PdfViewerFindMixin = (superClass) =>
       }
       const parts = getMatchParts(pageText, match);
       const { textDivs } = page.textLayer;
+      // The text must be the one of the text layer elements.
+      if (!parts.length || textDivs.length !== pageText.items.length) {
+        return null;
+      }
       const first = parts[0];
       const last = parts[parts.length - 1];
-      const startNode = textDivs[first.itemIndex] && textDivs[first.itemIndex].firstChild;
-      const endNode = textDivs[last.itemIndex] && textDivs[last.itemIndex].firstChild;
-      return startNode && endNode ? [startNode, first.start, endNode, last.end] : null;
+      const startNode = textDivs[first.itemIndex].firstChild;
+      const endNode = textDivs[last.itemIndex].firstChild;
+      const isValid = startNode && endNode && first.start <= startNode.length && last.end <= endNode.length;
+      return isValid ? [startNode, first.start, endNode, last.end] : null;
     }
 
     /**
@@ -353,7 +374,10 @@ export const PdfViewerFindMixin = (superClass) =>
           .then((pdfPage) => pdfPage.getTextContent())
           .then(({ items }) => {
             const pageText = createPageText(items);
-            this.#loadedPageTexts.set(pageIndex, pageText);
+            // Text of a document that was unloaded meanwhile must not mix with the text of the current one.
+            if (this._pdfDocument === pdfDocument) {
+              this.#loadedPageTexts.set(pageIndex, pageText);
+            }
             return { pageText, normalized: normalizeText(pageText.text) };
           })
           .catch(() => {

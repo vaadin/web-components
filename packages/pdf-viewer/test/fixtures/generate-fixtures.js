@@ -180,6 +180,43 @@ function createUnsafeLinksPdf() {
 }
 
 /**
+ * Builds a PDF with links that cover only part of a line, several links in one
+ * line, and a link over two lines, in a monospace font so that the link areas
+ * match the words exactly. A character of Courier at 14pt is 8.4pt wide.
+ */
+function createInlineLinksPdf() {
+  const lines = [
+    [720, 72, 'Read the Vaadin documentation for details.'],
+    [690, 72, 'Links to vaadin.com and to github.com in one line.'],
+    [660, 72, 'A link that continues'],
+    [644, 172.8, 'next line, then plain text.'],
+  ];
+  const content = lines.map(([y, x, text]) => `BT /F1 14 Tf ${x} ${y} Td (${text}) Tj ET`).join(' ');
+  // [left, bottom, right, top, URL]: "Vaadin", "vaadin.com", "github.com", and "continues" + "next line"
+  const areas = [
+    [147.6, 715, 198, 733, 'https://vaadin.com/'],
+    [147.6, 685, 231.6, 703, 'https://vaadin.com/'],
+    [298.8, 685, 382.8, 703, 'https://github.com/'],
+    [172.8, 639, 248.4, 673, 'https://vaadin.com/docs'],
+  ];
+  const links = areas.map(
+    ([left, bottom, right, top, url]) =>
+      `<< /Type /Annot /Subtype /Link /Rect [${left} ${bottom} ${right} ${top}] /Border [0 0 0] /A << /S /URI /URI (${url}) >> >>`,
+  );
+  return assemblePdf(
+    [
+      '<< /Type /Catalog /Pages 2 0 R >>',
+      '<< /Type /Pages /Kids [3 0 R] /Count 1 >>',
+      `<< /Type /Page /Parent 2 0 R /MediaBox [0 0 612 792] /Resources << /Font << /F1 5 0 R >> >> /Contents 4 0 R /Annots [${links.map((_, index) => `${index + 6} 0 R`).join(' ')}] >>`,
+      `<< /Length ${content.length} >>\nstream\n${content}\nendstream`,
+      '<< /Type /Font /Subtype /Type1 /BaseFont /Courier /Encoding /WinAnsiEncoding >>',
+      ...links,
+    ],
+    '',
+  );
+}
+
+/**
  * Builds a PDF that uses the standard security handler with a user password,
  * so that pdf.js asks for a password. The document itself is never readable.
  */
@@ -213,4 +250,5 @@ await browser.close();
 writeFileSync(join(dir, 'encrypted.pdf'), createEncryptedPdf(), 'latin1');
 writeFileSync(join(dir, 'standard-font.pdf'), createStandardFontPdf(), 'latin1');
 writeFileSync(join(dir, 'unsafe-links.pdf'), createUnsafeLinksPdf(), 'latin1');
+writeFileSync(join(dir, 'inline-links.pdf'), createInlineLinksPdf(), 'latin1');
 writeFileSync(join(dir, 'invalid.pdf'), 'This file is not a PDF document.\n');

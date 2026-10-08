@@ -57,6 +57,7 @@ export const PdfViewerOutlineMixin = (superClass) =>
         __outline: {
           type: Array,
           value: null,
+          attribute: false,
         },
 
         /**
@@ -66,17 +67,20 @@ export const PdfViewerOutlineMixin = (superClass) =>
         __sidebarView: {
           type: String,
           value: 'thumbnails',
+          attribute: false,
         },
 
         /** @private */
         __expandedOutlineItems: {
           type: Object,
           value: () => new Set(),
+          attribute: false,
         },
 
         /** @private */
         __focusedOutlineItem: {
           type: Object,
+          attribute: false,
         },
       };
     }
@@ -84,7 +88,11 @@ export const PdfViewerOutlineMixin = (superClass) =>
     /** The item that was activated last. */
     #activatedItem = null;
 
-    /** @protected */
+    /**
+     * Override method from `LitElement` to load the outline of a newly loaded document.
+     * @protected
+     * @override
+     */
     updated(props) {
       super.updated(props);
 

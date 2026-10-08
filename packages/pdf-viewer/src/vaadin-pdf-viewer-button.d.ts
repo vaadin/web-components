@@ -21,3 +21,5 @@ declare global {
     'vaadin-pdf-viewer-button': PdfViewerButton;
   }
 }
+
+export { PdfViewerButton };

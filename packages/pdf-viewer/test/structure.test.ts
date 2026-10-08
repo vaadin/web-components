@@ -1,9 +1,10 @@
 import { expect } from '@vaadin/chai-plugins';
-import { fixtureSync, nextRender } from '@vaadin/testing-helpers';
+import { getAccessibilityTree, resetMouse, sendMouse } from '@vaadin/test-runner-commands';
+import { fixtureSync, isChrome, nextRender } from '@vaadin/testing-helpers';
 import './enable-feature-flag.js';
 import '../vaadin-pdf-viewer.js';
 import type { PdfViewer } from '../vaadin-pdf-viewer.js';
-import { loadDocument, nextRenderIdle } from './helpers.js';
+import { createPdf, loadDocument, nextRenderIdle } from './helpers.js';
 
 describe('tagged PDF structure', () => {
   let viewer: PdfViewer;
@@ -77,6 +78,61 @@ describe('tagged PDF structure', () => {
       expect(getOwnedText(swedish)).to.equal('Hej världen');
     });
 
+    // Only Chromium exposes its accessibility tree to the tests.
+    (isChrome ? describe : describe.skip)('accessibility tree', () => {
+      let tree: Awaited<ReturnType<typeof getAccessibilityTree>>;
+
+      beforeEach(async () => {
+        tree = await getAccessibilityTree();
+      });
+
+      function getNames(role: string) {
+        return tree!.filter((node) => node.role === role).map((node) => node.name);
+      }
+
+      it('should name headings with their text', () => {
+        const headings = tree!.filter((node) => node.role === 'heading');
+        expect(headings.map((node) => [node.name, node.properties.level])).to.deep.include.members([
+          ['Tagged document', 1],
+        ]);
+        headings.forEach((heading) => expect(heading.name).to.not.be.empty);
+      });
+
+      it('should name table header and data cells with their text', () => {
+        expect(getNames('columnheader').map((name) => name.trim())).to.deep.equal(['Name', 'Value']);
+        expect(getNames('cell')).to.have.lengthOf(4);
+        getNames('cell').forEach((name) => expect(name).to.not.be.empty);
+      });
+
+      it('should only have rows in tables and row groups', () => {
+        const containers = ['table', 'rowgroup'];
+        tree!.forEach((node, index) => {
+          if (containers.includes(node.role)) {
+            const children = tree!.slice(index + 1).filter((child) => child.depth === node.depth + 1);
+            const end = tree!.findIndex((other, i) => i > index && other.depth <= node.depth);
+            const ownChildren = end === -1 ? children : children.filter((child) => tree!.indexOf(child) < end);
+            ownChildren.forEach((child) => expect(['row', 'rowgroup', 'caption']).to.include(child.role));
+          }
+        });
+      });
+
+      it('should expose list items with their text', () => {
+        const index = tree!.findIndex((node) => node.role === 'list');
+        const items = tree!.filter((node, i) => i > index && node.role === 'listitem');
+        expect(items).to.have.lengthOf(2);
+        items.forEach((item) => {
+          const start = tree!.indexOf(item);
+          const end = tree!.findIndex((node, i) => i > start && node.depth <= item.depth);
+          const text = tree!
+            .slice(start + 1, end === -1 ? undefined : end)
+            .filter((node) => node.role === 'StaticText')
+            .map((node) => node.name)
+            .join('');
+          expect(text.trim()).to.not.be.empty;
+        });
+      });
+    });
+
     it('should reference text layer elements that exist', () => {
       const ids = [...getTree()!.querySelectorAll('[aria-owns]')].flatMap((element) =>
         element.getAttribute('aria-owns')!.split(' '),
@@ -85,6 +141,64 @@ describe('tagged PDF structure', () => {
       ids.forEach((id) => {
         expect(viewer.shadowRoot!.getElementById(id), id).to.be.ok;
       });
+    });
+  });
+
+  describe('marked content', () => {
+    const text = 'BT /F1 24 Tf 72 700 Td (Marked text) Tj ET';
+    let urls: string[] = [];
+
+    afterEach(async () => {
+      urls.forEach((url) => URL.revokeObjectURL(url));
+      urls = [];
+      await resetMouse();
+    });
+
+    async function getTextPosition(content: string, rotate: number) {
+      const url = createPdf([{ content, rotate }]);
+      urls.push(url);
+      const idle = nextRenderIdle(viewer);
+      viewer.src = url;
+      await idle;
+      const page = viewer.shadowRoot!.querySelector('[part="page"]')!.getBoundingClientRect();
+      const span = [...viewer.shadowRoot!.querySelectorAll('.text-layer span:not(.markedContent)')].find(
+        (element) => element.textContent === 'Marked text',
+      )!;
+      const rect = span.getBoundingClientRect();
+      return {
+        left: (rect.left - page.left) / page.width,
+        top: (rect.top - page.top) / page.height,
+        width: rect.width / page.width,
+        height: rect.height / page.height,
+      };
+    }
+
+    [0, 90].forEach((rotate) => {
+      [1, 2].forEach((zoom) => {
+        it(`should place marked content like other text with rotation ${rotate} and zoom ${zoom}`, async () => {
+          viewer.zoom = zoom;
+          const plain = await getTextPosition(text, rotate);
+          const marked = await getTextPosition(`/P << /MCID 0 >> BDC ${text} EMC`, rotate);
+          expect(viewer.shadowRoot!.querySelector('.text-layer .markedContent')).to.be.ok;
+          Object.entries(plain).forEach(([key, value]) => {
+            expect(marked[key as keyof typeof marked], key).to.be.closeTo(value, 0.001);
+          });
+        });
+      });
+    });
+
+    it('should allow selecting marked content with the pointer', async () => {
+      await getTextPosition(`/P << /MCID 0 >> BDC ${text} EMC`, 0);
+      const span = [...viewer.shadowRoot!.querySelectorAll('.text-layer span:not(.markedContent)')].find(
+        (element) => element.textContent === 'Marked text',
+      )!;
+      const rect = span.getBoundingClientRect();
+      const y = Math.round(rect.top + rect.height / 2);
+      await sendMouse({ type: 'move', position: [Math.round(rect.left) + 1, y] });
+      await sendMouse({ type: 'down' });
+      await sendMouse({ type: 'move', position: [Math.round(rect.right) - 1, y] });
+      await sendMouse({ type: 'up' });
+      expect(window.getSelection()!.toString()).to.include('Marked tex');
     });
   });
 });

@@ -18,7 +18,8 @@ import './vaadin-pdf-viewer-button.js';
 import { html, nothing, render } from 'lit';
 import { live } from 'lit/directives/live.js';
 import { isKeyboardActive } from '@vaadin/a11y-base/src/focus-utils.js';
-import { formatZoom, getZoomInLevel, getZoomOutLevel, ZOOM_LEVELS } from './pdf-viewer-zoom.js';
+import { generateUniqueId } from '@vaadin/component-base/src/unique-id-utils.js';
+import { formatZoom, getZoomInLevel, getZoomOutLevel, isValidZoom, ZOOM_LEVELS } from './pdf-viewer-zoom.js';
 
 /**
  * Renders the toolbar of the PDF viewer. Its controls are Vaadin components,
@@ -29,24 +30,29 @@ import { formatZoom, getZoomInLevel, getZoomOutLevel, ZOOM_LEVELS } from './pdf-
  */
 export const PdfViewerToolbarMixin = (superClass) =>
   class PdfViewerToolbarMixinClass extends superClass {
-    /** @protected */
-    firstUpdated() {
-      super.firstUpdated();
-
-      this.addEventListener('mouseenter', (event) => this.#showTooltip(event), true);
-      this.addEventListener('focusin', (event) => this.#showTooltip(event));
+    static get properties() {
+      return {
+        /**
+         * A page number entered by the user that does not exist, which is kept
+         * in the field until the page changes, or null.
+         * @private
+         */
+        __invalidPageEntry: {
+          type: String,
+          value: null,
+          attribute: false,
+        },
+      };
     }
 
-    /** @protected */
-    disconnectedCallback() {
-      super.disconnectedCallback();
-      // A tooltip that is open when removed keeps listening to Escape on the document.
-      // `vaadin-tooltip` has no public API to close it without delays, so use its state controller.
-      const tooltip = this.querySelector(':scope > vaadin-tooltip[slot="toolbar-tooltip"]');
-      tooltip?._stateController.close(true);
-    }
+    /** The id of the error message of the page field. */
+    #pageErrorId = `pdf-viewer-page-error-${generateUniqueId()}`;
 
-    /** @protected */
+    /**
+     * Override method from `LitElement` to render the toolbar when the state it shows changes.
+     * @protected
+     * @override
+     */
     updated(props) {
       super.updated(props);
 
@@ -64,8 +70,13 @@ export const PdfViewerToolbarMixin = (superClass) =>
         props.has('__findSearching') ||
         props.has('__findQuery') ||
         props.has('__printProgress') ||
-        props.has('__findCurrentIndex')
+        props.has('__findCurrentIndex') ||
+        props.has('__invalidPageEntry')
       ) {
+        // The field shows the current page again when it changes.
+        if (props.has('page') || props.has('pageCount')) {
+          this.__invalidPageEntry = null;
+        }
         this.#renderToolbar();
       }
     }
@@ -83,29 +94,37 @@ export const PdfViewerToolbarMixin = (superClass) =>
       render(
         html`
           <vaadin-pdf-viewer-button
-            slot="toolbar-start"
+            slot="toolbar-navigation"
             icon="sidebar"
             theme="tertiary icon"
             aria-label="${i18n.sidebar}"
             aria-pressed="${this.sidebarOpened ? 'true' : 'false'}"
             .disabled="${!hasDocument}"
             @click="${this.#onSidebarToggleClick}"
-          ></vaadin-pdf-viewer-button>
+          >
+            ${this.#renderTooltip(i18n.sidebar)}
+          </vaadin-pdf-viewer-button>
           <vaadin-pdf-viewer-button
-            slot="toolbar-navigation"
+            slot="toolbar-page"
             icon="previous-page"
             theme="tertiary icon"
             aria-label="${i18n.previousPage}"
             .disabled="${!hasDocument || page <= 1}"
             @click="${this.#onPreviousPageClick}"
-          ></vaadin-pdf-viewer-button>
+          >
+            ${this.#renderTooltip(i18n.previousPage)}
+          </vaadin-pdf-viewer-button>
           <vaadin-integer-field
-            slot="toolbar-navigation"
+            slot="toolbar-page"
             theme="align-right"
+            style="--_page-digits: ${String(pageCount || 1).length}"
             accessible-name="${hasDocument ? i18n.pageOf.replace('{pageCount}', pageCount) : i18n.page}"
             min="1"
             max="${pageCount || 1}"
-            .value="${live(pageValue)}"
+            manual-validation
+            .value="${live(this.__invalidPageEntry ?? pageValue)}"
+            .invalid="${this.__invalidPageEntry !== null}"
+            .accessibleDescriptionRef="${this.#pageErrorId}"
             .disabled="${!hasDocument}"
             @change="${this.#onPageFieldChange}"
             @input="${this.#stopEvent}"
@@ -114,13 +133,18 @@ export const PdfViewerToolbarMixin = (superClass) =>
             <span slot="suffix" aria-hidden="true">${hasDocument ? `/ ${pageCount}` : ''}</span>
           </vaadin-integer-field>
           <vaadin-pdf-viewer-button
-            slot="toolbar-navigation"
+            slot="toolbar-page"
             icon="next-page"
             theme="tertiary icon"
             aria-label="${i18n.nextPage}"
             .disabled="${!hasDocument || page >= pageCount}"
             @click="${this.#onNextPageClick}"
-          ></vaadin-pdf-viewer-button>
+          >
+            ${this.#renderTooltip(i18n.nextPage)}
+          </vaadin-pdf-viewer-button>
+          <span slot="page-error" id="${this.#pageErrorId}" aria-live="assertive"
+            >${this.__invalidPageEntry === null ? nothing : i18n.pageError.replace('{pageCount}', pageCount)}</span
+          >
           <vaadin-pdf-viewer-button
             slot="toolbar-zoom"
             icon="zoom-out"
@@ -128,7 +152,9 @@ export const PdfViewerToolbarMixin = (superClass) =>
             aria-label="${i18n.zoomOut}"
             .disabled="${!hasDocument || !getZoomOutLevel(zoomFactor)}"
             @click="${this.#onZoomOutClick}"
-          ></vaadin-pdf-viewer-button>
+          >
+            ${this.#renderTooltip(i18n.zoomOut)}
+          </vaadin-pdf-viewer-button>
           <vaadin-select
             slot="toolbar-zoom"
             accessible-name="${i18n.zoom}"
@@ -144,7 +170,9 @@ export const PdfViewerToolbarMixin = (superClass) =>
             aria-label="${i18n.zoomIn}"
             .disabled="${!hasDocument || !getZoomInLevel(zoomFactor)}"
             @click="${this.#onZoomInClick}"
-          ></vaadin-pdf-viewer-button>
+          >
+            ${this.#renderTooltip(i18n.zoomIn)}
+          </vaadin-pdf-viewer-button>
           <vaadin-pdf-viewer-button
             slot="toolbar-actions"
             icon="find"
@@ -153,7 +181,9 @@ export const PdfViewerToolbarMixin = (superClass) =>
             aria-pressed="${this.__findOpened ? 'true' : 'false'}"
             .disabled="${!hasDocument}"
             @click="${this.#onFindToggleClick}"
-          ></vaadin-pdf-viewer-button>
+          >
+            ${this.#renderTooltip(i18n.find)}
+          </vaadin-pdf-viewer-button>
           <vaadin-pdf-viewer-button
             slot="toolbar-actions"
             icon="download"
@@ -161,7 +191,9 @@ export const PdfViewerToolbarMixin = (superClass) =>
             aria-label="${i18n.download}"
             .disabled="${!hasDocument}"
             @click="${this.#onDownloadClick}"
-          ></vaadin-pdf-viewer-button>
+          >
+            ${this.#renderTooltip(i18n.download)}
+          </vaadin-pdf-viewer-button>
           <vaadin-pdf-viewer-button
             slot="toolbar-actions"
             icon="print"
@@ -169,9 +201,10 @@ export const PdfViewerToolbarMixin = (superClass) =>
             aria-label="${i18n.print}"
             .disabled="${!hasDocument || this.__printProgress >= 0}"
             @click="${this.#onPrintClick}"
-          ></vaadin-pdf-viewer-button>
+          >
+            ${this.#renderTooltip(i18n.print)}
+          </vaadin-pdf-viewer-button>
           ${this.#renderFindBar(i18n)} ${this.#renderSidebarHeader(i18n)} ${this.#renderPrintProgress(i18n)}
-          <vaadin-tooltip slot="toolbar-tooltip" .ariaLinkMode="${'none'}"></vaadin-tooltip>
         `,
         this,
         { host: this },
@@ -196,6 +229,15 @@ export const PdfViewerToolbarMixin = (superClass) =>
         );
         next?.focus({ focusVisible: true });
       }
+    }
+
+    /**
+     * Renders the tooltip of a toolbar button, which shows its label on hover
+     * and keyboard focus. The label is the accessible name of the button already.
+     * @private
+     */
+    #renderTooltip(text) {
+      return html`<vaadin-tooltip slot="tooltip" .text="${text}" .ariaLinkMode="${'none'}"></vaadin-tooltip>`;
     }
 
     /** @private */
@@ -230,7 +272,9 @@ export const PdfViewerToolbarMixin = (superClass) =>
           .disabled="${count === 0}"
           @click="${this.#onPreviousMatchClick}"
           @keydown="${this.#onFindButtonKeyDown}"
-        ></vaadin-pdf-viewer-button>
+        >
+          ${this.#renderTooltip(i18n.previousMatch)}
+        </vaadin-pdf-viewer-button>
         <vaadin-pdf-viewer-button
           slot="find-actions"
           icon="next-match"
@@ -239,7 +283,9 @@ export const PdfViewerToolbarMixin = (superClass) =>
           .disabled="${count === 0}"
           @click="${this.#onNextMatchClick}"
           @keydown="${this.#onFindButtonKeyDown}"
-        ></vaadin-pdf-viewer-button>
+        >
+          ${this.#renderTooltip(i18n.nextMatch)}
+        </vaadin-pdf-viewer-button>
         <vaadin-pdf-viewer-button
           slot="find-actions"
           icon="close"
@@ -247,7 +293,9 @@ export const PdfViewerToolbarMixin = (superClass) =>
           aria-label="${i18n.closeFind}"
           @click="${this.#onCloseFindClick}"
           @keydown="${this.#onFindButtonKeyDown}"
-        ></vaadin-pdf-viewer-button>
+        >
+          ${this.#renderTooltip(i18n.closeFind)}
+        </vaadin-pdf-viewer-button>
       `;
     }
 
@@ -269,7 +317,9 @@ export const PdfViewerToolbarMixin = (superClass) =>
           aria-label="${i18n.thumbnailsView}"
           aria-pressed="${view === 'thumbnails' ? 'true' : 'false'}"
           @click="${this.#onThumbnailsViewClick}"
-        ></vaadin-pdf-viewer-button>
+        >
+          ${this.#renderTooltip(i18n.thumbnailsView)}
+        </vaadin-pdf-viewer-button>
         <vaadin-pdf-viewer-button
           slot="sidebar-header"
           icon="outline"
@@ -277,7 +327,9 @@ export const PdfViewerToolbarMixin = (superClass) =>
           aria-label="${i18n.outline}"
           aria-pressed="${view === 'outline' ? 'true' : 'false'}"
           @click="${this.#onOutlineViewClick}"
-        ></vaadin-pdf-viewer-button>
+        >
+          ${this.#renderTooltip(i18n.outline)}
+        </vaadin-pdf-viewer-button>
       `;
     }
 
@@ -400,7 +452,7 @@ export const PdfViewerToolbarMixin = (superClass) =>
      */
     #getZoomValue() {
       const zoom = this.zoom;
-      return zoom === 'page-fit' || Number(zoom) > 0 ? String(zoom) : 'page-width';
+      return isValidZoom(zoom) ? String(zoom) : 'page-width';
     }
 
     /** @private */
@@ -411,8 +463,8 @@ export const PdfViewerToolbarMixin = (superClass) =>
         ...ZOOM_LEVELS.map((level) => ({ label: formatZoom(level, this), value: String(level) })),
       ];
       // Show a zoom set by the application that is not one of the levels.
-      const zoom = String(this.zoom);
-      if (!items.some((item) => item.value === zoom) && Number(zoom) > 0) {
+      const zoom = this.#getZoomValue();
+      if (!items.some((item) => item.value === zoom)) {
         items.push({ label: formatZoom(Number(zoom), this), value: zoom });
       }
       return items;
@@ -428,18 +480,23 @@ export const PdfViewerToolbarMixin = (superClass) =>
       this._goToPage(Math.max(this.page, 0) + 1);
     }
 
-    /** @private */
+    /**
+     * Goes to the entered page. A page that does not exist is kept in the
+     * field, which is marked invalid, and an empty field shows the current
+     * page again.
+     * @private
+     */
     #onPageFieldChange(event) {
       // The change is internal to the viewer. Applications listen to `page-changed`.
       event.stopPropagation();
-      const page = Number(event.target.value);
-      if (Number.isInteger(page) && page >= 1 && page <= this.pageCount) {
+      const { value } = event.target;
+      const page = Number(value);
+      const isValid = Number.isInteger(page) && page >= 1 && page <= this.pageCount;
+      this.__invalidPageEntry = value === '' || isValid ? null : value;
+      if (value !== '' && isValid) {
         this._goToPage(page);
-      } else {
-        // Show the current page again
-        event.target.value = this.page >= 1 && this.page <= this.pageCount ? String(this.page) : '';
-        event.target._requestValidation();
       }
+      this.#renderToolbar();
     }
 
     /** @private */
@@ -466,26 +523,5 @@ export const PdfViewerToolbarMixin = (superClass) =>
       event.stopPropagation();
       const { value } = event.target;
       this.zoom = value === 'page-width' || value === 'page-fit' ? value : Number(value);
-    }
-
-    /**
-     * Shows the label of a toolbar button as a tooltip when hovering it, or
-     * when focusing it with the keyboard.
-     * @private
-     */
-    #showTooltip({ type, target }) {
-      if (target.localName !== 'vaadin-pdf-viewer-button' || target.parentNode !== this) {
-        return;
-      }
-      if (type === 'focusin' && !isKeyboardActive()) {
-        return;
-      }
-      const tooltip = this.querySelector(':scope > vaadin-tooltip[slot="toolbar-tooltip"]');
-      tooltip.target = target;
-      tooltip.text = target.getAttribute('aria-label');
-      tooltip._stateController.open({
-        focus: type === 'focusin',
-        hover: type === 'mouseenter',
-      });
     }
   };

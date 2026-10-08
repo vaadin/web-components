@@ -9,7 +9,7 @@
  * license.
  */
 import { announce } from '@vaadin/a11y-base/src/announce.js';
-import { isKeyboardActive } from '@vaadin/a11y-base/src/focus-utils.js';
+import { getDeepActiveElement, isKeyboardActive } from '@vaadin/a11y-base/src/focus-utils.js';
 import { MAX_CANVAS_PIXELS } from './pdf-viewer-page.js';
 
 /** The resolution that pages are printed at. PDF units are 1/72 inch. */
@@ -31,6 +31,9 @@ const PRINT_STYLES = `
  * @return {string | null}
  */
 function getFileNameFromUrl(src) {
+  if (!src) {
+    return null;
+  }
   try {
     const { protocol, pathname } = new URL(src, document.baseURI);
     if (!['http:', 'https:', 'file:'].includes(protocol)) {
@@ -62,10 +65,23 @@ export const PdfViewerPrintMixin = (superClass) =>
           type: String,
         },
 
+        /**
+         * Whether the name of the document is shown above the toolbar: the
+         * `fileName`, else the last part of the path of `src`, else the title
+         * of the document.
+         *
+         * @attr {boolean} file-name-visible
+         */
+        fileNameVisible: {
+          type: Boolean,
+          value: false,
+        },
+
         /** @private */
         __printProgress: {
           type: Number,
           value: -1,
+          attribute: false,
         },
       };
     }
@@ -85,7 +101,11 @@ export const PdfViewerPrintMixin = (superClass) =>
     /** @type {HTMLElement | null} */
     #printReturnFocus = null;
 
-    /** @protected */
+    /**
+     * Override method from `LitElement` to remember the title of loaded documents, and to cancel printing with Escape.
+     * @protected
+     * @override
+     */
     firstUpdated() {
       super.firstUpdated();
 
@@ -102,7 +122,11 @@ export const PdfViewerPrintMixin = (superClass) =>
       });
     }
 
-    /** @protected */
+    /**
+     * Override method from `HTMLElement` to cancel printing.
+     * @protected
+     * @override
+     */
     disconnectedCallback() {
       super.disconnectedCallback();
       this._cancelPrint();
@@ -125,7 +149,7 @@ export const PdfViewerPrintMixin = (superClass) =>
       this.#printId += 1;
       const printId = this.#printId;
       const isCancelled = () => printId !== this.#printId || this._pdfDocument !== pdfDocument;
-      this.#printReturnFocus = this.#getDeepActiveElement();
+      this.#printReturnFocus = this.#getFocusedElement();
       this.__printProgress = 0;
       announce(this.__effectiveI18n.printing);
 
@@ -198,15 +222,13 @@ export const PdfViewerPrintMixin = (superClass) =>
     }
 
     /**
-     * Returns the focused element, also inside shadow roots.
+     * Returns the focused element, also inside shadow roots, or null when
+     * nothing is focused.
      * @private
      */
-    #getDeepActiveElement() {
-      let active = document.activeElement;
-      while (active && active.shadowRoot && active.shadowRoot.activeElement) {
-        active = active.shadowRoot.activeElement;
-      }
-      return active && active !== document.body ? active : null;
+    #getFocusedElement() {
+      const active = getDeepActiveElement();
+      return active !== document.body ? active : null;
     }
 
     /**
@@ -218,7 +240,7 @@ export const PdfViewerPrintMixin = (superClass) =>
       const returnFocus = this.#printReturnFocus;
       this.#printReturnFocus = null;
       await this.updateComplete;
-      const active = this.#getDeepActiveElement();
+      const active = this.#getFocusedElement();
       // Focus is lost when on nothing, on the print frame, or on an element that is gone or hidden.
       const isLost = !active || active.localName === 'iframe' || !active.isConnected || !active.checkVisibility();
       if (!isLost) {
@@ -227,14 +249,16 @@ export const PdfViewerPrintMixin = (superClass) =>
       if (returnFocus && returnFocus.isConnected && !returnFocus.disabled && returnFocus.checkVisibility()) {
         returnFocus.focus({ focusVisible: isKeyboardActive() });
       }
-      if (this.#getDeepActiveElement() !== returnFocus && this.pageCount) {
+      if (this.#getFocusedElement() !== returnFocus && this.pageCount) {
         this.$.content.focus({ focusVisible: isKeyboardActive() });
       }
     }
 
     /**
      * Downloads the document with the original bytes of the file, so that
-     * it also works for documents from other origins.
+     * it also works for documents from other origins. The file has the name
+     * from when the download started, also when another document is loaded
+     * or `fileName` changes while the bytes are read.
      * @protected
      */
     async _download() {
@@ -242,6 +266,7 @@ export const PdfViewerPrintMixin = (superClass) =>
       if (!pdfDocument) {
         return;
       }
+      const fileName = this.#getFileName();
       let data;
       try {
         data = await pdfDocument.getData();
@@ -252,7 +277,7 @@ export const PdfViewerPrintMixin = (superClass) =>
       const url = URL.createObjectURL(new Blob([data], { type: 'application/pdf' }));
       const link = document.createElement('a');
       link.href = url;
-      link.download = this.#getFileName();
+      link.download = fileName;
       link.click();
       // Give the browser time to start the download before releasing the data.
       setTimeout(() => URL.revokeObjectURL(url), 60000);
@@ -269,12 +294,22 @@ export const PdfViewerPrintMixin = (superClass) =>
       this.#title = '';
     }
 
+    /**
+     * Returns the name of the loaded document to show to the user, see
+     * `fileNameVisible`, or an empty string when it has none.
+     * @return {string}
+     * @protected
+     */
+    _getDocumentName() {
+      return this.fileName || getFileNameFromUrl(this.src) || this.#title || '';
+    }
+
     /** @private */
     #getFileName() {
       if (this.fileName) {
         return this.fileName;
       }
-      const name = getFileNameFromUrl(this.src) || this.#title || 'document';
+      const name = this._getDocumentName() || 'document';
       return /\.pdf$/iu.test(name) ? name : `${name}.pdf`;
     }
 

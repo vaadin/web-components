@@ -48,7 +48,11 @@ export const PdfViewerSidebarMixin = (superClass) =>
     /** @type {IntersectionObserver | null} */
     #observer = null;
 
-    /** @protected */
+    /**
+     * Override method from `LitElement` to add the listeners of the thumbnails and the sidebar.
+     * @protected
+     * @override
+     */
     firstUpdated() {
       super.firstUpdated();
 
@@ -60,7 +64,11 @@ export const PdfViewerSidebarMixin = (superClass) =>
         .addEventListener('keydown', (event) => this.#onSidebarKeyDown(event));
     }
 
-    /** @protected */
+    /**
+     * Override method from `HTMLElement` to observe the thumbnails again after being moved in the DOM.
+     * @protected
+     * @override
+     */
     connectedCallback() {
       super.connectedCallback();
       // Observe the thumbnails again after being moved in the DOM.
@@ -69,7 +77,11 @@ export const PdfViewerSidebarMixin = (superClass) =>
       }
     }
 
-    /** @protected */
+    /**
+     * Override method from `HTMLElement` to stop observing and rendering the thumbnails.
+     * @protected
+     * @override
+     */
     disconnectedCallback() {
       super.disconnectedCallback();
       this.#observer?.disconnect();
@@ -78,7 +90,11 @@ export const PdfViewerSidebarMixin = (superClass) =>
       this.#visibleThumbnails.clear();
     }
 
-    /** @protected */
+    /**
+     * Override method from `LitElement` to move focus out of the sidebar before it hides.
+     * @protected
+     * @override
+     */
     willUpdate(props) {
       super.willUpdate(props);
 
@@ -88,7 +104,11 @@ export const PdfViewerSidebarMixin = (superClass) =>
       }
     }
 
-    /** @protected */
+    /**
+     * Override method from `LitElement` to create the thumbnails, and to mark the thumbnail of the current page.
+     * @protected
+     * @override
+     */
     updated(props) {
       super.updated(props);
 
@@ -287,8 +307,9 @@ export const PdfViewerSidebarMixin = (superClass) =>
         }
       } finally {
         this.#isRenderingThumbnail = false;
+        // Also after an outdated thumbnail, as visible thumbnails may have been added meanwhile.
+        this.#renderNextThumbnail();
       }
-      this.#renderNextThumbnail();
     }
 
     /** @private */

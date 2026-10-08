@@ -21,6 +21,40 @@
     outline: 2px solid var(--lumo-primary-color-50pct);
   }
 
+  /* Filled like Lumo fields, without a border */
+  [part~='page-controls'],
+  [part~='zoom-controls'] {
+    border-width: 0;
+    border-radius: var(--lumo-border-radius-m);
+    background: var(--lumo-contrast-10pct);
+  }
+
+  [part~='page-controls'][part~='invalid'] {
+    background: var(--lumo-error-color-10pct);
+  }
+
+  [part~='page-controls'][part~='disabled'],
+  [part~='zoom-controls'][part~='disabled'] {
+    background: var(--lumo-contrast-5pct);
+  }
+
+  /* No extra space around the field inside the box */
+  ::slotted(vaadin-integer-field[slot='toolbar-page']),
+  ::slotted(vaadin-select[slot='toolbar-zoom']) {
+    padding-block: 0;
+  }
+
+  /* Neutral like the step buttons of a number field */
+  ::slotted(vaadin-pdf-viewer-button[slot='toolbar-page']:not([disabled])),
+  ::slotted(vaadin-pdf-viewer-button[slot='toolbar-zoom']:not([disabled])) {
+    color: var(--lumo-contrast-60pct);
+  }
+
+  ::slotted([slot='page-error']) {
+    color: var(--lumo-error-text-color);
+    font-size: var(--lumo-font-size-xs);
+  }
+
   :host {
     font-family: var(--lumo-font-family);
     font-size: var(--lumo-font-size-m);

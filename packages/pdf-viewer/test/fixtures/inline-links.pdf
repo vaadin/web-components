@@ -1,0 +1,48 @@
+%PDF-1.4
+1 0 obj
+<< /Type /Catalog /Pages 2 0 R >>
+endobj
+2 0 obj
+<< /Type /Pages /Kids [3 0 R] /Count 1 >>
+endobj
+3 0 obj
+<< /Type /Page /Parent 2 0 R /MediaBox [0 0 612 792] /Resources << /Font << /F1 5 0 R >> >> /Contents 4 0 R /Annots [6 0 R 7 0 R 8 0 R 9 0 R] >>
+endobj
+4 0 obj
+<< /Length 270 >>
+stream
+BT /F1 14 Tf 72 720 Td (Read the Vaadin documentation for details.) Tj ET BT /F1 14 Tf 72 690 Td (Links to vaadin.com and to github.com in one line.) Tj ET BT /F1 14 Tf 72 660 Td (A link that continues) Tj ET BT /F1 14 Tf 172.8 644 Td (next line, then plain text.) Tj ET
+endstream
+endobj
+5 0 obj
+<< /Type /Font /Subtype /Type1 /BaseFont /Courier /Encoding /WinAnsiEncoding >>
+endobj
+6 0 obj
+<< /Type /Annot /Subtype /Link /Rect [147.6 715 198 733] /Border [0 0 0] /A << /S /URI /URI (https://vaadin.com/) >> >>
+endobj
+7 0 obj
+<< /Type /Annot /Subtype /Link /Rect [147.6 685 231.6 703] /Border [0 0 0] /A << /S /URI /URI (https://vaadin.com/) >> >>
+endobj
+8 0 obj
+<< /Type /Annot /Subtype /Link /Rect [298.8 685 382.8 703] /Border [0 0 0] /A << /S /URI /URI (https://github.com/) >> >>
+endobj
+9 0 obj
+<< /Type /Annot /Subtype /Link /Rect [172.8 639 248.4 673] /Border [0 0 0] /A << /S /URI /URI (https://vaadin.com/docs) >> >>
+endobj
+xref
+0 10
+0000000000 65535 f 
+0000000009 00000 n 
+0000000058 00000 n 
+0000000115 00000 n 
+0000000275 00000 n 
+0000000596 00000 n 
+0000000691 00000 n 
+0000000826 00000 n 
+0000000963 00000 n 
+0000001100 00000 n 
+trailer
+<< /Size 10 /Root 1 0 R  >>
+startxref
+1241
+%%EOF

@@ -54,6 +54,21 @@ const ROLES_WITHOUT_NAME = new Set(['caption', 'code', 'emphasis', 'generic', 'n
 const HEADING_PATTERN = /^H(\d+)$/u;
 
 /**
+ * Roles whose children must have specific roles, e.g. rows in a table. Content
+ * directly in such an element is not owned by it, and stays in the text layer.
+ */
+const ROLES_WITH_REQUIRED_CHILDREN = new Set(['list', 'row', 'rowgroup', 'table']);
+
+/**
+ * Whether the node is marked content of the text layer, rather than a structure element.
+ * @param {object} node
+ * @return {boolean}
+ */
+function isContent(node) {
+  return !('role' in node) && 'id' in node;
+}
+
+/**
  * Sets the ARIA attributes of a structure element.
  * @param {object} node a node of `PDFPageProxy.getStructTree()`
  * @param {HTMLElement} element
@@ -130,13 +145,10 @@ function walk(node, parents) {
     element.append(image);
   }
 
-  const children = node.children || [];
-  if (
-    children.length === 1 &&
-    !('role' in children[0]) &&
-    'id' in children[0] &&
-    element.getAttribute('role') !== 'none'
-  ) {
+  const role = element.getAttribute('role');
+  const hasRequiredChildren = ROLES_WITH_REQUIRED_CHILDREN.has(role);
+  const children = (node.children || []).filter((child) => !(hasRequiredChildren && isContent(child)));
+  if (children.length === 1 && isContent(children[0]) && role !== 'none') {
     // A single content child is owned by this element directly.
     setAttributes(children[0], element);
   } else {

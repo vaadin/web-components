@@ -10,9 +10,12 @@
  */
 import { ElementMixin } from '@vaadin/component-base/src/element-mixin.js';
 import { I18nMixin } from '@vaadin/component-base/src/i18n-mixin.js';
+import { PdfViewerFindMixin } from './vaadin-pdf-viewer-find-mixin.js';
 import { PdfViewerMixin, type PdfViewerZoom } from './vaadin-pdf-viewer-mixin.js';
+import { PdfViewerOutlineMixin } from './vaadin-pdf-viewer-outline-mixin.js';
 import { PdfViewerPrintMixin } from './vaadin-pdf-viewer-print-mixin.js';
 import { PdfViewerSidebarMixin } from './vaadin-pdf-viewer-sidebar-mixin.js';
+import { PdfViewerToolbarMixin } from './vaadin-pdf-viewer-toolbar-mixin.js';
 
 export type { PdfViewerZoom } from './vaadin-pdf-viewer-mixin.js';
 
@@ -29,6 +32,7 @@ export interface PdfViewerI18n {
   nextPage?: string;
   page?: string;
   pageOf?: string;
+  pageError?: string;
   pageAnnouncement?: string;
   zoom?: string;
   zoomIn?: string;
@@ -100,6 +104,11 @@ export interface PdfViewerEventMap extends HTMLElementEventMap, PdfViewerCustomE
  * ```html
  * <vaadin-pdf-viewer src="/files/report.pdf"></vaadin-pdf-viewer>
  * ```
+ *
+ * On devices whose main pointer is touch, users zoom the pages by pinching and move between
+ * pages by scrolling, like in other PDF viewers on phones, so the toolbar does not show the zoom
+ * select and the page controls. The zoom in and zoom out buttons stay, for zooming without
+ * two fingers. Keyboard shortcuts for zooming keep working.
  *
  * ### Styling
  *
@@ -186,8 +195,14 @@ export interface PdfViewerEventMap extends HTMLElementEventMap, PdfViewerCustomE
  * @fires {CustomEvent} sidebar-opened-changed - Fired when the `sidebarOpened` property changes.
  * @fires {CustomEvent} zoom-changed - Fired when the `zoom` property changes.
  */
-declare class PdfViewer extends PdfViewerPrintMixin(
-  PdfViewerSidebarMixin(PdfViewerMixin(ElementMixin(I18nMixin<typeof HTMLElement, PdfViewerI18n>(HTMLElement)))),
+declare class PdfViewer extends PdfViewerToolbarMixin(
+  PdfViewerPrintMixin(
+    PdfViewerOutlineMixin(
+      PdfViewerSidebarMixin(
+        PdfViewerFindMixin(PdfViewerMixin(ElementMixin(I18nMixin<typeof HTMLElement, PdfViewerI18n>(HTMLElement)))),
+      ),
+    ),
+  ),
 ) {
   /**
    * The object used to localize this component. To change the default
@@ -221,6 +236,9 @@ declare class PdfViewer extends PdfViewerPrintMixin(
    *   // {pageCount} is replaced with the number of pages.
    *   page: 'Page',
    *   pageOf: 'Page of {pageCount}',
+   *   // Error message of the page number field for a page that does not exist.
+   *   // {pageCount} is replaced with the number of pages.
+   *   pageError: 'Enter 1–{pageCount}',
    *   // Announced when a toolbar control changes the page.
    *   // {page} and {pageCount} are replaced with the page number and the number of pages.
    *   pageAnnouncement: 'Page {page} of {pageCount}',

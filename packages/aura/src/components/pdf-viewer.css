@@ -8,3 +8,23 @@ vaadin-pdf-viewer-button {
   --aura-accent-color-light: var(--aura-neutral);
   --aura-accent-color-dark: var(--aura-neutral);
 }
+
+/* The page and zoom controls look like one Aura field */
+vaadin-pdf-viewer::part(page-controls),
+vaadin-pdf-viewer::part(zoom-controls) {
+  background: var(--aura-surface-color);
+  --aura-surface-level: 4;
+  --aura-surface-opacity: 0.7;
+  background-clip: padding-box;
+  box-shadow: var(--aura-shadow-xs);
+}
+
+vaadin-pdf-viewer::part(page-controls disabled),
+vaadin-pdf-viewer::part(zoom-controls disabled) {
+  background: var(--vaadin-input-field-disabled-background, var(--vaadin-background-container));
+  box-shadow: none;
+}
+
+vaadin-pdf-viewer > [slot]:is(vaadin-integer-field, vaadin-select)::part(input-field) {
+  box-shadow: none;
+}

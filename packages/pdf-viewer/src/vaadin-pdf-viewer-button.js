@@ -14,6 +14,7 @@ import { ButtonMixin } from '@vaadin/button/src/vaadin-button-mixin.js';
 import { defineCustomElement } from '@vaadin/component-base/src/define.js';
 import { DirMixin } from '@vaadin/component-base/src/dir-mixin.js';
 import { PolylitMixin } from '@vaadin/component-base/src/polylit-mixin.js';
+import { TooltipController } from '@vaadin/component-base/src/tooltip-controller.js';
 import { LumoInjectionMixin } from '@vaadin/vaadin-themable-mixin/lumo-injection-mixin.js';
 import { pdfViewerButtonStyles } from './styles/vaadin-pdf-viewer-button-base-styles.js';
 
@@ -39,14 +40,33 @@ class PdfViewerButton extends ButtonMixin(DirMixin(PolylitMixin(LumoInjectionMix
     return [buttonStyles, pdfViewerButtonStyles];
   }
 
-  /** @protected */
+  /**
+   * Override method from `LitElement` to render the icon of the button.
+   * @protected
+   * @override
+   */
   render() {
     return html`
       <div class="vaadin-button-container" role="presentation">
         <span part="icon" aria-hidden="true"></span>
+        <slot name="tooltip"></slot>
       </div>
     `;
+  }
+
+  /**
+   * Override method from `PolylitMixin` to show a tooltip slotted into the button for it.
+   * @protected
+   * @override
+   */
+  ready() {
+    super.ready();
+
+    this._tooltipController = new TooltipController(this);
+    this.addController(this._tooltipController);
   }
 }
 
 defineCustomElement(PdfViewerButton);
+
+export { PdfViewerButton };

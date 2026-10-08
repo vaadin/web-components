@@ -24,7 +24,9 @@ VoiceOver + Safari (macOS), VoiceOver + Safari (iOS).
 - [ ] Every button reads its name ("Previous page", "Zoom in", "Sidebar", …) and the
       pressed state of "Sidebar" and "Find in document".
 - [ ] Disabled buttons are announced as unavailable / dimmed.
-- [ ] The page field reads "Page of 6", its value, and accepts typing + Enter.
+- [ ] The page field reads "Page of 6", its value, and accepts typing + Enter. Entering a
+      page that does not exist (e.g. 99) keeps it, marks the field invalid and reads the error
+      "Enter 1–6"; the document stays on its page.
 - [ ] After previous / next page, "Page N of M" is announced once.
 - [ ] After zoom in / out, the new percentage is announced once.
 - [ ] The zoom select reads "Zoom" and its value, and works with the keyboard.
@@ -35,10 +37,18 @@ VoiceOver + Safari (macOS), VoiceOver + Safari (iOS).
       sensible order, without reading the same text twice.
 - [ ] Links are read once, in place, with their text ("External link to vaadin.com (opens
       in a new tab)"), and work with Enter.
-- [ ] `tagged.pdf`: headings are announced with their level and can be navigated with the
-      heading keys (H / 1–6), the list is announced with 2 items, the table with rows,
-      column headers and cells (table navigation keys work, cells read their column header),
-      and the figure reads "A blue square".
+- [ ] `inline-links.pdf`: each line is read in order with its links in place, e.g. "Read the,
+      link Vaadin (opens in a new tab), documentation for details." The text around a link is
+      read once, not before or after the link a second time. The link over two lines is read
+      once, as "continues next line". Copying a line gives its text once.
+- [ ] Changing the language (`i18n`) while a document is shown renames the links ("opens in a
+      new tab"), the page groups, and the viewer itself for a document without title.
+- [ ] `tagged.pdf`: headings are announced with their level and their text ("Tagged
+      document", not an empty heading), and can be navigated with the heading keys (H / 1–6).
+      The list is announced with 2 items, the table with rows, column headers and cells that
+      read their text (table navigation keys work, cells read their column header), and the
+      figure reads "A blue square". Automated tests check the names in Chrome's accessibility
+      tree, not the screen reader output.
 - [ ] `tagged.pdf`: the link "Vaadin website" is announced once, as one link.
 - [ ] `tagged.pdf`: "Hej världen" is read with a Swedish voice where the screen reader switches
       languages.
@@ -64,6 +74,9 @@ VoiceOver + Safari (macOS), VoiceOver + Safari (iOS).
 - [ ] Enter / Shift+Enter announce the next / previous result; with no matches, Enter
       announces "No matches".
 - [ ] Escape closes the find bar from any of its controls and returns focus to where it was.
+      When that control can no longer take focus (e.g. focus "Next page", find "landscape",
+      which goes to the last page and disables "Next page", then Escape), focus moves to the
+      page area, never to the page body.
 - [ ] After closing, with caret browsing (F7 in Chrome / Firefox) the caret is at the current
       match. In NVDA / JAWS browse mode, note where reading continues (focus returns to where it
       was, so reading may continue from there rather than from the match).
@@ -117,12 +130,29 @@ Test in Windows with a dark and a light contrast theme, in Chrome / Edge and Fir
       (wrapping, no clipping), and the pages can still be read.
 - [ ] Reflow at 320 CSS px (WCAG 1.4.10): the toolbar wraps (up to 3 rows) without horizontal
       scrolling of the page; note how much height it takes.
+- [ ] With a large default font size in the browser settings and the find bar open, the toolbar
+      and the find bar take at most half of the viewer and scroll; Tab and Shift+Tab bring each
+      control into view, and the pages stay visible below.
 - [ ] Text spacing (WCAG 1.4.12, e.g. with a text spacing bookmarklet): toolbar, find bar,
       sidebar and outline texts are not clipped.
 - [ ] On touch devices, toolbar buttons, thumbnails and outline items are comfortable to tap
       (WCAG 2.5.5 is AAA, so this is advisory).
 - [ ] On iOS with VoiceOver, swiping through the toolbar, sidebar and pages works, and
       double-tap activates controls.
+- [ ] On a phone or tablet, the toolbar shows no zoom select and no page controls, but the zoom
+      out / zoom in buttons (WCAG 2.5.1: zooming must not need two fingers). Pinching the pages
+      zooms them around the fingers (25 %–400 %), and the rest of the application page does not
+      zoom. With VoiceOver / TalkBack, the zoom buttons work with a double tap.
+
+## Automated accessibility scan
+
+Axe (axe-core, Chrome) on `tagged.pdf` reports no violations. It lists `color-contrast` as
+"incomplete" for the text layer: that text is transparent and placed over the page image, which
+is what users see, so Axe cannot find its background. The contrast of the page content is that
+of the PDF itself. Check in the forced colors run above that selected and highlighted text
+stays visible. It also lists `heading-order` as "incomplete" for `tagged.pdf` and `outline.pdf`:
+the heading levels come from the tags of the PDF, so check them with the heading navigation
+above. A scan without violations does not mean that the component conforms to WCAG.
 
 ## Results
 

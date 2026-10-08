@@ -4,6 +4,7 @@ import { fixtureSync, nextFrame, nextRender, nextUpdate } from '@vaadin/testing-
 import sinon from 'sinon';
 import './enable-feature-flag.js';
 import '../vaadin-pdf-viewer.js';
+import { getDeepActiveElement } from '@vaadin/a11y-base/src/focus-utils.js';
 import type { TextField } from '@vaadin/text-field';
 import { createPageText, findInText, getMatchParts, normalizeText } from '../src/pdf-viewer-find.js';
 import type { PdfViewer } from '../vaadin-pdf-viewer.js';
@@ -324,6 +325,55 @@ describe('find', () => {
         expect(getMatches()).to.be.empty;
       });
 
+      describe('text of a previous document', () => {
+        let settle: { resolve(value: unknown): void; reject(error: Error): void };
+
+        beforeEach(async () => {
+          // Delay the text of the first page of the current document until settled.
+          const pdfDocument = (viewer as any)._pdfDocument;
+          const getPage = pdfDocument.getPage.bind(pdfDocument);
+          sinon.stub(pdfDocument, 'getPage').callsFake(async (pageNumber: unknown) => {
+            const page = await getPage(pageNumber);
+            if (pageNumber !== 1) {
+              return page;
+            }
+            return {
+              getTextContent: () =>
+                new Promise((resolve, reject) => {
+                  settle = { resolve, reject };
+                }),
+            };
+          });
+          const field = getFindField();
+          field.value = 'Internal link to page 2';
+          field.inputElement.dispatchEvent(new Event('input', { bubbles: true, composed: true }));
+          for (let i = 0; i < 50 && !settle; i++) {
+            await nextFrame();
+          }
+          await loadDocument(viewer, 'links.pdf');
+          await waitForResult();
+          expect(getResultText()).to.equal('1 of 1');
+        });
+
+        async function expectCurrentMatchSelectedOnClose() {
+          await nextRender();
+          getButton('close').click();
+          await nextRender();
+          expect(window.getSelection()!.toString()).to.equal('Internal link to page 2');
+          window.getSelection()!.removeAllRanges();
+        }
+
+        it('should not mix text that arrives late with the text of the new document', async () => {
+          settle.resolve({ items: [{ str: 'x'.repeat(500), hasEOL: false }] });
+          await expectCurrentMatchSelectedOnClose();
+        });
+
+        it('should ignore text of the previous document that fails to load', async () => {
+          settle.reject(new Error('Worker was destroyed'));
+          await expectCurrentMatchSelectedOnClose();
+        });
+      });
+
       it('should search the new document when src changes', async () => {
         await search('marker1');
         await loadDocument(viewer, 'links.pdf');
@@ -334,6 +384,52 @@ describe('find', () => {
 
     // Last, as the tooltip that opens on keyboard focus listens to Escape on the document while open
     describe('closing with keyboard', () => {
+      async function findAndClose(query: string, page: number) {
+        await sendKeys({ press: 'Control+KeyF' });
+        await nextRender();
+        await sendKeys({ type: query });
+        await waitForResult();
+        // Wait until the page of the match is shown with its text
+        const getTextLayer = () =>
+          viewer.shadowRoot!.querySelectorAll('[part~="page"]')[page - 1]?.querySelector('.text-layer');
+        for (let i = 0; i < 100 && (viewer.page !== page || !getTextLayer()); i++) {
+          await nextFrame();
+        }
+        await sendKeys({ press: 'Escape' });
+        await nextRender();
+      }
+
+      it('should focus the pages when the button focused before is disabled meanwhile', async () => {
+        getButton('next-page').focus();
+        await findAndClose('landscape', 6);
+        expect(getButton('next-page').disabled).to.be.true;
+        expect(getDeepActiveElement()).to.equal(viewer.shadowRoot!.querySelector('[part="content"]'));
+      });
+
+      it('should focus the pages when the element focused before is hidden meanwhile', async () => {
+        viewer.sidebarOpened = true;
+        await nextRender();
+        viewer.shadowRoot!.querySelector<HTMLElement>('[part~="thumbnail"]')!.focus();
+        await sendKeys({ press: 'Control+KeyF' });
+        await nextRender();
+        viewer.sidebarOpened = false;
+        await nextRender();
+        await sendKeys({ press: 'Escape' });
+        await nextRender();
+        expect(getDeepActiveElement()).to.equal(viewer.shadowRoot!.querySelector('[part="content"]'));
+      });
+
+      it('should focus the pages when the link focused before is released meanwhile', async () => {
+        const idle = nextRenderIdle(viewer);
+        await loadDocument(viewer, 'links.pdf');
+        await idle;
+        const link = viewer.shadowRoot!.querySelector<HTMLElement>('a.link')!;
+        link.focus();
+        await findAndClose('Page 4', 4);
+        expect(link.isConnected).to.be.false;
+        expect(getDeepActiveElement()).to.equal(viewer.shadowRoot!.querySelector('[part="content"]'));
+      });
+
       it('should return focus to the find button when closing with Escape', async () => {
         getButton('find').focus();
         await sendKeys({ press: 'Enter' });

@@ -14,7 +14,7 @@ import { ResizeMixin } from '@vaadin/component-base/src/resize-mixin.js';
 import { issueWarning } from '@vaadin/component-base/src/warnings.js';
 import { MAX_CANVAS_PIXELS, PdfViewerPage } from './pdf-viewer-page.js';
 import { isAllowedLinkUrl } from './pdf-viewer-url.js';
-import { formatZoom, getZoomInLevel, getZoomOutLevel } from './pdf-viewer-zoom.js';
+import { formatZoom, getZoomInLevel, getZoomOutLevel, isValidZoom, MAX_ZOOM, MIN_ZOOM } from './pdf-viewer-zoom.js';
 import { acquireWorker, loadPdfjs, releaseWorker } from './pdfjs-loader.js';
 
 /** PDF units are points (1/72 inch), CSS pixels are 1/96 inch. */
@@ -38,6 +38,12 @@ const PAGE_SIZE_BATCH = 10;
 
 /** The named actions of internal links that the viewer supports. */
 const SUPPORTED_LINK_ACTIONS = ['FirstPage', 'LastPage', 'NextPage', 'PrevPage'];
+
+/**
+ * The index of the top coordinate in the explicit destinations that have one,
+ * by destination type, e.g. `[page, { name: 'XYZ' }, left, top, zoom]`.
+ */
+const DESTINATION_TOP_INDEX = { XYZ: 3, FitH: 2, FitBH: 2, FitR: 5 };
 
 /**
  * Maps a pdf.js loading error to the `reason` reported in the `document-error`
@@ -132,6 +138,7 @@ export const PdfViewerMixin = (superClass) =>
         /** @private */
         __errorReason: {
           type: String,
+          attribute: false,
         },
 
         /** @private */
@@ -152,6 +159,15 @@ export const PdfViewerMixin = (superClass) =>
 
     /** The accessible name the viewer set on itself, to know it can replace it. */
     #ownAccessibleName = null;
+
+    /** The title of the loaded document, or an empty string. */
+    #documentTitle = '';
+
+    /**
+     * What the accessible name of each link is made of, to update it when the localization changes.
+     * @type {WeakMap<HTMLElement, { text: string, url?: string, targetPage: number | null }>}
+     */
+    #linkLabels = new WeakMap();
 
     /** @type {ReturnType<typeof acquireWorker> | null} */
     #workerHandle = null;
@@ -216,7 +232,23 @@ export const PdfViewerMixin = (superClass) =>
     /** Set when the document is not loaded because the element is detached, to load it on attach. */
     #released = false;
 
-    /** @protected */
+    /**
+     * The pinch-to-zoom in progress: the ids of the two touches, their distance and midpoint at
+     * the start, the zoom factor at the start, the point of the pages at the start midpoint,
+     * and the current zoom and midpoint.
+     * @type {{ ids: number[], distance: number, origin: { x: number, y: number }, zoomFactor: number, anchor: object, zoom: number, point: { x: number, y: number } } | null}
+     */
+    #pinch = null;
+
+    /** The point of the pages and where it goes in the view when the zoom changes next, e.g. after pinching. */
+    #zoomAnchor = null;
+
+    /**
+     * Override method from `HTMLElement` to observe the size of the pages area,
+     * and to load a document that was released when the element was detached.
+     * @protected
+     * @override
+     */
     connectedCallback() {
       super.connectedCallback();
 
@@ -232,7 +264,12 @@ export const PdfViewerMixin = (superClass) =>
       }
     }
 
-    /** @protected */
+    /**
+     * Override method from `HTMLElement` to stop observing, and to release the
+     * document when the element stays detached.
+     * @protected
+     * @override
+     */
     disconnectedCallback() {
       super.disconnectedCallback();
 
@@ -252,7 +289,12 @@ export const PdfViewerMixin = (superClass) =>
       });
     }
 
-    /** @protected */
+    /**
+     * Override method from `LitElement` to set the default role and to add the
+     * listeners of the pages area.
+     * @protected
+     * @override
+     */
     firstUpdated() {
       super.firstUpdated();
 
@@ -264,15 +306,30 @@ export const PdfViewerMixin = (superClass) =>
       this.#contentObserver = new ResizeObserver(() => this._onResize());
       this.#contentObserver.observe(this.$.content);
       this.$.content.addEventListener('keydown', (event) => this.#onContentKeyDown(event));
+      // Touch events, as pointer events end when the browser starts to scroll, e.g. when one
+      // finger moves before the second one touches the pages.
+      this.$.content.addEventListener('touchstart', (event) => this.#onTouchStart(event), { passive: true });
+      this.$.content.addEventListener('touchmove', (event) => this.#onTouchMove(event), { passive: false });
+      this.$.content.addEventListener('touchend', (event) => this.#onTouchEnd(event));
+      this.$.content.addEventListener('touchcancel', () => this.#cancelPinch());
       this.addEventListener('keydown', (event) => this.#onKeyDown(event));
     }
 
-    /** @protected */
+    /**
+     * Override method from `LitElement` to load the document, and to apply
+     * changes to the page, the zoom and the localization.
+     * @protected
+     * @override
+     */
     updated(props) {
       super.updated(props);
 
       if (props.has('__effectiveI18n')) {
         this.#updatePageLabels();
+        this.#updateLinkLabels();
+        if (this.#document) {
+          this.#updateAccessibleName();
+        }
       }
 
       if (props.has('src')) {
@@ -286,6 +343,10 @@ export const PdfViewerMixin = (superClass) =>
       if (props.has('zoom') && this.#pages.length) {
         this.#idle = false;
         this.#refresh();
+      }
+      if (props.has('zoom')) {
+        this.#zoomAnchor = null;
+        this.$.pages.style.transform = '';
       }
 
       if (props.has('page') && this.page !== this.#scrolledPage && this.#pages.length) {
@@ -390,22 +451,17 @@ export const PdfViewerMixin = (superClass) =>
 
     /**
      * Goes to the destination of an internal link or an outline item, and
-     * announces the page. Returns whether the destination could be resolved.
+     * announces the page. Does nothing when the destination cannot be resolved.
      * @param {{ dest?: string | Array, action?: string }} destination
-     * @return {Promise<boolean>}
+     * @return {Promise<void>}
      * @protected
      */
     async _goToDestination(destination) {
       const loadId = this.#loadId;
       const target = await this.#resolveLinkTarget(destination);
-      if (loadId !== this.#loadId || !target) {
-        return false;
+      if (loadId === this.#loadId && target) {
+        this.#goToTarget(target);
       }
-      this._goToPage(target.page);
-      if (target.top !== undefined) {
-        this.#scrollToPage(target.page, target.top);
-      }
-      return true;
     }
 
     /**
@@ -427,7 +483,9 @@ export const PdfViewerMixin = (superClass) =>
      * @private
      */
     #refresh() {
-      if (this.#updateScale()) {
+      const scale = this.#pages.length ? this.#computeScale() : 0;
+      if (scale > 0 && scale !== this.#scale) {
+        this.#applyScale(scale);
         return;
       }
       if (this.#pendingPage && this.#scale > 0) {
@@ -443,7 +501,6 @@ export const PdfViewerMixin = (superClass) =>
       const loadId = this.#loadId;
       this.#unload();
 
-      this._setPageCount(0);
       this.#resetAccessibleName();
       this.__hasError = false;
       this.__errorReason = undefined;
@@ -510,7 +567,8 @@ export const PdfViewerMixin = (superClass) =>
       this.#pageSizesLoaded = false;
       this.#refresh();
       this.#loadPageSizes(loadId);
-      this.#updateAccessibleName(title);
+      this.#documentTitle = title;
+      this.#updateAccessibleName();
 
       this.dispatchEvent(new CustomEvent('document-load', { detail: { pageCount: pdfDocument.numPages, title } }));
     }
@@ -531,8 +589,8 @@ export const PdfViewerMixin = (superClass) =>
           await Promise.allSettled(
             batch.map((page) =>
               pdfDocument.getPage(page.pageNumber).then((pdfPage) => {
-                if (loadId === this.#loadId && !page.pdfPage && page.setPdfPage(pdfPage)) {
-                  this.#scheduleRelayout();
+                if (loadId === this.#loadId && !page.pdfPage) {
+                  this.#setPdfPage(page, pdfPage);
                 }
               }),
             ),
@@ -547,6 +605,19 @@ export const PdfViewerMixin = (superClass) =>
           this.#renderNext();
         }
       })();
+    }
+
+    /**
+     * Sets the loaded page of a page view, and lays out the pages again when
+     * its size differs from the estimate.
+     * @private
+     */
+    #setPdfPage(page, pdfPage) {
+      const { unscaledWidth, unscaledHeight } = page;
+      page.setPdfPage(pdfPage);
+      if (page.unscaledWidth !== unscaledWidth || page.unscaledHeight !== unscaledHeight) {
+        this.#scheduleRelayout();
+      }
     }
 
     /**
@@ -587,6 +658,8 @@ export const PdfViewerMixin = (superClass) =>
       this.#pages.forEach((page) => page.release());
       this.#pages = [];
       this.#document = null;
+      this.#documentTitle = '';
+      this._setPageCount(0);
       this.#pdfjs = null;
       this.#scale = 0;
       this._zoomFactor = 0;
@@ -660,8 +733,10 @@ export const PdfViewerMixin = (superClass) =>
       }
 
       let zoom = this.zoom;
-      if (zoom !== 'page-width' && zoom !== 'page-fit' && !(Number(zoom) > 0)) {
-        issueWarning(`Invalid zoom value "${zoom}" for <vaadin-pdf-viewer>, using "page-width" instead.`);
+      if (!isValidZoom(zoom)) {
+        // Only show strings and numbers, as converting other values to a string can throw.
+        const value = typeof zoom === 'string' || typeof zoom === 'number' ? zoom : typeof zoom;
+        issueWarning(`Invalid zoom value "${value}" for <vaadin-pdf-viewer>, using "page-width" instead.`);
         zoom = 'page-width';
       }
 
@@ -674,25 +749,6 @@ export const PdfViewerMixin = (superClass) =>
       }
 
       return Number(zoom) * PDF_TO_CSS_UNITS;
-    }
-
-    /**
-     * Applies the scale for the current `zoom` and size to the pages. Returns
-     * whether the pages are laid out with a new scale.
-     * @private
-     */
-    #updateScale() {
-      if (!this.#pages.length) {
-        return false;
-      }
-
-      const scale = this.#computeScale();
-      if (scale <= 0 || scale === this.#scale) {
-        return false;
-      }
-
-      this.#applyScale(scale);
-      return true;
     }
 
     /**
@@ -713,8 +769,12 @@ export const PdfViewerMixin = (superClass) =>
         return;
       }
 
+      // The pages are laid out again, e.g. when their sizes arrive after loading. A pinch in
+      // progress ends, as its preview no longer fits. The preview must not be measured either.
+      this.#pinch = null;
+      this.$.pages.style.transform = '';
       const isFirstLayout = this.#scale === 0;
-      const anchor = isFirstLayout ? null : this.#captureAnchor();
+      const anchor = isFirstLayout ? null : this.#zoomAnchor || this.#captureAnchor(null);
 
       this.#scale = scale;
       this._zoomFactor = scale / PDF_TO_CSS_UNITS;
@@ -738,36 +798,60 @@ export const PdfViewerMixin = (superClass) =>
     }
 
     /**
-     * Returns the point of the current page that is in the middle of the view,
-     * relative to the size of the page.
+     * Returns where a point of a page is, relative to the size of the page,
+     * and where it is in the view. The point is the given client point, or
+     * the middle of the top of the view on the current page.
+     * @param {{ x: number, y: number } | null} point
      * @private
      */
-    #captureAnchor() {
-      const page = this.#pages[this.#currentIndex];
+    #captureAnchor(point) {
+      const { content } = this.$;
+      const contentRect = content.getBoundingClientRect();
+      const viewX = point ? point.x - contentRect.left : contentRect.width / 2;
+      const viewY = point ? point.y - contentRect.top : 0;
+      const page = point ? this.#getPageAt(content.scrollTop + viewY) : this.#pages[this.#currentIndex];
       const pageRect = page.element.getBoundingClientRect();
-      const contentRect = this.$.content.getBoundingClientRect();
       return {
         page,
-        x: (contentRect.left + contentRect.width / 2 - pageRect.left) / pageRect.width,
-        y: (this.$.content.scrollTop - page.element.offsetTop) / page.height,
+        x: (contentRect.left + viewX - pageRect.left) / pageRect.width,
+        y: (content.scrollTop + viewY - page.element.offsetTop) / page.height,
+        viewX,
+        viewY,
+        keepX: !!point,
       };
     }
 
     /**
-     * Scrolls so that the anchor point of the page is in the same place again.
-     * Pages that fit the width of the view are centered.
+     * Scrolls so that the anchor point of the page is in the same place of the
+     * view again. Pages that fit the width of the view are centered, unless
+     * the point is a given one.
      * @private
      */
-    #restoreAnchor({ page, x, y }) {
+    #restoreAnchor({ page, x, y, viewX, viewY, keepX, target }) {
       const { content } = this.$;
-      content.scrollTop = page.element.offsetTop + y * page.height;
+      if (target) {
+        // A given point of the view, e.g. between the fingers at the end of a pinch
+        const rect = content.getBoundingClientRect();
+        viewX = target.x - rect.left;
+        viewY = target.y - rect.top;
+      }
+      content.scrollTop = page.element.offsetTop + y * page.height - viewY;
 
       // Work with rectangles, so that the same code works for any scroll
       // direction (scrollLeft is 0 or negative in RTL).
       const pageRect = page.element.getBoundingClientRect();
       const contentRect = content.getBoundingClientRect();
-      const ratio = pageRect.width <= content.clientWidth ? 0.5 : x;
-      content.scrollLeft += pageRect.left + ratio * pageRect.width - (contentRect.left + content.clientWidth / 2);
+      const ratio = !keepX && pageRect.width <= content.clientWidth ? 0.5 : x;
+      content.scrollLeft += pageRect.left + ratio * pageRect.width - (contentRect.left + viewX);
+    }
+
+    /**
+     * Returns the page at the given position from the top of the scrolled content.
+     * @private
+     */
+    #getPageAt(top) {
+      const page = this.#pages.find(({ element }) => top < element.offsetTop + element.offsetHeight);
+      return page || this.#pages[this.#pages.length - 1];
     }
 
     /**
@@ -806,6 +890,108 @@ export const PdfViewerMixin = (superClass) =>
       this.#pinnedPage = page;
       this.#pinnedScrollTop = content.scrollTop;
       this.#updateVisiblePages();
+    }
+
+    /**
+     * Returns the first two touches on the pages.
+     * @private
+     */
+    #getPinchTouches(event) {
+      return [...event.touches].filter((touch) => this.$.content.contains(touch.target)).slice(0, 2);
+    }
+
+    /**
+     * Starts pinch-to-zoom when a second finger touches the pages.
+     * @private
+     */
+    #onTouchStart(event) {
+      const touches = this.#getPinchTouches(event);
+      const ids = [...event.touches].map((touch) => touch.identifier);
+      // A pinch whose end was missed, e.g. as the element was moved meanwhile
+      if (this.#pinch && !this.#pinch.ids.every((id) => ids.includes(id))) {
+        this.#cancelPinch();
+      }
+      if (this.#pinch || touches.length < 2 || !this.#pages.length || this._zoomFactor <= 0 || !this.#hasLayout()) {
+        return;
+      }
+      const [a, b] = touches;
+      const origin = { x: (a.clientX + b.clientX) / 2, y: (a.clientY + b.clientY) / 2 };
+      this.#pinch = {
+        ids: [a.identifier, b.identifier],
+        distance: Math.hypot(a.clientX - b.clientX, a.clientY - b.clientY) || 1,
+        origin,
+        zoomFactor: this._zoomFactor,
+        // Taken at the start, as the browser may still scroll the pages while pinching.
+        anchor: this.#captureAnchor(origin),
+        zoom: this._zoomFactor,
+        point: origin,
+      };
+      const pagesRect = this.$.pages.getBoundingClientRect();
+      this.$.pages.style.transformOrigin = `${origin.x - pagesRect.left}px ${origin.y - pagesRect.top}px`;
+    }
+
+    /**
+     * Shows the zoom of a pinch by scaling the pages, and moves them with the
+     * fingers, which is fast. The pages are rendered at the new zoom when the
+     * pinch ends.
+     * @private
+     */
+    #onTouchMove(event) {
+      const pinch = this.#pinch;
+      if (!pinch) {
+        return;
+      }
+      const [a, b] = pinch.ids.map((id) => [...event.touches].find((touch) => touch.identifier === id));
+      if (!a || !b) {
+        return;
+      }
+      // Keep the browser from scrolling the pages while pinching, when it still can.
+      if (event.cancelable) {
+        event.preventDefault();
+      }
+      const distance = Math.hypot(a.clientX - b.clientX, a.clientY - b.clientY);
+      // Also a zoom outside the zoom levels set by the application does not jump into them.
+      const min = Math.min(MIN_ZOOM, pinch.zoomFactor);
+      const max = Math.max(MAX_ZOOM, pinch.zoomFactor);
+      pinch.zoom = Math.min(Math.max((pinch.zoomFactor * distance) / pinch.distance, min), max);
+      pinch.point = { x: (a.clientX + b.clientX) / 2, y: (a.clientY + b.clientY) / 2 };
+      const dx = pinch.point.x - pinch.origin.x;
+      const dy = pinch.point.y - pinch.origin.y;
+      this.$.pages.style.transform = `translate(${dx}px, ${dy}px) scale(${pinch.zoom / pinch.zoomFactor})`;
+    }
+
+    /**
+     * Applies the zoom of a pinch when one of its fingers is lifted, so that
+     * the point of the pages between the fingers stays between them.
+     * @private
+     */
+    #onTouchEnd(event) {
+      const pinch = this.#pinch;
+      const remaining = [...event.touches].map((touch) => touch.identifier);
+      if (!pinch || pinch.ids.every((id) => remaining.includes(id))) {
+        return;
+      }
+      this.#pinch = null;
+      // Two decimals are enough for a zoom level, e.g. 1.35 for 135%.
+      const zoom = Math.round(pinch.zoom * 100) / 100;
+      if (Math.abs(zoom - pinch.zoomFactor) < 0.01) {
+        // Only moved: scroll by as much, as the preview showed.
+        this.$.pages.style.transform = '';
+        this.$.content.scrollTop -= pinch.point.y - pinch.origin.y;
+        this.$.content.scrollLeft -= pinch.point.x - pinch.origin.x;
+        return;
+      }
+      this.#zoomAnchor = { ...pinch.anchor, target: pinch.point };
+      this.zoom = zoom;
+    }
+
+    /**
+     * Stops a pinch without changing the zoom, e.g. when the system takes over the touches.
+     * @private
+     */
+    #cancelPinch() {
+      this.#pinch = null;
+      this.$.pages.style.transform = '';
     }
 
     /** @private */
@@ -961,9 +1147,7 @@ export const PdfViewerMixin = (superClass) =>
           if (loadId !== this.#loadId) {
             return;
           }
-          if (page.setPdfPage(pdfPage)) {
-            this.#scheduleRelayout();
-          }
+          this.#setPdfPage(page, pdfPage);
         }
         await page.render(outputScale);
         // The page may have been released or unloaded meanwhile.
@@ -981,7 +1165,7 @@ export const PdfViewerMixin = (superClass) =>
             annotations.filter((annotation) => annotation.annotationType === this.#pdfjs.AnnotationType.LINK),
             (annotation) => this.#createLink(annotation),
           );
-          await Promise.all(links.map(({ link, annotation }) => this.#placeLink(page, link, annotation)));
+          await this.#placeLinks(page, links);
         }
         this._pageRendered(page);
       } catch (error) {
@@ -1021,27 +1205,65 @@ export const PdfViewerMixin = (superClass) =>
     }
 
     /**
-     * Gives a link its accessible name, and moves it into the text layer next
-     * to the text it covers, so that assistive technology reads the link once,
-     * in reading order, instead of the text and then the link.
+     * Gives the links of a page their accessible name, and moves them into
+     * the text layer next to the text they cover, so that assistive technology
+     * reads each link once, in reading order, instead of the text and then the link.
      * @private
      */
-    async #placeLink(page, link, annotation) {
-      const i18n = this.__effectiveI18n;
-      const textElements = page.getTextElementsInside(link);
-      let label = textElements.map((element) => element.textContent.trim()).join(' ');
-      if (!label && annotation.url) {
-        label = annotation.url;
-      } else if (!label) {
-        const target = await this.#resolveLinkTarget(annotation);
-        label = target ? i18n.goToPage.replace('{page}', target.page) : i18n.link;
-      }
-      link.setAttribute('aria-label', annotation.url ? i18n.externalLink.replace('{text}', label) : label);
+    async #placeLinks(page, links) {
+      const loadId = this.#loadId;
+      const { textLayerElement } = page;
+      const linksWithText = links.map(({ link }) => ({ link, parts: page.getTextInside(link) }));
 
-      if (textElements.length) {
-        textElements.forEach((element) => element.setAttribute('aria-hidden', 'true'));
-        textElements[textElements.length - 1].after(link);
+      await Promise.all(
+        links.map(async ({ link, annotation }, index) => {
+          const text = linksWithText[index].parts
+            .map(({ element, start, end }) => element.textContent.slice(start, end).trim())
+            .join(' ');
+          let targetPage = null;
+          if (!text && !annotation.url) {
+            const target = await this.#resolveLinkTarget(annotation);
+            targetPage = target ? target.page : null;
+          }
+          this.#linkLabels.set(link, { text, url: annotation.url, targetPage });
+          this.#updateLinkLabel(link);
+        }),
+      );
+
+      // The page may have been released meanwhile.
+      if (loadId === this.#loadId && textLayerElement && page.textLayerElement === textLayerElement) {
+        page.placeLinks(linksWithText.filter(({ parts }) => parts.length));
       }
+    }
+
+    /**
+     * Sets the accessible name of a link: its text, or the URL or the page it
+     * goes to when it has none.
+     * @private
+     */
+    #updateLinkLabel(link) {
+      const { text, url, targetPage } = this.#linkLabels.get(link);
+      const i18n = this.__effectiveI18n;
+      let label = text || url;
+      if (!label) {
+        label = targetPage ? i18n.goToPage.replace('{page}', targetPage) : i18n.link;
+      }
+      link.setAttribute('aria-label', url ? i18n.externalLink.replace('{text}', label) : label);
+    }
+
+    /**
+     * Updates the accessible names of the links of the rendered pages, e.g.
+     * when the localization changes.
+     * @private
+     */
+    #updateLinkLabels() {
+      this.#pages.forEach((page) => {
+        page.element.querySelectorAll('a.link').forEach((link) => {
+          if (this.#linkLabels.has(link)) {
+            this.#updateLinkLabel(link);
+          }
+        });
+      });
     }
 
     /**
@@ -1064,14 +1286,14 @@ export const PdfViewerMixin = (superClass) =>
         if (!Array.isArray(explicitDest)) {
           return null;
         }
-        const [ref, { name }, , top] = explicitDest;
+        const [ref, { name }] = explicitDest;
         const pageIndex = Number.isInteger(ref) ? ref : await pdfDocument.getPageIndex(ref);
         if (pageIndex < 0 || pageIndex >= pageCount) {
           return null;
         }
-        // Only "XYZ" and "FitH" destinations have a position on the page.
-        const hasTop = (name === 'XYZ' || name === 'FitH') && typeof top === 'number';
-        return { page: pageIndex + 1, top: hasTop ? top : undefined };
+        // Only some types of destinations have a position on the page, at different indexes.
+        const top = explicitDest[DESTINATION_TOP_INDEX[name]];
+        return { page: pageIndex + 1, top: typeof top === 'number' ? top : undefined };
       } catch {
         // A broken destination does nothing, like in other PDF viewers.
         return null;
@@ -1084,21 +1306,38 @@ export const PdfViewerMixin = (superClass) =>
      * @private
      */
     async #followLink(annotation) {
-      if (await this._goToDestination(annotation)) {
+      const loadId = this.#loadId;
+      const target = await this.#resolveLinkTarget(annotation);
+      if (loadId === this.#loadId && target) {
+        this.#goToTarget(target);
         this.$.content.focus({ preventScroll: true });
       }
     }
 
     /**
-     * Sets the title of the document as the accessible name of the viewer,
-     * unless the application has set one.
+     * Goes to a page, or a position on it, and announces the page.
+     * @param {{ page: number, top?: number }} target
      * @private
      */
-    #updateAccessibleName(title) {
-      if (this.hasAttribute('aria-labelledby') || this.hasAttribute('aria-label')) {
+    #goToTarget(target) {
+      this._goToPage(target.page);
+      if (target.top !== undefined) {
+        this.#scrollToPage(target.page, target.top);
+      }
+    }
+
+    /**
+     * Sets the title of the document as the accessible name of the viewer,
+     * or the localized fallback name, unless the application has set a name.
+     * @private
+     */
+    #updateAccessibleName() {
+      const hasOwnName =
+        this.#ownAccessibleName !== null && this.getAttribute('aria-label') === this.#ownAccessibleName;
+      if (!hasOwnName && (this.hasAttribute('aria-labelledby') || this.hasAttribute('aria-label'))) {
         return;
       }
-      this.#ownAccessibleName = title || this.__effectiveI18n.document;
+      this.#ownAccessibleName = this.#documentTitle || this.__effectiveI18n.document;
       this.setAttribute('aria-label', this.#ownAccessibleName);
     }
 

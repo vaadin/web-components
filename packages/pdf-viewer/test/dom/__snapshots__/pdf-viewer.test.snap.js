@@ -8,31 +8,59 @@ snapshots["vaadin-pdf-viewer host default"] =
     aria-label="Sidebar"
     aria-pressed="false"
     disabled=""
+    has-tooltip=""
     icon="sidebar"
     role="button"
-    slot="toolbar-start"
+    slot="toolbar-navigation"
     tabindex="-1"
     theme="tertiary icon"
   >
+    <vaadin-tooltip
+      modeless=""
+      slot="tooltip"
+    >
+      <div
+        id="vaadin-tooltip-9"
+        role="tooltip"
+        slot="overlay"
+      >
+        Sidebar
+      </div>
+    </vaadin-tooltip>
   </vaadin-pdf-viewer-button>
   <vaadin-pdf-viewer-button
     aria-disabled="true"
     aria-label="Previous page"
     disabled=""
+    has-tooltip=""
     icon="previous-page"
     role="button"
-    slot="toolbar-navigation"
+    slot="toolbar-page"
     tabindex="-1"
     theme="tertiary icon"
   >
+    <vaadin-tooltip
+      modeless=""
+      slot="tooltip"
+    >
+      <div
+        id="vaadin-tooltip-10"
+        role="tooltip"
+        slot="overlay"
+      >
+        Previous page
+      </div>
+    </vaadin-tooltip>
   </vaadin-pdf-viewer-button>
   <vaadin-integer-field
     accessible-name="Page"
     aria-disabled="true"
     disabled=""
+    manual-validation=""
     max="1"
     min="1"
-    slot="toolbar-navigation"
+    slot="toolbar-page"
+    style="--_page-digits: 1"
     theme="align-right"
   >
     <span
@@ -41,21 +69,22 @@ snapshots["vaadin-pdf-viewer host default"] =
     >
     </span>
     <label
-      for="input-vaadin-integer-field-9"
-      id="label-vaadin-integer-field-0"
+      for="input-vaadin-integer-field-17"
+      id="label-vaadin-integer-field-1"
       slot="label"
     >
     </label>
     <div
       hidden=""
-      id="error-message-vaadin-integer-field-2"
+      id="error-message-vaadin-integer-field-3"
       slot="error-message"
     >
     </div>
     <input
+      aria-describedby="pdf-viewer-page-error-0"
       aria-label="Page"
       disabled=""
-      id="input-vaadin-integer-field-9"
+      id="input-vaadin-integer-field-17"
       max="1"
       min="1"
       slot="input"
@@ -67,23 +96,55 @@ snapshots["vaadin-pdf-viewer host default"] =
     aria-disabled="true"
     aria-label="Next page"
     disabled=""
+    has-tooltip=""
     icon="next-page"
     role="button"
-    slot="toolbar-navigation"
+    slot="toolbar-page"
     tabindex="-1"
     theme="tertiary icon"
   >
+    <vaadin-tooltip
+      modeless=""
+      slot="tooltip"
+    >
+      <div
+        id="vaadin-tooltip-11"
+        role="tooltip"
+        slot="overlay"
+      >
+        Next page
+      </div>
+    </vaadin-tooltip>
   </vaadin-pdf-viewer-button>
+  <span
+    aria-live="assertive"
+    id="pdf-viewer-page-error-0"
+    slot="page-error"
+  >
+  </span>
   <vaadin-pdf-viewer-button
     aria-disabled="true"
     aria-label="Zoom out"
     disabled=""
+    has-tooltip=""
     icon="zoom-out"
     role="button"
     slot="toolbar-zoom"
     tabindex="-1"
     theme="tertiary icon"
   >
+    <vaadin-tooltip
+      modeless=""
+      slot="tooltip"
+    >
+      <div
+        id="vaadin-tooltip-12"
+        role="tooltip"
+        slot="overlay"
+      >
+        Zoom out
+      </div>
+    </vaadin-tooltip>
   </vaadin-pdf-viewer-button>
   <vaadin-select
     accessible-name="Zoom"
@@ -179,13 +240,13 @@ snapshots["vaadin-pdf-viewer host default"] =
       </vaadin-select-list-box>
     </div>
     <label
-      id="label-vaadin-select-3"
+      id="label-vaadin-select-4"
       slot="label"
     >
     </label>
     <div
       hidden=""
-      id="error-message-vaadin-select-5"
+      id="error-message-vaadin-select-6"
       slot="error-message"
     >
     </div>
@@ -193,21 +254,21 @@ snapshots["vaadin-pdf-viewer host default"] =
       aria-disabled="true"
       aria-expanded="false"
       aria-haspopup="listbox"
-      aria-labelledby="label-vaadin-select-7 value-vaadin-select-6"
+      aria-labelledby="label-vaadin-select-8 value-vaadin-select-7"
       disabled=""
       role="button"
       slot="value"
       tabindex="-1"
     >
       <vaadin-select-item
-        id="value-vaadin-select-6"
+        id="value-vaadin-select-7"
         selected=""
       >
         Page width
       </vaadin-select-item>
     </vaadin-select-value-button>
     <label
-      id="label-vaadin-select-7"
+      id="label-vaadin-select-8"
       slot="sr-label"
     >
       Zoom
@@ -217,58 +278,99 @@ snapshots["vaadin-pdf-viewer host default"] =
     aria-disabled="true"
     aria-label="Zoom in"
     disabled=""
+    has-tooltip=""
     icon="zoom-in"
     role="button"
     slot="toolbar-zoom"
     tabindex="-1"
     theme="tertiary icon"
   >
+    <vaadin-tooltip
+      modeless=""
+      slot="tooltip"
+    >
+      <div
+        id="vaadin-tooltip-13"
+        role="tooltip"
+        slot="overlay"
+      >
+        Zoom in
+      </div>
+    </vaadin-tooltip>
   </vaadin-pdf-viewer-button>
   <vaadin-pdf-viewer-button
     aria-disabled="true"
     aria-label="Find in document"
     aria-pressed="false"
     disabled=""
+    has-tooltip=""
     icon="find"
     role="button"
     slot="toolbar-actions"
     tabindex="-1"
     theme="tertiary icon"
   >
+    <vaadin-tooltip
+      modeless=""
+      slot="tooltip"
+    >
+      <div
+        id="vaadin-tooltip-14"
+        role="tooltip"
+        slot="overlay"
+      >
+        Find in document
+      </div>
+    </vaadin-tooltip>
   </vaadin-pdf-viewer-button>
   <vaadin-pdf-viewer-button
     aria-disabled="true"
     aria-label="Download"
     disabled=""
+    has-tooltip=""
     icon="download"
     role="button"
     slot="toolbar-actions"
     tabindex="-1"
     theme="tertiary icon"
   >
+    <vaadin-tooltip
+      modeless=""
+      slot="tooltip"
+    >
+      <div
+        id="vaadin-tooltip-15"
+        role="tooltip"
+        slot="overlay"
+      >
+        Download
+      </div>
+    </vaadin-tooltip>
   </vaadin-pdf-viewer-button>
   <vaadin-pdf-viewer-button
     aria-disabled="true"
     aria-label="Print"
     disabled=""
+    has-tooltip=""
     icon="print"
     role="button"
     slot="toolbar-actions"
     tabindex="-1"
     theme="tertiary icon"
   >
-  </vaadin-pdf-viewer-button>
-  <vaadin-tooltip
-    modeless=""
-    slot="toolbar-tooltip"
-  >
-    <div
-      id="vaadin-tooltip-8"
-      role="tooltip"
-      slot="overlay"
+    <vaadin-tooltip
+      modeless=""
+      slot="tooltip"
     >
-    </div>
-  </vaadin-tooltip>
+      <div
+        id="vaadin-tooltip-16"
+        role="tooltip"
+        slot="overlay"
+      >
+        Print
+      </div>
+    </vaadin-tooltip>
+  </vaadin-pdf-viewer-button>
 </vaadin-pdf-viewer>
 `;
 /* end snapshot vaadin-pdf-viewer host default */
@@ -283,31 +385,59 @@ snapshots["vaadin-pdf-viewer host error"] =
     aria-label="Sidebar"
     aria-pressed="false"
     disabled=""
+    has-tooltip=""
     icon="sidebar"
     role="button"
-    slot="toolbar-start"
+    slot="toolbar-navigation"
     tabindex="-1"
     theme="tertiary icon"
   >
+    <vaadin-tooltip
+      modeless=""
+      slot="tooltip"
+    >
+      <div
+        id="vaadin-tooltip-9"
+        role="tooltip"
+        slot="overlay"
+      >
+        Sidebar
+      </div>
+    </vaadin-tooltip>
   </vaadin-pdf-viewer-button>
   <vaadin-pdf-viewer-button
     aria-disabled="true"
     aria-label="Previous page"
     disabled=""
+    has-tooltip=""
     icon="previous-page"
     role="button"
-    slot="toolbar-navigation"
+    slot="toolbar-page"
     tabindex="-1"
     theme="tertiary icon"
   >
+    <vaadin-tooltip
+      modeless=""
+      slot="tooltip"
+    >
+      <div
+        id="vaadin-tooltip-10"
+        role="tooltip"
+        slot="overlay"
+      >
+        Previous page
+      </div>
+    </vaadin-tooltip>
   </vaadin-pdf-viewer-button>
   <vaadin-integer-field
     accessible-name="Page"
     aria-disabled="true"
     disabled=""
+    manual-validation=""
     max="1"
     min="1"
-    slot="toolbar-navigation"
+    slot="toolbar-page"
+    style="--_page-digits: 1"
     theme="align-right"
   >
     <span
@@ -316,21 +446,22 @@ snapshots["vaadin-pdf-viewer host error"] =
     >
     </span>
     <label
-      for="input-vaadin-integer-field-9"
-      id="label-vaadin-integer-field-0"
+      for="input-vaadin-integer-field-17"
+      id="label-vaadin-integer-field-1"
       slot="label"
     >
     </label>
     <div
       hidden=""
-      id="error-message-vaadin-integer-field-2"
+      id="error-message-vaadin-integer-field-3"
       slot="error-message"
     >
     </div>
     <input
+      aria-describedby="pdf-viewer-page-error-0"
       aria-label="Page"
       disabled=""
-      id="input-vaadin-integer-field-9"
+      id="input-vaadin-integer-field-17"
       max="1"
       min="1"
       slot="input"
@@ -342,23 +473,55 @@ snapshots["vaadin-pdf-viewer host error"] =
     aria-disabled="true"
     aria-label="Next page"
     disabled=""
+    has-tooltip=""
     icon="next-page"
     role="button"
-    slot="toolbar-navigation"
+    slot="toolbar-page"
     tabindex="-1"
     theme="tertiary icon"
   >
+    <vaadin-tooltip
+      modeless=""
+      slot="tooltip"
+    >
+      <div
+        id="vaadin-tooltip-11"
+        role="tooltip"
+        slot="overlay"
+      >
+        Next page
+      </div>
+    </vaadin-tooltip>
   </vaadin-pdf-viewer-button>
+  <span
+    aria-live="assertive"
+    id="pdf-viewer-page-error-0"
+    slot="page-error"
+  >
+  </span>
   <vaadin-pdf-viewer-button
     aria-disabled="true"
     aria-label="Zoom out"
     disabled=""
+    has-tooltip=""
     icon="zoom-out"
     role="button"
     slot="toolbar-zoom"
     tabindex="-1"
     theme="tertiary icon"
   >
+    <vaadin-tooltip
+      modeless=""
+      slot="tooltip"
+    >
+      <div
+        id="vaadin-tooltip-12"
+        role="tooltip"
+        slot="overlay"
+      >
+        Zoom out
+      </div>
+    </vaadin-tooltip>
   </vaadin-pdf-viewer-button>
   <vaadin-select
     accessible-name="Zoom"
@@ -454,13 +617,13 @@ snapshots["vaadin-pdf-viewer host error"] =
       </vaadin-select-list-box>
     </div>
     <label
-      id="label-vaadin-select-3"
+      id="label-vaadin-select-4"
       slot="label"
     >
     </label>
     <div
       hidden=""
-      id="error-message-vaadin-select-5"
+      id="error-message-vaadin-select-6"
       slot="error-message"
     >
     </div>
@@ -468,21 +631,21 @@ snapshots["vaadin-pdf-viewer host error"] =
       aria-disabled="true"
       aria-expanded="false"
       aria-haspopup="listbox"
-      aria-labelledby="label-vaadin-select-7 value-vaadin-select-6"
+      aria-labelledby="label-vaadin-select-8 value-vaadin-select-7"
       disabled=""
       role="button"
       slot="value"
       tabindex="-1"
     >
       <vaadin-select-item
-        id="value-vaadin-select-6"
+        id="value-vaadin-select-7"
         selected=""
       >
         Page width
       </vaadin-select-item>
     </vaadin-select-value-button>
     <label
-      id="label-vaadin-select-7"
+      id="label-vaadin-select-8"
       slot="sr-label"
     >
       Zoom
@@ -492,58 +655,99 @@ snapshots["vaadin-pdf-viewer host error"] =
     aria-disabled="true"
     aria-label="Zoom in"
     disabled=""
+    has-tooltip=""
     icon="zoom-in"
     role="button"
     slot="toolbar-zoom"
     tabindex="-1"
     theme="tertiary icon"
   >
+    <vaadin-tooltip
+      modeless=""
+      slot="tooltip"
+    >
+      <div
+        id="vaadin-tooltip-13"
+        role="tooltip"
+        slot="overlay"
+      >
+        Zoom in
+      </div>
+    </vaadin-tooltip>
   </vaadin-pdf-viewer-button>
   <vaadin-pdf-viewer-button
     aria-disabled="true"
     aria-label="Find in document"
     aria-pressed="false"
     disabled=""
+    has-tooltip=""
     icon="find"
     role="button"
     slot="toolbar-actions"
     tabindex="-1"
     theme="tertiary icon"
   >
+    <vaadin-tooltip
+      modeless=""
+      slot="tooltip"
+    >
+      <div
+        id="vaadin-tooltip-14"
+        role="tooltip"
+        slot="overlay"
+      >
+        Find in document
+      </div>
+    </vaadin-tooltip>
   </vaadin-pdf-viewer-button>
   <vaadin-pdf-viewer-button
     aria-disabled="true"
     aria-label="Download"
     disabled=""
+    has-tooltip=""
     icon="download"
     role="button"
     slot="toolbar-actions"
     tabindex="-1"
     theme="tertiary icon"
   >
+    <vaadin-tooltip
+      modeless=""
+      slot="tooltip"
+    >
+      <div
+        id="vaadin-tooltip-15"
+        role="tooltip"
+        slot="overlay"
+      >
+        Download
+      </div>
+    </vaadin-tooltip>
   </vaadin-pdf-viewer-button>
   <vaadin-pdf-viewer-button
     aria-disabled="true"
     aria-label="Print"
     disabled=""
+    has-tooltip=""
     icon="print"
     role="button"
     slot="toolbar-actions"
     tabindex="-1"
     theme="tertiary icon"
   >
-  </vaadin-pdf-viewer-button>
-  <vaadin-tooltip
-    modeless=""
-    slot="toolbar-tooltip"
-  >
-    <div
-      id="vaadin-tooltip-8"
-      role="tooltip"
-      slot="overlay"
+    <vaadin-tooltip
+      modeless=""
+      slot="tooltip"
     >
-    </div>
-  </vaadin-tooltip>
+      <div
+        id="vaadin-tooltip-16"
+        role="tooltip"
+        slot="overlay"
+      >
+        Print
+      </div>
+    </vaadin-tooltip>
+  </vaadin-pdf-viewer-button>
 </vaadin-pdf-viewer>
 `;
 /* end snapshot vaadin-pdf-viewer host error */
@@ -556,30 +760,58 @@ snapshots["vaadin-pdf-viewer find bar host"] =
   <vaadin-pdf-viewer-button
     aria-label="Sidebar"
     aria-pressed="false"
+    has-tooltip=""
     icon="sidebar"
     role="button"
-    slot="toolbar-start"
+    slot="toolbar-navigation"
     tabindex="0"
     theme="tertiary icon"
   >
+    <vaadin-tooltip
+      modeless=""
+      slot="tooltip"
+    >
+      <div
+        id="vaadin-tooltip-9"
+        role="tooltip"
+        slot="overlay"
+      >
+        Sidebar
+      </div>
+    </vaadin-tooltip>
   </vaadin-pdf-viewer-button>
   <vaadin-pdf-viewer-button
     aria-disabled="true"
     aria-label="Previous page"
     disabled=""
+    has-tooltip=""
     icon="previous-page"
     role="button"
-    slot="toolbar-navigation"
+    slot="toolbar-page"
     tabindex="-1"
     theme="tertiary icon"
   >
+    <vaadin-tooltip
+      modeless=""
+      slot="tooltip"
+    >
+      <div
+        id="vaadin-tooltip-10"
+        role="tooltip"
+        slot="overlay"
+      >
+        Previous page
+      </div>
+    </vaadin-tooltip>
   </vaadin-pdf-viewer-button>
   <vaadin-integer-field
     accessible-name="Page of 6"
     has-value=""
+    manual-validation=""
     max="6"
     min="1"
-    slot="toolbar-navigation"
+    slot="toolbar-page"
+    style="--_page-digits: 1"
     theme="align-right"
   >
     <span
@@ -589,20 +821,21 @@ snapshots["vaadin-pdf-viewer find bar host"] =
       / 6
     </span>
     <label
-      for="input-vaadin-integer-field-9"
-      id="label-vaadin-integer-field-0"
+      for="input-vaadin-integer-field-17"
+      id="label-vaadin-integer-field-1"
       slot="label"
     >
     </label>
     <div
       hidden=""
-      id="error-message-vaadin-integer-field-2"
+      id="error-message-vaadin-integer-field-3"
       slot="error-message"
     >
     </div>
     <input
+      aria-describedby="pdf-viewer-page-error-0"
       aria-label="Page of 6"
-      id="input-vaadin-integer-field-9"
+      id="input-vaadin-integer-field-17"
       max="6"
       min="1"
       slot="input"
@@ -613,21 +846,53 @@ snapshots["vaadin-pdf-viewer find bar host"] =
   </vaadin-integer-field>
   <vaadin-pdf-viewer-button
     aria-label="Next page"
+    has-tooltip=""
     icon="next-page"
     role="button"
-    slot="toolbar-navigation"
+    slot="toolbar-page"
     tabindex="0"
     theme="tertiary icon"
   >
+    <vaadin-tooltip
+      modeless=""
+      slot="tooltip"
+    >
+      <div
+        id="vaadin-tooltip-11"
+        role="tooltip"
+        slot="overlay"
+      >
+        Next page
+      </div>
+    </vaadin-tooltip>
   </vaadin-pdf-viewer-button>
+  <span
+    aria-live="assertive"
+    id="pdf-viewer-page-error-0"
+    slot="page-error"
+  >
+  </span>
   <vaadin-pdf-viewer-button
     aria-label="Zoom out"
+    has-tooltip=""
     icon="zoom-out"
     role="button"
     slot="toolbar-zoom"
     tabindex="0"
     theme="tertiary icon"
   >
+    <vaadin-tooltip
+      modeless=""
+      slot="tooltip"
+    >
+      <div
+        id="vaadin-tooltip-12"
+        role="tooltip"
+        slot="overlay"
+      >
+        Zoom out
+      </div>
+    </vaadin-tooltip>
   </vaadin-pdf-viewer-button>
   <vaadin-select
     accessible-name="Zoom"
@@ -721,33 +986,33 @@ snapshots["vaadin-pdf-viewer find bar host"] =
       </vaadin-select-list-box>
     </div>
     <label
-      id="label-vaadin-select-3"
+      id="label-vaadin-select-4"
       slot="label"
     >
     </label>
     <div
       hidden=""
-      id="error-message-vaadin-select-5"
+      id="error-message-vaadin-select-6"
       slot="error-message"
     >
     </div>
     <vaadin-select-value-button
       aria-expanded="false"
       aria-haspopup="listbox"
-      aria-labelledby="label-vaadin-select-7 value-vaadin-select-6"
+      aria-labelledby="label-vaadin-select-8 value-vaadin-select-7"
       role="button"
       slot="value"
       tabindex="0"
     >
       <vaadin-select-item
-        id="value-vaadin-select-6"
+        id="value-vaadin-select-7"
         selected=""
       >
         Page width
       </vaadin-select-item>
     </vaadin-select-value-button>
     <label
-      id="label-vaadin-select-7"
+      id="label-vaadin-select-8"
       slot="sr-label"
     >
       Zoom
@@ -755,40 +1020,92 @@ snapshots["vaadin-pdf-viewer find bar host"] =
   </vaadin-select>
   <vaadin-pdf-viewer-button
     aria-label="Zoom in"
+    has-tooltip=""
     icon="zoom-in"
     role="button"
     slot="toolbar-zoom"
     tabindex="0"
     theme="tertiary icon"
   >
+    <vaadin-tooltip
+      modeless=""
+      slot="tooltip"
+    >
+      <div
+        id="vaadin-tooltip-13"
+        role="tooltip"
+        slot="overlay"
+      >
+        Zoom in
+      </div>
+    </vaadin-tooltip>
   </vaadin-pdf-viewer-button>
   <vaadin-pdf-viewer-button
     aria-label="Find in document"
     aria-pressed="true"
+    has-tooltip=""
     icon="find"
     role="button"
     slot="toolbar-actions"
     tabindex="0"
     theme="tertiary icon"
   >
+    <vaadin-tooltip
+      modeless=""
+      slot="tooltip"
+    >
+      <div
+        id="vaadin-tooltip-14"
+        role="tooltip"
+        slot="overlay"
+      >
+        Find in document
+      </div>
+    </vaadin-tooltip>
   </vaadin-pdf-viewer-button>
   <vaadin-pdf-viewer-button
     aria-label="Download"
+    has-tooltip=""
     icon="download"
     role="button"
     slot="toolbar-actions"
     tabindex="0"
     theme="tertiary icon"
   >
+    <vaadin-tooltip
+      modeless=""
+      slot="tooltip"
+    >
+      <div
+        id="vaadin-tooltip-15"
+        role="tooltip"
+        slot="overlay"
+      >
+        Download
+      </div>
+    </vaadin-tooltip>
   </vaadin-pdf-viewer-button>
   <vaadin-pdf-viewer-button
     aria-label="Print"
+    has-tooltip=""
     icon="print"
     role="button"
     slot="toolbar-actions"
     tabindex="0"
     theme="tertiary icon"
   >
+    <vaadin-tooltip
+      modeless=""
+      slot="tooltip"
+    >
+      <div
+        id="vaadin-tooltip-16"
+        role="tooltip"
+        slot="overlay"
+      >
+        Print
+      </div>
+    </vaadin-tooltip>
   </vaadin-pdf-viewer-button>
   <vaadin-text-field
     accessible-name="Find in document"
@@ -797,20 +1114,20 @@ snapshots["vaadin-pdf-viewer find bar host"] =
     slot="find"
   >
     <label
-      for="input-vaadin-text-field-13"
-      id="label-vaadin-text-field-10"
+      for="input-vaadin-text-field-24"
+      id="label-vaadin-text-field-18"
       slot="label"
     >
     </label>
     <div
       hidden=""
-      id="error-message-vaadin-text-field-12"
+      id="error-message-vaadin-text-field-20"
       slot="error-message"
     >
     </div>
     <input
       aria-label="Find in document"
-      id="input-vaadin-text-field-13"
+      id="input-vaadin-text-field-24"
       placeholder="Find in document"
       slot="input"
       type="text"
@@ -827,86 +1144,135 @@ snapshots["vaadin-pdf-viewer find bar host"] =
     aria-disabled="true"
     aria-label="Previous match"
     disabled=""
+    has-tooltip=""
     icon="previous-match"
     role="button"
     slot="find-actions"
     tabindex="-1"
     theme="tertiary icon"
   >
+    <vaadin-tooltip
+      modeless=""
+      slot="tooltip"
+    >
+      <div
+        id="vaadin-tooltip-21"
+        role="tooltip"
+        slot="overlay"
+      >
+        Previous match
+      </div>
+    </vaadin-tooltip>
   </vaadin-pdf-viewer-button>
   <vaadin-pdf-viewer-button
     aria-disabled="true"
     aria-label="Next match"
     disabled=""
+    has-tooltip=""
     icon="next-match"
     role="button"
     slot="find-actions"
     tabindex="-1"
     theme="tertiary icon"
   >
+    <vaadin-tooltip
+      modeless=""
+      slot="tooltip"
+    >
+      <div
+        id="vaadin-tooltip-22"
+        role="tooltip"
+        slot="overlay"
+      >
+        Next match
+      </div>
+    </vaadin-tooltip>
   </vaadin-pdf-viewer-button>
   <vaadin-pdf-viewer-button
     aria-label="Close find"
+    has-tooltip=""
     icon="close"
     role="button"
     slot="find-actions"
     tabindex="0"
     theme="tertiary icon"
   >
-  </vaadin-pdf-viewer-button>
-  <vaadin-tooltip
-    modeless=""
-    slot="toolbar-tooltip"
-  >
-    <div
-      id="vaadin-tooltip-8"
-      role="tooltip"
-      slot="overlay"
+    <vaadin-tooltip
+      modeless=""
+      slot="tooltip"
     >
-    </div>
-  </vaadin-tooltip>
+      <div
+        id="vaadin-tooltip-23"
+        role="tooltip"
+        slot="overlay"
+      >
+        Close find
+      </div>
+    </vaadin-tooltip>
+  </vaadin-pdf-viewer-button>
 </vaadin-pdf-viewer>
 `;
 /* end snapshot vaadin-pdf-viewer find bar host */
 
 snapshots["vaadin-pdf-viewer shadow default"] = 
-`<div
-  aria-label="PDF toolbar"
-  part="toolbar"
-  role="toolbar"
->
-  <div part="toolbar-group">
-    <slot name="toolbar-start">
-    </slot>
+`<div class="header">
+  <div
+    dir="auto"
+    hidden=""
+    part="file-name"
+    title="PDF document"
+  >
+    PDF document
   </div>
-  <div part="toolbar-group">
-    <slot name="toolbar-navigation">
-    </slot>
+  <div
+    aria-label="PDF toolbar"
+    part="toolbar"
+    role="toolbar"
+  >
+    <div
+      class="navigation"
+      part="toolbar-group"
+    >
+      <slot name="toolbar-navigation">
+      </slot>
+      <div part="page-controls disabled">
+        <slot name="toolbar-page">
+        </slot>
+      </div>
+      <slot name="page-error">
+      </slot>
+    </div>
+    <div
+      class="viewing"
+      part="toolbar-group"
+    >
+      <div part="zoom-controls disabled">
+        <slot name="toolbar-zoom">
+        </slot>
+      </div>
+    </div>
+    <div
+      class="actions"
+      part="toolbar-group"
+    >
+      <slot name="toolbar-actions">
+      </slot>
+    </div>
   </div>
-  <div part="toolbar-group">
-    <slot name="toolbar-zoom">
+  <div
+    aria-label="Find in document"
+    hidden=""
+    part="find-bar"
+    role="search"
+  >
+    <slot name="find">
     </slot>
-  </div>
-  <div part="toolbar-group">
-    <slot name="toolbar-actions">
-    </slot>
+    <div class="find-actions">
+      <slot name="find-actions">
+      </slot>
+    </div>
   </div>
 </div>
-<div
-  aria-label="Find in document"
-  hidden=""
-  part="find-bar"
-  role="search"
->
-  <slot name="find">
-  </slot>
-  <div class="find-actions">
-    <slot name="find-actions">
-    </slot>
-  </div>
-</div>
-<slot name="toolbar-tooltip">
-</slot>
 <div part="loader">
 </div>
 <div class="main">
@@ -975,43 +1341,64 @@ snapshots["vaadin-pdf-viewer shadow default"] =
 /* end snapshot vaadin-pdf-viewer shadow default */
 
 snapshots["vaadin-pdf-viewer shadow document"] = 
-`<div
-  aria-label="PDF toolbar"
-  part="toolbar"
-  role="toolbar"
->
-  <div part="toolbar-group">
-    <slot name="toolbar-start">
-    </slot>
+`<div class="header">
+  <div
+    dir="auto"
+    hidden=""
+    part="file-name"
+    title="multi-page.pdf"
+  >
+    multi-page.pdf
   </div>
-  <div part="toolbar-group">
-    <slot name="toolbar-navigation">
-    </slot>
+  <div
+    aria-label="PDF toolbar"
+    part="toolbar"
+    role="toolbar"
+  >
+    <div
+      class="navigation"
+      part="toolbar-group"
+    >
+      <slot name="toolbar-navigation">
+      </slot>
+      <div part="page-controls">
+        <slot name="toolbar-page">
+        </slot>
+      </div>
+      <slot name="page-error">
+      </slot>
+    </div>
+    <div
+      class="viewing"
+      part="toolbar-group"
+    >
+      <div part="zoom-controls">
+        <slot name="toolbar-zoom">
+        </slot>
+      </div>
+    </div>
+    <div
+      class="actions"
+      part="toolbar-group"
+    >
+      <slot name="toolbar-actions">
+      </slot>
+    </div>
   </div>
-  <div part="toolbar-group">
-    <slot name="toolbar-zoom">
+  <div
+    aria-label="Find in document"
+    hidden=""
+    part="find-bar"
+    role="search"
+  >
+    <slot name="find">
     </slot>
-  </div>
-  <div part="toolbar-group">
-    <slot name="toolbar-actions">
-    </slot>
+    <div class="find-actions">
+      <slot name="find-actions">
+      </slot>
+    </div>
   </div>
 </div>
-<div
-  aria-label="Find in document"
-  hidden=""
-  part="find-bar"
-  role="search"
->
-  <slot name="find">
-  </slot>
-  <div class="find-actions">
-    <slot name="find-actions">
-    </slot>
-  </div>
-</div>
-<slot name="toolbar-tooltip">
-</slot>
 <div part="loader">
 </div>
 <div class="main">
@@ -1206,43 +1593,64 @@ snapshots["vaadin-pdf-viewer shadow document"] =
 /* end snapshot vaadin-pdf-viewer shadow document */
 
 snapshots["vaadin-pdf-viewer shadow error"] = 
-`<div
-  aria-label="PDF toolbar"
-  part="toolbar"
-  role="toolbar"
->
-  <div part="toolbar-group">
-    <slot name="toolbar-start">
-    </slot>
+`<div class="header">
+  <div
+    dir="auto"
+    hidden=""
+    part="file-name"
+    title="invalid.pdf"
+  >
+    invalid.pdf
   </div>
-  <div part="toolbar-group">
-    <slot name="toolbar-navigation">
-    </slot>
+  <div
+    aria-label="PDF toolbar"
+    part="toolbar"
+    role="toolbar"
+  >
+    <div
+      class="navigation"
+      part="toolbar-group"
+    >
+      <slot name="toolbar-navigation">
+      </slot>
+      <div part="page-controls disabled">
+        <slot name="toolbar-page">
+        </slot>
+      </div>
+      <slot name="page-error">
+      </slot>
+    </div>
+    <div
+      class="viewing"
+      part="toolbar-group"
+    >
+      <div part="zoom-controls disabled">
+        <slot name="toolbar-zoom">
+        </slot>
+      </div>
+    </div>
+    <div
+      class="actions"
+      part="toolbar-group"
+    >
+      <slot name="toolbar-actions">
+      </slot>
+    </div>
   </div>
-  <div part="toolbar-group">
-    <slot name="toolbar-zoom">
+  <div
+    aria-label="Find in document"
+    hidden=""
+    part="find-bar"
+    role="search"
+  >
+    <slot name="find">
     </slot>
-  </div>
-  <div part="toolbar-group">
-    <slot name="toolbar-actions">
-    </slot>
+    <div class="find-actions">
+      <slot name="find-actions">
+      </slot>
+    </div>
   </div>
 </div>
-<div
-  aria-label="Find in document"
-  hidden=""
-  part="find-bar"
-  role="search"
->
-  <slot name="find">
-  </slot>
-  <div class="find-actions">
-    <slot name="find-actions">
-    </slot>
-  </div>
-</div>
-<slot name="toolbar-tooltip">
-</slot>
 <div part="loader">
 </div>
 <div class="main">

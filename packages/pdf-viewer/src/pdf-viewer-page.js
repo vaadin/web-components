@@ -17,6 +17,23 @@ import { createStructTreeElement } from './pdf-viewer-struct-tree.js';
  */
 export const MAX_CANVAS_PIXELS = 2 ** 24;
 
+/** Finds the words of the text of a page, e.g. the text of a link. */
+const wordSegmenter = new Intl.Segmenter(undefined, { granularity: 'word' });
+
+/**
+ * Creates an element with text for assistive technology only. The text is
+ * generated content, see the styles, so that it is not selected, copied or
+ * found with the text of the page.
+ * @param {string} text
+ * @return {HTMLElement}
+ */
+function createAssistiveText(text) {
+  const element = document.createElement('span');
+  element.className = 'link-text';
+  element.dataset.text = text;
+  return element;
+}
+
 /**
  * Manages the DOM of a single page of the document: a placeholder sized to
  * the page, and the canvas the page is rendered to once it is needed.
@@ -97,10 +114,9 @@ export class PdfViewerPage {
   }
 
   /**
-   * Sets the loaded page. Returns whether the page size differs from the estimate.
+   * Sets the loaded page, and its own size instead of the estimate.
    *
    * @param {import('pdfjs-dist').PDFPageProxy} pdfPage
-   * @return {boolean}
    */
   setPdfPage(pdfPage) {
     this.pdfPage = pdfPage;
@@ -108,14 +124,13 @@ export class PdfViewerPage {
     this.userUnit = userUnit;
     this.#updateTextScale();
     if (width === this.unscaledWidth && height === this.unscaledHeight) {
-      return false;
+      return;
     }
     this.unscaledWidth = width;
     this.unscaledHeight = height;
     // The canvas has the wrong aspect ratio now, render it again.
     this.cancel();
     this.renderedScale = 0;
-    return true;
   }
 
   /**
@@ -309,22 +324,107 @@ export class PdfViewerPage {
   }
 
   /**
-   * Returns the elements of the text layer that are inside the given element,
-   * e.g. the text of a link.
+   * Returns the text of the text layer that is inside the given element, e.g.
+   * the text of a link, as the text layer elements with the offsets of their
+   * words whose center is inside the element. Whole words are used, as the
+   * text layer only places each element exactly, not each of its characters.
    *
    * @param {Element} element
-   * @return {HTMLElement[]}
+   * @return {Array<{ element: HTMLElement, start: number, end: number }>}
    */
-  getTextElementsInside(element) {
+  getTextInside(element) {
     if (!this.textLayer) {
       return [];
     }
     const rect = element.getBoundingClientRect();
-    return this.textLayer.textDivs.filter((span) => {
+    const isInside = (wordRect) => {
+      const x = wordRect.left + wordRect.width / 2;
+      const y = wordRect.top + wordRect.height / 2;
+      return x >= rect.left && x <= rect.right && y >= rect.top && y <= rect.bottom;
+    };
+    const parts = [];
+    const range = document.createRange();
+    this.textLayer.textDivs.forEach((span) => {
+      const textNode = span.firstChild;
       const spanRect = span.getBoundingClientRect();
-      const x = spanRect.left + spanRect.width / 2;
-      const y = spanRect.top + spanRect.height / 2;
-      return span.textContent.trim() && x >= rect.left && x <= rect.right && y >= rect.top && y <= rect.bottom;
+      const overlaps =
+        spanRect.left <= rect.right &&
+        spanRect.right >= rect.left &&
+        spanRect.top <= rect.bottom &&
+        spanRect.bottom >= rect.top;
+      if (!textNode || !overlaps) {
+        return;
+      }
+      // The words inside a link are next to each other, as a link is a rectangle.
+      let start = -1;
+      let end = -1;
+      // Words as the browser finds them, also in languages without spaces, without punctuation.
+      for (const word of wordSegmenter.segment(textNode.data)) {
+        if (!word.isWordLike) {
+          continue;
+        }
+        range.setStart(textNode, word.index);
+        range.setEnd(textNode, word.index + word.segment.length);
+        if (isInside(range.getBoundingClientRect())) {
+          start = start < 0 ? word.index : start;
+          end = word.index + word.segment.length;
+        }
+      }
+      if (start >= 0) {
+        parts.push({ element: span, start, end });
+      }
+    });
+    return parts;
+  }
+
+  /**
+   * Moves links into the text layer, next to the text they cover, so that
+   * assistive technology reads each link once, in reading order. The text
+   * layer elements with links stay for selecting and finding text, but are
+   * hidden from assistive technology. Their text outside the links is added
+   * next to the links, for assistive technology only. A link that covers the
+   * text of several elements is placed with the first one.
+   *
+   * @param {Array<{ link: HTMLElement, parts: Array<{ element: HTMLElement, start: number, end: number }> }>} links
+   *   the links with the text they cover, see `getTextInside()`
+   */
+  placeLinks(links) {
+    const partsByElement = new Map();
+    links.forEach(({ link, parts }) => {
+      parts.forEach((part) => {
+        if (!partsByElement.has(part.element)) {
+          partsByElement.set(part.element, []);
+        }
+        partsByElement.get(part.element).push({ ...part, link });
+      });
+    });
+
+    const placedLinks = new Set();
+    this.textLayer.textDivs.forEach((element) => {
+      const parts = partsByElement.get(element);
+      if (!parts) {
+        return;
+      }
+      parts.sort((a, b) => a.start - b.start);
+      const text = element.firstChild.data;
+      const nodes = [];
+      let offset = 0;
+      parts.forEach(({ start, end, link }) => {
+        nodes.push(text.slice(offset, start));
+        if (!placedLinks.has(link)) {
+          placedLinks.add(link);
+          nodes.push(link);
+        }
+        offset = Math.max(offset, end);
+      });
+      nodes.push(text.slice(offset));
+
+      element.setAttribute('aria-hidden', 'true');
+      element.after(
+        ...nodes
+          .filter((node) => typeof node !== 'string' || node.trim())
+          .map((node) => (typeof node === 'string' ? createAssistiveText(node) : node)),
+      );
     });
   }
 

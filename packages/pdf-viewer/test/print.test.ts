@@ -94,6 +94,48 @@ describe('download and print', () => {
       const link = await download();
       expect(link.download).to.equal('report.pdf');
     });
+
+    describe('while reading the file', () => {
+      let original: ArrayBuffer;
+      let release: () => void;
+
+      beforeEach(async () => {
+        original = await fetch(fixtureUrl('multi-page.pdf')).then((response) => response.arrayBuffer());
+        // Delay the bytes of the document until released, then return them, also when it is unloaded meanwhile.
+        const pdfDocument = (viewer as any)._pdfDocument;
+        const data = await pdfDocument.getData();
+        const released = new Promise<void>((resolve) => {
+          release = resolve;
+        });
+        sinon.stub(pdfDocument, 'getData').callsFake(async () => {
+          await released;
+          return data;
+        });
+      });
+
+      async function expectDownload(fileName: string) {
+        for (let i = 0; i < 50 && !link; i++) {
+          await nextFrame();
+        }
+        expect(link!.download).to.equal(fileName);
+        const downloaded = await fetch(link!.href).then((response) => response.arrayBuffer());
+        expect(new Uint8Array(downloaded)).to.deep.equal(new Uint8Array(original));
+      }
+
+      it('should download the file with its own name when another document loads', async () => {
+        getButton('download').click();
+        await loadDocument(viewer, 'links.pdf');
+        release();
+        await expectDownload('multi-page.pdf');
+      });
+
+      it('should download the file with the name from when the download started', async () => {
+        getButton('download').click();
+        viewer.fileName = 'other.pdf';
+        release();
+        await expectDownload('multi-page.pdf');
+      });
+    });
   });
 
   describe('print', () => {

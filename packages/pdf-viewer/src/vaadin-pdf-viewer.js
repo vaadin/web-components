@@ -35,6 +35,7 @@ const DEFAULT_I18N = {
   nextPage: 'Next page',
   page: 'Page',
   pageOf: 'Page of {pageCount}',
+  pageError: 'Enter 1–{pageCount}',
   pageAnnouncement: 'Page {page} of {pageCount}',
   zoom: 'Zoom',
   zoomIn: 'Zoom in',
@@ -68,6 +69,11 @@ const DEFAULT_I18N = {
  * <vaadin-pdf-viewer src="/files/report.pdf"></vaadin-pdf-viewer>
  * ```
  *
+ * On devices whose main pointer is touch, users zoom the pages by pinching and move between
+ * pages by scrolling, like in other PDF viewers on phones, so the toolbar does not show the zoom
+ * select and the page controls. The zoom in and zoom out buttons stay, for zooming without
+ * two fingers. Keyboard shortcuts for zooming keep working.
+ *
  * ### Styling
  *
  * The following shadow DOM parts are available for styling:
@@ -75,7 +81,10 @@ const DEFAULT_I18N = {
  * Part name              | Description
  * -----------------------|------------
  * `toolbar`              | The toolbar above the pages.
- * `toolbar-group`        | A group of related controls in the toolbar.
+ * `file-name`            | The name of the document above the toolbar, see `fileNameVisible`.
+ * `toolbar-group`        | A group of related controls in the toolbar: navigation, viewing options and actions.
+ * `page-controls`        | The page number field with the previous and next page buttons. Also has the `invalid` part name while the entered page does not exist, and the `disabled` part name without a document.
+ * `zoom-controls`        | The zoom select with the zoom out and zoom in buttons. Also has the `disabled` part name without a document.
  * `find-bar`             | The bar with the controls for finding text, below the toolbar.
  * `sidebar`              | The sidebar next to the pages.
  * `thumbnails`           | The scrollable list of page thumbnails in the sidebar.
@@ -221,6 +230,9 @@ class PdfViewer extends PdfViewerToolbarMixin(
    *   // {pageCount} is replaced with the number of pages.
    *   page: 'Page',
    *   pageOf: 'Page of {pageCount}',
+   *   // Error message of the page number field for a page that does not exist.
+   *   // {pageCount} is replaced with the number of pages.
+   *   pageError: 'Enter 1–{pageCount}',
    *   // Announced when a toolbar control changes the page.
    *   // {page} and {pageCount} are replaced with the page number and the number of pages.
    *   pageAnnouncement: 'Page {page} of {pageCount}',
@@ -279,21 +291,39 @@ class PdfViewer extends PdfViewerToolbarMixin(
     super.i18n = value;
   }
 
-  /** @protected */
+  /**
+   * Override method from `LitElement` to render the toolbar, the sidebar and the pages area.
+   * @protected
+   * @override
+   */
   render() {
     const i18n = this.__effectiveI18n;
+    const hasInvalidPage = this.__invalidPageEntry !== null;
+    const disabled = this.pageCount ? '' : ' disabled';
+    const documentName = this._getDocumentName() || i18n.document;
     return html`
-      <div part="toolbar" role="toolbar" aria-label="${i18n.toolbar}">
-        <div part="toolbar-group"><slot name="toolbar-start"></slot></div>
-        <div part="toolbar-group"><slot name="toolbar-navigation"></slot></div>
-        <div part="toolbar-group"><slot name="toolbar-zoom"></slot></div>
-        <div part="toolbar-group"><slot name="toolbar-actions"></slot></div>
+      <div class="header">
+        <div part="file-name" dir="auto" title="${documentName}" ?hidden="${!this.fileNameVisible || !this.pageCount}">
+          ${documentName}
+        </div>
+        <div part="toolbar" role="toolbar" aria-label="${i18n.toolbar}">
+          <div part="toolbar-group" class="navigation">
+            <slot name="toolbar-navigation"></slot>
+            <div part="${hasInvalidPage ? 'page-controls invalid' : `page-controls${disabled}`}">
+              <slot name="toolbar-page"></slot>
+            </div>
+            <slot name="page-error"></slot>
+          </div>
+          <div part="toolbar-group" class="viewing">
+            <div part="${`zoom-controls${disabled}`}"><slot name="toolbar-zoom"></slot></div>
+          </div>
+          <div part="toolbar-group" class="actions"><slot name="toolbar-actions"></slot></div>
+        </div>
+        <div part="find-bar" role="search" aria-label="${i18n.find}" ?hidden="${!this.__findOpened}">
+          <slot name="find"></slot>
+          <div class="find-actions"><slot name="find-actions"></slot></div>
+        </div>
       </div>
-      <div part="find-bar" role="search" aria-label="${i18n.find}" ?hidden="${!this.__findOpened}">
-        <slot name="find"></slot>
-        <div class="find-actions"><slot name="find-actions"></slot></div>
-      </div>
-      <slot name="toolbar-tooltip"></slot>
       <div part="loader"></div>
       <div class="main">
         <div part="sidebar" ?hidden="${!this.sidebarOpened}">

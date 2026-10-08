@@ -175,6 +175,21 @@ describe('outline', () => {
         expect(viewer.page).to.equal(3);
       });
 
+      it('should scroll to the position of the destination of an item', async () => {
+        getItem('Chapter 1').querySelector<HTMLElement>('[part~="outline-toggle"]')!.click();
+        await nextRender();
+        getItem('Section 1.2').querySelector<HTMLElement>('[part="outline-item-title"]')!.click();
+        await nextRenderIdle(viewer);
+        const content = viewer.shadowRoot!.querySelector<HTMLElement>('[part="content"]')!;
+        const heading = [...viewer.shadowRoot!.querySelectorAll('.text-layer span:not(.markedContent)')].find(
+          (span) => span.textContent === 'Section 1.2',
+        )!;
+        // The destination is the top of the heading, which is in the middle of the page
+        const offset = heading.getBoundingClientRect().top - content.getBoundingClientRect().top;
+        expect(content.scrollTop).to.be.greaterThan(0);
+        expect(offset).to.be.within(-10, 40);
+      });
+
       describe('keyboard', () => {
         beforeEach(() => {
           getItem('Chapter 1').focus();

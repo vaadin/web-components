@@ -258,4 +258,83 @@ describe('sidebar', () => {
       expect(getThumbnails()[0].querySelector('canvas')).to.be.null;
     });
   });
+
+  describe('outdated thumbnails', () => {
+    /**
+     * Makes the document wait with returning the first page until the returned
+     * function is called. The page is loaded already, so that it is returned
+     * also when the document has been unloaded meanwhile.
+     */
+    async function delayFirstPage() {
+      const pdfDocument = (viewer as any)._pdfDocument;
+      const getPage = pdfDocument.getPage.bind(pdfDocument);
+      const firstPage = await getPage(1);
+      let release!: () => void;
+      const released = new Promise<void>((resolve) => {
+        release = resolve;
+      });
+      const stub = sinon.stub(pdfDocument, 'getPage').callsFake(async (pageNumber: unknown) => {
+        if (pageNumber === 1) {
+          await released;
+          return firstPage;
+        }
+        return getPage(pageNumber);
+      });
+      return { stub, release };
+    }
+
+    it('should render the thumbnails of a new document after an outdated thumbnail finishes', async () => {
+      const { stub, release } = await delayFirstPage();
+      viewer.sidebarOpened = true;
+      for (let i = 0; i < 50 && !stub.calledWith(1); i++) {
+        await nextFrame();
+      }
+      expect(stub).to.be.calledWith(1);
+
+      const idle = nextRenderIdle(viewer);
+      await loadDocument(viewer, 'links.pdf');
+      await idle;
+      await nextRender();
+      release();
+      await waitForThumbnail(4);
+      expect(getThumbnails().map((thumbnail) => !!thumbnail.querySelector('canvas'))).to.deep.equal([
+        true,
+        true,
+        true,
+        true,
+      ]);
+    });
+
+    it('should render other thumbnails after one that was scrolled away from finishes', async () => {
+      const url = createPdfUrl(100);
+      try {
+        const idle = nextRenderIdle(viewer);
+        viewer.src = url;
+        await idle;
+        const { stub, release } = await delayFirstPage();
+        viewer.sidebarOpened = true;
+        for (let i = 0; i < 50 && !stub.calledWith(1); i++) {
+          await nextFrame();
+        }
+        expect(stub).to.be.calledWith(1);
+
+        getList().scrollTop = getList().scrollHeight / 2;
+        // Let the thumbnails that became visible wait for the outdated one.
+        for (let i = 0; i < 5; i++) {
+          await nextFrame();
+        }
+        release();
+        const visible = getThumbnails().find((thumbnail) => {
+          const rect = thumbnail.getBoundingClientRect();
+          const list = getList().getBoundingClientRect();
+          return rect.top >= list.top && rect.bottom <= list.bottom;
+        })!;
+        await waitForThumbnail(Number(visible.dataset.page));
+        expect(visible.querySelector('canvas')).to.be.ok;
+        expect(getThumbnails()[0].querySelector('canvas')).to.be.null;
+      } finally {
+        URL.revokeObjectURL(url);
+      }
+    });
+  });
 });
