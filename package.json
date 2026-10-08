@@ -6,7 +6,7 @@
   "scripts": {
     "api-docs:build": "yarn release:cem && yarn workspace api-docs generate ../custom-elements.json && yarn workspace api-docs build",
     "api-docs:start": "yarn release:cem && yarn workspace api-docs generate ../custom-elements.json && yarn workspace api-docs start",
-    "build:react": "yarn release:cem && yarn release:web-types && yarn release:react",
+    "build:react": "yarn release:cem && yarn release:react",
     "clean:react": "yarn workspace @vaadin/react-components clean && yarn workspace @vaadin/react-components-pro clean",
     "debug": "yarn test --watch",
     "debug:it": "yarn test --watch --config web-test-runner-it.config.js",

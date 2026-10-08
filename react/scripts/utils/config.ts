@@ -17,7 +17,6 @@ export const srcDir = resolve(packageDir, 'src');
 export const generatedDir = resolve(srcDir, 'generated');
 export const utilsDir = resolve(srcDir, 'utils');
 export const nodeModulesDir = resolve(rootDir, 'node_modules');
-export const typesDir = resolve(rootDir, 'react/scripts/types');
 
 export const packageURL = pathToFileURL(`${packageDir}/`);
 export const srcURL = pathToFileURL(`${srcDir}/`);
