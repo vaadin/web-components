@@ -2,7 +2,7 @@ import { build, type Plugin } from 'esbuild';
 import { glob } from 'glob';
 import { execFileSync } from 'node:child_process';
 import { existsSync } from 'node:fs';
-import { copyFile, mkdir, readdir, readFile, writeFile } from 'node:fs/promises';
+import { copyFile, mkdir, readdir, readFile, rm, writeFile } from 'node:fs/promises';
 import { basename, dirname, extname, join, resolve } from 'node:path';
 import { fileURLToPath } from 'node:url';
 import { generate } from './generator.js';
@@ -49,7 +49,7 @@ const fixImports: Plugin = {
     });
 
     // Workaround for https://github.com/evanw/esbuild/issues/1433
-    build.onLoad({ filter: /src[\/\\][A-Za-z_-]+\.tsx?$/ }, async ({ path }) => {
+    build.onLoad({ filter: /src[/\\][A-Za-z_-]+\.tsx?$/ }, async ({ path }) => {
       const result = basename(path, extname(path));
       const [contents, generatedContents] = await Promise.all([
         readFile(path, 'utf8'),
@@ -65,7 +65,7 @@ const fixImports: Plugin = {
     });
 
     // Workaround for https://github.com/evanw/esbuild/issues/1433
-    build.onLoad({ filter: /src[\/\\]generated[\/\\][A-Za-z_-]+\.ts$/ }, async ({ path }) => {
+    build.onLoad({ filter: /src[/\\]generated[/\\][A-Za-z_-]+\.ts$/ }, async ({ path }) => {
       return {
         contents: (await readFile(path, 'utf8'))
           .split('\n')
@@ -167,7 +167,7 @@ async function updateExports() {
   const collator = new Intl.Collator('en', { sensitivity: 'base' });
   const moduleNames = await listModuleNames(srcDir);
   const sortedEntries = (paths: string[]) =>
-    Object.fromEntries(paths.sort(collator.compare).map((path) => [path, path]));
+    Object.fromEntries([...paths].sort(collator.compare).map((path) => [path, path]));
 
   const [cssFiles, utilsFiles, renderersFiles] = await Promise.all([
     listOutputFiles('css', '*/*'),
@@ -199,6 +199,13 @@ async function updateExports() {
   await writeFile(packageJsonPath, `${JSON.stringify(packageJson, null, 2)}\n`, 'utf8');
 }
 
+/** Removes previous build output so that renamed or deleted sources do not linger in the package. */
+async function clean() {
+  const outputs = await glob(['*.{js,d.ts,map}', 'generated', 'utils', 'renderers', 'css'], { cwd: packageDir });
+  await Promise.all(outputs.map((output) => rm(resolve(packageDir, output), { recursive: true, force: true })));
+}
+
+await clean();
 await generate();
 if (basename(packageDir) === 'react-components') {
   await generateCss();

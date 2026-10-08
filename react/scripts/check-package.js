@@ -1,14 +1,18 @@
-// Usage: node react/scripts/check-package.js <package dir>
+// Usage: node react/scripts/check-package.js packages/<package>
 import { execFileSync } from 'node:child_process';
 import { existsSync, readdirSync, readFileSync } from 'node:fs';
-import { dirname, join, resolve } from 'node:path';
+import { basename, dirname, join, resolve } from 'node:path';
+import { fileURLToPath } from 'node:url';
 
-const dir = resolve(process.argv[2] ?? '.');
+// Only packages of this repo can be checked, so the argument is reduced to a package name.
+const packagesDir = resolve(dirname(fileURLToPath(import.meta.url)), '../../packages');
+const dir = join(packagesDir, basename(process.argv[2] ?? ''));
 const pkg = JSON.parse(readFileSync(join(dir, 'package.json'), 'utf8'));
 const errors = [];
 
 const leaves = (value) => (typeof value === 'string' ? [value] : Object.values(value ?? {}).flatMap(leaves));
 const exportKeys = Object.keys(pkg.exports ?? {}).filter((key) => !key.includes('*'));
+if (exportKeys.length === 0) errors.push('exports: empty');
 for (const key of exportKeys) {
   for (const target of leaves(pkg.exports[key])) {
     if (!existsSync(join(dir, target))) errors.push(`exports["${key}"] -> ${target}: missing`);
@@ -17,7 +21,7 @@ for (const key of exportKeys) {
 
 if (!existsSync(join(dir, 'index.js'))) errors.push('index.js: missing');
 
-const specifierPattern = /(?:\bfrom|\bimport)\s*\(?\s*['"](\.\.?\/[^'"]+)['"]/gu;
+const specifierPattern = /\b(?:from|import)\s*(?:\(\s*)?['"](\.\.?\/[^'"]+)['"]/gu;
 const files = [
   ...readdirSync(dir).filter((file) => /\.(js|d\.ts)$/u.test(file)),
   ...['generated', 'utils', 'renderers']
@@ -38,7 +42,7 @@ const toRegExp = (pattern) => {
   const source = pattern
     .replace(/^\.?\//u, '')
     .replace(/\/$/u, '')
-    .replace(/[.+^${}()|[\]\\]/gu, '\\$&')
+    .replace(/[.+^${}()|[\]\\]/gu, String.raw`\$&`)
     .replace(/\*\*\/|\*\*|\*|\?/gu, (m) => ({ '**/': '(?:.*/)?', '**': '.*', '*': '[^/]*', '?': '[^/]' })[m]);
   return new RegExp(`^${source}(?:/.*)?$`, 'u');
 };
@@ -46,12 +50,19 @@ const included = [...(pkg.files ?? []), 'package.json', 'README.md', 'LICENSE'].
 const [{ files: packed }] = JSON.parse(
   execFileSync('npm', ['pack', '--dry-run', '--json', '--ignore-scripts'], { cwd: dir, encoding: 'utf8' }),
 );
-for (const { path } of packed) {
+const packedPaths = new Set(packed.map(({ path }) => path));
+for (const path of packedPaths) {
   if (!included.some((regExp) => regExp.test(path))) errors.push(`packed file not matched by "files": ${path}`);
+}
+for (const key of exportKeys) {
+  for (const target of leaves(pkg.exports[key])) {
+    if (!packedPaths.has(target.replace(/^\.\//u, ''))) errors.push(`exports["${key}"] -> ${target}: not packed`);
+  }
 }
 
 if (errors.length > 0) {
-  console.error(`FAIL ${pkg.name}\n${errors.map((error) => `  ${error}`).join('\n')}`);
+  const list = errors.map((error) => `  ${error}`).join('\n');
+  console.error(`FAIL ${pkg.name}\n${list}`);
   process.exit(1);
 }
 console.log(`OK ${pkg.name} (${exportKeys.length} exports, ${packed.length} files)`);

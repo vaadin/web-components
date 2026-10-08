@@ -14,8 +14,8 @@ export async function loadDescriptions(): Promise<readonly JSONSchemaForWebTypes
       try {
         const contents = await readFile(resolve(webComponentsDir, dir, 'web-types.json'), 'utf8');
         return JSON.parse(contents) as JSONSchemaForWebTypes;
-      } catch (_) {
-        // ignore file that doesn't exist
+      } catch {
+        // Packages without web-types.json are skipped.
         return undefined;
       }
     }),

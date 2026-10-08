@@ -58,20 +58,18 @@ function createGenerics({ numberOfGenerics, typeConstraints, nonGenericInterface
 async function prepareElementFiles(dependencies: readonly string[]): Promise<ElementData[]> {
   const descriptions = await loadDescriptions();
 
-  const elements = await Promise.all(
-    Array.from(extractElementsFromDescriptions(descriptions), async ([packageName, element]) => {
-      if (!element.name) {
-        throw new ElementNameMissingError(packageName);
-      }
+  const elements = Array.from(extractElementsFromDescriptions(descriptions), ([packageName, element]) => {
+    if (!element.name) {
+      throw new ElementNameMissingError(packageName);
+    }
 
-      if (!dependencies.includes(packageName)) {
-        return undefined;
-      }
+    if (!dependencies.includes(packageName)) {
+      return undefined;
+    }
 
-      const path = await search(element.name, resolve(nodeModulesDir, packageName));
-      return path ? { element, packageName, path } : undefined;
-    }),
-  );
+    const path = search(element.name, resolve(nodeModulesDir, packageName));
+    return path ? { element, packageName, path } : undefined;
+  });
 
   return elements.filter((data): data is ElementData => data != null);
 }

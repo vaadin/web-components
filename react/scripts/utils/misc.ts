@@ -1,5 +1,5 @@
 import { glob } from 'glob';
-import { existsSync } from 'node:fs';
+import { statSync } from 'node:fs';
 import { join } from 'node:path';
 import type { GenericJsContribution } from '../types/schema.js';
 import { elementsWithMissingEntrypoint, elementToClassNamingConventionViolations } from './settings.js';
@@ -35,14 +35,14 @@ export function convertElementNameToClassName(elementName: string): string {
   return conventionalClassName;
 }
 
-export async function search(elementName: string, dir: string): Promise<string | undefined> {
+export function search(elementName: string, dir: string): string | undefined {
   if (elementsWithMissingEntrypoint.has(elementName)) {
     dir = join(dir, 'src');
   }
 
   // Only the package root: `src/<tag>.js` modules are not public entrypoints.
   const path = join(dir, `${elementName}.js`);
-  return existsSync(path) ? path : undefined;
+  return statSync(path, { throwIfNoEntry: false })?.isFile() ? path : undefined;
 }
 
 export function createImportPath(link: string, local: boolean): string {
