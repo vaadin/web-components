@@ -319,6 +319,10 @@
       "types": "./Markdown.d.ts",
       "default": "./Markdown.js"
     },
+    "./MasterDetailLayout.js": {
+      "types": "./MasterDetailLayout.d.ts",
+      "default": "./MasterDetailLayout.js"
+    },
     "./MenuBar.js": {
       "types": "./MenuBar.d.ts",
       "default": "./MenuBar.js"
@@ -415,6 +419,10 @@
       "types": "./Tabs.d.ts",
       "default": "./Tabs.js"
     },
+    "./TabSheet.js": {
+      "types": "./TabSheet.d.ts",
+      "default": "./TabSheet.js"
+    },
     "./TextArea.js": {
       "types": "./TextArea.d.ts",
       "default": "./TextArea.js"
@@ -503,6 +511,7 @@
     "./LoginForm": "./LoginForm.js",
     "./LoginOverlay": "./LoginOverlay.js",
     "./Markdown": "./Markdown.js",
+    "./MasterDetailLayout": "./MasterDetailLayout.js",
     "./MenuBar": "./MenuBar.js",
     "./Message": "./Message.js",
     "./MessageInput": "./MessageInput.js",
@@ -527,6 +536,7 @@
     "./Switch": "./Switch.js",
     "./Tab": "./Tab.js",
     "./Tabs": "./Tabs.js",
+    "./TabSheet": "./TabSheet.js",
     "./TextArea": "./TextArea.js",
     "./TextField": "./TextField.js",
     "./TimePicker": "./TimePicker.js",

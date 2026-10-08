@@ -25,6 +25,8 @@ import { MenuBar, type MenuBarItem, type MenuBarItemSelectedEvent } from '../../
 import { MessageInput, type MessageInputElement, type MessageInputSubmitEvent } from '../../src/MessageInput.js';
 import { Notification, type NotificationElement } from '../../src/Notification.js';
 import { Popover, type PopoverElement } from '../../src/Popover.js';
+import type { TabElement } from '../../src/Tab.js';
+import { TabSheet, type TabSheetElement, TabSheetTab } from '../../src/TabSheet.js';
 import { TextArea, type TextAreaChangeEvent, type TextAreaElement } from '../../src/TextArea.js';
 import { TextField, type TextFieldElement } from '../../src/TextField.js';
 import { TimePicker, type TimePickerChangeEvent } from '../../src/TimePicker.js';
@@ -238,6 +240,24 @@ type PopoverProps = typeof popoverProps;
 assertOmitted<HTMLAttributes<PopoverElement>, PopoverProps>('style');
 assertOmitted<HTMLAttributes<PopoverElement>, PopoverProps>('contentEditable');
 assertOmitted<HTMLAttributes<PopoverElement>, PopoverProps>('onClick');
+
+const tabSheetProps = React.createElement(TabSheet, {}).props;
+type TabSheetProps = typeof tabSheetProps;
+assertType<number | null | undefined>(tabSheetProps.selected);
+assertType<HTMLAttributes<TabSheetElement>['children']>(tabSheetProps.children);
+assertType<TabSheetElement['hidden'] | undefined>(tabSheetProps.hidden);
+assertType<HTMLAttributes<TabSheetElement>['aria-label']>(tabSheetProps['aria-label']);
+assertOmitted<TabSheetElement, TabSheetProps>('items');
+
+const tabSheetTabProps = React.createElement(TabSheetTab, {}).props;
+type TabSheetTabProps = typeof tabSheetTabProps;
+assertType<ReactNode>(tabSheetTabProps.label);
+assertType<ReactNode>(tabSheetTabProps.children);
+assertType<string | undefined>(tabSheetTabProps.id);
+assertType<string | undefined>(tabSheetTabProps['aria-label']);
+assertType<boolean | undefined>(tabSheetTabProps.disabled);
+assertOmitted<TabElement, TabSheetTabProps>('value');
+assertOmitted<TabElement, TabSheetTabProps>('selected');
 
 const markdownProps = React.createElement(Markdown, {}).props;
 type MarkdownProps = typeof markdownProps;
