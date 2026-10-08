@@ -193,6 +193,15 @@ export const monthCalendarStyles = css`
     );
   }
 
+  /*
+   * While editing an existing range, the date that a pick would set is hinted at
+   * with a dashed outline, and the range itself stays as it is.
+   */
+  [part~='range-hint']:not(:focus-visible)::after {
+    outline: 1px dashed var(--vaadin-date-picker-date-selected-background, var(--vaadin-text-color));
+    outline-offset: -1px;
+  }
+
   [disabled] {
     cursor: var(--vaadin-disabled-cursor);
     color: var(--vaadin-date-picker-date-disabled-color, var(--vaadin-text-color-disabled));

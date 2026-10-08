@@ -117,29 +117,20 @@ describe('date-range-picker', () => {
       expect(document.activeElement).to.equal(endInput);
     });
 
-    it('should not mark the previous end while previewing a new end', async () => {
-      await openFrom(endInput);
-      await sendMouseToElement({ type: 'move', element: getCell(20) });
-      expect(getParts(20)).to.include.members(['range-end', 'selected']);
-      expect(getParts(15)).to.not.include.members(['range-end']);
-      expect(getParts(15)).to.not.include('selected');
-    });
-
-    it('should not mark the previous start while previewing a new start', async () => {
-      await openFrom(startInput);
-      await sendMouseToElement({ type: 'move', element: getCell(12) });
-      expect(getParts(12)).to.include.members(['range-start', 'selected']);
-      expect(getParts(15)).to.include('range-end');
-      expect(getParts(10)).to.not.include('range-start');
-      expect(getParts(10)).to.not.include('selected');
-    });
-
-    it('should preview a new start after the end as the start of a new range', async () => {
-      await openFrom(startInput);
-      await sendMouseToElement({ type: 'move', element: getCell(20) });
-      expect(getParts(20)).to.include('range-start');
-      expect(getParts(10)).to.not.include('range-start');
-      expect(getParts(15)).to.not.include('range-end');
+    [
+      { from: 'end', day: 20 },
+      { from: 'end', day: 5 },
+      { from: 'start', day: 12 },
+      { from: 'start', day: 20 },
+    ].forEach(({ from, day }) => {
+      it(`should keep the range on display and hint at ${day} when hovering it from the ${from} input`, async () => {
+        await openFrom(from === 'start' ? startInput : endInput);
+        await sendMouseToElement({ type: 'move', element: getCell(day) });
+        expect(getParts(day)).to.include('range-hint');
+        expect(getParts(day)).to.not.include.members(['range-start', 'range-end']);
+        expect(getParts(10)).to.include.members(['range-start', 'in-range']);
+        expect(getParts(15)).to.include.members(['range-end', 'in-range']);
+      });
     });
 
     it('should mark the end being edited, depending on the focused input', async () => {
@@ -151,22 +142,6 @@ describe('date-range-picker', () => {
       await untilOverlayRendered(picker);
       expect(getParts(10)).to.include('range-editing');
       expect(getParts(15)).to.not.include('range-editing');
-    });
-
-    it('should mark the previewed end as being edited', async () => {
-      await openFrom(endInput);
-      await sendMouseToElement({ type: 'move', element: getCell(20) });
-      expect(getParts(20)).to.include('range-editing');
-      expect(getParts(10)).to.not.include('range-editing');
-    });
-
-    it('should preview a date before the start as the start of a new range while picking the end', async () => {
-      await openFrom(endInput);
-      await sendMouseToElement({ type: 'move', element: getCell(5) });
-      expect(getParts(5)).to.include('range-start');
-      expect(getParts(10)).to.not.include('range-start');
-      expect(getParts(12)).to.not.include('in-range');
-      expect(getParts(15)).to.not.include('range-end');
     });
 
     it('should close and keep a picked start on Escape', async () => {

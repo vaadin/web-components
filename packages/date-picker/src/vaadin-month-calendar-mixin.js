@@ -74,6 +74,16 @@ export const MonthCalendarMixin = (superClass) =>
         },
 
         /**
+         * A `Date` object for the date that a pick would set, while the displayed range
+         * stays as it is. The date is marked with the `range-hint` part. Used by the
+         * date range picker.
+         */
+        rangeHint: {
+          type: Object,
+          sync: true,
+        },
+
+        /**
          * Set true to display ISO-8601 week numbers in the calendar. Notice that
          * displaying week numbers is only supported when `i18n.firstDayOfWeek`
          * is 1 (Monday).
@@ -410,6 +420,10 @@ export const MonthCalendarMixin = (superClass) =>
 
       if (this.__isRangeEditingDate(date)) {
         result.push('range-editing');
+      }
+
+      if (dateEquals(date, this.rangeHint)) {
+        result.push('range-hint');
       }
 
       if (this._isToday(date)) {

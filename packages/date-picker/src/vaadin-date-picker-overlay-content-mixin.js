@@ -558,7 +558,8 @@ export const DatePickerOverlayContentMixin = (superClass) =>
     }
 
     /**
-     * Range state: the selected range, or the previewed range while picking its end.
+     * Range state: the selected range, or the previewed range while picking its end,
+     * or the hinted date while editing an existing range.
      * @private
      */
     // eslint-disable-next-line @typescript-eslint/max-params
@@ -570,10 +571,16 @@ export const DatePickerOverlayContentMixin = (superClass) =>
       let displayedStart = rangeStart;
       let displayedEnd = rangeEnd;
       let editing = rangePreview;
+      let hint = null;
       const previewDate = hoveredDate || (calendarFocused ? focusedDate : null);
       const dragRange = this.__getDragRange();
       if (dragRange) {
         ({ start: displayedStart, end: displayedEnd, editing } = dragRange);
+      } else if (previewDate && rangePreview && rangeStart && rangeEnd) {
+        // When editing an existing range, it stays on display, and the date that a
+        // pick would set is only hinted at. The range is previewed while it is
+        // picked for the first time.
+        hint = previewDate;
       } else if (previewDate && rangePreview === 'end' && rangeStart && previewDate >= rangeStart) {
         displayedEnd = previewDate;
       } else if (previewDate && rangePreview === 'start' && rangeEnd && previewDate <= rangeEnd) {
@@ -592,6 +599,7 @@ export const DatePickerOverlayContentMixin = (superClass) =>
         calendar.rangeStart = displayedStart;
         calendar.rangeEnd = displayedEnd;
         calendar.rangeEditing = editing;
+        calendar.rangeHint = hint;
       });
     }
 
