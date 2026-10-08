@@ -59,6 +59,12 @@ Run TypeScript to check typings:
 yarn lint:types
 ```
 
+The React packages are excluded from the root type check. Check them after `yarn build:react`:
+
+```sh
+yarn lint:types:react
+```
+
 ## Testing
 
 ### Unit tests
@@ -186,6 +192,24 @@ Run integration tests that are in the separate `integration` folder:
 ```sh
 yarn test:it
 ```
+
+### React components
+
+The React wrappers live in `packages/react-components` and `packages/react-components-pro`.
+Their generated sources and build output are not committed, so build them once first:
+
+```sh
+yarn build:react
+```
+
+Then run the Vitest browser tests, or open the dev pages at `/dev/<name>.html`:
+
+```sh
+yarn test:react
+yarn start:react
+```
+
+See [react/README.md](react/README.md) for the generator, the build steps and how to add a dev page.
 
 ## Making a version bump
 
