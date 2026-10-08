@@ -275,6 +275,7 @@ export default [
       'react/no-array-index-key': 'off', // Static demo lists
       'react/jsx-no-useless-fragment': 'off', // Renderers in tests return text-only fragments
       '@typescript-eslint/no-unused-vars': 'off', // Typings tests declare unused values, specs destructure partially
+      '@typescript-eslint/no-namespace': 'off', // JSX.IntrinsicElements augmentation needs a nested namespace
     },
   },
 ];
