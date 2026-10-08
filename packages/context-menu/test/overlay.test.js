@@ -1,5 +1,5 @@
 import { expect } from '@vaadin/chai-plugins';
-import { esc, fire, fixtureSync, isIOS, nextFrame, nextRender, oneEvent } from '@vaadin/testing-helpers';
+import { esc, fire, fixtureSync, nextFrame, nextRender, oneEvent } from '@vaadin/testing-helpers';
 import sinon from 'sinon';
 import '../src/vaadin-context-menu.js';
 
@@ -106,9 +106,6 @@ describe('overlay', () => {
         before(async () => {
           isRTL = direction === 'rtl';
           document.documentElement.setAttribute('dir', direction);
-          if (isRTL) {
-            document.body.style.margin = 0;
-          }
           await nextFrame();
           viewWidth = document.documentElement.clientWidth;
         });
@@ -118,7 +115,6 @@ describe('overlay', () => {
           // is set to `rtl` and then removed
           if (isRTL) {
             document.documentElement.setAttribute('dir', 'ltr');
-            document.body.style.margin = null;
           }
         });
 
@@ -206,9 +202,6 @@ describe('overlay', () => {
         before(async () => {
           isRTL = direction === 'rtl';
           document.documentElement.setAttribute('dir', direction);
-          if (isRTL) {
-            document.body.style.margin = 0;
-          }
           await nextFrame();
           viewWidth = document.documentElement.clientWidth;
         });
@@ -218,7 +211,6 @@ describe('overlay', () => {
           // is set to `rtl` and then removed
           if (isRTL) {
             document.documentElement.setAttribute('dir', 'ltr');
-            document.body.style.margin = null;
           }
         });
 
@@ -294,21 +286,6 @@ describe('overlay', () => {
       it('should not prevent default of `contextmenu` event', () => {
         const event = contextmenu(0, 0, true);
         expect(event.defaultPrevented).to.not.eql(true);
-      });
-    });
-
-    (isIOS ? describe : describe.skip)('<vaadin-overlay> iOS viewport workaround (phone mode)', () => {
-      it('should have zero bottom by default', async () => {
-        contextmenu();
-        await oneEvent(overlay, 'vaadin-overlay-open');
-        expect(parseFloat(getComputedStyle(overlay).bottom)).to.equal(0);
-      });
-
-      it('should accept --vaadin-overlay-viewport-bottom CSS property', async () => {
-        contextmenu();
-        await oneEvent(overlay, 'vaadin-overlay-open');
-        overlay.style.setProperty('--vaadin-overlay-viewport-bottom', '50px');
-        expect(getComputedStyle(overlay).bottom).to.equal('50px');
       });
     });
   });
