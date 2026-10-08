@@ -16,7 +16,8 @@
     "directory": "packages/react-components"
   },
   "scripts": {
-    "build": "tsx ../../react/scripts/build.ts"
+    "build": "tsx ../../react/scripts/build.ts",
+    "clean": "tsx ../../react/scripts/build.ts --clean"
   },
   "dependencies": {
     "@lit/react": "^1.0.7",

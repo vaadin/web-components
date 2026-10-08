@@ -199,18 +199,23 @@ async function updateExports() {
   await writeFile(packageJsonPath, `${JSON.stringify(packageJson, null, 2)}\n`, 'utf8');
 }
 
-/** Removes previous build output so that renamed or deleted sources do not linger in the package. */
+/** Removes the generated sources and the build output, so that renamed or deleted sources do not linger. */
 async function clean() {
-  const outputs = await glob(['*.{js,d.ts,map}', 'generated', 'utils', 'renderers', 'css'], { cwd: packageDir });
+  const outputs = await glob(['*.{js,d.ts,map}', 'generated', 'utils', 'renderers', 'css', 'src/generated'], {
+    cwd: packageDir,
+  });
   await Promise.all(outputs.map((output) => rm(resolve(packageDir, output), { recursive: true, force: true })));
 }
 
+// Usage: tsx build.ts [--clean]
 await clean();
-await generate();
-if (basename(packageDir) === 'react-components') {
-  await generateCss();
+if (!process.argv.includes('--clean')) {
+  await generate();
+  if (basename(packageDir) === 'react-components') {
+    await generateCss();
+  }
+  await bundle();
+  emitDeclarations();
+  await copyDts();
+  await updateExports();
 }
-await bundle();
-emitDeclarations();
-await copyDts();
-await updateExports();
