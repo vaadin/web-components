@@ -69,3 +69,29 @@ jobs:
 
       - name: Test
         run: yarn test:webkit
+  react:
+    name: React
+    runs-on: ubuntu-latest
+    steps:
+      - uses: actions/checkout@v7
+
+      - name: Setup Node
+        uses: actions/setup-node@v6
+        with:
+          node-version: '24'
+          cache: 'yarn'
+
+      - name: Install Dependencies
+        run: yarn --frozen-lockfile --no-progress --non-interactive
+
+      - name: Build React packages
+        run: yarn release:react
+
+      - name: Lint TypeScript
+        run: yarn lint:types:react
+
+      - name: Check generated package.json is committed
+        run: git diff --exit-code packages/react-components*/package.json
+
+      - name: Check package integrity
+        run: node react/scripts/check-package.js

@@ -1,0 +1,30 @@
+{
+  "name": "react-components-tooling",
+  "version": "25.4.0-alpha2",
+  "private": true,
+  "repository": {
+    "type": "git",
+    "url": "https://github.com/vaadin/web-components.git",
+    "directory": "react"
+  },
+  "license": "(Apache-2.0 OR SEE LICENSE IN https://vaadin.com/commercial-license-and-service-terms)",
+  "author": "Vaadin Ltd",
+  "type": "module",
+  "scripts": {
+    "lint:types": "tsc -p tsconfig.json"
+  },
+  "devDependencies": {
+    "@types/chai-as-promised": "^8.0.1",
+    "@types/chai-dom": "^1.11.3",
+    "@types/node": "^22.15.17",
+    "@vitejs/plugin-react": "^6.0.1",
+    "@vitest/browser-playwright": "^4.1.2",
+    "chai-as-promised": "^8.0.1",
+    "chai-dom": "^1.12.0",
+    "playwright": "~1.63.0",
+    "tsx": "^4.23.0",
+    "vite": "^8.0.3",
+    "vitest": "^4.1.2",
+    "vitest-browser-react": "^2.1.0"
+  }
+}
