@@ -84,11 +84,17 @@ jobs:
       - name: Install Dependencies
         run: yarn --frozen-lockfile --no-progress --non-interactive
 
+      - name: Install Playwright
+        run: yarn playwright install chromium --with-deps
+
       - name: Build React packages
         run: yarn release:react
 
       - name: Lint TypeScript
         run: yarn lint:types:react
+
+      - name: Test
+        run: yarn test:react
 
       - name: Check generated package.json is committed
         run: git diff --exit-code packages/react-components*/package.json

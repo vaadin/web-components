@@ -89,8 +89,10 @@
   "devDependencies": {
     "@types/react": "^19.1.13",
     "@types/react-dom": "^19.1.9",
+    "@types/sinon": "^22.0.0",
     "react": "^19.3.0",
-    "react-dom": "^19.3.0"
+    "react-dom": "^19.3.0",
+    "sinon": "^22.0.0"
   },
   "author": "Vaadin Ltd.",
   "license": "Apache-2.0",
@@ -221,13 +223,41 @@
       "types": "./FormRow.d.ts",
       "default": "./FormRow.js"
     },
+    "./Grid.js": {
+      "types": "./Grid.d.ts",
+      "default": "./Grid.js"
+    },
+    "./GridColumn.js": {
+      "types": "./GridColumn.d.ts",
+      "default": "./GridColumn.js"
+    },
+    "./GridColumnGroup.js": {
+      "types": "./GridColumnGroup.d.ts",
+      "default": "./GridColumnGroup.js"
+    },
     "./GridFilter.js": {
       "types": "./GridFilter.d.ts",
       "default": "./GridFilter.js"
     },
+    "./GridFilterColumn.js": {
+      "types": "./GridFilterColumn.d.ts",
+      "default": "./GridFilterColumn.js"
+    },
+    "./GridSelectionColumn.js": {
+      "types": "./GridSelectionColumn.d.ts",
+      "default": "./GridSelectionColumn.js"
+    },
+    "./GridSortColumn.js": {
+      "types": "./GridSortColumn.d.ts",
+      "default": "./GridSortColumn.js"
+    },
     "./GridSorter.js": {
       "types": "./GridSorter.d.ts",
       "default": "./GridSorter.js"
+    },
+    "./GridTreeColumn.js": {
+      "types": "./GridTreeColumn.d.ts",
+      "default": "./GridTreeColumn.js"
     },
     "./GridTreeToggle.js": {
       "types": "./GridTreeToggle.d.ts",
@@ -393,8 +423,15 @@
     "./FormItem": "./FormItem.js",
     "./FormLayout": "./FormLayout.js",
     "./FormRow": "./FormRow.js",
+    "./Grid": "./Grid.js",
+    "./GridColumn": "./GridColumn.js",
+    "./GridColumnGroup": "./GridColumnGroup.js",
     "./GridFilter": "./GridFilter.js",
+    "./GridFilterColumn": "./GridFilterColumn.js",
+    "./GridSelectionColumn": "./GridSelectionColumn.js",
+    "./GridSortColumn": "./GridSortColumn.js",
     "./GridSorter": "./GridSorter.js",
+    "./GridTreeColumn": "./GridTreeColumn.js",
     "./GridTreeToggle": "./GridTreeToggle.js",
     "./HorizontalLayout": "./HorizontalLayout.js",
     "./Icon": "./Icon.js",
