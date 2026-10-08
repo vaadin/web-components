@@ -84,12 +84,6 @@ jobs:
       - name: Install Dependencies
         run: yarn --frozen-lockfile --no-progress --non-interactive
 
-      - name: Build custom elements manifest
-        run: yarn release:cem
-
-      - name: Build web-types
-        run: yarn release:web-types
-
       - name: Build React packages
         run: yarn release:react
 

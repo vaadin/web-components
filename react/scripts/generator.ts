@@ -203,11 +203,21 @@ export async function generate(): Promise<void> {
   const sourceFiles = (await prepareElementFiles(dependencies)).map(generateReactComponent);
   const moduleNames = await listModuleNames(srcDir);
 
-  for (const { fileName } of sourceFiles) {
-    const elementName = basename(fileName, '.ts');
+  const generatedNames = sourceFiles.map(({ fileName }) => basename(fileName, '.ts'));
+  for (const elementName of generatedNames) {
     if (!moduleNames.includes(elementName)) {
       console.warn(`[WARNING]: ${elementName} is generated but has no src/${elementName}.ts(x) wrapper`);
     }
+  }
+
+  // Every wrapper re-exports its generated module, so a missing one breaks the build later
+  // with an obscure error. Stale or missing web-types.json files are the usual cause.
+  const missing = moduleNames.filter((name) => !generatedNames.includes(name));
+  if (missing.length > 0) {
+    throw new Error(
+      `No generated module for src/${missing.join(', src/')}. ` +
+        'Run "yarn release:cem && yarn release:web-types" to refresh the web-types.json inputs.',
+    );
   }
 
   await Promise.all([
