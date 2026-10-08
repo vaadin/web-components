@@ -133,19 +133,15 @@ export const RowDetailsMixin = (superClass) =>
 
     /** @protected */
     _updateDetailsCellHeight(row) {
-      const cell = row.querySelector('[part~="details-cell"]');
-      if (!cell) {
-        return;
-      }
-
-      this.__updateDetailsRowPadding(row, cell);
+      this.__updateDetailsRowPadding(row);
       // Ensure the row has correct padding after frame (the resize observer might miss it)
-      requestAnimationFrame(() => this.__updateDetailsRowPadding(row, cell));
+      requestAnimationFrame(() => this.__updateDetailsRowPadding(row));
     }
 
     /** @private */
-    __updateDetailsRowPadding(row, cell) {
-      if (cell.hidden) {
+    __updateDetailsRowPadding(row) {
+      const cell = row.querySelector('[part~="details-cell"]');
+      if (!cell || cell.hidden) {
         row.style.removeProperty('padding-bottom');
       } else {
         row.style.setProperty('padding-bottom', `${cell.offsetHeight}px`);
