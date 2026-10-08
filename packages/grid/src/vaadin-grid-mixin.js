@@ -575,7 +575,7 @@ export const GridMixin = (superClass) =>
       // Sizer rows
       this.__initRow(this.$.sizer, columnTree[columnTree.length - 1]);
 
-      this._resizeHandler();
+      this.__updateHorizontalScrollPosition();
       this.__a11yUpdateHeaderRows();
       this.__a11yUpdateFooterRows();
       this.__updateHeaderAndFooter();
@@ -643,12 +643,6 @@ export const GridMixin = (superClass) =>
       this._updateDetailsCellHeight(row);
 
       this.__a11yUpdateRowExpanded(row, model.expanded);
-    }
-
-    /** @private */
-    _resizeHandler() {
-      this._updateDetailsCellHeights();
-      this.__updateHorizontalScrollPosition();
     }
 
     /**

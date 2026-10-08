@@ -172,13 +172,6 @@ export const RowDetailsMixin = (superClass) =>
       }
     }
 
-    /** @protected */
-    _updateDetailsCellHeights() {
-      this._getRenderedRows().forEach((row) => {
-        this._updateDetailsCellHeight(row);
-      });
-    }
-
     /**
      * @param {!GridItem} item
      * @return {boolean}
