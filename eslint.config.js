@@ -268,10 +268,11 @@ export default [
     },
   },
   {
-    files: ['packages/react-components*/test/**'],
+    files: ['packages/react-components*/test/**', 'react/dev/**'],
     rules: {
-      ...reactRulesOff('jsx-a11y/'), // Test fixtures are not real UI
+      ...reactRulesOff('jsx-a11y/'), // Test fixtures and dev pages are not real UI
       'react/button-has-type': 'off',
+      'react/no-array-index-key': 'off', // Static demo lists
       'react/jsx-no-useless-fragment': 'off', // Renderers in tests return text-only fragments
       '@typescript-eslint/no-unused-vars': 'off', // Typings tests declare unused values, specs destructure partially
     },
