@@ -46,7 +46,7 @@ export const eventSettings = new Map<string, EventSettings>([
 // Components that support the `theme` attribute (theme variants or propagation)
 // but do not use `ThemableMixin` / expose `ThemePropertyMixinClass` in their type.
 // These are generated with `createThemedComponent` so the `theme` prop is available.
-export const themedElements = new Set<string>(['Switch', 'Breadcrumbs']);
+export const themedElements = new Set<string>(['Switch', 'Breadcrumbs', 'BreadcrumbsItem']);
 
 export const elementsWithMissingEntrypoint = new Set<string>([]);
 
