@@ -44,7 +44,7 @@ const PRO_COMPONENTS = [
   'react-components-pro',
 ];
 
-const REACT_FILES = ['packages/react-components*/**/*.{ts,tsx}', 'react/dev/**/*.tsx'];
+const REACT_FILES = ['packages/react-components*/**/*.{ts,tsx}', 'react/test/**/*.ts', 'react/dev/**/*.tsx'];
 
 /** Turns off every rule of the React preset whose name starts with the given plugin prefix. */
 const reactRulesOff = (prefix) =>
@@ -272,12 +272,8 @@ export default [
     rules: {
       ...reactRulesOff('jsx-a11y/'), // Test fixtures are not real UI
       'react/button-has-type': 'off',
-    },
-  },
-  {
-    files: ['packages/react-components*/test/typings/**'],
-    rules: {
-      '@typescript-eslint/no-unused-vars': 'off',
+      'react/jsx-no-useless-fragment': 'off', // Renderers in tests return text-only fragments
+      '@typescript-eslint/no-unused-vars': 'off', // Typings tests declare unused values, specs destructure partially
     },
   },
 ];

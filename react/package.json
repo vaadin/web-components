@@ -11,7 +11,9 @@
   "author": "Vaadin Ltd",
   "type": "module",
   "scripts": {
-    "lint:types": "tsc -p tsconfig.json"
+    "lint:types": "tsc -p tsconfig.json",
+    "test": "vitest run",
+    "test:watch": "vitest"
   },
   "devDependencies": {
     "@types/chai-as-promised": "^8.0.1",
