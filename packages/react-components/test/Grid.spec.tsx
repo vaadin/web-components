@@ -12,8 +12,13 @@ import { GridSortColumn } from '../src/GridSortColumn.js';
 import { GridTreeColumn } from '../src/GridTreeColumn.js';
 import type { GridBodyReactRendererProps } from '../src/renderers/grid.js';
 
-async function until<T = boolean>(predicate: () => T) {
+// Bounded below the 2 s test timeout, so a predicate that never holds fails with a clear message.
+async function until<T = boolean>(predicate: () => T, timeout = 1500) {
+  const start = Date.now();
   while (!predicate()) {
+    if (Date.now() - start > timeout) {
+      throw new Error(`Condition not met within ${timeout} ms: ${predicate}`);
+    }
     await new Promise((r) => setTimeout(r, 10));
   }
   return predicate()!;
@@ -162,17 +167,22 @@ describe('Grid', () => {
         }
 
         const error = sinon.stub(console, 'error');
-        await render(<GridWithAutoWidthColumns />);
+        try {
+          await render(<GridWithAutoWidthColumns />);
 
-        const grid = await findByQuerySelector('vaadin-grid');
-        const columns = Array.from(grid.children).filter((c): c is GridColumnElement => c.localName.includes('column'));
-        expect(columns.length).to.be.above(0);
+          const grid = await findByQuerySelector('vaadin-grid');
+          const columns = Array.from(grid.children).filter((c): c is GridColumnElement =>
+            c.localName.includes('column'),
+          );
+          expect(columns.length).to.be.above(0);
 
-        for (const column of columns) {
-          await until(() => parseFloat(String(column.width)) > 300);
+          for (const column of columns) {
+            await until(() => parseFloat(String(column.width)) > 300);
+          }
+        } finally {
+          // Restore even on failure, or the next parameterized case fails with "already wrapped".
+          error.restore();
         }
-
-        error.restore();
         expect(error.called).to.be.false;
       });
     });
