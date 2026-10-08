@@ -1,4 +1,4 @@
-import { useEffect, useState } from 'react';
+import { useEffect, useRef, useState } from 'react';
 import type { SelectInvalidChangedEvent, SelectValidatedEvent } from '@vaadin/select';
 import type { SelectItemData } from '../../../packages/react-components/src/Select.js';
 import { Select } from '../../../packages/react-components/src/Select.js';
@@ -62,10 +62,12 @@ export default function SelectPage() {
   const [useItemLabelInCustomRenderer, setUseItemLabelInCustomRenderer] = useState(true);
   const [usePrefix, setUsePrefix] = useState(false);
 
-  const [eventLog, setEventLog] = useState<string[]>([]);
+  const [eventLog, setEventLog] = useState<Array<{ id: number; text: string }>>([]);
+  const nextLogId = useRef(0);
 
   const logEvent = (event: string) => {
-    setEventLog((prev) => [`${new Date().toLocaleTimeString()}: ${event}`, ...prev].slice(0, 100));
+    const text = `${new Date().toLocaleTimeString()}: ${event}`;
+    setEventLog((prev) => [{ id: nextLogId.current++, text }, ...prev].slice(0, 100));
   };
 
   useEffect(() => {
@@ -225,8 +227,8 @@ export default function SelectPage() {
             background: '#f9f9f9',
           }}
         >
-          {eventLog.map((log, index) => (
-            <div key={index}>{log}</div>
+          {eventLog.map((log) => (
+            <div key={log.id}>{log.text}</div>
           ))}
         </div>
       </div>
