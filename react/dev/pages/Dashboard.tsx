@@ -6,10 +6,6 @@ import {
 } from '../../../packages/react-components-pro/src/Dashboard.js';
 import { DashboardWidget } from '../../../packages/react-components-pro/src/DashboardWidget.js';
 
-window.Vaadin ||= {};
-window.Vaadin.featureFlags ||= {};
-window.Vaadin.featureFlags.dashboardComponent = true;
-
 type TestItem = DashboardItem & {
   title?: string;
   content?: string;
