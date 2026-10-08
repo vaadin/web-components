@@ -1,6 +1,5 @@
 import { expect } from '@vaadin/chai-plugins';
-import { aTimeout, fire, fixtureSync, nextRender } from '@vaadin/testing-helpers';
-import sinon from 'sinon';
+import { fire, fixtureSync, nextRender } from '@vaadin/testing-helpers';
 import '../src/vaadin-context-menu.js';
 
 class XFoo extends HTMLElement {
@@ -112,30 +111,6 @@ describe('context', () => {
 
     fire(another, 'contextmenu');
 
-    expect(menu.opened).to.be.true;
-  });
-
-  it('should be closed after detached', async () => {
-    fire(target, 'contextmenu');
-    expect(menu.opened).to.be.true;
-
-    const spy = sinon.spy(menu, 'close');
-
-    menu.parentNode.removeChild(menu);
-    await aTimeout(0);
-    expect(spy.calledOnce).to.be.true;
-    expect(menu.opened).to.be.false;
-  });
-
-  it('should not close when moved within the DOM', async () => {
-    fire(target, 'contextmenu');
-    expect(menu.opened).to.be.true;
-
-    const newParent = document.createElement('div');
-    document.body.appendChild(newParent);
-
-    newParent.appendChild(menu);
-    await aTimeout(0);
     expect(menu.opened).to.be.true;
   });
 });

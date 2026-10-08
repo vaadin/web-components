@@ -49,3 +49,15 @@ export async function openSubMenus(menu) {
     await openSubMenus(subMenu);
   }
 }
+
+export function contextmenu(target, x, y, shiftKey = false) {
+  const event = new MouseEvent('contextmenu', {
+    bubbles: true,
+    cancelable: true,
+    clientX: x,
+    clientY: y,
+    shiftKey,
+  });
+  target.dispatchEvent(event);
+  return event;
+}
