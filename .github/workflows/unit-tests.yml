@@ -100,4 +100,4 @@ jobs:
         run: git diff --exit-code packages/react-components*/package.json
 
       - name: Check package integrity
-        run: node react/scripts/check-package.js packages/react-components
+        run: node react/scripts/check-package.js
