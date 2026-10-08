@@ -8,8 +8,7 @@
 // names and types, generic type parameters, and the `theme` prop of themed elements.
 import { BreadcrumbsItem, type BreadcrumbsItemProps } from '../../src/BreadcrumbsItem.js';
 import { Button, type ButtonProps } from '../../src/Button.js';
-// Grid is generated but its wrapper is not ported yet. Import from the generated module until then.
-import { Grid, type GridProps } from '../../src/generated/Grid.js';
+import { Grid, type GridProps } from '../../src/Grid.js';
 import { Switch, type SwitchProps } from '../../src/Switch.js';
 import {
   TextField,
