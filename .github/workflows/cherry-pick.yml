@@ -50,9 +50,6 @@ jobs:
         with:
           github-token: ${{ secrets.CHERRY_PICK_TOKEN }}
           anthropic-api-key: ${{ secrets.ANTHROPIC_API_KEY }}
-          # Rollout: only log what would be picked while the existing
-          # cherry-pick job is still active.
-          dry-run: true
           verify-instructions: |
             - Install the dependencies of the target branch first:
               yarn --frozen-lockfile --no-progress --non-interactive
