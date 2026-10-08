@@ -123,8 +123,7 @@ export const ColumnResizingMixin = (superClass) =>
           );
         }
 
-        // Notify resize
-        this._resizeHandler();
+        this.__updateHorizontalScrollPosition();
       }
     }
   };

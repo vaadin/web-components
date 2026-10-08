@@ -192,8 +192,8 @@ describe('column resizing', () => {
     expect(grid._columnTree[0][1].flexGrow).to.equal(0);
   });
 
-  it('should notify resize on column resize', () => {
-    const spy = sinon.spy(grid, '_resizeHandler');
+  it('should update horizontal scroll position on column resize', () => {
+    const spy = sinon.spy(grid, '__updateHorizontalScrollPosition');
     const options = { node: handle };
     const rect = headerCells[0].getBoundingClientRect();
 
