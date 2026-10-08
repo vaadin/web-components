@@ -33,15 +33,6 @@ export const BodyRenderingMixin = (superClass) =>
 
       this.#updateRowReferences(row);
 
-      row.querySelectorAll('[role="button"]').forEach((button) => {
-        const cell = button.parentElement;
-        if (cell._focusButton !== button) {
-          // Patch `focus()` to use the button
-          cell._focusButton = button;
-          cell.focus = (options) => button.focus(options);
-        }
-      });
-
       const previousDetailsCell = row.__detailsCell;
       row.__detailsCell = row.querySelector('[part~="details-cell"]');
 
