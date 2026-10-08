@@ -641,6 +641,8 @@ export const KeyboardNavigationMixin = (superClass) =>
 
     /** @private */
     _predictFocusStepTarget(srcElement, step) {
+      this._debounceColumnContentVisibility?.flush();
+
       const tabOrder = [
         this.$.table,
         this._headerFocusable,
