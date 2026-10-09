@@ -3,7 +3,7 @@
  * Copyright (c) 2022 - 2026 Vaadin Ltd.
  * This program is available under Apache License Version 2.0, available at https://vaadin.com/license/
  */
-import { type ForwardedRef, type RefCallback, useLayoutEffect, useRef } from 'react';
+import { type ForwardedRef, type RefCallback, useCallback } from 'react';
 import type { GridElement } from '../generated/Grid.js';
 import useMergedRefs from './useMergedRefs.js';
 
@@ -15,16 +15,16 @@ import useMergedRefs from './useMergedRefs.js';
 export default function useDeferredColumnWidthRecalculation<T extends GridElement<any>>(
   ref: ForwardedRef<T>,
 ): RefCallback<T> {
-  const innerRef = useRef<T>(null);
-
-  useLayoutEffect(() => {
-    innerRef.current!.recalculateColumnWidths = function (...args) {
-      // Wait for column content to finish rendering before recalculating widths.
-      queueMicrotask(() => {
-        Object.getPrototypeOf(this).recalculateColumnWidths.call(this, ...args);
-      });
-    };
+  const patchRef = useCallback((element: T | null) => {
+    if (element) {
+      element.recalculateColumnWidths = function (...args) {
+        // Wait for column content to finish rendering before recalculating widths.
+        queueMicrotask(() => {
+          Object.getPrototypeOf(this).recalculateColumnWidths.call(this, ...args);
+        });
+      };
+    }
   }, []);
 
-  return useMergedRefs(innerRef, ref);
+  return useMergedRefs(patchRef, ref);
 }
