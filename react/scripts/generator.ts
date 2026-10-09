@@ -5,13 +5,7 @@ import { type ElementData, loadPackageElements } from './manifest.js';
 import { generatedDir, packageDir, srcDir, utilsDir } from './utils/config.js';
 import { camelCase, convertElementNameToClassName, createImportPath, listModuleNames } from './utils/misc.js';
 import type { PackageJson } from './utils/package-json.js';
-import {
-  eventSettings,
-  type GenericElementInfo,
-  genericElements,
-  NonGenericInterface,
-  themedElements,
-} from './utils/settings.js';
+import { eventSettings, type GenericElementInfo, genericElements, NonGenericInterface } from './utils/settings.js';
 
 const printer = ts.createPrinter({
   newLine: ts.NewLineKind.LineFeed,
@@ -40,7 +34,12 @@ function createGenerics({ numberOfGenerics, typeConstraints, nonGenericInterface
   };
 }
 
-function generateReactComponent({ tagName, events, modulePath: elementModulePath }: ElementData): ts.SourceFile {
+function generateReactComponent({
+  tagName,
+  events,
+  modulePath: elementModulePath,
+  themed,
+}: ElementData): ts.SourceFile {
   const elementName = convertElementNameToClassName(tagName);
   const createComponentPath = createImportPath(relative(generatedDir, resolve(utilsDir, './createComponent.js')), true);
 
@@ -64,9 +63,8 @@ function generateReactComponent({ tagName, events, modulePath: elementModulePath
 
   // Components that support the `theme` attribute but do not use `ThemableMixin`
   // are generated with `createThemedComponent` so the `theme` prop is available.
-  const isThemed = themedElements.has(elementName);
-  const createFn = isThemed ? 'createThemedComponent' : 'createComponent';
-  const themeSuffix = isThemed ? ' & { theme?: string }' : '';
+  const createFn = themed ? 'createThemedComponent' : 'createComponent';
+  const themeSuffix = themed ? ' & { theme?: string }' : '';
 
   const eventMapMembers = existingEvents
     .map((eventName) => {
