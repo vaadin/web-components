@@ -11,6 +11,7 @@
 import { type ForwardedRef, forwardRef, type ReactElement, type RefAttributes } from 'react';
 import type { GridDefaultItem, GridProps } from '@vaadin/react-components/Grid.js';
 import { useModelRenderer } from '@vaadin/react-components/renderers/useModelRenderer.js';
+import useDeferredColumnWidthRecalculation from '@vaadin/react-components/utils/useDeferredColumnWidthRecalculation.js';
 import { GridPro as _GridPro, type GridProElement, type GridProProps as _GridProProps } from './generated/GridPro.js';
 
 export * from './generated/GridPro.js';
@@ -24,10 +25,14 @@ function GridPro<TItem = GridDefaultItem>(
   props: GridProProps<TItem>,
   ref: ForwardedRef<GridProElement<TItem>>,
 ): ReactElement | null {
-  const [portals, rowDetailsRenderer] = useModelRenderer(props.rowDetailsRenderer);
+  const [portals, rowDetailsRenderer] = useModelRenderer(props.rowDetailsRenderer, {
+    renderMode: 'microtask',
+  });
+
+  const finalRef = useDeferredColumnWidthRecalculation(ref);
 
   return (
-    <_GridPro<TItem> {...props} ref={ref} rowDetailsRenderer={rowDetailsRenderer}>
+    <_GridPro<TItem> {...props} ref={finalRef} rowDetailsRenderer={rowDetailsRenderer}>
       {props.children}
       {portals}
     </_GridPro>
