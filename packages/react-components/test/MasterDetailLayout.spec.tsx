@@ -319,6 +319,87 @@ describe('MasterDetailLayout', () => {
     expect(getComputedStyle(layout).getPropertyValue('--_detail-cached-size')).to.equal('201px'); // 1px border
   });
 
+  describe('real transitions', () => {
+    function ViewA() {
+      return <div>View A</div>;
+    }
+
+    function ViewB() {
+      return <div>View B</div>;
+    }
+
+    function ViewC() {
+      return <div>View C</div>;
+    }
+
+    function withDetail(view: ReactNode, forceOverlay = false) {
+      return (
+        <MasterDetailLayout forceOverlay={forceOverlay}>
+          <MasterDetailLayout.Master>Master</MasterDetailLayout.Master>
+          <MasterDetailLayout.Detail>{view}</MasterDetailLayout.Detail>
+        </MasterDetailLayout>
+      );
+    }
+
+    async function untilTransitionEnds() {
+      await vi.waitFor(() => {
+        expect(layout.hasAttribute('transition')).to.be.false;
+      });
+    }
+
+    function outgoingElements() {
+      return layout.querySelectorAll('[slot="detail-outgoing"]');
+    }
+
+    beforeEach(async () => {
+      // Use the real _startTransition
+      delete (layout as any)._startTransition;
+      layout.style.width = '800px';
+
+      await result.rerender(withDetail(<ViewA />));
+      await assertDetailsVisible('View A');
+    });
+
+    it('should remove the outgoing clone after a replace transition', async () => {
+      await result.rerender(withDetail(<ViewB />));
+      await assertDetailsVisible('View B');
+      await untilTransitionEnds();
+
+      expect(outgoingElements()).to.have.length(0);
+      expect(layout.textContent).to.not.include('View A');
+
+      await result.rerender(withDetail(<ViewC />));
+      await assertDetailsVisible('View C');
+      await untilTransitionEnds();
+
+      expect(outgoingElements()).to.have.length(0);
+      expect(layout.textContent).to.not.include('View B');
+    });
+
+    it('should run one transition when the detail changes during a transition', async () => {
+      // Replace is instant in split mode, so use overlay mode where it animates
+      await result.rerender(withDetail(<ViewA />, true));
+      await vi.waitFor(() => {
+        expect(layout.hasAttribute('overlay')).to.be.true;
+      });
+      const spy = sinon.spy(layout as any, '_startTransition');
+
+      await result.rerender(withDetail(<ViewB />, true));
+      // Change the detail while the replace animation is running
+      await new Promise((resolve) => {
+        setTimeout(resolve, 50);
+      });
+      await result.rerender(withDetail(<ViewC />, true));
+
+      await assertDetailsVisible('View C');
+      await untilTransitionEnds();
+
+      expect(spy.calledOnce).to.be.true;
+      expect(outgoingElements()).to.have.length(0);
+      expect(layout.textContent).to.not.include('View B');
+    });
+  });
+
   it('should render detail placeholder content', async () => {
     await result.rerender(
       <MasterDetailLayout>
