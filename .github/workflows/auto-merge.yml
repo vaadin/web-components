@@ -1,0 +1,106 @@
+# Approves and enables auto merge (squash) for cherry-pick PRs that
+# - are open and not a draft,
+# - are opened by vaadin-bot,
+# - have "CP:" in the title,
+# - do not target main,
+# - do not have the ai-resolved-conflict label,
+# - have passed every check and commit status on the head commit. PRs whose
+#   checks are still running are picked up again by the next run.
+#
+# The rules live in scripts/autoMerge.js of vaadin/platform-build-script
+# (AUTO_MERGE_POLICY=cherry-pick). Scheduled workflows always run from the
+# default branch, so this file covers PRs into every maintenance branch and
+# does not need to be cherry-picked.
+
+name: Auto Merge
+
+on:
+  schedule:
+    - cron: '30 * * * *'
+  workflow_dispatch:
+    inputs:
+      dry-run:
+        description: Only list the PRs that would be checked
+        type: boolean
+        default: false
+
+concurrency:
+  group: ${{ github.workflow }}
+  cancel-in-progress: false
+
+jobs:
+  auto-merge:
+    timeout-minutes: 15
+    runs-on: ubuntu-latest
+    permissions:
+      contents: read
+    steps:
+      - uses: actions/checkout@v7
+        with:
+          repository: vaadin/platform-build-script
+          ref: main
+          token: ${{ secrets.VAADIN_BOT_TOKEN }}
+      - uses: actions/setup-node@v6
+        with:
+          node-version: '24'
+      - name: Auto-merge cherry-pick PRs
+        env:
+          AUTO_MERGE_POLICY: cherry-pick
+          GH_TOKEN: ${{ secrets.VAADIN_BOT_TOKEN }}
+          GITHUB_TOKEN: ${{ secrets.VAADIN_BOT_TOKEN }}
+          GITHUB_REVIEW_TOKEN: ${{ secrets.VAADIN_REVIEW_BOT }}
+          DRY_RUN: ${{ inputs.dry-run || false }}
+        run: |
+          # A cheap pre-filter; scripts/autoMerge.js checks every condition
+          # again. PRs that already have auto merge enabled or are approved
+          # were handled by an earlier run (or a human) and are skipped, so
+          # they are not approved and commented on again every hour.
+          prs=$(gh pr list --repo "$GITHUB_REPOSITORY" --state open --limit 500 \
+            --author vaadin-bot \
+            --search '"CP:" in:title -base:main -label:ai-resolved-conflict draft:false' \
+            --json number,title,baseRefName,autoMergeRequest,reviewDecision \
+            --jq '.[] | select(.autoMergeRequest == null and .reviewDecision != "APPROVED")
+              | [.number, .baseRefName, .title] | @tsv')
+
+          if [ -z "$prs" ]; then
+            echo "No cherry-pick PRs to check." | tee -a "$GITHUB_STEP_SUMMARY"
+            exit 0
+          fi
+
+          {
+            echo "### Cherry-pick auto merge"
+            echo
+            echo "| PR | Branch | Title | Result |"
+            echo "| --- | --- | --- | --- |"
+          } >> "$GITHUB_STEP_SUMMARY"
+
+          merged=0
+          failed=0
+          while IFS=$'\t' read -r pr base title; do
+            echo "::group::PR #$pr"
+            if [ "$DRY_RUN" = "true" ]; then
+              echo "Dry run, would check PR #$pr"
+              result="Dry run, not checked"
+            elif output=$(PR_NUMBER=$pr node scripts/autoMerge.js 2>&1); then
+              echo "$output"
+              if grep -q "has been merged automatically" <<< "$output"; then
+                result="✅ Approved, auto merge enabled"
+                merged=$((merged + 1))
+              else
+                reason=$(grep "skip auto-merging" <<< "$output" | tail -1)
+                result="⏭️ Skipped: $(sed "s/^PR #$pr /PR /; s/, skip auto-merging\.$//" <<< "$reason")"
+              fi
+            else
+              echo "$output"
+              result="❌ $(tail -1 <<< "$output")"
+              failed=1
+            fi
+            echo "::endgroup::"
+            # Keep the table intact when a title or message contains a pipe.
+            echo "| #$pr | $base | ${title//|/\\|} | ${result//|/\\|} |" >> "$GITHUB_STEP_SUMMARY"
+          done <<< "$prs"
+
+          if [ "$DRY_RUN" != "true" ]; then
+            echo -e "\n$merged PR(s) approved with auto merge enabled." >> "$GITHUB_STEP_SUMMARY"
+          fi
+          exit $failed
