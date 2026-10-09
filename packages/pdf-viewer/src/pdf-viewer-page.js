@@ -21,6 +21,12 @@ export const MAX_CANVAS_PIXELS = 2 ** 24;
 const wordSegmenter = new Intl.Segmenter(undefined, { granularity: 'word' });
 
 /**
+ * Whether a segment is a word. Firefox does not mark words that end with a
+ * combining mark, e.g. "café" with a combining accent, as word-like.
+ */
+const isWord = ({ isWordLike, segment }) => isWordLike || /[\p{L}\p{N}]/u.test(segment);
+
+/**
  * Creates an element with text for assistive technology only. The text is
  * generated content, see the styles, so that it is not selected, copied or
  * found with the text of the page.
@@ -360,7 +366,7 @@ export class PdfViewerPage {
       let end = -1;
       // Words as the browser finds them, also in languages without spaces, without punctuation.
       for (const word of wordSegmenter.segment(textNode.data)) {
-        if (!word.isWordLike) {
+        if (!isWord(word)) {
           continue;
         }
         range.setStart(textNode, word.index);

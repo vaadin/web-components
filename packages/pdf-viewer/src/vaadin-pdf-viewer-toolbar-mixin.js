@@ -69,6 +69,17 @@ export const PdfViewerToolbarMixin = (superClass) =>
     #pageErrorId = `pdf-viewer-page-error-${generateUniqueId()}`;
 
     /**
+     * Override method from `LitElement` to keep focused controls in view.
+     * @protected
+     * @override
+     */
+    firstUpdated() {
+      super.firstUpdated();
+
+      this.addEventListener('focusin', (event) => this.#onFocusIn(event));
+    }
+
+    /**
      * Override method from `LitElement` to render the toolbar when the state it shows changes.
      * @protected
      * @override
@@ -272,6 +283,31 @@ export const PdfViewerToolbarMixin = (superClass) =>
         this.shadowRoot.querySelector('#content').focus(options);
       } else if (this._isToolbarCollapsed() && TOOLBAR_SLOTS.includes(focusedControl.slot)) {
         this.querySelector(':scope > [slot="toolbar-toggle"]').focus(options);
+      }
+    }
+
+    /**
+     * Scrolls the header so that a focused control in it is visible with its
+     * focus ring. Not all browsers scroll a control into view that is partly
+     * visible already, which can leave its focus ring cut off.
+     * @private
+     */
+    #onFocusIn(event) {
+      const target = event.composedPath()[0];
+      const control = [...this.children].find((child) => child.contains(target));
+      const header = this.shadowRoot.querySelector('.header');
+      if (!control || !control.assignedSlot || !header.contains(control.assignedSlot)) {
+        return;
+      }
+      const style = getComputedStyle(header);
+      const headerTop = header.getBoundingClientRect().top + header.clientTop;
+      const top = headerTop + Number.parseFloat(style.scrollPaddingBlockStart);
+      const bottom = headerTop + header.clientHeight - Number.parseFloat(style.scrollPaddingBlockEnd);
+      const rect = target.getBoundingClientRect();
+      if (rect.top < top) {
+        header.scrollTop -= top - rect.top;
+      } else if (rect.bottom > bottom) {
+        header.scrollTop += rect.bottom - bottom;
       }
     }
 

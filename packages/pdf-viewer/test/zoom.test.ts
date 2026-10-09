@@ -94,8 +94,9 @@ describe('zoom', () => {
 
       function getHorizontalCenterOffset() {
         const page = getPages()[0].getBoundingClientRect();
-        const content = getContent().getBoundingClientRect();
-        return page.left + page.width / 2 - (content.left + getContent().clientWidth / 2);
+        const content = getContent();
+        const left = content.getBoundingClientRect().left + content.clientLeft;
+        return page.left + page.width / 2 - (left + content.clientWidth / 2);
       }
 
       it('should keep the page centered when zooming in', async () => {

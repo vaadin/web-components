@@ -92,7 +92,10 @@ export const PdfViewerPrintMixin = (superClass) =>
     /** Incremented on every print, to stop an outdated or cancelled print. */
     #printId = 0;
 
-    /** Cleans up the current print, if any. */
+    /**
+     * Cleans up the current print, if any.
+     * @type {(() => void) | null}
+     */
     #cleanupPrint = null;
 
     /** @type {import('pdfjs-dist').RenderTask | null} */
@@ -246,6 +249,10 @@ export const PdfViewerPrintMixin = (superClass) =>
       if (!isLost) {
         return;
       }
+      // Firefox keeps the element that was focused before the print frame as the
+      // focused element of this window, and does not focus it again until the
+      // window itself has focus.
+      window.focus();
       if (returnFocus && returnFocus.isConnected && !returnFocus.disabled && returnFocus.checkVisibility()) {
         returnFocus.focus({ focusVisible: isKeyboardActive() });
       }

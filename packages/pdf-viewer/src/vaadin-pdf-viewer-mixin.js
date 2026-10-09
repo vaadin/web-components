@@ -101,7 +101,8 @@ export const PdfViewerMixin = (superClass) =>
           notify: true,
           // Numbers set as attribute, e.g. zoom="1.5", become numbers.
           converter: {
-            fromAttribute: (value) => (value !== null && value.trim() !== '' && !isNaN(value) ? Number(value) : value),
+            fromAttribute: (value) =>
+              value !== null && value.trim() !== '' && !Number.isNaN(Number(value)) ? Number(value) : value,
           },
         },
 
@@ -220,6 +221,8 @@ export const PdfViewerMixin = (superClass) =>
 
     #relayoutFrame = 0;
 
+    #resizeFrame = 0;
+
     /** Whether all pages have their own size, see `#loadPageSizes()`. */
     #pageSizesLoaded = true;
 
@@ -277,6 +280,8 @@ export const PdfViewerMixin = (superClass) =>
       this.#contentObserver?.disconnect();
       cancelAnimationFrame(this.#scrollFrame);
       this.#scrollFrame = 0;
+      cancelAnimationFrame(this.#resizeFrame);
+      this.#resizeFrame = 0;
 
       // Wait a microtask so that moving the element in the DOM does not reload the document.
       queueMicrotask(() => {
@@ -303,7 +308,7 @@ export const PdfViewerMixin = (superClass) =>
       }
 
       this.$.content.addEventListener('scroll', () => this.#onScroll(), { passive: true });
-      this.#contentObserver = new ResizeObserver(() => this._onResize());
+      this.#contentObserver = new ResizeObserver(() => this.#onContentResize());
       this.#contentObserver.observe(this.$.content);
       this.$.content.addEventListener('keydown', (event) => this.#onContentKeyDown(event));
       // Touch events, as pointer events end when the browser starts to scroll, e.g. when one
@@ -352,6 +357,22 @@ export const PdfViewerMixin = (superClass) =>
       if (props.has('page') && this.page !== this.#scrolledPage && this.#pages.length) {
         this.#scrollToPage(this.page);
       }
+    }
+
+    /**
+     * Fits the pages to the new size of the content in the next frame. Fitting
+     * them right away can make a scrollbar of the content appear or disappear,
+     * which resizes the content again before the observer can be notified.
+     * @private
+     */
+    #onContentResize() {
+      if (this.#resizeFrame) {
+        return;
+      }
+      this.#resizeFrame = requestAnimationFrame(() => {
+        this.#resizeFrame = 0;
+        this._onResize();
+      });
     }
 
     /**
@@ -717,8 +738,10 @@ export const PdfViewerMixin = (superClass) =>
       const { content } = this.$;
       const style = getComputedStyle(content);
       return {
-        width: content.clientWidth - parseFloat(style.paddingInlineStart) - parseFloat(style.paddingInlineEnd),
-        height: content.clientHeight - parseFloat(style.paddingBlockStart) - parseFloat(style.paddingBlockEnd),
+        width:
+          content.clientWidth - Number.parseFloat(style.paddingInlineStart) - Number.parseFloat(style.paddingInlineEnd),
+        height:
+          content.clientHeight - Number.parseFloat(style.paddingBlockStart) - Number.parseFloat(style.paddingBlockEnd),
       };
     }
 
@@ -807,7 +830,9 @@ export const PdfViewerMixin = (superClass) =>
     #captureAnchor(point) {
       const { content } = this.$;
       const contentRect = content.getBoundingClientRect();
-      const viewX = point ? point.x - contentRect.left : contentRect.width / 2;
+      // The middle of the visible area, which excludes a vertical scrollbar
+      // (on the left in RTL, where clientLeft includes it).
+      const viewX = point ? point.x - contentRect.left : content.clientLeft + content.clientWidth / 2;
       const viewY = point ? point.y - contentRect.top : 0;
       const page = point ? this.#getPageAt(content.scrollTop + viewY) : this.#pages[this.#currentIndex];
       const pageRect = page.element.getBoundingClientRect();
@@ -876,7 +901,7 @@ export const PdfViewerMixin = (superClass) =>
         );
       } else {
         const pageView = this.#pages[page - 1];
-        let offset = -parseFloat(getComputedStyle(content).paddingBlockStart);
+        let offset = -Number.parseFloat(getComputedStyle(content).paddingBlockStart);
         if (top !== undefined) {
           offset = pageView.pdfPage
             ? pageView.pdfPage.getViewport({ scale: this.#scale }).convertToViewportPoint(0, top)[1]

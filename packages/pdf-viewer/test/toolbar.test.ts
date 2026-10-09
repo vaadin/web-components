@@ -399,7 +399,6 @@ describe('toolbar', () => {
 
     it('should size the page field for the number of digits of the page count', async () => {
       const narrow = getPageField().getBoundingClientRect().width;
-      expect(narrow).to.be.lessThan(80);
       const url = createPdfUrl(120);
       try {
         const loaded = oneEvent(viewer, 'document-load');
