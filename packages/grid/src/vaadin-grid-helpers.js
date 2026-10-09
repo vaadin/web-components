@@ -48,8 +48,10 @@ export function iterateChildren(container, callback) {
  */
 export function iterateRowCells(row, callback) {
   getBodyRowCells(row).forEach(callback);
-  if (row.__detailsCell) {
-    callback(row.__detailsCell);
+
+  const detailsCell = row.querySelector('[part~="details-cell"]');
+  if (detailsCell) {
+    callback(detailsCell);
   }
 }
 

@@ -434,14 +434,16 @@ export const GridMixin = (superClass) =>
       iterateRowCells(row, (cell) => {
         cell._vacant = true;
       });
+
+      const detailsCell = row.querySelector('[part~="details-cell"]');
+      if (detailsCell) {
+        this.__teardownDetailsCell(detailsCell);
+      }
+
       row.innerHTML = '';
       if (section === 'body') {
         // Clear the cached cell references
         row.__cells = [];
-        if (row.__detailsCell) {
-          this.__teardownDetailsCell(row.__detailsCell);
-        }
-        row.__detailsCell = null;
       }
 
       columns
@@ -490,8 +492,6 @@ export const GridMixin = (superClass) =>
               this._configureDetailsCell(detailsCell);
               detailsCell.__parentRow = row;
               row.appendChild(detailsCell);
-              // Cache the details cell reference
-              row.__detailsCell = detailsCell;
               this.__a11ySetRowDetailsCell(row, detailsCell);
               detailsCell._vacant = false;
             }
