@@ -17,7 +17,7 @@
   /* The font size is set here, so that the icon part is sized relative to the button font size */
   [part='icon']::before {
     content: var(--_icon);
-    font-family: 'lumo-icons';
+    font-family: 'lumo-icons'; /* NOSONAR */
     font-size: var(--lumo-icon-size-m);
     line-height: 1;
   }

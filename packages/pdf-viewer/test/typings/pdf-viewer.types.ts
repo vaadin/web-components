@@ -35,7 +35,7 @@ assertType<boolean>(viewer.sidebarOpened);
 assertType<string | null | undefined>(viewer.fileName);
 assertType<boolean>(viewer.fileNameVisible);
 assertType<boolean>(viewer.toolbarCollapsed);
-assertType<Promise<void>>(viewer.print());
+assertType<() => Promise<void>>(viewer.print);
 viewer.zoom = 'page-fit';
 viewer.zoom = 'page-width';
 viewer.zoom = 1.5;

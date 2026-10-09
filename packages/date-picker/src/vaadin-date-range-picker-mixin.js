@@ -1010,7 +1010,7 @@ export const DateRangePickerMixin = (superClass) =>
       }
       const parts = i18n.parseDate(text);
       const date = parts && parseDate(`${parts.year}-${parts.month + 1}-${parts.day}`);
-      if (date && !isNaN(date.getTime())) {
+      if (date && !Number.isNaN(date.getTime())) {
         return date;
       }
       return undefined;
@@ -1051,7 +1051,7 @@ export const DateRangePickerMixin = (superClass) =>
      * @private
      */
     __splitRangeText(text) {
-      return text.split(/\s*[–—]\s*|\s+-\s+|\s+to\s+/iu, 2).map((part) => part.trim());
+      return text.split(/[–—]|\s-\s|\sto\s/iu, 2).map((part) => part.trim());
     }
 
     /**

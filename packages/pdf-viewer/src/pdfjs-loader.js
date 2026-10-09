@@ -30,7 +30,8 @@ export function loadPdfjs() {
  * The worker shared by all viewers on the page, with the number of documents
  * that use it.
  *
- * @type {{ worker: import('pdfjs-dist').PDFWorker, port: Worker, failed: Promise<never>, users: number } | null}
+ * @typedef {{ worker: import('pdfjs-dist').PDFWorker | null, port: Worker, failed: Promise<never> | null, users: number, pdfjs: typeof import('pdfjs-dist') }} WorkerHandle
+ * @type {WorkerHandle | null}
  */
 let sharedWorker = null;
 
@@ -47,6 +48,7 @@ let sharedWorker = null;
 export function acquireWorker(pdfjs) {
   if (!sharedWorker) {
     const port = new Worker(new URL('./pdf-viewer-worker.js', import.meta.url), { type: 'module' });
+    /** @type {WorkerHandle} */
     const handle = { worker: null, port, failed: null, users: 0, pdfjs };
     // pdf.js does not notice when a worker passed as a port fails to load,
     // so loading would wait forever. Expose the failure to the caller instead,
