@@ -12,8 +12,9 @@ CEM's output, the per-package `custom-elements.json`, drives three things:
 - The per-package `web-types.json` and `web-types.lit.json`, which give IDE
   autocomplete for plain HTML and Lit 3 binding syntax respectively.
 - The **React wrapper generation** for `@vaadin/react-components` — the
-  React components are produced by the generator script that is based on
-  `web-types.json` and `.d.ts` definitions of web components.
+  generator in `react/scripts/` reads the per-package `custom-elements.json`
+  for tag names, entry modules and events, and the `.d.ts` definitions of
+  web components supply the types.
 
 CEM is configured in `custom-elements-manifest.config.js` at the repo
 root; `scripts/split-cem.js` splits the merged manifest per package, and
