@@ -242,7 +242,10 @@ describe('field-highlighter', () => {
   describe('multiline name', () => {
     beforeEach(async () => {
       element = fixtureSync(`<vaadin-text-field></vaadin-text-field>`, div);
-      setUsers(element, [{ id: 'a', name: 'Line 1\nLine 2', colorIndex: 0, fieldIndex: 0 }]);
+      setUsers(element, [
+        { id: 'a', name: 'Line 1\nLine 2', colorIndex: 0, fieldIndex: 0 },
+        { id: 'b', name: 'User', colorIndex: 1, fieldIndex: 0 },
+      ]);
       await nextFrame();
     });
 
