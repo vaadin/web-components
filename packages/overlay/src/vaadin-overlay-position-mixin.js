@@ -282,6 +282,12 @@ export const PositionMixin = (superClass) =>
         return;
       }
 
+      // Measure preferred-side offsets even when the overlay was previously flipped.
+      setOverlayStateAttribute(this, 'top-aligned', this.verticalAlign === 'top');
+      setOverlayStateAttribute(this, 'bottom-aligned', this.verticalAlign !== 'top');
+      setOverlayStateAttribute(this, 'start-aligned', this.horizontalAlign === 'start');
+      setOverlayStateAttribute(this, 'end-aligned', this.horizontalAlign !== 'start');
+
       // Detect the desired alignment and update the layout accordingly
       const shouldAlignStartVertically = this.__shouldAlignStartVertically(targetRect);
       this.style.justifyContent = shouldAlignStartVertically ? 'flex-start' : 'flex-end';
@@ -327,8 +333,13 @@ export const PositionMixin = (superClass) =>
     __shouldAlignStartHorizontally(targetRect, rtl) {
       // Using previous size to fix a case where window resize may cause the overlay to be squeezed
       // smaller than its current space before the fit-calculations.
-      const contentWidth = Math.max(this.__oldContentWidth || 0, this.$.overlay.offsetWidth);
-      this.__oldContentWidth = this.$.overlay.offsetWidth;
+      const style = getComputedStyle(this.$.overlay);
+      const width =
+        this.$.overlay.offsetWidth +
+        (Number.parseFloat(style.marginLeft) || 0) +
+        (Number.parseFloat(style.marginRight) || 0);
+      const contentWidth = Math.max(this.__oldContentWidth || 0, width);
+      this.__oldContentWidth = width;
 
       const viewportWidth = Math.min(window.innerWidth, document.documentElement.clientWidth);
       const defaultAlignLeft = (!rtl && this.horizontalAlign === 'start') || (rtl && this.horizontalAlign === 'end');
@@ -347,9 +358,13 @@ export const PositionMixin = (superClass) =>
     __shouldAlignStartVertically(targetRect) {
       // Using previous size to fix a case where window resize may cause the overlay to be squeezed
       // smaller than its current space before the fit-calculations.
-      const contentHeight =
-        this.requiredVerticalSpace || Math.max(this.__oldContentHeight || 0, this.$.overlay.offsetHeight);
-      this.__oldContentHeight = this.$.overlay.offsetHeight;
+      const style = getComputedStyle(this.$.overlay);
+      const height =
+        this.$.overlay.offsetHeight +
+        (Number.parseFloat(style.marginTop) || 0) +
+        (Number.parseFloat(style.marginBottom) || 0);
+      const contentHeight = this.requiredVerticalSpace || Math.max(this.__oldContentHeight || 0, height);
+      this.__oldContentHeight = height;
 
       const viewportHeight = Math.min(window.innerHeight, document.documentElement.clientHeight);
       const defaultAlignTop = this.verticalAlign === 'top';
