@@ -40,16 +40,31 @@ const pdfViewerBaseStyles = css`
     scroll-padding-block: calc(var(--vaadin-focus-ring-width) * 2 + 2px);
   }
 
+  /* The name in the middle, the button that collapses the toolbar at the end */
   [part='file-name'] {
-    /* The full name is in the title, for names that don't fit */
+    display: grid;
+    grid-template-columns: 1fr minmax(0, max-content) 1fr;
+    align-items: center;
+    gap: var(--vaadin-gap-xs);
     padding: var(--vaadin-padding-xs) var(--vaadin-padding-s);
     border-block-end: 1px solid var(--vaadin-pdf-viewer-border-color, var(--vaadin-border-color-secondary));
     background: var(--vaadin-pdf-viewer-toolbar-background, var(--vaadin-background-color));
+  }
+
+  /* The full name is in the title, for names that don't fit */
+  .file-name-text {
+    grid-column: 2;
     font-weight: 600;
-    text-align: center;
     overflow: hidden;
     text-overflow: ellipsis;
     white-space: nowrap;
+  }
+
+  /* No extra space around the button, so that the row is not taller than the name needs */
+  ::slotted([slot='toolbar-toggle']) {
+    grid-column: 3;
+    justify-self: end;
+    margin-block: 0;
   }
 
   [part='file-name'][hidden] {
@@ -78,6 +93,7 @@ const pdfViewerBaseStyles = css`
     background: var(--vaadin-pdf-viewer-toolbar-background, var(--vaadin-background-color));
   }
 
+  [part='toolbar'][hidden],
   [part='find-bar'][hidden] {
     display: none;
   }
@@ -127,19 +143,24 @@ const pdfViewerBaseStyles = css`
     justify-self: end;
   }
 
-  /* When the groups don't fit next to each other, they wrap and are centered,
-     with more space between the groups than between their controls. */
+  /* When the groups don't fit next to each other, they wrap and start from the
+     start edge, with more space between the groups than between their controls. */
   @container (max-width: 41rem) {
     [part='toolbar'] {
       display: flex;
       flex-wrap: wrap;
-      justify-content: center;
+      justify-content: flex-start;
       column-gap: var(--vaadin-gap-l);
+    }
+
+    [part='toolbar-group'],
+    [part='find-bar'],
+    .find-actions {
+      justify-content: flex-start;
     }
   }
 
-  /* The page field and the zoom select with their buttons look like one field with step buttons. */
-  [part~='page-controls'],
+  /* The zoom select with its buttons looks like one field with step buttons. */
   [part~='zoom-controls'] {
     display: flex;
     align-items: stretch;
@@ -152,19 +173,12 @@ const pdfViewerBaseStyles = css`
     background: var(--vaadin-input-field-background, var(--vaadin-background-color));
   }
 
-  [part~='page-controls'][part~='invalid'] {
-    border-color: var(--vaadin-input-field-error-color, var(--vaadin-text-color));
-    border-style: dashed;
-  }
-
-  [part~='page-controls'][part~='disabled'],
   [part~='zoom-controls'][part~='disabled'] {
     border-color: transparent;
     background: var(--vaadin-input-field-disabled-background, var(--vaadin-background-container-strong));
   }
 
-  /* The box draws the background and the border of the field, also when disabled or invalid. */
-  ::slotted(vaadin-integer-field[slot='toolbar-page']),
+  /* The box draws the background and the border of the select, also when disabled. */
   ::slotted(vaadin-select[slot='toolbar-zoom']) {
     flex: 0 1 auto;
     min-width: 0;
@@ -175,8 +189,7 @@ const pdfViewerBaseStyles = css`
     --vaadin-input-field-border-color: transparent;
   }
 
-  /* The buttons take the height of the field, like the step buttons of a number field */
-  ::slotted(vaadin-pdf-viewer-button[slot='toolbar-page']),
+  /* The buttons take the height of the select, like the step buttons of a number field */
   ::slotted(vaadin-pdf-viewer-button[slot='toolbar-zoom']) {
     height: auto;
     min-height: 0;
@@ -184,7 +197,7 @@ const pdfViewerBaseStyles = css`
     padding-block: 0;
   }
 
-  /* Next to the page controls, so that the toolbar keeps its height */
+  /* Next to the page field, so that the toolbar keeps its height */
   ::slotted([slot='page-error']) {
     align-self: center;
     font-size: var(--vaadin-input-field-error-font-size, 0.875em);
@@ -200,7 +213,7 @@ const pdfViewerBaseStyles = css`
     clip-path: inset(50%);
   }
 
-  /* Wide enough for the page number and the page count after it, e.g. "12 / 34" */
+  /* Wide enough for the page number, at least two digits for a page that was mistyped, and the page count after it, e.g. "12 / 34" */
   ::slotted(vaadin-integer-field) {
     width: var(--vaadin-pdf-viewer-page-field-width, calc((2 * var(--_page-digits, 1) + 2) * 1ch + 1.5em));
   }
@@ -690,9 +703,9 @@ const pdfViewerBaseStyles = css`
   /* On touch devices, pages are zoomed by pinching and changed by scrolling, like in other PDF viewers
      on phones. The zoom buttons stay for zooming without two fingers. */
   @media (pointer: coarse) {
-    ::slotted(vaadin-select[slot='toolbar-zoom']),
-    [part~='page-controls'],
-    ::slotted([slot='page-error']) {
+    ::slotted(
+      :is(vaadin-select[slot='toolbar-zoom'], [slot='toolbar-page'], [slot='page-field'], [slot='page-error'])
+    ) {
       display: none;
     }
 

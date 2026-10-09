@@ -180,9 +180,8 @@ describe('toolbar', () => {
           expect(input.getAttribute('aria-invalid')).to.equal('true');
         });
 
-        it('should mark the page controls invalid', () => {
-          const controls = viewer.shadowRoot!.querySelector('[part~="page-controls"]')!;
-          expect(controls.part.contains('invalid')).to.be.true;
+        it('should mark the page field invalid', () => {
+          expect(getPageField().invalid).to.be.true;
         });
 
         it('should keep the entered page when the toolbar is updated', async () => {
@@ -419,14 +418,47 @@ describe('toolbar', () => {
       expect(getPageField().getBoundingClientRect().width).to.equal(200);
     });
 
-    it('should show the page field and the zoom select joined with their buttons', () => {
-      const pageControls = viewer.shadowRoot!.querySelector('[part~="page-controls"]')!;
+    it('should show the zoom select joined with its buttons', () => {
       const zoomControls = viewer.shadowRoot!.querySelector('[part~="zoom-controls"]')!;
-      expect(getPageField().assignedSlot!.parentElement).to.equal(pageControls);
       expect(getZoomSelect().assignedSlot!.parentElement).to.equal(zoomControls);
-      expect(getComputedStyle(getPageField()).getPropertyValue('--vaadin-input-field-border-width').trim()).to.equal(
+      expect(getComputedStyle(getZoomSelect()).getPropertyValue('--vaadin-input-field-border-width').trim()).to.equal(
         '0px',
       );
+    });
+
+    it('should center the value of the zoom select', () => {
+      expect(getZoomSelect().getAttribute('theme')).to.equal('align-center');
+    });
+
+    it('should show the page buttons before the page field, not joined with it', () => {
+      const navigation = viewer.shadowRoot!.querySelector('[part~="toolbar-group"].navigation')!;
+      expect(getPageField().assignedSlot!.parentElement).to.equal(navigation);
+      const field = getPageField().getBoundingClientRect();
+      expect(getButton('previous-page').getBoundingClientRect().right).to.be.at.most(field.left);
+      expect(getButton('next-page').getBoundingClientRect().right).to.be.at.most(field.left);
+    });
+
+    ['ltr', 'rtl'].forEach((dir) => {
+      it(`should start the groups from the start edge of a narrow toolbar in ${dir}`, async () => {
+        viewer.setAttribute('dir', dir);
+        viewer.style.width = '360px';
+        await nextFrame();
+        const toolbar = viewer.shadowRoot!.querySelector('[part="toolbar"]')!.getBoundingClientRect();
+        const groups = [...viewer.shadowRoot!.querySelectorAll('[part~="toolbar-group"]')].map((group) =>
+          group.getBoundingClientRect(),
+        );
+        // Each line starts at the start edge.
+        const lines = new Set(groups.map((group) => group.top));
+        expect(lines.size).to.be.greaterThan(1);
+        lines.forEach((top) => {
+          const line = groups.filter((group) => group.top === top);
+          const offset =
+            dir === 'ltr'
+              ? Math.min(...line.map((group) => group.left)) - toolbar.left
+              : toolbar.right - Math.max(...line.map((group) => group.right));
+          expect(offset).to.be.lessThan(20);
+        });
+      });
     });
   });
 
@@ -442,6 +474,22 @@ describe('toolbar', () => {
 
     afterEach(async () => {
       await setTouchEmulation(false);
+    });
+
+    it('should collapse the toolbar by default', async () => {
+      const touchViewer = fixtureSync<PdfViewer>('<vaadin-pdf-viewer file-name-visible></vaadin-pdf-viewer>');
+      expect(touchViewer.toolbarCollapsed).to.be.true;
+      await loadDocument(touchViewer, 'multi-page.pdf');
+      await nextFrame();
+      const toolbar = touchViewer.shadowRoot!.querySelector<HTMLElement>('[part="toolbar"]')!;
+      expect(toolbar.checkVisibility()).to.be.false;
+    });
+
+    it('should not collapse the toolbar when the application has expanded it', async () => {
+      const touchViewer = fixtureSync<PdfViewer>('<vaadin-pdf-viewer file-name-visible></vaadin-pdf-viewer>');
+      touchViewer.toolbarCollapsed = false;
+      await nextRender();
+      expect(touchViewer.toolbarCollapsed).to.be.false;
     });
 
     it('should hide the zoom select and the page controls', () => {
@@ -516,6 +564,127 @@ describe('toolbar', () => {
       viewer.src = undefined as any;
       await nextFrame();
       expect(getFileName().hidden).to.be.true;
+    });
+  });
+
+  describe('collapsed toolbar', () => {
+    function getToolbar() {
+      return viewer.shadowRoot!.querySelector<HTMLElement>('[part="toolbar"]')!;
+    }
+
+    function getToggle() {
+      return viewer.querySelector<HTMLElement>('vaadin-pdf-viewer-button[slot="toolbar-toggle"]');
+    }
+
+    beforeEach(async () => {
+      await loadDocument(viewer, 'multi-page.pdf');
+      await nextFrame();
+    });
+
+    it('should not collapse the toolbar by default', () => {
+      expect(viewer.toolbarCollapsed).to.be.false;
+      expect(getToolbar().checkVisibility()).to.be.true;
+    });
+
+    it('should not show the toggle button without the file name', () => {
+      expect(getToggle()).to.be.null;
+    });
+
+    it('should not collapse the toolbar without the file name, which has the button to expand it', async () => {
+      viewer.toolbarCollapsed = true;
+      await nextFrame();
+      expect(getToolbar().checkVisibility()).to.be.true;
+    });
+
+    it('should move focus to the toggle button when the toolbar collapses as the file name is shown', async () => {
+      viewer.toolbarCollapsed = true;
+      await nextFrame();
+      getButton('download').focus();
+      viewer.fileNameVisible = true;
+      await nextFrame();
+      expect(getToolbar().checkVisibility()).to.be.false;
+      expect(document.activeElement).to.equal(getToggle());
+    });
+
+    it('should collapse the toolbar with the attributes', async () => {
+      viewer.setAttribute('toolbar-collapsed', '');
+      viewer.setAttribute('file-name-visible', '');
+      await nextFrame();
+      expect(viewer.toolbarCollapsed).to.be.true;
+      expect(getToolbar().checkVisibility()).to.be.false;
+    });
+
+    describe('with file name', () => {
+      beforeEach(async () => {
+        viewer.fileNameVisible = true;
+        await nextFrame();
+      });
+
+      it('should show the toggle button next to the file name', () => {
+        const fileName = viewer.shadowRoot!.querySelector('[part="file-name"]')!;
+        expect(fileName.contains(getToggle()!.assignedSlot)).to.be.true;
+        expect(getToggle()!.getAttribute('aria-label')).to.equal('Toolbar');
+        expect(getToggle()!.getAttribute('aria-expanded')).to.equal('true');
+        expect(getToggle()!.getAttribute('icon')).to.equal('collapse-toolbar');
+      });
+
+      it('should collapse and expand the toolbar on toggle button click', async () => {
+        const spy = sinon.spy();
+        viewer.addEventListener('toolbar-collapsed-changed', spy);
+        getToggle()!.click();
+        await nextFrame();
+        expect(viewer.toolbarCollapsed).to.be.true;
+        expect(spy).to.be.calledOnce;
+        expect(getToolbar().checkVisibility()).to.be.false;
+        expect(getToggle()!.getAttribute('aria-label')).to.equal('Toolbar');
+        expect(getToggle()!.getAttribute('aria-expanded')).to.equal('false');
+        expect(getToggle()!.getAttribute('icon')).to.equal('expand-toolbar');
+
+        getToggle()!.click();
+        await nextFrame();
+        expect(viewer.toolbarCollapsed).to.be.false;
+        expect(getToolbar().checkVisibility()).to.be.true;
+      });
+
+      it('should use the i18n label for the toggle button', async () => {
+        viewer.i18n = { toolbarToggle: 'Verktygsfält' };
+        await nextFrame();
+        expect(getToggle()!.getAttribute('aria-label')).to.equal('Verktygsfält');
+      });
+
+      it('should move focus to the toggle button when the toolbar collapses with focus in it', async () => {
+        getButton('download').focus();
+        viewer.toolbarCollapsed = true;
+        await nextFrame();
+        expect(document.activeElement).to.equal(getToggle());
+      });
+
+      it('should keep focus outside the toolbar when it collapses', async () => {
+        getButton('find').click();
+        await nextRender();
+        const findField = viewer.querySelector('vaadin-text-field')!;
+        expect(findField.contains(document.activeElement)).to.be.true;
+        viewer.toolbarCollapsed = true;
+        await nextFrame();
+        expect(findField.contains(document.activeElement)).to.be.true;
+      });
+
+      it('should move focus to the pages when the toggle button is removed with focus', async () => {
+        getToggle()!.focus();
+        viewer.src = undefined as any;
+        await nextFrame();
+        expect(getToggle()).to.be.null;
+        expect(viewer.shadowRoot!.activeElement).to.equal(viewer.shadowRoot!.querySelector('[part="content"]'));
+      });
+
+      it('should keep the find bar open when the toolbar collapses', async () => {
+        getButton('find').click();
+        await nextRender();
+        viewer.toolbarCollapsed = true;
+        await nextFrame();
+        const findBar = viewer.shadowRoot!.querySelector<HTMLElement>('[part="find-bar"]')!;
+        expect(findBar.checkVisibility()).to.be.true;
+      });
     });
   });
 

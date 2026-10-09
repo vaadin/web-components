@@ -30,6 +30,14 @@
     --_icon: var(--vaadin-pdf-viewer-icon-next-page);
   }
 
+  :host([icon='collapse-toolbar']) {
+    --_icon: var(--vaadin-pdf-viewer-icon-collapse-toolbar);
+  }
+
+  :host([icon='expand-toolbar']) {
+    --_icon: var(--vaadin-pdf-viewer-icon-expand-toolbar);
+  }
+
   :host([icon='zoom-out']) {
     --_icon: var(--vaadin-pdf-viewer-icon-zoom-out);
   }

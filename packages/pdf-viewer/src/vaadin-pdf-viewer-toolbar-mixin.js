@@ -21,6 +21,9 @@ import { isKeyboardActive } from '@vaadin/a11y-base/src/focus-utils.js';
 import { generateUniqueId } from '@vaadin/component-base/src/unique-id-utils.js';
 import { formatZoom, getZoomInLevel, getZoomOutLevel, isValidZoom, ZOOM_LEVELS } from './pdf-viewer-zoom.js';
 
+/** The slots of the controls in the toolbar, which are hidden when it collapses. */
+const TOOLBAR_SLOTS = ['toolbar-navigation', 'toolbar-page', 'page-field', 'toolbar-zoom', 'toolbar-actions'];
+
 /**
  * Renders the toolbar of the PDF viewer. Its controls are Vaadin components,
  * rendered into the light DOM so that themes can style them like any other
@@ -32,6 +35,23 @@ export const PdfViewerToolbarMixin = (superClass) =>
   class PdfViewerToolbarMixinClass extends superClass {
     static get properties() {
       return {
+        /**
+         * Whether the toolbar is collapsed. The button that collapses and
+         * expands it is next to the file name, so the toolbar collapses only
+         * while the file name is shown, see `fileNameVisible`. The find bar
+         * stays open when the toolbar collapses.
+         *
+         * Defaults to collapsed on devices whose main pointer is touch, like
+         * phones, where the pages need all the space they can get.
+         *
+         * @attr {boolean} toolbar-collapsed
+         */
+        toolbarCollapsed: {
+          type: Boolean,
+          value: () => window.matchMedia('(pointer: coarse)').matches,
+          notify: true,
+        },
+
         /**
          * A page number entered by the user that does not exist, which is kept
          * in the field until the page changes, or null.
@@ -58,6 +78,8 @@ export const PdfViewerToolbarMixin = (superClass) =>
 
       if (
         props.has('sidebarOpened') ||
+        props.has('toolbarCollapsed') ||
+        props.has('fileNameVisible') ||
         props.has('__outline') ||
         props.has('__sidebarView') ||
         props.has('page') ||
@@ -90,9 +112,11 @@ export const PdfViewerToolbarMixin = (superClass) =>
       // The page field only shows a page that exists. A page out of range set by
       // the application would make the field invalid.
       const pageValue = hasDocument && page >= 1 && page <= pageCount ? String(page) : '';
+      const focusedControl = this.querySelector(':scope > :focus-within');
 
       render(
         html`
+          ${this.#renderToolbarToggle(i18n)}
           <vaadin-pdf-viewer-button
             slot="toolbar-navigation"
             icon="sidebar"
@@ -114,10 +138,20 @@ export const PdfViewerToolbarMixin = (superClass) =>
           >
             ${this.#renderTooltip(i18n.previousPage)}
           </vaadin-pdf-viewer-button>
-          <vaadin-integer-field
+          <vaadin-pdf-viewer-button
             slot="toolbar-page"
+            icon="next-page"
+            theme="tertiary icon"
+            aria-label="${i18n.nextPage}"
+            .disabled="${!hasDocument || page >= pageCount}"
+            @click="${this.#onNextPageClick}"
+          >
+            ${this.#renderTooltip(i18n.nextPage)}
+          </vaadin-pdf-viewer-button>
+          <vaadin-integer-field
+            slot="page-field"
             theme="align-right"
-            style="--_page-digits: ${String(pageCount || 1).length}"
+            style="--_page-digits: ${Math.max(String(pageCount).length, 2)}"
             accessible-name="${hasDocument ? i18n.pageOf.replace('{pageCount}', pageCount) : i18n.page}"
             min="1"
             max="${pageCount || 1}"
@@ -132,16 +166,6 @@ export const PdfViewerToolbarMixin = (superClass) =>
           >
             <span slot="suffix" aria-hidden="true">${hasDocument ? `/ ${pageCount}` : ''}</span>
           </vaadin-integer-field>
-          <vaadin-pdf-viewer-button
-            slot="toolbar-page"
-            icon="next-page"
-            theme="tertiary icon"
-            aria-label="${i18n.nextPage}"
-            .disabled="${!hasDocument || page >= pageCount}"
-            @click="${this.#onNextPageClick}"
-          >
-            ${this.#renderTooltip(i18n.nextPage)}
-          </vaadin-pdf-viewer-button>
           <span slot="page-error" id="${this.#pageErrorId}" aria-live="assertive"
             >${this.__invalidPageEntry === null ? nothing : i18n.pageError.replace('{pageCount}', pageCount)}</span
           >
@@ -157,6 +181,7 @@ export const PdfViewerToolbarMixin = (superClass) =>
           </vaadin-pdf-viewer-button>
           <vaadin-select
             slot="toolbar-zoom"
+            theme="align-center"
             accessible-name="${i18n.zoom}"
             .items="${this.#getZoomItems(i18n)}"
             .value="${live(this.#getZoomValue())}"
@@ -210,6 +235,8 @@ export const PdfViewerToolbarMixin = (superClass) =>
         { host: this },
       );
 
+      this.#keepFocus(focusedControl);
+
       // Printing disables the print button. Focus the cancel button instead.
       const focusedPrintButton = this.querySelector(':scope > vaadin-pdf-viewer-button[icon="print"][disabled]:focus');
       if (focusedPrintButton) {
@@ -224,11 +251,56 @@ export const PdfViewerToolbarMixin = (superClass) =>
       // that touch devices don't open the on-screen keyboard.
       const focusedButton = this.querySelector(':scope > vaadin-pdf-viewer-button[disabled]:focus');
       if (focusedButton && isKeyboardActive()) {
-        const next = this.querySelector(
-          `:scope > [slot="${focusedButton.slot}"]:not([disabled], vaadin-pdf-viewer-button)`,
-        );
+        const slot = focusedButton.slot === 'toolbar-page' ? 'page-field' : focusedButton.slot;
+        const next = this.querySelector(`:scope > [slot="${slot}"]:not([disabled], vaadin-pdf-viewer-button)`);
         next?.focus({ focusVisible: true });
       }
+    }
+
+    /**
+     * Keeps focus in the viewer when the control that has it is hidden or
+     * removed: a control of a collapsed toolbar moves focus to the button that
+     * expands it, and that button, removed with the file name, to the pages.
+     * @private
+     */
+    #keepFocus(focusedControl) {
+      if (!focusedControl) {
+        return;
+      }
+      const options = { focusVisible: isKeyboardActive() };
+      if (focusedControl.slot === 'toolbar-toggle' && !focusedControl.isConnected) {
+        this.shadowRoot.querySelector('#content').focus(options);
+      } else if (this._isToolbarCollapsed() && TOOLBAR_SLOTS.includes(focusedControl.slot)) {
+        this.querySelector(':scope > [slot="toolbar-toggle"]').focus(options);
+      }
+    }
+
+    /**
+     * Renders the button next to the file name that collapses and expands the toolbar.
+     * @private
+     */
+    #renderToolbarToggle(i18n) {
+      if (!this._isFileNameShown()) {
+        return nothing;
+      }
+      const collapsed = this._isToolbarCollapsed();
+      return html`
+        <vaadin-pdf-viewer-button
+          slot="toolbar-toggle"
+          icon="${collapsed ? 'expand-toolbar' : 'collapse-toolbar'}"
+          theme="tertiary icon"
+          aria-label="${i18n.toolbarToggle}"
+          aria-expanded="${collapsed ? 'false' : 'true'}"
+          @click="${this.#onToolbarToggleClick}"
+        >
+          ${this.#renderTooltip(i18n.toolbarToggle)}
+        </vaadin-pdf-viewer-button>
+      `;
+    }
+
+    /** @private */
+    #onToolbarToggleClick() {
+      this.toolbarCollapsed = !this._isToolbarCollapsed();
     }
 
     /**
@@ -523,5 +595,22 @@ export const PdfViewerToolbarMixin = (superClass) =>
       event.stopPropagation();
       const { value } = event.target;
       this.zoom = value === 'page-width' || value === 'page-fit' ? value : Number(value);
+    }
+
+    /**
+     * Returns whether the toolbar is collapsed. It collapses only while the
+     * file name, with the button that expands it, is shown.
+     * @protected
+     */
+    _isToolbarCollapsed() {
+      return !!this.toolbarCollapsed && this._isFileNameShown();
+    }
+
+    /**
+     * Returns whether the file name, with the button that collapses the toolbar, is shown.
+     * @protected
+     */
+    _isFileNameShown() {
+      return this.fileNameVisible && this.pageCount > 0;
     }
   };

@@ -22,6 +22,10 @@
         viewer.src = select.value.startsWith('/') ? select.value : fixtures + select.value;
       });
 
+      document.querySelector('#file-name-visible').addEventListener('change', (e) => {
+        viewer.fileNameVisible = e.target.checked;
+      });
+
       viewer.addEventListener('document-load', (e) => {
         log.textContent = `document-load: ${JSON.stringify(e.detail)}`;
       });
@@ -51,6 +55,10 @@
           <option value="invalid.pdf">invalid.pdf</option>
           <option value="/does-not-exist.pdf">Missing file</option>
         </select>
+      </label>
+      <label>
+        <input type="checkbox" id="file-name-visible" />
+        Show file name
       </label>
       <output id="log"></output>
     </p>

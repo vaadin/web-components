@@ -26,6 +26,7 @@ const DEFAULT_I18N = {
   loadError: 'The document could not be loaded.',
   passwordError: 'Password-protected documents are not supported.',
   toolbar: 'PDF toolbar',
+  toolbarToggle: 'Toolbar',
   sidebar: 'Sidebar',
   sidebarView: 'Sidebar view',
   thumbnails: 'Page thumbnails',
@@ -71,8 +72,9 @@ const DEFAULT_I18N = {
  *
  * On devices whose main pointer is touch, users zoom the pages by pinching and move between
  * pages by scrolling, like in other PDF viewers on phones, so the toolbar does not show the zoom
- * select and the page controls. The zoom in and zoom out buttons stay, for zooming without
- * two fingers. Keyboard shortcuts for zooming keep working.
+ * select, the page buttons and the page field. The zoom in and zoom out buttons stay, for zooming without
+ * two fingers. Keyboard shortcuts for zooming keep working. When the file name is shown, the
+ * toolbar also starts collapsed there, see `toolbarCollapsed`.
  *
  * ### Styling
  *
@@ -81,9 +83,8 @@ const DEFAULT_I18N = {
  * Part name              | Description
  * -----------------------|------------
  * `toolbar`              | The toolbar above the pages.
- * `file-name`            | The name of the document above the toolbar, see `fileNameVisible`.
+ * `file-name`            | The name of the document above the toolbar, with the button that collapses the toolbar, see `fileNameVisible`.
  * `toolbar-group`        | A group of related controls in the toolbar: navigation, viewing options and actions.
- * `page-controls`        | The page number field with the previous and next page buttons. Also has the `invalid` part name while the entered page does not exist, and the `disabled` part name without a document.
  * `zoom-controls`        | The zoom select with the zoom out and zoom in buttons. Also has the `disabled` part name without a document.
  * `find-bar`             | The bar with the controls for finding text, below the toolbar.
  * `sidebar`              | The sidebar next to the pages.
@@ -120,7 +121,9 @@ const DEFAULT_I18N = {
  * | `--vaadin-pdf-viewer-error-color`                  |
  * | `--vaadin-pdf-viewer-find-field-width`             |
  * | `--vaadin-pdf-viewer-icon-close`                   |
+ * | `--vaadin-pdf-viewer-icon-collapse-toolbar`        |
  * | `--vaadin-pdf-viewer-icon-download`                |
+ * | `--vaadin-pdf-viewer-icon-expand-toolbar`          |
  * | `--vaadin-pdf-viewer-icon-find`                    |
  * | `--vaadin-pdf-viewer-icon-next-page`               |
  * | `--vaadin-pdf-viewer-icon-outline`                 |
@@ -160,6 +163,7 @@ const DEFAULT_I18N = {
  * @fires {CustomEvent} document-error - Fired when the document could not be loaded.
  * @fires {CustomEvent} page-changed - Fired when the `page` property changes.
  * @fires {CustomEvent} sidebar-opened-changed - Fired when the `sidebarOpened` property changes.
+ * @fires {CustomEvent} toolbar-collapsed-changed - Fired when the `toolbarCollapsed` property changes.
  * @fires {CustomEvent} zoom-changed - Fired when the `zoom` property changes.
  *
  * @customElement vaadin-pdf-viewer
@@ -213,6 +217,9 @@ class PdfViewer extends PdfViewerToolbarMixin(
    *   passwordError: 'Password-protected documents are not supported.',
    *   // Accessible label of the toolbar.
    *   toolbar: 'PDF toolbar',
+   *   // Accessible label and tooltip of the button next to the file name that
+   *   // collapses and expands the toolbar, see `fileNameVisible`.
+   *   toolbarToggle: 'Toolbar',
    *   // Accessible label and tooltip of the sidebar button.
    *   sidebar: 'Sidebar',
    *   // Accessible label of the group of buttons that switch the sidebar view.
@@ -298,20 +305,19 @@ class PdfViewer extends PdfViewerToolbarMixin(
    */
   render() {
     const i18n = this.__effectiveI18n;
-    const hasInvalidPage = this.__invalidPageEntry !== null;
     const disabled = this.pageCount ? '' : ' disabled';
     const documentName = this._getDocumentName() || i18n.document;
     return html`
       <div class="header">
-        <div part="file-name" dir="auto" title="${documentName}" ?hidden="${!this.fileNameVisible || !this.pageCount}">
-          ${documentName}
+        <div part="file-name" ?hidden="${!this._isFileNameShown()}">
+          <span class="file-name-text" dir="auto" title="${documentName}">${documentName}</span>
+          <slot name="toolbar-toggle"></slot>
         </div>
-        <div part="toolbar" role="toolbar" aria-label="${i18n.toolbar}">
+        <div part="toolbar" role="toolbar" aria-label="${i18n.toolbar}" ?hidden="${this._isToolbarCollapsed()}">
           <div part="toolbar-group" class="navigation">
             <slot name="toolbar-navigation"></slot>
-            <div part="${hasInvalidPage ? 'page-controls invalid' : `page-controls${disabled}`}">
-              <slot name="toolbar-page"></slot>
-            </div>
+            <slot name="toolbar-page"></slot>
+            <slot name="page-field"></slot>
             <slot name="page-error"></slot>
           </div>
           <div part="toolbar-group" class="viewing">

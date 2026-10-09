@@ -22,30 +22,23 @@
   }
 
   /* Filled like Lumo fields, without a border */
-  [part~='page-controls'],
   [part~='zoom-controls'] {
     border-width: 0;
     border-radius: var(--lumo-border-radius-m);
     background: var(--lumo-contrast-10pct);
   }
 
-  [part~='page-controls'][part~='invalid'] {
-    background: var(--lumo-error-color-10pct);
-  }
-
-  [part~='page-controls'][part~='disabled'],
   [part~='zoom-controls'][part~='disabled'] {
     background: var(--lumo-contrast-5pct);
   }
 
-  /* No extra space around the field inside the box */
-  ::slotted(vaadin-integer-field[slot='toolbar-page']),
+  /* No extra space around the fields, so that they have the height of the buttons */
+  ::slotted(vaadin-integer-field[slot='page-field']),
   ::slotted(vaadin-select[slot='toolbar-zoom']) {
     padding-block: 0;
   }
 
   /* Neutral like the step buttons of a number field */
-  ::slotted(vaadin-pdf-viewer-button[slot='toolbar-page']:not([disabled])),
   ::slotted(vaadin-pdf-viewer-button[slot='toolbar-zoom']:not([disabled])) {
     color: var(--lumo-contrast-60pct);
   }
@@ -73,6 +66,8 @@
     --vaadin-pdf-viewer-selection-background: color-mix(in srgb, var(--lumo-primary-color) 30%, transparent);
     --vaadin-pdf-viewer-icon-previous-page: var(--lumo-icons-angle-up);
     --vaadin-pdf-viewer-icon-next-page: var(--lumo-icons-angle-down);
+    --vaadin-pdf-viewer-icon-collapse-toolbar: var(--lumo-icons-angle-up);
+    --vaadin-pdf-viewer-icon-expand-toolbar: var(--lumo-icons-angle-down);
     --vaadin-pdf-viewer-icon-zoom-out: var(--lumo-icons-minus);
     --vaadin-pdf-viewer-icon-zoom-in: var(--lumo-icons-plus);
     --vaadin-pdf-viewer-icon-find: var(--lumo-icons-search);

@@ -9,6 +9,7 @@ import type {
   PdfViewerI18n,
   PdfViewerPageChangedEvent,
   PdfViewerSidebarOpenedChangedEvent,
+  PdfViewerToolbarCollapsedChangedEvent,
   PdfViewerZoom,
   PdfViewerZoomChangedEvent,
 } from '../../src/vaadin-pdf-viewer.js';
@@ -33,6 +34,7 @@ assertType<PdfViewerZoom>(viewer.zoom);
 assertType<boolean>(viewer.sidebarOpened);
 assertType<string | null | undefined>(viewer.fileName);
 assertType<boolean>(viewer.fileNameVisible);
+assertType<boolean>(viewer.toolbarCollapsed);
 assertType<Promise<void>>(viewer.print());
 viewer.zoom = 'page-fit';
 viewer.zoom = 'page-width';
@@ -92,5 +94,10 @@ assertType<PdfViewerI18n>({
 
 viewer.addEventListener('sidebar-opened-changed', (event) => {
   assertType<PdfViewerSidebarOpenedChangedEvent>(event);
+  assertType<boolean>(event.detail.value);
+});
+
+viewer.addEventListener('toolbar-collapsed-changed', (event) => {
+  assertType<PdfViewerToolbarCollapsedChangedEvent>(event);
   assertType<boolean>(event.detail.value);
 });

@@ -148,6 +148,14 @@ describe('pdf-viewer', () => {
     await visualDiff(div, 'file-name');
   });
 
+  it('toolbar-collapsed', async () => {
+    element.fileNameVisible = true;
+    element.toolbarCollapsed = true;
+    element.src = fixtureUrl('multi-page.pdf');
+    await nextRenderIdle(element);
+    await visualDiff(div, 'toolbar-collapsed');
+  });
+
   it('wide', async () => {
     div.style.width = '900px';
     element.src = fixtureUrl('multi-page.pdf');

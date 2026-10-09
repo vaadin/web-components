@@ -23,6 +23,7 @@ export interface PdfViewerI18n {
   loadError?: string;
   passwordError?: string;
   toolbar?: string;
+  toolbarToggle?: string;
   sidebar?: string;
   sidebarView?: string;
   thumbnails?: string;
@@ -84,6 +85,11 @@ export type PdfViewerZoomChangedEvent = CustomEvent<{ value: PdfViewerZoom }>;
  */
 export type PdfViewerSidebarOpenedChangedEvent = CustomEvent<{ value: boolean }>;
 
+/**
+ * Fired when the `toolbarCollapsed` property changes.
+ */
+export type PdfViewerToolbarCollapsedChangedEvent = CustomEvent<{ value: boolean }>;
+
 export interface PdfViewerCustomEventMap {
   'document-load': PdfViewerDocumentLoadEvent;
 
@@ -92,6 +98,8 @@ export interface PdfViewerCustomEventMap {
   'page-changed': PdfViewerPageChangedEvent;
 
   'sidebar-opened-changed': PdfViewerSidebarOpenedChangedEvent;
+
+  'toolbar-collapsed-changed': PdfViewerToolbarCollapsedChangedEvent;
 
   'zoom-changed': PdfViewerZoomChangedEvent;
 }
@@ -107,8 +115,9 @@ export interface PdfViewerEventMap extends HTMLElementEventMap, PdfViewerCustomE
  *
  * On devices whose main pointer is touch, users zoom the pages by pinching and move between
  * pages by scrolling, like in other PDF viewers on phones, so the toolbar does not show the zoom
- * select and the page controls. The zoom in and zoom out buttons stay, for zooming without
- * two fingers. Keyboard shortcuts for zooming keep working.
+ * select, the page buttons and the page field. The zoom in and zoom out buttons stay, for zooming without
+ * two fingers. Keyboard shortcuts for zooming keep working. When the file name is shown, the
+ * toolbar also starts collapsed there, see `toolbarCollapsed`.
  *
  * ### Styling
  *
@@ -117,7 +126,9 @@ export interface PdfViewerEventMap extends HTMLElementEventMap, PdfViewerCustomE
  * Part name              | Description
  * -----------------------|------------
  * `toolbar`              | The toolbar above the pages.
- * `toolbar-group`        | A group of related controls in the toolbar.
+ * `file-name`            | The name of the document above the toolbar, with the button that collapses the toolbar, see `fileNameVisible`.
+ * `toolbar-group`        | A group of related controls in the toolbar: navigation, viewing options and actions.
+ * `zoom-controls`        | The zoom select with the zoom out and zoom in buttons. Also has the `disabled` part name without a document.
  * `find-bar`             | The bar with the controls for finding text, below the toolbar.
  * `sidebar`              | The sidebar next to the pages.
  * `thumbnails`           | The scrollable list of page thumbnails in the sidebar.
@@ -153,7 +164,9 @@ export interface PdfViewerEventMap extends HTMLElementEventMap, PdfViewerCustomE
  * | `--vaadin-pdf-viewer-error-color`                  |
  * | `--vaadin-pdf-viewer-find-field-width`             |
  * | `--vaadin-pdf-viewer-icon-close`                   |
+ * | `--vaadin-pdf-viewer-icon-collapse-toolbar`        |
  * | `--vaadin-pdf-viewer-icon-download`                |
+ * | `--vaadin-pdf-viewer-icon-expand-toolbar`          |
  * | `--vaadin-pdf-viewer-icon-find`                    |
  * | `--vaadin-pdf-viewer-icon-next-page`               |
  * | `--vaadin-pdf-viewer-icon-outline`                 |
@@ -193,6 +206,7 @@ export interface PdfViewerEventMap extends HTMLElementEventMap, PdfViewerCustomE
  * @fires {CustomEvent} document-error - Fired when the document could not be loaded.
  * @fires {CustomEvent} page-changed - Fired when the `page` property changes.
  * @fires {CustomEvent} sidebar-opened-changed - Fired when the `sidebarOpened` property changes.
+ * @fires {CustomEvent} toolbar-collapsed-changed - Fired when the `toolbarCollapsed` property changes.
  * @fires {CustomEvent} zoom-changed - Fired when the `zoom` property changes.
  */
 declare class PdfViewer extends PdfViewerToolbarMixin(
@@ -219,6 +233,9 @@ declare class PdfViewer extends PdfViewerToolbarMixin(
    *   passwordError: 'Password-protected documents are not supported.',
    *   // Accessible label of the toolbar.
    *   toolbar: 'PDF toolbar',
+   *   // Accessible label and tooltip of the button next to the file name that
+   *   // collapses and expands the toolbar, see `fileNameVisible`.
+   *   toolbarToggle: 'Toolbar',
    *   // Accessible label and tooltip of the sidebar button.
    *   sidebar: 'Sidebar',
    *   // Accessible label of the group of buttons that switch the sidebar view.

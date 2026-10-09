@@ -48,6 +48,14 @@ export const pdfViewerButtonStyles = css`
     --_icon: var(--vaadin-pdf-viewer-icon-next-page, var(--_vaadin-icon-chevron-down));
   }
 
+  :host([icon='collapse-toolbar']) {
+    --_icon: var(--vaadin-pdf-viewer-icon-collapse-toolbar, var(--_vaadin-icon-chevron-up));
+  }
+
+  :host([icon='expand-toolbar']) {
+    --_icon: var(--vaadin-pdf-viewer-icon-expand-toolbar, var(--_vaadin-icon-chevron-down));
+  }
+
   :host([icon='sidebar']) {
     --_icon: var(--vaadin-pdf-viewer-icon-sidebar, var(--_vaadin-icon-sidebar));
   }
