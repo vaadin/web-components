@@ -319,6 +319,72 @@ describe('MasterDetailLayout', () => {
     expect(getComputedStyle(layout).getPropertyValue('--_detail-cached-size')).to.equal('201px'); // 1px border
   });
 
+  it('should render detail placeholder content', async () => {
+    await result.rerender(
+      <MasterDetailLayout>
+        <MasterDetailLayout.Master>
+          <div>Master content</div>
+        </MasterDetailLayout.Master>
+        <MasterDetailLayout.DetailPlaceholder>
+          <div>Select an item</div>
+        </MasterDetailLayout.DetailPlaceholder>
+      </MasterDetailLayout>,
+    );
+
+    await vi.waitFor(() => {
+      const placeholder = layout!.querySelector('[slot="detail-placeholder"]');
+      expect(placeholder).to.exist;
+      expect(placeholder).to.have.text('Select an item');
+    });
+  });
+
+  it('should not throw an error when using DetailPlaceholder', async () => {
+    await render(
+      <MasterDetailLayout>
+        <MasterDetailLayout.Master>Master</MasterDetailLayout.Master>
+        <MasterDetailLayout.Detail />
+        <MasterDetailLayout.DetailPlaceholder>Placeholder</MasterDetailLayout.DetailPlaceholder>
+      </MasterDetailLayout>,
+    );
+  });
+
+  describe('Child validation', () => {
+    it('should throw an error for invalid child component type', async () => {
+      await expect(
+        render(
+          <MasterDetailLayout>
+            <div>Unexpected div</div>
+            <MasterDetailLayout.Master>Master</MasterDetailLayout.Master>
+          </MasterDetailLayout>,
+        ),
+      ).to.be.rejectedWith(
+        'Invalid child in MasterDetailLayout. Only <MasterDetailLayout.Master>, <MasterDetailLayout.Detail>, and <MasterDetailLayout.DetailPlaceholder> components are allowed. Check the component docs for proper usage.',
+      );
+
+      const CustomComponent = () => <div>Custom</div>;
+      await expect(
+        render(
+          <MasterDetailLayout>
+            <CustomComponent />
+            <MasterDetailLayout.Master>Master</MasterDetailLayout.Master>
+          </MasterDetailLayout>,
+        ),
+      ).to.be.rejectedWith(
+        'Invalid child in MasterDetailLayout. Only <MasterDetailLayout.Master>, <MasterDetailLayout.Detail>, and <MasterDetailLayout.DetailPlaceholder> components are allowed. Check the component docs for proper usage.',
+      );
+    });
+
+    it('should not throw an error when using null, undefined, or text nodes', async () => {
+      await render(
+        <MasterDetailLayout>
+          {null}
+          {undefined}
+          Just a text node
+        </MasterDetailLayout>,
+      );
+    });
+  });
+
   describe('real transitions', () => {
     function ViewA() {
       return <div>View A</div>;
@@ -397,72 +463,6 @@ describe('MasterDetailLayout', () => {
       expect(spy.calledOnce).to.be.true;
       expect(outgoingElements()).to.have.length(0);
       expect(layout.textContent).to.not.include('View B');
-    });
-  });
-
-  it('should render detail placeholder content', async () => {
-    await result.rerender(
-      <MasterDetailLayout>
-        <MasterDetailLayout.Master>
-          <div>Master content</div>
-        </MasterDetailLayout.Master>
-        <MasterDetailLayout.DetailPlaceholder>
-          <div>Select an item</div>
-        </MasterDetailLayout.DetailPlaceholder>
-      </MasterDetailLayout>,
-    );
-
-    await vi.waitFor(() => {
-      const placeholder = layout!.querySelector('[slot="detail-placeholder"]');
-      expect(placeholder).to.exist;
-      expect(placeholder).to.have.text('Select an item');
-    });
-  });
-
-  it('should not throw an error when using DetailPlaceholder', async () => {
-    await render(
-      <MasterDetailLayout>
-        <MasterDetailLayout.Master>Master</MasterDetailLayout.Master>
-        <MasterDetailLayout.Detail />
-        <MasterDetailLayout.DetailPlaceholder>Placeholder</MasterDetailLayout.DetailPlaceholder>
-      </MasterDetailLayout>,
-    );
-  });
-
-  describe('Child validation', () => {
-    it('should throw an error for invalid child component type', async () => {
-      await expect(
-        render(
-          <MasterDetailLayout>
-            <div>Unexpected div</div>
-            <MasterDetailLayout.Master>Master</MasterDetailLayout.Master>
-          </MasterDetailLayout>,
-        ),
-      ).to.be.rejectedWith(
-        'Invalid child in MasterDetailLayout. Only <MasterDetailLayout.Master>, <MasterDetailLayout.Detail>, and <MasterDetailLayout.DetailPlaceholder> components are allowed. Check the component docs for proper usage.',
-      );
-
-      const CustomComponent = () => <div>Custom</div>;
-      await expect(
-        render(
-          <MasterDetailLayout>
-            <CustomComponent />
-            <MasterDetailLayout.Master>Master</MasterDetailLayout.Master>
-          </MasterDetailLayout>,
-        ),
-      ).to.be.rejectedWith(
-        'Invalid child in MasterDetailLayout. Only <MasterDetailLayout.Master>, <MasterDetailLayout.Detail>, and <MasterDetailLayout.DetailPlaceholder> components are allowed. Check the component docs for proper usage.',
-      );
-    });
-
-    it('should not throw an error when using null, undefined, or text nodes', async () => {
-      await render(
-        <MasterDetailLayout>
-          {null}
-          {undefined}
-          Just a text node
-        </MasterDetailLayout>,
-      );
     });
   });
 });
