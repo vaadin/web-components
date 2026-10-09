@@ -10,6 +10,7 @@ of steps to perform when creating a new major or minor version branch of the mon
   - [Visual tests](#visual-tests)
   - [Snapshot tests](#snapshot-tests)
   - [Integration tests](#integration-tests)
+  - [React components](#react-components)
 - [Making a version bump](#making-a-version-bump)
 - [Miscellaneous](#miscellaneous)
   - [Generating icons](#generating-icons)
