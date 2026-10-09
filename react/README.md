@@ -6,7 +6,8 @@ the wrapper generator and build (`scripts/`), the Vitest setup (`vite.config.ts`
 ## Build
 
 ```sh
-yarn release:react   # CEM and web-types inputs, then generate wrappers, bundle, emit types, update exports
+yarn build:react     # CEM and web-types inputs, then `yarn release:react`: generate wrappers, bundle, emit types, update exports for both packages
+yarn release:react   # only the React packages, the step `yarn release` runs after it has built the inputs
 yarn clean:react     # remove the generated sources and the build output
 ```
 
@@ -16,7 +17,7 @@ Specs live in `packages/react-components*/test/*.spec.tsx` and run in Chromium t
 
 ```sh
 npx playwright install chromium   # once
-yarn release:react                # once: the wrappers re-export the gitignored `src/generated`, and the bare `@vaadin/react-components` import uses the built `index.js`
+yarn build:react                  # once: the wrappers re-export the gitignored `src/generated`, and the bare `@vaadin/react-components` import uses the built `index.js`
 yarn test:react
 ```
 
@@ -26,7 +27,7 @@ Subpath imports such as `@vaadin/react-components/Grid.js` resolve to the source
 ## Dev pages
 
 ```sh
-yarn release:react   # once, see above
+yarn build:react     # once, see above
 yarn start:react     # opens /dev/ with one page per file in react/dev/pages/, e.g. /dev/grid.html
 ```
 

@@ -1,0 +1,153 @@
+{
+  "name": "@vaadin/react-components-pro",
+  "version": "25.4.0-alpha2",
+  "publishConfig": {
+    "access": "public"
+  },
+  "description": "React wrappers for commercial Vaadin components",
+  "type": "module",
+  "module": "index.js",
+  "main": "index.js",
+  "types": "index.d.ts",
+  "repository": {
+    "type": "git",
+    "url": "https://github.com/vaadin/web-components.git",
+    "directory": "packages/react-components-pro"
+  },
+  "scripts": {
+    "build": "tsx ../../react/scripts/build.ts",
+    "clean": "tsx ../../react/scripts/build.ts --clean",
+    "prepack": "node -e \"require('fs').accessSync('index.js')\" || (echo 'Run yarn build:react before publishing' && exit 1)"
+  },
+  "dependencies": {
+    "@lit/react": "^1.0.7",
+    "@vaadin/board": "25.4.0-alpha2",
+    "@vaadin/charts": "25.4.0-alpha2",
+    "@vaadin/crud": "25.4.0-alpha2",
+    "@vaadin/dashboard": "25.4.0-alpha2",
+    "@vaadin/grid-pro": "25.4.0-alpha2",
+    "@vaadin/map": "25.4.0-alpha2",
+    "@vaadin/react-components": "25.4.0-alpha2",
+    "@vaadin/rich-text-editor": "25.4.0-alpha2"
+  },
+  "devDependencies": {
+    "@types/react": "^19.1.13",
+    "@types/react-dom": "^19.1.9",
+    "@types/sinon": "^22.0.0",
+    "react": "^19.3.0",
+    "react-dom": "^19.3.0",
+    "sinon": "^22.0.0"
+  },
+  "author": "Vaadin Ltd.",
+  "license": "SEE LICENSE IN LICENSE",
+  "peerDependencies": {
+    "@types/react": "^19.0.0",
+    "@types/react-dom": "^19.0.0",
+    "react": "^19.0.0",
+    "react-dom": "^19.0.0"
+  },
+  "peerDependenciesMeta": {
+    "@types/react": {
+      "optional": true
+    },
+    "@types/react-dom": {
+      "optional": true
+    }
+  },
+  "sideEffects": false,
+  "files": [
+    "generated",
+    "renderers",
+    "utils",
+    "*.d.ts",
+    "*.d.ts.map",
+    "*.js",
+    "*.js.map"
+  ],
+  "exports": {
+    ".": {
+      "types": "./index.d.ts",
+      "default": "./index.js"
+    },
+    "./package.json": "./package.json",
+    "./Board.js": {
+      "types": "./Board.d.ts",
+      "default": "./Board.js"
+    },
+    "./BoardRow.js": {
+      "types": "./BoardRow.d.ts",
+      "default": "./BoardRow.js"
+    },
+    "./Chart.js": {
+      "types": "./Chart.d.ts",
+      "default": "./Chart.js"
+    },
+    "./ChartSeries.js": {
+      "types": "./ChartSeries.d.ts",
+      "default": "./ChartSeries.js"
+    },
+    "./Crud.js": {
+      "types": "./Crud.d.ts",
+      "default": "./Crud.js"
+    },
+    "./CrudEdit.js": {
+      "types": "./CrudEdit.d.ts",
+      "default": "./CrudEdit.js"
+    },
+    "./CrudEditColumn.js": {
+      "types": "./CrudEditColumn.d.ts",
+      "default": "./CrudEditColumn.js"
+    },
+    "./Dashboard.js": {
+      "types": "./Dashboard.d.ts",
+      "default": "./Dashboard.js"
+    },
+    "./DashboardLayout.js": {
+      "types": "./DashboardLayout.d.ts",
+      "default": "./DashboardLayout.js"
+    },
+    "./DashboardSection.js": {
+      "types": "./DashboardSection.d.ts",
+      "default": "./DashboardSection.js"
+    },
+    "./DashboardWidget.js": {
+      "types": "./DashboardWidget.d.ts",
+      "default": "./DashboardWidget.js"
+    },
+    "./GridPro.js": {
+      "types": "./GridPro.d.ts",
+      "default": "./GridPro.js"
+    },
+    "./GridProEditColumn.js": {
+      "types": "./GridProEditColumn.d.ts",
+      "default": "./GridProEditColumn.js"
+    },
+    "./Map.js": {
+      "types": "./Map.d.ts",
+      "default": "./Map.js"
+    },
+    "./RichTextEditor.js": {
+      "types": "./RichTextEditor.d.ts",
+      "default": "./RichTextEditor.js"
+    },
+    "./Board": "./Board.js",
+    "./BoardRow": "./BoardRow.js",
+    "./Chart": "./Chart.js",
+    "./ChartSeries": "./ChartSeries.js",
+    "./Crud": "./Crud.js",
+    "./CrudEdit": "./CrudEdit.js",
+    "./CrudEditColumn": "./CrudEditColumn.js",
+    "./Dashboard": "./Dashboard.js",
+    "./DashboardLayout": "./DashboardLayout.js",
+    "./DashboardSection": "./DashboardSection.js",
+    "./DashboardWidget": "./DashboardWidget.js",
+    "./GridPro": "./GridPro.js",
+    "./GridProEditColumn": "./GridProEditColumn.js",
+    "./Map": "./Map.js",
+    "./RichTextEditor": "./RichTextEditor.js",
+    "./utils/createComponent.d.ts": "./utils/createComponent.d.ts",
+    "./utils/createComponent.d.ts.map": "./utils/createComponent.d.ts.map",
+    "./utils/createComponent.js": "./utils/createComponent.js",
+    "./utils/createComponent.js.map": "./utils/createComponent.js.map"
+  }
+}
