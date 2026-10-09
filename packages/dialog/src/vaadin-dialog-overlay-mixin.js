@@ -4,6 +4,7 @@
  * This program is available under Apache License Version 2.0, available at https://vaadin.com/license/
  */
 import { getDeepActiveElement } from '@vaadin/a11y-base/src/focus-utils.js';
+import { setOrRemoveAttribute } from '@vaadin/component-base/src/dom-utils.js';
 import { SlotObserver } from '@vaadin/component-base/src/slot-observer.js';
 import { OverlayMixin } from '@vaadin/overlay/src/vaadin-overlay-mixin.js';
 import { setOverlayStateAttribute } from '@vaadin/overlay/src/vaadin-overlay-utils.js';
@@ -18,6 +19,13 @@ export const DialogOverlayMixin = (superClass) =>
          */
         headerTitle: {
           type: String,
+        },
+
+        /**
+         * The ARIA heading level of the title.
+         */
+        headingLevel: {
+          type: Number,
         },
 
         /**
@@ -117,6 +125,7 @@ export const DialogOverlayMixin = (superClass) =>
       this.__handleWindowResize = this.__handleWindowResize.bind(this);
     }
 
+    /** @protected */
     updated(props) {
       super.updated(props);
 
@@ -126,6 +135,10 @@ export const DialogOverlayMixin = (superClass) =>
         } else {
           window.removeEventListener('resize', this.__handleWindowResize);
         }
+      }
+
+      if (props.has('headingLevel') && this.headerTitleElement) {
+        setOrRemoveAttribute(this.headerTitleElement, 'aria-level', this.headingLevel);
       }
     }
 
@@ -217,6 +230,7 @@ export const DialogOverlayMixin = (superClass) =>
         }
         this.owner.appendChild(this.headerTitleElement);
         this.headerTitleElement.textContent = this.headerTitle;
+        setOrRemoveAttribute(this.headerTitleElement, 'aria-level', this.headingLevel);
       } else if (this.headerTitleElement) {
         this.headerTitleElement.remove();
         this.headerTitleElement = null;

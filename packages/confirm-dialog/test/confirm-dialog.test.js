@@ -147,6 +147,32 @@ describe('vaadin-confirm-dialog', () => {
         const headerNode = confirm.querySelector('[slot="header"]');
         expect(headerNode.textContent.trim()).to.equal('Just go away');
       });
+
+      it('should not set aria-level on the header by default', () => {
+        const headerNode = confirm.querySelector('[slot="header"]');
+        expect(headerNode.hasAttribute('aria-level')).to.be.false;
+      });
+
+      it('should toggle aria-level on the header when headingLevel changes', async () => {
+        const headerNode = confirm.querySelector('[slot="header"]');
+
+        confirm.headingLevel = 2;
+        await nextFrame();
+        expect(headerNode.getAttribute('aria-level')).to.equal('2');
+
+        confirm.headingLevel = null;
+        await nextFrame();
+        expect(headerNode.hasAttribute('aria-level')).to.be.false;
+      });
+
+      it('should set aria-level on the header when heading-level attribute is set', async () => {
+        confirm = fixtureSync(
+          '<vaadin-confirm-dialog opened header="Header" heading-level="2"></vaadin-confirm-dialog>',
+        );
+        await nextRender();
+        const headerNode = confirm.querySelector('[slot="header"]');
+        expect(headerNode.getAttribute('aria-level')).to.equal('2');
+      });
     });
 
     describe('slot', () => {
@@ -169,6 +195,13 @@ describe('vaadin-confirm-dialog', () => {
         await nextFrame();
         const headerNode = confirm.querySelector('[slot="header"]');
         expect(headerNode.textContent.trim()).to.equal('Slotted header');
+      });
+
+      it('should not set aria-level on custom node when headingLevel is set', async () => {
+        confirm.headingLevel = 2;
+        await nextFrame();
+        const headerNode = confirm.querySelector('[slot="header"]');
+        expect(headerNode.hasAttribute('aria-level')).to.be.false;
       });
 
       it('should set pointer-events on the element to auto', () => {
