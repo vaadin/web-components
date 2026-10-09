@@ -1,0 +1,150 @@
+name: PR Snapshot
+
+# Builds and publishes a feature snapshot of all packages to npm for a pull
+# request, so that the change can be tried out before it is merged. The build is
+# opt-in per pull request: it runs once the "snapshot build" label is added and
+# then again for every commit pushed while the label is there.
+#
+# Adopted from the workflow of the same name in vaadin/flow and
+# vaadin/flow-components. The publishing itself is done by
+# scripts/publishFeatureSnapshot.sh: every commit gets an immutable version
+# <base>-dev.<short-hash>, and the dist-tag dev-<branch> is moved to the newest
+# one. The feature name is taken from the branch name the same way the other
+# repositories derive their snapshot qualifier, so snapshots built from branches
+# with the same name in those repositories can be found by the same name here.
+on:
+  pull_request:
+    types: [labeled, synchronize]
+
+permissions:
+  contents: read
+  pull-requests: write
+
+concurrency:
+  # One snapshot per pull request at a time. Not cancelled in progress, unlike
+  # the Maven snapshots of the other repositories: npm moves the dist-tag of each
+  # package as that package is published, so a cancel midway would leave the tag
+  # pointing at two different builds. A newer push waits instead, and only the
+  # newest of the waiting ones runs.
+  group: ${{ github.workflow }}-${{ github.event.number }}
+  cancel-in-progress: false
+
+env:
+  _HEAD_REF: ${{ github.head_ref }}
+  _HEAD_SHA: ${{ github.event.pull_request.head.sha }}
+  _PR_NUMBER: ${{ github.event.number }}
+
+jobs:
+  snapshot:
+    name: Snapshot
+    runs-on: ubuntu-latest
+    timeout-minutes: 60
+    # A publish needs the npm token, and secrets are only handed to pull requests
+    # from a branch of this repository, never to a fork. Which is also the access
+    # check: pushing that branch takes write access to the repository and
+    # applying the label takes at least triage access, so a snapshot cannot be
+    # triggered from the outside. Fork pull requests are skipped entirely -
+    # labeling one does nothing.
+    #
+    # The label has to be present for both event types, and a `labeled` event
+    # for some other label must not start a build of its own.
+    if: >-
+      !github.event.pull_request.head.repo.fork
+      && contains(github.event.pull_request.labels.*.name, 'snapshot build')
+      && (github.event.action != 'labeled' || github.event.label.name == 'snapshot build')
+    steps:
+      - name: Check configuration
+        # Without the token the script would only fail after installing and
+        # building everything, so say it here in a line instead.
+        env:
+          NPM_TOKEN: ${{ secrets.NPM_TOKEN }}
+        run: |
+          [ -z "$NPM_TOKEN" ] \
+            && echo "🚫 The **NPM_TOKEN** secret is not defined, check the configuration of **${{ github.repository }}**. It needs publish access to the @vaadin scope on npm." \
+            | tee -a $GITHUB_STEP_SUMMARY && exit 1 || exit 0
+
+      - uses: actions/checkout@v7
+        with:
+          ref: ${{ env._HEAD_SHA }}
+
+      - name: Setup Node
+        uses: actions/setup-node@v6
+        with:
+          node-version: '24'
+          cache: 'yarn'
+
+      - name: Build and publish the snapshot
+        id: publish
+        env:
+          NPM_TOKEN: ${{ secrets.NPM_TOKEN }}
+        # Everything up to the last slash is a prefix like feature/, fix/ or
+        # issues/ and is dropped, leaving the branch name itself as the feature
+        # name: fix/my-thing -> dev-my-thing. The script normalizes it into a
+        # valid dist-tag.
+        run: ./scripts/publishFeatureSnapshot.sh "${_HEAD_REF##*/}"
+
+      - name: Comment the snapshot version on the pull request
+        # Runs after a failed publish too, so that the comment of an earlier run
+        # does not keep announcing a build the newest commit never replaced.
+        # Skipped when the script failed before it had a version to say
+        # anything about.
+        if: ${{ !cancelled() && steps.publish.outputs.version != '' }}
+        env:
+          GH_TOKEN: ${{ secrets.GITHUB_TOKEN }}
+          VERSION: ${{ steps.publish.outputs.version }}
+          TAG: ${{ steps.publish.outputs.tag }}
+          PUBLISH_OUTCOME: ${{ steps.publish.outcome }}
+        run: |
+          marker='<!-- web-components-pr-snapshot -->'
+          run_url="${{ github.server_url }}/${{ github.repository }}/actions/runs/${{ github.run_id }}"
+          # The heredocs are written at the indentation of this block rather
+          # than of the branch they sit in, because their content is the
+          # comment body verbatim, delimiter included.
+          if [ "$PUBLISH_OUTCOME" = success ]; then
+          cat > comment.md <<EOF
+          $marker
+          ### 📦 Snapshot published
+
+          \`$VERSION\` with the dist-tag \`$TAG\` — built from ${_HEAD_SHA:0:7} ([run]($run_url)).
+
+          Built without running tests. Look at the checks on this pull request before relying on it.
+
+          Every new commit on this branch publishes a new version and moves \`$TAG\` to it while the \`snapshot build\` label is there.
+
+          <details><summary>How to use it</summary>
+          EOF
+          else
+          cat > comment.md <<EOF
+          $marker
+          ### 🚫 Snapshot build failed
+
+          \`$VERSION\` was not published, or only partly: the build from ${_HEAD_SHA:0:7} failed ([run]($run_url)). Anything \`$TAG\` points at is from an earlier commit of this branch.
+
+          <details><summary>How to use that earlier build, if there is one</summary>
+          EOF
+          fi
+          cat >> comment.md <<EOF
+
+          Install any package with the dist-tag to get the newest build of this branch:
+
+          \`\`\`sh
+          npm i @vaadin/button@$TAG
+          \`\`\`
+
+          All packages are published in lockstep, so install every \`@vaadin\` package the application uses with the same tag, or pin them all to \`$VERSION\`.
+          </details>
+          EOF
+          # One comment per pull request, edited in place, so a series of pushes
+          # does not bury the pull request in notifications. --jq runs once per
+          # page under --paginate, so each page yields at most one id and the
+          # first of those is the comment. The trimming is a parameter expansion
+          # rather than a pipe, so a failed listing still ends the step instead
+          # of reading as "none yet" and posting a second comment.
+          existing=$(gh api "repos/${{ github.repository }}/issues/$_PR_NUMBER/comments" --paginate \
+            --jq "[.[] | select(.body | startswith(\"$marker\")) | .id] | first // empty")
+          existing=${existing%%$'\n'*}
+          if [ -n "$existing" ]; then
+            gh api --method PATCH "repos/${{ github.repository }}/issues/comments/$existing" -F body=@comment.md
+          else
+            gh api "repos/${{ github.repository }}/issues/$_PR_NUMBER/comments" -F body=@comment.md
+          fi

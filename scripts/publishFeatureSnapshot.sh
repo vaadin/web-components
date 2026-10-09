@@ -45,6 +45,13 @@ VERSION="${BASE}-dev.${HASH}"
 
 echo "Publishing feature snapshot $VERSION (dist-tag: $TAG)"
 
+# Hand the version and dist-tag to the calling GitHub Actions job, so that it
+# can announce them without deriving them a second time.
+if [[ -n "${GITHUB_OUTPUT:-}" ]]; then
+  echo "version=$VERSION" >> "$GITHUB_OUTPUT"
+  echo "tag=$TAG" >> "$GITHUB_OUTPUT"
+fi
+
 # 0. Authenticate to npm for a real publish (skipped for DRY_RUN and for a
 #    custom registry such as an anonymous Verdaccio). If NPM_TOKEN - the
 #    standard npm CI variable - is set, write an .npmrc that references it;
