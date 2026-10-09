@@ -43,9 +43,11 @@ export default defineConfig(({ mode }) => ({
     ],
   },
   resolve: {
-    // Specs import core through the package name. In tests, subpath imports resolve to the
-    // sources so that a change in core is visible without a build. The bare import keeps
-    // using the built `index.js`, so `yarn release:react` runs once before `yarn test:react`.
+    // Specs import the React packages by name. In tests, subpath imports such as
+    // `@vaadin/react-components/Grid.js` are aliased to the `src/` sources, so a change there
+    // is visible without a rebuild. The bare `@vaadin/react-components` import has no alias
+    // and resolves to the built `index.js`, which is missing on a fresh checkout. Run
+    // `yarn build:react` once before `yarn test:react`; nothing here runs it for you.
     // Note: a spec may then load two instances of `utils/*`. No module there holds state.
     alias:
       mode === 'test'
