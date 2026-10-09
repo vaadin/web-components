@@ -3,6 +3,7 @@ import { useEffect, useState } from 'react';
 import { describe, expect, it, vi } from 'vitest';
 import { render } from 'vitest-browser-react';
 import { findByQuerySelector } from '../../../react/test/utils/findByQuerySelector.js';
+import { until } from '../../../react/test/utils/until.js';
 import { Grid, type GridDataProvider } from '../src/Grid.js';
 import { GridColumn, type GridColumnElement } from '../src/GridColumn.js';
 import { GridColumnGroup } from '../src/GridColumnGroup.js';
@@ -11,18 +12,6 @@ import { GridSelectionColumn } from '../src/GridSelectionColumn.js';
 import { GridSortColumn } from '../src/GridSortColumn.js';
 import { GridTreeColumn } from '../src/GridTreeColumn.js';
 import type { GridBodyReactRendererProps } from '../src/renderers/grid.js';
-
-// Bounded below the 2 s test timeout, so a predicate that never holds fails with a clear message.
-async function until<T = boolean>(predicate: () => T, timeout = 1500) {
-  const start = Date.now();
-  while (!predicate()) {
-    if (Date.now() - start > timeout) {
-      throw new Error(`Condition not met within ${timeout} ms: ${predicate}`);
-    }
-    await new Promise((r) => setTimeout(r, 10));
-  }
-  return predicate()!;
-}
 
 describe('Grid', () => {
   type Item = Readonly<{ name: string; surname: string; role: string }>;

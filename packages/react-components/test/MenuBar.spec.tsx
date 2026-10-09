@@ -1,17 +1,12 @@
 import sinon from 'sinon';
 import { describe, expect, it } from 'vitest';
 import { render } from 'vitest-browser-react';
+import { until } from '../../../react/test/utils/until.js';
 import { MenuBar, type MenuBarElement } from '../src/MenuBar.js';
 
 const subMenuTag = 'vaadin-menu-bar-submenu';
 const menuItemTag = 'vaadin-menu-bar-item';
 const menuButtonTag = 'vaadin-menu-bar-button';
-
-async function until(predicate: () => boolean) {
-  while (!predicate()) {
-    await new Promise((r) => setTimeout(r, 10));
-  }
-}
 
 async function overlayOpened(): Promise<void> {
   return new Promise((resolve) => {
