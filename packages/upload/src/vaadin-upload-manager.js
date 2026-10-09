@@ -542,7 +542,7 @@ export class UploadManager extends EventTarget {
       this.#notifyFilesChanged();
     };
 
-    xhr.onreadystatechange = () => {
+    xhr.onload = xhr.onerror = () => {
       if (xhr.readyState === 4) {
         clearTimeout(stalledId);
         file.indeterminate = file.uploading = false;
@@ -724,7 +724,8 @@ export class UploadManager extends EventTarget {
     if (xhr) {
       xhr.upload.onprogress = null;
       xhr.upload.onloadstart = null;
-      xhr.onreadystatechange = null;
+      xhr.onload = null;
+      xhr.onerror = null;
       xhr.onabort = null;
       xhr.ontimeout = null;
     }
