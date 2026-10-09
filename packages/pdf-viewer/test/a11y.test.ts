@@ -153,7 +153,8 @@ describe('accessibility', () => {
       await sendKeys({ press: 'Shift+ArrowDown' });
       document.removeEventListener('keydown', spy);
       // WebKit scrolls the pages itself when there is no selection to extend
-      expect(spy.firstCall.args[0].defaultPrevented).to.be.false;
+      const event = spy.args.map(([e]) => e).find((e) => e.key === 'ArrowDown');
+      expect(event.defaultPrevented).to.be.false;
     });
 
     it('should not zoom with Ctrl+= in the page field', async () => {
