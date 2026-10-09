@@ -71,5 +71,15 @@ describe('chart', () => {
     it('pie', async () => {
       await visualDiff(element, 'pie');
     });
+
+    it('pie-theme-attribute', async () => {
+      element.setAttribute('theme', '');
+      await visualDiff(element, 'pie-theme-attribute');
+    });
+
+    it('pie-theme-small', async () => {
+      element.setAttribute('theme', 'small');
+      await visualDiff(element, 'pie-theme-small');
+    });
   });
 });
