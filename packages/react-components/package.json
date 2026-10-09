@@ -112,6 +112,7 @@
   },
   "sideEffects": false,
   "files": [
+    "src",
     "css",
     "generated",
     "renderers",
