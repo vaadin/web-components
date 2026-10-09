@@ -75,6 +75,10 @@ function Detail({ children }: DetailProps) {
   const nextDetailsKey = currentDetailsKey.current + 1;
   const [state, setState] = useState('idle');
   const [currentChildren, setCurrentChildren] = useState(children);
+  // The transition completion handler closes over the children from when the
+  // transition started, so read the latest ones through a ref instead.
+  const latestChildren = useRef(children);
+  latestChildren.current = children;
 
   useLayoutEffect(() => {
     const layout = currentDetailsRef.current?.closest(
@@ -97,6 +101,7 @@ function Detail({ children }: DetailProps) {
 
       // _startTransition calls the callback synchronously for add/replace,
       // and asynchronously for remove.
+      let outgoingClone: HTMLElement | undefined;
       layout
         ._startTransition(transitionType, async () => {
           if (transitionType === 'replace' && currentDetailsRef.current) {
@@ -105,6 +110,7 @@ function Detail({ children }: DetailProps) {
             // WC can animate the clone out, then hide the React-managed original
             // so the WC's post-animation cleanup won't remove it from the DOM.
             const clone = currentDetailsRef.current.cloneNode(true) as HTMLElement;
+            outgoingClone = clone;
             clone.setAttribute('slot', 'detail-outgoing');
             layout.appendChild(clone);
             currentDetailsRef.current.setAttribute('slot', 'detail-hidden');
@@ -124,8 +130,10 @@ function Detail({ children }: DetailProps) {
           layout.recalculateLayout();
         })
         .then(() => {
-          // Animation finished — sync React state to match DOM reality
-          setCurrentChildren(children);
+          // Animation finished — remove the clone the WC does not own, then
+          // sync React state to match DOM reality
+          outgoingClone?.remove();
+          setCurrentChildren(latestChildren.current);
           currentDetailsKey.current = nextDetailsKey;
           setState('idle');
         });
