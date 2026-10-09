@@ -3,21 +3,10 @@ import { useState } from 'react';
 import { beforeEach, describe, expect, it, vi } from 'vitest';
 import { render } from 'vitest-browser-react';
 import { nextRender } from '../../../react/test/utils/nextRender.js';
+import { until } from '../../../react/test/utils/until.js';
 import type { GridBodyReactRendererProps } from '../../react-components/src/renderers/grid.js';
 import { GridPro } from '../src/GridPro.js';
 import { GridProEditColumn } from '../src/GridProEditColumn.js';
-
-// Bounded below the 2 s test timeout, so a predicate that never holds fails with a clear message.
-async function until<T = boolean>(predicate: () => T, timeout = 1500) {
-  const start = Date.now();
-  while (!predicate()) {
-    if (Date.now() - start > timeout) {
-      throw new Error(`Condition not met within ${timeout} ms: ${predicate}`);
-    }
-    await new Promise((r) => setTimeout(r, 10));
-  }
-  return predicate()!;
-}
 
 describe('GridPro', () => {
   type Item = Readonly<{ name: string; surname: string; role: string }>;
