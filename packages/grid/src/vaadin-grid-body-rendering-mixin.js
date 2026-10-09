@@ -10,6 +10,7 @@ import { repeat } from 'lit/directives/repeat.js';
 import { partMap } from '@vaadin/component-base/src/directives/part-map.js';
 import { generateUniqueId } from '@vaadin/component-base/src/unique-id-utils.js';
 import { cellContent } from './directives/cell-content-directive.js';
+import { detailsCell } from './directives/details-cell-directive.js';
 
 /**
  * A mixin providing rendering of body rows.
@@ -29,27 +30,15 @@ export const BodyRenderingMixin = (superClass) =>
 
     /** @private */
     __renderBodyRow(row) {
-      render(this.#bodyRowTemplate(this.#getRowState(row)), row.__renderRoot, { host: this });
-
+      const state = this.#getRowState(row);
+      render(this.#bodyRowTemplate(state), row.__renderRoot, { host: this });
       this.#updateRowReferences(row);
-
-      const previousDetailsCell = row.__detailsCell;
-      row.__detailsCell = row.querySelector('[part~="details-cell"]');
-
-      if (previousDetailsCell && previousDetailsCell !== row.__detailsCell) {
-        this.__teardownDetailsCell(previousDetailsCell);
-      }
-
-      if (row.__detailsCell && row.__detailsCell !== previousDetailsCell) {
-        this._configureDetailsCell(row.__detailsCell);
-      }
     }
 
     /** @private */
     __renderSizerRow() {
       const row = this.$.sizer;
       render(this.#sizerRowTemplate(), row, { host: this });
-
       this.#updateRowReferences(row);
     }
 
@@ -123,6 +112,7 @@ export const BodyRenderingMixin = (superClass) =>
                     @mousedown="${this.__onCellMouseDown}"
                     @mouseenter="${this.__onCellMouseEnter}"
                     @mouseleave="${this.__onCellMouseLeave}"
+                    ${detailsCell(this)}
                   >
                     ${cellContent(this, `vaadin-grid-details-cell-content-${rowId}`)}
                   </td>

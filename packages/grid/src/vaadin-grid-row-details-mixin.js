@@ -93,21 +93,6 @@ export const RowDetailsMixin = (superClass) =>
     }
 
     /**
-     * @param {!HTMLElement} cell
-     * @protected
-     */
-    _configureDetailsCell(cell) {
-      this._detailsCellResizeObserver.observe(cell);
-      this._frozenCellsChanged();
-    }
-
-    /** @private */
-    __teardownDetailsCell(cell) {
-      this._detailsCellResizeObserver.unobserve(cell);
-      this._frozenCellsChanged();
-    }
-
-    /**
      * @param {!HTMLElement} row
      * @param {boolean} detailsOpened
      * @protected
