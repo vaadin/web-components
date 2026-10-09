@@ -2,7 +2,7 @@
   "extends": "./tsconfig.json",
   "compilerOptions": {
     "noEmit": false,
-    "emitDeclarationOnly": true,
+    "sourceMap": true,
     "module": "NodeNext",
     "moduleResolution": "NodeNext",
     "rootDir": "./src",

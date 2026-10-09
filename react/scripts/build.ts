@@ -1,12 +1,10 @@
-import { build, type Plugin } from 'esbuild';
 import { glob } from 'glob';
 import { execFileSync } from 'node:child_process';
 import { existsSync } from 'node:fs';
 import { copyFile, mkdir, readdir, readFile, rm, writeFile } from 'node:fs/promises';
-import { basename, dirname, extname, join, resolve } from 'node:path';
-import { fileURLToPath } from 'node:url';
+import { basename, resolve } from 'node:path';
 import { generate } from './generator.js';
-import { generatedURL, nodeModulesDir, packageDir, packageURL, rootDir, srcDir, srcURL } from './utils/config.js';
+import { generatedDir, nodeModulesDir, packageDir, rootDir, srcDir } from './utils/config.js';
 import { camelCase, listModuleNames } from './utils/misc.js';
 import type { PackageJson } from './utils/package-json.js';
 
@@ -41,113 +39,18 @@ async function generateCss() {
   await writeFile(resolve(outputDir, 'Utility.module.css'), entryPointCss, 'utf8');
 }
 
-const fixImports: Plugin = {
-  name: 'add-imports',
-  setup(build) {
-    build.onResolve({ filter: /\.\.?\/(?:utils|renderers)/ }, (args) => {
-      return { path: `./${basename(dirname(args.path))}/${basename(args.path)}`, external: true };
-    });
-
-    // Workaround for https://github.com/evanw/esbuild/issues/1433
-    build.onLoad({ filter: /src[/\\][A-Za-z_-]+\.tsx?$/ }, async ({ path }) => {
-      const result = basename(path, extname(path));
-      const [contents, generatedContents] = await Promise.all([
-        readFile(path, 'utf8'),
-        readFile(new URL(`${result}.ts`, generatedURL), 'utf8'),
-      ]);
-
-      const exportAllLine = generatedContents.split('\n').find((line) => line.startsWith('export *')) ?? '';
-
-      return {
-        contents: `${exportAllLine}\n${contents}`,
-        loader: 'tsx',
-      };
-    });
-
-    // Workaround for https://github.com/evanw/esbuild/issues/1433
-    build.onLoad({ filter: /src[/\\]generated[/\\][A-Za-z_-]+\.ts$/ }, async ({ path }) => {
-      return {
-        contents: (await readFile(path, 'utf8'))
-          .split('\n')
-          .filter((line) => !line.startsWith('export *'))
-          .join('\n'),
-        loader: 'tsx',
-      };
-    });
-  },
-};
-
-async function detectEntryPoints(patterns: string[], ignore: string[] = []) {
-  return (
-    await glob(patterns, {
-      cwd: fileURLToPath(srcURL),
-      ignore: ['**/*.d.ts', ...ignore],
-    })
-  )
-    .map((file) => new URL(file, srcURL))
-    .map((url) => fileURLToPath(url));
+/** Writes `src/generated/version.ts`, which `createComponent.ts` reports in `window.Vaadin.registrations`. */
+async function generateVersion() {
+  const { version = '0.0.0' } = await readPackageJson();
+  await writeFile(resolve(generatedDir, 'version.ts'), `export const version = '${version}';\n`, 'utf8');
 }
 
-async function bundle() {
-  const packageJson = await readPackageJson();
-
-  const commonOptions = {
-    define: {
-      __VERSION__: `'${packageJson.version ?? '0.0.0'}'`,
-    },
-    format: 'esm',
-    minify: true,
-    outdir: fileURLToPath(packageURL),
-    sourcemap: 'linked',
-    sourcesContent: true,
-    target: 'es2021',
-    tsconfig: fileURLToPath(new URL('./tsconfig.build.json', packageURL)),
-  } as const;
-
-  const [componentEntryPoints, utilsEntryPoints, renderersEntryPoints] = await Promise.all([
-    detectEntryPoints(['*.{ts,tsx}']),
-    detectEntryPoints(['utils/*.{ts,tsx}']),
-    detectEntryPoints(['renderers/*.{ts,tsx}']),
-  ]);
-
-  await Promise.all([
-    build({
-      ...commonOptions,
-      bundle: true,
-      entryPoints: componentEntryPoints,
-      packages: 'external',
-      plugins: [fixImports],
-    }),
-    build({
-      ...commonOptions,
-      outdir: join(commonOptions.outdir, 'utils'),
-      entryPoints: utilsEntryPoints,
-    }),
-    build({
-      ...commonOptions,
-      outdir: join(commonOptions.outdir, 'renderers'),
-      entryPoints: renderersEntryPoints,
-    }),
-  ]);
-}
-
-function emitDeclarations() {
+/** Emits unbundled JS, declarations and source maps from `src/` into the package root with `tsc`. */
+function emit() {
   execFileSync(process.execPath, [resolve(nodeModulesDir, 'typescript/bin/tsc'), '-p', 'tsconfig.build.json'], {
     cwd: packageDir,
     stdio: 'inherit',
   });
-}
-
-/** Copies the type-only `.d.ts` files from `src/`, which `tsc` does not emit. */
-async function copyDts() {
-  const files = await glob('**/*.d.ts', { cwd: srcDir });
-  await Promise.all(
-    files.map(async (file) => {
-      const dest = resolve(packageDir, file);
-      await mkdir(dirname(dest), { recursive: true });
-      await copyFile(resolve(srcDir, file), dest);
-    }),
-  );
 }
 
 // `css/` is listed one level deep on purpose: the `css/lumo/utilities/*` modules are
@@ -212,10 +115,8 @@ await clean();
 if (!process.argv.includes('--clean')) {
   await generate();
   if (basename(packageDir) === 'react-components') {
-    await generateCss();
+    await Promise.all([generateCss(), generateVersion()]);
   }
-  await bundle();
-  emitDeclarations();
-  await copyDts();
+  emit();
   await updateExports();
 }

@@ -7,8 +7,7 @@ import { createComponent as _createComponent, type EventName } from '@lit/react'
 import type React from 'react';
 import type { RefAttributes } from 'react';
 import type { ThemePropertyMixinClass } from '@vaadin/vaadin-themable-mixin/vaadin-theme-property-mixin.js';
-
-declare const __VERSION__: string;
+import { version } from '../generated/version.js';
 
 declare global {
   interface VaadinRegistration {
@@ -30,7 +29,7 @@ window.Vaadin ??= {};
 window.Vaadin.registrations ??= [];
 window.Vaadin.registrations.push({
   is: '@vaadin/react-components',
-  version: __VERSION__,
+  version,
 });
 
 // TODO: Remove when types from @lit-labs/react are exported

@@ -1,6 +1,5 @@
 import react from '@vitejs/plugin-react';
 import { playwright } from '@vitest/browser-playwright';
-import { readFileSync } from 'node:fs';
 import { dirname, resolve } from 'node:path';
 import { fileURLToPath } from 'node:url';
 import { defineConfig } from 'vitest/config';
@@ -8,13 +7,9 @@ import devPagesPlugin from './dev/dev-pages-plugin.js';
 
 const root = dirname(fileURLToPath(import.meta.url));
 const repoRoot = resolve(root, '..');
-const { version } = JSON.parse(readFileSync(resolve(repoRoot, 'lerna.json'), 'utf8')) as { version: string };
 
 export default defineConfig(({ mode }) => ({
   root,
-  define: {
-    __VERSION__: JSON.stringify(version),
-  },
   build: {
     target: 'esnext',
   },

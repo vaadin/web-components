@@ -6,7 +6,7 @@ the wrapper generator and build (`scripts/`), the Vitest setup (`vite.config.ts`
 ## Build
 
 ```sh
-yarn build:react     # CEM input, then `yarn release:react`: generate wrappers, bundle, emit types, update exports for both packages
+yarn build:react     # CEM input, then `yarn release:react`: generate wrappers, emit JS and types with `tsc`, update exports for both packages
 yarn release:react   # only the React packages, the step `yarn release` runs after it has built the inputs
 yarn clean:react     # remove the generated sources and the build output
 ```
