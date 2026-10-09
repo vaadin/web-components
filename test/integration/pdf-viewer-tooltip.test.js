@@ -59,7 +59,7 @@ describe('pdf-viewer with tooltip', () => {
 
   it('should show the button label as tooltip on keyboard focus', async () => {
     getPageField().focus();
-    await sendKeys({ press: 'Tab' });
+    await sendKeys({ press: 'Shift+Tab' });
     await nextRender();
     expect(getTooltip('next-page').opened).to.be.true;
   });
