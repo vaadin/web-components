@@ -278,6 +278,8 @@ export interface ContextMenuEventMap<TItem extends ContextMenuItemData = Context
  *
  * ### Styling
  *
+ * The host uses `display: contents` so wrapping a target does not affect its layout.
+ *
  * The following shadow DOM parts are available for styling:
  *
  * Part name        | Description
