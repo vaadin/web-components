@@ -223,4 +223,16 @@ describe('field-highlighter', () => {
       await visualDiff(div, 'text-field-focused');
     });
   });
+
+  describe('multiline name', () => {
+    beforeEach(async () => {
+      element = fixtureSync(`<vaadin-text-field></vaadin-text-field>`, div);
+      setUsers(element, [{ id: 'a', name: 'Line 1\nLine 2', colorIndex: 0, fieldIndex: 0 }]);
+      await nextFrame();
+    });
+
+    it('default', async () => {
+      await visualDiff(div, 'multiline-name');
+    });
+  });
 });
