@@ -27,7 +27,7 @@ export function getClosestCell(node) {
  */
 export function getBodyRowCells(row) {
   // If available, return the cached cells. Otherwise, query the cells directly from the row.
-  return row.__cells || Array.from(row.querySelectorAll('.cell:not(.details-cell)'));
+  return row.__cells || Array.from(row.querySelectorAll('.body-cell'));
 }
 
 /**

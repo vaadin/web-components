@@ -422,7 +422,7 @@ export const ColumnReorderingMixin = (superClass) =>
      * @protected
      */
     _isSwappableByPosition(targetColumn, clientX) {
-      const targetCell = Array.from(this.$.header.querySelectorAll('tr:not([hidden]) .cell')).find((cell) =>
+      const targetCell = Array.from(this.$.header.querySelectorAll('tr:not([hidden]) .header-cell')).find((cell) =>
         targetColumn.contains(cell._column),
       );
       const sourceCellRect = this.$.header
