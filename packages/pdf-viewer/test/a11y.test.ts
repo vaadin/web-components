@@ -146,11 +146,14 @@ describe('accessibility', () => {
       expect(content.scrollTop).to.be.closeTo(content.scrollHeight - content.clientHeight, 2);
     });
 
-    it('should not scroll with Shift+ArrowDown, which extends a text selection', async () => {
+    it('should leave Shift+ArrowDown, which extends a text selection, to the browser', async () => {
+      const spy = sinon.spy();
+      document.addEventListener('keydown', spy);
       getContent().focus();
       await sendKeys({ press: 'Shift+ArrowDown' });
-      await nextFrame();
-      expect(getContent().scrollTop).to.equal(0);
+      document.removeEventListener('keydown', spy);
+      // WebKit scrolls the pages itself when there is no selection to extend
+      expect(spy.firstCall.args[0].defaultPrevented).to.be.false;
     });
 
     it('should not zoom with Ctrl+= in the page field', async () => {
