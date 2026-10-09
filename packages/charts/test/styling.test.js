@@ -216,6 +216,17 @@ describe('vaadin-chart styling', () => {
       expect(styles.markerFill).to.equal('rgb(1, 2, 3)');
     });
 
+    it('should apply the chart font size to an outside tooltip', async () => {
+      const style = '--vaadin-charts-font-size: 20px';
+      const outside = await fixtureTooltip(true, { style });
+      const outsideFontSize = getComputedStyle(outside.querySelector('text')).fontSize;
+      const outsideWidth = boxWidth(outside);
+      const inside = await fixtureTooltip(false, { style });
+      expect(outsideFontSize).to.equal(getComputedStyle(inside.querySelector('text')).fontSize);
+      // Firefox measures the two up to 4px apart at this size. Measured too early, they differ by ~70px.
+      expect(outsideWidth).to.be.closeTo(boxWidth(inside), 5);
+    });
+
     // Highcharts creates a new container on update, which must get the styled-mode class too.
     it('should style a tooltip moved outside after the chart renders', async () => {
       const outside = tooltipStyles(await fixtureTooltip('later'));
