@@ -136,7 +136,6 @@ export const ColumnBaseMixin = (superClass) =>
         _bodyContentHidden: {
           type: Boolean,
           value: false,
-          sync: true,
         },
 
         /**
@@ -509,7 +508,7 @@ export const ColumnBaseMixin = (superClass) =>
           this._grid._debouncerHiddenChanged,
           animationFrame,
           () => {
-            this._grid?._renderColumnTree?.(this._grid._columnTree);
+            this._grid?._renderColumnTree?.();
           },
         );
 
@@ -863,7 +862,6 @@ export const GridColumnMixin = (superClass) =>
          */
         _cells: {
           type: Array,
-          sync: true,
         },
       };
     }
