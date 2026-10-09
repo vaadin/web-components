@@ -1,8 +1,5 @@
 import { glob } from 'glob';
-import { statSync } from 'node:fs';
-import { join } from 'node:path';
-import type { GenericJsContribution } from '../types/schema.js';
-import { elementsWithMissingEntrypoint, elementToClassNamingConventionViolations } from './settings.js';
+import { elementToClassNamingConventionViolations } from './settings.js';
 
 export function camelCase(str: string): string {
   // CamelCase join
@@ -35,16 +32,6 @@ export function convertElementNameToClassName(elementName: string): string {
   return conventionalClassName;
 }
 
-export function search(elementName: string, dir: string): string | undefined {
-  if (elementsWithMissingEntrypoint.has(elementName)) {
-    dir = join(dir, 'src');
-  }
-
-  // Only the package root: `src/<tag>.js` modules are not public entrypoints.
-  const path = join(dir, `${elementName}.js`);
-  return statSync(path, { throwIfNoEntry: false })?.isFile() ? path : undefined;
-}
-
 export function createImportPath(link: string, local: boolean): string {
   let updatedLink = link;
 
@@ -53,22 +40,6 @@ export function createImportPath(link: string, local: boolean): string {
   }
 
   return updatedLink.replace('.ts', '.js').replaceAll('\\', '/');
-}
-
-export type NamedGenericJsContribution = GenericJsContribution & { name: string };
-
-export function pickNamedEvents(
-  events: GenericJsContribution[] | undefined,
-  logger: () => void,
-): readonly NamedGenericJsContribution[] | undefined {
-  return events?.filter((e): e is NamedGenericJsContribution => {
-    if (!e.name) {
-      logger();
-      return false;
-    }
-
-    return true;
-  });
 }
 
 const collator = new Intl.Collator('en');

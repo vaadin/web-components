@@ -1,8 +1,3 @@
-export interface MissingEvents {
-  all?: boolean;
-  some?: readonly string[];
-}
-
 export const NonGenericInterface = {
   EVENT_MAP: 0,
 } as const;
@@ -48,6 +43,12 @@ export const eventSettings = new Map<string, EventSettings>([
 // These are generated with `createThemedComponent` so the `theme` prop is available.
 export const themedElements = new Set<string>(['Switch', 'Breadcrumbs', 'BreadcrumbsItem']);
 
-export const elementsWithMissingEntrypoint = new Set<string>([]);
+// Infrastructure packages whose elements are internal parts of other components.
+// They get no React wrapper, like they get no web-types.
+export const internalPackages = new Set<string>([
+  '@vaadin/field-highlighter',
+  '@vaadin/input-container',
+  '@vaadin/overlay',
+]);
 
 export const elementToClassNamingConventionViolations = new Map<string, string>([['vaadin-tabsheet', 'TabSheet']]);

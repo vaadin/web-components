@@ -1,18 +1,9 @@
 import { mkdir, readFile, rm, writeFile } from 'node:fs/promises';
 import { basename, relative, resolve } from 'node:path';
 import ts from 'typescript';
-import { extractElementsFromDescriptions, loadDescriptions } from './descriptions.js';
-import type { HtmlElement as SchemaHTMLElement } from './types/schema.js';
-import { generatedDir, nodeModulesDir, packageDir, srcDir, utilsDir } from './utils/config.js';
-import { ElementNameMissingError } from './utils/errors.js';
-import {
-  camelCase,
-  convertElementNameToClassName,
-  createImportPath,
-  listModuleNames,
-  pickNamedEvents,
-  search,
-} from './utils/misc.js';
+import { type ElementData, loadPackageElements } from './manifest.js';
+import { generatedDir, packageDir, srcDir, utilsDir } from './utils/config.js';
+import { camelCase, convertElementNameToClassName, createImportPath, listModuleNames } from './utils/misc.js';
 import type { PackageJson } from './utils/package-json.js';
 import {
   eventSettings,
@@ -21,12 +12,6 @@ import {
   NonGenericInterface,
   themedElements,
 } from './utils/settings.js';
-
-type ElementData = Readonly<{
-  element: SchemaHTMLElement;
-  packageName: string;
-  path: string;
-}>;
 
 const printer = ts.createPrinter({
   newLine: ts.NewLineKind.LineFeed,
@@ -55,42 +40,14 @@ function createGenerics({ numberOfGenerics, typeConstraints, nonGenericInterface
   };
 }
 
-async function prepareElementFiles(dependencies: readonly string[]): Promise<ElementData[]> {
-  const descriptions = await loadDescriptions();
-
-  const elements = Array.from(extractElementsFromDescriptions(descriptions), ([packageName, element]) => {
-    if (!element.name) {
-      throw new ElementNameMissingError(packageName);
-    }
-
-    if (!dependencies.includes(packageName)) {
-      return undefined;
-    }
-
-    const path = search(element.name, resolve(nodeModulesDir, packageName));
-    return path ? { element, packageName, path } : undefined;
-  });
-
-  return elements.filter((data): data is ElementData => data != null);
-}
-
-function generateReactComponent({ element: { name, js }, packageName, path }: ElementData): ts.SourceFile {
-  if (!name) {
-    throw new ElementNameMissingError(packageName);
-  }
-
-  const elementName = convertElementNameToClassName(name);
-  const elementModulePath = createImportPath(relative(nodeModulesDir, path), false);
+function generateReactComponent({ tagName, events, modulePath: elementModulePath }: ElementData): ts.SourceFile {
+  const elementName = convertElementNameToClassName(tagName);
   const createComponentPath = createImportPath(relative(generatedDir, resolve(utilsDir, './createComponent.js')), true);
 
-  const hasEvents = !!js?.events && js.events.length > 0;
-  const eventNameMissingLogger = () => console.error(`[${packageName}]: event name is missing`);
-  const namedEvents = pickNamedEvents(js?.events, eventNameMissingLogger) ?? [];
+  const hasEvents = events.length > 0;
   const { remove: eventsToRemove, makeUnknown: eventsToBeUnknown } = eventSettings.get(elementName) ?? {};
-  const existingEvents = namedEvents.filter(({ name: eventName }) => !eventsToRemove?.includes(eventName));
-  const hasKnownEvents = namedEvents.some(
-    ({ name: eventName }) => !eventsToRemove?.includes(eventName) && !eventsToBeUnknown?.includes(eventName),
-  );
+  const existingEvents = events.filter((eventName) => !eventsToRemove?.includes(eventName));
+  const hasKnownEvents = existingEvents.some((eventName) => !eventsToBeUnknown?.includes(eventName));
 
   const genericElementInfo = genericElements.get(elementName);
   const {
@@ -112,7 +69,7 @@ function generateReactComponent({ element: { name, js }, packageName, path }: El
   const themeSuffix = isThemed ? ' & { theme?: string }' : '';
 
   const eventMapMembers = existingEvents
-    .map(({ name: eventName }) => {
+    .map((eventName) => {
       const eventType = eventsToBeUnknown?.includes(eventName)
         ? 'CustomEvent<unknown>'
         : `_${elementName}EventMap${eventMapTypeArguments}['${eventName}']`;
@@ -120,9 +77,7 @@ function generateReactComponent({ element: { name, js }, packageName, path }: El
     })
     .join('\n');
   // One line: Prettier keeps an object literal expanded when its first key is on a new line.
-  const eventsMembers = existingEvents
-    .map(({ name: eventName }) => `on${camelCase(eventName)}: '${eventName}'`)
-    .join(', ');
+  const eventsMembers = existingEvents.map((eventName) => `on${camelCase(eventName)}: '${eventName}'`).join(', ');
   const componentCast = genericElementInfo
     ? ` as ${typeParameters}(
   props: ${elementName}Props${typeArguments} & React.RefAttributes<${elementName}Element${typeArguments}>,
@@ -154,7 +109,7 @@ export const ${elementName} = ${createFn}({
   elementClass: ${elementName}Element,
   events,
   react: React,
-  tagName: '${name}',
+  tagName: '${tagName}',
 })${componentCast};
 `;
 
@@ -200,7 +155,7 @@ export async function generate(): Promise<void> {
   const packageJson: PackageJson = JSON.parse(await readFile(resolve(packageDir, 'package.json'), 'utf8'));
   const dependencies = Object.keys(packageJson.dependencies ?? {});
 
-  const sourceFiles = (await prepareElementFiles(dependencies)).map(generateReactComponent);
+  const sourceFiles = (await loadPackageElements(dependencies)).map(generateReactComponent);
   const moduleNames = await listModuleNames(srcDir);
 
   const generatedNames = sourceFiles.map(({ fileName }) => basename(fileName, '.ts'));
@@ -211,12 +166,12 @@ export async function generate(): Promise<void> {
   }
 
   // Every wrapper re-exports its generated module, so a missing one breaks the build later
-  // with an obscure error. Stale or missing web-types.json files are the usual cause.
+  // with an obscure error. Stale or missing custom-elements.json files are the usual cause.
   const missing = moduleNames.filter((name) => !generatedNames.includes(name));
   if (missing.length > 0) {
     throw new Error(
       `No generated module for src/${missing.join(', src/')}. ` +
-        'Run "yarn build:react" to refresh the web-types.json inputs and rebuild.',
+        'Run "yarn build:react" to refresh the custom-elements.json inputs and rebuild.',
     );
   }
 
