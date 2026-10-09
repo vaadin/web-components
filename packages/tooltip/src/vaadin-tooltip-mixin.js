@@ -20,6 +20,8 @@ const closing = new Set();
 
 let warmedUp = false;
 let warmUpTimeout = null;
+/** The tooltip that opens when the warm up timeout ends. */
+let warmUpTooltip = null;
 let cooldownTimeout = null;
 
 /**
@@ -32,6 +34,7 @@ export function resetGlobalTooltipState() {
   clearTimeout(warmUpTimeout);
   clearTimeout(cooldownTimeout);
   warmUpTimeout = null;
+  warmUpTooltip = null;
   cooldownTimeout = null;
   closing.clear();
 }
@@ -107,6 +110,15 @@ class TooltipStateController {
     }
   }
 
+  /**
+   * Cancel a scheduled opening of this tooltip, e.g. when it is removed meanwhile.
+   */
+  cancelOpen() {
+    if (warmUpTooltip === this.host) {
+      this.__abortWarmUp();
+    }
+  }
+
   /** @private */
   _isOpened() {
     return this.host.opened;
@@ -177,6 +189,7 @@ class TooltipStateController {
     if (warmUpTimeout) {
       clearTimeout(warmUpTimeout);
       warmUpTimeout = null;
+      warmUpTooltip = null;
     }
   }
 
@@ -206,8 +219,10 @@ class TooltipStateController {
   /** @private */
   __scheduleWarmUp(isFocus) {
     const delay = isFocus ? this.focusDelay : this.hoverDelay;
+    warmUpTooltip = this.host;
     warmUpTimeout = setTimeout(() => {
       warmUpTimeout = null;
+      warmUpTooltip = null;
       warmedUp = true;
       this.__showTooltip();
     }, delay);
@@ -411,6 +426,9 @@ export const TooltipMixin = (superClass) =>
 
       if (this.opened && !this.manual) {
         this._stateController.close(true);
+      } else if (!this.manual) {
+        // A tooltip waiting for its delay must not open while detached.
+        this._stateController.cancelOpen();
       }
       this._isConnected = false;
 

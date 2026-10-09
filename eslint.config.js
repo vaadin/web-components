@@ -41,6 +41,7 @@ const PRO_COMPONENTS = [
   'grid-pro',
   'rich-text-editor',
   'map',
+  'pdf-viewer',
   'react-components-pro',
 ];
 

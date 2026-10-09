@@ -1,0 +1,122 @@
+/**
+ * @license
+ * Copyright (c) 2000 - 2026 Vaadin Ltd.
+ * This program is available under Apache License Version 2.0, available at https://vaadin.com/license/
+ */
+@media lumo_components_pdf-viewer-button {
+  [part='icon'] {
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    width: var(--lumo-icon-size-m);
+    height: var(--lumo-icon-size-m);
+    mask: none;
+    background: none;
+  }
+
+  /* The font size is set here, so that the icon part is sized relative to the button font size */
+  [part='icon']::before {
+    content: var(--_icon);
+    font-family: 'lumo-icons';
+    font-size: var(--lumo-icon-size-m);
+    line-height: 1;
+  }
+
+  :host([icon='previous-page']) {
+    --_icon: var(--vaadin-pdf-viewer-icon-previous-page);
+  }
+
+  :host([icon='next-page']) {
+    --_icon: var(--vaadin-pdf-viewer-icon-next-page);
+  }
+
+  :host([icon='collapse-toolbar']) {
+    --_icon: var(--vaadin-pdf-viewer-icon-collapse-toolbar);
+  }
+
+  :host([icon='expand-toolbar']) {
+    --_icon: var(--vaadin-pdf-viewer-icon-expand-toolbar);
+  }
+
+  :host([icon='zoom-out']) {
+    --_icon: var(--vaadin-pdf-viewer-icon-zoom-out);
+  }
+
+  :host([icon='zoom-in']) {
+    --_icon: var(--vaadin-pdf-viewer-icon-zoom-in);
+  }
+
+  :host([icon='previous-match']) {
+    --_icon: var(--vaadin-pdf-viewer-icon-previous-page);
+  }
+
+  :host([icon='next-match']) {
+    --_icon: var(--vaadin-pdf-viewer-icon-next-page);
+  }
+
+  :host([icon='sidebar']) {
+    --_icon: var(--vaadin-pdf-viewer-icon-sidebar);
+  }
+
+  :host([icon='download']) {
+    --_icon: var(--vaadin-pdf-viewer-icon-download);
+  }
+
+  /* Lumo has no icons for these, so the mask icons of the base styles are used */
+  :host([icon='print']) {
+    --_mask-icon: var(--vaadin-pdf-viewer-icon-print, var(--_vaadin-icon-print));
+  }
+
+  :host([icon='thumbnails']) {
+    --_mask-icon: var(--vaadin-pdf-viewer-icon-thumbnails, var(--_vaadin-icon-layout-grid));
+  }
+
+  :host([icon='outline']) {
+    --_mask-icon: var(--vaadin-pdf-viewer-icon-outline, var(--_vaadin-icon-list-tree));
+  }
+
+  :host(:is([icon='print'], [icon='thumbnails'], [icon='outline'])) [part='icon'] {
+    background: currentColor;
+    /* Scaled to match the visual size of the Lumo icon font */
+    mask: var(--_mask-icon) 50% / 75% no-repeat;
+  }
+
+  :host(:is([icon='print'], [icon='thumbnails'], [icon='outline'])) [part='icon']::before {
+    content: none;
+  }
+
+  @media (forced-colors: active) {
+    :host(:is([icon='print'], [icon='thumbnails'], [icon='outline'])) [part='icon'] {
+      background: CanvasText;
+    }
+
+    :host([disabled]:is([icon='print'], [icon='thumbnails'], [icon='outline'])) [part='icon'] {
+      background: GrayText;
+    }
+
+    /* Font icons are colored by the text color, not by a background */
+    :host([aria-pressed='true']) {
+      color: HighlightText;
+    }
+
+    :host([aria-pressed='true']) [part='icon'] {
+      background: none;
+    }
+
+    :host([aria-pressed='true']:is([icon='print'], [icon='thumbnails'], [icon='outline'])) [part='icon'] {
+      background: HighlightText;
+    }
+  }
+
+  :host([icon='find']) {
+    --_icon: var(--vaadin-pdf-viewer-icon-find);
+  }
+
+  :host([icon='close']) {
+    --_icon: var(--vaadin-pdf-viewer-icon-close);
+  }
+
+  :host([aria-pressed='true']) {
+    --vaadin-button-tertiary-background: var(--lumo-contrast-10pct);
+  }
+}
