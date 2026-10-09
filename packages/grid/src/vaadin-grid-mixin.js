@@ -435,7 +435,7 @@ export const GridMixin = (superClass) =>
         cell._vacant = true;
       });
 
-      const detailsCell = row.querySelector('[part~="details-cell"]');
+      const detailsCell = row.querySelector('.details-cell');
       if (detailsCell) {
         this.__teardownDetailsCell(detailsCell);
       }

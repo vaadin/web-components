@@ -49,7 +49,7 @@ export function iterateChildren(container, callback) {
 export function iterateRowCells(row, callback) {
   getBodyRowCells(row).forEach(callback);
 
-  const detailsCell = row.querySelector('[part~="details-cell"]');
+  const detailsCell = row.querySelector('.details-cell');
   if (detailsCell) {
     callback(detailsCell);
   }
