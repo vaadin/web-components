@@ -86,7 +86,7 @@ export const RowDetailsMixin = (superClass) =>
       if (this._columnTree) {
         // Only update the rows if the column tree has already been initialized
         this._getRenderedRows().forEach((row) => {
-          if (!row.querySelector('[part~=details-cell]')) {
+          if (!row.querySelector('.details-cell')) {
             this.__initRow(row, this._columnTree[this._columnTree.length - 1]);
             this.__updateRow(row);
             return;
@@ -133,7 +133,7 @@ export const RowDetailsMixin = (superClass) =>
      * @protected
      */
     _toggleDetailsCell(row, detailsOpened) {
-      const cell = row.querySelector('[part~="details-cell"]');
+      const cell = row.querySelector('.details-cell');
       if (!cell) {
         return;
       }
@@ -153,7 +153,7 @@ export const RowDetailsMixin = (superClass) =>
 
     /** @protected */
     _updateDetailsCellHeight(row) {
-      const cell = row.querySelector('[part~="details-cell"]');
+      const cell = row.querySelector('.details-cell');
       if (!cell) {
         return;
       }
