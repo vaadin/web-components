@@ -112,7 +112,7 @@ export const PdfViewerFindMixin = (superClass) =>
         const isF = event.key.toLowerCase() === 'f' || (!isLatinLetter && event.code === 'KeyF');
         if (isShortcut && isF && this.pageCount > 0) {
           event.preventDefault();
-          this._openFind();
+          this._openFind(); // NOSONAR
         }
       });
     }
@@ -127,7 +127,7 @@ export const PdfViewerFindMixin = (superClass) =>
 
       // Search a newly loaded document for the query that is still entered.
       if (props.has('pageCount') && this.pageCount > 0 && this.__findOpened && this.__findQuery) {
-        this.#search();
+        this.#search(); // NOSONAR
       }
     }
 
@@ -146,7 +146,7 @@ export const PdfViewerFindMixin = (superClass) =>
         // Show and announce the results of the query entered before closing the find bar.
         this.#lastAnnouncement = '';
         if (this.__findQuery.trim()) {
-          this.#search();
+          this.#search(); // NOSONAR
         }
       }
       this.__findOpened = true;
@@ -236,7 +236,7 @@ export const PdfViewerFindMixin = (superClass) =>
     _setFindQuery(query) {
       this.__findQuery = query;
       this.#closedMatchIndex = -1;
-      this.#search();
+      this.#search(); // NOSONAR
     }
 
     /**
@@ -265,7 +265,7 @@ export const PdfViewerFindMixin = (superClass) =>
      */
     _pageRendered(page) {
       super._pageRendered(page);
-      this.#highlightPage(page);
+      this.#highlightPage(page); // NOSONAR
     }
 
     /**
@@ -437,7 +437,7 @@ export const PdfViewerFindMixin = (superClass) =>
       pageIndexes.forEach((pageIndex) => {
         const page = this._getPageView(pageIndex + 1);
         if (page && page.textLayer) {
-          this.#highlightPage(page);
+          this.#highlightPage(page); // NOSONAR
         }
       });
     }

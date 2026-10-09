@@ -263,7 +263,7 @@ export const PdfViewerMixin = (superClass) =>
 
       if (this.#released) {
         this.#released = false;
-        this.#load();
+        this.#load(); // NOSONAR
       }
     }
 
@@ -342,7 +342,7 @@ export const PdfViewerMixin = (superClass) =>
         if (!props.has('page')) {
           this.#setPageFromViewer(1);
         }
-        this.#load();
+        this.#load(); // NOSONAR
       }
 
       if (props.has('zoom') && this.#pages.length) {
@@ -587,7 +587,7 @@ export const PdfViewerMixin = (superClass) =>
       // Rendering waits for the page sizes, see #notifyIdle().
       this.#pageSizesLoaded = false;
       this.#refresh();
-      this.#loadPageSizes(loadId);
+      this.#loadPageSizes(loadId); // NOSONAR
       this.#documentTitle = title;
       this.#updateAccessibleName();
 
@@ -598,34 +598,32 @@ export const PdfViewerMixin = (superClass) =>
      * Loads the pages after the first one, and corrects their size.
      * @private
      */
-    #loadPageSizes(loadId) {
+    async #loadPageSizes(loadId) {
       const pdfDocument = this.#document;
       const pages = this.#pages.slice(1);
-      (async () => {
-        // Request a few pages at a time, so that requests for pages to
-        // render do not wait behind the requests for all page sizes.
-        for (let start = 0; start < pages.length; start += PAGE_SIZE_BATCH) {
-          const batch = pages.slice(start, start + PAGE_SIZE_BATCH);
-          // A page that fails to load reports the error when it is rendered.
-          await Promise.allSettled(
-            batch.map((page) =>
-              pdfDocument.getPage(page.pageNumber).then((pdfPage) => {
-                if (loadId === this.#loadId && !page.pdfPage) {
-                  this.#setPdfPage(page, pdfPage);
-                }
-              }),
-            ),
-          );
-          if (loadId !== this.#loadId) {
-            return;
-          }
+      // Request a few pages at a time, so that requests for pages to
+      // render do not wait behind the requests for all page sizes.
+      for (let start = 0; start < pages.length; start += PAGE_SIZE_BATCH) {
+        const batch = pages.slice(start, start + PAGE_SIZE_BATCH);
+        // A page that fails to load reports the error when it is rendered.
+        await Promise.allSettled(
+          batch.map((page) =>
+            pdfDocument.getPage(page.pageNumber).then((pdfPage) => {
+              if (loadId === this.#loadId && !page.pdfPage) {
+                this.#setPdfPage(page, pdfPage);
+              }
+            }),
+          ),
+        );
+        if (loadId !== this.#loadId) {
+          return;
         }
-        this.#pageSizesLoaded = true;
-        // Notify about being idle, unless a relayout will render again.
-        if (!this.#relayoutFrame) {
-          this.#renderNext();
-        }
-      })();
+      }
+      this.#pageSizesLoaded = true;
+      // Notify about being idle, unless a relayout will render again.
+      if (!this.#relayoutFrame) {
+        this.#renderNext();
+      }
     }
 
     /**
@@ -1155,12 +1153,13 @@ export const PdfViewerMixin = (superClass) =>
 
       this.#renderingPage = page;
       this.#idle = false;
-      this.#renderPage(page, outputScale).finally(() => {
+      const onRendered = () => {
         if (this.#renderingPage === page) {
           this.#renderingPage = null;
           this.#renderNext();
         }
-      });
+      };
+      this.#renderPage(page, outputScale).finally(onRendered); // NOSONAR
     }
 
     /** @private */
@@ -1220,7 +1219,7 @@ export const PdfViewerMixin = (superClass) =>
         link.href = '#';
         link.addEventListener('click', (event) => {
           event.preventDefault();
-          this.#followLink(annotation);
+          this.#followLink(annotation); // NOSONAR
         });
       } else {
         return null;

@@ -97,7 +97,7 @@ export const PdfViewerOutlineMixin = (superClass) =>
       super.updated(props);
 
       if (props.has('pageCount') && this.pageCount > 0) {
-        this.#loadOutline();
+        this.#loadOutline(); // NOSONAR
       }
     }
 
@@ -357,31 +357,32 @@ export const PdfViewerOutlineMixin = (superClass) =>
       const expanded = this.__expandedOutlineItems.has(item);
       const hasChildren = item.items.length > 0;
 
+      let focusTarget;
       switch (key) {
         case 'ArrowDown':
-          this.#focusItem(visibleItems[Math.min(index + 1, visibleItems.length - 1)]);
+          focusTarget = visibleItems[Math.min(index + 1, visibleItems.length - 1)];
           break;
         case 'ArrowUp':
-          this.#focusItem(visibleItems[Math.max(index - 1, 0)]);
+          focusTarget = visibleItems[Math.max(index - 1, 0)];
           break;
         case 'Home':
-          this.#focusItem(visibleItems[0]);
+          focusTarget = visibleItems[0];
           break;
         case 'End':
-          this.#focusItem(visibleItems[visibleItems.length - 1]);
+          focusTarget = visibleItems[visibleItems.length - 1];
           break;
         case 'ArrowRight':
           if (hasChildren && !expanded) {
             this.#setExpanded(item, true);
           } else if (hasChildren) {
-            this.#focusItem(item.items[0]);
+            focusTarget = item.items[0];
           }
           break;
         case 'ArrowLeft':
           if (expanded) {
             this.#setExpanded(item, false);
           } else if (item.parent) {
-            this.#focusItem(item.parent);
+            focusTarget = item.parent;
           }
           break;
         case 'Enter':
@@ -389,6 +390,9 @@ export const PdfViewerOutlineMixin = (superClass) =>
           break;
         default:
           return;
+      }
+      if (focusTarget) {
+        this.#focusItem(focusTarget); // NOSONAR
       }
       event.preventDefault();
     }

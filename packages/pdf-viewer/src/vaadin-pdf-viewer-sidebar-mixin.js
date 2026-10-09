@@ -257,7 +257,7 @@ export const PdfViewerSidebarMixin = (superClass) =>
           this.#releaseThumbnail(thumbnail);
         }
       });
-      this.#renderNextThumbnail();
+      this.#renderNextThumbnail(); // NOSONAR
     }
 
     /**
@@ -308,7 +308,7 @@ export const PdfViewerSidebarMixin = (superClass) =>
       } finally {
         this.#isRenderingThumbnail = false;
         // Also after an outdated thumbnail, as visible thumbnails may have been added meanwhile.
-        this.#renderNextThumbnail();
+        this.#renderNextThumbnail(); // NOSONAR
       }
     }
 

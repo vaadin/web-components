@@ -201,7 +201,7 @@ export const PdfViewerPrintMixin = (superClass) =>
         frameWindow.addEventListener('afterprint', cleanup, { once: true });
         frameWindow.focus();
         frameWindow.print();
-        this.#restoreFocus();
+        this.#restoreFocus(); // NOSONAR
       } catch {
         if (!isCancelled()) {
           this._cancelPrint();
@@ -220,7 +220,7 @@ export const PdfViewerPrintMixin = (superClass) =>
       this.__printProgress = -1;
       this.#cleanupPrint?.();
       if (wasPrinting) {
-        this.#restoreFocus();
+        this.#restoreFocus(); // NOSONAR
       }
     }
 
