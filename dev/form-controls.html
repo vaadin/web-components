@@ -1,0 +1,126 @@
+<!doctype html>
+<html lang="en">
+  <head>
+    <meta charset="UTF-8" />
+    <meta http-equiv="X-UA-Compatible" content="IE=edge" />
+    <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+    <title>Form controls</title>
+    <script type="module" src="./common.js"></script>
+    <script type="module">
+      import '@vaadin/text-field';
+      import '@vaadin/checkbox';
+    </script>
+    <style>
+      .controls {
+        display: grid;
+        grid-template-columns: auto 1fr;
+        place-items: center start;
+        gap: 8px 16px;
+      }
+    </style>
+  </head>
+
+  <body>
+    <section class="section vaadin-themed-html">
+      <h2 class="heading">Inside an element with the vaadin-themed-html class</h2>
+      <div class="controls">
+        <label for="themed-text">Text</label>
+        <input id="themed-text" placeholder="Placeholder" />
+        <label for="themed-email">Email</label>
+        <input id="themed-email" type="email" placeholder="name@example.com" />
+        <label for="themed-number">Number</label>
+        <input id="themed-number" type="number" value="42" />
+        <label for="themed-date">Date</label>
+        <input id="themed-date" type="date" />
+        <label for="themed-readonly">Read-only</label>
+        <input id="themed-readonly" value="Read-only" readonly />
+        <label for="themed-disabled">Disabled</label>
+        <input id="themed-disabled" value="Disabled" disabled />
+        <label for="themed-required">Required</label>
+        <input id="themed-required" required />
+        <label for="themed-select">Select</label>
+        <select id="themed-select">
+          <option>Option one</option>
+          <option>Option two</option>
+        </select>
+        <label for="themed-textarea">Text area</label>
+        <textarea id="themed-textarea"></textarea>
+        <span>Buttons</span>
+        <span>
+          <button>Button</button>
+          <input type="submit" />
+          <button disabled>Disabled</button>
+        </span>
+        <label for="themed-file">File</label>
+        <input id="themed-file" type="file" />
+        <label for="themed-checkbox">Checkbox</label>
+        <input id="themed-checkbox" type="checkbox" checked />
+        <label for="themed-radio-1">Radio one</label>
+        <input id="themed-radio-1" type="radio" name="themed-radio" checked />
+        <label for="themed-radio-2">Radio two</label>
+        <input id="themed-radio-2" type="radio" name="themed-radio" />
+        <label for="themed-range">Range</label>
+        <input id="themed-range" type="range" />
+        <label for="themed-progress">Progress</label>
+        <progress id="themed-progress" value="0.5"></progress>
+      </div>
+    </section>
+
+    <section class="section">
+      <h2 class="heading">Without the class</h2>
+      <div class="controls">
+        <label for="unthemed-text">Text</label>
+        <input id="unthemed-text" placeholder="Placeholder" />
+        <label for="unthemed-email">Email</label>
+        <input id="unthemed-email" type="email" placeholder="name@example.com" />
+        <label for="unthemed-number">Number</label>
+        <input id="unthemed-number" type="number" value="42" />
+        <label for="unthemed-date">Date</label>
+        <input id="unthemed-date" type="date" />
+        <label for="unthemed-readonly">Read-only</label>
+        <input id="unthemed-readonly" value="Read-only" readonly />
+        <label for="unthemed-disabled">Disabled</label>
+        <input id="unthemed-disabled" value="Disabled" disabled />
+        <label for="unthemed-required">Required</label>
+        <input id="unthemed-required" required />
+        <label for="unthemed-select">Select</label>
+        <select id="unthemed-select">
+          <option>Option one</option>
+          <option>Option two</option>
+        </select>
+        <label for="unthemed-textarea">Text area</label>
+        <textarea id="unthemed-textarea"></textarea>
+        <span>Buttons</span>
+        <span>
+          <button>Button</button>
+          <input type="submit" />
+          <button disabled>Disabled</button>
+        </span>
+        <label for="unthemed-file">File</label>
+        <input id="unthemed-file" type="file" />
+        <label for="unthemed-checkbox">Checkbox</label>
+        <input id="unthemed-checkbox" type="checkbox" checked />
+        <label for="unthemed-radio-1">Radio one</label>
+        <input id="unthemed-radio-1" type="radio" name="unthemed-radio" checked />
+        <label for="unthemed-radio-2">Radio two</label>
+        <input id="unthemed-radio-2" type="radio" name="unthemed-radio" />
+        <label for="unthemed-range">Range</label>
+        <input id="unthemed-range" type="range" />
+        <label for="unthemed-progress">Progress</label>
+        <progress id="unthemed-progress" value="0.5"></progress>
+      </div>
+    </section>
+
+    <section class="section vaadin-themed-html">
+      <h2 class="heading">Next to Vaadin components</h2>
+      <div style="display: flex; flex-wrap: wrap; align-items: baseline; gap: 8px">
+        <vaadin-text-field label="Vaadin text field"></vaadin-text-field>
+        <label for="native-text">Native input</label>
+        <input id="native-text" />
+        <vaadin-checkbox label="Vaadin checkbox" checked></vaadin-checkbox>
+        <input id="native-checkbox" type="checkbox" checked />
+        <label for="native-checkbox">Native checkbox</label>
+      </div>
+    </section>
+  </body>
+</html>
