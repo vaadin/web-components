@@ -64,6 +64,7 @@ export default [
       'packages/**/vendor/*.js',
       'packages/**/dist/*.js',
       'packages/**/test/dom/__snapshots__/*.snap.js',
+      'packages/**/test/a11y/__snapshots__/*.snap.js',
       'packages/**/test/*.generated.test.js',
       'packages/react-components*/*.{js,d.ts,map}',
       'packages/react-components*/{generated,renderers,utils,css}/**',

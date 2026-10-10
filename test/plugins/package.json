@@ -12,6 +12,8 @@
     "@open-wc/semantic-dom-diff": "^0.21.0",
     "@types/sinon": "^22.0.0",
     "@types/sinon-chai": "^4.0.0",
+    "@vaadin/test-runner-commands": "25.4.0-alpha3",
+    "@web/test-runner-commands": "^1.0.1",
     "chai": "^6.2.2",
     "sinon": "^22.0.0",
     "sinon-chai": "^4.0.1"
