@@ -21,12 +21,6 @@ Install the component:
 npm i @vaadin/pdf-viewer
 ```
 
-To try the latest prototype snapshot, install it with the `dev-discovery` tag:
-
-```sh
-npm i @vaadin/pdf-viewer@dev-discovery
-```
-
 Enable the feature flag before the component is loaded, then import it:
 
 ```js
