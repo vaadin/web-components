@@ -10702,6 +10702,13 @@ ws@^8.18.1, ws@^8.22.0:
   resolved "https://registry.yarnpkg.com/ws/-/ws-8.22.0.tgz#40f16e1d7588ac0575041be5c49b8eb261c28e73"
   integrity sha512-Ydggc987+RO0AnWtZ/7Wq9FtNvcrL1b/RO0ud9mWjUPgDrsAAwQSF51sm2hm1XofbU/4jkpGEsLFsZZxU+1DOg==
 
+wtr-a11y-tree-plugin@^0.1.0:
+  version "0.1.0"
+  resolved "https://registry.yarnpkg.com/wtr-a11y-tree-plugin/-/wtr-a11y-tree-plugin-0.1.0.tgz#c22d2817570d1fed0d64ca79747ad013a337131c"
+  integrity sha512-zgWhKF7YAU1cjaa+vYUMxBDoY+wsilAgJ/HCR6e6oPHqlQPzeKzvdN5j2ejrBSv+EL0bH+47L0pdQ3wzENrHyg==
+  dependencies:
+    "@web/test-runner-commands" "^1.0.1"
+
 xml-utils@^1.10.2:
   version "1.10.2"
   resolved "https://registry.yarnpkg.com/xml-utils/-/xml-utils-1.10.2.tgz#436b39ccc25a663ce367ea21abb717afdea5d6b1"

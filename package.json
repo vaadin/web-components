@@ -30,6 +30,7 @@
     "start:lumo": "web-dev-server --node-resolve --open /dev --theme=lumo",
     "start:react": "yarn workspace react-components-tooling start",
     "test": "web-test-runner",
+    "test:a11y": "yarn test --config web-test-runner-a11y.config.js",
     "test:aura": "./scripts/run-docker-visual-tests.sh test --config web-test-runner-aura.config.js",
     "test:aura:dark": "./scripts/run-docker-visual-tests.sh test --config web-test-runner-aura.config.js --dark",
     "test:base": "./scripts/run-docker-visual-tests.sh test --config web-test-runner-base.config.js",
@@ -40,6 +41,7 @@
     "test:react": "yarn workspace react-components-tooling test",
     "test:snapshots": "yarn test --config web-test-runner-snapshots.config.js",
     "test:webkit": "yarn test --config web-test-runner-webkit.config.js",
+    "update:a11y": "yarn test --config web-test-runner-a11y.config.js --update-snapshots",
     "update:aura": "TEST_ENV=update ./scripts/run-docker-visual-tests.sh test --config web-test-runner-aura.config.js",
     "update:aura:dark": "TEST_ENV=update ./scripts/run-docker-visual-tests.sh test --config web-test-runner-aura.config.js --dark",
     "update:base": "TEST_ENV=update ./scripts/run-docker-visual-tests.sh test --config web-test-runner-base.config.js",
@@ -78,7 +80,8 @@
     "stylelint": "^17.4.0",
     "stylelint-config-html": "^1.1.0",
     "stylelint-config-vaadin": "^1.0.0-alpha.2",
-    "typescript": "^6.0.3"
+    "typescript": "^6.0.3",
+    "wtr-a11y-tree-plugin": "^0.1.0"
   },
   "resolutions": {
     "playwright": "1.64.1"

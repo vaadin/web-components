@@ -83,6 +83,15 @@ const getAllSnapshotPackages = () => {
 };
 
 /**
+ * Get all available packages with accessibility tests.
+ */
+const getAllA11yPackages = () => {
+  return fs
+    .readdirSync('packages')
+    .filter((dir) => fs.statSync(`packages/${dir}`).isDirectory() && fs.existsSync(`packages/${dir}/test/a11y`));
+};
+
+/**
  * Get all available packages with visual tests.
  */
 const getAllVisualPackages = () => {
@@ -136,6 +145,18 @@ const getSnapshotTestGroups = (packages) => {
     return {
       name: pkg,
       files: `packages/${pkg}/test/dom/*.test.{js,ts}`,
+    };
+  });
+};
+
+/**
+ * Get accessibility test groups based on packages.
+ */
+const getA11yTestGroups = (packages) => {
+  return packages.map((pkg) => {
+    return {
+      name: pkg,
+      files: `packages/${pkg}/test/a11y/*.test.{js,ts}`,
     };
   });
 };
@@ -221,6 +242,23 @@ const createSnapshotTestsConfig = (config) => {
   const snapshotPackages = getAllSnapshotPackages();
   const packages = getTestPackages(snapshotPackages);
   const groups = getSnapshotTestGroups(packages);
+
+  return {
+    ...config,
+    nodeResolve: true,
+    browserStartTimeout: 60000, // Default 30000
+    testsStartTimeout: 60000, // Default 10000
+    testsFinishTimeout: 120000, // Default 20000
+    groups,
+    testRunnerHtml: getTestRunnerHtml(),
+    filterBrowserLogs,
+  };
+};
+
+const createA11yTestsConfig = (config) => {
+  const a11yPackages = getAllA11yPackages();
+  const packages = getTestPackages(a11yPackages);
+  const groups = getA11yTestGroups(packages);
 
   return {
     ...config,
@@ -361,4 +399,10 @@ const createIntegrationTestsConfig = (config) => {
   };
 };
 
-export { createSnapshotTestsConfig, createUnitTestsConfig, createVisualTestsConfig, createIntegrationTestsConfig };
+export {
+  createA11yTestsConfig,
+  createSnapshotTestsConfig,
+  createUnitTestsConfig,
+  createVisualTestsConfig,
+  createIntegrationTestsConfig,
+};
