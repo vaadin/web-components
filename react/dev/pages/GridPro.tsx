@@ -21,7 +21,12 @@ const users: Item[] = [...Array(1000)].map((_, i) => {
 export default function () {
   return (
     <GridPro singleCellEdit items={users}>
-      <GridProEditColumn path="firstName" />
+      <GridProEditColumn
+        path="firstName"
+        header={<b style={{ whiteSpace: 'nowrap' }}>First name (auto width)</b>}
+        autoWidth
+        flexGrow={0}
+      />
       <GridProEditColumn
         path="lastName"
         editModeRenderer={() => <TextField />}
