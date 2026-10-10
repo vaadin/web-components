@@ -5,3 +5,12 @@ type MovePayload = { type: 'move'; element: Element };
 type ClickPayload = { type: 'click'; element: Element; button?: 'left' | 'middle' | 'right' };
 
 export function sendMouseToElement(payload: MovePayload | ClickPayload): Promise<void>;
+
+export type A11ySnapshotNode = {
+  role: string;
+  name: string;
+  children?: A11ySnapshotNode[];
+  [property: string]: unknown;
+};
+
+export function a11ySnapshotOfElement(element: Element): Promise<A11ySnapshotNode>;
