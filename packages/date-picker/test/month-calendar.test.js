@@ -297,4 +297,112 @@ describe('vaadin-month-calendar', () => {
       expect(monthCalendar.hasAttribute('disabled')).to.be.false;
     });
   });
+
+  describe('range', () => {
+    const parts = (day) => getDateCell(monthCalendar, day).getAttribute('part').split(' ');
+    const rangeParts = (day) => parts(day).filter((part) => ['range-start', 'range-end', 'in-range'].includes(part));
+
+    beforeEach(async () => {
+      monthCalendar.rangeStart = new Date(2016, 1, 10);
+      monthCalendar.rangeEnd = new Date(2016, 1, 14);
+      await nextRender();
+    });
+
+    it('should mark the start, the end and the dates between', () => {
+      expect(rangeParts(9)).to.be.empty;
+      expect(rangeParts(10)).to.have.members(['range-start', 'in-range']);
+      expect(rangeParts(12)).to.have.members(['in-range']);
+      expect(rangeParts(14)).to.have.members(['range-end', 'in-range']);
+      expect(rangeParts(15)).to.be.empty;
+    });
+
+    it('should mark only the start and the end as selected', () => {
+      [10, 14].forEach((day) => {
+        expect(parts(day)).to.include('selected');
+        expect(getDateCell(monthCalendar, day).getAttribute('aria-selected')).to.equal('true');
+      });
+      expect(parts(12)).to.not.include('selected');
+      expect(getDateCell(monthCalendar, 12).getAttribute('aria-selected')).to.equal('false');
+    });
+
+    it('should include the range role in the accessible name of the dates', () => {
+      const label = (day) => getDateCell(monthCalendar, day).getAttribute('aria-label');
+      expect(label(10)).to.match(/, range start$/u);
+      expect(label(12)).to.match(/, in range$/u);
+      expect(label(14)).to.match(/, range end$/u);
+      expect(label(15)).to.not.match(/range/u);
+    });
+
+    it('should use the range role labels from i18n', async () => {
+      monthCalendar.i18n = { ...monthCalendar.i18n, rangeStart: 'Beginn', inRange: 'im Bereich', rangeEnd: 'Ende' };
+      await nextRender();
+      expect(getDateCell(monthCalendar, 10).getAttribute('aria-label')).to.match(/, Beginn$/u);
+      expect(getDateCell(monthCalendar, 12).getAttribute('aria-label')).to.match(/, im Bereich$/u);
+      expect(getDateCell(monthCalendar, 14).getAttribute('aria-label')).to.match(/, Ende$/u);
+    });
+
+    it('should mark a single-day range as both start and end without a band', async () => {
+      monthCalendar.rangeEnd = new Date(2016, 1, 10);
+      await nextRender();
+      expect(rangeParts(10)).to.have.members(['range-start', 'range-end']);
+    });
+
+    it('should mark only the start when the range has no end', async () => {
+      monthCalendar.rangeEnd = null;
+      await nextRender();
+      expect(rangeParts(10)).to.have.members(['range-start']);
+      expect(rangeParts(12)).to.be.empty;
+    });
+
+    it('should not mark an end without a start', async () => {
+      monthCalendar.rangeStart = null;
+      await nextRender();
+      expect(rangeParts(14)).to.be.empty;
+      expect(parts(14)).to.not.include('selected');
+    });
+
+    it('should mark the end being edited', async () => {
+      const isEditing = (day) => parts(day).includes('range-editing');
+      monthCalendar.rangeEditing = 'end';
+      await nextRender();
+      expect(isEditing(14)).to.be.true;
+      expect(isEditing(10)).to.be.false;
+
+      monthCalendar.rangeEditing = 'start';
+      await nextRender();
+      expect(isEditing(10)).to.be.true;
+      expect(isEditing(14)).to.be.false;
+
+      monthCalendar.rangeEditing = null;
+      await nextRender();
+      expect(isEditing(10) || isEditing(14)).to.be.false;
+    });
+
+    it('should mark the hinted date', async () => {
+      const isHinted = (day) => parts(day).includes('range-hint');
+      monthCalendar.rangeHint = new Date(2016, 1, 12);
+      await nextRender();
+      expect(isHinted(12)).to.be.true;
+      expect(isHinted(10) || isHinted(14)).to.be.false;
+
+      monthCalendar.rangeHint = null;
+      await nextRender();
+      expect(isHinted(12)).to.be.false;
+    });
+
+    it('should not mark a single-day range as being edited', async () => {
+      monthCalendar.rangeEnd = new Date(2016, 1, 10);
+      monthCalendar.rangeEditing = 'end';
+      await nextRender();
+      expect(parts(10)).to.not.include('range-editing');
+    });
+
+    it('should mark a range that continues past the displayed month', async () => {
+      monthCalendar.rangeStart = new Date(2016, 0, 20);
+      monthCalendar.rangeEnd = new Date(2016, 2, 5);
+      await nextRender();
+      expect(rangeParts(1)).to.have.members(['in-range']);
+      expect(rangeParts(29)).to.have.members(['in-range']);
+    });
+  });
 });

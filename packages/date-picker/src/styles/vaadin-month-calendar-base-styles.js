@@ -115,6 +115,93 @@ export const monthCalendarStyles = css`
     outline-offset: 1px;
   }
 
+  /* Range band, drawn behind the date indicators */
+  [part~='in-range'] {
+    --_range-band: var(
+      --vaadin-date-picker-date-in-range-background,
+      color-mix(in srgb, var(--vaadin-date-picker-date-selected-background, var(--vaadin-text-color)) 12%, transparent)
+    );
+    --_range-edge: var(
+      --vaadin-date-picker-date-in-range-border-color,
+      var(--vaadin-date-picker-date-selected-background, var(--vaadin-text-color))
+    );
+    /* Optional edges along the band, off by default */
+    --_range-edge-width: var(--vaadin-date-picker-date-in-range-border-width, 0px);
+    /* Full height, so that the weeks of a range join into one calm area */
+    --_range-band-height: 100%;
+    isolation: isolate;
+    border-radius: 0;
+    background: linear-gradient(
+        var(--_range-edge) var(--_range-edge-width),
+        var(--_range-band) var(--_range-edge-width) calc(100% - var(--_range-edge-width)),
+        var(--_range-edge) calc(100% - var(--_range-edge-width))
+      )
+      center / 100% var(--_range-band-height) no-repeat;
+  }
+
+  /* Round the band where it wraps to the next week, or where the month starts or ends */
+  [part~='in-range']:is(:nth-child(2), td:empty + *) {
+    border-start-start-radius: var(--vaadin-date-picker-date-border-radius, var(--vaadin-radius-m));
+    border-end-start-radius: var(--vaadin-date-picker-date-border-radius, var(--vaadin-radius-m));
+  }
+
+  [part~='in-range']:is(:last-child, :has(+ td:empty)) {
+    border-start-end-radius: var(--vaadin-date-picker-date-border-radius, var(--vaadin-radius-m));
+    border-end-end-radius: var(--vaadin-date-picker-date-border-radius, var(--vaadin-radius-m));
+  }
+
+  [part~='in-range'][part~='range-start'] {
+    background-position: right center;
+    background-size: 50% var(--_range-band-height);
+  }
+
+  [part~='in-range'][part~='range-end'] {
+    background-position: left center;
+    background-size: 50% var(--_range-band-height);
+  }
+
+  /* Keep the band continuous across disabled dates, only their text is dimmed */
+  [part~='in-range'][disabled] {
+    opacity: 1;
+  }
+
+  [part~='in-range']::after {
+    border-radius: var(--vaadin-date-picker-date-border-radius, var(--vaadin-radius-m));
+  }
+
+  /*
+   * The ends of a range, or a lone start, can be dragged to move them. A single-day
+   * range is both, and dragging it selects a new range instead.
+   */
+  [part~='range-start']:not([part~='range-end']),
+  [part~='range-end']:not([part~='range-start']) {
+    cursor: grab;
+  }
+
+  /*
+   * The end of the range being edited gets a lighter fill than the other end. An
+   * outline would look like the focus indicator.
+   */
+  [part~='range-editing'] {
+    color: var(--vaadin-date-picker-date-range-editing-color, var(--vaadin-text-color));
+  }
+
+  [part~='range-editing']::after {
+    background: var(
+      --vaadin-date-picker-date-range-editing-background,
+      color-mix(in srgb, var(--_range-edge) 35%, var(--vaadin-background-color))
+    );
+  }
+
+  /*
+   * While editing an existing range, the date that a pick would set is hinted at
+   * with a dashed outline, and the range itself stays as it is.
+   */
+  [part~='range-hint']:not(:focus-visible)::after {
+    outline: 1px dashed var(--vaadin-date-picker-date-selected-background, var(--vaadin-text-color));
+    outline-offset: -1px;
+  }
+
   [disabled] {
     cursor: var(--vaadin-disabled-cursor);
     color: var(--vaadin-date-picker-date-disabled-color, var(--vaadin-text-color-disabled));

@@ -47,6 +47,43 @@ export const MonthCalendarMixin = (superClass) =>
         },
 
         /**
+         * A `Date` object for the first date of the displayed range.
+         * Used by the date range picker.
+         */
+        rangeStart: {
+          type: Object,
+          sync: true,
+        },
+
+        /**
+         * A `Date` object for the last date of the displayed range.
+         * Used by the date range picker.
+         */
+        rangeEnd: {
+          type: Object,
+          sync: true,
+        },
+
+        /**
+         * The end of the range being edited: `start` or `end`. The date of that end
+         * is marked with the `range-editing` part. Used by the date range picker.
+         */
+        rangeEditing: {
+          type: String,
+          sync: true,
+        },
+
+        /**
+         * A `Date` object for the date that a pick would set, while the displayed range
+         * stays as it is. The date is marked with the `range-hint` part. Used by the
+         * date range picker.
+         */
+        rangeHint: {
+          type: Object,
+          sync: true,
+        },
+
+        /**
          * Set true to display ISO-8601 week numbers in the calendar. Notice that
          * displaying week numbers is only supported when `i18n.firstDayOfWeek`
          * is 1 (Monday).
@@ -332,6 +369,13 @@ export const MonthCalendarMixin = (superClass) =>
         ariaLabel += `, ${this.i18n.today}`;
       }
 
+      const rangeRole = this.__getRangeRole(date);
+      if (rangeRole) {
+        const { rangeStart, rangeEnd, inRange } = this.i18n;
+        const rangeRoleLabels = { 'range-start': rangeStart, 'range-end': rangeEnd, 'in-range': inRange };
+        ariaLabel += `, ${rangeRoleLabels[rangeRole] || rangeRole.replace('-', ' ')}`;
+      }
+
       return ariaLabel;
     }
 
@@ -360,6 +404,28 @@ export const MonthCalendarMixin = (superClass) =>
         result.push('selected');
       }
 
+      // A single-day range is both the start and the end of the range.
+      if (dateEquals(date, this.rangeStart)) {
+        result.push('range-start');
+      }
+
+      if (this.rangeStart && dateEquals(date, this.rangeEnd)) {
+        result.push('range-end');
+      }
+
+      // Includes the start and the end date, so that the range can be styled as one band.
+      if (this.__getRangeRole(date) && this.rangeEnd && !dateEquals(this.rangeStart, this.rangeEnd)) {
+        result.push('in-range');
+      }
+
+      if (this.__isRangeEditingDate(date)) {
+        result.push('range-editing');
+      }
+
+      if (dateEquals(date, this.rangeHint)) {
+        result.push('range-hint');
+      }
+
       if (this._isToday(date)) {
         result.push('today');
       }
@@ -383,7 +449,47 @@ export const MonthCalendarMixin = (superClass) =>
 
     /** @private */
     __isDaySelected(date, selectedDate) {
-      return dateEquals(date, selectedDate);
+      // In a range, both the start and the end date are selected.
+      const rangeRole = this.__getRangeRole(date);
+      return dateEquals(date, selectedDate) || rangeRole === 'range-start' || rangeRole === 'range-end';
+    }
+
+    /**
+     * Whether the date is the end of the range being edited, so that it can be told
+     * apart from the end that stays as it is. Not marked for a single-day range.
+     * @private
+     */
+    __isRangeEditingDate(date) {
+      const { rangeStart, rangeEnd, rangeEditing } = this;
+      if (!date || !rangeStart || !rangeEnd || dateEquals(rangeStart, rangeEnd)) {
+        return false;
+      }
+      return dateEquals(date, rangeEditing === 'start' ? rangeStart : rangeEditing === 'end' ? rangeEnd : null);
+    }
+
+    /**
+     * Returns the role of the date in the displayed range: `range-start`, `range-end`,
+     * `in-range`, or `undefined` if the date is outside of the range.
+     * @private
+     */
+    __getRangeRole(date) {
+      const { rangeStart, rangeEnd } = this;
+      if (!date || !rangeStart) {
+        return undefined;
+      }
+      if (dateEquals(date, rangeStart)) {
+        return 'range-start';
+      }
+      if (!rangeEnd) {
+        return undefined;
+      }
+      if (dateEquals(date, rangeEnd)) {
+        return 'range-end';
+      }
+      if (date > rangeStart && date < rangeEnd) {
+        return 'in-range';
+      }
+      return undefined;
     }
 
     /** @private */
