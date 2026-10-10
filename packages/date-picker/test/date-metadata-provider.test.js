@@ -4,7 +4,16 @@ import sinon from 'sinon';
 import '../src/vaadin-date-picker.js';
 import { DateMetadataController } from '../src/vaadin-date-metadata-controller.js';
 import { formatISODate, monthIndex, parseDate } from '../src/vaadin-date-picker-helper.js';
-import { getCalendars, getDateCell, getDateCells, getMonthCalendar, isoDate, isoDateInMonth, open } from './helpers.js';
+import {
+  getCalendars,
+  getDateButton,
+  getDateCell,
+  getDateCells,
+  getMonthCalendar,
+  isoDate,
+  isoDateInMonth,
+  open,
+} from './helpers.js';
 
 describe('dateMetadataProvider integration', () => {
   let datePicker, overlayContent, today, year, month;
@@ -84,8 +93,8 @@ describe('dateMetadataProvider integration', () => {
     });
 
     it('should set aria-disabled on a provider-disabled date', () => {
-      expect(cell15.getAttribute('aria-disabled')).to.equal('true');
-      expect(cell16.getAttribute('aria-disabled')).to.equal('false');
+      expect(getDateButton(cell15).getAttribute('aria-disabled')).to.equal('true');
+      expect(getDateButton(cell16).getAttribute('aria-disabled')).to.equal('false');
     });
 
     it('should not report loading for an answer that needs no waiting', () => {
@@ -121,7 +130,7 @@ describe('dateMetadataProvider integration', () => {
 
     it('should keep the dates of a pending month selectable', () => {
       expect(isDisabled(cell15)).to.be.false;
-      expect(cell15.getAttribute('aria-disabled')).to.equal('false');
+      expect(getDateButton(cell15).getAttribute('aria-disabled')).to.equal('false');
     });
 
     it('should commit a date picked from a month being fetched', async () => {
@@ -144,10 +153,10 @@ describe('dateMetadataProvider integration', () => {
       expect(overlayContent.hasAttribute('aria-busy')).to.be.false;
 
       expect(isDisabled(cell15)).to.be.true;
-      expect(cell15.getAttribute('aria-disabled')).to.equal('true');
+      expect(getDateButton(cell15).getAttribute('aria-disabled')).to.equal('true');
 
       expect(isDisabled(cell16)).to.be.false;
-      expect(cell16.getAttribute('aria-disabled')).to.equal('false');
+      expect(getDateButton(cell16).getAttribute('aria-disabled')).to.equal('false');
 
       expect(cell15.part.contains('loading')).to.be.false;
       expect(cell16.part.contains('loading')).to.be.false;
