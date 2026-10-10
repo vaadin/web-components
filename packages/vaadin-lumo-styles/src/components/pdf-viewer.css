@@ -1,0 +1,78 @@
+/**
+ * @license
+ * Copyright (c) 2000 - 2026 Vaadin Ltd.
+ * This program is available under Apache License Version 2.0, available at https://vaadin.com/license/
+ */
+@media lumo_components_pdf-viewer {
+  [part='content']:focus-visible + .content-focus-ring {
+    outline: 2px solid var(--lumo-primary-color-50pct);
+    outline-offset: -2px;
+  }
+
+  [part~='thumbnail']:focus-visible {
+    outline: 2px solid var(--lumo-primary-color-50pct);
+  }
+
+  [part~='outline-item']:focus-visible > [part='outline-item-content'] {
+    outline: 2px solid var(--lumo-primary-color-50pct);
+  }
+
+  .link:focus-visible {
+    outline: 2px solid var(--lumo-primary-color-50pct);
+  }
+
+  /* Filled like Lumo fields, without a border */
+  [part~='zoom-controls'] {
+    border-width: 0;
+    border-radius: var(--lumo-border-radius-m);
+    background: var(--lumo-contrast-10pct);
+  }
+
+  [part~='zoom-controls'][part~='disabled'] {
+    background: var(--lumo-contrast-5pct);
+  }
+
+  /* No extra space around the fields, so that they have the height of the buttons */
+  ::slotted(vaadin-integer-field[slot='page-field']),
+  ::slotted(vaadin-select[slot='toolbar-zoom']) {
+    padding-block: 0;
+  }
+
+  /* Neutral like the step buttons of a number field */
+  ::slotted(vaadin-pdf-viewer-button[slot='toolbar-zoom']:not([disabled])) {
+    color: var(--lumo-contrast-60pct);
+  }
+
+  ::slotted([slot='page-error']) {
+    color: var(--lumo-error-text-color);
+    font-size: var(--lumo-font-size-xs);
+  }
+
+  :host {
+    font-family: var(--lumo-font-family);
+    font-size: var(--lumo-font-size-m);
+    line-height: var(--lumo-line-height-m);
+    -webkit-font-smoothing: antialiased;
+    -moz-osx-font-smoothing: grayscale;
+    --vaadin-pdf-viewer-border-color: var(--lumo-contrast-10pct);
+    --vaadin-pdf-viewer-border-radius: var(--lumo-border-radius-m);
+    --vaadin-pdf-viewer-background: var(--lumo-contrast-5pct);
+    --vaadin-pdf-viewer-padding: var(--lumo-space-m);
+    --vaadin-pdf-viewer-page-gap: var(--lumo-space-m);
+    --vaadin-pdf-viewer-page-shadow: var(--lumo-box-shadow-xs);
+    --vaadin-pdf-viewer-error-color: var(--lumo-secondary-text-color);
+    --vaadin-pdf-viewer-toolbar-background: var(--lumo-base-color);
+    --vaadin-pdf-viewer-toolbar-padding: var(--lumo-space-xs);
+    --vaadin-pdf-viewer-selection-background: color-mix(in srgb, var(--lumo-primary-color) 30%, transparent);
+    --vaadin-pdf-viewer-icon-previous-page: var(--lumo-icons-angle-up);
+    --vaadin-pdf-viewer-icon-next-page: var(--lumo-icons-angle-down);
+    --vaadin-pdf-viewer-icon-collapse-toolbar: var(--lumo-icons-angle-up);
+    --vaadin-pdf-viewer-icon-expand-toolbar: var(--lumo-icons-angle-down);
+    --vaadin-pdf-viewer-icon-zoom-out: var(--lumo-icons-minus);
+    --vaadin-pdf-viewer-icon-zoom-in: var(--lumo-icons-plus);
+    --vaadin-pdf-viewer-icon-find: var(--lumo-icons-search);
+    --vaadin-pdf-viewer-icon-download: var(--lumo-icons-download);
+    --vaadin-pdf-viewer-icon-sidebar: var(--lumo-icons-menu);
+    --vaadin-pdf-viewer-icon-close: var(--lumo-icons-cross);
+  }
+}

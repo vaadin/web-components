@@ -64,8 +64,9 @@ export const selectStyles = css`
     justify-content: start;
   }
 
+  /* Starts at the start edge when the value doesn't fit, so that only its end is cut */
   :host([theme~='align-center']) ::slotted([slot='value']) {
-    justify-content: center;
+    justify-content: safe center;
   }
 
   :host([theme~='align-end']) ::slotted([slot='value']) {

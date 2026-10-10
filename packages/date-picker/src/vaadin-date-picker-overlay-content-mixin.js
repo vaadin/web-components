@@ -50,6 +50,65 @@ export const DatePickerOverlayContentMixin = (superClass) =>
           sync: true,
         },
 
+        /**
+         * The first date of the selected range. Used by the date range picker.
+         */
+        rangeStart: {
+          type: Object,
+          sync: true,
+        },
+
+        /**
+         * The last date of the selected range. Used by the date range picker.
+         */
+        rangeEnd: {
+          type: Object,
+          sync: true,
+        },
+
+        /**
+         * The end of the range that a pick sets: `start` or `end`. While set,
+         * hovering or focusing a date previews the range that picking it would select.
+         */
+        rangePreview: {
+          type: String,
+          sync: true,
+        },
+
+        /** @private */
+        _hoveredDate: {
+          type: Object,
+          sync: true,
+        },
+
+        /** @private */
+        _calendarFocused: {
+          type: Boolean,
+          sync: true,
+        },
+
+        /**
+         * The kind of range drag in progress: `select` when dragging from a date to
+         * select a new range, `start` or `end` when dragging that end of the range.
+         * @private
+         */
+        _dragMode: {
+          type: String,
+          sync: true,
+        },
+
+        /** @private */
+        _dragAnchor: {
+          type: Object,
+          sync: true,
+        },
+
+        /** @private */
+        _dragTarget: {
+          type: Object,
+          sync: true,
+        },
+
         _focusedMonthDate: Number,
 
         /**
@@ -175,6 +234,7 @@ export const DatePickerOverlayContentMixin = (superClass) =>
       return [
         '__updateCalendarsConfig(calendars, i18n, minDate, maxDate, showWeekNumbers, isDateDisabled, _theme, _dateMetadataController)',
         '__updateCalendarsState(calendars, selectedDate, focusedDate, enteredDate, _ignoreTaps)',
+        '__updateCalendarsRange(calendars, rangeStart, rangeEnd, rangePreview, _hoveredDate, focusedDate, _calendarFocused, _dragTarget)',
         '__updateCancelButton(_cancelButton, i18n)',
         '__updateYears(years, selectedDate, _theme)',
       ];
@@ -304,6 +364,44 @@ export const DatePickerOverlayContentMixin = (superClass) =>
 
             scroller.addEventListener('keydown', (e) => {
               this.__onMonthCalendarKeyDown(e);
+            });
+
+            // Use mousemove, as mouseover does not fire reliably for the date cells.
+            scroller.addEventListener('mousemove', (e) => {
+              const date = e.composedPath()[0].date || null;
+              if (!dateEquals(date, this._hoveredDate)) {
+                this._hoveredDate = date;
+              }
+              if (this._dragMode && date && this._dateSelectable(date) && !dateEquals(date, this._dragTarget)) {
+                this._dragTarget = date;
+              }
+            });
+
+            scroller.addEventListener('pointerdown', (e) => {
+              this.__onRangePointerDown(e);
+            });
+
+            scroller.addEventListener(
+              'date-tap',
+              (e) => {
+                if (this.__suppressTap) {
+                  this.__suppressTap = false;
+                  e.stopPropagation();
+                }
+              },
+              true,
+            );
+
+            scroller.addEventListener('mouseleave', () => {
+              this._hoveredDate = null;
+            });
+
+            scroller.addEventListener('focusin', () => {
+              this._calendarFocused = true;
+            });
+
+            scroller.addEventListener('focusout', () => {
+              this._calendarFocused = false;
             });
 
             scroller.addEventListener('init-done', () => {
@@ -457,6 +555,135 @@ export const DatePickerOverlayContentMixin = (superClass) =>
           calendar.ignoreTaps = ignoreTaps;
         });
       }
+    }
+
+    /**
+     * Range state: the selected range, or the previewed range while picking its end,
+     * or the hinted date while editing an existing range.
+     * @private
+     */
+    // eslint-disable-next-line @typescript-eslint/max-params
+    __updateCalendarsRange(calendars, rangeStart, rangeEnd, rangePreview, hoveredDate, focusedDate, calendarFocused) {
+      if (!calendars?.length) {
+        return;
+      }
+
+      let displayedStart = rangeStart;
+      let displayedEnd = rangeEnd;
+      let editing = rangePreview;
+      let hint = null;
+      const previewDate = hoveredDate || (calendarFocused ? focusedDate : null);
+      const dragRange = this.__getDragRange();
+      if (dragRange) {
+        ({ start: displayedStart, end: displayedEnd, editing } = dragRange);
+      } else if (previewDate && rangePreview && rangeStart && rangeEnd) {
+        // When editing an existing range, it stays on display, and the date that a
+        // pick would set is only hinted at. The range is previewed while it is
+        // picked for the first time.
+        hint = previewDate;
+      } else if (previewDate && rangePreview === 'end' && rangeStart && previewDate >= rangeStart) {
+        displayedEnd = previewDate;
+      } else if (previewDate && rangePreview === 'start' && rangeEnd && previewDate <= rangeEnd) {
+        displayedStart = previewDate;
+      } else if (
+        previewDate &&
+        ((rangePreview === 'end' && rangeStart && previewDate < rangeStart) ||
+          (rangePreview === 'start' && rangeEnd && previewDate > rangeEnd))
+      ) {
+        // Picking this date starts a new range, so preview it as the only date of
+        // the range instead of keeping the current range on display.
+        [displayedStart, displayedEnd, editing] = [previewDate, null, 'start'];
+      }
+
+      calendars.forEach((calendar) => {
+        calendar.rangeStart = displayedStart;
+        calendar.rangeEnd = displayedEnd;
+        calendar.rangeEditing = editing;
+        calendar.rangeHint = hint;
+      });
+    }
+
+    /**
+     * Starts a range drag when pressing a date with a mouse or a pen: pressing an end
+     * of the range drags that end, pressing any other date selects a new range.
+     * Touch is left to scroll the calendar.
+     * @private
+     */
+    __onRangePointerDown(event) {
+      // A tap suppressed after the previous drag may never have arrived.
+      this.__suppressTap = false;
+
+      const date = event.composedPath()[0].date;
+      if (!this.rangePreview || event.pointerType === 'touch' || event.button !== 0 || !date) {
+        return;
+      }
+      if (!this._dateSelectable(date)) {
+        return;
+      }
+
+      // A lone start or end, picked before the other end, can be dragged as well. A
+      // single-day range is not dragged, as it has no end to move apart from the other.
+      const hasRange = !dateEquals(this.rangeStart, this.rangeEnd);
+      if (hasRange && dateEquals(date, this.rangeStart)) {
+        this._dragMode = 'start';
+      } else if (hasRange && dateEquals(date, this.rangeEnd)) {
+        this._dragMode = 'end';
+      } else {
+        this._dragMode = 'select';
+      }
+      this._dragAnchor = date;
+      this._dragTarget = date;
+
+      // Transient listener, removed when the drag ends.
+      this.__boundRangePointerUp ||= () => this.__onRangePointerUp();
+      document.addEventListener('pointerup', this.__boundRangePointerUp);
+      document.addEventListener('pointercancel', this.__boundRangePointerUp);
+    }
+
+    /** @private */
+    __onRangePointerUp() {
+      document.removeEventListener('pointerup', this.__boundRangePointerUp);
+      document.removeEventListener('pointercancel', this.__boundRangePointerUp);
+
+      const range = this.__getDragRange();
+      this._dragMode = null;
+      this._dragAnchor = null;
+      this._dragTarget = null;
+
+      if (range) {
+        // The release would otherwise also count as a tap on the date below the pointer.
+        this.__suppressTap = true;
+        /** @internal to not document it in CEM */
+        this.dispatchEvent(new CustomEvent('range-drag-end', { detail: range }));
+      }
+    }
+
+    /**
+     * The range shown while dragging, or `null` if the pointer has not moved to
+     * another date yet. Includes the drag mode, see `_dragMode`.
+     * @private
+     */
+    __getDragRange() {
+      const { _dragMode: mode, _dragAnchor: anchor, _dragTarget: target } = this;
+      if (!mode || !target || dateEquals(anchor, target)) {
+        return null;
+      }
+
+      let start, end, editing;
+      if (mode === 'select') {
+        [start, end, editing] = [anchor, target, 'end'];
+      } else if (mode === 'start') {
+        [start, end, editing] = [target, this.rangeEnd, 'start'];
+      } else {
+        [start, end, editing] = [this.rangeStart, target, 'end'];
+      }
+
+      // Dragging an end past the other one turns the range around.
+      if (start && end && start > end) {
+        [start, end] = [end, start];
+        editing = editing === 'start' ? 'end' : 'start';
+      }
+      return { start, end, editing, mode };
     }
 
     /** @private */
