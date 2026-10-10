@@ -20,6 +20,12 @@ export type ElementData = Readonly<{
   events: readonly string[];
   /** The bare specifier of the public entry module, `@vaadin/button/vaadin-button.js`. */
   modulePath: string;
+  /**
+   * True when the element documents a `theme` attribute that `ThemePropertyMixin` does not
+   * provide, so the `theme` prop is not part of the element type. The manifest config records
+   * the mixin as `inheritedFrom` of the attribute.
+   */
+  themed: boolean;
 }>;
 
 const collator = new Intl.Collator('en');
@@ -63,7 +69,7 @@ async function loadElements(packageName: string): Promise<ElementData[]> {
 
   const { modules } = manifest;
   return modules.flatMap(({ path, declarations = [] }) =>
-    declarations.filter(isElementDeclaration).flatMap(({ tagName = '', events = [] }) => {
+    declarations.filter(isElementDeclaration).flatMap(({ tagName = '', events = [], attributes = [] }) => {
       const entryModule = findEntryModule(modules, path, tagName);
       // Elements without a public entry module, such as `vaadin-upload-file`, get no wrapper.
       if (!entryModule) {
@@ -74,6 +80,7 @@ async function loadElements(packageName: string): Promise<ElementData[]> {
         tagName,
         events: events.map(({ name }) => name).sort(collator.compare),
         modulePath: `${packageName}/${entryModule}`,
+        themed: attributes.some(({ name, inheritedFrom }) => name === 'theme' && !inheritedFrom),
       };
     }),
   );

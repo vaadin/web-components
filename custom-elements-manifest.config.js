@@ -183,6 +183,33 @@ function resolveInheritedMembers(allDeclarations) {
   }
 }
 
+const themeMixins = ['ThemableMixin', 'ThemePropertyMixin'];
+
+/**
+ * True when the class, or a superclass in the merged manifest, applies a theme mixin.
+ */
+function hasThemeMixin(decl, allDeclarations) {
+  if ((decl.mixins || []).some((mixin) => themeMixins.includes(mixin.name))) {
+    return true;
+  }
+  const parent = decl.superclass && allDeclarations.get(decl.superclass.name);
+  return parent ? hasThemeMixin(parent, allDeclarations) : false;
+}
+
+/**
+ * Every element documents `theme` with `@attr`, so the attribute alone does not tell
+ * whether `ThemePropertyMixin` provides it. Record the origin for consumers such as
+ * the React wrapper generator, which adds a `theme` prop only when the mixin is absent.
+ */
+function markThemeAttributeOrigin(allDeclarations) {
+  for (const decl of allDeclarations.values()) {
+    const theme = decl.kind === 'class' && decl.attributes?.find((attr) => attr.name === 'theme');
+    if (theme && !theme.inheritedFrom && hasThemeMixin(decl, allDeclarations)) {
+      theme.inheritedFrom = { name: 'ThemePropertyMixin' };
+    }
+  }
+}
+
 export default {
   globs: ['packages/**/src/(vaadin-*.js|*-mixin.js)'],
   packagejson: false,
@@ -203,6 +230,7 @@ export default {
         // The analyzer only follows inheritedFrom one level deep, so members
         // inherited through 2+ levels are dropped from class declarations.
         resolveInheritedMembers(allDeclarations);
+        markThemeAttributeOrigin(allDeclarations);
 
         for (const definition of customElementsManifest.modules) {
           // Filter out class declarations marked as @private or @protected
