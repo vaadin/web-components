@@ -25,6 +25,6 @@ snapshots["vaadin-accordion disabled panel"] =
 `- button "Panel 1" [expanded]
 - text: Content 1
 - button "Panel 2"
-- heading "Panel 3" [disabled, level=2]`;
+- heading "Panel 3" [disabled, level=3]`;
 /* end snapshot vaadin-accordion disabled panel */
 

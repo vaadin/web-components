@@ -13,6 +13,7 @@
     "@types/sinon": "^22.0.0",
     "@types/sinon-chai": "^4.0.0",
     "@vaadin/test-runner-commands": "25.4.0-alpha6",
+    "axe-core": "^4.10.0",
     "chai": "^6.2.2",
     "sinon": "^22.0.0",
     "sinon-chai": "^4.0.1"
