@@ -2,6 +2,10 @@ import { expect } from '@vaadin/chai-plugins';
 import { fixtureSync, nextRender, nextUpdate } from '@vaadin/testing-helpers';
 import '../../src/vaadin-tabsheet.js';
 
+// The tabs scroll container has `tabindex="-1"` so that Firefox does not make it a Tab stop.
+// axe reports it as a child of the tablist that is not a tab.
+const AXE_OPTIONS = { ignoredRules: ['aria-required-children'] };
+
 describe('vaadin-tabsheet', () => {
   let tabsheet;
 
@@ -24,17 +28,20 @@ describe('vaadin-tabsheet', () => {
 
   it('default', async () => {
     await expect(tabsheet).to.equalAriaSnapshot();
+    await expect(tabsheet).to.be.accessible(AXE_OPTIONS);
   });
 
   it('selected', async () => {
     tabsheet.selected = 2;
     await nextUpdate(tabsheet);
     await expect(tabsheet).to.equalAriaSnapshot();
+    await expect(tabsheet).to.be.accessible(AXE_OPTIONS);
   });
 
   it('prefix and suffix', async () => {
     tabsheet.insertAdjacentHTML('afterbegin', '<button slot="prefix">Back</button><button slot="suffix">Add</button>');
     await nextUpdate(tabsheet);
     await expect(tabsheet).to.equalAriaSnapshot();
+    await expect(tabsheet).to.be.accessible(AXE_OPTIONS);
   });
 });

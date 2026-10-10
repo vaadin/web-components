@@ -17,23 +17,27 @@ describe('vaadin-details', () => {
 
   it('default', async () => {
     await expect(details).to.equalAriaSnapshot();
+    await expect(details).to.be.accessible();
   });
 
   it('opened', async () => {
     details.opened = true;
     await nextUpdate(details);
     await expect(details).to.equalAriaSnapshot();
+    await expect(details).to.be.accessible();
   });
 
   it('disabled', async () => {
     details.disabled = true;
     await nextUpdate(details);
     await expect(details).to.equalAriaSnapshot();
+    await expect(details).to.be.accessible();
   });
 
   it('summary string', async () => {
     details = fixtureSync('<vaadin-details summary="Summary"><div>Content</div></vaadin-details>');
     await nextUpdate(details);
     await expect(details).to.equalAriaSnapshot();
+    await expect(details).to.be.accessible();
   });
 });

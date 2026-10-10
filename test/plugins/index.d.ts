@@ -8,6 +8,11 @@ declare global {
        * Compares the aria snapshot of an element with the one saved for the current test.
        */
       equalAriaSnapshot(): Promise<void>;
+
+      /**
+       * Runs axe-core rule checks on an element and fails on any violation.
+       */
+      accessible(options?: { ignoredRules?: string[] }): Promise<void>;
     }
   }
 }

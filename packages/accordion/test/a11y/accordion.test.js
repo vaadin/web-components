@@ -7,7 +7,7 @@ describe('vaadin-accordion', () => {
 
   beforeEach(async () => {
     accordion = fixtureSync(`
-      <vaadin-accordion>
+      <vaadin-accordion heading-level="3">
         <vaadin-accordion-panel>
           <vaadin-accordion-heading slot="summary">Panel 1</vaadin-accordion-heading>
           <div>Content 1</div>
@@ -27,23 +27,27 @@ describe('vaadin-accordion', () => {
 
   it('default', async () => {
     await expect(accordion).to.equalAriaSnapshot();
+    await expect(accordion).to.be.accessible();
   });
 
   it('opened', async () => {
     accordion.opened = 1;
     await nextUpdate(accordion);
     await expect(accordion).to.equalAriaSnapshot();
+    await expect(accordion).to.be.accessible();
   });
 
   it('closed', async () => {
     accordion.opened = null;
     await nextUpdate(accordion);
     await expect(accordion).to.equalAriaSnapshot();
+    await expect(accordion).to.be.accessible();
   });
 
   it('disabled panel', async () => {
     accordion.items[2].disabled = true;
     await nextUpdate(accordion.items[2]);
     await expect(accordion).to.equalAriaSnapshot();
+    await expect(accordion).to.be.accessible();
   });
 });
