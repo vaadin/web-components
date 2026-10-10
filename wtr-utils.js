@@ -83,6 +83,15 @@ const getAllSnapshotPackages = () => {
 };
 
 /**
+ * Get all available packages with accessibility tests.
+ */
+const getAllA11yPackages = () => {
+  return fs
+    .readdirSync('packages')
+    .filter((dir) => fs.statSync(`packages/${dir}`).isDirectory() && fs.existsSync(`packages/${dir}/test/a11y`));
+};
+
+/**
  * Get all available packages with visual tests.
  */
 const getAllVisualPackages = () => {
@@ -136,6 +145,18 @@ const getSnapshotTestGroups = (packages) => {
     return {
       name: pkg,
       files: `packages/${pkg}/test/dom/*.test.{js,ts}`,
+    };
+  });
+};
+
+/**
+ * Get accessibility test groups based on packages.
+ */
+const getA11yTestGroups = (packages) => {
+  return packages.map((pkg) => {
+    return {
+      name: pkg,
+      files: `packages/${pkg}/test/a11y/*.test.{js,ts}`,
     };
   });
 };
@@ -221,6 +242,43 @@ const createSnapshotTestsConfig = (config) => {
   const snapshotPackages = getAllSnapshotPackages();
   const packages = getTestPackages(snapshotPackages);
   const groups = getSnapshotTestGroups(packages);
+
+  return {
+    ...config,
+    nodeResolve: true,
+    browserStartTimeout: 60000, // Default 30000
+    testsStartTimeout: 60000, // Default 10000
+    testsFinishTimeout: 120000, // Default 20000
+    groups,
+    testRunnerHtml: getTestRunnerHtml(),
+    filterBrowserLogs,
+  };
+};
+
+/**
+ * A test runner command that returns the Playwright aria snapshot, as YAML,
+ * of the element that matches the given selector.
+ *
+ * @return {import('@web/test-runner').TestRunnerPlugin}
+ */
+const ariaSnapshotPlugin = () => ({
+  name: 'aria-snapshot-command',
+  executeCommand({ command, payload, session }) {
+    if (command !== 'aria-snapshot') {
+      return undefined;
+    }
+    if (session.browser.type !== 'playwright') {
+      throw new Error(`Aria snapshots are not supported for browser type ${session.browser.type}.`);
+    }
+    const page = session.browser.getPage(session.id);
+    return page.locator(payload.selector).ariaSnapshot();
+  },
+});
+
+const createA11yTestsConfig = (config) => {
+  const a11yPackages = getAllA11yPackages();
+  const packages = getTestPackages(a11yPackages);
+  const groups = getA11yTestGroups(packages);
 
   return {
     ...config,
@@ -361,4 +419,11 @@ const createIntegrationTestsConfig = (config) => {
   };
 };
 
-export { createSnapshotTestsConfig, createUnitTestsConfig, createVisualTestsConfig, createIntegrationTestsConfig };
+export {
+  ariaSnapshotPlugin,
+  createA11yTestsConfig,
+  createSnapshotTestsConfig,
+  createUnitTestsConfig,
+  createVisualTestsConfig,
+  createIntegrationTestsConfig,
+};

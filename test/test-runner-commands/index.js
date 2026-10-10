@@ -29,3 +29,28 @@ export async function sendMouseToElement(payload) {
   const y = Math.floor(rect.y + rect.height / 2);
   await executeServerCommand('send-mouse', { type, position: [x, y] });
 }
+
+let ariaSnapshotId = 0;
+
+/**
+ * Returns the Playwright aria snapshot of an element as YAML: the roles,
+ * accessible names and states of the element and its descendants, including
+ * shadow DOM and slotted content.
+ *
+ * @param {Element} element
+ * @return {Promise<string>}
+ *
+ * @example
+ * const yaml = await ariaSnapshot(document.querySelector('vaadin-button'));
+ */
+export async function ariaSnapshot(element) {
+  ariaSnapshotId += 1;
+  const id = `${ariaSnapshotId}`;
+  // Commands can only receive JSON, so mark the element to find it by a selector.
+  element.setAttribute('data-aria-snapshot', id);
+  try {
+    return await executeServerCommand('aria-snapshot', { selector: `[data-aria-snapshot="${id}"]` });
+  } finally {
+    element.removeAttribute('data-aria-snapshot');
+  }
+}
