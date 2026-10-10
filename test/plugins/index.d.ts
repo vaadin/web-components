@@ -2,4 +2,15 @@ import '@open-wc/semantic-dom-diff';
 import 'sinon-chai';
 import 'wtr-a11y-tree-plugin/chai';
 
+declare global {
+  namespace Chai {
+    interface Assertion {
+      /**
+       * Runs axe-core rule checks on an element and fails on any violation.
+       */
+      accessible(options?: { ignoredRules?: string[] }): Promise<void>;
+    }
+  }
+}
+
 export { expect } from 'chai';

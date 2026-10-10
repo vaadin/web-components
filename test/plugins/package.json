@@ -12,6 +12,7 @@
     "@open-wc/semantic-dom-diff": "^0.21.0",
     "@types/sinon": "^22.0.0",
     "@types/sinon-chai": "^4.0.0",
+    "axe-core": "^4.10.0",
     "chai": "^6.2.2",
     "sinon": "^22.0.0",
     "sinon-chai": "^4.0.1",
