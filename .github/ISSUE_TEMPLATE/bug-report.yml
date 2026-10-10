@@ -17,6 +17,19 @@ body:
       placeholder: "Example: I would expect the click listener to be called, regardless of which child of the button is clicked."
     validations:
       required: true
+  - type: markdown
+    attributes:
+      value: |
+        ## Reproduce the issue online
+
+        The fastest way to share a working reproduction is a StackBlitz project
+        pre-configured with Vaadin Web Components. Fork the template below and
+        edit it until it reproduces the issue, then paste the link here.
+
+        **[▶ Open the Vaadin Web Components StackBlitz template](https://stackblitz.com/fork/vaadin-web-components-starter)**
+
+        No local setup needed — the template has the components already
+        installed, so you can paste your code and click "Run".
   - type: textarea
     id: reproduction
     attributes:
@@ -37,7 +50,7 @@ body:
     id: environment
     attributes:
       label: Environment
-      description: Environment in which the issue reproduces. Feel free to add further information that might help with debugging the issue.
+      description: Environment in which the issue reproduces. Feel free to add further information that might help with debugging.
       value: "Vaadin version(s): \nOS: "
     validations:
       required: true
