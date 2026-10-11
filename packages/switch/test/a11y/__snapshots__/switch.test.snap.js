@@ -22,7 +22,9 @@ snapshots["vaadin-switch readonly"] =
 /* end snapshot vaadin-switch readonly */
 
 snapshots["vaadin-switch error"] = 
-`- switch "Notifications" [invalid]
-- text: Notifications Notifications must be enabled`;
+`- switch "Notifications" [invalid]:
+  - /description: Notifications must be enabled
+- text: Notifications
+- text: Notifications must be enabled`;
 /* end snapshot vaadin-switch error */
 

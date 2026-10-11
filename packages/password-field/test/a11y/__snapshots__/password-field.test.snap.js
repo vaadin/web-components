@@ -4,13 +4,13 @@ export const snapshots = {};
 snapshots["vaadin-password-field default"] = 
 `- text: Password
 - textbox "Password"
-- button "Show password"`;
+- button "Show password" [pressed=false]`;
 /* end snapshot vaadin-password-field default */
 
 snapshots["vaadin-password-field value"] = 
 `- text: Password
-- textbox "Password": secret
-- button "Show password"`;
+- textbox "Password": ••••••
+- button "Show password" [pressed=false]`;
 /* end snapshot vaadin-password-field value */
 
 
@@ -22,32 +22,34 @@ snapshots["vaadin-password-field reveal button hidden"] =
 snapshots["vaadin-password-field disabled"] = 
 `- text: Password
 - textbox "Password" [disabled]
-- button "Show password" [disabled]`;
+- button "Show password" [disabled, pressed=false]`;
 /* end snapshot vaadin-password-field disabled */
 
 snapshots["vaadin-password-field readonly"] = 
 `- text: Password
-- textbox "Password"
-- button "Show password"`;
+- textbox "Password" [readonly]
+- button "Show password" [pressed=false]`;
 /* end snapshot vaadin-password-field readonly */
 
 snapshots["vaadin-password-field required"] = 
 `- text: Password
-- textbox "Password"
-- button "Show password"`;
+- textbox "Password" [required]
+- button "Show password" [pressed=false]`;
 /* end snapshot vaadin-password-field required */
 
 snapshots["vaadin-password-field helper"] = 
 `- text: Password
-- textbox "Password"
-- button "Show password"
+- textbox "Password":
+  - /description: At least 8 characters
+- button "Show password" [pressed=false]
 - text: At least 8 characters`;
 /* end snapshot vaadin-password-field helper */
 
 snapshots["vaadin-password-field error"] = 
 `- text: Password
-- textbox "Password" [invalid]
-- button "Show password"
+- textbox "Password" [invalid]:
+  - /description: Error message
+- button "Show password" [pressed=false]
 - text: Error message`;
 /* end snapshot vaadin-password-field error */
 

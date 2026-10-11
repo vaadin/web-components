@@ -2,28 +2,28 @@
 export const snapshots = {};
 
 snapshots["vaadin-tabs default"] = 
-`- tablist:
+`- tablist [orientation=horizontal]:
   - tab "Tab 1" [selected]
   - tab "Tab 2"
   - tab "Tab 3"`;
 /* end snapshot vaadin-tabs default */
 
 snapshots["vaadin-tabs selected"] = 
-`- tablist:
+`- tablist [orientation=horizontal]:
   - tab "Tab 1"
   - tab "Tab 2" [selected]
   - tab "Tab 3"`;
 /* end snapshot vaadin-tabs selected */
 
 snapshots["vaadin-tabs disabled tab"] = 
-`- tablist:
+`- tablist [orientation=horizontal]:
   - tab "Tab 1" [selected]
   - tab "Tab 2"
   - tab "Tab 3" [disabled]`;
 /* end snapshot vaadin-tabs disabled tab */
 
 snapshots["vaadin-tabs aria-label"] = 
-`- tablist "Sections":
+`- tablist "Sections" [orientation=horizontal]:
   - tab "Tab 1" [selected]
   - tab "Tab 2"
   - tab "Tab 3"`;

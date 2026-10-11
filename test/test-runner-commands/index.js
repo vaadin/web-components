@@ -30,27 +30,28 @@ export async function sendMouseToElement(payload) {
   await executeServerCommand('send-mouse', { type, position: [x, y] });
 }
 
-let ariaSnapshotId = 0;
+let a11yTreeId = 0;
 
 /**
- * Returns the Playwright aria snapshot of an element as YAML: the roles,
- * accessible names and states of the element and its descendants, including
- * shadow DOM and slotted content.
+ * Returns the Chromium accessibility tree of an element: the roles, names,
+ * descriptions, values, states and relations of the element and its
+ * descendants, including shadow DOM and slotted content.
  *
  * @param {Element} element
- * @return {Promise<string>}
+ * @return {Promise<Array<object>>}
  *
  * @example
- * const yaml = await ariaSnapshot(document.querySelector('vaadin-button'));
+ * const tree = await getA11yTree(document.querySelector('vaadin-text-field'));
  */
-export async function ariaSnapshot(element) {
-  ariaSnapshotId += 1;
-  const id = `${ariaSnapshotId}`;
-  // Commands can only receive JSON, so mark the element to find it by a selector.
-  element.setAttribute('data-aria-snapshot', id);
+export async function getA11yTree(element) {
+  a11yTreeId += 1;
+  const id = `${a11yTreeId}`;
+  // Commands can only receive JSON, so the server reads the element from a global map.
+  globalThis.__a11yTreeTargets ||= new Map();
+  globalThis.__a11yTreeTargets.set(id, element);
   try {
-    return await executeServerCommand('aria-snapshot', { selector: `[data-aria-snapshot="${id}"]` });
+    return await executeServerCommand('get-a11y-tree', { id });
   } finally {
-    element.removeAttribute('data-aria-snapshot');
+    globalThis.__a11yTreeTargets.delete(id);
   }
 }

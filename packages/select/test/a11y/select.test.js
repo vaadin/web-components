@@ -16,42 +16,42 @@ describe('vaadin-select', () => {
   });
 
   it('default', async () => {
-    await expect(select).to.equalAriaSnapshot();
+    await expect(select).to.equalA11yTreeSnapshot();
     await expect(select).to.be.accessible();
   });
 
   it('value', async () => {
     select.value = 'm';
     await nextUpdate(select);
-    await expect(select).to.equalAriaSnapshot();
+    await expect(select).to.equalA11yTreeSnapshot();
     await expect(select).to.be.accessible();
   });
 
   it('placeholder', async () => {
     select.placeholder = 'Choose a size';
     await nextUpdate(select);
-    await expect(select).to.equalAriaSnapshot();
+    await expect(select).to.equalA11yTreeSnapshot();
     await expect(select).to.be.accessible();
   });
 
   it('disabled', async () => {
     select.disabled = true;
     await nextUpdate(select);
-    await expect(select).to.equalAriaSnapshot();
+    await expect(select).to.equalA11yTreeSnapshot();
     await expect(select).to.be.accessible();
   });
 
   it('readonly', async () => {
     select.readonly = true;
     await nextUpdate(select);
-    await expect(select).to.equalAriaSnapshot();
+    await expect(select).to.equalA11yTreeSnapshot();
     await expect(select).to.be.accessible();
   });
 
   it('required', async () => {
     select.required = true;
     await nextUpdate(select);
-    await expect(select).to.equalAriaSnapshot();
+    await expect(select).to.equalA11yTreeSnapshot();
     // Known issue: `aria-required` is set on the value button, but `role="button"` does not support it.
     // See https://github.com/vaadin/web-components/issues/7337
     await expect(select).to.be.accessible({ ignoredRules: ['aria-allowed-attr'] });
@@ -61,7 +61,7 @@ describe('vaadin-select', () => {
     select.errorMessage = 'Error message';
     select.invalid = true;
     await aTimeout(0);
-    await expect(select).to.equalAriaSnapshot();
+    await expect(select).to.equalA11yTreeSnapshot();
     await expect(select).to.be.accessible();
   });
 
@@ -70,7 +70,7 @@ describe('vaadin-select', () => {
     const overlay = select.shadowRoot.querySelector('vaadin-select-overlay');
     select.opened = true;
     await oneEvent(overlay, 'vaadin-overlay-open');
-    await expect(select).to.equalAriaSnapshot();
+    await expect(select).to.equalA11yTreeSnapshot();
     // The list box in the overlay has no accessible name.
     await expect(select).to.be.accessible({ ignoredRules: ['aria-input-field-name'] });
   });

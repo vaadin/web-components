@@ -17,35 +17,35 @@ describe('vaadin-checkbox-group', () => {
   });
 
   it('default', async () => {
-    await expect(group).to.equalAriaSnapshot();
+    await expect(group).to.equalA11yTreeSnapshot();
     await expect(group).to.be.accessible();
   });
 
   it('value', async () => {
     group.value = ['cheese', 'olives'];
     await nextUpdate(group);
-    await expect(group).to.equalAriaSnapshot();
+    await expect(group).to.equalA11yTreeSnapshot();
     await expect(group).to.be.accessible();
   });
 
   it('disabled', async () => {
     group.disabled = true;
     await nextUpdate(group);
-    await expect(group).to.equalAriaSnapshot();
+    await expect(group).to.equalA11yTreeSnapshot();
     await expect(group).to.be.accessible();
   });
 
   it('readonly', async () => {
     group.readonly = true;
     await nextUpdate(group);
-    await expect(group).to.equalAriaSnapshot();
+    await expect(group).to.equalA11yTreeSnapshot();
     await expect(group).to.be.accessible();
   });
 
   it('required', async () => {
     group.required = true;
     await nextUpdate(group);
-    await expect(group).to.equalAriaSnapshot();
+    await expect(group).to.equalA11yTreeSnapshot();
     // `role="group"` does not support `aria-required`, but the group keeps it on purpose,
     // because VoiceOver and JAWS announce it.
     // See https://github.com/vaadin/web-components/issues/2931
@@ -55,7 +55,7 @@ describe('vaadin-checkbox-group', () => {
   it('helper', async () => {
     group.helperText = 'Choose up to two';
     await nextUpdate(group);
-    await expect(group).to.equalAriaSnapshot();
+    await expect(group).to.equalA11yTreeSnapshot();
     await expect(group).to.be.accessible();
   });
 
@@ -63,7 +63,7 @@ describe('vaadin-checkbox-group', () => {
     group.errorMessage = 'Choose at least one';
     group.invalid = true;
     await aTimeout(0);
-    await expect(group).to.equalAriaSnapshot();
+    await expect(group).to.equalA11yTreeSnapshot();
     await expect(group).to.be.accessible();
   });
 });

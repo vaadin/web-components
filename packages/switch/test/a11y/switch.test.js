@@ -11,28 +11,28 @@ describe('vaadin-switch', () => {
   });
 
   it('default', async () => {
-    await expect(element).to.equalAriaSnapshot();
+    await expect(element).to.equalA11yTreeSnapshot();
     await expect(element).to.be.accessible();
   });
 
   it('checked', async () => {
     element.checked = true;
     await nextUpdate(element);
-    await expect(element).to.equalAriaSnapshot();
+    await expect(element).to.equalA11yTreeSnapshot();
     await expect(element).to.be.accessible();
   });
 
   it('disabled', async () => {
     element.disabled = true;
     await nextUpdate(element);
-    await expect(element).to.equalAriaSnapshot();
+    await expect(element).to.equalA11yTreeSnapshot();
     await expect(element).to.be.accessible();
   });
 
   it('readonly', async () => {
     element.readonly = true;
     await nextUpdate(element);
-    await expect(element).to.equalAriaSnapshot();
+    await expect(element).to.equalA11yTreeSnapshot();
     await expect(element).to.be.accessible();
   });
 
@@ -40,7 +40,7 @@ describe('vaadin-switch', () => {
     element.errorMessage = 'Notifications must be enabled';
     element.invalid = true;
     await aTimeout(0);
-    await expect(element).to.equalAriaSnapshot();
+    await expect(element).to.equalA11yTreeSnapshot();
     await expect(element).to.be.accessible();
   });
 });

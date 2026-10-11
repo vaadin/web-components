@@ -261,17 +261,125 @@ const createSnapshotTestsConfig = (config) => {
  *
  * @return {import('@web/test-runner').TestRunnerPlugin}
  */
-const ariaSnapshotPlugin = () => ({
-  name: 'aria-snapshot-command',
-  executeCommand({ command, payload, session }) {
-    if (command !== 'aria-snapshot') {
+// Accessibility tree properties kept in `get-a11y-tree` results. Others,
+// such as `focusable` or `editable`, are set on most nodes and add noise.
+const A11Y_TREE_STATES = new Set([
+  'autocomplete',
+  'checked',
+  'disabled',
+  'expanded',
+  'hasPopup',
+  'invalid',
+  'level',
+  'modal',
+  'multiselectable',
+  'orientation',
+  'pressed',
+  'readonly',
+  'required',
+  'selected',
+  'valuemax',
+  'valuemin',
+  'valuetext',
+]);
+
+const A11Y_TREE_RELATIONS = new Set(['activedescendant', 'controls', 'details', 'errormessage', 'owns']);
+
+// Roles with no meaningful descendants: their text is already in the name or value.
+const A11Y_TREE_LEAF_ROLES = new Set([
+  'checkbox',
+  'combobox',
+  'radio',
+  'searchbox',
+  'slider',
+  'spinbutton',
+  'switch',
+  'textbox',
+]);
+
+// Roles that only add noise to the tree. Their children are kept.
+const A11Y_TREE_SKIPPED_ROLES = new Set(['InlineTextBox', 'LabelText', 'LineBreak', 'none']);
+
+/**
+ * Converts the CDP accessibility tree below the given DOM node into a list of
+ * plain nodes. Ignored nodes, unnamed generic containers and noisy roles are
+ * skipped, and their children move up. Relations are resolved to the role and
+ * name of the target, as generated IDs change between runs.
+ */
+const toA11yTree = (axNodes, backendNodeId) => {
+  const byId = new Map(axNodes.map((node) => [node.nodeId, node]));
+  const byBackendId = new Map(axNodes.map((node) => [node.backendDOMNodeId, node]));
+
+  const describe = (node) => ({ role: node.role.value, name: node.name?.value ?? '' });
+
+  const convert = (node) => {
+    const role = node.role?.value;
+    const name = node.name?.value ?? '';
+    const children = A11Y_TREE_LEAF_ROLES.has(role)
+      ? []
+      : (node.childIds || []).flatMap((id) => (byId.has(id) ? convert(byId.get(id)) : []));
+
+    if (node.ignored || A11Y_TREE_SKIPPED_ROLES.has(role) || (role === 'generic' && !name)) {
+      // Join the text of one container, such as a label, into one node. Text
+      // from different containers stays separate.
+      if (children.length > 1 && children.every((child) => child.role === 'text')) {
+        return [{ role: 'text', name: children.map((child) => child.name).join(' ') }];
+      }
+      return children;
+    }
+
+    if (role === 'StaticText') {
+      return name ? [{ role: 'text', name }] : [];
+    }
+
+    const result = { role, name, states: {}, relations: {}, children };
+    const value = node.value?.value;
+    if (value !== undefined && value !== '') {
+      result.value = String(value);
+    }
+    if (node.description?.value) {
+      result.description = node.description.value;
+    }
+    (node.properties || []).forEach(({ name: key, value: { value: stateValue, relatedNodes } }) => {
+      if (A11Y_TREE_STATES.has(key)) {
+        result.states[key] = stateValue;
+      } else if (A11Y_TREE_RELATIONS.has(key) && relatedNodes) {
+        result.relations[key] = relatedNodes
+          .map((related) => byBackendId.get(related.backendDOMNodeId))
+          .filter(Boolean)
+          .map(describe);
+      }
+    });
+    return [result];
+  };
+
+  const root = byBackendId.get(backendNodeId);
+  return root ? convert(root) : [];
+};
+
+const a11yTreePlugin = () => ({
+  name: 'a11y-tree-command',
+  async executeCommand({ command, payload, session }) {
+    if (command !== 'get-a11y-tree') {
       return undefined;
     }
-    if (session.browser.type !== 'playwright') {
-      throw new Error(`Aria snapshots are not supported for browser type ${session.browser.type}.`);
+    if (session.browser.type !== 'playwright' || session.browser.name !== 'Chromium') {
+      throw new Error(`Accessibility tree is not supported for browser ${session.browser.name}.`);
     }
     const page = session.browser.getPage(session.id);
-    return page.locator(payload.selector).ariaSnapshot();
+    const cdp = await page.context().newCDPSession(page);
+    try {
+      // The browser side stores the element in a global map, which also works
+      // for elements inside shadow roots.
+      const { result } = await cdp.send('Runtime.evaluate', {
+        expression: `globalThis.__a11yTreeTargets.get(${JSON.stringify(payload.id)})`,
+      });
+      const { node } = await cdp.send('DOM.describeNode', { objectId: result.objectId });
+      const { nodes } = await cdp.send('Accessibility.getFullAXTree');
+      return toA11yTree(nodes, node.backendNodeId);
+    } finally {
+      await cdp.detach();
+    }
   },
 });
 
@@ -420,7 +528,7 @@ const createIntegrationTestsConfig = (config) => {
 };
 
 export {
-  ariaSnapshotPlugin,
+  a11yTreePlugin,
   createA11yTestsConfig,
   createSnapshotTestsConfig,
   createUnitTestsConfig,

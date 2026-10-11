@@ -5,9 +5,9 @@ declare global {
   namespace Chai {
     interface Assertion {
       /**
-       * Compares the aria snapshot of an element with the one saved for the current test.
+       * Compares the Chromium accessibility tree of an element with the one saved for the current test.
        */
-      equalAriaSnapshot(): Promise<void>;
+      equalA11yTreeSnapshot(): Promise<void>;
 
       /**
        * Runs axe-core rule checks on an element and fails on any violation.

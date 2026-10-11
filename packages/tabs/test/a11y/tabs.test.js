@@ -21,27 +21,27 @@ describe('vaadin-tabs', () => {
   });
 
   it('default', async () => {
-    await expect(tabs).to.equalAriaSnapshot();
+    await expect(tabs).to.equalA11yTreeSnapshot();
     await expect(tabs).to.be.accessible(AXE_OPTIONS);
   });
 
   it('selected', async () => {
     tabs.selected = 1;
     await nextUpdate(tabs);
-    await expect(tabs).to.equalAriaSnapshot();
+    await expect(tabs).to.equalA11yTreeSnapshot();
     await expect(tabs).to.be.accessible(AXE_OPTIONS);
   });
 
   it('disabled tab', async () => {
     tabs.items[2].disabled = true;
     await nextUpdate(tabs.items[2]);
-    await expect(tabs).to.equalAriaSnapshot();
+    await expect(tabs).to.equalA11yTreeSnapshot();
     await expect(tabs).to.be.accessible(AXE_OPTIONS);
   });
 
   it('aria-label', async () => {
     tabs.setAttribute('aria-label', 'Sections');
-    await expect(tabs).to.equalAriaSnapshot();
+    await expect(tabs).to.equalA11yTreeSnapshot();
     await expect(tabs).to.be.accessible(AXE_OPTIONS);
   });
 });

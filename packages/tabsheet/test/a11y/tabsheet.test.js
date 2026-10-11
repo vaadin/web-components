@@ -27,21 +27,21 @@ describe('vaadin-tabsheet', () => {
   });
 
   it('default', async () => {
-    await expect(tabsheet).to.equalAriaSnapshot();
+    await expect(tabsheet).to.equalA11yTreeSnapshot();
     await expect(tabsheet).to.be.accessible(AXE_OPTIONS);
   });
 
   it('selected', async () => {
     tabsheet.selected = 2;
     await nextUpdate(tabsheet);
-    await expect(tabsheet).to.equalAriaSnapshot();
+    await expect(tabsheet).to.equalA11yTreeSnapshot();
     await expect(tabsheet).to.be.accessible(AXE_OPTIONS);
   });
 
   it('prefix and suffix', async () => {
     tabsheet.insertAdjacentHTML('afterbegin', '<button slot="prefix">Back</button><button slot="suffix">Add</button>');
     await nextUpdate(tabsheet);
-    await expect(tabsheet).to.equalAriaSnapshot();
+    await expect(tabsheet).to.equalA11yTreeSnapshot();
     await expect(tabsheet).to.be.accessible(AXE_OPTIONS);
   });
 });

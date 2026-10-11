@@ -17,21 +17,21 @@ describe('vaadin-radio-group', () => {
   });
 
   it('default', async () => {
-    await expect(group).to.equalAriaSnapshot();
+    await expect(group).to.equalA11yTreeSnapshot();
     await expect(group).to.be.accessible();
   });
 
   it('value', async () => {
     group.value = 'm';
     await nextUpdate(group);
-    await expect(group).to.equalAriaSnapshot();
+    await expect(group).to.equalA11yTreeSnapshot();
     await expect(group).to.be.accessible();
   });
 
   it('disabled', async () => {
     group.disabled = true;
     await nextUpdate(group);
-    await expect(group).to.equalAriaSnapshot();
+    await expect(group).to.equalA11yTreeSnapshot();
     await expect(group).to.be.accessible();
   });
 
@@ -39,21 +39,21 @@ describe('vaadin-radio-group', () => {
     group.value = 'm';
     group.readonly = true;
     await nextUpdate(group);
-    await expect(group).to.equalAriaSnapshot();
+    await expect(group).to.equalA11yTreeSnapshot();
     await expect(group).to.be.accessible();
   });
 
   it('required', async () => {
     group.required = true;
     await nextUpdate(group);
-    await expect(group).to.equalAriaSnapshot();
+    await expect(group).to.equalA11yTreeSnapshot();
     await expect(group).to.be.accessible();
   });
 
   it('helper', async () => {
     group.helperText = 'Choose one';
     await nextUpdate(group);
-    await expect(group).to.equalAriaSnapshot();
+    await expect(group).to.equalA11yTreeSnapshot();
     await expect(group).to.be.accessible();
   });
 
@@ -61,7 +61,7 @@ describe('vaadin-radio-group', () => {
     group.errorMessage = 'Choose a size';
     group.invalid = true;
     await aTimeout(0);
-    await expect(group).to.equalAriaSnapshot();
+    await expect(group).to.equalA11yTreeSnapshot();
     await expect(group).to.be.accessible();
   });
 });

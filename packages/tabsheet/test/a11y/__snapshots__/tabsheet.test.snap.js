@@ -2,25 +2,28 @@
 export const snapshots = {};
 
 snapshots["vaadin-tabsheet default"] = 
-`- tablist:
-  - tab "Tab 1" [selected]
+`- tablist [orientation=horizontal]:
+  - tab "Tab 1" [selected]:
+    - /controls: tabpanel "Tab 1"
   - tab "Tab 2"
   - tab "Tab 3"
 - tabpanel "Tab 1": Content 1`;
 /* end snapshot vaadin-tabsheet default */
 
 snapshots["vaadin-tabsheet selected"] = 
-`- tablist:
+`- tablist [orientation=horizontal]:
   - tab "Tab 1"
   - tab "Tab 2"
-  - tab "Tab 3" [selected]
+  - tab "Tab 3" [selected]:
+    - /controls: tabpanel "Tab 3"
 - tabpanel "Tab 3": Content 3`;
 /* end snapshot vaadin-tabsheet selected */
 
 snapshots["vaadin-tabsheet prefix and suffix"] = 
 `- button "Back"
-- tablist:
-  - tab "Tab 1" [selected]
+- tablist [orientation=horizontal]:
+  - tab "Tab 1" [selected]:
+    - /controls: tabpanel "Tab 1"
   - tab "Tab 2"
   - tab "Tab 3"
 - button "Add"

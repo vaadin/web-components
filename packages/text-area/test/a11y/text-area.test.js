@@ -11,49 +11,49 @@ describe('vaadin-text-area', () => {
   });
 
   it('default', async () => {
-    await expect(textArea).to.equalAriaSnapshot();
+    await expect(textArea).to.equalA11yTreeSnapshot();
     await expect(textArea).to.be.accessible();
   });
 
   it('value', async () => {
     textArea.value = 'Line 1\nLine 2';
     await nextUpdate(textArea);
-    await expect(textArea).to.equalAriaSnapshot();
+    await expect(textArea).to.equalA11yTreeSnapshot();
     await expect(textArea).to.be.accessible();
   });
 
   it('placeholder', async () => {
     textArea.placeholder = 'Type here';
     await nextUpdate(textArea);
-    await expect(textArea).to.equalAriaSnapshot();
+    await expect(textArea).to.equalA11yTreeSnapshot();
     await expect(textArea).to.be.accessible();
   });
 
   it('disabled', async () => {
     textArea.disabled = true;
     await nextUpdate(textArea);
-    await expect(textArea).to.equalAriaSnapshot();
+    await expect(textArea).to.equalA11yTreeSnapshot();
     await expect(textArea).to.be.accessible();
   });
 
   it('readonly', async () => {
     textArea.readonly = true;
     await nextUpdate(textArea);
-    await expect(textArea).to.equalAriaSnapshot();
+    await expect(textArea).to.equalA11yTreeSnapshot();
     await expect(textArea).to.be.accessible();
   });
 
   it('required', async () => {
     textArea.required = true;
     await nextUpdate(textArea);
-    await expect(textArea).to.equalAriaSnapshot();
+    await expect(textArea).to.equalA11yTreeSnapshot();
     await expect(textArea).to.be.accessible();
   });
 
   it('helper', async () => {
     textArea.helperText = 'Helper text';
     await nextUpdate(textArea);
-    await expect(textArea).to.equalAriaSnapshot();
+    await expect(textArea).to.equalA11yTreeSnapshot();
     await expect(textArea).to.be.accessible();
   });
 
@@ -61,7 +61,7 @@ describe('vaadin-text-area', () => {
     textArea.errorMessage = 'Error message';
     textArea.invalid = true;
     await aTimeout(0);
-    await expect(textArea).to.equalAriaSnapshot();
+    await expect(textArea).to.equalA11yTreeSnapshot();
     await expect(textArea).to.be.accessible();
   });
 });

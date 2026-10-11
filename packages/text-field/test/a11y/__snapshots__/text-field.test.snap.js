@@ -13,8 +13,7 @@ snapshots["vaadin-text-field value"] =
 
 snapshots["vaadin-text-field placeholder"] = 
 `- text: Name
-- textbox "Name":
-  - /placeholder: Type here`;
+- textbox "Name"`;
 /* end snapshot vaadin-text-field placeholder */
 
 snapshots["vaadin-text-field disabled"] = 
@@ -24,23 +23,25 @@ snapshots["vaadin-text-field disabled"] =
 
 snapshots["vaadin-text-field readonly"] = 
 `- text: Name
-- textbox "Name"`;
+- textbox "Name" [readonly]`;
 /* end snapshot vaadin-text-field readonly */
 
 snapshots["vaadin-text-field required"] = 
 `- text: Name
-- textbox "Name"`;
+- textbox "Name" [required]`;
 /* end snapshot vaadin-text-field required */
 
 snapshots["vaadin-text-field helper"] = 
 `- text: Name
-- textbox "Name"
+- textbox "Name":
+  - /description: Helper text
 - text: Helper text`;
 /* end snapshot vaadin-text-field helper */
 
 snapshots["vaadin-text-field error"] = 
 `- text: Name
-- textbox "Name" [invalid]
+- textbox "Name" [invalid]:
+  - /description: Error message
 - text: Error message`;
 /* end snapshot vaadin-text-field error */
 
@@ -50,7 +51,8 @@ snapshots["vaadin-text-field clear button"] =
 /* end snapshot vaadin-text-field clear button */
 
 snapshots["vaadin-text-field prefix and suffix"] = 
-`- text: Price $
+`- text: Price
+- text: $
 - textbox "Price"
 - text: USD`;
 /* end snapshot vaadin-text-field prefix and suffix */

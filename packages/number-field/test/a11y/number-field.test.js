@@ -11,14 +11,14 @@ describe('vaadin-number-field', () => {
   });
 
   it('default', async () => {
-    await expect(numberField).to.equalAriaSnapshot();
+    await expect(numberField).to.equalA11yTreeSnapshot();
     await expect(numberField).to.be.accessible();
   });
 
   it('value', async () => {
     numberField.value = '5';
     await nextUpdate(numberField);
-    await expect(numberField).to.equalAriaSnapshot();
+    await expect(numberField).to.equalA11yTreeSnapshot();
     await expect(numberField).to.be.accessible();
   });
 
@@ -27,7 +27,7 @@ describe('vaadin-number-field', () => {
     numberField.max = 10;
     numberField.value = '5';
     await nextUpdate(numberField);
-    await expect(numberField).to.equalAriaSnapshot();
+    await expect(numberField).to.equalA11yTreeSnapshot();
     await expect(numberField).to.be.accessible();
   });
 
@@ -35,35 +35,35 @@ describe('vaadin-number-field', () => {
     numberField.stepButtonsVisible = true;
     numberField.value = '5';
     await nextUpdate(numberField);
-    await expect(numberField).to.equalAriaSnapshot();
+    await expect(numberField).to.equalA11yTreeSnapshot();
     await expect(numberField).to.be.accessible();
   });
 
   it('disabled', async () => {
     numberField.disabled = true;
     await nextUpdate(numberField);
-    await expect(numberField).to.equalAriaSnapshot();
+    await expect(numberField).to.equalA11yTreeSnapshot();
     await expect(numberField).to.be.accessible();
   });
 
   it('readonly', async () => {
     numberField.readonly = true;
     await nextUpdate(numberField);
-    await expect(numberField).to.equalAriaSnapshot();
+    await expect(numberField).to.equalA11yTreeSnapshot();
     await expect(numberField).to.be.accessible();
   });
 
   it('required', async () => {
     numberField.required = true;
     await nextUpdate(numberField);
-    await expect(numberField).to.equalAriaSnapshot();
+    await expect(numberField).to.equalA11yTreeSnapshot();
     await expect(numberField).to.be.accessible();
   });
 
   it('helper', async () => {
     numberField.helperText = 'Helper text';
     await nextUpdate(numberField);
-    await expect(numberField).to.equalAriaSnapshot();
+    await expect(numberField).to.equalA11yTreeSnapshot();
     await expect(numberField).to.be.accessible();
   });
 
@@ -71,7 +71,7 @@ describe('vaadin-number-field', () => {
     numberField.errorMessage = 'Error message';
     numberField.invalid = true;
     await aTimeout(0);
-    await expect(numberField).to.equalAriaSnapshot();
+    await expect(numberField).to.equalA11yTreeSnapshot();
     await expect(numberField).to.be.accessible();
   });
 });

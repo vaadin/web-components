@@ -27,17 +27,21 @@ snapshots["vaadin-checkbox readonly"] =
 /* end snapshot vaadin-checkbox readonly */
 
 snapshots["vaadin-checkbox required"] = 
-`- checkbox "Accept terms"
-- text: Accept terms *`;
+`- checkbox "Accept terms" [invalid]
+- text: "Accept terms *"`;
 /* end snapshot vaadin-checkbox required */
 
 snapshots["vaadin-checkbox helper"] = 
-`- checkbox "Accept terms"
-- text: Accept terms Read the terms first`;
+`- checkbox "Accept terms":
+  - /description: Read the terms first
+- text: Accept terms
+- text: Read the terms first`;
 /* end snapshot vaadin-checkbox helper */
 
 snapshots["vaadin-checkbox error"] = 
-`- checkbox "Accept terms" [invalid]
-- text: Accept terms You must accept the terms`;
+`- checkbox "Accept terms" [invalid]:
+  - /description: You must accept the terms
+- text: Accept terms
+- text: You must accept the terms`;
 /* end snapshot vaadin-checkbox error */
 
