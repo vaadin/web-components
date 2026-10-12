@@ -304,6 +304,7 @@ describe('vaadin-dialog', () => {
         <div style="height: 200vh"></div>
       `);
       document.body.insertBefore(spacer, document.body.firstChild);
+      await nextRender();
 
       // Scroll to the top
       window.scrollTo(0, 0);
