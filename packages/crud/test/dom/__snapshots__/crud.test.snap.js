@@ -14,7 +14,10 @@ snapshots["vaadin-crud host default"] =
     tabindex="0"
     with-backdrop=""
   >
-    <h3 slot="header">
+    <h3
+      aria-level="3"
+      slot="header"
+    >
       Discard changes
     </h3>
     <div>
@@ -57,7 +60,10 @@ snapshots["vaadin-crud host default"] =
     tabindex="0"
     with-backdrop=""
   >
-    <h3 slot="header">
+    <h3
+      aria-level="3"
+      slot="header"
+    >
       Delete item
     </h3>
     <div>
