@@ -67,7 +67,7 @@ export declare class ConfirmDialogMixinClass {
    *
    * @attr {number} heading-level
    */
-  headingLevel: number | null | undefined;
+  headingLevel: number;
 
   /**
    * Set the message or confirmation question.

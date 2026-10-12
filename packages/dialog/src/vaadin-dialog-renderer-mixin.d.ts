@@ -41,7 +41,7 @@ export declare class DialogRendererMixinClass {
    *
    * @attr {number} heading-level
    */
-  headingLevel: number | null | undefined;
+  headingLevel: number;
 
   /**
    * Custom function for rendering the dialog header.
