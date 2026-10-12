@@ -1,6 +1,7 @@
 import { useState } from 'react';
 import { describe, expect, it } from 'vitest';
 import { render } from 'vitest-browser-react';
+import { until } from '../../../react/test/utils/until.js';
 import type { TabElement } from '../src/Tab.js';
 import { TabSheet, TabSheetTab } from '../src/TabSheet.js';
 
@@ -10,12 +11,6 @@ function getTabSheet() {
 
 function getTabContent(tab: TabElement) {
   return getTabSheet().querySelector(`[tab="${tab.id}"]`);
-}
-
-async function until(predicate: () => boolean) {
-  while (!predicate()) {
-    await new Promise((r) => setTimeout(r, 10));
-  }
 }
 
 describe('TabSheet', () => {
