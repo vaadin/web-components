@@ -9,6 +9,7 @@ import { css } from 'lit';
 export const messageListStyles = css`
   :host {
     display: block;
+    position: relative;
     overflow: auto;
     box-sizing: border-box;
     padding: var(--vaadin-message-list-padding, var(--vaadin-padding-xs) 0);
