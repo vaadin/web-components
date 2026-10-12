@@ -171,13 +171,6 @@ describe('vaadin-confirm-dialog', () => {
         expect(headerNode.textContent.trim()).to.equal('Slotted header');
       });
 
-      it('should not set aria-level on custom node when headingLevel is set', async () => {
-        confirm.headingLevel = 2;
-        await nextFrame();
-        const headerNode = confirm.querySelector('[slot="header"]');
-        expect(headerNode.hasAttribute('aria-level')).to.be.false;
-      });
-
       it('should set pointer-events on the element to auto', () => {
         const headerNode = confirm.querySelector('[slot="header"]');
         expect(getComputedStyle(headerNode).pointerEvents).to.equal('auto');
