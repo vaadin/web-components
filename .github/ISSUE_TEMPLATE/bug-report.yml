@@ -17,24 +17,11 @@ body:
       placeholder: "Example: I would expect the click listener to be called, regardless of which child of the button is clicked."
     validations:
       required: true
-  - type: markdown
-    attributes:
-      value: |
-        ## Reproduce the issue online
-
-        The fastest way to share a working reproduction is a StackBlitz project
-        pre-configured with Vaadin Web Components. Fork the template below and
-        edit it until it reproduces the issue, then paste the link here.
-
-        **[▶ Open the Vaadin Web Components StackBlitz template](https://stackblitz.com/fork/vaadin-web-components-starter)**
-
-        No local setup needed — the template has the components already
-        installed, so you can paste your code and click "Run".
   - type: textarea
     id: reproduction
     attributes:
       label: Minimal reproducible example
-      description: "A code snippet with irrelevant parts and dependencies already removed, providing a concise representation of the issue. While demo projects are accepted, please keep them as minimal as possible to speed up the triaging process. Otherwise, processing of the issue could be severely prolonged."
+      description: "A code snippet with irrelevant parts and dependencies already removed, providing a concise representation of the issue. You can also [fork this StackBlitz example](https://stackblitz.com/fork/vaadin-wc-example) with Vaadin components preinstalled and paste the link to your fork here. While demo projects are accepted, please keep them as minimal as possible to speed up the triaging process. Otherwise, processing of the issue could be severely prolonged."
       placeholder: "Example:\n```html\n<vaadin-button><vaadin-icon icon=\"vaadin:phone\"></vaadin-icon> Call<vaadin-button>\n<script>\n  document.querySelector(\"vaadin-button\").addEventListener(\"click\", () => console.log(\"Clicked\"));\n</script>\n```"
     validations:
       required: true
@@ -50,7 +37,7 @@ body:
     id: environment
     attributes:
       label: Environment
-      description: Environment in which the issue reproduces. Feel free to add further information that might help with debugging.
+      description: Environment in which the issue reproduces. Feel free to add further information that might help with debugging the issue.
       value: "Vaadin version(s): \nOS: "
     validations:
       required: true
