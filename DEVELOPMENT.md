@@ -69,6 +69,7 @@ yarn lint:types:react
 Check that the meta packages are up to date:
 
 ```sh
+yarn release:cem
 yarn release:meta --check
 ```
 
@@ -286,6 +287,7 @@ Their dependencies and the imports of their entry point are generated from the w
 custom elements manifests, so a new component lands in them by running:
 
 ```sh
+yarn release:cem
 yarn release:meta
 ```
 

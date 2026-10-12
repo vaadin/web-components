@@ -31,7 +31,7 @@ jobs:
         run: yarn lint:types
 
       - name: Check meta packages
-        run: yarn release:meta --check
+        run: yarn release:cem && yarn release:meta --check
   snapshots:
     name: Snapshot tests
     runs-on: ubuntu-latest
