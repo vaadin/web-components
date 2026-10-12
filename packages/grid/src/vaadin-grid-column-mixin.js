@@ -505,16 +505,13 @@ export const ColumnBaseMixin = (superClass) =>
             cell._content.parentNode?.removeChild(cell._content);
           });
         }
-        // Skip on the initial value: the column tree render already excludes hidden columns
-        if (this._previousHidden !== undefined) {
-          this._grid._debouncerHiddenChanged = Debouncer.debounce(
-            this._grid._debouncerHiddenChanged,
-            animationFrame,
-            () => {
-              this._grid?._renderColumnTree?.(this._grid._columnTree);
-            },
-          );
-        }
+        this._grid._debouncerHiddenChanged = Debouncer.debounce(
+          this._grid._debouncerHiddenChanged,
+          animationFrame,
+          () => {
+            this._grid?._renderColumnTree?.(this._grid._columnTree);
+          },
+        );
 
         this._grid._debounceUpdateFrozenColumn?.();
         this._grid._resetKeyboardNavigation?.();

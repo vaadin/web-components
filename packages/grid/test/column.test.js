@@ -613,4 +613,16 @@ describe('column - simple grid', () => {
     flushGrid(grid);
     expect(getBodyCellContent(grid, 0, 1).textContent.trim()).to.equal('foo0');
   });
+
+  it('should render column tree once when adding a group with only hidden columns', () => {
+    const spy = sinon.spy(grid, '_renderColumnTree');
+    const group = document.createElement('vaadin-grid-column-group');
+    const newColumn = document.createElement('vaadin-grid-column');
+    newColumn.hidden = true;
+    group.appendChild(newColumn);
+    grid.appendChild(group);
+    flushGrid(grid);
+    expect(group.hidden).to.be.true;
+    expect(spy).to.be.calledOnce;
+  });
 });
