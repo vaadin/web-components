@@ -30,8 +30,14 @@ export type DialogProps = Partial<
   Readonly<{
     children?: ReactNode | ComponentType<DialogReactRendererProps>;
     footer?: ReactNode;
+    /**
+     * @deprecated Use `footer` instead.
+     */
     footerRenderer?: ComponentType<DialogReactRendererProps> | null;
     header?: ReactNode;
+    /**
+     * @deprecated Use `header` instead.
+     */
     headerRenderer?: ComponentType<DialogReactRendererProps> | null;
     renderer?: ComponentType<DialogReactRendererProps> | null;
   }>;
