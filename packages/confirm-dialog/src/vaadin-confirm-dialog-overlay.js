@@ -52,7 +52,7 @@ class ConfirmDialogOverlay extends OverlayMixin(DirMixin(ThemableMixin(PolylitMi
         <div part="content" id="content">
           <div part="message"><slot></slot></div>
         </div>
-        <footer part="footer" role="toolbar">
+        <div part="footer" role="toolbar">
           <div part="cancel-button" ?hidden="${!this.cancelButtonVisible}">
             <slot name="cancel-button"></slot>
           </div>
@@ -62,7 +62,7 @@ class ConfirmDialogOverlay extends OverlayMixin(DirMixin(ThemableMixin(PolylitMi
           <div part="confirm-button">
             <slot name="confirm-button"></slot>
           </div>
-        </footer>
+        </div>
       </div>
     `;
   }
