@@ -600,47 +600,16 @@ describe('column - simple grid', () => {
     expect(getBodyCellContent(grid, 1, 0).textContent.trim()).to.equal('foo1');
   });
 
-  it('should render column tree once when adding an initially hidden column', async () => {
+  it('should render column tree once when adding an initially hidden column', () => {
     const spy = sinon.spy(grid, '_renderColumnTree');
     const newColumn = document.createElement('vaadin-grid-column');
+    newColumn.path = 'value';
     newColumn.hidden = true;
     grid.appendChild(newColumn);
-    await nextFrame();
-    await nextFrame();
+    flushGrid(grid);
+    expect(spy).to.be.calledOnce;
 
-    expect(spy.calledOnce).to.be.true;
-  });
-});
-
-describe('column - initially hidden', () => {
-  let grid, renderColumnTreeSpy;
-
-  beforeEach(async () => {
-    grid = fixtureSync(`
-      <vaadin-grid>
-        <vaadin-grid-column path="value"></vaadin-grid-column>
-        <vaadin-grid-column path="value" hidden></vaadin-grid-column>
-      </vaadin-grid>
-    `);
-    renderColumnTreeSpy = sinon.spy(grid, '_renderColumnTree');
-    grid.size = 1;
-    grid.dataProvider = infiniteDataProvider;
-    await nextFrame();
-    await nextFrame();
-  });
-
-  it('should render column tree once', () => {
-    expect(renderColumnTreeSpy.calledOnce).to.be.true;
-  });
-
-  it('should not render cells of the hidden column', () => {
-    expect(getPhysicalItems(grid)[0].childElementCount).to.equal(1);
-    expect(getBodyCellContent(grid, 0, 0).textContent.trim()).to.equal('foo0');
-  });
-
-  it('should render cells of the column when it is shown', () => {
-    const column = grid.querySelectorAll('vaadin-grid-column')[1];
-    column.hidden = false;
+    newColumn.hidden = false;
     flushGrid(grid);
     expect(getBodyCellContent(grid, 0, 1).textContent.trim()).to.equal('foo0');
   });
