@@ -1,6 +1,6 @@
 {
   "name": "@vaadin/icons",
-  "version": "25.2.14",
+  "version": "25.2.15",
   "publishConfig": {
     "access": "public"
   },
@@ -31,11 +31,11 @@
     "web-component"
   ],
   "dependencies": {
-    "@vaadin/icon": "~25.2.14"
+    "@vaadin/icon": "~25.2.15"
   },
   "devDependencies": {
-    "@vaadin/aura": "~25.2.14",
+    "@vaadin/aura": "~25.2.15",
     "@vaadin/testing-helpers": "^2.0.0",
-    "@vaadin/vaadin-lumo-styles": "~25.2.14"
+    "@vaadin/vaadin-lumo-styles": "~25.2.15"
   }
 }
