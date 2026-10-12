@@ -109,6 +109,36 @@ describe('message-list', () => {
     });
   });
 
+  describe('document overflow', () => {
+    let list;
+
+    beforeEach(async () => {
+      // The padding moves the list away from the left edge of the page: visually hidden
+      // elements use a negative margin, and overflow at negative x does not scroll the page
+      const wrapper = fixtureSync(`
+        <div style="height: 200px; overflow: auto; padding: 16px">
+          <vaadin-message-list></vaadin-message-list>
+        </div>
+      `);
+      list = wrapper.firstElementChild;
+      list.items = Array.from({ length: 50 }, (_, i) => ({
+        text: `Message ${i}`,
+        userName: 'User',
+        theme: i % 2 === 0 ? 'self' : undefined,
+      }));
+      await nextRender();
+    });
+
+    ['', 'bubble'].forEach((theme) => {
+      it(`should not overflow the document with theme="${theme}"`, async () => {
+        list.setAttribute('theme', theme);
+        await nextRender();
+        const { scrollHeight, clientHeight } = document.documentElement;
+        expect(scrollHeight).to.be.at.most(clientHeight);
+      });
+    });
+  });
+
   describe('items property', () => {
     beforeEach(async () => {
       messageList.items = messages;
