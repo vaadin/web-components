@@ -55,7 +55,7 @@ export const DialogOverlayMixin = (superClass) =>
     static get observers() {
       return [
         '_headerFooterRendererChange(headerRenderer, footerRenderer, opened)',
-        '_headerTitleChanged(headerTitle, opened)',
+        '_headerTitleChanged(headerTitle, headingLevel, opened)',
       ];
     }
 
@@ -125,7 +125,6 @@ export const DialogOverlayMixin = (superClass) =>
       this.__handleWindowResize = this.__handleWindowResize.bind(this);
     }
 
-    /** @protected */
     updated(props) {
       super.updated(props);
 
@@ -135,10 +134,6 @@ export const DialogOverlayMixin = (superClass) =>
         } else {
           window.removeEventListener('resize', this.__handleWindowResize);
         }
-      }
-
-      if (props.has('headingLevel') && this.headerTitleElement) {
-        setOrRemoveAttribute(this.headerTitleElement, 'aria-level', this.headingLevel);
       }
     }
 
@@ -211,7 +206,7 @@ export const DialogOverlayMixin = (superClass) =>
     }
 
     /** @private */
-    _headerTitleChanged(headerTitle, opened) {
+    _headerTitleChanged(headerTitle, _headingLevel, opened) {
       setOverlayStateAttribute(this, 'has-title', !!headerTitle);
 
       if (opened && (headerTitle || this._oldHeaderTitle)) {
