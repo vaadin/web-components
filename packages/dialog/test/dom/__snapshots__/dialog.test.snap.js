@@ -322,3 +322,27 @@ snapshots["vaadin-dialog shadow modeless noAutofocus"] =
 `;
 /* end snapshot vaadin-dialog shadow modeless noAutofocus */
 
+snapshots["vaadin-dialog host headingLevel"] = 
+`<vaadin-dialog
+  aria-label="Title"
+  aria-modal="true"
+  has-title=""
+  opened=""
+  role="dialog"
+  tabindex="0"
+  with-backdrop=""
+>
+  <vaadin-dialog-content>
+    content
+  </vaadin-dialog-content>
+  <h2
+    aria-level="3"
+    class="draggable"
+    slot="title"
+  >
+    Title
+  </h2>
+</vaadin-dialog>
+`;
+/* end snapshot vaadin-dialog host headingLevel */
+

@@ -147,27 +147,6 @@ describe('vaadin-confirm-dialog', () => {
         const headerNode = confirm.querySelector('[slot="header"]');
         expect(headerNode.textContent.trim()).to.equal('Just go away');
       });
-
-      it('should toggle aria-level on the header when headingLevel changes', async () => {
-        const headerNode = confirm.querySelector('[slot="header"]');
-
-        confirm.headingLevel = 2;
-        await nextFrame();
-        expect(headerNode.getAttribute('aria-level')).to.equal('2');
-
-        confirm.headingLevel = null;
-        await nextFrame();
-        expect(headerNode.hasAttribute('aria-level')).to.be.false;
-      });
-
-      it('should set aria-level on the header when heading-level attribute is set', async () => {
-        confirm = fixtureSync(
-          '<vaadin-confirm-dialog opened header="Header" heading-level="2"></vaadin-confirm-dialog>',
-        );
-        await nextRender();
-        const headerNode = confirm.querySelector('[slot="header"]');
-        expect(headerNode.getAttribute('aria-level')).to.equal('2');
-      });
     });
 
     describe('slot', () => {

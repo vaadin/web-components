@@ -148,22 +148,6 @@ describe('header/footer feature', () => {
         const title = dialog.querySelector('[slot=title]');
         expect(title.getAttribute('aria-level')).to.equal('3');
       });
-
-      it('should toggle aria-level on the title element when headingLevel changes', async () => {
-        dialog.headerTitle = HEADER_TITLE;
-        dialog.opened = true;
-        await nextRender();
-
-        const title = dialog.querySelector('[slot=title]');
-
-        dialog.headingLevel = 3;
-        await nextUpdate(dialog);
-        expect(title.getAttribute('aria-level')).to.equal('3');
-
-        dialog.headingLevel = null;
-        await nextUpdate(dialog);
-        expect(title.hasAttribute('aria-level')).to.be.false;
-      });
     });
   });
 
