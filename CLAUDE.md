@@ -15,6 +15,8 @@ This is the Vaadin Web Components monorepo - a collection of high-quality, acces
 - `packages/aura/`: Aura theme
 - `packages/vaadin-lumo-styles/`: Lumo theme
 - `packages/vaadin-themable-mixin/`: Theming infrastructure
+- `packages/react-components/`, `packages/react-components-pro/`: React wrappers for the web components, generated from the components' `custom-elements.json` plus hand-written wrappers in `src/`
+- `react/`: Tooling for the React packages: wrapper generator and build (`scripts/`), Vitest setup (`test/`), dev pages (`dev/`)
 - `test/integration/`: Cross-component integration tests
 - `dev/`: Development playground with component examples for manual testing
 
@@ -54,6 +56,7 @@ All components follow a consistent pattern:
 - Visual tests: Screenshot comparison for themes
 - Snapshot tests: DOM structure validation
 - Integration tests: Cross-component interaction testing
+- React tests: Vitest browser mode with `vitest-browser-react`, specs beside the package under `test/*.spec.tsx`
 
 ## Guidelines & Conventions
 
@@ -103,6 +106,19 @@ All visual and snapshot test commands support the same `--group` option to targe
 ```bash
 yarn test:it           # Run integration tests
 ```
+
+### React Components
+
+```bash
+yarn build:react       # Build the custom elements manifests, then both React packages (needed once before the commands below)
+yarn release:react     # Build only the React packages, the last step of `yarn release`
+yarn clean:react       # Remove generated sources and build output
+yarn test:react        # Vitest browser tests in Chromium (packages/react-components*/test/*.spec.tsx)
+yarn start:react       # Vite dev server, pages at /dev/<name>.html from react/dev/pages/
+yarn lint:types:react  # Type check the React packages, tests and tooling
+```
+
+React sources are TypeScript. `yarn lint` covers them, root `yarn lint:types` does not; use `yarn lint:types:react` after `yarn build:react`.
 
 ### Linting and Type Checking
 
