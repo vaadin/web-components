@@ -45,10 +45,8 @@ export const ConfirmDialogMixin = (superClass) =>
         },
 
         /**
-         * The ARIA heading level of the header, used to set the `aria-level`
-         * attribute on the header element rendered for `header`.
-         *
-         * Sets the `aria-level` attribute on the header element. Defaults to `3`.
+         * The ARIA heading level, used to set the `aria-level` attribute
+         * on the header element. Defaults to `3`.
          *
          * This only affects the default header element, a custom slotted
          * header will not be altered.
