@@ -139,15 +139,6 @@ describe('header/footer feature', () => {
         expect(dialog.getAttribute('aria-label')).to.be.equal(ARIA_LABEL);
       });
 
-      it('should not set aria-level on the title element by default', async () => {
-        dialog.headerTitle = HEADER_TITLE;
-        dialog.opened = true;
-        await nextRender();
-
-        const title = dialog.querySelector('[slot=title]');
-        expect(title.hasAttribute('aria-level')).to.be.false;
-      });
-
       it('should set aria-level on the title element when headingLevel is set', async () => {
         dialog.headerTitle = HEADER_TITLE;
         dialog.headingLevel = 3;

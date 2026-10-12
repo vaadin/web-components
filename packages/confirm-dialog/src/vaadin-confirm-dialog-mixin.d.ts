@@ -62,9 +62,7 @@ export declare class ConfirmDialogMixinClass {
    * The ARIA heading level of the header, used to set the `aria-level`
    * attribute on the header element rendered for `header`.
    *
-   * By default, no `aria-level` is set and the header is announced by
-   * screen readers at level 3. Set this property to expose the header
-   * at the level that matches the surrounding page structure.
+   * Sets the `aria-level` attribute on the header element. Defaults to `3`.
    *
    * This only affects the default header element, a custom slotted
    * header will not be altered.

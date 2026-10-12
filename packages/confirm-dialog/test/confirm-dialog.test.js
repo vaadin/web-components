@@ -148,11 +148,6 @@ describe('vaadin-confirm-dialog', () => {
         expect(headerNode.textContent.trim()).to.equal('Just go away');
       });
 
-      it('should not set aria-level on the header by default', () => {
-        const headerNode = confirm.querySelector('[slot="header"]');
-        expect(headerNode.hasAttribute('aria-level')).to.be.false;
-      });
-
       it('should toggle aria-level on the header when headingLevel changes', async () => {
         const headerNode = confirm.querySelector('[slot="header"]');
 

@@ -30,6 +30,7 @@ snapshots["vaadin-dialog host headerTitle"] =
     content
   </vaadin-dialog-content>
   <h2
+    aria-level="2"
     class="draggable"
     slot="title"
   >

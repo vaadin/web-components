@@ -13,7 +13,10 @@ snapshots["vaadin-confirm-dialog host"] =
   with-backdrop=""
 >
   Do you want to save or discard the changes?
-  <h3 slot="header">
+  <h3
+    aria-level="3"
+    slot="header"
+  >
     Unsaved changes
   </h3>
   <vaadin-button
