@@ -27,6 +27,22 @@ describe('vaadin-dialog', () => {
       await expect(dialog).dom.to.equalSnapshot(SNAPSHOT_CONFIG);
     });
 
+    it('headerRenderer', async () => {
+      dialog.headerRenderer = (root) => {
+        root.textContent = 'Header';
+      };
+      await nextRender();
+      await expect(dialog).dom.to.equalSnapshot(SNAPSHOT_CONFIG);
+    });
+
+    it('footerRenderer', async () => {
+      dialog.footerRenderer = (root) => {
+        root.textContent = 'Footer';
+      };
+      await nextRender();
+      await expect(dialog).dom.to.equalSnapshot(SNAPSHOT_CONFIG);
+    });
+
     describe('headerTitle', () => {
       beforeEach(async () => {
         dialog.headerTitle = 'Title';
@@ -42,22 +58,6 @@ describe('vaadin-dialog', () => {
         await nextUpdate(dialog);
         await expect(dialog).dom.to.equalSnapshot(SNAPSHOT_CONFIG);
       });
-    });
-
-    it('headerRenderer', async () => {
-      dialog.headerRenderer = (root) => {
-        root.textContent = 'Header';
-      };
-      await nextRender();
-      await expect(dialog).dom.to.equalSnapshot(SNAPSHOT_CONFIG);
-    });
-
-    it('footerRenderer', async () => {
-      dialog.footerRenderer = (root) => {
-        root.textContent = 'Footer';
-      };
-      await nextRender();
-      await expect(dialog).dom.to.equalSnapshot(SNAPSHOT_CONFIG);
     });
   });
 
