@@ -50,6 +50,13 @@ describe('vaadin-dialog', () => {
     await expect(dialog).to.be.accessible();
   });
 
+  it('heading level', async () => {
+    dialog.headerTitle = 'Title';
+    dialog.headingLevel = 3;
+    await nextUpdate(dialog);
+    await expect(dialog).to.matchA11yTree('- heading "Title" [level=3]');
+  });
+
   it('modeless', async () => {
     dialog.headerTitle = 'Title';
     dialog.modeless = true;
