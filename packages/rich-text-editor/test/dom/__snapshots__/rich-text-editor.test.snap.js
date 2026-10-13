@@ -34,7 +34,7 @@ snapshots["vaadin-rich-text-editor host"] =
       >
     </vaadin-text-field>
     <h3
-      aria-level="3"
+      aria-level="1"
       slot="header"
     >
       Link address
