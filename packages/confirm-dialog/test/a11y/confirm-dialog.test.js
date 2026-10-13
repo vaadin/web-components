@@ -35,6 +35,12 @@ describe('vaadin-confirm-dialog', () => {
     await expect(dialog).to.be.accessible(AXE_OPTIONS);
   });
 
+  it('heading level', async () => {
+    dialog.headingLevel = 2;
+    await nextUpdate(dialog);
+    await expect(dialog).to.matchA11yTree('- heading "Unsaved changes" [level=2]');
+  });
+
   it('no header', async () => {
     dialog.header = '';
     await nextUpdate(dialog);
