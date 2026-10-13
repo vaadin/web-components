@@ -1,5 +1,7 @@
 import { isStaticMember } from '@custom-elements-manifest/analyzer/src/utils/ast-helpers.js';
 import { extractMixinNodes } from '@custom-elements-manifest/analyzer/src/utils/mixins.js';
+import fs from 'node:fs';
+import { byName } from './scripts/lib/cem.js';
 
 const inheritanceDenyList = ['PolylitMixin', 'DirMixin'];
 
@@ -187,6 +189,13 @@ export default {
   globs: ['packages/**/src/(vaadin-*.js|*-mixin.js)'],
   packagejson: false,
   litelement: true,
+  // `globby` lists the files in no fixed order, and the analyzer applies
+  // inheritance in module order, so sort them for a stable manifest
+  overrideModuleCreation({ ts, globs }) {
+    return [...globs]
+      .sort(byName)
+      .map((file) => ts.createSourceFile(file, fs.readFileSync(file, 'utf-8'), ts.ScriptTarget.ES2015, true));
+  },
   plugins: [
     classPrivacyPlugin(),
     readonlyPlugin(),
