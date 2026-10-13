@@ -148,7 +148,7 @@ snapshots["vaadin-confirm-dialog overlay"] =
       </slot>
     </div>
   </div>
-  <footer
+  <div
     part="footer"
     role="toolbar"
   >
@@ -170,7 +170,7 @@ snapshots["vaadin-confirm-dialog overlay"] =
       <slot name="confirm-button">
       </slot>
     </div>
-  </footer>
+  </div>
 </div>
 `;
 /* end snapshot vaadin-confirm-dialog overlay */
