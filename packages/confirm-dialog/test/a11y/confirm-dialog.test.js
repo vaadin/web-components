@@ -4,9 +4,6 @@ import { fixtureSync, nextRender, nextUpdate, oneEvent } from '@vaadin/testing-h
 import '../not-animated-styles.css';
 import '../../src/vaadin-confirm-dialog.js';
 
-// The footer has `role="toolbar"`, which axe does not allow on a `<footer>` element.
-const AXE_OPTIONS = { ignoredRules: ['aria-allowed-role'] };
-
 describe('vaadin-confirm-dialog', () => {
   let dialog;
 
@@ -23,7 +20,7 @@ describe('vaadin-confirm-dialog', () => {
 
   it('default', async () => {
     await expect(dialog).to.equalA11yTreeSnapshot();
-    await expect(dialog).to.be.accessible(AXE_OPTIONS);
+    await expect(dialog).to.be.accessible();
   });
 
   it('cancel and reject buttons', async () => {
@@ -33,7 +30,7 @@ describe('vaadin-confirm-dialog', () => {
     dialog.confirmText = 'Save';
     await nextUpdate(dialog);
     await expect(dialog).to.equalA11yTreeSnapshot();
-    await expect(dialog).to.be.accessible(AXE_OPTIONS);
+    await expect(dialog).to.be.accessible();
   });
 
   it('heading level', async () => {
@@ -51,7 +48,7 @@ describe('vaadin-confirm-dialog', () => {
     // Known issue: the header heading is rendered even when it is empty,
     // and the dialog falls back to the generic "confirmation" name.
     // See https://github.com/vaadin/web-components/issues/13002
-    await expect(dialog).to.be.accessible({ ignoredRules: [...AXE_OPTIONS.ignoredRules, 'empty-heading'] });
+    await expect(dialog).to.be.accessible({ expectedViolations: ['empty-heading'] });
   });
 
   it('accessible description ref', async () => {
@@ -62,6 +59,6 @@ describe('vaadin-confirm-dialog', () => {
     dialog.accessibleDescriptionRef = 'warning';
     await nextUpdate(dialog);
     await expect(dialog).to.equalA11yTreeSnapshot();
-    await expect(dialog).to.be.accessible(AXE_OPTIONS);
+    await expect(dialog).to.be.accessible();
   });
 });
