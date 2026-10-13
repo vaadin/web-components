@@ -373,7 +373,7 @@ export const ColumnBaseMixin = (superClass) =>
       });
     }
 
-    /** @private */
+    /** @protected */
     _widthChanged(width) {
       if (this.parentElement && this.parentElement._columnPropChanged) {
         this.parentElement._columnPropChanged('width');
@@ -809,6 +809,7 @@ export const GridColumnMixin = (superClass) =>
       return {
         /**
          * Width of the cells for this column.
+         * Setting the property to `null` or `undefined` restores the default width.
          *
          * Please note that using the `em` length unit is discouraged as
          * it might lead to misalignment issues if the header, body, and footer
@@ -918,5 +919,23 @@ export const GridColumnMixin = (superClass) =>
           sync: true,
         },
       };
+    }
+
+    /**
+     * Override method from `ColumnBaseMixin` to restore the default width
+     * when the property is set to `null` or `undefined`.
+     *
+     * @param {string | null | undefined} width
+     * @protected
+     * @override
+     */
+    _widthChanged(width) {
+      if (width == null) {
+        // Read the default from the property options, as e.g. the selection column overrides it
+        this.width = this.constructor.elementProperties.get('width').value;
+        return;
+      }
+
+      super._widthChanged(width);
     }
   };
