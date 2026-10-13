@@ -318,7 +318,8 @@ describe('Lumo injection', () => {
       it('should inject matching styles added to document using link element', async () => {
         const link = createTestFooStyleSheet();
         document.head.appendChild(link);
-        await nextRender();
+        // Wait for the style sheet, which can take longer than a render to load.
+        await oneEvent(link, 'load');
 
         document.body.appendChild(element);
         await nextRender();
@@ -494,7 +495,8 @@ describe('Lumo injection', () => {
       it('should inject matching styles added to enclosing shadow root using link element', async () => {
         const link = createTestFooStyleSheet();
         host.shadowRoot.appendChild(link);
-        await nextRender();
+        // Wait for the style sheet, which can take longer than a render to load.
+        await oneEvent(link, 'load');
 
         host.shadowRoot.appendChild(element);
         await nextRender();

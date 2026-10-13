@@ -251,7 +251,11 @@ export const PdfViewerPrintMixin = (superClass) =>
       }
       // Firefox keeps the element that was focused before the print frame as the
       // focused element of this window, and does not focus it again until the
-      // window itself has focus.
+      // window itself has focus. Newer versions also keep focus in the print
+      // frame until the frame is blurred.
+      if (active && active.localName === 'iframe') {
+        active.blur();
+      }
       window.focus();
       if (returnFocus && returnFocus.isConnected && !returnFocus.disabled && returnFocus.checkVisibility()) {
         returnFocus.focus({ focusVisible: isKeyboardActive() });
