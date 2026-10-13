@@ -27,7 +27,7 @@ export function getClosestCell(node) {
  */
 export function getBodyRowCells(row) {
   // If available, return the cached cells. Otherwise, query the cells directly from the row.
-  return row.__cells || Array.from(row.querySelectorAll('[part~="cell"]:not([part~="details-cell"])'));
+  return row.__cells || Array.from(row.querySelectorAll('.body-cell'));
 }
 
 /**
@@ -48,8 +48,10 @@ export function iterateChildren(container, callback) {
  */
 export function iterateRowCells(row, callback) {
   getBodyRowCells(row).forEach(callback);
-  if (row.__detailsCell) {
-    callback(row.__detailsCell);
+
+  const detailsCell = row.querySelector('.details-cell');
+  if (detailsCell) {
+    callback(detailsCell);
   }
 }
 

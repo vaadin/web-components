@@ -55,6 +55,7 @@ export class AutoResponsiveLayout extends AbstractLayout {
 
     const { host } = this;
     host.style.removeProperty('--_column-width');
+    host.style.removeProperty('--_min-columns');
     host.style.removeProperty('--_max-columns');
     host.removeAttribute('has-labels-aside');
     host.$.layout.style.removeProperty('--_grid-rendered-column-count');
@@ -63,6 +64,7 @@ export class AutoResponsiveLayout extends AbstractLayout {
       child.style.removeProperty('--_grid-colstart');
       child.style.removeProperty('--_grid-colspan');
 
+      child.removeAttribute('data-form-layout-auto-responsive');
       child.removeAttribute('data-form-layout-has-labels-aside');
     });
   }
@@ -143,6 +145,7 @@ export class AutoResponsiveLayout extends AbstractLayout {
         return;
       }
 
+      child.setAttribute('data-form-layout-auto-responsive', '');
       child.toggleAttribute('data-form-layout-has-labels-aside', hasLabelsAside);
     });
 

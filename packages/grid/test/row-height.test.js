@@ -88,7 +88,7 @@ describe('rows', () => {
 
     // Simulate a (window) resize
     grid.style.width = '200px';
-    grid._resizeHandler();
+    await nextResize(grid);
 
     expect(header.getBoundingClientRect().top).to.be.closeTo(grid.getBoundingClientRect().top, 1);
   });

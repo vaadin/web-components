@@ -326,6 +326,18 @@ describe('value commit', () => {
       await sendKeys({ press: 'Enter' });
       expectValueCommit('00:00');
     });
+
+    it('should commit typed input instead of highlighted item on Enter', async () => {
+      await sendKeys({ type: '12:00' });
+      await sendKeys({ press: 'Enter' });
+      expectValueCommit('12:00');
+    });
+
+    it('should commit typed input instead of highlighted item on close with outside click', async () => {
+      await sendKeys({ type: '12:00' });
+      outsideClick();
+      expectValueCommit('12:00');
+    });
   });
 
   describe('value set programmatically', () => {

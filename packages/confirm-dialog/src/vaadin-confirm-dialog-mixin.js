@@ -3,6 +3,7 @@
  * Copyright (c) 2018 - 2026 Vaadin Ltd.
  * This program is available under Apache License Version 2.0, available at https://vaadin.com/license/
  */
+import { setOrRemoveAttribute } from '@vaadin/component-base/src/dom-utils.js';
 import { SlotController } from '@vaadin/component-base/src/slot-controller.js';
 import { DialogSizeMixin } from '@vaadin/dialog/src/vaadin-dialog-size-mixin.js';
 
@@ -41,6 +42,20 @@ export const ConfirmDialogMixin = (superClass) =>
         header: {
           type: String,
           value: '',
+        },
+
+        /**
+         * The ARIA heading level, used to set the `aria-level` attribute
+         * on the header element. Defaults to `3`.
+         *
+         * This only affects the default header element, a custom slotted
+         * header will not be altered.
+         *
+         * @attr {number} heading-level
+         */
+        headingLevel: {
+          type: Number,
+          value: 3,
         },
 
         /**
@@ -187,7 +202,7 @@ export const ConfirmDialogMixin = (superClass) =>
       return [
         '__updateConfirmButton(_confirmButton, confirmText, confirmTheme)',
         '__updateCancelButton(_cancelButton, cancelText, cancelTheme, cancelButtonVisible)',
-        '__updateHeaderNode(_headerNode, header)',
+        '__updateHeaderNode(_headerNode, header, headingLevel)',
         '__updateMessageNodes(_messageNodes, message)',
         '__updateRejectButton(_rejectButton, rejectText, rejectTheme, rejectButtonVisible)',
         '__accessibleDescriptionRefChanged(_messageNodes, accessibleDescriptionRef)',
@@ -345,10 +360,11 @@ export const ConfirmDialogMixin = (superClass) =>
     }
 
     /** @private */
-    __updateHeaderNode(headerNode, header) {
-      // Only update text content for the default header node.
+    __updateHeaderNode(headerNode, header, headingLevel) {
+      // Only update the default header node.
       if (headerNode && headerNode === this._headerController.defaultNode) {
         headerNode.textContent = header;
+        setOrRemoveAttribute(headerNode, 'aria-level', headingLevel);
       }
     }
 

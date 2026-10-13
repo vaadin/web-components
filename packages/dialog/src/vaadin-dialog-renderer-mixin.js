@@ -36,6 +36,17 @@ export const DialogRendererMixin = (superClass) =>
         },
 
         /**
+         * The ARIA heading level, used to set the `aria-level` attribute
+         * on the title element. Defaults to `2`.
+         *
+         * @attr {number} heading-level
+         */
+        headingLevel: {
+          type: Number,
+          value: 2,
+        },
+
+        /**
          * Custom function for rendering the dialog header.
          * Receives two arguments:
          *

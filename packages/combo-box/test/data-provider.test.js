@@ -1,4 +1,5 @@
 import { expect } from '@vaadin/chai-plugins';
+import { sendKeys } from '@vaadin/test-runner-commands';
 import { arrowDownKeyDown, aTimeout, enterKeyDown, fixtureSync, nextFrame, nextRender } from '@vaadin/testing-helpers';
 import sinon from 'sinon';
 import '../src/vaadin-combo-box.js';
@@ -1061,94 +1062,81 @@ describe('data provider', () => {
   });
 
   describe('lost focus before data is returned', () => {
-    let returnedItems;
+    let pendingCallback;
 
-    const bluringDataProvider = (_, callback) => {
-      comboBox.inputElement.blur();
-      callback(returnedItems, returnedItems.length);
-    };
+    function setInputValueAndTab(value) {
+      setInputValue(comboBox, value);
+      return sendKeys({ press: 'Tab' });
+    }
+
+    function returnData(items) {
+      pendingCallback(items, items.length);
+    }
 
     beforeEach(() => {
-      returnedItems = ['item 12'];
-      comboBox.focus();
-      comboBox.opened = true;
-      comboBox.dataProvider = bluringDataProvider;
-      comboBox.opened = false;
+      // Keep the request pending until the test calls `returnData()`
+      comboBox.dataProvider = (_params, callback) => {
+        pendingCallback = callback;
+      };
+      // Add an element to move focus to with Tab
+      comboBox.after(document.createElement('input'));
       comboBox.inputElement.focus();
     });
 
-    it('should set value without auto-open-disabled', () => {
-      comboBox.autoOpenDisabled = false;
-      expect(comboBox.autoOpenDisabled).to.be.false;
+    [false, true].forEach((autoOpenDisabled) => {
+      describe(`autoOpenDisabled is ${autoOpenDisabled}`, () => {
+        beforeEach(() => {
+          comboBox.autoOpenDisabled = autoOpenDisabled;
+        });
 
-      setInputValue(comboBox, 'item 12');
+        it('should keep input value while loading', async () => {
+          await setInputValueAndTab('item 12');
+          expect(comboBox.loading).to.be.true;
+          expect(comboBox.inputElement.value).to.equal('item 12');
+          expect(comboBox.value).to.equal('');
+        });
 
-      expect(comboBox.opened).to.be.false;
-      expect(comboBox.hasAttribute('focused')).to.be.false;
-      expect(comboBox.value).to.equal('item 12');
-    });
+        it('should set value matching input when data is returned', async () => {
+          await setInputValueAndTab('item 12');
+          returnData(['item 12']);
+          expect(comboBox.opened).to.be.false;
+          expect(comboBox.value).to.equal('item 12');
+        });
 
-    it('should set value with auto-open-disabled', () => {
-      comboBox.autoOpenDisabled = true;
-      expect(comboBox.autoOpenDisabled).to.be.true;
+        it('should set value matching input in different case when data is returned', async () => {
+          await setInputValueAndTab('ItEm 12');
+          returnData(['item 12']);
+          expect(comboBox.opened).to.be.false;
+          expect(comboBox.value).to.equal('item 12');
+          expect(comboBox.inputElement.value).to.equal('item 12');
+        });
 
-      setInputValue(comboBox, 'item 12');
+        it('should set first value of multiple matches that differ only in case', async () => {
+          await setInputValueAndTab('IteM 12');
+          returnData(['item 12', 'IteM 12']);
+          expect(comboBox.opened).to.be.false;
+          expect(comboBox.value).to.equal('item 12');
+        });
 
-      expect(comboBox.opened).to.be.false;
-      expect(comboBox.hasAttribute('focused')).to.be.false;
-      expect(comboBox.value).to.equal('item 12');
-    });
+        it('should keep empty value if no item matches input exactly', async () => {
+          await setInputValueAndTab('item');
+          returnData(['item 12']);
+          expect(comboBox.opened).to.be.false;
+          expect(comboBox.value).to.equal('');
+          expect(comboBox.inputElement.value).to.equal('');
+        });
 
-    it('should set value without auto-open-disabled even if case does not match', () => {
-      comboBox.autoOpenDisabled = false;
-      expect(comboBox.autoOpenDisabled).to.be.false;
+        it('should keep previous value if no item matches input exactly', async () => {
+          comboBox.filteredItems = ['other value', 'item 12'];
+          comboBox.value = 'other value';
 
-      setInputValue(comboBox, 'ItEm 12');
-
-      expect(comboBox.opened).to.be.false;
-      expect(comboBox.hasAttribute('focused')).to.be.false;
-      expect(comboBox.value).to.equal('item 12');
-    });
-
-    it('should set value with auto-open-disabled even if case does not match', () => {
-      comboBox.autoOpenDisabled = true;
-      expect(comboBox.autoOpenDisabled).to.be.true;
-
-      setInputValue(comboBox, 'iTem 12');
-
-      expect(comboBox.opened).to.be.false;
-      expect(comboBox.hasAttribute('focused')).to.be.false;
-      expect(comboBox.value).to.equal('item 12');
-    });
-
-    it('should set first value of multiple matches that differ only in case', () => {
-      returnedItems = ['item 12', 'IteM 12'];
-
-      setInputValue(comboBox, 'IteM 12');
-
-      expect(comboBox.opened).to.be.false;
-      expect(comboBox.hasAttribute('focused')).to.be.false;
-      expect(comboBox.value).to.equal('item 12');
-    });
-
-    it('should keep empty value if it is not an exact match', () => {
-      setInputValue(comboBox, 'item');
-      expect(comboBox.opened).to.be.false;
-      expect(comboBox.hasAttribute('focused')).to.be.false;
-      expect(comboBox.value).to.equal('');
-    });
-
-    it('should keep previous value if it is not an exact match', () => {
-      comboBox.filteredItems = ['other value', 'item 12'];
-      comboBox.value = 'other value';
-      expect(comboBox.value).to.equal('other value');
-
-      returnedItems = ['item 12'];
-      setInputValue(comboBox, 'item 1');
-
-      expect(comboBox.opened).to.be.false;
-      expect(comboBox.hasAttribute('focused')).to.be.false;
-      expect(comboBox.value).to.equal('other value');
+          await setInputValueAndTab('item 1');
+          returnData(['item 12']);
+          expect(comboBox.opened).to.be.false;
+          expect(comboBox.value).to.equal('other value');
+          expect(comboBox.inputElement.value).to.equal('other value');
+        });
+      });
     });
   });
 });

@@ -6,6 +6,8 @@
   "scripts": {
     "api-docs:build": "yarn release:cem && yarn workspace api-docs generate ../custom-elements.json && yarn workspace api-docs build",
     "api-docs:start": "yarn release:cem && yarn workspace api-docs generate ../custom-elements.json && yarn workspace api-docs start",
+    "build:react": "yarn release:cem && yarn release:react",
+    "clean:react": "yarn workspace @vaadin/react-components clean && yarn workspace @vaadin/react-components-pro clean",
     "debug": "yarn test --watch",
     "debug:it": "yarn test --watch --config web-test-runner-it.config.js",
     "dev:build": "yarn workspace dev build",
@@ -14,15 +16,19 @@
     "lint:css": "stylelint --ignore-path .gitignore \"packages/**/src/**/*.js\" \"packages/vaadin-lumo-styles/mixins/*.js\" \"packages/**/*.css\" \"dev/**/*.html\"",
     "lint:js": "eslint",
     "lint:types": "tsc",
+    "lint:types:react": "yarn workspace react-components-tooling lint:types",
     "postinstall": "patch-package",
     "prepare": "husky",
-    "release": "yarn release:themes && yarn release:cem && yarn release:web-types",
+    "release": "yarn release:themes && yarn release:cem && yarn release:meta && yarn release:web-types && yarn release:react",
     "release:cem": "custom-elements-manifest analyze --config custom-elements-manifest.config.js && node ./scripts/split-cem.js",
+    "release:meta": "node scripts/generateMetaPackages.js",
+    "release:react": "yarn workspace @vaadin/react-components build && yarn workspace @vaadin/react-components-pro build",
     "release:themes": "yarn workspace @vaadin/aura build && yarn workspace @vaadin/vaadin-lumo-styles build",
     "release:web-types": "node scripts/buildWebtypes.js",
     "start": "web-dev-server --node-resolve --open /dev",
     "start:aura": "web-dev-server --node-resolve --open /dev --theme=aura",
     "start:lumo": "web-dev-server --node-resolve --open /dev --theme=lumo",
+    "start:react": "yarn workspace react-components-tooling start",
     "test": "web-test-runner",
     "test:aura": "./scripts/run-docker-visual-tests.sh test --config web-test-runner-aura.config.js",
     "test:aura:dark": "./scripts/run-docker-visual-tests.sh test --config web-test-runner-aura.config.js --dark",
@@ -30,6 +36,7 @@
     "test:firefox": "yarn test --config web-test-runner-firefox.config.js",
     "test:it": "yarn test --config web-test-runner-it.config.js",
     "test:lumo": "./scripts/run-docker-visual-tests.sh test --config web-test-runner-lumo.config.js",
+    "test:react": "yarn workspace react-components-tooling test",
     "test:snapshots": "yarn test --config web-test-runner-snapshots.config.js",
     "test:webkit": "yarn test --config web-test-runner-webkit.config.js",
     "update:aura": "TEST_ENV=update ./scripts/run-docker-visual-tests.sh test --config web-test-runner-aura.config.js",
@@ -62,6 +69,7 @@
     "lint-staged": "^16.4.0",
     "npm-run-all": "^4.1.5",
     "patch-package": "^8.0.1",
+    "pkg-pr-new": "^0.0.91",
     "postcss-html": "^2.0.0",
     "postcss-lit": "^1.2.0",
     "prettier": "^3.9.4",
@@ -73,10 +81,10 @@
     "typescript": "^6.0.3"
   },
   "resolutions": {
-    "playwright": "~1.63.0"
+    "playwright": "~1.64.0"
   },
   "lint-staged": {
-    "*.{js,ts}": [
+    "*.{js,ts,tsx}": [
       "eslint --fix",
       "prettier --write"
     ],
@@ -89,6 +97,7 @@
     "test/*",
     "packages/*",
     "api-docs",
-    "dev"
+    "dev",
+    "react"
   ]
 }

@@ -8,19 +8,25 @@ import { css } from 'lit';
 
 export const formItemStyles = css`
   :host {
-    /* By default, when auto-responsive mode is disabled, labels should be displayed beside the fields. */
-    --_form-item-labels-above: ' '; /* false */
-    --_form-item-labels-aside: initial; /* true */
-
-    align-items: var(--_form-item-labels-aside, baseline);
+    align-items: baseline;
     display: inline-flex;
-    flex-flow: var(--_form-item-labels-above, column) nowrap;
     justify-self: stretch;
   }
 
   :host([label-position='top']) {
-    --_form-item-labels-above: initial; /* true */
-    --_form-item-labels-aside: ' '; /* false */
+    align-items: normal;
+    flex-direction: column;
+  }
+
+  :host([data-form-layout-auto-responsive]) {
+    display: grid;
+    grid-template-columns: minmax(0, 1fr);
+  }
+
+  :host([data-form-layout-has-labels-aside]) {
+    align-items: baseline;
+    column-gap: var(--vaadin-form-layout-label-spacing, 1em);
+    grid-template-columns: var(--vaadin-form-layout-label-width, 8em) minmax(0, 1fr);
   }
 
   :host([hidden]) {
@@ -34,10 +40,19 @@ export const formItemStyles = css`
     font-weight: var(--vaadin-form-item-label-font-weight, var(--vaadin-input-field-label-font-weight, 500));
     line-height: var(--vaadin-form-item-label-line-height, var(--vaadin-input-field-label-line-height, inherit));
     position: relative;
-    text-align: var(--_form-item-labels-aside, var(--_label-text-align, start));
-    width: var(--_form-item-labels-aside, var(--_label-width, 8em));
+    text-align: var(--vaadin-form-layout-label-text-align, start);
+    width: var(--vaadin-form-layout-label-width, 8em);
     word-break: break-word;
     box-sizing: border-box;
+  }
+
+  :host(:is([label-position='top'], [data-form-layout-auto-responsive])) [part='label'] {
+    text-align: inherit;
+    width: auto;
+  }
+
+  :host([data-form-layout-has-labels-aside]) [part='label'] {
+    text-align: var(--vaadin-form-layout-label-text-align, start);
   }
 
   :host([required]) [part='label'] {
@@ -62,7 +77,11 @@ export const formItemStyles = css`
 
   #spacing {
     flex: 0 0 auto;
-    width: var(--_label-spacing, 1em);
+    width: var(--vaadin-form-layout-label-spacing, 1em);
+  }
+
+  :host([data-form-layout-auto-responsive]) #spacing {
+    display: none;
   }
 
   #content {

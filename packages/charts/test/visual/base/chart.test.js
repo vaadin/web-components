@@ -162,8 +162,9 @@ describe('chart', () => {
   // Vaadin token get a dark baseline. Aura runs every scenario in both schemes
   // (`yarn test:aura:dark`); Lumo has no dark mode in the visual runner.
   describe('dark', () => {
-    defineScreenshotTests(['gauge', 'solidgauge', 'treemap', 'organization', 'exporting-menu', 'no-data'], {
-      dark: true,
-    });
+    defineScreenshotTests(
+      ['gauge', 'solidgauge', 'treemap', 'organization', 'exporting-menu', 'no-data', 'tooltip-outside-non-styled'],
+      { dark: true },
+    );
   });
 });

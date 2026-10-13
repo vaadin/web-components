@@ -114,6 +114,8 @@ Methods that return a boolean should use an interrogative prefix (`_should...`, 
 
 When adding files under `packages/`, `dev/`, or `test/`, name files using dash-case (e.g. `form-layout.types.ts`). Build scripts under `scripts/` are the exception and use camelCase.
 
+The React packages under `packages/react-components*/` are an exception. Component files use the PascalCase component name (`Button.ts`, `GridColumn.tsx`), because the file name is the published import specifier (`@vaadin/react-components/Button.js`). Hooks and utilities use camelCase (`useRenderer.ts`, `createComponent.ts`).
+
 ## JSDoc
 
 Documentation / JSDoc should describe the public contract and behavior, not internal implementation details on how the behavior is achieved.

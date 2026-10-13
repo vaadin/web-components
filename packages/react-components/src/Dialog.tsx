@@ -1,0 +1,74 @@
+/**
+ * @license
+ * Copyright (c) 2022 - 2026 Vaadin Ltd.
+ * This program is available under Apache License Version 2.0, available at https://vaadin.com/license/
+ */
+import {
+  type ComponentType,
+  type ForwardedRef,
+  forwardRef,
+  type HTMLAttributes,
+  type ReactElement,
+  type ReactNode,
+} from 'react';
+import { Dialog as _Dialog, type DialogElement, type DialogProps as _DialogProps } from './generated/Dialog.js';
+import { useSimpleOrChildrenRenderer } from './renderers/useSimpleOrChildrenRenderer.js';
+import type { ReactSimpleRendererProps } from './renderers/useSimpleRenderer.js';
+
+export * from './generated/Dialog.js';
+
+/**
+ * @deprecated Renderer props are deprecated and will be removed in Vaadin 26.
+ */
+export type DialogReactRendererProps = ReactSimpleRendererProps<DialogElement>;
+
+type OmittedDialogHTMLAttributes = Omit<
+  HTMLAttributes<DialogElement>,
+  'id' | 'className' | 'dangerouslySetInnerHTML' | 'slot' | 'role' | 'aria-label' | 'aria-labelledby' | 'draggable'
+>;
+
+export type DialogProps = Partial<
+  Omit<_DialogProps, 'children' | 'footerRenderer' | 'headerRenderer' | 'renderer' | keyof OmittedDialogHTMLAttributes>
+> &
+  Readonly<{
+    /**
+     * The dialog content. Render-function children are deprecated and will be
+     * removed in Vaadin 26. Pass React nodes instead.
+     */
+    children?: ReactNode | ComponentType<DialogReactRendererProps>;
+    footer?: ReactNode;
+    /**
+     * @deprecated Use `footer` instead.
+     */
+    footerRenderer?: ComponentType<DialogReactRendererProps> | null;
+    header?: ReactNode;
+    /**
+     * @deprecated Use `header` instead.
+     */
+    headerRenderer?: ComponentType<DialogReactRendererProps> | null;
+    /**
+     * @deprecated Use `children` instead.
+     */
+    renderer?: ComponentType<DialogReactRendererProps> | null;
+  }>;
+
+function Dialog(
+  { children, footer, header, ...props }: DialogProps,
+  ref: ForwardedRef<DialogElement>,
+): ReactElement | null {
+  const [footerPortals, footerRenderer] = useSimpleOrChildrenRenderer(props.footerRenderer, footer);
+  const [headerPortals, headerRenderer] = useSimpleOrChildrenRenderer(props.headerRenderer, header);
+  const [portals, renderer] = useSimpleOrChildrenRenderer(props.renderer, children);
+
+  return (
+    <_Dialog {...props} ref={ref} footerRenderer={footerRenderer} headerRenderer={headerRenderer} renderer={renderer}>
+      {headerPortals}
+      {footerPortals}
+      {portals}
+    </_Dialog>
+  );
+}
+
+const ForwardedDialog = forwardRef(Dialog);
+
+export { ForwardedDialog as Dialog };

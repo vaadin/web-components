@@ -613,9 +613,8 @@ import {
         // Tab to header
         shiftTab();
 
-        // Scroll to the end
-        await scrollHorizontally(grid.$.table.scrollWidth);
-        await nextFrame();
+        // Scroll to the end without waiting for the content visibility update
+        await scrollHorizontally(grid.$.table.scrollWidth, 0);
 
         const left = grid.$.table.scrollLeft;
         // Tab to body

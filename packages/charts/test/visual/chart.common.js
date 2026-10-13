@@ -23,7 +23,8 @@ async function whenRendered(charts) {
 }
 
 /** `outside` decides whether the tooltip renders in the shadow root or in `document.body`. */
-function buildTooltipFixture(outside) {
+function buildTooltipFixture(outside, { styledMode = true } = {}) {
+  const chartOptions = styledMode ? '' : '"chart": { "styledMode": false }, ';
   return `
     <vaadin-chart
       type="column"
@@ -31,7 +32,7 @@ function buildTooltipFixture(outside) {
       tooltip
       style="width: 600px; height: 400px"
       categories="${SOLAR_CATEGORIES}"
-      additional-options='{ "tooltip": { "outside": ${outside} } }'
+      additional-options='{ ${chartOptions}"tooltip": { "outside": ${outside} } }'
     >
       <vaadin-chart-series title="Installation" values="${SOLAR_INSTALLATION}"></vaadin-chart-series>
       <vaadin-chart-series title="Manufacturing" values="${SOLAR_MANUFACTURING}"></vaadin-chart-series>
@@ -669,6 +670,10 @@ const baseOnlyFixtures = {
       ></vaadin-chart-series>
     </vaadin-chart>
   `,
+
+  // Not a module: the global tooltip stylesheet must leave a non-styled outside
+  // tooltip as Highcharts draws it, also in a dark color scheme.
+  'tooltip-outside-non-styled': buildTooltipFixture(true, { styledMode: false }),
 };
 
 /** Hovers a point so that the tooltip is rendered. */
@@ -706,6 +711,7 @@ async function hideSeriesAndPageLegend(chart) {
 const interactions = {
   tooltip: showTooltip,
   'tooltip-outside': showTooltip,
+  'tooltip-outside-non-styled': showTooltip,
   'use-html': showTooltip,
   'exporting-menu': openExportMenu,
   'point-states': selectAndHoverPoints,

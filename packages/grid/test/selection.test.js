@@ -779,6 +779,12 @@ describe('multi selection column', () => {
     expect(widthWithCheckboxes).to.be.closeTo(widthWithoutCheckboxes, 1);
   });
 
+  it('should restore selection column default width when set to null', () => {
+    selectionColumn.width = '100px';
+    selectionColumn.width = null;
+    expect(selectionColumn.width).to.equal('58px');
+  });
+
   describe('drag selection', () => {
     let clock;
 

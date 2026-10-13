@@ -8,3 +8,10 @@
   --vaadin-charts-button-active-background: var(--aura-accent-color);
   --vaadin-charts-button-active-label: var(--aura-accent-contrast-color);
 }
+
+/* Overrides the font size that Aura sets on every element with a theme attribute.
+   The size variants change the token, so they also scale the chart. */
+:where(vaadin-chart) {
+  font-size: var(--vaadin-charts-font-size, var(--aura-font-size-xs));
+  line-height: normal;
+}

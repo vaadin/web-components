@@ -27,13 +27,18 @@ const seriesColorTokens = Array.from(
     `--_color-${i}: var(--highcharts-color-${i}, var(--vaadin-charts-color-${i}, var(--vaadin-user-color-${i})));`,
 ).join('\n    ');
 
+// Only a styled-mode tooltip gets these styles. Highcharts copies highcharts-*
+// classes of the chart element to an outside tooltip (see tooltip.outside docs).
+// :where() keeps the old specificity.
+const styledOutsideTooltip = '.highcharts-tooltip-container:where(.highcharts-styled-mode)';
+
 // A non-split tooltip carries highcharts-color-N on the tooltip element itself,
 // a split one on its child boxes, so both selectors are needed.
 const seriesColorRules = Array.from(
   { length: 10 },
   (_, i) =>
-    `.highcharts-tooltip-container .highcharts-tooltip.highcharts-color-${i},
-    .highcharts-tooltip-container .highcharts-tooltip .highcharts-color-${i} { fill: var(--_color-${i}); stroke: var(--_color-${i}); }`,
+    `${styledOutsideTooltip} .highcharts-tooltip.highcharts-color-${i},
+    ${styledOutsideTooltip} .highcharts-tooltip .highcharts-color-${i} { fill: var(--_color-${i}); stroke: var(--_color-${i}); }`,
 ).join('\n');
 
 /* Emitted at both scopes, so it looks absent from upstream Highcharts. Do not prune. */
@@ -96,19 +101,20 @@ const tooltipStyles = (scope) => css`
 addGlobalStyles(
   'vaadin-charts-tooltip',
   css`
-    .highcharts-tooltip-container {
+    /* Can't use styledOutsideTooltip due to Stylelint */
+    .highcharts-tooltip-container:where(.highcharts-styled-mode) {
       ${unsafeCSS(seriesColorTokens)}
     }
 
     ${unsafeCSS(seriesColorRules)}
 
-    .highcharts-tooltip-container .highcharts-root {
+    ${unsafeCSS(styledOutsideTooltip)} .highcharts-root {
       overflow: visible;
       font-size: var(--vaadin-charts-font-size, 0.75rem);
       line-height: normal;
     }
   `,
-  tooltipStyles('.highcharts-tooltip-container'),
+  tooltipStyles(styledOutsideTooltip),
 );
 
 export const chartStyles = css`

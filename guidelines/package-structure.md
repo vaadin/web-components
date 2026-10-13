@@ -89,11 +89,11 @@ export * from './src/vaadin-{name}.js';
 These files are not checked into the VCS and produced by scripts — do **not**
 hand-edit them.
 
-| File                   | Generator                                                                          | Purpose                                                                |
-| ---------------------- | ---------------------------------------------------------------------------------- | ---------------------------------------------------------------------- |
-| `custom-elements.json` | `yarn release:cem` (`custom-elements-manifest.config.js` + `scripts/split-cem.js`) | Per-package CEM manifest. Drives `api-docs/` and the web-types files.  |
-| `web-types.json`       | `yarn release:web-types` (`scripts/buildWebtypes.js` reads `custom-elements.json`) | IDE autocomplete for plain HTML; also drives React wrapper generation. |
-| `web-types.lit.json`   | Same as `web-types.json`                                                           | IDE autocomplete for Lit 3 binding syntax.                             |
+| File                   | Generator                                                                          | Purpose                                                                                             |
+| ---------------------- | ---------------------------------------------------------------------------------- | --------------------------------------------------------------------------------------------------- |
+| `custom-elements.json` | `yarn release:cem` (`custom-elements-manifest.config.js` + `scripts/split-cem.js`) | Per-package CEM manifest. Drives `api-docs/`, the web-types files and the React wrapper generation. |
+| `web-types.json`       | `yarn release:web-types` (`scripts/buildWebtypes.js` reads `custom-elements.json`) | IDE autocomplete for plain HTML.                                                                    |
+| `web-types.lit.json`   | Same as `web-types.json`                                                           | IDE autocomplete for Lit 3 binding syntax.                                                          |
 
 See [Documenting](documenting.md) for the JSDoc tags that drive these.
 

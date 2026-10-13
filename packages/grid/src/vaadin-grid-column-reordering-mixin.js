@@ -36,7 +36,7 @@ export const ColumnReorderingMixin = (superClass) =>
     ready() {
       super.ready();
       addListener(this, 'track', this._onTrackEvent);
-      this._reorderGhost = this.shadowRoot.querySelector('[part="reorder-ghost"]');
+      this._reorderGhost = this.shadowRoot.querySelector('.reorder-ghost');
 
       this.addEventListener('touchstart', this._onTouchStart.bind(this));
       this.addEventListener('touchmove', this._onTouchMove.bind(this));
@@ -422,7 +422,7 @@ export const ColumnReorderingMixin = (superClass) =>
      * @protected
      */
     _isSwappableByPosition(targetColumn, clientX) {
-      const targetCell = Array.from(this.$.header.querySelectorAll('tr:not([hidden]) [part~="cell"]')).find((cell) =>
+      const targetCell = Array.from(this.$.header.querySelectorAll('tr:not([hidden]) .header-cell')).find((cell) =>
         targetColumn.contains(cell._column),
       );
       const sourceCellRect = this.$.header
