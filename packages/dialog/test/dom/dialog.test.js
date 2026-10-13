@@ -58,6 +58,12 @@ describe('vaadin-dialog', () => {
         await nextUpdate(dialog);
         await expect(dialog).dom.to.equalSnapshot(SNAPSHOT_CONFIG);
       });
+
+      it('modeless', async () => {
+        dialog.modeless = true;
+        await nextUpdate(dialog);
+        await expect(dialog).dom.to.equalSnapshot(SNAPSHOT_CONFIG);
+      });
     });
   });
 

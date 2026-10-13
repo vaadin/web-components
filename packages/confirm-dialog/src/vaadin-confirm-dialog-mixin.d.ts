@@ -60,7 +60,7 @@ export declare class ConfirmDialogMixinClass {
 
   /**
    * The ARIA heading level, used to set the `aria-level` attribute
-   * on the header element. Defaults to `3`.
+   * on the header element. Defaults to `1`.
    *
    * This only affects the default header element, a custom slotted
    * header will not be altered.

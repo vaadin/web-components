@@ -15,7 +15,7 @@ snapshots["vaadin-crud host default"] =
     with-backdrop=""
   >
     <h3
-      aria-level="3"
+      aria-level="1"
       slot="header"
     >
       Discard changes
@@ -61,7 +61,7 @@ snapshots["vaadin-crud host default"] =
     with-backdrop=""
   >
     <h3
-      aria-level="3"
+      aria-level="1"
       slot="header"
     >
       Delete item

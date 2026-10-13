@@ -36,11 +36,12 @@ export declare class DialogRendererMixinClass {
 
   /**
    * The ARIA heading level, used to set the `aria-level` attribute
-   * on the title element. Defaults to `2`.
+   * on the title element. Defaults to `1` for modal dialogs and `2`
+   * for modeless dialogs.
    *
    * @attr {number} heading-level
    */
-  headingLevel: number;
+  headingLevel: number | null | undefined;
 
   /**
    * Custom function for rendering the dialog header.
