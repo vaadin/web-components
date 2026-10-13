@@ -27,17 +27,21 @@ describe('vaadin-dialog', () => {
       await expect(dialog).dom.to.equalSnapshot(SNAPSHOT_CONFIG);
     });
 
-    it('headerTitle', async () => {
-      dialog.headerTitle = 'Title';
-      await nextUpdate(dialog);
-      await expect(dialog).dom.to.equalSnapshot(SNAPSHOT_CONFIG);
-    });
+    describe('headerTitle', () => {
+      beforeEach(async () => {
+        dialog.headerTitle = 'Title';
+        await nextUpdate(dialog);
+      });
 
-    it('headingLevel', async () => {
-      dialog.headerTitle = 'Title';
-      dialog.headingLevel = 3;
-      await nextUpdate(dialog);
-      await expect(dialog).dom.to.equalSnapshot(SNAPSHOT_CONFIG);
+      it('default', async () => {
+        await expect(dialog).dom.to.equalSnapshot(SNAPSHOT_CONFIG);
+      });
+
+      it('headingLevel', async () => {
+        dialog.headingLevel = 3;
+        await nextUpdate(dialog);
+        await expect(dialog).dom.to.equalSnapshot(SNAPSHOT_CONFIG);
+      });
     });
 
     it('headerRenderer', async () => {
