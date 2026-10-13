@@ -60,14 +60,14 @@ export declare class ConfirmDialogMixinClass {
 
   /**
    * The ARIA heading level, used to set the `aria-level` attribute
-   * on the header element. Defaults to `1`.
+   * on the header element. When not set, defaults to `1`.
    *
    * This only affects the default header element, a custom slotted
    * header will not be altered.
    *
    * @attr {number} heading-level
    */
-  headingLevel: number;
+  headingLevel: number | null | undefined;
 
   /**
    * Set the message or confirmation question.

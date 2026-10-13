@@ -3,7 +3,6 @@
  * Copyright (c) 2018 - 2026 Vaadin Ltd.
  * This program is available under Apache License Version 2.0, available at https://vaadin.com/license/
  */
-import { setOrRemoveAttribute } from '@vaadin/component-base/src/dom-utils.js';
 import { SlotController } from '@vaadin/component-base/src/slot-controller.js';
 import { DialogSizeMixin } from '@vaadin/dialog/src/vaadin-dialog-size-mixin.js';
 
@@ -46,7 +45,7 @@ export const ConfirmDialogMixin = (superClass) =>
 
         /**
          * The ARIA heading level, used to set the `aria-level` attribute
-         * on the header element. Defaults to `1`.
+         * on the header element. When not set, defaults to `1`.
          *
          * This only affects the default header element, a custom slotted
          * header will not be altered.
@@ -55,7 +54,6 @@ export const ConfirmDialogMixin = (superClass) =>
          */
         headingLevel: {
           type: Number,
-          value: 1,
         },
 
         /**
@@ -364,7 +362,7 @@ export const ConfirmDialogMixin = (superClass) =>
       // Only update the default header node.
       if (headerNode && headerNode === this._headerController.defaultNode) {
         headerNode.textContent = header;
-        setOrRemoveAttribute(headerNode, 'aria-level', headingLevel);
+        headerNode.setAttribute('aria-level', headingLevel ?? 1);
       }
     }
 
