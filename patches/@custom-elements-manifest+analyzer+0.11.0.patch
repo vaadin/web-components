@@ -1,0 +1,146 @@
+diff --git a/node_modules/@custom-elements-manifest/analyzer/src/features/post-processing/apply-inheritance.js b/node_modules/@custom-elements-manifest/analyzer/src/features/post-processing/apply-inheritance.js
+index bd4e9b1..ff79312 100644
+--- a/node_modules/@custom-elements-manifest/analyzer/src/features/post-processing/apply-inheritance.js
++++ b/node_modules/@custom-elements-manifest/analyzer/src/features/post-processing/apply-inheritance.js
+@@ -19,6 +19,13 @@ export function applyInheritancePlugin() {
+         classLikes.push(...[...classes, ...mixins]);
+       });
+ 
++      // Apply inheritance from the items each class-like declares itself, so that
++      // the result does not depend on which class-likes were processed before
++      const TYPES = ['slots', 'cssParts', 'cssProperties', 'attributes', 'members', 'events', 'cssStates'];
++      const ownItems = new Map(
++        classLikes.map((klass) => [klass, Object.fromEntries(TYPES.map((type) => [type, (klass[type] || []).map((item) => ({ ...item }))]))])
++      );
++
+       classLikes.forEach((customElement) => {
+         const inheritanceChain = getInheritanceTree(allManifests, customElement.name);
+ 
+@@ -28,8 +35,8 @@ export function applyInheritancePlugin() {
+             return;
+           }
+ 
+-          ['slots', 'cssParts', 'cssProperties', 'attributes', 'members', 'events', 'cssStates'].forEach(type => {
+-            klass?.[type]?.forEach(currItem => {
++          TYPES.forEach(type => {
++            ownItems.get(klass)?.[type]?.forEach(currItem => {
+               const containingModulePath = getModuleForClassLike(allManifests, klass.name);
+               const containingModule = getModuleFromManifests(allManifests, containingModulePath);
+ 
+@@ -49,14 +56,11 @@ export function applyInheritancePlugin() {
+                   ...resolveModuleOrPackageSpecifier(containingModule, context, klass.name)
+                 }
+ 
++                // The overriding item keeps its own privacy and type, the inherited one only fills the gaps
+                 customElement[type] = customElement?.[type]?.map(item => item.name === existing.name
+                   ? {
+                       ...newItem,
+                       ...existing,
+-                      ...{
+-                        ...(newItem.type ? { type: newItem.type } : {}),
+-                        ...(newItem.privacy ? { privacy: newItem.privacy } : {})
+-                      }
+                     }
+                   : item);
+               } else {
+diff --git a/node_modules/@custom-elements-manifest/analyzer/src/utils/manifest-helpers.js b/node_modules/@custom-elements-manifest/analyzer/src/utils/manifest-helpers.js
+index fcb5f94..5a097a3 100644
+--- a/node_modules/@custom-elements-manifest/analyzer/src/utils/manifest-helpers.js
++++ b/node_modules/@custom-elements-manifest/analyzer/src/utils/manifest-helpers.js
+@@ -61,73 +61,42 @@ export function getAllDeclarationsOfKind(manifest, kind) {
+  * @param {string} className
+  */
+ export function getInheritanceTree(manifests, className) {
+-  const tree = [];
+   const allClassLikes = new Map();
+-  const _classes = [];
+   const _mixins = [];
+ 
+   manifests.forEach((cem) => {
+-    _classes.push(...getAllDeclarationsOfKind(cem, 'class'));
+     _mixins.push(...getAllDeclarationsOfKind(cem, 'mixin'));
++    [...getAllDeclarationsOfKind(cem, 'mixin'), ...getAllDeclarationsOfKind(cem, 'class')].forEach((klass) => {
++      allClassLikes.set(klass.name, klass);
++    });
+   });
+ 
+-  [..._mixins, ..._classes].forEach((klass) => {
+-    allClassLikes.set(klass.name, klass);
+-  });
+-
+-  let klass = allClassLikes.get(className)
+-
+-  if(klass) {
+-    tree.push(klass)
++  const klass = allClassLikes.get(className);
++  if (!klass) {
++    return [];
++  }
+ 
+-    klass?.mixins?.forEach(mixin => {
+-      let foundMixin = _mixins.find(m => m.name === mixin.name);
+-      if(foundMixin) {
++  // Depth-first: every mixin (and the mixins it applies) and every superclass,
++  // each class-like once, nearest first
++  const tree = [klass];
++  const visit = (current) => {
++    current.mixins?.forEach((mixin) => {
++      const foundMixin = _mixins.find((m) => m.name === mixin.name);
++      if (foundMixin && !tree.includes(foundMixin)) {
+         tree.push(foundMixin);
+-
+-        while(has(foundMixin?.mixins)) {
+-          foundMixin?.mixins?.forEach(mixin => {
+-            foundMixin =  _mixins.find(m => m.name === mixin.name);
+-            if(foundMixin) {
+-              tree.push(foundMixin);
+-            }
+-          });
+-        }
++        visit(foundMixin);
+       }
+     });
+ 
+-    while(allClassLikes.has(klass.superclass?.name)) {
+-      const newKlass = allClassLikes.get(klass.superclass.name);
+-      let allMixins = [];
+-      if (klass?.mixins) {
+-        allMixins = [...klass.mixins];
+-      }
+-      if (newKlass?.mixins) {
+-        allMixins = [...allMixins, ...newKlass.mixins];
+-      }
+-
+-      allMixins.forEach(mixin => {
+-        let foundMixin = _mixins.find(m => m.name === mixin.name);
+-        if(foundMixin) {
+-          tree.push(foundMixin);
+-
+-          while(has(foundMixin?.mixins)) {
+-            foundMixin?.mixins?.forEach(mixin => {
+-              foundMixin =  _mixins.find(m => m.name === mixin.name);
+-              if(foundMixin) {
+-                tree.push(foundMixin);
+-              }
+-            });
+-          }
+-        }
+-      });
+-
+-      tree.push(newKlass);
+-      klass = newKlass;
++    const superclass = allClassLikes.get(current.superclass?.name);
++    if (superclass && !tree.includes(superclass)) {
++      tree.push(superclass);
++      visit(superclass);
+     }
+-    return tree;
+-  }
+-  return [];
++  };
++  visit(klass);
++
++  return tree;
+ }
+ 
+ /**
