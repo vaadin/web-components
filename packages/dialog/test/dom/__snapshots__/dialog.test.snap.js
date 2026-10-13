@@ -102,6 +102,29 @@ snapshots["vaadin-dialog host headerTitle headingLevel"] =
 `;
 /* end snapshot vaadin-dialog host headerTitle headingLevel */
 
+snapshots["vaadin-dialog host headerTitle modeless"] = 
+`<vaadin-dialog
+  aria-label="Title"
+  has-title=""
+  modeless=""
+  opened=""
+  role="dialog"
+  tabindex="0"
+>
+  <vaadin-dialog-content>
+    content
+  </vaadin-dialog-content>
+  <h2
+    aria-level="2"
+    class="draggable"
+    slot="title"
+  >
+    Title
+  </h2>
+</vaadin-dialog>
+`;
+/* end snapshot vaadin-dialog host headerTitle modeless */
+
 snapshots["vaadin-dialog shadow default"] = 
 `<vaadin-dialog-overlay
   autofocus=""
@@ -345,27 +368,4 @@ snapshots["vaadin-dialog shadow overlay"] =
 </div>
 `;
 /* end snapshot vaadin-dialog shadow overlay */
-
-snapshots["vaadin-dialog host headerTitle modeless"] = 
-`<vaadin-dialog
-  aria-label="Title"
-  has-title=""
-  modeless=""
-  opened=""
-  role="dialog"
-  tabindex="0"
->
-  <vaadin-dialog-content>
-    content
-  </vaadin-dialog-content>
-  <h2
-    aria-level="2"
-    class="draggable"
-    slot="title"
-  >
-    Title
-  </h2>
-</vaadin-dialog>
-`;
-/* end snapshot vaadin-dialog host headerTitle modeless */
 
