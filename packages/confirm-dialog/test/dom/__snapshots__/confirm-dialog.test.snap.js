@@ -13,7 +13,10 @@ snapshots["vaadin-confirm-dialog host"] =
   with-backdrop=""
 >
   Do you want to save or discard the changes?
-  <h3 slot="header">
+  <h3
+    aria-level="3"
+    slot="header"
+  >
     Unsaved changes
   </h3>
   <vaadin-button
@@ -177,4 +180,54 @@ snapshots["vaadin-confirm-dialog overlay"] =
 </div>
 `;
 /* end snapshot vaadin-confirm-dialog overlay */
+
+snapshots["vaadin-confirm-dialog headingLevel"] = 
+`<vaadin-confirm-dialog
+  aria-description="Do you want to save or discard the changes?"
+  aria-label="Unsaved changes"
+  aria-modal="true"
+  header="Unsaved changes"
+  opened=""
+  role="alertdialog"
+  tabindex="0"
+  with-backdrop=""
+>
+  Do you want to save or discard the changes?
+  <h3
+    aria-level="2"
+    slot="header"
+  >
+    Unsaved changes
+  </h3>
+  <vaadin-button
+    hidden=""
+    role="button"
+    slot="cancel-button"
+    tabindex="0"
+    theme="tertiary"
+  >
+    Cancel
+  </vaadin-button>
+  <vaadin-button
+    hidden=""
+    role="button"
+    slot="reject-button"
+    tabindex="0"
+    theme="error tertiary"
+  >
+    Reject
+  </vaadin-button>
+  <vaadin-button
+    focus-ring=""
+    focused=""
+    role="button"
+    slot="confirm-button"
+    tabindex="0"
+    theme="primary"
+  >
+    Confirm
+  </vaadin-button>
+</vaadin-confirm-dialog>
+`;
+/* end snapshot vaadin-confirm-dialog headingLevel */
 
