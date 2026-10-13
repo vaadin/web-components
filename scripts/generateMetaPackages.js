@@ -7,15 +7,10 @@
  *
  * Usage: yarn release:cem && yarn release:meta [--check]
  */
-import { execSync } from 'node:child_process';
 import fs from 'node:fs';
 import path from 'node:path';
-import { fileURLToPath } from 'node:url';
 import lerna from '../lerna.json' with { type: 'json' };
-
-const __dirname = path.dirname(fileURLToPath(import.meta.url));
-const rootDir = path.resolve(__dirname, '..');
-const packagesDir = path.join(rootDir, 'packages');
+import { byName, isElement, listPackages, packagesDir, readManifest, readPackageJson, rootDir } from './lib/cem.js';
 
 const { version } = lerna;
 
@@ -41,22 +36,6 @@ const skippedDirs = new Set([
   'react-components-pro',
 ]);
 
-// Code unit order, independent of locale
-const byName = (a, b) => {
-  if (a === b) {
-    return 0;
-  }
-  return a < b ? -1 : 1;
-};
-
-/**
- * @param {string} dir
- * @return {object}
- */
-function readPackageJson(dir) {
-  return JSON.parse(fs.readFileSync(path.join(packagesDir, dir, 'package.json'), 'utf-8'));
-}
-
 /**
  * @return {{ core: object[], commercial: object[] }}
  */
@@ -64,15 +43,7 @@ function collectPackages() {
   const core = [];
   const commercial = [];
 
-  const pathToLerna = path.normalize('./node_modules/.bin/lerna');
-  const output = execSync(`${pathToLerna} ls --json --loglevel silent`, { cwd: rootDir }); // NOSONAR
-  const dirs = JSON.parse(output.toString())
-    .filter((project) => path.dirname(project.location) === packagesDir)
-    .map((project) => path.basename(project.location))
-    .filter((dir) => !skippedDirs.has(dir))
-    .sort(byName);
-
-  for (const dir of dirs) {
+  for (const dir of listPackages().filter((dir) => !skippedDirs.has(dir))) {
     const packageJson = readPackageJson(dir);
     const group = packageJson.license === 'Apache-2.0' ? core : commercial;
     group.push({ dir, ...packageJson });
@@ -91,15 +62,15 @@ function collectImports(packageJson) {
   }
 
   // Theme packages have no manifest
-  const manifest = path.join(packagesDir, packageJson.dir, 'custom-elements.json');
-  if (!fs.existsSync(manifest)) {
+  const manifest = readManifest(packageJson.dir);
+  if (!manifest) {
     return [];
   }
 
   // Root level entry points that define a custom element, not mixin-only ones
-  const { modules } = JSON.parse(fs.readFileSync(manifest, 'utf-8'));
+  const { modules } = manifest;
   const definesElement = ({ declaration }) =>
-    modules.some((module) => module.path === declaration.module && module.declarations.some((d) => d.customElement));
+    modules.some((module) => module.path === declaration.module && module.declarations.some(isElement));
 
   const entryPoints = modules
     .filter((module) => !module.path.includes('/') && module.exports.some(definesElement))
