@@ -692,6 +692,10 @@ export const GridMixin = (superClass) =>
      * @protected
      */
     _renderColumnTree(columnTree) {
+      // This render uses the current hidden state of all columns,
+      // so a pending render from a hidden change is not needed
+      this._debouncerHiddenChanged?.cancel();
+
       iterateChildren(this.$.items, (row) => {
         this.__initRow(row, columnTree[columnTree.length - 1], 'body', false, true);
         this.__updateRow(row);
