@@ -96,6 +96,18 @@ describe('column', () => {
 
         expect(getContainerCell(grid.$.footer, 0, 0).style.width).to.eql('200px');
       });
+
+      ['null', 'undefined'].forEach((type) => {
+        it(`should restore default width when set to ${type}`, () => {
+          column.width = '200px';
+          column.width = type === 'null' ? null : undefined;
+          flushGrid(grid);
+
+          expect(column.width).to.equal('100px');
+          expect(getContainerCell(grid.$.items, 0, 0).style.width).to.equal('100px');
+          expect(getContainerCell(grid.$.header, 1, 0).style.width).to.equal('100px');
+        });
+      });
     });
 
     describe('hidden', () => {
