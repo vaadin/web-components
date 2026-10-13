@@ -135,7 +135,10 @@ snapshots["vaadin-confirm-dialog overlay"] =
   id="overlay"
   part="overlay"
 >
-  <header part="header">
+  <header
+    part="header"
+    role="presentation"
+  >
     <slot name="header">
     </slot>
   </header>
