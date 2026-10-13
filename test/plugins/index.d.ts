@@ -10,6 +10,11 @@ declare global {
       equalA11yTreeSnapshot(): Promise<void>;
 
       /**
+       * Checks that the Chromium accessibility tree of an element contains the nodes of the expected tree.
+       */
+      matchA11yTree(expected: string): Promise<void>;
+
+      /**
        * Runs axe-core rule checks on an element and fails on any violation.
        */
       accessible(options?: { ignoredRules?: string[] }): Promise<void>;
