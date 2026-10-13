@@ -35,6 +35,7 @@ describe('vaadin-dialog', () => {
 
     it('headingLevel', async () => {
       dialog.headerTitle = 'Title';
+      await nextUpdate(dialog);
       dialog.headingLevel = 3;
       await nextUpdate(dialog);
       await expect(dialog).dom.to.equalSnapshot(SNAPSHOT_CONFIG);
