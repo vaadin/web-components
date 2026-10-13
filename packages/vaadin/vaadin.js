@@ -14,4 +14,5 @@ import '@vaadin/dashboard/vaadin-dashboard-widget.js';
 import '@vaadin/grid-pro';
 import '@vaadin/grid-pro/vaadin-grid-pro-edit-column.js';
 import '@vaadin/map';
+import '@vaadin/pdf-viewer';
 import '@vaadin/rich-text-editor';
