@@ -70,20 +70,6 @@ function transformDescription(packageJson, description) {
   return description;
 }
 
-// Primitive types that can be set via HTML attributes
-const primitiveTypePattern =
-  /^(string|number|boolean|null|undefined)(\s*\|\s*(string|number|boolean|null|undefined))*$/iu;
-
-/**
- * Checks if an attribute is a writable primitive attribute.
- * In CEM, attributes are already filtered to public ones, and we check for primitive types.
- * @param {object} attribute - The attribute object
- * @returns {boolean}
- */
-function isWritablePrimitiveAttribute(attribute) {
-  return primitiveTypePattern.test(getTypeText(attribute.type));
-}
-
 /**
  * Gets public writable field members from a CEM element declaration.
  * CEM already filters to public members based on config, and fields with
@@ -102,11 +88,10 @@ function getPublicWritableProperties(elementDeclaration) {
 }
 
 function createPlainElementDefinition(packageJson, elementDeclaration) {
-  const readonlyFields = new Set((elementDeclaration.members || []).filter((m) => m.readonly).map((m) => m.name));
-  const elementAttributes = elementDeclaration.attributes || [];
-  const attributes = elementAttributes
-    .filter((attribute) => isWritablePrimitiveAttribute(attribute))
-    .filter((attribute) => !readonlyFields.has(attribute.fieldName))
+  // CEM keeps only attributes that can be set from HTML. Untyped ones come from
+  // `observedAttributes`, e.g. `class` on `<vaadin-icon>`, and are not listed.
+  const attributes = (elementDeclaration.attributes || [])
+    .filter((attribute) => attribute.type)
     .sort((a, b) => a.name.localeCompare(b.name))
     .map((attribute) => ({
       name: attribute.name,
