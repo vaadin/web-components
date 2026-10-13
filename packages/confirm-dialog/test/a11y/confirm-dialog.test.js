@@ -1,4 +1,5 @@
 import { expect } from '@vaadin/chai-plugins';
+import { a11ySnapshotOfElement, findAccessibilityNode } from '@vaadin/test-runner-commands';
 import { fixtureSync, nextRender, nextUpdate, oneEvent } from '@vaadin/testing-helpers';
 import '../not-animated-styles.css';
 import '../../src/vaadin-confirm-dialog.js';
@@ -33,6 +34,14 @@ describe('vaadin-confirm-dialog', () => {
     await nextUpdate(dialog);
     await expect(dialog).to.equalA11yTreeSnapshot();
     await expect(dialog).to.be.accessible(AXE_OPTIONS);
+  });
+
+  it('heading level', async () => {
+    dialog.headingLevel = 2;
+    await nextUpdate(dialog);
+    const snapshot = await a11ySnapshotOfElement(dialog);
+    const heading = findAccessibilityNode(snapshot, (node) => node.role === 'heading');
+    expect(heading).to.include({ name: 'Unsaved changes', level: 2 });
   });
 
   it('no header', async () => {

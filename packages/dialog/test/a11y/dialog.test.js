@@ -1,4 +1,5 @@
 import { expect } from '@vaadin/chai-plugins';
+import { a11ySnapshotOfElement, findAccessibilityNode } from '@vaadin/test-runner-commands';
 import { fixtureSync, nextRender, nextUpdate, oneEvent } from '@vaadin/testing-helpers';
 import '../not-animated-styles.css';
 import '../../src/vaadin-dialog.js';
@@ -48,6 +49,19 @@ describe('vaadin-dialog', () => {
     await nextUpdate(dialog);
     await expect(dialog).to.equalA11yTreeSnapshot();
     await expect(dialog).to.be.accessible();
+  });
+
+  it('heading level', async () => {
+    dialog.headerTitle = 'Title';
+    dialog.headingLevel = 3;
+    // The snapshot lists the content of a dialog only when it has a focusable element.
+    dialog.footerRenderer = (root) => {
+      root.innerHTML = '<button>Close</button>';
+    };
+    await nextRender();
+    const snapshot = await a11ySnapshotOfElement(dialog);
+    const heading = findAccessibilityNode(snapshot, (node) => node.role === 'heading');
+    expect(heading).to.include({ name: 'Title', level: 3 });
   });
 
   it('modeless', async () => {
