@@ -20,7 +20,7 @@ describe('vaadin-dialog', () => {
     await expect(dialog).to.equalA11yTreeSnapshot();
     // Known issue: the dialog has no accessible name without `headerTitle`.
     // See https://github.com/vaadin/web-components/issues/13002
-    await expect(dialog).to.be.accessible({ ignoredRules: ['aria-dialog-name'] });
+    await expect(dialog).to.be.accessible({ expectedViolations: ['aria-dialog-name'] });
   });
 
   it('header title', async () => {
