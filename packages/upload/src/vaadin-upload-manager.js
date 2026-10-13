@@ -543,48 +543,46 @@ export class UploadManager extends EventTarget {
     };
 
     xhr.onload = xhr.onerror = () => {
-      if (xhr.readyState === 4) {
-        clearTimeout(stalledId);
-        file.indeterminate = file.uploading = false;
+      clearTimeout(stalledId);
+      file.indeterminate = file.uploading = false;
 
-        this.#activeUploads -= 1;
-        this._processUploadQueue();
-        this.#cleanupXhr(xhr);
+      this.#activeUploads -= 1;
+      this._processUploadQueue();
+      this.#cleanupXhr(xhr);
 
-        // Return early if already handled (abort or timeout)
-        if (file.abort || file.errorKey) {
-          return;
-        }
-        file.status = '';
-
-        const evt = this.dispatchEvent(
-          new CustomEvent('upload-response', {
-            detail: { file, xhr },
-            cancelable: true,
-          }),
-        );
-
-        if (!evt) {
-          return;
-        }
-        if (xhr.status === 0) {
-          file.errorKey = 'serverUnavailable';
-        } else if (xhr.status >= 500) {
-          file.errorKey = 'unexpectedServerError';
-        } else if (xhr.status === 413) {
-          file.errorKey = 'fileTooLarge';
-        } else if (xhr.status >= 400) {
-          file.errorKey = 'forbidden';
-        }
-
-        file.complete = !file.errorKey;
-        const eventName = file.errorKey ? 'upload-error' : 'upload-success';
-        this.dispatchEvent(new CustomEvent(eventName, { detail: { file, xhr } }));
-
-        this._clearFileXhr(file);
-
-        this.#notifyFilesChanged();
+      // Return early if already handled (abort or timeout)
+      if (file.abort || file.errorKey) {
+        return;
       }
+      file.status = '';
+
+      const evt = this.dispatchEvent(
+        new CustomEvent('upload-response', {
+          detail: { file, xhr },
+          cancelable: true,
+        }),
+      );
+
+      if (!evt) {
+        return;
+      }
+      if (xhr.status === 0) {
+        file.errorKey = 'serverUnavailable';
+      } else if (xhr.status >= 500) {
+        file.errorKey = 'unexpectedServerError';
+      } else if (xhr.status === 413) {
+        file.errorKey = 'fileTooLarge';
+      } else if (xhr.status >= 400) {
+        file.errorKey = 'forbidden';
+      }
+
+      file.complete = !file.errorKey;
+      const eventName = file.errorKey ? 'upload-error' : 'upload-success';
+      this.dispatchEvent(new CustomEvent(eventName, { detail: { file, xhr } }));
+
+      this._clearFileXhr(file);
+
+      this.#notifyFilesChanged();
     };
 
     const isRawUpload = this.uploadFormat === 'raw';
