@@ -96,6 +96,18 @@ describe('column', () => {
 
         expect(getContainerCell(grid.$.footer, 0, 0).style.width).to.eql('200px');
       });
+
+      ['null', 'undefined'].forEach((type) => {
+        it(`should restore default width when set to ${type}`, () => {
+          column.width = '200px';
+          column.width = type === 'null' ? null : undefined;
+          flushGrid(grid);
+
+          expect(column.width).to.equal('100px');
+          expect(getContainerCell(grid.$.items, 0, 0).style.width).to.equal('100px');
+          expect(getContainerCell(grid.$.header, 1, 0).style.width).to.equal('100px');
+        });
+      });
     });
 
     describe('text align', () => {
@@ -598,5 +610,31 @@ describe('column - simple grid', () => {
 
     expect(getBodyCellContent(grid, 0, 0).textContent.trim()).to.equal('foo0');
     expect(getBodyCellContent(grid, 1, 0).textContent.trim()).to.equal('foo1');
+  });
+
+  it('should render column tree once when adding an initially hidden column', () => {
+    const spy = sinon.spy(grid, '_renderColumnTree');
+    const newColumn = document.createElement('vaadin-grid-column');
+    newColumn.path = 'value';
+    newColumn.hidden = true;
+    grid.appendChild(newColumn);
+    flushGrid(grid);
+    expect(spy).to.be.calledOnce;
+
+    newColumn.hidden = false;
+    flushGrid(grid);
+    expect(getBodyCellContent(grid, 0, 1).textContent.trim()).to.equal('foo0');
+  });
+
+  it('should render column tree once when adding a group with only hidden columns', () => {
+    const spy = sinon.spy(grid, '_renderColumnTree');
+    const group = document.createElement('vaadin-grid-column-group');
+    const newColumn = document.createElement('vaadin-grid-column');
+    newColumn.hidden = true;
+    group.appendChild(newColumn);
+    grid.appendChild(group);
+    flushGrid(grid);
+    expect(group.hidden).to.be.true;
+    expect(spy).to.be.calledOnce;
   });
 });

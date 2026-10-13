@@ -21,7 +21,7 @@ body:
     id: reproduction
     attributes:
       label: Minimal reproducible example
-      description: "A code snippet with irrelevant parts and dependencies already removed, providing a concise representation of the issue. While demo projects are accepted, please keep them as minimal as possible to speed up the triaging process. Otherwise, processing of the issue could be severely prolonged."
+      description: "Code snippet - please **keep it short** and only include relevant parts."
       placeholder: "Example:\n```html\n<vaadin-button><vaadin-icon icon=\"vaadin:phone\"></vaadin-icon> Call<vaadin-button>\n<script>\n  document.querySelector(\"vaadin-button\").addEventListener(\"click\", () => console.log(\"Clicked\"));\n</script>\n```"
     validations:
       required: true
@@ -29,7 +29,7 @@ body:
     id: steps
     attributes:
       label: Steps to reproduce
-      description: Clear steps describing how to reproduce the issue with the reproduction provided above.
+      description: Clear steps describing how to reproduce the issue with the code above.
       placeholder: "Example:\n1. Add the snippet above to a HTML page\n2. Click icon in the button\n3. Notice how nothing is logged to the console"
     validations:
       required: true
@@ -37,7 +37,7 @@ body:
     id: environment
     attributes:
       label: Environment
-      description: Environment in which the issue reproduces. Feel free to add further information that might help with debugging the issue.
+      description: Environment and any information that might help with debugging.
       value: "Vaadin version(s): \nOS: "
     validations:
       required: true

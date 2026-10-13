@@ -130,6 +130,20 @@ describe('header/footer feature', () => {
         expect(dialog.hasAttribute('aria-label')).to.be.false;
       });
 
+      it('should update aria-level when headingLevel changes', async () => {
+        dialog.headerTitle = HEADER_TITLE;
+        dialog.headingLevel = 3;
+        dialog.opened = true;
+        await nextRender();
+
+        const title = dialog.querySelector('[slot=title]');
+        expect(title.getAttribute('aria-level')).to.equal('3');
+
+        dialog.headingLevel = null;
+        await nextUpdate(dialog);
+        expect(title.getAttribute('aria-level')).to.equal('1');
+      });
+
       it('should not overwrite the aria-label attribute when no header title is set', async () => {
         const ARIA_LABEL = '__ARIA_LABEL__';
         dialog.ariaLabel = ARIA_LABEL;

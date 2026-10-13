@@ -17,6 +17,9 @@ import type { ReactSimpleRendererProps } from './renderers/useSimpleRenderer.js'
 
 export * from './generated/Dialog.js';
 
+/**
+ * @deprecated Renderer props are deprecated and will be removed in Vaadin 26.
+ */
 export type DialogReactRendererProps = ReactSimpleRendererProps<DialogElement>;
 
 type OmittedDialogHTMLAttributes = Omit<
@@ -28,11 +31,24 @@ export type DialogProps = Partial<
   Omit<_DialogProps, 'children' | 'footerRenderer' | 'headerRenderer' | 'renderer' | keyof OmittedDialogHTMLAttributes>
 > &
   Readonly<{
+    /**
+     * The dialog content. Render-function children are deprecated and will be
+     * removed in Vaadin 26. Pass React nodes instead.
+     */
     children?: ReactNode | ComponentType<DialogReactRendererProps>;
     footer?: ReactNode;
+    /**
+     * @deprecated Use `footer` instead.
+     */
     footerRenderer?: ComponentType<DialogReactRendererProps> | null;
     header?: ReactNode;
+    /**
+     * @deprecated Use `header` instead.
+     */
     headerRenderer?: ComponentType<DialogReactRendererProps> | null;
+    /**
+     * @deprecated Use `children` instead.
+     */
     renderer?: ComponentType<DialogReactRendererProps> | null;
   }>;
 

@@ -1,65 +1,25 @@
-import { execSync } from 'node:child_process';
 import fs from 'node:fs';
 import os from 'node:os';
 import path from 'node:path';
+import { getElements, INTERNAL_PACKAGES, listPackages, packagesDir, readManifest, readPackageJson } from './lib/cem.js';
 
 const PLAIN_WEB_TYPES_FILE = 'web-types.json';
 const LIT_WEB_TYPES_FILE = 'web-types.lit.json';
 
 const API_DOCS_BASE_PATH = 'https://cdn.vaadin.com/vaadin-web-components';
 
-const blacklistedPackages = [
-  /^vaadin-/u,
-  /^a11y-base/u,
-  /^component-base/u,
-  /^field-base/u,
-  /^field-highlighter/u,
-  /^icons/u,
-  /^input-container/u,
-  /^lit-renderer/u,
-  /^overlay/u,
-  /^aura/u,
-  /^react-components/u,
-];
-
 /**
- * Get packages using lerna, excluding blacklisted packages
+ * Lists the packages with public custom elements, which get web-types.
+ * @return {{ dir: string, elements: object[] }[]}
  */
-function getRelevantPackages() {
-  const pathToLerna = path.normalize('./node_modules/.bin/lerna');
-  const output = execSync(`${pathToLerna} ls --json --loglevel silent`); // NOSONAR
-  const allPackages = JSON.parse(output.toString()).map((project) => project.name.replace('@vaadin/', ''));
-  return allPackages.filter((pkg) => !blacklistedPackages.some((blacklistedPackage) => pkg.match(blacklistedPackage)));
-}
-
-/**
- * Loads the custom-elements.json manifest for a specific package.
- * Returns null only when the manifest file does not exist; other failures
- * (e.g., corrupt JSON) are rethrown so they fail the build loudly.
- * @param {string} packageName - The package name (e.g., 'button')
- * @returns {object|null} - The manifest object, or null if not found
- */
-function loadCustomElementsManifest(packageName) {
-  const manifestPath = path.resolve(`./packages/${packageName}/custom-elements.json`);
-  try {
-    return JSON.parse(fs.readFileSync(manifestPath, 'utf8'));
-  } catch (error) {
-    if (error.code === 'ENOENT') {
-      return null;
-    }
-    throw error;
-  }
-}
-
-/**
- * Extracts custom element class declarations from a CEM manifest.
- * @param {object} manifest - The custom-elements.json manifest
- * @returns {object[]} - Array of element declarations with tagName
- */
-function getElementsFromManifest(manifest) {
-  return manifest.modules.flatMap((module) =>
-    (module.declarations || []).filter((decl) => decl.kind === 'class' && decl.tagName),
-  );
+function getWebTypesPackages() {
+  return listPackages()
+    .filter((dir) => !INTERNAL_PACKAGES.has(dir))
+    .map((dir) => {
+      const manifest = readManifest(dir);
+      return { dir, elements: manifest ? getElements(manifest) : [] };
+    })
+    .filter(({ elements }) => elements.length > 0);
 }
 
 /**
@@ -267,25 +227,16 @@ function createLitWebTypes(packageJson, packageElements) {
  * attribute syntax.
  */
 function buildWebTypes() {
-  const packages = getRelevantPackages();
+  getWebTypesPackages().forEach(({ dir, elements }) => {
+    const packageJson = readPackageJson(dir);
 
-  packages.forEach((packageName) => {
-    const manifest = loadCustomElementsManifest(packageName);
-    if (!manifest) {
-      console.warn(`No custom-elements.json found for package: ${packageName}`);
-      return;
-    }
-
-    const packageJson = JSON.parse(fs.readFileSync(`./packages/${packageName}/package.json`, 'utf8'));
-    const packageElements = getElementsFromManifest(manifest);
-
-    const plainWebTypes = createPlainWebTypes(packageJson, packageElements);
+    const plainWebTypes = createPlainWebTypes(packageJson, elements);
     const plainWebTypesJson = JSON.stringify(plainWebTypes, null, 2);
-    fs.writeFileSync(path.join('.', 'packages', packageName, PLAIN_WEB_TYPES_FILE), plainWebTypesJson, 'utf8');
+    fs.writeFileSync(path.join(packagesDir, dir, PLAIN_WEB_TYPES_FILE), plainWebTypesJson, 'utf8');
 
-    const litWebTypes = createLitWebTypes(packageJson, packageElements);
+    const litWebTypes = createLitWebTypes(packageJson, elements);
     const litWebTypesJson = JSON.stringify(litWebTypes, null, 2);
-    fs.writeFileSync(path.join('.', 'packages', packageName, LIT_WEB_TYPES_FILE), litWebTypesJson, 'utf8');
+    fs.writeFileSync(path.join(packagesDir, dir, LIT_WEB_TYPES_FILE), litWebTypesJson, 'utf8');
   });
 }
 
@@ -298,10 +249,8 @@ function buildWebTypes() {
  * command line.
  */
 function modifyPackageJson() {
-  const packages = getRelevantPackages();
-
-  packages.forEach((packageName) => {
-    const packageJson = JSON.parse(fs.readFileSync(`./packages/${packageName}/package.json`, 'utf8'));
+  getWebTypesPackages().forEach(({ dir }) => {
+    const packageJson = readPackageJson(dir);
     // Add web types definitions to published files
     if (!packageJson.files.includes(PLAIN_WEB_TYPES_FILE)) {
       packageJson.files.push(PLAIN_WEB_TYPES_FILE);
@@ -313,7 +262,7 @@ function modifyPackageJson() {
     packageJson['web-types'] = [PLAIN_WEB_TYPES_FILE, LIT_WEB_TYPES_FILE];
 
     const fileContent = JSON.stringify(packageJson, null, 2) + os.EOL;
-    fs.writeFileSync(`./packages/${packageName}/package.json`, fileContent, 'utf8');
+    fs.writeFileSync(path.join(packagesDir, dir, 'package.json'), fileContent, 'utf8');
   });
 }
 

@@ -20,13 +20,23 @@ import useMergedRefs from './utils/useMergedRefs.js';
 
 export * from './generated/Select.js';
 
+/**
+ * @deprecated The `renderer` prop is deprecated and will be removed in Vaadin 26.
+ */
 export type SelectReactRendererProps = ReactSimpleRendererProps<SelectElement>;
 
 type SelectRenderer = ComponentType<SelectReactRendererProps>;
 
 export type SelectProps = Partial<Omit<_SelectProps, 'children' | 'renderer'>> &
   Readonly<{
+    /**
+     * The select content. Render-function children are deprecated and will be
+     * removed in Vaadin 26. Use `items` or a `SelectListBox` child instead.
+     */
     children?: ReactNode | SelectRenderer | Array<ReactNode | SelectRenderer>;
+    /**
+     * @deprecated Use `items` or a `SelectListBox` child instead.
+     */
     renderer?: SelectRenderer | null;
   }>;
 

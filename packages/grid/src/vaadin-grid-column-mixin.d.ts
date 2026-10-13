@@ -121,6 +121,7 @@ export declare class GridColumnMixinClass<
 > extends ColumnBaseMixinClass<TItem, Column> {
   /**
    * Width of the cells for this column.
+   * Setting the property to `null` or `undefined` restores the default width.
    *
    * Please note that using the `em` length unit is discouraged as
    * it might lead to misalignment issues if the header, body, and footer

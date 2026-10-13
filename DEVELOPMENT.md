@@ -10,6 +10,7 @@ of steps to perform when creating a new major or minor version branch of the mon
   - [Visual tests](#visual-tests)
   - [Snapshot tests](#snapshot-tests)
   - [Integration tests](#integration-tests)
+  - [React components](#react-components)
 - [Making a version bump](#making-a-version-bump)
 - [Miscellaneous](#miscellaneous)
   - [Generating icons](#generating-icons)
@@ -57,6 +58,19 @@ Run TypeScript to check typings:
 
 ```sh
 yarn lint:types
+```
+
+The React packages are excluded from the root type check. Check them after `yarn build:react`:
+
+```sh
+yarn lint:types:react
+```
+
+Check that the meta packages are up to date:
+
+```sh
+yarn release:cem
+yarn release:meta --check
 ```
 
 ## Testing
@@ -187,6 +201,24 @@ Run integration tests that are in the separate `integration` folder:
 yarn test:it
 ```
 
+### React components
+
+The React wrappers live in `packages/react-components` and `packages/react-components-pro`.
+Their generated sources and build output are not committed, so build them once first:
+
+```sh
+yarn build:react
+```
+
+Then run the Vitest browser tests, or open the dev pages at `/dev/<name>.html`:
+
+```sh
+yarn test:react
+yarn start:react
+```
+
+See [react/README.md](react/README.md) for the generator, the build steps and how to add a dev page.
+
 ## Making a version bump
 
 Use the [`scripts/createVersionBranch.sh`](scripts/createVersionBranch.sh) script to bump versions:
@@ -243,6 +275,27 @@ The script requires:
 3. Update [`check-branches.js`](https://github.com/vaadin/components-team-tasks/blob/master/release-app/check-branches.js) in the release app to include the new version branch
 
 ## Miscellaneous
+
+### Meta packages
+
+`@vaadin/vaadin-core` and `@vaadin/vaadin` ship every component of the repository in a single
+package, the free ones and, in the case of `@vaadin/vaadin`, the commercial ones as well. A package
+belongs to `@vaadin/vaadin-core` when it is licensed under Apache-2.0 and to `@vaadin/vaadin` when
+it is not.
+
+Their dependencies and the imports of their entry point are generated from the workspace and its
+custom elements manifests, so a new component lands in them by running:
+
+```sh
+yarn release:cem
+yarn release:meta
+```
+
+`yarn release` regenerates them before publishing, so a published package always matches the
+repository, and `yarn release:meta --check` reports whether the committed files do as well.
+
+The packages that a meta package ships but this repository does not build, e.g. `@vaadin/router`,
+stay in its `package.json` with a version of their own, which is where to bump them.
 
 ### Generating icons
 
