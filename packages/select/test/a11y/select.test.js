@@ -54,7 +54,7 @@ describe('vaadin-select', () => {
     await expect(select).to.equalA11yTreeSnapshot();
     // Known issue: `aria-required` is set on the value button, but `role="button"` does not support it.
     // See https://github.com/vaadin/web-components/issues/7337
-    await expect(select).to.be.accessible({ ignoredRules: ['aria-allowed-attr'] });
+    await expect(select).to.be.accessible({ expectedViolations: ['aria-allowed-attr'] });
   });
 
   it('error', async () => {
@@ -71,7 +71,7 @@ describe('vaadin-select', () => {
     select.opened = true;
     await oneEvent(overlay, 'vaadin-overlay-open');
     await expect(select).to.equalA11yTreeSnapshot();
-    // The list box in the overlay has no accessible name.
-    await expect(select).to.be.accessible({ ignoredRules: ['aria-input-field-name'] });
+    // Known issue: the list box in the overlay has no accessible name.
+    await expect(select).to.be.accessible({ expectedViolations: ['aria-input-field-name'] });
   });
 });
