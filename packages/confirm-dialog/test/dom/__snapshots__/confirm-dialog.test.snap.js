@@ -14,7 +14,7 @@ snapshots["vaadin-confirm-dialog host"] =
 >
   Do you want to save or discard the changes?
   <h3
-    aria-level="3"
+    aria-level="1"
     slot="header"
   >
     Unsaved changes

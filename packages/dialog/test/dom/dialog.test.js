@@ -58,6 +58,19 @@ describe('vaadin-dialog', () => {
         await nextUpdate(dialog);
         await expect(dialog).dom.to.equalSnapshot(SNAPSHOT_CONFIG);
       });
+
+      it('modeless', async () => {
+        dialog.modeless = true;
+        await nextUpdate(dialog);
+        await expect(dialog).dom.to.equalSnapshot(SNAPSHOT_CONFIG);
+      });
+
+      it('modeless headingLevel', async () => {
+        dialog.modeless = true;
+        dialog.headingLevel = 3;
+        await nextUpdate(dialog);
+        await expect(dialog).dom.to.equalSnapshot(SNAPSHOT_CONFIG);
+      });
     });
   });
 
