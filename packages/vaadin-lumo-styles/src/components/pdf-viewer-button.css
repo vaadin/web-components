@@ -47,11 +47,11 @@
   }
 
   :host([icon='previous-match']) {
-    --_icon: var(--vaadin-pdf-viewer-icon-previous-page);
+    --_icon: var(--vaadin-pdf-viewer-icon-previous-match);
   }
 
   :host([icon='next-match']) {
-    --_icon: var(--vaadin-pdf-viewer-icon-next-page);
+    --_icon: var(--vaadin-pdf-viewer-icon-next-match);
   }
 
   :host([icon='sidebar']) {
@@ -85,6 +85,22 @@
     content: none;
   }
 
+  :host([icon='find']) {
+    --_icon: var(--vaadin-pdf-viewer-icon-find);
+  }
+
+  :host([icon$='-match']:dir(rtl)) [part='icon'] {
+    scale: -1 1;
+  }
+
+  :host([icon='close']) {
+    --_icon: var(--vaadin-pdf-viewer-icon-close);
+  }
+
+  :host([aria-pressed='true']) {
+    --vaadin-button-tertiary-background: var(--lumo-contrast-10pct);
+  }
+
   @media (forced-colors: active) {
     :host(:is([icon='print'], [icon='thumbnails'], [icon='outline'])) [part='icon'] {
       background: CanvasText;
@@ -97,6 +113,10 @@
     /* Font icons are colored by the text color, not by a background */
     :host([aria-pressed='true']) {
       color: HighlightText;
+      /* Lumo sets the background of tertiary buttons with !important */
+      --vaadin-button-tertiary-background: Highlight;
+      /* No backplate behind the glyph, which would hide it */
+      forced-color-adjust: none;
     }
 
     :host([aria-pressed='true']) [part='icon'] {
@@ -106,17 +126,5 @@
     :host([aria-pressed='true']:is([icon='print'], [icon='thumbnails'], [icon='outline'])) [part='icon'] {
       background: HighlightText;
     }
-  }
-
-  :host([icon='find']) {
-    --_icon: var(--vaadin-pdf-viewer-icon-find);
-  }
-
-  :host([icon='close']) {
-    --_icon: var(--vaadin-pdf-viewer-icon-close);
-  }
-
-  :host([aria-pressed='true']) {
-    --vaadin-button-tertiary-background: var(--lumo-contrast-10pct);
   }
 }

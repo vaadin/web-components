@@ -82,41 +82,8 @@ const pdfViewerBaseStyles = css`
     background: var(--vaadin-pdf-viewer-toolbar-background, var(--vaadin-background-color));
   }
 
-  [part='find-bar'] {
-    display: flex;
-    flex-wrap: wrap;
-    align-items: center;
-    justify-content: center;
-    gap: var(--vaadin-gap-xs);
-    padding: var(--vaadin-pdf-viewer-toolbar-padding, var(--vaadin-padding-xs));
-    border-block-end: 1px solid var(--vaadin-pdf-viewer-border-color, var(--vaadin-border-color-secondary));
-    background: var(--vaadin-pdf-viewer-toolbar-background, var(--vaadin-background-color));
-  }
-
-  [part='toolbar'][hidden],
-  [part='find-bar'][hidden] {
+  [part='toolbar'][hidden] {
     display: none;
-  }
-
-  .find-actions {
-    display: flex;
-    flex-wrap: wrap;
-    align-items: center;
-    justify-content: center;
-    max-width: 100%;
-    gap: var(--vaadin-gap-xs);
-  }
-
-  ::slotted(span[slot='find-actions']) {
-    min-width: 5em;
-    margin-inline: var(--vaadin-gap-s);
-    text-align: center;
-    white-space: nowrap;
-  }
-
-  ::slotted(vaadin-text-field) {
-    width: var(--vaadin-pdf-viewer-find-field-width, 14em);
-    max-width: 100%;
   }
 
   [part='toolbar-group'] {
@@ -153,9 +120,7 @@ const pdfViewerBaseStyles = css`
       column-gap: var(--vaadin-gap-l);
     }
 
-    [part='toolbar-group'],
-    [part='find-bar'],
-    .find-actions {
+    [part='toolbar-group'] {
       justify-content: flex-start;
     }
   }
@@ -467,6 +432,50 @@ const pdfViewerBaseStyles = css`
     min-height: 0;
   }
 
+  /* Over the top end of the pages, next to the scrollbar, like the find of browsers.
+     Below the sidebar that is shown over the pages in a narrow viewer. */
+  [part='find-bar'] {
+    --_inset: var(--vaadin-gap-s);
+    position: absolute;
+    top: var(--_inset);
+    inset-inline-end: calc(var(--_scrollbar-width, 0px) + var(--_inset));
+    z-index: 1;
+    display: flex;
+    flex-wrap: wrap;
+    align-items: center;
+    justify-content: flex-end;
+    gap: var(--vaadin-gap-xs);
+    box-sizing: border-box;
+    max-width: calc(100% - var(--_scrollbar-width, 0px) - 2 * var(--_inset));
+    padding: var(--vaadin-padding-xs);
+    border: 1px solid var(--vaadin-pdf-viewer-border-color, var(--vaadin-border-color-secondary));
+    border-radius: var(--vaadin-radius-m);
+    background: var(--vaadin-pdf-viewer-toolbar-background, var(--vaadin-background-color));
+    box-shadow: var(--vaadin-overlay-shadow, 0 8px 24px -4px rgba(0, 0, 0, 0.3));
+  }
+
+  [part='find-bar'][hidden] {
+    display: none;
+  }
+
+  /* The field gets smaller in a narrow viewer, and takes a row of its own when the buttons don't fit next to it */
+  ::slotted(vaadin-text-field[slot='find']) {
+    /* The width sizes the find bar, the smaller basis decides when the buttons wrap */
+    flex: 1 1 min(100%, 10em);
+    width: var(--vaadin-pdf-viewer-find-field-width, 16em);
+    min-width: min(100%, 10em);
+    margin-block: 0;
+    padding-block: 0;
+  }
+
+  /* The buttons stay together when they wrap below the field */
+  .find-actions {
+    display: flex;
+    flex: none;
+    align-items: center;
+    gap: var(--vaadin-gap-xs);
+  }
+
   /* Drawn over the pages, which would cover an outline of the scroll container itself */
   .content-focus-ring {
     position: absolute;
@@ -480,7 +489,9 @@ const pdfViewerBaseStyles = css`
     outline-offset: calc(var(--vaadin-focus-ring-width) * -1);
   }
 
+  /* Space above the first page while finding, for a match that the find bar would cover otherwise */
   #pages {
+    margin-block-start: var(--_find-space, 0);
     display: flex;
     flex-direction: column;
     /* Pages wider than the view start at the edge, so that they can be scrolled to both edges. */
@@ -621,7 +632,7 @@ const pdfViewerBaseStyles = css`
   /* Orange, like the current match of browser find, with an outline of at least 3:1 contrast */
   .find-match.current {
     background: var(--vaadin-pdf-viewer-current-match-background, #ff9632);
-    outline: 2px solid color-mix(in srgb, #ff9632, black 50%);
+    outline: 2px solid var(--vaadin-pdf-viewer-current-match-outline-color, color-mix(in srgb, #ff9632, black 50%));
   }
 
   @media (forced-colors: active) {

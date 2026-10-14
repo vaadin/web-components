@@ -39,6 +39,9 @@ const PAGE_SIZE_BATCH = 10;
 /** The named actions of internal links that the viewer supports. */
 const SUPPORTED_LINK_ACTIONS = ['FirstPage', 'LastPage', 'NextPage', 'PrevPage'];
 
+/** The duration of smooth scrolling in milliseconds, short so that moving between places stays fast. */
+const SMOOTH_SCROLL_DURATION = 150;
+
 /**
  * The index of the top coordinate in the explicit destinations that have one,
  * by destination type, e.g. `[page, { name: 'XYZ' }, left, top, zoom]`.
@@ -210,6 +213,8 @@ export const PdfViewerMixin = (superClass) =>
 
     #scrollFrame = 0;
 
+    #smoothScrollFrame = 0;
+
     /** @type {ResizeObserver | null} */
     #contentObserver = null;
 
@@ -277,6 +282,7 @@ export const PdfViewerMixin = (superClass) =>
       this.#contentObserver?.disconnect();
       cancelAnimationFrame(this.#scrollFrame);
       this.#scrollFrame = 0;
+      this.#cancelSmoothScroll();
 
       // Wait a microtask so that moving the element in the DOM does not reload the document.
       queueMicrotask(() => {
@@ -422,19 +428,69 @@ export const PdfViewerMixin = (superClass) =>
      * Scrolls the pages so that the given client rectangle is in the middle
      * of the view, unless it is well inside the view already.
      * @param {DOMRect} rect
+     * @param {{ topInset?: number, smooth?: boolean }} [options]
+     *   `topInset`: the height at the top of the view that is covered, e.g. by the find bar.
+     *   `smooth`: whether to scroll smoothly. Only short distances are scrolled smoothly.
      * @protected
      */
-    _scrollRectIntoView(rect) {
+    _scrollRectIntoView(rect, { topInset = 0, smooth = false } = {}) {
       const { content } = this.$;
       const view = content.getBoundingClientRect();
+      const top = view.top + Math.min(topInset, content.clientHeight / 2);
+      const height = view.top + content.clientHeight - top;
       // Also scroll when the rectangle is close to an edge, where it is easy to miss.
-      const margin = Math.min(64, content.clientHeight / 4);
-      if (rect.top < view.top + margin || rect.bottom > view.top + content.clientHeight - margin) {
-        content.scrollTop += rect.top + rect.height / 2 - (view.top + content.clientHeight / 2);
+      const margin = Math.min(64, height / 4);
+      let deltaY = 0;
+      let deltaX = 0;
+      if (rect.top < top + margin || rect.bottom > top + height - margin) {
+        deltaY = rect.top + rect.height / 2 - (top + height / 2);
       }
       if (rect.left < view.left || rect.right > view.left + content.clientWidth) {
-        content.scrollLeft += rect.left + rect.width / 2 - (view.left + content.clientWidth / 2);
+        deltaX = rect.left + rect.width / 2 - (view.left + content.clientWidth / 2);
       }
+      this.#scrollBy(deltaX, deltaY, smooth);
+    }
+
+    /**
+     * Scrolls the pages by the given distance, smoothly when asked and the
+     * distance is at most two views, so that the pages in between are not
+     * rendered on the way. Not smoothly when the user prefers reduced motion.
+     * @private
+     */
+    #scrollBy(deltaX, deltaY, smooth) {
+      const { content } = this.$;
+      this.#cancelSmoothScroll();
+      const isShort = Math.abs(deltaY) <= content.clientHeight * 2 && Math.abs(deltaX) <= content.clientWidth * 2;
+      if (!smooth || !isShort || document.hidden || matchMedia('(prefers-reduced-motion: reduce)').matches) {
+        content.scrollTop += deltaY;
+        content.scrollLeft += deltaX;
+        return;
+      }
+      const start = { time: 0, top: content.scrollTop, left: content.scrollLeft };
+      let last = { top: content.scrollTop, left: content.scrollLeft };
+      const step = (time) => {
+        // The time of the first frame, which can be before the time of the event that started scrolling
+        start.time ||= time;
+        // Stop when something else scrolled meanwhile, e.g. going to a page.
+        if (Math.abs(content.scrollTop - last.top) > 1 || Math.abs(content.scrollLeft - last.left) > 1) {
+          this.#smoothScrollFrame = 0;
+          return;
+        }
+        const progress = Math.min((time - start.time) / SMOOTH_SCROLL_DURATION, 1);
+        // Ease out, so that the scrolling starts fast and slows down at the end.
+        const eased = 1 - (1 - progress) ** 3;
+        content.scrollTop = start.top + deltaY * eased;
+        content.scrollLeft = start.left + deltaX * eased;
+        last = { top: content.scrollTop, left: content.scrollLeft };
+        this.#smoothScrollFrame = progress < 1 ? requestAnimationFrame(step) : 0;
+      };
+      this.#smoothScrollFrame = requestAnimationFrame(step);
+    }
+
+    /** @private */
+    #cancelSmoothScroll() {
+      cancelAnimationFrame(this.#smoothScrollFrame);
+      this.#smoothScrollFrame = 0;
     }
 
     /**
@@ -652,6 +708,7 @@ export const PdfViewerMixin = (superClass) =>
 
     /** @private */
     #unload() {
+      this.#cancelSmoothScroll();
       if (this.#document) {
         this._documentUnloaded();
       }
@@ -829,6 +886,7 @@ export const PdfViewerMixin = (superClass) =>
      */
     #restoreAnchor({ page, x, y, viewX, viewY, keepX, target }) {
       const { content } = this.$;
+      this.#cancelSmoothScroll();
       if (target) {
         // A given point of the view, e.g. between the fingers at the end of a pinch
         const rect = content.getBoundingClientRect();
@@ -882,6 +940,7 @@ export const PdfViewerMixin = (superClass) =>
             ? pageView.pdfPage.getViewport({ scale: this.#scale }).convertToViewportPoint(0, top)[1]
             : (pageView.unscaledHeight - top) * this.#scale;
         }
+        this.#cancelSmoothScroll();
         content.scrollTop = pageView.element.offsetTop + (top === undefined ? offset : Math.max(offset, 0));
         this.#scrolledPage = page;
       }

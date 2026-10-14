@@ -129,7 +129,7 @@ export interface PdfViewerEventMap extends HTMLElementEventMap, PdfViewerCustomE
  * `file-name`            | The name of the document above the toolbar, with the button that collapses the toolbar, see `fileNameVisible`.
  * `toolbar-group`        | A group of related controls in the toolbar: navigation, viewing options and actions.
  * `zoom-controls`        | The zoom select with the zoom out and zoom in buttons. Also has the `disabled` part name without a document.
- * `find-bar`             | The bar with the controls for finding text, below the toolbar.
+ * `find-bar`             | The panel with the controls for finding text, shown over the top end of the pages.
  * `sidebar`              | The sidebar next to the pages.
  * `thumbnails`           | The scrollable list of page thumbnails in the sidebar.
  * `thumbnail`            | A page thumbnail. Also has the `current` part name for the current page.
@@ -161,6 +161,7 @@ export interface PdfViewerEventMap extends HTMLElementEventMap, PdfViewerCustomE
  * | `--vaadin-pdf-viewer-border-color`                 |
  * | `--vaadin-pdf-viewer-border-radius`                |
  * | `--vaadin-pdf-viewer-current-match-background`     |
+ * | `--vaadin-pdf-viewer-current-match-outline-color`  |
  * | `--vaadin-pdf-viewer-error-color`                  |
  * | `--vaadin-pdf-viewer-find-field-width`             |
  * | `--vaadin-pdf-viewer-icon-close`                   |
@@ -168,8 +169,10 @@ export interface PdfViewerEventMap extends HTMLElementEventMap, PdfViewerCustomE
  * | `--vaadin-pdf-viewer-icon-download`                |
  * | `--vaadin-pdf-viewer-icon-expand-toolbar`          |
  * | `--vaadin-pdf-viewer-icon-find`                    |
+ * | `--vaadin-pdf-viewer-icon-next-match`              |
  * | `--vaadin-pdf-viewer-icon-next-page`               |
  * | `--vaadin-pdf-viewer-icon-outline`                 |
+ * | `--vaadin-pdf-viewer-icon-previous-match`          |
  * | `--vaadin-pdf-viewer-icon-previous-page`           |
  * | `--vaadin-pdf-viewer-icon-print`                   |
  * | `--vaadin-pdf-viewer-icon-sidebar`                 |
