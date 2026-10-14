@@ -6,6 +6,7 @@ import path from 'node:path';
 import { afterEach, beforeEach, test } from 'node:test';
 import { fileURLToPath } from 'node:url';
 import { parse } from 'yaml';
+import { COMMENT_MARKER } from '../lib/api-snapshot.js';
 
 const WORKFLOW = path.resolve(
   path.dirname(fileURLToPath(import.meta.url)),
@@ -92,9 +93,10 @@ async function run({ conclusion = 'success', headSha = HEAD_SHA, comments = [] }
 
 const posted = (calls) => calls.create.length + calls.update.length;
 
-test('the extracted script is not empty and contains the marker', () => {
-  assert.ok(script.trim().length > 0);
-  assert.ok(script.includes(`const marker = '${MARKER}';`));
+test('the extracted script uses the marker and the heading of the library', () => {
+  assert.equal(MARKER, COMMENT_MARKER);
+  assert.ok(script.includes(`const marker = '${COMMENT_MARKER}';`));
+  assert.ok(script.includes("'### Custom elements API'"));
 });
 
 test('the job condition rejects a cancelled run', () => {
@@ -106,16 +108,20 @@ test('the job condition rejects a cancelled run', () => {
   assert.equal(evaluate(event('success')), true);
   assert.equal(evaluate(event('failure')), true);
   assert.equal(evaluate(event('cancelled')), false);
+  // eslint-disable-next-line camelcase
+  assert.equal(evaluate({ event: { workflow_run: { event: 'push', conclusion: 'success' } } }), false);
   assert.deepEqual([...condition.matchAll(/conclusion == '(\w+)'/gu)].map((m) => m[1]).sort(), ['failure', 'success']);
 });
 
-test('an invalid pull request number fails and posts nothing', async () => {
-  writeReport({ ...reportFiles(), 'pr-number': 'abc\n' });
-  const calls = await run();
-  assert.equal(calls.failed.length, 1);
-  assert.equal(calls.get.length, 0);
-  assert.equal(posted(calls), 0);
-});
+for (const value of ['abc\n', '0\n', '-5\n', '']) {
+  test(`an invalid pull request number ${JSON.stringify(value)} fails and posts nothing`, async () => {
+    writeReport({ ...reportFiles(), 'pr-number': value });
+    const calls = await run();
+    assert.equal(calls.failed.length, 1);
+    assert.equal(calls.get.length, 0);
+    assert.equal(posted(calls), 0);
+  });
+}
 
 test('a head SHA mismatch posts nothing', async () => {
   writeReport(reportFiles());
@@ -171,6 +177,13 @@ test('a marker comment of another user is never updated', async () => {
   assert.equal(calls.create.length, 1);
 });
 
+test('a bot comment without the marker is left alone', async () => {
+  writeReport(reportFiles());
+  const calls = await run({ comments: [{ id: 7, user: BOT, body: 'Coverage report' }] });
+  assert.equal(calls.update.length, 0);
+  assert.equal(calls.create.length, 1);
+});
+
 test('a success with a body that lacks the marker posts nothing', async () => {
   writeReport(reportFiles({ body: 'Forged body without the marker' }));
   const calls = await run({ comments: [{ id: 7, user: BOT, body: `${MARKER}\nOld` }] });
@@ -178,8 +191,17 @@ test('a success with a body that lacks the marker posts nothing', async () => {
   assert.equal(posted(calls), 0);
 });
 
-test('a success with a body over the GitHub limit posts nothing', async () => {
-  writeReport(reportFiles({ body: `${MARKER}\n${'x'.repeat(65536)}` }));
+const bodyOfLength = (length) => `${MARKER}\n${'x'.repeat(length - MARKER.length - 1)}`;
+
+test('a body of exactly the GitHub limit is posted', async () => {
+  writeReport(reportFiles({ body: bodyOfLength(65536) }));
+  const calls = await run();
+  assert.equal(calls.failed.length, 0);
+  assert.equal(calls.create.length, 1);
+});
+
+test('a body over the GitHub limit posts nothing', async () => {
+  writeReport(reportFiles({ body: bodyOfLength(65537) }));
   const calls = await run();
   assert.equal(calls.failed.length, 1);
   assert.equal(posted(calls), 0);
@@ -191,11 +213,16 @@ test('a failure updates an existing comment to the outdated text', async () => {
   assert.equal(calls.update.length, 1);
   const { comment_id: id, body } = calls.update[0];
   assert.equal(id, 7);
-  assert.ok(body.startsWith(MARKER));
-  assert.ok(body.includes(HEAD_SHA));
-  assert.ok(body.includes(RUN_URL));
-  assert.ok(body.includes('outdated'));
-  assert.ok(!body.includes('Forged'));
+  assert.equal(
+    body,
+    [
+      MARKER,
+      '### Custom elements API',
+      '',
+      `The API report for ${HEAD_SHA} failed, see ${RUN_URL}. This comment is outdated.`,
+      '',
+    ].join('\n'),
+  );
   assert.equal(calls.create.length, 0);
 });
 

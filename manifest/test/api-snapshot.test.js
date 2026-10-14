@@ -97,6 +97,24 @@ describe('snapshotManifest', () => {
     );
   });
 
+  test('should join a multi-line type, syntax and default into one line', () => {
+    const snapshot = snapshotManifest(
+      manifestOf({
+        members: [{ kind: 'field', name: 'items', type: { text: 'Item[]\n  | undefined' } }],
+        cssProperties: [{ name: '--vaadin-x-gap', syntax: '<length>\n| <percentage>', default: '0\n  px' }],
+      }),
+    );
+    assert.deepEqual(snapshot.split('\n').slice(1, 3), [
+      '  property items: Item[] | undefined',
+      '  cssprop --vaadin-x-gap: <length> | <percentage> [default=0 px]',
+    ]);
+  });
+
+  test('should flag a deprecated element in its header', () => {
+    const snapshot = snapshotManifest(manifestOf({ deprecated: 'Use vaadin-y' }));
+    assert.equal(snapshot, 'vaadin-x (X) [deprecated]\n');
+  });
+
   test('should flag deprecated styling items', () => {
     const snapshot = snapshotManifest(
       manifestOf({
@@ -116,6 +134,34 @@ describe('snapshotManifest', () => {
 });
 
 describe('snapshotWebTypes', () => {
+  test('should render attributes and properties with a string or a list type', () => {
+    const snapshot = snapshotWebTypes([
+      {
+        contributions: {
+          html: {
+            elements: [
+              {
+                name: 'vaadin-x',
+                attributes: [{ name: 'disabled', value: { type: 'boolean' } }],
+                js: { properties: [{ name: 'items', value: { type: ['Item[]', 'undefined'] } }, { name: 'renderer' }] },
+              },
+            ],
+          },
+        },
+      },
+    ]);
+    assert.equal(
+      snapshot,
+      [
+        'vaadin-x',
+        '  attribute disabled: boolean',
+        '  property items: Item[] | undefined',
+        '  property renderer',
+        '',
+      ].join('\n'),
+    );
+  });
+
   test('should add part and cssprop lines from css', () => {
     const snapshot = snapshotWebTypes([
       {
@@ -285,7 +331,9 @@ describe('renderComment', () => {
 
   test('should render two collapsed sections with the counts', () => {
     const comment = renderComment(cem, webTypes, LABELS);
-    assert.ok(comment.startsWith(`${COMMENT_MARKER}\n### Custom elements API\n\nCompared #123 (\`abc1234567\`) with`));
+    assert.ok(
+      comment.startsWith(`${COMMENT_MARKER}\n### Custom elements API\n\nCompared ${LABELS.head} with ${LABELS.base}.`),
+    );
     assert.deepEqual(sections(comment), [
       [
         '<details><summary><b>custom-elements.json impact</b>: 1 added in 1 element</summary>',
@@ -333,6 +381,7 @@ describe('renderComment', () => {
       const [section] = sections(comment);
       const fenced = section.match(/```diff\n([\s\S]*)\n```/u)[1];
       assert.ok(fenced.length <= 60000);
+      assert.ok(fenced.length > 60000 - itemLine.length - 1, 'the cut is at most one line below the budget');
       assert.ok(
         fenced
           .split('\n')
@@ -355,6 +404,15 @@ describe('renderComment', () => {
           '</details>',
         ].join('\n'),
       );
+    });
+
+    test('should omit the web-types diff when less than 2000 characters remain', () => {
+      // 593 lines of 101 characters leave 89 characters, less than the 3 web-types lines need
+      const comment = renderComment({ diff: long(593), stats: longStats }, { diff: long(3), stats: longStats }, LABELS);
+      const [cemSection, section] = sections(comment);
+      assert.ok(cemSection.includes('```diff'));
+      assert.ok(section.includes('_Diff omitted, see the `cem-api-report` artifact._'));
+      assert.ok(!section.includes('```'));
     });
 
     test('should give the web-types diff the rest of the budget', () => {
