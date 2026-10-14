@@ -95,12 +95,11 @@ function getPublicWritableProperties(elementDeclaration) {
 }
 
 function createPlainElementDefinition(packageJson, elementDeclaration) {
-  const readonlyFields = new Set((elementDeclaration.members || []).filter((m) => m.readonly).map((m) => m.name));
-  // The manifest keeps only attributes with primitive types. Untyped ones come
-  // from `observedAttributes`, e.g. `class` on `<vaadin-icon>`, and are not listed.
+  // The manifest keeps only attributes with primitive types that are not
+  // read-only. Untyped ones come from `observedAttributes`, e.g. `class` on
+  // `<vaadin-icon>`, and are not listed.
   const attributes = (elementDeclaration.attributes || [])
     .filter((attribute) => attribute.type)
-    .filter((attribute) => !readonlyFields.has(attribute.fieldName))
     .sort((a, b) => a.name.localeCompare(b.name))
     .map((attribute) => ({
       name: attribute.name,
