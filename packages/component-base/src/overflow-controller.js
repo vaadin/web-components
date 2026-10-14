@@ -3,7 +3,7 @@
  * Copyright (c) 2021 - 2026 Vaadin Ltd.
  * This program is available under Apache License Version 2.0, available at https://vaadin.com/license/
  */
-import { setOrRemoveAttribute } from './dom-utils.js';
+import { deserializeAttributeValue, setOrRemoveAttribute } from './dom-utils.js';
 
 /**
  * A controller that detects if content inside the element overflows its scrolling viewport,
@@ -19,6 +19,15 @@ export class OverflowController {
 
   /** @type {number} */
   #resizeRaf;
+
+  /** @type {string | undefined} */
+  #previousOverflow;
+
+  /** @type {boolean} */
+  #changedBeforeResize = false;
+
+  /** @type {string | null} */
+  #unstableLayout = null;
 
   constructor(host, scrollTarget) {
     /**
@@ -101,8 +110,22 @@ export class OverflowController {
     const state = this.#readState();
     if (sync) {
       this.#writeState(state);
-    } else {
-      this.#resizeRaf = requestAnimationFrame(() => this.#writeState(state));
+      return;
+    }
+
+    // A first resize after a change that reverts the change can be caused by the attribute
+    // itself, when styles that depend on it change the size of the content
+    const reverted = this.#changedBeforeResize && state.overflow === this.#previousOverflow;
+    this.#changedBeforeResize = false;
+
+    if (this.#unstableLayout === null || this.#readLayout() !== this.#unstableLayout) {
+      this.#resizeRaf = requestAnimationFrame(() => {
+        if (reverted) {
+          this.#writeVerifiedState();
+        } else {
+          this.#writeState(state);
+        }
+      });
     }
   }
 
@@ -131,7 +154,41 @@ export class OverflowController {
     return { overflow: overflow.trim() };
   }
 
+  #readLayout() {
+    const { scrollTop, scrollHeight, clientHeight, scrollLeft, scrollWidth, clientWidth } = this.scrollTarget;
+    return [scrollTop, scrollHeight, clientHeight, scrollLeft, scrollWidth, clientWidth].join();
+  }
+
   #writeState({ overflow }) {
-    setOrRemoveAttribute(this.host, 'overflow', overflow);
+    const current = this.host.getAttribute('overflow') || '';
+    if (overflow !== current) {
+      this.#previousOverflow = current;
+      this.#changedBeforeResize = true;
+      this.#unstableLayout = null;
+      setOrRemoveAttribute(this.host, 'overflow', overflow);
+    }
+  }
+
+  #writeVerifiedState() {
+    let { overflow } = this.#readState();
+    this.#writeState({ overflow });
+
+    let after = this.#readState();
+    if (after.overflow === overflow) {
+      return;
+    }
+
+    // The new state changed the layout so that the state no longer matches it. Writing the
+    // state again would start an endless loop. Keep the state with more overflow values, as
+    // its styles usually hide a border, so the content fits without a scrollbar. Then keep
+    // the state until the layout changes for another reason.
+    if (deserializeAttributeValue(after.overflow).size > deserializeAttributeValue(overflow).size) {
+      overflow = after.overflow;
+      this.#writeState({ overflow });
+      after = this.#readState();
+    }
+    if (after.overflow !== overflow) {
+      this.#unstableLayout = this.#readLayout();
+    }
   }
 }

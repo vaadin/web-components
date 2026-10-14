@@ -234,6 +234,74 @@ describe('OverflowController', () => {
     });
   });
 
+  describe('layout depends on overflow', () => {
+    const dependentTag = defineLit(
+      'overflow-dependent',
+      `
+        <style>
+          :host {
+            display: block;
+            overflow: auto;
+            height: 80px;
+          }
+
+          ::slotted(*) {
+            height: 40px;
+          }
+
+          /* Content is 1px too tall without overflow, and fits with overflow */
+          :host(:not([overflow])) ::slotted(:last-child) {
+            height: 41px;
+          }
+        </style>
+        <slot></slot>
+      `,
+      (Base) => class extends PolylitMixin(Base) {},
+    );
+
+    const nextFrames = async (count) => {
+      for (let i = 0; i < count; i++) {
+        await nextFrame();
+      }
+    };
+
+    let element;
+
+    beforeEach(async () => {
+      element = fixtureSync(`
+        <${dependentTag}>
+          <div>1</div>
+          <div>2</div>
+        </${dependentTag}>
+      `);
+      await nextFrame();
+      element.addController(new OverflowController(element));
+      await nextFrames(5);
+    });
+
+    it('should not toggle overflow endlessly when the state changes the content size', async () => {
+      let mutations = 0;
+      const observer = new MutationObserver(() => {
+        mutations += 1;
+      });
+      observer.observe(element, { attributes: true, attributeFilter: ['overflow'] });
+      await nextFrames(10);
+      observer.disconnect();
+      expect(mutations).to.equal(0);
+    });
+
+    it('should keep the state with overflow when the state changes the content size', () => {
+      expect(element.getAttribute('overflow')).to.equal('bottom');
+    });
+
+    it('should update overflow when the layout changes for another reason', async () => {
+      element.style.height = '200px';
+      await nextResize(element);
+      await nextFrame();
+      expect(element.hasAttribute('overflow')).to.be.false;
+    });
+  });
+
   describe('scroll target', () => {
     let element, scroller, items, controller;
 
