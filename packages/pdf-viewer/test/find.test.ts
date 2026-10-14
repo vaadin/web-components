@@ -1,5 +1,5 @@
 import { expect } from '@vaadin/chai-plugins';
-import { sendKeys } from '@vaadin/test-runner-commands';
+import { emulateMedia, sendKeys } from '@vaadin/test-runner-commands';
 import { fixtureSync, nextFrame, nextRender, nextUpdate } from '@vaadin/testing-helpers';
 import sinon from 'sinon';
 import './enable-feature-flag.js';
@@ -73,7 +73,7 @@ describe('find', () => {
     }
 
     function getResultText() {
-      return viewer.querySelector('span[slot="find-actions"]')!.textContent!.trim();
+      return viewer.querySelector('vaadin-text-field[slot="find"] > span[slot="suffix"]')!.textContent!.trim();
     }
 
     function getMatches(pageNumber?: number) {
@@ -93,6 +93,20 @@ describe('find', () => {
         await nextFrame();
       }
       await nextFrame();
+    }
+
+    async function waitForScrollEnd() {
+      const content = viewer.shadowRoot!.querySelector<HTMLElement>('[part="content"]')!;
+      // Longer than smooth scrolling takes, and then until the position stays the same
+      await new Promise((resolve) => {
+        setTimeout(resolve, 200);
+      });
+      let top = -1;
+      for (let i = 0; i < 50 && top !== content.scrollTop; i++) {
+        top = content.scrollTop;
+        await nextFrame();
+        await nextFrame();
+      }
     }
 
     async function search(query: string) {
@@ -153,6 +167,30 @@ describe('find', () => {
       expect(document.activeElement).to.equal(getFindField().inputElement);
     });
 
+    it('should show the find bar over the pages without moving them', async () => {
+      const content = viewer.shadowRoot!.querySelector<HTMLElement>('[part="content"]')!;
+      const before = content.getBoundingClientRect();
+      getButton('find').click();
+      await nextRender();
+      const after = content.getBoundingClientRect();
+      expect(after.top).to.equal(before.top);
+      expect(after.height).to.equal(before.height);
+      const findBar = getFindBar().getBoundingClientRect();
+      expect(findBar.top).to.be.at.least(after.top);
+      expect(findBar.right).to.be.at.most(after.right);
+    });
+
+    it('should leave Ctrl+G to the browser while the find bar is closed', async () => {
+      const spy = sinon.spy();
+      const onKeyDown = (event: KeyboardEvent) => spy(event.defaultPrevented);
+      document.addEventListener('keydown', onKeyDown);
+      viewer.shadowRoot!.querySelector<HTMLElement>('[part="content"]')!.focus();
+      await sendKeys({ press: 'Control+KeyG' });
+      document.removeEventListener('keydown', onKeyDown);
+      // The keydown of G, after the one of Control
+      expect(spy.lastCall.args[0]).to.be.false;
+    });
+
     describe('opened', () => {
       beforeEach(async () => {
         getButton('find').click();
@@ -194,7 +232,7 @@ describe('find', () => {
         getButton('next-match').click();
         getButton('next-match').click();
         await nextRenderIdle(viewer);
-        await nextFrame();
+        await waitForScrollEnd();
         expect(viewer.page).to.equal(3);
         expect(getResultText()).to.equal('3 of 5');
         const current = getCurrentMatch()!.getBoundingClientRect();
@@ -217,6 +255,119 @@ describe('find', () => {
         await sendKeys({ press: 'Enter' });
         await nextFrame();
         expect(getResultText()).to.equal('2 of 5');
+      });
+
+      it('should show the result in the find field', async () => {
+        await search('quick brown fox');
+        const suffix = getFindField().querySelector('[slot="suffix"]')!;
+        expect(suffix.textContent!.trim()).to.equal('1 of 6');
+      });
+
+      it('should not change the layout of the find bar when the result appears', async () => {
+        const elements = [getFindBar(), getFindField(), getButton('next-match')];
+        const before = elements.map((element) => element.getBoundingClientRect().toJSON());
+        await search('quick');
+        const after = elements.map((element) => element.getBoundingClientRect().toJSON());
+        expect(after).to.deep.equal(before);
+      });
+
+      it('should go to the next match with Ctrl+G and to the previous one with Shift+Ctrl+G', async () => {
+        await search('unique word');
+        getFindField().focus();
+        await sendKeys({ press: 'Control+KeyG' });
+        await nextFrame();
+        expect(getResultText()).to.equal('2 of 5');
+        await sendKeys({ press: 'Shift+Control+KeyG' });
+        await nextFrame();
+        expect(getResultText()).to.equal('1 of 5');
+      });
+
+      it('should go to the next match with F3 on the pages', async () => {
+        await search('unique word');
+        viewer.shadowRoot!.querySelector<HTMLElement>('[part="content"]')!.focus();
+        await sendKeys({ press: 'F3' });
+        await nextFrame();
+        expect(getResultText()).to.equal('2 of 5');
+      });
+
+      describe('scrolling', () => {
+        let content: HTMLElement;
+
+        beforeEach(() => {
+          content = viewer.shadowRoot!.querySelector<HTMLElement>('[part="content"]')!;
+        });
+
+        afterEach(async () => {
+          await emulateMedia({ reducedMotion: 'no-preference' });
+        });
+
+        it('should scroll smoothly to a match on a rendered page', async () => {
+          await search('marker');
+          await waitForScrollEnd();
+          const start = content.scrollTop;
+          const positions: number[] = [];
+          const onScroll = () => positions.push(content.scrollTop);
+          content.addEventListener('scroll', onScroll);
+          getButton('next-match').click();
+          await waitForScrollEnd();
+          content.removeEventListener('scroll', onScroll);
+          const end = content.scrollTop;
+          expect(end).to.be.greaterThan(start);
+          // At least one position on the way
+          expect(positions.some((top) => top > start && top < end)).to.be.true;
+        });
+
+        it('should not scroll smoothly when reduced motion is preferred', async () => {
+          await emulateMedia({ reducedMotion: 'reduce' });
+          await search('marker');
+          await waitForScrollEnd();
+          getButton('next-match').click();
+          await nextFrame();
+          const top = content.scrollTop;
+          await waitForScrollEnd();
+          expect(content.scrollTop).to.equal(top);
+        });
+
+        it('should add space above the pages for a match at the top of the first page', async () => {
+          // The heading "Page 1" is under the find bar at the top of the pages
+          viewer.style.setProperty('--vaadin-pdf-viewer-padding', '0px');
+          viewer.zoom = 0.3;
+          await nextRenderIdle(viewer);
+          await search('page');
+          await waitForScrollEnd();
+          expect(getCurrentMatch()!.getBoundingClientRect().top).to.be.at.least(
+            getFindBar().getBoundingClientRect().bottom,
+          );
+        });
+
+        it('should remove the space above the pages when the find bar closes', async () => {
+          viewer.style.width = '340px';
+          await nextRender();
+          await search('page');
+          await waitForScrollEnd();
+          const page = viewer.shadowRoot!.querySelector('[part~="page"]')!;
+          const top = page.getBoundingClientRect().top;
+          getButton('close').click();
+          await nextFrame();
+          expect(page.getBoundingClientRect().top).to.be.lessThan(top);
+        });
+
+        it('should keep the current match out from under the find bar', async () => {
+          // A low viewer, so that the margin at the edges of the view is smaller than the find bar
+          viewer.style.height = '220px';
+          await search('marker');
+          await waitForScrollEnd();
+          // Place the next match where the find bar covers it, but outside the margin of the view without the find bar.
+          const findBar = getFindBar().getBoundingClientRect();
+          const next = getMatches(2)[0].getBoundingClientRect();
+          content.scrollTop += next.top - (findBar.bottom - next.height / 2);
+          await nextFrame();
+          getButton('next-match').click();
+          await waitForScrollEnd();
+          expect(getCurrentMatch()!.getBoundingClientRect().top).to.be.at.least(
+            getFindBar().getBoundingClientRect().bottom,
+          );
+        });
       });
 
       it('should update the highlights when zooming', async () => {
@@ -284,8 +435,7 @@ describe('find', () => {
         field.inputElement.dispatchEvent(new Event('input', { bubbles: true, composed: true }));
         await nextUpdate(viewer);
         // The search has not gone through all pages yet
-        const result = viewer.querySelector<HTMLElement>('span[slot="find-actions"]')!;
-        expect(result.hidden).to.be.true;
+        expect(getResultText()).to.equal('');
       });
 
       it('should keep the highlights over the text right after zooming', async () => {

@@ -1116,6 +1116,13 @@ snapshots["vaadin-pdf-viewer find bar host"] =
     placeholder="Find in document"
     slot="find"
   >
+    <span
+      aria-hidden="true"
+      dir="auto"
+      slot="suffix"
+      style="white-space: nowrap"
+    >
+    </span>
     <label
       for="input-vaadin-text-field-24"
       id="label-vaadin-text-field-18"
@@ -1136,13 +1143,6 @@ snapshots["vaadin-pdf-viewer find bar host"] =
       type="text"
     >
   </vaadin-text-field>
-  <span
-    aria-hidden="true"
-    dir="auto"
-    hidden=""
-    slot="find-actions"
-  >
-  </span>
   <vaadin-pdf-viewer-button
     aria-disabled="true"
     aria-label="Previous match"
@@ -1268,19 +1268,6 @@ snapshots["vaadin-pdf-viewer shadow default"] =
       </slot>
     </div>
   </div>
-  <div
-    aria-label="Find in document"
-    hidden=""
-    part="find-bar"
-    role="search"
-  >
-    <slot name="find">
-    </slot>
-    <div class="find-actions">
-      <slot name="find-actions">
-      </slot>
-    </div>
-  </div>
 </div>
 <div part="loader">
 </div>
@@ -1314,7 +1301,23 @@ snapshots["vaadin-pdf-viewer shadow default"] =
     >
     </div>
   </div>
-  <div class="content-area">
+  <div
+    class="content-area"
+    style="--_scrollbar-width: 0px;"
+  >
+    <div
+      aria-label="Find in document"
+      hidden=""
+      part="find-bar"
+      role="search"
+    >
+      <slot name="find">
+      </slot>
+      <div class="find-actions">
+        <slot name="find-actions">
+        </slot>
+      </div>
+    </div>
     <div
       aria-busy="false"
       aria-label="Pages"
@@ -1400,19 +1403,6 @@ snapshots["vaadin-pdf-viewer shadow document"] =
       </slot>
     </div>
   </div>
-  <div
-    aria-label="Find in document"
-    hidden=""
-    part="find-bar"
-    role="search"
-  >
-    <slot name="find">
-    </slot>
-    <div class="find-actions">
-      <slot name="find-actions">
-      </slot>
-    </div>
-  </div>
 </div>
 <div part="loader">
 </div>
@@ -1447,6 +1437,19 @@ snapshots["vaadin-pdf-viewer shadow document"] =
     </div>
   </div>
   <div class="content-area">
+    <div
+      aria-label="Find in document"
+      hidden=""
+      part="find-bar"
+      role="search"
+    >
+      <slot name="find">
+      </slot>
+      <div class="find-actions">
+        <slot name="find-actions">
+        </slot>
+      </div>
+    </div>
     <div
       aria-busy="false"
       aria-label="Pages"
@@ -1658,19 +1661,6 @@ snapshots["vaadin-pdf-viewer shadow error"] =
       </slot>
     </div>
   </div>
-  <div
-    aria-label="Find in document"
-    hidden=""
-    part="find-bar"
-    role="search"
-  >
-    <slot name="find">
-    </slot>
-    <div class="find-actions">
-      <slot name="find-actions">
-      </slot>
-    </div>
-  </div>
 </div>
 <div part="loader">
 </div>
@@ -1704,7 +1694,23 @@ snapshots["vaadin-pdf-viewer shadow error"] =
     >
     </div>
   </div>
-  <div class="content-area">
+  <div
+    class="content-area"
+    style="--_scrollbar-width: 0px;"
+  >
+    <div
+      aria-label="Find in document"
+      hidden=""
+      part="find-bar"
+      role="search"
+    >
+      <slot name="find">
+      </slot>
+      <div class="find-actions">
+        <slot name="find-actions">
+        </slot>
+      </div>
+    </div>
     <div
       aria-busy="false"
       aria-label="Pages"

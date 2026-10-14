@@ -695,9 +695,9 @@ describe('toolbar', () => {
       await idle;
       getButton('find').click();
       await nextRender();
-      // Show the result next to the find buttons
+      // Show the result in the find field
       await sendKeys({ type: 'quick' });
-      const result = viewer.querySelector('span[slot="find-actions"]')!;
+      const result = viewer.querySelector('vaadin-text-field[slot="find"] > span[slot="suffix"]')!;
       for (let i = 0; i < 50 && !result.textContent!.trim(); i++) {
         await nextFrame();
       }
@@ -724,10 +724,11 @@ describe('toolbar', () => {
     });
 
     it('should scroll each control into view when focused with the keyboard', async () => {
-      // The toolbar and the find bar, also before they had a container of their own
+      // The toolbar, also before it had a container of its own
       const header =
         viewer.shadowRoot!.querySelector<HTMLElement>('.header') ??
         viewer.shadowRoot!.querySelector<HTMLElement>('[part="toolbar"]')!.parentElement!;
+      const findBar = viewer.shadowRoot!.querySelector<HTMLElement>('[part="find-bar"]')!;
       // Go backwards from the find field, which has focus, through all toolbar controls.
       const visited = new Set<Element>();
       for (let i = 0; i < 20; i++) {
@@ -739,8 +740,8 @@ describe('toolbar', () => {
         visited.add(control);
         // The focused element, i.e. the input of a field, which the browser scrolls into view
         const rect = active.getBoundingClientRect();
-        // Visible in the header, which is inside the viewer
-        const headerRect = header.getBoundingClientRect();
+        // Visible in the header or the find bar, which are inside the viewer
+        const headerRect = (findBar.contains(control.assignedSlot) ? findBar : header).getBoundingClientRect();
         const viewerRect = viewer.getBoundingClientRect();
         const top = Math.max(headerRect.top, viewerRect.top);
         const bottom = Math.min(headerRect.bottom, viewerRect.bottom);

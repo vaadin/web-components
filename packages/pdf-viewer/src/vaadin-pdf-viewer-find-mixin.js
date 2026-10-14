@@ -17,6 +17,9 @@ import { createPageText, findInText, getMatchParts, normalizeText } from './pdf-
 /** The number of pages whose text is loaded at a time when searching. */
 const SEARCH_BATCH = 10;
 
+/** The space between the find bar and a match that would be under it otherwise, in pixels. */
+const FIND_SPACE_GAP = 8;
+
 /** The delay of announcing the result while typing, so that not every keystroke is announced. */
 const ANNOUNCE_DELAY = 500;
 
@@ -83,8 +86,11 @@ export const PdfViewerFindMixin = (superClass) =>
     /** Incremented on every search, to drop results of an outdated search. */
     #searchId = 0;
 
-    /** Whether to scroll to the current match once its page is rendered. */
-    #scrollToMatchPending = false;
+    /**
+     * Set when to scroll to the current match once it is highlighted, and whether to scroll smoothly.
+     * @type {{ smooth: boolean } | null}
+     */
+    #scrollToMatchPending = null;
 
     /** @type {HTMLElement | null} */
     #returnFocus = null;
@@ -94,11 +100,16 @@ export const PdfViewerFindMixin = (superClass) =>
 
     #lastAnnouncement = '';
 
+    /** The space above the pages for a match that the find bar would cover otherwise. */
+    #findSpace = 0;
+
     /** The current match when the find bar was closed, to continue from it when reopened. */
     #closedMatchIndex = -1;
 
     /**
-     * Override method from `LitElement` to open the find bar with Ctrl+F or Cmd+F.
+     * Override method from `LitElement` to add the keyboard shortcuts of
+     * browser find: Ctrl+F or Cmd+F opens the find bar, and while it is open,
+     * Ctrl+G or Cmd+G and F3 go to the next match, with Shift to the previous one.
      * @protected
      * @override
      */
@@ -106,13 +117,17 @@ export const PdfViewerFindMixin = (superClass) =>
       super.firstUpdated();
 
       this.addEventListener('keydown', (event) => {
-        const isShortcut = (event.ctrlKey || event.metaKey) && !event.altKey && !event.shiftKey;
+        const isShortcut = (event.ctrlKey || event.metaKey) && !event.altKey;
         // The key code is for keyboard layouts without Latin letters.
         const isLatinLetter = /^[a-z]$/iu.test(event.key);
-        const isF = event.key.toLowerCase() === 'f' || (!isLatinLetter && event.code === 'KeyF');
-        if (isShortcut && isF && this.pageCount > 0) {
+        const isKey = (letter) =>
+          event.key.toLowerCase() === letter || (!isLatinLetter && event.code === `Key${letter.toUpperCase()}`);
+        if (isShortcut && !event.shiftKey && isKey('f') && this.pageCount > 0) {
           event.preventDefault();
           this._openFind(); // NOSONAR
+        } else if (this.__findOpened && ((isShortcut && isKey('g')) || event.key === 'F3')) {
+          event.preventDefault();
+          this._findNext(event.shiftKey ? -1 : 1);
         }
       });
     }
@@ -168,6 +183,7 @@ export const PdfViewerFindMixin = (superClass) =>
         return;
       }
       this.__findOpened = false;
+      this.#setFindSpace(0);
       this.#closedMatchIndex = this.__findCurrentIndex;
       const matchSelection = this.#getCurrentMatchRange();
       this.#resetSearch();
@@ -258,6 +274,19 @@ export const PdfViewerFindMixin = (superClass) =>
     }
 
     /**
+     * Override method from `PdfViewerMixin` to keep the find bar next to the
+     * scrollbar of the pages.
+     * @protected
+     * @override
+     */
+    _onResize() {
+      super._onResize();
+      const { content } = this.$;
+      const scrollbarWidth = content.offsetWidth - content.clientWidth;
+      this.shadowRoot.querySelector('.content-area').style.setProperty('--_scrollbar-width', `${scrollbarWidth}px`);
+    }
+
+    /**
      * Override method from `PdfViewerMixin` to highlight the matches on a
      * page once it is rendered.
      * @protected
@@ -279,6 +308,7 @@ export const PdfViewerFindMixin = (superClass) =>
       this.#pageTexts.clear();
       this.#loadedPageTexts.clear();
       this.#resetSearch();
+      this.#setFindSpace(0);
     }
 
     /**
@@ -291,7 +321,7 @@ export const PdfViewerFindMixin = (superClass) =>
       this.__findMatchCount = 0;
       this.__findCurrentIndex = -1;
       this.__findSearching = false;
-      this.#scrollToMatchPending = false;
+      this.#scrollToMatchPending = null;
       this.#announceDebouncer?.cancel();
     }
 
@@ -405,16 +435,42 @@ export const PdfViewerFindMixin = (superClass) =>
         { delayed },
       );
 
+      // Scroll to the match once it is highlighted: smoothly when its page is
+      // rendered, or after going to the page when it is not.
+      const page = this._getPageView(match.pageIndex + 1);
+      const isRendered = Boolean(page && page.textLayer);
+      this.#scrollToMatchPending = { smooth: isRendered };
       this.#highlightPages(previousMatch ? [previousMatch, match] : [match]);
-      const currentElement = this.#getCurrentMatchElement();
-      if (currentElement) {
-        this.#scrollToMatchPending = false;
-        this._scrollRectIntoView(currentElement.getBoundingClientRect());
-      } else {
-        // Scroll to the page, and to the match once the page is rendered.
-        this.#scrollToMatchPending = true;
+      if (!isRendered) {
         this.page = match.pageIndex + 1;
       }
+    }
+
+    /**
+     * Scrolls the pages so that the match is not covered by the find bar.
+     * @private
+     */
+    #scrollToMatch(element, { smooth }) {
+      const { content } = this.$;
+      const findBar = this.shadowRoot.querySelector('[part="find-bar"]');
+      const contentTop = content.getBoundingClientRect().top;
+      const topInset = this.__findOpened ? Math.max(findBar.getBoundingClientRect().bottom - contentTop, 0) : 0;
+
+      // A match at the top of the first page cannot be scrolled out from under
+      // the find bar. Add space above the pages for it, until the find bar closes.
+      const matchTop = element.getBoundingClientRect().top - contentTop + content.scrollTop - this.#findSpace;
+      const space = Math.ceil(topInset + FIND_SPACE_GAP - matchTop);
+      if (topInset && space > this.#findSpace) {
+        this.#setFindSpace(space);
+      }
+
+      this._scrollRectIntoView(element.getBoundingClientRect(), { topInset, smooth });
+    }
+
+    /** @private */
+    #setFindSpace(space) {
+      this.#findSpace = space;
+      this.$.content.style.setProperty('--_find-space', `${space}px`);
     }
 
     /** @private */
@@ -494,11 +550,12 @@ export const PdfViewerFindMixin = (superClass) =>
       // Below the text layer, so that the text stays selectable.
       page.textLayerElement.before(layer);
 
-      if (this.#scrollToMatchPending && currentMatch && currentMatch.pageIndex === pageIndex) {
-        this.#scrollToMatchPending = false;
+      const scrollToMatch = this.#scrollToMatchPending;
+      if (scrollToMatch && currentMatch && currentMatch.pageIndex === pageIndex) {
+        this.#scrollToMatchPending = null;
         const currentElement = this.#getCurrentMatchElement();
         if (currentElement) {
-          this._scrollRectIntoView(currentElement.getBoundingClientRect());
+          this.#scrollToMatch(currentElement, scrollToMatch);
         }
       }
     }

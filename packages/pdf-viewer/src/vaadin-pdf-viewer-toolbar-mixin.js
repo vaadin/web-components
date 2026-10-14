@@ -370,8 +370,9 @@ export const PdfViewerToolbarMixin = (superClass) =>
           @input="${this.#onFindInput}"
           @change="${this.#stopEvent}"
           @keydown="${this.#onFindKeyDown}"
-        ></vaadin-text-field>
-        <span slot="find-actions" dir="auto" aria-hidden="true" ?hidden="${!result}">${result}</span>
+        >
+          <span slot="suffix" dir="auto" aria-hidden="true" style="white-space: nowrap">${result}</span>
+        </vaadin-text-field>
         <vaadin-pdf-viewer-button
           slot="find-actions"
           icon="previous-match"

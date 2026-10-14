@@ -40,12 +40,20 @@ export const pdfViewerButtonStyles = css`
     --_icon: var(--vaadin-pdf-viewer-icon-zoom-in, var(--_vaadin-icon-plus));
   }
 
+  /* Left and right, as up and down are for the pages */
   :host([icon='previous-match']) {
-    --_icon: var(--vaadin-pdf-viewer-icon-previous-page, var(--_vaadin-icon-chevron-up));
+    --_icon: var(
+      --vaadin-pdf-viewer-icon-previous-match,
+      url('data:image/svg+xml;utf8,<svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><path d="m15 18-6-6 6-6"/></svg>')
+    );
   }
 
   :host([icon='next-match']) {
-    --_icon: var(--vaadin-pdf-viewer-icon-next-page, var(--_vaadin-icon-chevron-down));
+    --_icon: var(--vaadin-pdf-viewer-icon-next-match, var(--_vaadin-icon-chevron-right));
+  }
+
+  :host([icon$='-match']:dir(rtl)) [part='icon'] {
+    scale: -1 1;
   }
 
   :host([icon='collapse-toolbar']) {
