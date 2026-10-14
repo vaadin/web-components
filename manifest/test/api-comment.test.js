@@ -171,6 +171,20 @@ test('a marker comment of another user is never updated', async () => {
   assert.equal(calls.create.length, 1);
 });
 
+test('a success with a body that lacks the marker posts nothing', async () => {
+  writeReport(reportFiles({ body: 'Forged body without the marker' }));
+  const calls = await run({ comments: [{ id: 7, user: BOT, body: `${MARKER}\nOld` }] });
+  assert.equal(calls.failed.length, 1);
+  assert.equal(posted(calls), 0);
+});
+
+test('a success with a body over the GitHub limit posts nothing', async () => {
+  writeReport(reportFiles({ body: `${MARKER}\n${'x'.repeat(65536)}` }));
+  const calls = await run();
+  assert.equal(calls.failed.length, 1);
+  assert.equal(posted(calls), 0);
+});
+
 test('a failure updates an existing comment to the outdated text', async () => {
   writeReport(reportFiles({ body: `${MARKER}\nForged artifact text` }));
   const calls = await run({ conclusion: 'failure', comments: [{ id: 7, user: BOT, body: `${MARKER}\nOld` }] });

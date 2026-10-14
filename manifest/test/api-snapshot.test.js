@@ -56,6 +56,47 @@ describe('snapshotManifest', () => {
     );
   });
 
+  test('should render public properties and methods with their flags and signatures', () => {
+    const snapshot = snapshotManifest(
+      manifestOf({
+        members: [
+          { kind: 'field', name: 'value', type: { text: 'string | null' }, attribute: 'value', reflects: true },
+          { kind: 'field', name: 'loading', type: { text: 'boolean' }, attribute: 'loading', readonly: true },
+          { kind: 'field', name: 'items', type: { text: 'Item[]' } },
+          { kind: 'field', name: 'version', type: { text: 'string' }, static: true },
+          {
+            kind: 'method',
+            name: 'focus',
+            parameters: [{ name: 'options', optional: true, type: { text: 'FocusOptions' } }],
+            return: { type: { text: 'void' } },
+          },
+          {
+            kind: 'method',
+            name: 'scrollToIndex',
+            parameters: [{ name: 'indexes', rest: true, type: { text: 'number[]' } }],
+          },
+          { kind: 'method', name: 'show', static: true, deprecated: true },
+          { kind: 'field', name: 'secret', type: { text: 'string' }, privacy: 'private' },
+          { kind: 'method', name: 'update', privacy: 'protected' },
+        ],
+      }),
+    );
+    assert.equal(
+      snapshot,
+      [
+        'vaadin-x (X)',
+        '  property items: Item[]',
+        '  property loading: boolean [attribute=loading] [readonly]',
+        '  property value: string | null [attribute=value] [reflects]',
+        '  static-property version: string',
+        '  method focus(options?: FocusOptions): void',
+        '  method scrollToIndex(...indexes: number[])',
+        '  static-method show() [deprecated]',
+        '',
+      ].join('\n'),
+    );
+  });
+
   test('should flag deprecated styling items', () => {
     const snapshot = snapshotManifest(
       manifestOf({
