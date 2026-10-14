@@ -2,6 +2,7 @@ import { isStaticMember } from '@custom-elements-manifest/analyzer/src/utils/ast
 import { extractMixinNodes } from '@custom-elements-manifest/analyzer/src/utils/mixins.js';
 import fs from 'node:fs';
 import { byName } from './lib/cem-helpers.js';
+import { preserveOverridesPlugin } from './plugins/preserve-overrides.js';
 
 const inheritanceDenyList = ['PolylitMixin', 'DirMixin'];
 
@@ -197,6 +198,7 @@ export default {
       .map((file) => ts.createSourceFile(file, fs.readFileSync(file, 'utf-8'), ts.ScriptTarget.ES2015, true));
   },
   plugins: [
+    preserveOverridesPlugin(),
     classPrivacyPlugin(),
     readonlyPlugin(),
     {
