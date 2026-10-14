@@ -17,6 +17,7 @@ const userTagsOverlay = css`
   [part='content'] {
     display: flex;
     flex-wrap: wrap;
+    align-items: flex-start;
     gap: var(--vaadin-user-tag-overlay-gap, 0.2em);
     padding: 0.5em 0;
   }
