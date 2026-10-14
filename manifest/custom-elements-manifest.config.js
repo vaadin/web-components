@@ -244,15 +244,19 @@ export default {
 
             // Transform attributes:
             // - Filter out attributes whose corresponding field member is not public.
+            // - Filter out attributes of read-only fields, which ignore attribute changes.
             // - Filter out starting with underscore e.g. `_lastTabIndex`
             // - Filter out `dir` attribute inherited from DirMixin.
             // - Filter out attributes with non-primitive types (can't be set via HTML attributes).
             //   Untyped ones come from `observedAttributes` and are kept.
             // - Transform camelCase attribute names to dash-case.
             if (declaration?.attributes?.length) {
-              const publicMemberNames = new Set((declaration.members || []).map((m) => m.name));
+              const members = declaration.members || [];
+              const publicMemberNames = new Set(members.map((m) => m.name));
+              const readonlyMemberNames = new Set(members.filter((m) => m.readonly).map((m) => m.name));
               declaration.attributes = declaration.attributes
                 .filter((attr) => !attr.fieldName || publicMemberNames.has(attr.fieldName))
+                .filter((attr) => !readonlyMemberNames.has(attr.fieldName))
                 .filter((member) => !inheritanceDenyList.includes(member.inheritedFrom?.name))
                 .filter((member) => !member.name.startsWith('_') && member.name !== 'dir')
                 .filter((attr) => !attr.type || isPrimitiveType(attr.type.text))
