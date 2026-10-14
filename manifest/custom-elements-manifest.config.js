@@ -1,13 +1,10 @@
 import { isStaticMember } from '@custom-elements-manifest/analyzer/src/utils/ast-helpers.js';
 import { extractMixinNodes } from '@custom-elements-manifest/analyzer/src/utils/mixins.js';
 import fs from 'node:fs';
-import { byName } from './lib/cem-helpers.js';
+import { byName, isPrimitiveType } from './lib/cem-helpers.js';
 import { preserveOverridesPlugin } from './plugins/preserve-overrides.js';
 
 const inheritanceDenyList = ['PolylitMixin', 'DirMixin'];
-
-// Attribute types that can't be set via HTML attributes
-const ignoredAttributeTypes = ['object', 'unknown', 'Array'];
 
 // Members incorrectly picked up by CEM from assignments to sub-object properties
 // (e.g., `this._controller.slotName = 'sr-label'` misinterpreted as a class field)
@@ -250,6 +247,7 @@ export default {
             // - Filter out starting with underscore e.g. `_lastTabIndex`
             // - Filter out `dir` attribute inherited from DirMixin.
             // - Filter out attributes with non-primitive types (can't be set via HTML attributes).
+            //   Untyped ones come from `observedAttributes` and are kept.
             // - Transform camelCase attribute names to dash-case.
             if (declaration?.attributes?.length) {
               const publicMemberNames = new Set((declaration.members || []).map((m) => m.name));
@@ -257,7 +255,7 @@ export default {
                 .filter((attr) => !attr.fieldName || publicMemberNames.has(attr.fieldName))
                 .filter((member) => !inheritanceDenyList.includes(member.inheritedFrom?.name))
                 .filter((member) => !member.name.startsWith('_') && member.name !== 'dir')
-                .filter((member) => !ignoredAttributeTypes.some((type) => member.type?.text?.includes(type)))
+                .filter((attr) => !attr.type || isPrimitiveType(attr.type.text))
                 .map((attr) => ({ ...attr, name: camelToDash(attr.name) }))
                 .sort(sortName);
             }

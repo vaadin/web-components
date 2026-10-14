@@ -25,6 +25,17 @@ export const byName = (a, b) => {
   return a < b ? -1 : 1;
 };
 
+const PRIMITIVE_TYPE = /^(string|number|boolean|null|undefined)(\s*\|\s*(string|number|boolean|null|undefined))*$/iu;
+
+/**
+ * Tells whether a type can be set from an HTML attribute: `string`, `number`,
+ * `boolean`, `null`, `undefined`, or a union of them. Objects, arrays, functions
+ * and renderers only have a property.
+ * @param {string} text the `type.text` of a manifest item
+ * @return {boolean}
+ */
+export const isPrimitiveType = (text) => PRIMITIVE_TYPE.test(text);
+
 /**
  * Lists the directory names of the public packages under `packages/`, sorted.
  * @return {string[]}
