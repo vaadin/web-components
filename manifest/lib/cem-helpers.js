@@ -13,7 +13,11 @@ export const packagesDir = path.join(rootDir, 'packages');
 // Define custom elements used only inside other components
 export const INTERNAL_PACKAGES = new Set(['field-highlighter', 'input-container', 'overlay']);
 
-// Code unit order, independent of locale
+/**
+ * Compares two strings by UTF-16 code unit, like the default `Array.prototype.sort`.
+ * The scripts use it wherever a generated file must come out byte-identical on
+ * every machine, as `localeCompare` depends on the locale and the ICU version.
+ */
 export const byName = (a, b) => {
   if (a === b) {
     return 0;
