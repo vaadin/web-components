@@ -1,18 +1,16 @@
 #!/usr/bin/env node
 
 /**
- * Writes the public API that `custom-elements.json` and the web-types files
- * describe as text snapshots, and compares two snapshots as a diff.
+ * Compares the public API that `custom-elements.json` and the web-types files
+ * describe between a base ref and the working tree.
  *
  * Usage:
- *   node manifest/scripts/cem-api.js snapshot --out <dir>
- *     Generates the manifests in the current checkout and writes
- *     `<dir>/custom-elements.api` and `<dir>/web-types.api`.
- *   node manifest/scripts/cem-api.js diff <baseDir> <headDir> --out <dir> [--base-label <text>] [--head-label <text>]
- *     Writes `<dir>/cem-api.diff`, `<dir>/comment.md` and `<dir>/status.json`.
- *   node manifest/scripts/cem-api.js compare [--base <ref>] [--out <dir>]
- *     Snapshots <ref> (default `origin/main`) in a temporary worktree and the
- *     working tree, then diffs them. Prints the comment to stdout.
+ *   node manifest/scripts/cem-api.js compare [--base <ref>] [--out <dir>] [--base-label <text>] [--head-label <text>]
+ *
+ * Snapshots <ref> (default `origin/main`) in a temporary worktree with its own
+ * `yarn install`, as `patches/` can change the analyzer, and the working tree.
+ * Prints the PR comment, and with `--out` writes `cem-api.diff`, `comment.md`
+ * and `status.json` to <dir>. The CEM API workflow runs the same command.
  */
 import { execFileSync, spawnSync } from 'node:child_process';
 import fs from 'node:fs';
@@ -32,7 +30,6 @@ const option = (name) => {
   const index = args.indexOf(`--${name}`);
   return index === -1 ? undefined : args[index + 1];
 };
-const positional = args.filter((arg, i) => !arg.startsWith('--') && !args[i - 1]?.startsWith('--'));
 
 const run = (cmd, cmdArgs, cwd) =>
   execFileSync(cmd, cmdArgs, {
@@ -44,44 +41,16 @@ const run = (cmd, cmdArgs, cwd) =>
 
 // GENERATION
 
-// The tooling moved to `manifest/`, older refs keep it at the old paths
-const TOOLING = {
-  config: ['manifest/custom-elements-manifest.config.js', 'custom-elements-manifest.config.js'],
-  split: ['manifest/scripts/split-cem.js', 'scripts/split-cem.js'],
-  webTypes: ['manifest/scripts/buildWebtypes.js', 'scripts/buildWebtypes.js'],
-};
-
-function resolveTool(dir, candidates) {
-  const found = candidates.find((file) => fs.existsSync(path.join(dir, file)));
-  if (!found) {
-    throw new Error(`Missing ${candidates[0]} in ${dir}`);
-  }
-  return found;
-}
-
-// Analyzes the files in sorted order, as the analyzer applies inheritance in module order
-const wrapperConfig = (configPath) => `import fs from 'node:fs';
-import config from './${configPath}';
-
-export default {
-  ...config,
-  overrideModuleCreation:
-    config.overrideModuleCreation ??
-    (({ ts, globs }) =>
-      [...globs]
-        .sort((a, b) => (a < b ? -1 : a > b ? 1 : 0))
-        .map((file) => ts.createSourceFile(file, fs.readFileSync(file, 'utf-8'), ts.ScriptTarget.ES2015, true))),
-};
-`;
+const CONFIG = 'manifest/custom-elements-manifest.config.js';
 
 /**
  * @param {string} dir the checkout to generate the manifests in
  * @return {{ manifest: object, webTypes: object[] }}
  */
 function generate(dir) {
-  const config = resolveTool(dir, TOOLING.config);
-  const split = resolveTool(dir, TOOLING.split);
-  const webTypesScript = resolveTool(dir, TOOLING.webTypes);
+  if (!fs.existsSync(path.join(dir, CONFIG))) {
+    throw new Error(`${dir} has no ${CONFIG}, the base must include #13116`);
+  }
 
   // Leftovers of another revision would end up in the snapshot
   fs.rmSync(path.join(dir, 'custom-elements.json'), { force: true });
@@ -91,19 +60,9 @@ function generate(dir) {
     }
   }
 
-  const wrapper = path.join(dir, '.cem-api.config.js');
-  fs.writeFileSync(wrapper, wrapperConfig(config));
-  try {
-    run(
-      path.join(dir, 'node_modules/.bin/custom-elements-manifest'),
-      ['analyze', '--config', '.cem-api.config.js'],
-      dir,
-    );
-  } finally {
-    fs.rmSync(wrapper);
-  }
-  run('node', [split], dir);
-  run('node', [webTypesScript], dir);
+  run(path.join(dir, 'node_modules/.bin/custom-elements-manifest'), ['analyze', '--config', CONFIG], dir);
+  run('node', ['manifest/scripts/split-cem.js'], dir);
+  run('node', ['scripts/buildWebtypes.js'], dir);
 
   const manifest = JSON.parse(fs.readFileSync(path.join(dir, 'custom-elements.json'), 'utf-8'));
   const webTypes = [];
@@ -175,7 +134,7 @@ function diff(baseDir, headDir, outDir, labels) {
 
 // COMPARE
 
-function compare(baseRef, outDir) {
+function compare(baseRef, outDir, labels) {
   const rootDir = run('git', ['rev-parse', '--show-toplevel']).trim();
   const sha = run('git', ['rev-parse', baseRef], rootDir).trim();
   const tmp = fs.mkdtempSync(path.join(os.tmpdir(), 'cem-api-'));
@@ -188,8 +147,8 @@ function compare(baseRef, outDir) {
     console.error('[cem-api] head: generating the working tree');
     snapshot(rootDir, path.join(tmp, 'head-api'));
     return diff(path.join(tmp, 'base-api'), path.join(tmp, 'head-api'), outDir ?? path.join(tmp, 'report'), {
-      base: `\`${baseRef}\` (${sha.slice(0, 10)})`,
-      head: 'the working tree',
+      base: labels.base ?? `\`${baseRef}\` (${sha.slice(0, 10)})`,
+      head: labels.head ?? 'the working tree',
     });
   } finally {
     run('git', ['worktree', 'remove', '--force', worktree], rootDir);
@@ -199,17 +158,10 @@ function compare(baseRef, outDir) {
 
 // MAIN
 
-if (command === 'snapshot') {
-  snapshot(process.cwd(), option('out') ?? 'cem-api');
-} else if (command === 'diff') {
-  const [baseDir, headDir] = positional;
-  diff(baseDir, headDir, option('out') ?? 'cem-api-report', {
-    base: option('base-label') ?? 'the base',
-    head: option('head-label') ?? 'the head',
-  });
-} else if (command === 'compare') {
-  process.stdout.write(compare(option('base') ?? 'origin/main', option('out')));
+if (command === 'compare') {
+  const labels = { base: option('base-label'), head: option('head-label') };
+  process.stdout.write(compare(option('base') ?? 'origin/main', option('out'), labels));
 } else {
-  console.error('Usage: node manifest/scripts/cem-api.js snapshot|diff|compare, see the header of the script');
+  console.error('Usage: node manifest/scripts/cem-api.js compare, see the header of the script');
   process.exit(1);
 }

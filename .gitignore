@@ -3,10 +3,6 @@ coverage
 dist
 analysis.json
 custom-elements.json
-# Outputs of manifest/scripts/cem-api.js
-cem-api/
-cem-api-report/
-.cem-api.config.js
 yarn-error.log
 .env
 

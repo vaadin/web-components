@@ -1,0 +1,78 @@
+name: CEM API
+
+# Reports how a pull request changes the public API that custom-elements.json
+# and web-types.json describe. The report goes to the job summary and to the
+# `cem-api-report` artifact, which the "CEM API comment" workflow posts to the
+# pull request. This workflow runs the code of the pull request, so it only
+# gets a read-only token.
+on:
+  pull_request:
+    branches: [main]
+    paths:
+      - 'packages/*/src/**'
+      - 'manifest/**'
+      - 'scripts/buildWebtypes.js'
+      - 'patches/**'
+      - 'yarn.lock'
+      - '.github/workflows/cem-api.yml'
+
+permissions:
+  contents: read
+
+concurrency:
+  group: ${{ github.workflow }}-${{ github.event.pull_request.number }}
+  cancel-in-progress: true
+
+jobs:
+  report:
+    name: API report
+    runs-on: ubuntu-latest
+    timeout-minutes: 15
+    env:
+      HEAD_SHA: ${{ github.event.pull_request.head.sha }}
+      PR_NUMBER: ${{ github.event.pull_request.number }}
+    steps:
+      # The merge commit of the pull request and its first parent, the base
+      - uses: actions/checkout@v7
+        with:
+          fetch-depth: 2
+
+      - name: Setup Node
+        uses: actions/setup-node@v6
+        with:
+          node-version: '24'
+          cache: 'yarn'
+
+      # The first parent of the merge commit is the commit that the pull request
+      # merges into. `pull_request.base.sha` can lag behind it.
+      - name: Resolve the base
+        run: echo "BASE_SHA=$(git rev-parse HEAD^1)" >> "$GITHUB_ENV"
+
+      - name: Install Dependencies
+        run: yarn --frozen-lockfile --no-progress --non-interactive
+
+      # Snapshots the base in a worktree with a node_modules of its own, as
+      # patches/ can change the analyzer, then the pull request, and diffs them
+      - name: Compare with the base
+        run: |
+          node manifest/scripts/cem-api.js compare --base "$BASE_SHA" \
+            --out "$RUNNER_TEMP/report" \
+            --base-label "\`${BASE_SHA::10}\`" \
+            --head-label "#$PR_NUMBER (\`${HEAD_SHA::10}\`)"
+          echo "$PR_NUMBER" > "$RUNNER_TEMP/report/pr-number"
+          cat "$RUNNER_TEMP/report/comment.md" >> "$GITHUB_STEP_SUMMARY"
+
+      # Lets the comment workflow mark an existing comment as outdated
+      - name: Record failure
+        if: failure()
+        run: |
+          mkdir -p "$RUNNER_TEMP/report"
+          echo "$PR_NUMBER" > "$RUNNER_TEMP/report/pr-number"
+
+      - name: Upload report
+        if: success() || failure()
+        uses: actions/upload-artifact@v6
+        with:
+          name: cem-api-report
+          path: ${{ runner.temp }}/report
+          retention-days: 7

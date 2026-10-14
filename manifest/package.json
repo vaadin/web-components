@@ -14,6 +14,7 @@
     "test": "node --test \"test/*.test.js\""
   },
   "devDependencies": {
-    "@custom-elements-manifest/analyzer": "^0.11.0"
+    "@custom-elements-manifest/analyzer": "^0.11.0",
+    "yaml": "^2.8.2"
   }
 }
