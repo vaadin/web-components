@@ -4,17 +4,12 @@ name: CEM API
 # and web-types.json describe. The report goes to the job summary and to the
 # `cem-api-report` artifact, which the "CEM API comment" workflow posts to the
 # pull request. This workflow runs the code of the pull request, so it only
-# gets a read-only token.
+# gets a read-only token. It runs for every pull request, so that a push that
+# reverts an API change updates the comment. The script skips the generation
+# when no input of the manifests changed.
 on:
   pull_request:
     branches: [main]
-    paths:
-      - 'packages/*/src/**'
-      - 'manifest/**'
-      - 'scripts/buildWebtypes.js'
-      - 'patches/**'
-      - 'yarn.lock'
-      - '.github/workflows/cem-api.yml'
 
 permissions:
   contents: read
@@ -51,8 +46,7 @@ jobs:
       - name: Install Dependencies
         run: yarn --frozen-lockfile --no-progress --non-interactive
 
-      # Snapshots the base in a worktree with a node_modules of its own, as
-      # patches/ can change the analyzer, then the pull request, and diffs them
+      # The base gets its own node_modules, as patches/ can change the analyzer
       - name: Compare with the base
         run: |
           node manifest/scripts/cem-api.js compare --base "$BASE_SHA" \

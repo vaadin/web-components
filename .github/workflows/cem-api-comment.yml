@@ -3,7 +3,9 @@ name: CEM API comment
 # Posts the report of the "CEM API" workflow to the pull request, also for pull
 # requests from forks and Dependabot, which only get a read-only token there.
 # This workflow has a write token, so it never checks out or runs the code of
-# the pull request. It only reads the report artifact, as untrusted text.
+# the pull request. It only reads the report artifact, as untrusted text. A
+# fork can shape the text it posts, but only on its own pull request, which the
+# head SHA check below enforces.
 on:
   workflow_run:
     workflows: [CEM API]

@@ -72,8 +72,11 @@ function renderBlocks(blocks) {
 }
 
 /**
- * One line per item: `kind name`, a detail such as the type, and flags. Every
- * kind gets the `deprecated` flag from the item.
+ * @param {object[] | undefined} items
+ * @param {string} kind
+ * @param {(item: object) => string} [detail] e.g. the type, appended to the name
+ * @param {(item: object) => (string | false | undefined)[]} [flags] appended as `[flag]`, after `deprecated`
+ * @return {{ kind: string, name: string, text: string }[]} one line per item
  */
 function itemLines(items, kind, detail = () => '', flags = () => []) {
   return (items || []).map((item) =>
@@ -130,7 +133,10 @@ export function snapshotManifest(manifest) {
   return renderBlocks(blocks);
 }
 
-/** The type of a web-types attribute or property, which is a string or a list of strings */
+/**
+ * @param {{ value?: { type?: string | string[] } }} item a web-types attribute or property
+ * @return {string} the type as a union, or an empty string
+ */
 function unionDetail(item) {
   const type = [item.value?.type ?? []].flat().join(' | ');
   return type ? `: ${oneLine(type)}` : '';

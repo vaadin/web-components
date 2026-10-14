@@ -14,6 +14,8 @@ yarn test:manifest       # run the Node unit tests in manifest/test/
 
 To see how the working tree changes the public API, compare it with a base ref.
 The command prints the comment that the CEM API workflow posts on a pull request.
+It regenerates the ignored `custom-elements.json` and web-types files of the
+working tree, and skips the generation when no input of the manifests changed.
 
 ```sh
 node manifest/scripts/cem-api.js compare --base origin/main
