@@ -41,12 +41,15 @@ function typeDetail(item) {
   return item.type?.text ? `: ${oneLine(item.type.text)}` : '';
 }
 
+function parameter(p) {
+  const name = `${p.rest ? '...' : ''}${p.name}${p.optional ? '?' : ''}`;
+  return p.type ? `${name}: ${oneLine(p.type.text)}` : name;
+}
+
 function signature(method) {
-  const params = (method.parameters || [])
-    .map((p) => `${p.rest ? '...' : ''}${p.name}${p.optional ? '?' : ''}${p.type ? `: ${oneLine(p.type.text)}` : ''}`)
-    .join(', ');
+  const params = (method.parameters || []).map(parameter).join(', ');
   const ret = method.return?.type?.text;
-  return `(${params})${ret ? `: ${oneLine(ret)}` : ''}`;
+  return ret ? `(${params}): ${oneLine(ret)}` : `(${params})`;
 }
 
 function renderBlocks(blocks) {
@@ -69,56 +72,68 @@ function renderBlocks(blocks) {
 }
 
 /**
+ * One line per item: `kind name`, a detail such as the type, and flags. Every
+ * kind gets the `deprecated` flag from the item.
+ */
+function itemLines(items, kind, detail = () => '', flags = () => []) {
+  return (items || []).map((item) =>
+    line(kind, item.name, detail(item), [...flags(item), item.deprecated && 'deprecated']),
+  );
+}
+
+function memberLine(member) {
+  const prefix = member.static ? 'static-' : '';
+  const deprecated = member.deprecated && 'deprecated';
+  if (member.kind === 'method') {
+    return line(`${prefix}method`, member.name, signature(member), [deprecated]);
+  }
+  if (member.kind === 'field') {
+    return line(`${prefix}property`, member.name, typeDetail(member), [
+      member.attribute && `attribute=${member.attribute}`,
+      member.reflects && 'reflects',
+      member.readonly && 'readonly',
+      deprecated,
+    ]);
+  }
+  return undefined;
+}
+
+/**
  * @param {object} manifest the root `custom-elements.json`
  * @return {string} the public API of every custom element in the manifest
  */
 export function snapshotManifest(manifest) {
-  const blocks = [];
-  for (const decl of getElements(manifest)) {
-    const deprecated = (item) => item.deprecated && 'deprecated';
-    const lines = [];
-    for (const attr of decl.attributes || []) {
-      lines.push(line('attribute', attr.name, typeDetail(attr), [deprecated(attr)]));
-    }
-    for (const member of (decl.members || []).filter(isPublic)) {
-      const prefix = member.static ? 'static-' : '';
-      if (member.kind === 'field') {
-        lines.push(
-          line(`${prefix}property`, member.name, typeDetail(member), [
-            member.attribute && `attribute=${member.attribute}`,
-            member.reflects && 'reflects',
-            member.readonly && 'readonly',
-            deprecated(member),
-          ]),
-        );
-      } else if (member.kind === 'method') {
-        lines.push(line(`${prefix}method`, member.name, signature(member), [deprecated(member)]));
-      }
-    }
-    for (const event of (decl.events || []).filter((e) => e.name)) {
-      lines.push(line('event', event.name, typeDetail(event), [deprecated(event)]));
-    }
-    for (const slot of decl.slots || []) {
-      lines.push(line('slot', slot.name || '(default)', '', [deprecated(slot)]));
-    }
-    for (const part of decl.cssParts || []) {
-      lines.push(line('part', part.name, '', [deprecated(part)]));
-    }
-    for (const state of decl.cssStates || []) {
-      lines.push(line('state', state.name, '', [deprecated(state)]));
-    }
-    for (const prop of decl.cssProperties || []) {
-      lines.push(
-        line('cssprop', prop.name, prop.syntax ? `: ${oneLine(prop.syntax)}` : '', [
-          prop.default !== undefined && `default=${oneLine(prop.default)}`,
-          deprecated(prop),
-        ]),
-      );
-    }
-    const header = `${decl.tagName} (${decl.name})${decl.deprecated ? ' [deprecated]' : ''}`;
-    blocks.push({ header, lines });
-  }
+  const blocks = getElements(manifest).map((decl) => ({
+    header: `${decl.tagName} (${decl.name})${decl.deprecated ? ' [deprecated]' : ''}`,
+    lines: [
+      ...itemLines(decl.attributes, 'attribute', typeDetail),
+      ...(decl.members || []).filter(isPublic).map(memberLine).filter(Boolean),
+      ...itemLines(
+        decl.events?.filter((event) => event.name),
+        'event',
+        typeDetail,
+      ),
+      ...itemLines(
+        decl.slots?.map((slot) => ({ ...slot, name: slot.name || '(default)' })),
+        'slot',
+      ),
+      ...itemLines(decl.cssParts, 'part'),
+      ...itemLines(decl.cssStates, 'state'),
+      ...itemLines(
+        decl.cssProperties,
+        'cssprop',
+        (prop) => (prop.syntax ? `: ${oneLine(prop.syntax)}` : ''),
+        (prop) => [prop.default !== undefined && `default=${oneLine(prop.default)}`],
+      ),
+    ],
+  }));
   return renderBlocks(blocks);
+}
+
+/** The type of a web-types attribute or property, which is a string or a list of strings */
+function unionDetail(item) {
+  const type = [item.value?.type ?? []].flat().join(' | ');
+  return type ? `: ${oneLine(type)}` : '';
 }
 
 /**
@@ -126,30 +141,18 @@ export function snapshotManifest(manifest) {
  * @return {string} the elements of every web-types file
  */
 export function snapshotWebTypes(files) {
-  const blocks = [];
-  for (const data of files) {
-    for (const element of data.contributions?.html?.elements || []) {
-      const lines = [];
-      for (const attr of element.attributes || []) {
-        const type = [].concat(attr.value?.type ?? []).join(' | ');
-        lines.push(line('attribute', attr.name, type ? `: ${oneLine(type)}` : ''));
-      }
-      for (const prop of element.js?.properties || []) {
-        const type = [].concat(prop.value?.type ?? []).join(' | ');
-        lines.push(line('property', prop.name, type ? `: ${oneLine(type)}` : ''));
-      }
-      for (const event of element.js?.events || []) {
-        lines.push(line('event', event.name));
-      }
-      for (const part of element.css?.parts || []) {
-        lines.push(line('part', part.name));
-      }
-      for (const prop of element.css?.properties || []) {
-        lines.push(line('cssprop', prop.name));
-      }
-      blocks.push({ header: element.name, lines });
-    }
-  }
+  const blocks = files.flatMap((data) =>
+    (data.contributions?.html?.elements || []).map((element) => ({
+      header: element.name,
+      lines: [
+        ...itemLines(element.attributes, 'attribute', unionDetail),
+        ...itemLines(element.js?.properties, 'property', unionDetail),
+        ...itemLines(element.js?.events, 'event'),
+        ...itemLines(element.css?.parts, 'part'),
+        ...itemLines(element.css?.properties, 'cssprop'),
+      ],
+    })),
+  );
   return renderBlocks(blocks);
 }
 
@@ -160,7 +163,7 @@ export function snapshotWebTypes(files) {
 function itemKey(text) {
   const [kind, word] = text.split(' ');
   // The default slot is named `(default)`, which the cut would empty
-  return `${kind} ${word.replace(/[(:].*$/u, '') || word}`;
+  return `${kind} ${word.split(/[(:]/u)[0] || word}`;
 }
 
 /**
@@ -184,6 +187,30 @@ export function parseSnapshot(text) {
   return elements;
 }
 
+/** Counts the item changes of one element. An element without items counts as one change. */
+function elementCounts(before, after) {
+  if (!after) {
+    return { removed: before.items.size || 1, added: 0, changed: 0 };
+  }
+  if (!before) {
+    return { removed: 0, added: after.items.size || 1, changed: 0 };
+  }
+  const counts = { removed: 0, added: 0, changed: before.header === after.header ? 0 : 1 };
+  for (const [key, text] of before.items) {
+    if (!after.items.has(key)) {
+      counts.removed += 1;
+    } else if (after.items.get(key) !== text) {
+      counts.changed += 1;
+    }
+  }
+  for (const key of after.items.keys()) {
+    if (!before.items.has(key)) {
+      counts.added += 1;
+    }
+  }
+  return counts;
+}
+
 /**
  * @param {ReturnType<typeof parseSnapshot>} base
  * @param {ReturnType<typeof parseSnapshot>} head
@@ -194,26 +221,7 @@ export function diffStats(base, head) {
   for (const tag of new Set([...base.keys(), ...head.keys()])) {
     const before = base.get(tag);
     const after = head.get(tag);
-    const counts = { removed: 0, added: 0, changed: 0 };
-    if (!after) {
-      counts.removed = before.items.size || 1;
-    } else if (!before) {
-      counts.added = after.items.size || 1;
-    } else {
-      counts.changed = before.header === after.header ? 0 : 1;
-      for (const [key, text] of before.items) {
-        if (!after.items.has(key)) {
-          counts.removed += 1;
-        } else if (after.items.get(key) !== text) {
-          counts.changed += 1;
-        }
-      }
-      for (const key of after.items.keys()) {
-        if (!before.items.has(key)) {
-          counts.added += 1;
-        }
-      }
-    }
+    const counts = elementCounts(before, after);
     if (!before || !after || counts.removed || counts.added || counts.changed) {
       stats.elements += 1;
       stats.removed += counts.removed;
@@ -235,7 +243,7 @@ export function parseDiff(raw) {
   let current;
   let printed;
   for (const l of raw.split('\n')) {
-    const hunk = l.match(/^@@ [^@]+ @@ ?(.*)$/u);
+    const hunk = /^@@ [^@]+ @@ ?(.*)$/u.exec(l);
     if (hunk) {
       current = hunk[1];
     } else if (/^[-+] {2}/u.test(l)) {
