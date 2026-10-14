@@ -12,11 +12,20 @@ yarn release:web-types   # write web-types.json and web-types.lit.json per packa
 yarn test:manifest       # run the Node unit tests in manifest/test/
 ```
 
+To see how the working tree changes the public API, compare it with a base ref.
+The command prints the comment that the CEM API workflow posts on a pull request.
+
+```sh
+node manifest/scripts/cem-api.js compare --base origin/main
+```
+
 ## Files
 
 | Path                                 | Purpose                                                               |
 | ------------------------------------ | --------------------------------------------------------------------- |
 | `custom-elements-manifest.config.js` | Analyzer config with the Vaadin plugins.                              |
 | `scripts/split-cem.js`               | Splits the root `custom-elements.json` into one manifest per package. |
+| `scripts/cem-api.js`                 | Writes API snapshots of both outputs and compares two of them.        |
 | `lib/cem-helpers.js`                 | Shared helpers that read packages and manifests.                      |
+| `lib/api-snapshot.js`                | Pure functions that build the snapshots, the diff and the PR comment. |
 | `test/`                              | Unit tests that run with `node --test`.                               |
