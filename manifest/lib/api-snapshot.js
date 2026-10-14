@@ -308,14 +308,15 @@ export function renderComment(cem, webTypes, labels) {
     return `${comment.join('\n')}\n`;
   }
   let budget = MAX_DIFF_LENGTH;
-  for (const [title, { diff, stats }] of [
-    ['custom-elements.json', cem],
-    ['web-types.json', webTypes],
+  // The manifest section is open for review, the web-types section mostly repeats it
+  for (const [title, { diff, stats }, open] of [
+    ['custom-elements.json', cem, true],
+    ['web-types.json', webTypes, false],
   ]) {
     const body = sectionBody(diff, budget);
     budget -= body.used;
     comment.push(
-      `<details><summary><b>${title} impact</b>: ${summary(stats)}</summary>`,
+      `<details${open ? ' open' : ''}><summary><b>${title} impact</b>: ${summary(stats)}</summary>`,
       '',
       ...body.lines,
       '',

@@ -327,16 +327,16 @@ describe('renderComment', () => {
   const webTypes = { diff: '@@ vaadin-x @@\n-  part label', stats: { elements: 1, removed: 1, added: 0, changed: 0 } };
   const empty = { diff: '', stats: NO_STATS };
 
-  const sections = (comment) => comment.match(/<details>[\s\S]*?<\/details>/gu);
+  const sections = (comment) => comment.match(/<details( open)?>[\s\S]*?<\/details>/gu);
 
-  test('should render two collapsed sections with the counts', () => {
+  test('should render an open manifest section and a collapsed web-types section with the counts', () => {
     const comment = renderComment(cem, webTypes, LABELS);
     assert.ok(
       comment.startsWith(`${COMMENT_MARKER}\n### Custom elements API\n\nCompared ${LABELS.head} with ${LABELS.base}.`),
     );
     assert.deepEqual(sections(comment), [
       [
-        '<details><summary><b>custom-elements.json impact</b>: 1 added in 1 element</summary>',
+        '<details open><summary><b>custom-elements.json impact</b>: 1 added in 1 element</summary>',
         '',
         '```diff',
         cem.diff,
@@ -354,7 +354,6 @@ describe('renderComment', () => {
         '</details>',
       ].join('\n'),
     ]);
-    assert.ok(!comment.includes('<details open'));
   });
 
   test('should keep an empty section with "No changes."', () => {
@@ -368,7 +367,7 @@ describe('renderComment', () => {
   test('should render "No API changes." without sections for two empty diffs', () => {
     const comment = renderComment(empty, empty, LABELS);
     assert.ok(comment.endsWith('\n\nNo API changes.\n'));
-    assert.ok(!comment.includes('<details>'));
+    assert.ok(!comment.includes('<details'));
   });
 
   describe('budget', () => {
