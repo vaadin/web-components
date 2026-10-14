@@ -24,6 +24,9 @@ jobs:
       - name: Lint JavaScript
         run: yarn lint:js
 
+      - name: Test manifest tooling
+        run: yarn test:manifest
+
       - name: Lint CSS
         run: yarn lint:css
 

@@ -297,6 +297,18 @@ repository, and `yarn release:meta --check` reports whether the committed files 
 The packages that a meta package ships but this repository does not build, e.g. `@vaadin/router`,
 stay in its `package.json` with a version of their own, which is where to bump them.
 
+### API report
+
+The `CEM API` workflows post a comment on every pull request against `main`. It lists the changes
+to the public API that `custom-elements.json` and `web-types.json` describe. To see the report for
+the working tree before pushing, compare it with a base ref:
+
+```sh
+yarn workspace @vaadin/manifest-tools compare --base main
+```
+
+The tooling lives in the private `manifest/` workspace, and `yarn test:manifest` runs its tests.
+
 ### Generating icons
 
 Re-generate SVG icon sets and icon fonts from individual SVG files for the packages that have them (e.g. `vaadin-icons`):
