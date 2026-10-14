@@ -1301,10 +1301,7 @@ snapshots["vaadin-pdf-viewer shadow default"] =
     >
     </div>
   </div>
-  <div
-    class="content-area"
-    style="--_scrollbar-width: 0px;"
-  >
+  <div class="content-area">
     <div
       aria-label="Find in document"
       hidden=""
@@ -1694,10 +1691,7 @@ snapshots["vaadin-pdf-viewer shadow error"] =
     >
     </div>
   </div>
-  <div
-    class="content-area"
-    style="--_scrollbar-width: 0px;"
-  >
+  <div class="content-area">
     <div
       aria-label="Find in document"
       hidden=""

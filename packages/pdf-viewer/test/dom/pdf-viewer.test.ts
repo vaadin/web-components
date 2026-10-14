@@ -43,7 +43,8 @@ describe('vaadin-pdf-viewer', () => {
 
   describe('shadow', () => {
     it('default', async () => {
-      await expect(viewer).shadowDom.to.equalSnapshot();
+      // The style holds the measured scrollbar width, which depends on the browser.
+      await expect(viewer).shadowDom.to.equalSnapshot({ ignoreAttributes: ['style'] });
     });
 
     it('document', async () => {
@@ -56,7 +57,7 @@ describe('vaadin-pdf-viewer', () => {
       viewer.src = fixtureUrl('invalid.pdf');
       await oneEvent(viewer, 'document-error');
       await nextFrame();
-      await expect(viewer).shadowDom.to.equalSnapshot();
+      await expect(viewer).shadowDom.to.equalSnapshot({ ignoreAttributes: ['style'] });
     });
   });
 });
