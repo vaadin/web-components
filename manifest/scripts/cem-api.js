@@ -5,12 +5,12 @@
  * describe between a base ref and the working tree.
  *
  * Usage:
- *   node manifest/scripts/cem-api.js compare [--base <ref>] [--out <dir>] [--base-label <text>] [--head-label <text>]
+ *   yarn workspace @vaadin/manifest-tools compare [--base <ref>] [--out <dir>] [--base-label <text>] [--head-label <text>]
  *
  * Snapshots <ref> (default `origin/main`) in a temporary worktree with its own
  * `yarn install`, as `patches/` can change the analyzer, and the working tree.
  * Prints the PR comment, and with `--out` writes `cem-api.diff`, `comment.md`
- * and `status.json` to <dir>. The CEM API workflow runs the same command.
+ * and `status.json` to <dir>, which is relative to the repo root. The CEM API workflow runs the same command.
  * When no input of the manifests changed since <ref>, the generation is
  * skipped and the comment says "No API changes."
  */
@@ -28,7 +28,7 @@ import {
 } from '../lib/api-snapshot.js';
 
 const USAGE =
-  'Usage: node manifest/scripts/cem-api.js compare [--base <ref>] [--out <dir>] [--base-label <text>] [--head-label <text>]';
+  'Usage: yarn workspace @vaadin/manifest-tools compare [--base <ref>] [--out <dir>] [--base-label <text>] [--head-label <text>]';
 
 // The files that the manifests are generated from, as git pathspecs
 const INPUTS = ['packages/*/src/*', 'manifest', 'scripts/buildWebtypes.js', 'patches', 'yarn.lock'];
@@ -170,6 +170,8 @@ function inputsChanged(rootDir, sha) {
 
 function compare(baseRef, outDir, labels) {
   const rootDir = run('git', ['rev-parse', '--show-toplevel']).trim();
+  // `yarn workspace` runs the script in `manifest/`, so a relative <dir> means the repo root
+  const reportDir = outDir && path.resolve(rootDir, outDir);
   const sha = run('git', ['rev-parse', baseRef], rootDir).trim();
   const resolved = {
     base: labels.base ?? `\`${baseRef}\` (${sha.slice(0, 10)})`,
@@ -181,7 +183,7 @@ function compare(baseRef, outDir, labels) {
     if (!inputsChanged(rootDir, sha)) {
       console.error(`[cem-api] no input of the manifests changed since ${baseRef} (${sha.slice(0, 10)})`);
       const empty = { diff: '', stats: { elements: 0, removed: 0, added: 0, changed: 0 } };
-      return report(empty, empty, outDir ?? path.join(tmp, 'report'), resolved);
+      return report(empty, empty, reportDir ?? path.join(tmp, 'report'), resolved);
     }
     run('git', ['worktree', 'add', '--detach', worktree, sha], rootDir);
     console.error(`[cem-api] base: installing and generating ${baseRef} (${sha.slice(0, 10)})`);
@@ -189,7 +191,12 @@ function compare(baseRef, outDir, labels) {
     snapshot(worktree, path.join(tmp, 'base-api'));
     console.error('[cem-api] head: generating the working tree');
     snapshot(rootDir, path.join(tmp, 'head-api'));
-    return diff(path.join(tmp, 'base-api'), path.join(tmp, 'head-api'), outDir ?? path.join(tmp, 'report'), resolved);
+    return diff(
+      path.join(tmp, 'base-api'),
+      path.join(tmp, 'head-api'),
+      reportDir ?? path.join(tmp, 'report'),
+      resolved,
+    );
   } finally {
     if (fs.existsSync(worktree)) {
       run('git', ['worktree', 'remove', '--force', worktree], rootDir);

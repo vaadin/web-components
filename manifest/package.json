@@ -11,6 +11,7 @@
   "author": "Vaadin Ltd",
   "type": "module",
   "scripts": {
+    "compare": "node scripts/cem-api.js compare",
     "test": "node --test \"test/*.test.js\""
   },
   "devDependencies": {

@@ -18,7 +18,7 @@ It regenerates the ignored `custom-elements.json` and web-types files of the
 working tree, and skips the generation when no input of the manifests changed.
 
 ```sh
-node manifest/scripts/cem-api.js compare --base origin/main
+yarn workspace @vaadin/manifest-tools compare --base origin/main
 ```
 
 ## Files

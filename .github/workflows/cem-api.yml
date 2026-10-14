@@ -49,7 +49,7 @@ jobs:
       # The base gets its own node_modules, as patches/ can change the analyzer
       - name: Compare with the base
         run: |
-          node manifest/scripts/cem-api.js compare --base "$BASE_SHA" \
+          yarn workspace @vaadin/manifest-tools compare --base "$BASE_SHA" \
             --out "$RUNNER_TEMP/report" \
             --base-label "\`${BASE_SHA::10}\`" \
             --head-label "#$PR_NUMBER (\`${HEAD_SHA::10}\`)"
