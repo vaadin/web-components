@@ -352,6 +352,20 @@ describe('find', () => {
           expect(page.getBoundingClientRect().top).to.be.lessThan(top);
         });
 
+        it('should keep the pages in place when the space is removed while scrolled down', async () => {
+          viewer.style.width = '340px';
+          await nextRender();
+          await search('page');
+          await waitForScrollEnd();
+          content.scrollTop += 300;
+          await nextFrame();
+          const page = viewer.shadowRoot!.querySelectorAll('[part~="page"]')[1];
+          const top = page.getBoundingClientRect().top;
+          getButton('close').click();
+          await nextFrame();
+          expect(page.getBoundingClientRect().top).to.be.closeTo(top, 1);
+        });
+
         it('should keep the current match out from under the find bar', async () => {
           // A low viewer, so that the margin at the edges of the view is smaller than the find bar
           viewer.style.height = '220px';

@@ -469,8 +469,15 @@ export const PdfViewerFindMixin = (superClass) =>
 
     /** @private */
     #setFindSpace(space) {
+      const { content } = this.$;
+      const removed = this.#findSpace - space;
+      const { scrollTop } = content;
       this.#findSpace = space;
-      this.$.content.style.setProperty('--_find-space', `${space}px`);
+      content.style.setProperty('--_find-space', `${space}px`);
+      // Keep the visible pages in place when the space is removed while scrolled down.
+      if (removed > 0 && scrollTop >= removed) {
+        content.scrollTop = scrollTop - removed;
+      }
     }
 
     /** @private */
@@ -515,7 +522,12 @@ export const PdfViewerFindMixin = (superClass) =>
       const { pageText } = await this.#getPageText(pageIndex);
       // The highlights need the text layer elements that the text was taken from.
       const textDivs = page.textLayer ? page.textLayer.textDivs : [];
-      if (searchId !== this.#searchId || textDivs.length !== pageText.items.length) {
+      if (searchId !== this.#searchId) {
+        return;
+      }
+      if (textDivs.length !== pageText.items.length) {
+        // Without highlights, go at least to the page of the current match.
+        this.#goToPendingMatchPage(pageIndex);
         return;
       }
 
@@ -556,7 +568,22 @@ export const PdfViewerFindMixin = (superClass) =>
         const currentElement = this.#getCurrentMatchElement();
         if (currentElement) {
           this.#scrollToMatch(currentElement, scrollToMatch);
+        } else {
+          this.page = pageIndex + 1;
         }
+      }
+    }
+
+    /**
+     * Goes to the page of the current match when scrolling to it is pending
+     * but the match cannot be highlighted on the page.
+     * @private
+     */
+    #goToPendingMatchPage(pageIndex) {
+      const currentMatch = this.#matches[this.__findCurrentIndex];
+      if (this.#scrollToMatchPending && currentMatch && currentMatch.pageIndex === pageIndex) {
+        this.#scrollToMatchPending = null;
+        this.page = pageIndex + 1;
       }
     }
   };
