@@ -1,7 +1,14 @@
 import fs from 'node:fs';
 import os from 'node:os';
 import path from 'node:path';
-import { getElements, INTERNAL_PACKAGES, listPackages, packagesDir, readManifest, readPackageJson } from './lib/cem.js';
+import {
+  getElements,
+  INTERNAL_PACKAGES,
+  listPackages,
+  packagesDir,
+  readManifest,
+  readPackageJson,
+} from '../manifest/lib/cem-helpers.js';
 
 const PLAIN_WEB_TYPES_FILE = 'web-types.json';
 const LIT_WEB_TYPES_FILE = 'web-types.lit.json';

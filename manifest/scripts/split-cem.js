@@ -4,7 +4,7 @@
  * This script splits the root custom-elements.json manifest into
  * per-package custom-elements.json files.
  *
- * Run with: node scripts/split-cem.js
+ * Run with: node manifest/scripts/split-cem.js
  */
 import { globSync } from 'glob';
 import fs from 'node:fs';
@@ -12,7 +12,7 @@ import path from 'node:path';
 import { fileURLToPath } from 'node:url';
 
 const __dirname = path.dirname(fileURLToPath(import.meta.url));
-const rootDir = path.resolve(__dirname, '..');
+const rootDir = path.resolve(__dirname, '../..');
 const packagesDir = path.join(rootDir, 'packages');
 
 // Read root manifest

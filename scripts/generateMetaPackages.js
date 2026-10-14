@@ -10,7 +10,15 @@
 import fs from 'node:fs';
 import path from 'node:path';
 import lerna from '../lerna.json' with { type: 'json' };
-import { byName, isElement, listPackages, packagesDir, readManifest, readPackageJson, rootDir } from './lib/cem.js';
+import {
+  byName,
+  isElement,
+  listPackages,
+  packagesDir,
+  readManifest,
+  readPackageJson,
+  rootDir,
+} from '../manifest/lib/cem-helpers.js';
 
 const { version } = lerna;
 

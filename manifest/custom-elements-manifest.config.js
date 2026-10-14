@@ -1,7 +1,7 @@
 import { isStaticMember } from '@custom-elements-manifest/analyzer/src/utils/ast-helpers.js';
 import { extractMixinNodes } from '@custom-elements-manifest/analyzer/src/utils/mixins.js';
 import fs from 'node:fs';
-import { byName } from './scripts/lib/cem.js';
+import { byName } from './lib/cem-helpers.js';
 
 const inheritanceDenyList = ['PolylitMixin', 'DirMixin'];
 

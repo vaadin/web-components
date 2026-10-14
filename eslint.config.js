@@ -220,6 +220,7 @@ export default [
       'wtr-utils.js',
       'custom-rules/**/*.js',
       'api-docs/.eleventy.js',
+      'manifest/**/*.js',
       'react/scripts/**/*.{js,ts}',
       'react/*.ts',
       'react/dev/*.ts',
