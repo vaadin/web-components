@@ -25,13 +25,15 @@ describe('preserveOverridesPlugin', () => {
 
   test('should keep inherited type and privacy when the own item has none', () => {
     const plugin = preserveOverridesPlugin();
-    const checkbox = { kind: 'class', name: 'Checkbox', events: [{ name: 'change' }] };
+    const checkbox = { kind: 'class', name: 'Checkbox', members: [field('_hasValue')] };
     plugin.moduleLinkPhase({ moduleDoc: { path: 'checkbox.js', declarations: [checkbox] } });
-    checkbox.events[0].type = { text: 'CustomEvent' };
+    checkbox.members[0].type = { text: 'boolean' };
+    checkbox.members[0].privacy = 'protected';
     plugin.packageLinkPhase({
       customElementsManifest: { modules: [{ path: 'checkbox.js', declarations: [checkbox] }] },
     });
-    assert.equal(checkbox.events[0].type.text, 'CustomEvent');
+    assert.equal(checkbox.members[0].type.text, 'boolean');
+    assert.equal(checkbox.members[0].privacy, 'protected');
   });
 
   test('should restore event types declared with @fires', () => {
