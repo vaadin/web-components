@@ -148,6 +148,10 @@ export const gridStyles = css`
 
   [part~='cell'] {
     outline: none;
+
+    /* Browser default td styles use vertical-align: inherit, which forces every
+       cell in a row to restyle when the row's style changes. */
+    vertical-align: initial;
   }
 
   [part~='cell'] > [tabindex] {
