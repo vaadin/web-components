@@ -16,9 +16,10 @@ CEM's output, the per-package `custom-elements.json`, drives three things:
   for tag names, entry modules and events, and the `.d.ts` definitions of
   web components supply the types.
 
-CEM is configured in `manifest/custom-elements-manifest.config.js`;
-`manifest/scripts/split-cem.js` splits the merged manifest per package, and
-`scripts/buildWebtypes.js` turns it into the two web-types files.
+CEM is configured in `manifest/custom-elements-manifest.config.js` with the
+plugins in `manifest/plugins/`; `manifest/scripts/split-cem.js` splits the
+merged manifest per package, and `scripts/buildWebtypes.js` turns it into the
+two web-types files.
 
 `vscode-lit-plugin` ([lit-analyzer](https://github.com/runem/lit-analyzer))
 also reads JSDoc — that's why `@attr` exists, see below.
@@ -97,9 +98,10 @@ value: { type: String, notify: true },
 ## Marking an element as internal
 
 Add `@private` or `@protected` to a class's JSDoc to keep the element out
-of generated documentation. CEM's `classPrivacyPlugin` (in
-`manifest/custom-elements-manifest.config.js`) tags the declaration, and the
-`packageLinkPhase` then strips it — so the class never lands in
+of generated documentation. CEM's `classPrivacyPlugin`
+(`manifest/plugins/class-privacy.js`) tags the declaration, and
+`publicApiPlugin` (`manifest/plugins/public-api.js`) then strips it — so the
+class never lands in
 `custom-elements.json`, and consequently never makes it into
 `web-types.json` or the React wrappers either.
 
