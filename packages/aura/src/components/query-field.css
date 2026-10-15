@@ -1,0 +1,4 @@
+:is(vaadin-query-field) {
+  --vaadin-query-field-token-background: color-mix(in srgb, var(--aura-accent-color) 12%, transparent);
+  --vaadin-query-field-token-value-color: var(--aura-accent-text-color);
+}

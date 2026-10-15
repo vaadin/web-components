@@ -62,6 +62,7 @@ import '@vaadin/overlay';
 import '@vaadin/password-field';
 import '@vaadin/popover';
 import '@vaadin/progress-bar';
+import '@vaadin/query-field';
 import '@vaadin/radio-group';
 import '@vaadin/radio-group/vaadin-radio-button.js';
 import '@vaadin/scroller';

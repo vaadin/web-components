@@ -1,0 +1,65 @@
+<!doctype html>
+<html lang="en">
+  <head>
+    <meta charset="UTF-8" />
+    <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+    <title>Query field</title>
+    <script type="module" src="./common.js"></script>
+    <script type="module">
+      window.Vaadin ??= {};
+      window.Vaadin.featureFlags ??= {};
+      window.Vaadin.featureFlags.queryFieldComponent = true;
+
+      await import('@vaadin/query-field');
+      await import('@vaadin/icon');
+      await import('@vaadin/icons');
+
+      const field = document.querySelector('vaadin-query-field');
+      field.filters = [
+        {
+          name: 'label',
+          label: 'Record label',
+          options: ['Warp Records', 'Ninja Tune', 'Rephlex', { value: 'xl', label: 'XL Recordings' }],
+        },
+        {
+          name: 'artist',
+          label: 'Artist',
+          options: ['Aphex Twin', 'Boards of Canada', 'Autechre'],
+          allowCustomValue: true,
+        },
+        { name: 'year', label: 'Release year', type: 'number' },
+        { name: 'format', label: 'Format', options: ['vinyl', 'cd', 'cassette', 'digital'] },
+      ];
+      field.value = 'label:"Warp Records" year:2001 ambient';
+
+      const output = document.querySelector('output');
+      const showQuery = () => {
+        output.textContent = JSON.stringify(field.query, null, 2);
+      };
+      field.addEventListener('query-changed', showQuery);
+      showQuery();
+    </script>
+    <style>
+      vaadin-query-field {
+        width: 32rem;
+      }
+
+      vaadin-query-field::part(filter-year) {
+        --vaadin-query-field-token-background: color-mix(in srgb, orange 20%, transparent);
+      }
+    </style>
+  </head>
+
+  <body>
+    <vaadin-query-field
+      label="Search records"
+      helper-text="Try label:, artist:, year: or format:"
+      placeholder="Search…"
+      clear-button-visible
+    >
+      <vaadin-icon icon="vaadin:search" slot="prefix"></vaadin-icon>
+    </vaadin-query-field>
+
+    <pre><output></output></pre>
+  </body>
+</html>

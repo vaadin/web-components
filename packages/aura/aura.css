@@ -37,6 +37,7 @@
 @import './src/components/notification.css';
 @import './src/components/popover.css';
 @import './src/components/progress-bar.css';
+@import './src/components/query-field.css';
 @import './src/components/rich-text-editor.css';
 @import './src/components/select.css';
 @import './src/components/side-nav.css';
