@@ -29,25 +29,16 @@ function getWebTypesPackages() {
     .filter(({ elements }) => elements.length > 0);
 }
 
-/**
- * Extracts the type string from a CEM type object or string.
- * CEM uses `{ text: "boolean" }` format, while older formats use plain strings.
- * @param {object|string} type - The type object or string
- * @returns {string} - The type string
- */
-function getTypeText(type) {
-  if (!type) return '';
-  return typeof type === 'object' ? type.text || '' : type;
-}
+const byName = (a, b) => a.name.localeCompare(b.name);
 
 /**
- * Maps a type string such as `'boolean | null | undefined'` into an array of type
+ * Maps a type such as `'boolean | null | undefined'` into an array of type
  * strings, such as `['boolean', 'null', 'undefined']`
- * @param {object|string} type - The type object or string
+ * @param {{ text: string }} [type] - The type object
  * @returns {string[]}
  */
 function mapType(type) {
-  const typeString = getTypeText(type);
+  const typeString = type?.text ?? '';
   // Closure's `function(X): Y` needs a space between `function` and `X` after
   // the parens are stripped, so rewrite `(` as a space. `!` (non-null) and `)`
   // are dropped; consecutive spaces from the rewrite are collapsed.
@@ -78,20 +69,13 @@ function transformDescription(packageJson, description) {
 }
 
 /**
- * Gets public writable field members from a CEM element declaration.
- * CEM already filters to public members based on config, and fields with
- * an `attribute` property are reactive properties.
+ * Gets the writable field members from a CEM element declaration.
+ * The CEM config already filters out the private and protected members.
  * @param {object} elementDeclaration - The element declaration from CEM
  * @returns {object[]}
  */
 function getPublicWritableProperties(elementDeclaration) {
-  const members = elementDeclaration.members || [];
-  // Members without explicit privacy are treated as public (private/protected
-  // are already filtered out by the CEM config).
-  return members.filter(
-    (member) =>
-      member.kind === 'field' && member.privacy !== 'private' && member.privacy !== 'protected' && !member.readonly,
-  );
+  return (elementDeclaration.members || []).filter((member) => member.kind === 'field' && !member.readonly);
 }
 
 function createPlainElementDefinition(packageJson, elementDeclaration) {
@@ -100,7 +84,7 @@ function createPlainElementDefinition(packageJson, elementDeclaration) {
   // `<vaadin-icon>`, and are not listed.
   const attributes = (elementDeclaration.attributes || [])
     .filter((attribute) => attribute.type)
-    .sort((a, b) => a.name.localeCompare(b.name))
+    .sort(byName)
     .map((attribute) => ({
       name: attribute.name,
       description: transformDescription(packageJson, attribute.description || ''),
@@ -110,7 +94,7 @@ function createPlainElementDefinition(packageJson, elementDeclaration) {
     }));
 
   const properties = getPublicWritableProperties(elementDeclaration)
-    .sort((a, b) => a.name.localeCompare(b.name))
+    .sort(byName)
     .map((prop) => ({
       name: prop.name,
       description: transformDescription(packageJson, prop.description || ''),
@@ -119,12 +103,10 @@ function createPlainElementDefinition(packageJson, elementDeclaration) {
       },
     }));
 
-  const events = (elementDeclaration.events || [])
-    .sort((a, b) => a.name.localeCompare(b.name))
-    .map((event) => ({
-      name: event.name,
-      description: transformDescription(packageJson, event.description || ''),
-    }));
+  const events = (elementDeclaration.events || []).sort(byName).map((event) => ({
+    name: event.name,
+    description: transformDescription(packageJson, event.description || ''),
+  }));
 
   return {
     name: elementDeclaration.tagName,
@@ -165,15 +147,13 @@ function createLitElementDefinition(packageJson, elementDeclaration) {
   }
 
   const publicProperties = getPublicWritableProperties(elementDeclaration);
-  const propertyBindings = publicProperties
-    .sort((a, b) => a.name.localeCompare(b.name))
-    .map((prop) => {
-      const prefix = mapType(prop.type).includes('boolean') ? '?' : '.';
-      return toLitAttribute(`${prefix}${prop.name}`, prop.description);
-    });
+  const propertyBindings = publicProperties.sort(byName).map((prop) => {
+    const prefix = mapType(prop.type).includes('boolean') ? '?' : '.';
+    return toLitAttribute(`${prefix}${prop.name}`, prop.description);
+  });
 
   const eventBindings = (elementDeclaration.events || [])
-    .sort((a, b) => a.name.localeCompare(b.name))
+    .sort(byName)
     .map((event) => toLitAttribute(`@${event.name}`, event.description));
 
   return {
