@@ -264,6 +264,15 @@ export default {
                 .sort(sortName);
             }
 
+            // A field keeps `attribute` and `reflects` only when its attribute is listed
+            const attributeNames = new Set((declaration.attributes || []).map((attr) => attr.name));
+            for (const member of declaration.members || []) {
+              if (member.attribute && !attributeNames.has(member.attribute)) {
+                delete member.attribute;
+                delete member.reflects;
+              }
+            }
+
             // Filter out events:
             // - inherited from PolylitMixin
             // - with type "CustomEvent" but no name (invalid/inherited events)
