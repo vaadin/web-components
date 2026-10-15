@@ -108,6 +108,7 @@ export const ComboBoxBaseMixin = (superClass) =>
       this._boundOnClearButtonMouseDown = this.__onClearButtonMouseDown.bind(this);
       this._boundOnClick = this._onClick.bind(this);
       this._boundOnOverlayTouchAction = this._onOverlayTouchAction.bind(this);
+      this._boundOnOverlayClick = this.__onOverlayClick.bind(this);
       this._boundOnTouchend = this._onTouchend.bind(this);
     }
 
@@ -200,6 +201,9 @@ export const ComboBoxBaseMixin = (superClass) =>
 
       overlay.addEventListener('touchend', this._boundOnOverlayTouchAction);
       overlay.addEventListener('touchmove', this._boundOnOverlayTouchAction);
+
+      // Use capture phase as the scroller stops click propagation
+      overlay.addEventListener('click', this._boundOnOverlayClick, true);
 
       // Prevent blurring the input when clicking inside the overlay
       overlay.addEventListener('mousedown', (e) => e.preventDefault());
@@ -308,6 +312,9 @@ export const ComboBoxBaseMixin = (superClass) =>
           }
         }
       } else {
+        // Reset when a tap was not followed by a click, e.g. at the end of a scroll
+        this.__blurOnClick = false;
+
         if (this.autoselect) {
           // When the dropdown closes, the input remains focused. Mark that the next
           // host click should re-trigger autoselect, since the normal focus event
@@ -331,9 +338,31 @@ export const ComboBoxBaseMixin = (superClass) =>
     }
 
     /** @private */
-    _onOverlayTouchAction() {
-      // On touch devices, blur the input on touch start inside the overlay, in order to hide
-      // the virtual keyboard. But don't close the overlay on this blur.
+    _onOverlayTouchAction(event) {
+      // On tap, wait for the click: hiding the keyboard scrolls the page
+      // before iOS dispatches the click, which then misses its target.
+      if (event.type === 'touchend') {
+        this.__blurOnClick = true;
+        return;
+      }
+
+      this.__blurInputKeepOpened();
+    }
+
+    /** @private */
+    __onOverlayClick() {
+      if (this.__blurOnClick) {
+        this.__blurOnClick = false;
+        this.__blurInputKeepOpened();
+      }
+    }
+
+    /**
+     * Blur the input on touch inside the overlay to hide the virtual keyboard,
+     * but don't close the overlay on this blur.
+     * @private
+     */
+    __blurInputKeepOpened() {
       this._closeOnBlurIsPrevented = true;
       this.inputElement.blur();
       this._closeOnBlurIsPrevented = false;
