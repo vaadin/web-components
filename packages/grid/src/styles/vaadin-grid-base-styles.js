@@ -312,10 +312,14 @@ export const gridStyles = css`
       var(--vaadin-grid-cell-background-color, transparent)
     );
 
-    background-color: inherit;
+    background-color: var(--vaadin-grid-row-background-color, var(--vaadin-background-color));
     background-repeat: no-repeat;
     background-origin: padding-box;
     background-image: var(--_cell-background-image);
+
+    /* Browser default td styles use vertical-align: inherit, which forces every
+       cell in a row to restyle when the row's style changes. */
+    vertical-align: initial;
   }
 
   .body-cell {
