@@ -1,0 +1,13 @@
+diff --git a/node_modules/lerna/dist/chunk-RRL6PJQ5.js b/node_modules/lerna/dist/chunk-RRL6PJQ5.js
+index 0be37b5..33a6e1f 100644
+--- a/node_modules/lerna/dist/chunk-RRL6PJQ5.js
++++ b/node_modules/lerna/dist/chunk-RRL6PJQ5.js
+@@ -232,7 +232,7 @@ var VersionCommand = class extends Command {
+       forceGitTag,
+       overrideMessage
+     };
+-    this.savePrefix = this.options.exact ? "" : "^";
++    this.savePrefix = this.options.exact ? "" : "~";
+   }
+   async initialize() {
+     if (!this.project.isIndependent()) {
