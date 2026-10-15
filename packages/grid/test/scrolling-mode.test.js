@@ -130,6 +130,32 @@ describe('scrolling mode', () => {
         expect(grid.getAttribute('overflow')).to.not.contain('end');
       });
     });
+
+    describe('last row height', () => {
+      beforeEach(async () => {
+        // Border wider than the cell min-height from the test styles, so that it takes part in the row height
+        grid = fixtureSync(`
+          <vaadin-grid style="--vaadin-grid-row-border-width: 40px;">
+            <vaadin-grid-column path="name"></vaadin-grid-column>
+          </vaadin-grid>
+        `);
+        grid.items = [{ name: 'foo' }, { name: 'bar' }];
+        flushGrid(grid);
+        await nextFrame();
+      });
+
+      it('should not change when there is overflow', async () => {
+        const lastRow = grid.$.items.querySelector('.last-row');
+        const height = lastRow.offsetHeight;
+
+        grid.style.height = '100px';
+        await nextResize(grid);
+        await nextFrame();
+
+        expect(grid.getAttribute('overflow')).to.equal('bottom');
+        expect(lastRow.offsetHeight).to.equal(height);
+      });
+    });
   });
 });
 
@@ -172,32 +198,5 @@ describe('scroll on attach', () => {
     document.body.style.paddingTop = '';
 
     expect(scrollTop).to.equal(newScrollTop);
-  });
-});
-
-describe('overflow by less than row border', () => {
-  let grid;
-
-  beforeEach(async () => {
-    // Border wider than the cell min-height from the test styles, so that it takes part in the row height
-    grid = fixtureSync(`
-      <vaadin-grid style="--vaadin-grid-row-border-width: 40px;">
-        <vaadin-grid-column path="name"></vaadin-grid-column>
-      </vaadin-grid>
-    `);
-    grid.items = [{ name: 'foo' }, { name: 'bar' }];
-    flushGrid(grid);
-    await nextFrame();
-
-    // Shrink the grid so that the content overflows the table by 2px, less than the border width
-    const lastCell = grid.$.items.querySelector('.last-row-cell');
-    const gap = grid.$.table.getBoundingClientRect().bottom - lastCell.getBoundingClientRect().bottom;
-    grid.style.height = `${grid.offsetHeight - gap - 2}px`;
-    await nextResize(grid);
-    await nextFrame();
-  });
-
-  it('should keep overflow attribute in sync with scroll state', () => {
-    expect(grid.hasAttribute('overflow')).to.equal(grid.$.table.scrollHeight > grid.$.table.clientHeight);
   });
 });
