@@ -299,6 +299,28 @@ describe('grid focus', () => {
     });
   });
 
+  describe('single body row without footer', () => {
+    beforeEach(async () => {
+      element.items = users.slice(0, 1);
+      [...element.querySelectorAll('vaadin-grid-column, vaadin-grid-column-group')].forEach((column) => {
+        column.footerRenderer = null;
+      });
+      await nextRender();
+      await sendKeys({ press: 'Tab' });
+      await sendKeys({ press: 'Tab' });
+      await sendKeys({ press: 'ArrowLeft' });
+    });
+
+    it('row', async () => {
+      await visualDiff(element, 'single-body-row-without-footer');
+    });
+
+    it('cell', async () => {
+      await sendKeys({ press: 'ArrowRight' });
+      await visualDiff(element, 'single-body-row-without-footer-cell');
+    });
+  });
+
   describe('empty state', () => {
     beforeEach(async () => {
       element.items = [];

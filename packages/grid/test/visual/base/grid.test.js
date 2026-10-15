@@ -1,3 +1,4 @@
+import { sendKeys } from '@vaadin/test-runner-commands';
 import { fixtureSync, nextRender } from '@vaadin/testing-helpers';
 import { visualDiff } from '@web/test-runner-visual-regression';
 import '../../../src/vaadin-grid.js';
@@ -80,5 +81,40 @@ describe('theme', () => {
     };
     await nextRender();
     await visualDiff(element, 'custom-cell-padding');
+  });
+});
+
+describe('overflowing last row border', () => {
+  let element;
+
+  beforeEach(async () => {
+    // The row with 50px content fits in the 80px grid, its 40px bottom border does not
+    element = fixtureSync(`
+      <vaadin-grid style="width: 300px; height: 80px; --vaadin-grid-row-border-width: 40px;">
+        <vaadin-grid-column></vaadin-grid-column>
+        <vaadin-grid-column></vaadin-grid-column>
+      </vaadin-grid>
+    `);
+    const [firstName, lastName] = element.querySelectorAll('vaadin-grid-column');
+    firstName.renderer = (root, _, model) => {
+      root.textContent = model.item.name.first;
+      root.style.height = '50px';
+    };
+    lastName.renderer = (root, _, model) => {
+      root.textContent = model.item.name.last;
+      root.style.height = '50px';
+    };
+    element.items = [users[0]];
+    flushGrid(element);
+    await nextRender();
+  });
+
+  it('default', async () => {
+    await visualDiff(element, 'overflowing-last-row-border');
+  });
+
+  it('focused', async () => {
+    await sendKeys({ press: 'Tab' });
+    await visualDiff(element, 'overflowing-last-row-border-focused');
   });
 });

@@ -130,32 +130,6 @@ describe('scrolling mode', () => {
         expect(grid.getAttribute('overflow')).to.not.contain('end');
       });
     });
-
-    describe('last row height', () => {
-      beforeEach(async () => {
-        // Border wider than the cell min-height from the test styles, so that it takes part in the row height
-        grid = fixtureSync(`
-          <vaadin-grid style="--vaadin-grid-row-border-width: 40px;">
-            <vaadin-grid-column path="name"></vaadin-grid-column>
-          </vaadin-grid>
-        `);
-        grid.items = [{ name: 'foo' }, { name: 'bar' }];
-        flushGrid(grid);
-        await nextFrame();
-      });
-
-      it('should not change when there is overflow', async () => {
-        const lastRow = grid.$.items.querySelector('.last-row');
-        const height = lastRow.offsetHeight;
-
-        grid.style.height = '100px';
-        await nextResize(grid);
-        await nextFrame();
-
-        expect(grid.getAttribute('overflow')).to.equal('bottom');
-        expect(lastRow.offsetHeight).to.equal(height);
-      });
-    });
   });
 });
 
