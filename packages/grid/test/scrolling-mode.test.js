@@ -179,26 +179,20 @@ describe('overflow by less than row border', () => {
   let grid;
 
   beforeEach(async () => {
+    // Border wider than the cell min-height from the test styles, so that it takes part in the row height
     grid = fixtureSync(`
-      <vaadin-grid style="width: 200px; height: 600px; --vaadin-grid-row-border-width: 5px;">
+      <vaadin-grid style="--vaadin-grid-row-border-width: 40px;">
         <vaadin-grid-column path="name"></vaadin-grid-column>
       </vaadin-grid>
     `);
-    // Make cell content taller than the cell min-height from the test styles,
-    // so that cell borders take part in the row height
-    grid.querySelector('vaadin-grid-column').renderer = (root, _, model) => {
-      root.textContent = model.item.name;
-      root.style.height = '50px';
-    };
-    grid.items = Array.from({ length: 8 }, (_, i) => ({ name: `Row ${i}` }));
+    grid.items = [{ name: 'foo' }, { name: 'bar' }];
     flushGrid(grid);
     await nextFrame();
 
-    // Content height including the last row bottom border
+    // Shrink the grid so that the content overflows the table by 2px, less than the border width
     const lastCell = grid.$.items.querySelector('.last-row-cell');
-    const contentHeight = lastCell.getBoundingClientRect().bottom - grid.$.table.getBoundingClientRect().top;
-    // Make the table 2px shorter than the content, less than the 5px border
-    grid.style.height = `${grid.offsetHeight - (grid.$.table.clientHeight - contentHeight) - 2}px`;
+    const gap = grid.$.table.getBoundingClientRect().bottom - lastCell.getBoundingClientRect().bottom;
+    grid.style.height = `${grid.offsetHeight - gap - 2}px`;
     await nextResize(grid);
     await nextFrame();
   });
