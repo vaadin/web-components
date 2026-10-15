@@ -1,0 +1,84 @@
+<!doctype html>
+<html lang="en">
+  <head>
+    <meta charset="UTF-8" />
+    <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+    <title>vaadin-query-field (draft)</title>
+    <script>
+      const theme = new URLSearchParams(location.search).get('theme') || 'lumo';
+      if (theme !== 'base') document.write(`<link rel="stylesheet" href="${theme}.css">`);
+      document.documentElement.dataset.theme = theme;
+    </script>
+    <script type="module" src="query-field.js"></script>
+    <script type="module">
+      await customElements.whenDefined('vaadin-query-field');
+      const records = document.querySelector('#records');
+      records.filters = [
+        { name: 'label', label: 'Record label', options: ['Warp Records', 'Ninja Tune', 'Rephlex', { value: 'xl', label: 'XL Recordings' }] },
+        { name: 'artist', label: 'Artist', options: ['Aphex Twin', 'Boards of Canada', 'Autechre', 'Squarepusher'], allowCustomValue: true },
+        { name: 'year', label: 'Release year', type: 'number' },
+        { name: 'format', label: 'Format', options: ['vinyl', 'cd', 'cassette', 'digital'] },
+      ];
+      records.value = 'label:"Warp Records" year:2001 ambient';
+
+      const issues = document.querySelector('#issues');
+      issues.filters = [
+        { name: 'is', label: 'State', options: ['open', 'closed', 'draft'] },
+        { name: 'author', label: 'Author', options: ['alice', 'bob', 'carol'], allowCustomValue: true },
+        { name: 'label', label: 'Label', options: ['bug', 'enhancement', 'good first issue', 'a11y'] },
+        { name: 'comments', label: 'Number of comments', type: 'number' },
+      ];
+
+      document.querySelectorAll('vaadin-query-field').forEach((field) => {
+        const output = document.querySelector(`output[for="${field.id}"]`);
+        const show = () => (output.textContent = JSON.stringify(field.query, null, 2));
+        field.addEventListener('query-changed', show);
+        show();
+      });
+      document.querySelector('#validate').addEventListener('click', () => records.validate());
+    </script>
+    <style>
+      body { font-family: system-ui, sans-serif; margin: 2rem; max-width: 46rem; }
+      nav a { margin-inline-end: 1rem; }
+      nav a[aria-current] { font-weight: bold; }
+      vaadin-query-field { width: 100%; }
+      #records::part(filter-year) { --vaadin-query-field-token-background: color-mix(in srgb, orange 25%, transparent); }
+      pre { background: color-mix(in srgb, currentColor 6%, transparent); padding: 0.75rem; border-radius: 6px; font-size: 0.8rem; }
+      section { margin-block: 2rem; }
+    </style>
+  </head>
+  <body>
+    <h1>&lt;vaadin-query-field&gt; — draft</h1>
+    <nav>
+      Theme: <a href="?theme=lumo">Lumo</a><a href="?theme=aura">Aura</a><a href="?theme=base">Base</a>
+    </nav>
+    <p>
+      Type free text and <code>name:value</code> filters. Arrow Down opens suggestions (all filters in an empty field),
+      Enter / Tab picks, Escape closes. Ctrl/Cmd+Z undoes a picked suggestion. Invalid filters are underlined once the
+      caret leaves them.
+    </p>
+
+    <section>
+      <vaadin-query-field
+        id="records"
+        label="Search records"
+        helper-text="Filters: label:, artist:, year: (number), format:"
+        placeholder="Search…"
+        clear-button-visible
+        error-message="Fix the underlined filters"
+      >
+        <vaadin-icon icon="vaadin:search" slot="prefix"></vaadin-icon>
+      </vaadin-query-field>
+      <p><button id="validate">validate()</button></p>
+      <pre><output for="records"></output></pre>
+    </section>
+
+    <section>
+      <vaadin-query-field id="issues" label="Filter issues" placeholder="is:open label:bug …" clear-button-visible>
+        <vaadin-icon icon="vaadin:filter" slot="prefix"></vaadin-icon>
+      </vaadin-query-field>
+      <pre><output for="issues"></output></pre>
+    </section>
+
+  </body>
+</html>

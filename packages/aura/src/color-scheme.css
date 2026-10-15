@@ -1,5 +1,0 @@
-:where(:root),
-:where(:host) {
-  --aura-content-color-scheme: inherit;
-  --aura-notification-color-scheme: inherit;
-}

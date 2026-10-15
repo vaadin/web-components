@@ -1,5 +1,0 @@
-vaadin-button,
-vaadin-button::before,
-vaadin-button::after {
-  transition: none !important;
-}
