@@ -1,0 +1,610 @@
+/**
+ * @license
+ * Copyright (c) 2000 - 2026 Vaadin Ltd.
+ *
+ * This program is available under Vaadin Commercial License and Service Terms.
+ *
+ * See https://vaadin.com/commercial-license-and-service-terms for the full
+ * license.
+ */
+import { animationFrame } from '@vaadin/component-base/src/async.js';
+import { Debouncer } from '@vaadin/component-base/src/debounce.js';
+import { get, set } from '@vaadin/component-base/src/path-utils.js';
+import { iterateRowCells, updatePart } from '@vaadin/grid/src/vaadin-grid-helpers.js';
+
+export const InlineEditingMixin = (superClass) =>
+  class InlineEditingMixin extends superClass {
+    /** @type {boolean} */
+    #stoppingEdit = false;
+
+    static get properties() {
+      return {
+        /**
+         * When true, pressing Enter while in cell edit mode
+         * will move focus to the editable cell in the next row
+         * (Shift + Enter - same, but for previous row).
+         * @attr {boolean} enter-next-row
+         */
+        enterNextRow: {
+          type: Boolean,
+        },
+
+        /**
+         * When true, after moving to next or previous editable cell using
+         * Tab / Shift+Tab, it will be focused without edit mode.
+         *
+         * When `enterNextRow` is true, pressing Enter will also
+         * preserve edit mode, otherwise, it will have no effect.
+         * @attr {boolean} single-cell-edit
+         */
+        singleCellEdit: {
+          type: Boolean,
+        },
+
+        /**
+         * When true, the grid enters cell edit mode on a single click
+         * instead of the default double click.
+         * @attr {boolean} edit-on-click
+         */
+        editOnClick: {
+          type: Boolean,
+        },
+
+        /** @private */
+        _editingDisabled: {
+          type: Boolean,
+        },
+      };
+    }
+
+    constructor() {
+      super();
+      this.__boundItemPropertyChanged = this._onItemPropertyChanged.bind(this);
+      this.__boundEditorFocusOut = this._onEditorFocusOut.bind(this);
+      this.__boundEditorFocusIn = this._onEditorFocusIn.bind(this);
+
+      this._addEditColumnListener('mousedown', (e) => {
+        // Prevent grid from resetting navigating state
+        e.stopImmediatePropagation();
+        this.toggleAttribute('navigating', true);
+      });
+
+      this._addEditColumnListener('focusout', (e) => {
+        // Prevent grid from resetting navigating state
+        e.stopImmediatePropagation();
+      });
+    }
+
+    /** @protected */
+    ready() {
+      this.addEventListener(
+        'keydown',
+        (e) => {
+          if (this.hasAttribute('loading-editor') && !['Tab', 'Escape', 'Enter'].includes(e.key)) {
+            // If an editor is focused while it's loading, prevent default keydown behavior
+            // to avoid user interaction with the editor before it's fully loaded
+            // Used by Flow GridPro
+            e.preventDefault();
+            e.stopPropagation();
+          }
+        },
+        true,
+      );
+      // Add listener before `vaadin-grid` interaction mode listener
+      this.addEventListener('keydown', (e) => {
+        switch (e.keyCode) {
+          case 27:
+            if (this.__edited) {
+              this._stopEdit(true);
+            }
+            break;
+          case 9:
+            if (this.__edited) {
+              this._switchEditCell(e);
+            }
+            break;
+          case 13:
+            if (this.__edited) {
+              this._switchEditCell(e);
+            } else {
+              this._enterEditFromEvent(e);
+            }
+            break;
+          case 32:
+            if (!this.__edited) {
+              this._enterEditFromEvent(e);
+            }
+            break;
+          default:
+            if (e.key && e.key.length === 1) {
+              this._enterEditFromEvent(e, 'text');
+            }
+            break;
+        }
+      });
+
+      super.ready();
+
+      this.$.table.addEventListener('click', (e) => {
+        const column = this.getEventContext(e).column;
+        if (column && this._isEditColumn(column)) {
+          if (this.editOnClick) {
+            this._enterEditFromEvent(e);
+          }
+        }
+      });
+
+      // Dblclick does not work on iOS Safari
+      if (this._ios) {
+        let firstClickTime;
+        let waitingSecondClick = false;
+
+        this.addEventListener('click', (e) => {
+          if (!waitingSecondClick) {
+            firstClickTime = new Date().getTime();
+            waitingSecondClick = true;
+
+            setTimeout(() => {
+              waitingSecondClick = false;
+            }, 300);
+          } else {
+            waitingSecondClick = false;
+
+            const time = new Date().getTime();
+            if (time - firstClickTime < 300) {
+              this._enterEditFromEvent(e);
+            }
+          }
+        });
+      } else {
+        this.addEventListener('dblclick', (e) => {
+          if (!this.editOnClick) {
+            this._enterEditFromEvent(e);
+          }
+        });
+      }
+    }
+
+    /**
+     * Prevents making an edit column cell's parent row active on click.
+     *
+     * @override
+     * @protected
+     */
+    _shouldPreventCellActivationOnClick(e) {
+      return (
+        super._shouldPreventCellActivationOnClick(e) ||
+        // The clicked cell is editable
+        this._isEditColumn(this.getEventContext(e).column)
+      );
+    }
+
+    /**
+     * Override an observer from `DisabledMixin` to stop
+     * editing when grid element becomes disabled.
+     *
+     * @param {boolean} disabled
+     * @param {boolean} oldDisabled
+     * @protected
+     * @override
+     */
+    _disabledChanged(disabled, oldDisabled) {
+      super._disabledChanged(disabled, oldDisabled);
+
+      if (disabled && this.__edited) {
+        this._stopEdit(true);
+      }
+    }
+
+    /** @protected */
+    _checkImports() {
+      super._checkImports();
+      ['vaadin-grid-pro-edit-column'].forEach((elementName) => {
+        const element = this.querySelector(elementName);
+        if (element && !customElements.get(elementName)) {
+          console.warn(`Make sure you have imported the required module for <${elementName}> element.`);
+        }
+      });
+    }
+
+    /** @private */
+    _applyEdit({ path, value, item }) {
+      set(path, value, item);
+      this.requestContentUpdate();
+    }
+
+    /** @private */
+    _addEditColumnListener(type, callback) {
+      this.addEventListener(type, (e) => {
+        const context = this.getEventContext(e);
+        const column = context.column;
+        const edited = this.__edited;
+
+        if (context.item && this._isEditColumn(column)) {
+          const { cell } = this._getGridEventLocation(e);
+
+          if (!cell || cell.getAttribute('part').indexOf('details-cell') > -1) {
+            return;
+          }
+
+          if (edited?.cell === cell) {
+            return;
+          }
+
+          if (!this._isCellEditable(cell)) {
+            return;
+          }
+
+          callback(e);
+        }
+      });
+    }
+
+    /** @private */
+    _onItemPropertyChanged(e) {
+      if (!e.defaultPrevented) {
+        this._applyEdit(e.detail);
+      }
+    }
+
+    /** @private */
+    _getRowByIndex(index) {
+      return Array.from(this.$.items.children).find((el) => el.index === index);
+    }
+
+    /** @private */
+    _isEditColumn(column) {
+      return column?.localName.toLowerCase() === 'vaadin-grid-pro-edit-column';
+    }
+
+    /** @private */
+    _getEditColumns() {
+      const columnTreeLevel = this._columnTree.length - 1;
+      return this._columnTree[columnTreeLevel]
+        .filter((column) => this._isEditColumn(column) && !column.hidden)
+        .sort((a, b) => a._order - b._order);
+    }
+
+    /** @private */
+    _cancelStopEdit() {
+      // Stop edit on outside click will always trigger notify resize.
+      // when tabbing within same row it might not be needed, so cancel
+      if (this._debouncerStopEdit) {
+        this._debouncerStopEdit.cancel();
+        delete this._debouncerStopEdit;
+      }
+    }
+
+    /** @private */
+    _flushStopEdit() {
+      if (this._debouncerStopEdit) {
+        this._debouncerStopEdit.flush();
+        delete this._debouncerStopEdit;
+      }
+    }
+
+    /** @private */
+    _enterEditFromEvent(e, type) {
+      const context = this.getEventContext(e);
+      const column = context.column;
+      const edited = this.__edited;
+
+      if (context.item && this._isEditColumn(column)) {
+        const { cell } = this._getGridEventLocation(e);
+
+        if (!cell || cell.getAttribute('part').indexOf('details-cell') > -1) {
+          return;
+        }
+
+        if (type && column.editorType !== type) {
+          return;
+        }
+
+        if (edited?.cell === cell && column._getEditorComponent(cell).contains(e.target)) {
+          return;
+        }
+
+        this._flushStopEdit();
+
+        this._startEdit(cell, column);
+      } else if (edited) {
+        this._stopEdit();
+      }
+    }
+
+    /** @private */
+    _onEditorFocusOut(event) {
+      if (this.__shouldIgnoreFocusOut(event)) {
+        return;
+      }
+
+      // Schedule stop on editor component focusout
+      this._debouncerStopEdit = Debouncer.debounce(this._debouncerStopEdit, animationFrame, this._stopEdit.bind(this));
+    }
+
+    /**
+     * Override method from ScrollMixin to stop editing if the edited cell
+     * is scrolled out of the view and removed from the DOM.
+     * @private
+     */
+    __updateColumnsBodyContentHidden() {
+      super.__updateColumnsBodyContentHidden();
+
+      if (this.__edited && !this.__edited.cell.isConnected) {
+        this._stopEdit(true, false);
+      }
+    }
+
+    /** @private */
+    __shouldIgnoreFocusOut(event) {
+      const edited = this.__edited;
+      if (edited) {
+        const { cell, column } = this.__edited;
+        const editor = column._getEditorComponent(cell);
+
+        const path = event.composedPath();
+        const nodes = path.slice(0, path.indexOf(editor) + 1).filter((node) => node.nodeType === Node.ELEMENT_NODE);
+        // Detect focus moving to e.g. vaadin-select-overlay or vaadin-date-picker-overlay
+        if (nodes.some((el) => typeof el._shouldRemoveFocus === 'function' && !el._shouldRemoveFocus(event))) {
+          return true;
+        }
+      }
+    }
+
+    /** @private */
+    _onEditorFocusIn() {
+      this._cancelStopEdit();
+    }
+
+    /** @private */
+    _startEdit(cell, column) {
+      // TODO: remove `_editingDisabled` after Flow counterpart is updated.
+      if (this.disabled || this._editingDisabled || !this._isCellEditable(cell)) {
+        return;
+      }
+
+      // Unfocusable editors never fire focusout, so no stop was scheduled.
+      // Stop the previous edit here.
+      if (this.__edited?.cell !== cell) {
+        this._stopEdit();
+      }
+
+      // Cancel debouncer enqueued on focusout, including one enqueued by the
+      // blur() in the stop above
+      this._cancelStopEdit();
+
+      // Stopping the previous edit runs listeners that may have made this cell
+      // non-editable
+      if (!this._isCellEditable(cell)) {
+        return;
+      }
+
+      // Scroll column into view synchronously, which also triggers lazy column
+      // rendering to ensure cells for that column are in the DOM.
+      this.scrollToColumn(column);
+
+      const model = this.__getRowModel(cell.__parentRow);
+      this.__edited = { cell, column, model };
+      column._startCellEdit(cell, model);
+
+      this.dispatchEvent(
+        new CustomEvent('cell-edit-started', {
+          detail: {
+            index: model.index,
+            item: model.item,
+            path: column.path,
+          },
+          composed: true,
+        }),
+      );
+      this.addEventListener('item-property-changed', this.__boundItemPropertyChanged);
+    }
+
+    /**
+     * @param {boolean=} shouldCancel
+     * @param {boolean=} shouldRestoreFocus
+     * @protected
+     */
+    _stopEdit(shouldCancel, shouldRestoreFocus) {
+      if (!this.__edited) {
+        return;
+      }
+      if (this.#stoppingEdit) {
+        // `item-property-changed` listeners may re-render and re-enter here
+        // before `__edited` is cleared, so ignore nested calls, including cancels
+        return;
+      }
+      const { cell, column, model } = this.__edited;
+      this.#stoppingEdit = true;
+
+      try {
+        if (!shouldCancel && !this.hasAttribute('loading-editor')) {
+          const editor = column._getEditorComponent(cell);
+          if (editor) {
+            const value = column._getEditorValue(editor);
+            if (value !== get(column.path, model.item)) {
+              // Some browsers skip the change event when the editor is
+              // removed from the DOM, so blur to dispatch it.
+              editor.blur();
+
+              this.dispatchEvent(
+                new CustomEvent('item-property-changed', {
+                  detail: {
+                    index: model.index,
+                    item: model.item,
+                    path: column.path,
+                    value,
+                  },
+                  bubbles: true,
+                  cancelable: true,
+                  composed: true,
+                }),
+              );
+            }
+          }
+        }
+
+        column._stopCellEdit(cell, model);
+
+        this.__edited = null;
+
+        this.removeEventListener('item-property-changed', this.__boundItemPropertyChanged);
+      } finally {
+        this.#stoppingEdit = false;
+      }
+
+      if (shouldRestoreFocus) {
+        cell.focus();
+      }
+    }
+
+    /**
+     * @param {!KeyboardEvent} e
+     * @protected
+     */
+    async _switchEditCell(e) {
+      if (e.defaultPrevented && e.keyCode === 9) {
+        return;
+      }
+
+      this._cancelStopEdit();
+
+      const editableColumns = this._getEditColumns();
+      const { cell, column, model } = this.__edited;
+
+      // Prevent vaadin-grid handler from being called
+      e.stopImmediatePropagation();
+
+      const editor = column._getEditorComponent(cell);
+
+      // Do not prevent Tab to allow native input blur and wait for it,
+      // unless the keydown event is from the edit cell select overlay.
+      if (e.key === 'Tab' && editor?.contains(e.target)) {
+        const ignore = await new Promise((resolve) => {
+          editor.addEventListener(
+            'focusout',
+            (event) => {
+              resolve(this.__shouldIgnoreFocusOut(event));
+            },
+            { once: true },
+          );
+        });
+
+        // Ignore focusout event after which focus stays in the field,
+        // e.g. Tab between date and time pickers in date-time-picker.
+        if (ignore) {
+          return;
+        }
+      } else {
+        e.preventDefault();
+      }
+
+      this._stopEdit();
+
+      // Try to find the next editable cell
+      let nextIndex = model.index;
+      let nextColumn = column;
+      let nextCell = cell;
+      let directionX = 0;
+      let directionY = 0;
+
+      // Enter key: move up / down
+      if (e.keyCode === 13 && this.enterNextRow) {
+        directionY = e.shiftKey ? -1 : 1;
+      }
+
+      // Tab: move right / left
+      if (e.keyCode === 9) {
+        directionX = e.shiftKey ? -1 : 1;
+      }
+
+      if (directionX || directionY) {
+        while (nextCell) {
+          if (directionX) {
+            // Move horizontally
+            nextColumn = editableColumns[editableColumns.indexOf(nextColumn) + directionX];
+            if (!nextColumn) {
+              // Wrap to the next or previous row
+              nextIndex += directionX;
+              nextColumn = editableColumns[directionX > 0 ? 0 : editableColumns.length - 1];
+            }
+          }
+          // Move vertically
+          if (directionY) {
+            nextIndex += directionY;
+          }
+          // Stop looking if the next cell is editable
+          const nextRow = this._getRowByIndex(nextIndex);
+          // eslint-disable-next-line no-loop-func
+          nextCell = nextRow && Array.from(nextRow.__cells).find((cell) => cell._column === nextColumn);
+          if (nextCell && this._isCellEditable(nextCell)) {
+            break;
+          }
+        }
+      }
+
+      // Focus current cell as fallback
+      if (!nextCell) {
+        nextCell = cell;
+        nextIndex = model.index;
+      }
+
+      if (!this.singleCellEdit && nextCell !== cell) {
+        this._startEdit(nextCell, nextColumn);
+      } else {
+        this.__ensureFlatIndexInViewport(nextIndex);
+        nextCell.focus();
+      }
+    }
+
+    /**
+     * @param {!HTMLElement} row
+     * @private
+     */
+    __updateRow(row) {
+      const item = this.__getRowItem(row);
+      if (this.__edited) {
+        const { cell, model } = this.__edited;
+        if (!this._isCellEditable(cell)) {
+          // Cell is no longer editable, cancel edit
+          this._stopEdit(true, true);
+        } else if (cell.__parentRow === row && item && this.getItemId(model.item) !== this.getItemId(item)) {
+          // Edited item identity has changed, stop edit
+          this._stopEdit();
+        }
+      }
+      super.__updateRow(row, item);
+    }
+
+    /**
+     * Override method from `StylingMixin` to apply `editable-cell` part to the
+     * cells of edit columns.
+     *
+     * @override
+     */
+    _generateCellPartNames(row, model) {
+      super._generateCellPartNames(row, model);
+
+      iterateRowCells(row, (cell) => {
+        const isEditable = !row.hasAttribute('loading') && this._isCellEditable(cell);
+        const target = cell._focusButton || cell;
+        updatePart(target, 'editable-cell', isEditable);
+      });
+    }
+
+    /** @private */
+    _isCellEditable(cell) {
+      const column = cell._column;
+      // Not editable if the column is not an edit column
+      if (!this._isEditColumn(column)) {
+        return false;
+      }
+      // Cell is editable by default if isCellEditable is not configured
+      if (!column.isCellEditable) {
+        return true;
+      }
+      // Otherwise, check isCellEditable function
+      const model = this.__getRowModel(cell.__parentRow);
+      return column.isCellEditable(model);
+    }
+  };

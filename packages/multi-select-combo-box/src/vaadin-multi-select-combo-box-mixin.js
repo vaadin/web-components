@@ -1,0 +1,1304 @@
+/**
+ * @license
+ * Copyright (c) 2021 - 2026 Vaadin Ltd.
+ * This program is available under Apache License Version 2.0, available at https://vaadin.com/license/
+ */
+import { announce } from '@vaadin/a11y-base/src/announce.js';
+import { ComboBoxDataProviderMixin } from '@vaadin/combo-box/src/vaadin-combo-box-data-provider-mixin.js';
+import { ComboBoxFocusIndexMixin } from '@vaadin/combo-box/src/vaadin-combo-box-focus-index-mixin.js';
+import { ComboBoxItemsMixin } from '@vaadin/combo-box/src/vaadin-combo-box-items-mixin.js';
+import { ComboBoxPlaceholder } from '@vaadin/combo-box/src/vaadin-combo-box-placeholder.js';
+import { I18nMixin } from '@vaadin/component-base/src/i18n-mixin.js';
+import { ResizeMixin } from '@vaadin/component-base/src/resize-mixin.js';
+import { SlotController } from '@vaadin/component-base/src/slot-controller.js';
+import { TooltipController } from '@vaadin/component-base/src/tooltip-controller.js';
+import { InputControlMixin } from '@vaadin/field-base/src/input-control-mixin.js';
+import { InputController } from '@vaadin/field-base/src/input-controller.js';
+import { LabelledInputController } from '@vaadin/field-base/src/labelled-input-controller.js';
+import { MultiSelectComboBoxHighlightMixin } from './vaadin-multi-select-combo-box-highlight-mixin.js';
+import { MultiSelectComboBoxSelectAllMixin } from './vaadin-multi-select-combo-box-select-all-mixin.js';
+
+const DEFAULT_I18N = {
+  cleared: 'Selection cleared',
+  focused: 'focused. Press Backspace to remove',
+  selected: 'added to selection',
+  deselected: 'removed from selection',
+  total: '{count} items selected',
+  selectAll: 'Select All',
+  deselectAll: 'Deselect All',
+  selectFiltered: 'Select Filtered',
+  deselectFiltered: 'Deselect Filtered',
+};
+
+export const MultiSelectComboBoxMixin = (superClass) =>
+  class MultiSelectComboBoxMixinClass extends I18nMixin(
+    MultiSelectComboBoxSelectAllMixin(
+      MultiSelectComboBoxHighlightMixin(
+        ComboBoxFocusIndexMixin(
+          ComboBoxDataProviderMixin(ComboBoxItemsMixin(InputControlMixin(ResizeMixin(superClass)))),
+        ),
+      ),
+    ),
+  ) {
+    static get properties() {
+      return {
+        /**
+         * Set to true to auto expand horizontally, causing input field to
+         * grow until max width is reached.
+         * @attr {boolean} auto-expand-horizontally
+         */
+        autoExpandHorizontally: {
+          type: Boolean,
+          value: false,
+          reflectToAttribute: true,
+          sync: true,
+        },
+
+        /**
+         * Set to true to not collapse selected items chips into the overflow
+         * chip and instead always expand vertically, causing input field to
+         * wrap into multiple lines when width is limited.
+         * @attr {boolean} auto-expand-vertically
+         */
+        autoExpandVertically: {
+          type: Boolean,
+          value: false,
+          reflectToAttribute: true,
+          sync: true,
+        },
+
+        /**
+         * Set to true to collapse all selected items chips into the overflow
+         * chip when they don't all fit, instead of showing as many as possible.
+         * Has no effect when `autoExpandVertically` is true.
+         * @attr {boolean} collapse-chips
+         */
+        collapseChips: {
+          type: Boolean,
+          value: false,
+          reflectToAttribute: true,
+          sync: true,
+        },
+
+        /**
+         * A function used to generate CSS class names for dropdown
+         * items and selected chips based on the item. The return
+         * value should be the generated class name as a string, or
+         * multiple class names separated by whitespace characters.
+         */
+        itemClassNameGenerator: {
+          type: Object,
+          sync: true,
+        },
+
+        /**
+         * When true, filter string isn't cleared after selecting an item.
+         */
+        keepFilter: {
+          type: Boolean,
+          value: false,
+        },
+
+        /**
+         * True when loading items from the data provider, false otherwise.
+         */
+        loading: {
+          type: Boolean,
+          value: false,
+          reflectToAttribute: true,
+          sync: true,
+        },
+
+        /**
+         * When present, it specifies that the field is read-only.
+         */
+        readonly: {
+          type: Boolean,
+          value: false,
+          reflectToAttribute: true,
+          sync: true,
+        },
+
+        /**
+         * The list of selected items.
+         * Note: modifying the selected items creates a new array each time.
+         */
+        selectedItems: {
+          type: Array,
+          value: () => [],
+          notify: true,
+          sync: true,
+        },
+
+        /**
+         * When true, the user can input a value that is not present in the items list.
+         * @attr {boolean} allow-custom-value
+         */
+        allowCustomValue: {
+          type: Boolean,
+          value: false,
+        },
+
+        /**
+         * A hint to the user of what can be entered in the control.
+         * The placeholder will be only displayed in the case when
+         * there is no item selected.
+         */
+        placeholder: {
+          type: String,
+          observer: '_placeholderChanged',
+          reflectToAttribute: true,
+          sync: true,
+        },
+
+        /**
+         * Custom function for rendering the content of every item.
+         * Receives three arguments:
+         *
+         * - `root` The `<vaadin-multi-select-combo-box-item>` internal container DOM element.
+         * - `comboBox` The reference to the `<vaadin-multi-select-combo-box>` element.
+         * - `model` The object with the properties related with the rendered
+         *   item, contains:
+         *   - `model.index` The index of the rendered item.
+         *   - `model.item` The item.
+         */
+        renderer: {
+          type: Function,
+          sync: true,
+        },
+
+        /**
+         * Set to true to group selected items at the top of the overlay.
+         * @attr {boolean} selected-items-on-top
+         */
+        selectedItemsOnTop: {
+          type: Boolean,
+          value: false,
+          sync: true,
+        },
+
+        /** @private */
+        value: {
+          type: String,
+        },
+
+        /** @private */
+        _overflowItems: {
+          type: Array,
+          value: () => [],
+          sync: true,
+        },
+
+        /** @private */
+        _lastFilter: {
+          type: String,
+          sync: true,
+        },
+
+        /** @private */
+        _topGroup: {
+          type: Array,
+          observer: '_topGroupChanged',
+          sync: true,
+        },
+
+        /** @private */
+        _inputField: {
+          type: Object,
+        },
+      };
+    }
+
+    static get observers() {
+      return [
+        '_selectedItemsChanged(selectedItems)',
+        '__updateOverflowChip(_overflow, _overflowItems, disabled, readonly)',
+        '__updateTopGroup(selectedItemsOnTop, selectedItems, opened)',
+      ];
+    }
+
+    static get defaultI18n() {
+      return DEFAULT_I18N;
+    }
+
+    /**
+     * The object used to localize this component. To change the default
+     * localization, set this to an object that provides all properties, or
+     * just the individual properties you want to change.
+     *
+     * When not set, defaults to `undefined`.
+     *
+     * The object has the following JSON structure and default values:
+     * ```js
+     * {
+     *   // Screen reader announcement on clear button click.
+     *   cleared: 'Selection cleared',
+     *   // Screen reader announcement when a chip is focused.
+     *   focused: ' focused. Press Backspace to remove',
+     *   // Screen reader announcement when item is selected.
+     *   selected: 'added to selection',
+     *   // Screen reader announcement when item is deselected.
+     *   deselected: 'removed from selection',
+     *   // Screen reader announcement of the selected items count.
+     *   // {count} is replaced with the actual count of items.
+     *   total: '{count} items selected',
+     *   // Text of the select all button when no filter is set.
+     *   selectAll: 'Select All',
+     *   // Text of the select all button when no filter is set
+     *   // and all items are selected.
+     *   deselectAll: 'Deselect All',
+     *   // Text of the select all button when a filter is set.
+     *   selectFiltered: 'Select Filtered',
+     *   // Text of the select all button when a filter is set
+     *   // and all items matching the filter are selected.
+     *   deselectFiltered: 'Deselect Filtered',
+     * }
+     * ```
+     * @type {MultiSelectComboBoxI18n | undefined}
+     */
+    get i18n() {
+      return super.i18n;
+    }
+
+    set i18n(value) {
+      super.i18n = value;
+    }
+
+    /** @protected */
+    get slotStyles() {
+      const tag = this.localName;
+      return [
+        ...super.slotStyles,
+        `
+        ${tag}[has-value] input::placeholder {
+          color: transparent !important;
+          forced-color-adjust: none;
+        }
+      `,
+      ];
+    }
+
+    /**
+     * Used by `InputControlMixin` as a reference to the clear button element.
+     * @protected
+     * @return {!HTMLElement}
+     */
+    get clearElement() {
+      return this.$.clearButton;
+    }
+
+    /** @protected */
+    get _chips() {
+      return [...this.querySelectorAll('[slot="chip"]')];
+    }
+
+    /**
+     * Override a getter from `InputMixin` to compute
+     * the presence of value based on `selectedItems`.
+     *
+     * @protected
+     * @override
+     */
+    get _hasValue() {
+      return this.selectedItems && this.selectedItems.length > 0;
+    }
+
+    /**
+     * Tag name prefix used by scroller and items.
+     * @protected
+     * @return {string}
+     */
+    get _tagNamePrefix() {
+      return 'vaadin-multi-select-combo-box';
+    }
+
+    /** @protected */
+    ready() {
+      super.ready();
+
+      this.addController(
+        new InputController(this, (input) => {
+          this._setInputElement(input);
+          this._setFocusElement(input);
+          this.stateTarget = input;
+          this.ariaTarget = input;
+        }),
+      );
+      this.addController(new LabelledInputController(this.inputElement, this._labelController));
+
+      this._tooltipController = new TooltipController(this);
+      this.addController(this._tooltipController);
+      this._tooltipController.setPosition('top');
+      this._tooltipController.setAriaTarget(this.inputElement);
+      this._tooltipController.setShouldShow((target) => !target.opened);
+
+      this._toggleElement = this.$.toggleButton;
+      this._inputField = this.shadowRoot.querySelector('[part="input-field"]');
+
+      this._overflowController = new SlotController(this, 'overflow', 'vaadin-multi-select-combo-box-chip', {
+        initializer: (chip) => {
+          chip.addEventListener('mousedown', (e) => this._preventBlur(e));
+          this._overflow = chip;
+        },
+      });
+      this.addController(this._overflowController);
+    }
+
+    /** @protected */
+    updated(props) {
+      super.updated(props);
+
+      ['loading', 'itemClassNameGenerator', 'renderer'].forEach((prop) => {
+        if (props.has(prop)) {
+          this._scroller[prop] = this[prop];
+        }
+      });
+
+      if (props.has('selectedItems') && this.opened) {
+        this.$.overlay._updateOverlayWidth();
+      }
+
+      const chipProps = [
+        'autoExpandHorizontally',
+        'autoExpandVertically',
+        'collapseChips',
+        'disabled',
+        'readonly',
+        'clearButtonVisible',
+        'itemClassNameGenerator',
+      ];
+      if (chipProps.some((prop) => props.has(prop))) {
+        this.__updateChips();
+      }
+
+      if (props.has('_highlightState')) {
+        this.__updateChipHighlight(props.get('_highlightState'));
+      }
+
+      if (props.has('readonly')) {
+        this._setDropdownItems(this.filteredItems);
+
+        if (this.dataProvider) {
+          this.clearCache();
+        }
+      }
+    }
+
+    /**
+     * Returns true if the current input value satisfies all constraints (if any).
+     * @return {boolean}
+     */
+    checkValidity() {
+      return this.required && !this.readonly ? this._hasValue : true;
+    }
+
+    /**
+     * Opens the dropdown list.
+     * @override
+     */
+    open() {
+      // Allow opening dropdown when readonly.
+      if (!this.disabled && !(this.readonly && this.selectedItems.length === 0)) {
+        this.opened = true;
+      }
+    }
+
+    /**
+     * Clears the selected items.
+     */
+    clear() {
+      this.__updateSelection([]);
+      this.__announceSelection();
+    }
+
+    /** @private */
+    __syncTopGroup() {
+      this._topGroup = this.selectedItemsOnTop ? [...this.selectedItems] : [];
+    }
+
+    /**
+     * Clears the cached pages and reloads data from data provider when needed.
+     * @override
+     */
+    clearCache() {
+      // Do not clear the data provider cache when read-only.
+      if (this.readonly) {
+        return;
+      }
+
+      super.clearCache();
+
+      this.__syncTopGroup();
+    }
+
+    /**
+     * @private
+     * @override
+     */
+    _itemsChanged(items, oldItems) {
+      super._itemsChanged(items, oldItems);
+
+      this.__syncTopGroup();
+    }
+
+    /**
+     * Override method from `ComboBoxBaseMixin` to only open the dropdown
+     * when clicking on the label or the input field.
+     * @param {Event} event
+     * @protected
+     * @override
+     */
+    _onHostClick(event) {
+      const path = event.composedPath();
+
+      if (path.includes(this._labelNode) || path.includes(this._inputField)) {
+        super._onHostClick(event);
+      }
+    }
+
+    /**
+     * Override method from `ComboBoxBaseMixin` to implement clearing logic.
+     * @protected
+     * @override
+     */
+    _onClearAction() {
+      this.clear();
+    }
+
+    /**
+     * Override method from `ComboBoxBaseMixin`
+     * to commit value on overlay closing.
+     * @protected
+     * @override
+     */
+    _onClosed() {
+      // Do not commit selected item again on outside click
+      this._ignoreCommitValue = true;
+
+      if (!this.loading || this.allowCustomValue) {
+        this._commitValue();
+      }
+    }
+
+    /**
+     * Override method from `ComboBoxBaseMixin` to revert the input to the
+     * filter, as this component does not use `value` for the input text.
+     * @protected
+     * @override
+     */
+    _revertInputValue() {
+      this._inputElementValue = this.filter;
+      this._clearSelectionRange();
+    }
+
+    /**
+     * @protected
+     * @override
+     */
+    _commitValue() {
+      // Store filter value for checking if user input is matching
+      // an item which is already selected, to not un-select it.
+      this._lastFilter = this.filter;
+
+      // Do not commit focused item on not blur / outside click
+      if (this._ignoreCommitValue) {
+        this._inputElementValue = '';
+        this._clearItemHighlight();
+        this._ignoreCommitValue = false;
+      } else {
+        this.__commitUserInput();
+      }
+
+      // Clear filter unless keepFilter is set
+      if (!this.keepFilter || !this.opened) {
+        this.filter = '';
+      }
+    }
+
+    /** @private */
+    __commitUserInput() {
+      if (this._hasHighlightedItem) {
+        const focusedItem = this._highlightedItem;
+        // Do not unselect an already selected item when it was focused by
+        // filtering, in which case the input value still equals the filter.
+        if (
+          this._lastFilter &&
+          this._lastFilter === this._inputElementValue &&
+          this._findIndex(focusedItem, this.selectedItems) !== -1
+        ) {
+          this.__clearInternalValue();
+          return;
+        }
+        this.__selectItem(focusedItem);
+      } else if (this._inputElementValue) {
+        // Detect if input value doesn't match an existing item
+        const items = [...this._dropdownItems];
+        const itemMatchingInputValue = items[this.__getItemIndexByLabel(items, this._inputElementValue)];
+
+        if (this.allowCustomValue && !itemMatchingInputValue) {
+          const customValue = this._inputElementValue;
+
+          // Store reference to the last custom value for checking it on focusout.
+          this._lastCustomValue = customValue;
+
+          this.__clearInternalValue(true);
+
+          this.dispatchEvent(
+            new CustomEvent('custom-value-set', {
+              detail: customValue,
+              composed: true,
+              bubbles: true,
+            }),
+          );
+        } else if (!this.allowCustomValue && !this.opened && itemMatchingInputValue) {
+          // An item matching by label was found, select it.
+          this.__selectItem(itemMatchingInputValue);
+        } else {
+          // Clear input value on Escape press while closed.
+          this._inputElementValue = '';
+        }
+      }
+    }
+
+    /**
+     * Override method inherited from `FocusMixin` to validate on blur.
+     * @param {boolean} focused
+     * @protected
+     */
+    _setFocused(focused) {
+      // Do not validate, commit or close on internal blur triggered
+      // on overlay touch action needed to hide the virtual keyboard.
+      const blurred = !focused && !this._closeOnBlurIsPrevented;
+
+      if (blurred) {
+        this._ignoreCommitValue = true;
+      }
+
+      super._setFocused(focused);
+
+      // Do not validate when focusout is caused by document
+      // losing focus, which happens on browser tab switch.
+      if (blurred && document.hasFocus()) {
+        this._clearChipHighlight();
+        this._requestValidation();
+      }
+
+      if (blurred && this.readonly) {
+        this.close();
+      }
+    }
+
+    /**
+     * Implement callback from `ResizeMixin` to update chips.
+     * @protected
+     * @override
+     */
+    _onResize() {
+      this.__updateChips();
+    }
+
+    /**
+     * Override method from `DelegateStateMixin` to set required state
+     * using `aria-required` attribute instead of `required`, in order
+     * to prevent screen readers from announcing "invalid entry".
+     * @protected
+     * @override
+     */
+    _delegateAttribute(name, value) {
+      if (!this.stateTarget) {
+        return;
+      }
+
+      if (name === 'required') {
+        this._delegateAttribute('aria-required', value ? 'true' : false);
+        return;
+      }
+
+      super._delegateAttribute(name, value);
+    }
+
+    /** @private */
+    _placeholderChanged(placeholder) {
+      const tmpPlaceholder = this.__tmpA11yPlaceholder;
+      // Do not store temporary placeholder
+      if (tmpPlaceholder !== placeholder) {
+        this.__savedPlaceholder = placeholder;
+
+        if (tmpPlaceholder) {
+          this.placeholder = tmpPlaceholder;
+        }
+      }
+    }
+
+    /** @private */
+    _selectedItemsChanged(selectedItems) {
+      this._toggleHasValue(this._hasValue);
+
+      // Use placeholder for announcing items
+      if (this._hasValue) {
+        const tmpPlaceholder = this._mergeItemLabels(selectedItems);
+        if (this.__tmpA11yPlaceholder === undefined) {
+          this.__savedPlaceholder = this.placeholder;
+        }
+        this.__tmpA11yPlaceholder = tmpPlaceholder;
+        this.placeholder = tmpPlaceholder;
+      } else if (this.__tmpA11yPlaceholder !== undefined) {
+        delete this.__tmpA11yPlaceholder;
+        this.placeholder = this.__savedPlaceholder;
+      }
+
+      // Re-render chips
+      this.__updateChips();
+
+      // Update selected for dropdown items
+      this.requestContentUpdate();
+    }
+
+    /** @private */
+    _topGroupChanged(topGroup) {
+      if (topGroup) {
+        this._setDropdownItems(this.filteredItems);
+      }
+    }
+
+    /**
+     * Override method from `ComboBoxBaseMixin` to handle valid value.
+     * @protected
+     * @override
+     */
+    _hasValidInputValue() {
+      const hasInvalidOption = !this._hasHighlightedItem && this._inputElementValue !== '';
+      return this.allowCustomValue || !hasInvalidOption;
+    }
+
+    /**
+     * Override method from `ComboBoxDataProviderMixin` to not request
+     * data provider when read-only.
+     *
+     * @protected
+     * @override
+     */
+    _shouldFetchData() {
+      if (this.readonly) {
+        return false;
+      }
+
+      return super._shouldFetchData();
+    }
+
+    /**
+     * Override method from `ComboBoxItemsMixin` to show only selected
+     * items when read-only, and to group selected items at the top
+     * of the overlay when `selectedItemsOnTop` is set.
+     *
+     * @protected
+     * @override
+     */
+    _setDropdownItems(items) {
+      super._setDropdownItems(this.__generateDropdownItems(items));
+    }
+
+    /** @private */
+    __generateDropdownItems(items) {
+      if (this.readonly) {
+        return this.selectedItems;
+      }
+
+      if (this.filter || !this.selectedItemsOnTop) {
+        return items;
+      }
+
+      if (items?.length && this._topGroup?.length) {
+        // Filter out items included to the top group.
+        const filteredItems = items.filter((item) => this._findIndex(item, this._topGroup) === -1);
+        return this._topGroup.concat(filteredItems);
+      }
+
+      return items;
+    }
+
+    /** @private */
+    _mergeItemLabels(items) {
+      return items.map((item) => this._getItemLabel(item)).join(', ');
+    }
+
+    /** @private */
+    _findIndex(item, items) {
+      return items.findIndex((other) => this._isSameItem(item, other));
+    }
+
+    /**
+     * Clear the internal combo box value and filter. Filter will not be cleared
+     * when the `keepFilter` option is enabled. Using `force` can enforce clearing
+     * the filter.
+     * @param {boolean} force overrides the keepFilter option
+     * @private
+     */
+    __clearInternalValue(force = false) {
+      if (!this.keepFilter || force) {
+        // Clear both input value and filter.
+        this.filter = '';
+        this._inputElementValue = '';
+      } else {
+        // Restore input to the filter value. Needed when items are
+        // navigated with keyboard, which overrides the input value
+        // with the item label.
+        this._inputElementValue = this.filter;
+      }
+    }
+
+    /** @private */
+    __announceItem(itemLabel, isSelected, itemCount) {
+      const state = isSelected ? 'selected' : 'deselected';
+      const total = this.__effectiveI18n.total.replace('{count}', itemCount || 0);
+      announce(`${itemLabel} ${this.__effectiveI18n[state]} ${total}`);
+    }
+
+    /** @private */
+    __removeItem(item) {
+      const itemsCopy = [...this.selectedItems];
+      itemsCopy.splice(this._findIndex(item, itemsCopy), 1);
+      this.__updateSelection(itemsCopy);
+      const itemLabel = this._getItemLabel(item);
+      this.__announceItem(itemLabel, false, itemsCopy.length);
+    }
+
+    /** @private */
+    __selectItem(item) {
+      const itemsCopy = [...this.selectedItems];
+
+      const index = this._findIndex(item, itemsCopy);
+      const itemLabel = this._getItemLabel(item);
+
+      let isSelected = false;
+
+      if (index !== -1) {
+        const lastFilter = this._lastFilter;
+        // Do not unselect when manually typing and committing an already selected item.
+        if (lastFilter?.toLowerCase() === itemLabel.toLowerCase()) {
+          this.__clearInternalValue();
+          return;
+        }
+
+        itemsCopy.splice(index, 1);
+      } else {
+        itemsCopy.push(item);
+        isSelected = true;
+      }
+
+      this.__updateSelection(itemsCopy);
+
+      // Suppress `value-changed` event.
+      this.__clearInternalValue();
+
+      this.__announceItem(itemLabel, isSelected, itemsCopy.length);
+    }
+
+    /** @private */
+    __updateSelection(selectedItems) {
+      this.selectedItems = selectedItems;
+
+      this._requestValidation();
+
+      this.dispatchEvent(new CustomEvent('change', { bubbles: true }));
+    }
+
+    /**
+     * Announces the number of selected items to screen readers.
+     * @private
+     */
+    __announceSelection() {
+      const { cleared, total } = this.__effectiveI18n;
+      const count = this.selectedItems.length;
+      announce(count === 0 ? cleared : total.replace('{count}', count));
+    }
+
+    /** @private */
+    __updateTopGroup(selectedItemsOnTop, selectedItems, opened) {
+      if (!selectedItemsOnTop) {
+        this._topGroup = [];
+      } else if (!opened || this.__needToSyncTopGroup()) {
+        this._topGroup = [...selectedItems];
+      }
+    }
+
+    /** @private */
+    __needToSyncTopGroup() {
+      // Only sync for object items
+      if (!this.itemIdPath) {
+        return false;
+      }
+      return (
+        this._topGroup &&
+        this._topGroup.some((item) => {
+          const selectedItem = this.selectedItems[this._findIndex(item, this.selectedItems)];
+          return selectedItem && item !== selectedItem;
+        })
+      );
+    }
+
+    /** @private */
+    __createChip(item) {
+      const chip = document.createElement('vaadin-multi-select-combo-box-chip');
+      chip.setAttribute('slot', 'chip');
+
+      chip.item = item;
+      chip.disabled = this.disabled;
+      chip.readonly = this.readonly;
+
+      const label = this._getItemLabel(item);
+      chip.label = label;
+      chip.setAttribute('title', label);
+
+      if (typeof this.itemClassNameGenerator === 'function') {
+        chip.className = this.itemClassNameGenerator(item);
+      }
+
+      chip.addEventListener('item-removed', (e) => this._onItemRemoved(e));
+      chip.addEventListener('mousedown', (e) => this._preventBlur(e));
+
+      return chip;
+    }
+
+    /**
+     * Returns the width of the element with its fraction, unlike `clientWidth`.
+     * The chips do not shrink below their `max-width`, so a rounding error moves the input out.
+     * @private
+     */
+    __getUsedWidth(element) {
+      return parseFloat(getComputedStyle(element).width);
+    }
+
+    /** @private */
+    __getWrapperGap() {
+      // The gap computes to `normal` when not set, which is 0 in a flex container
+      return parseFloat(getComputedStyle(this._inputField.$.wrapper).columnGap) || 0;
+    }
+
+    /** @private */
+    __getWrapperWidth() {
+      // Exclude the gap between the chips and the input
+      return this.__getUsedWidth(this._inputField.$.wrapper) - this.__getWrapperGap();
+    }
+
+    /**
+     * Returns the width that the overflow chip with the given count takes,
+     * including its margins and the gap between it and the chips.
+     * @private
+     */
+    __getOverflowWidth(count) {
+      const chip = this._overflow;
+
+      // The `_overflowItems` observer sets the final label and count afterwards
+      chip.style.visibility = 'hidden';
+      chip.removeAttribute('hidden');
+      chip.label = `${count}`;
+      chip.setAttribute('count', `${count}`);
+
+      // The chip uses `box-sizing: border-box`, so its width includes padding and border
+      const { marginInlineStart, marginInlineEnd } = getComputedStyle(chip);
+      const overflowWidth =
+        this.__getUsedWidth(chip) +
+        parseFloat(marginInlineStart) +
+        parseFloat(marginInlineEnd) +
+        this.__getWrapperGap();
+
+      chip.setAttribute('hidden', '');
+      chip.style.visibility = '';
+
+      return overflowWidth;
+    }
+
+    /** @private */
+    __updateChips() {
+      if (!this._inputField || !this.inputElement) {
+        return;
+      }
+
+      // Clear all chips except the overflow
+      this._chips.forEach((chip) => {
+        chip.remove();
+      });
+
+      if (this.selectedItems.length === 0) {
+        this._overflowItems = [];
+        return;
+      }
+
+      // When auto expanding vertically, create all chips without overflow
+      if (this.autoExpandVertically) {
+        this.selectedItems.forEach((item) => {
+          this.appendChild(this.__createChip(item));
+        });
+        this._overflowItems = [];
+        return;
+      }
+
+      const inputWidth = parseFloat(getComputedStyle(this.inputElement).flexBasis);
+
+      if (this.collapseChips) {
+        this._overflowItems = this.__updateChipsCollapsed(this.selectedItems, inputWidth);
+      } else if (this.autoExpandHorizontally) {
+        this._overflowItems = this.__updateChipsHorizontalExpand(this.selectedItems, inputWidth);
+      } else {
+        this._overflowItems = this.__updateChipsDefault(this.selectedItems, inputWidth);
+      }
+    }
+
+    /** @private */
+    __renderAllChips(items, inputWidth) {
+      const chips = items.map((item) => {
+        const chip = this.__createChip(item);
+        this.appendChild(chip);
+        return chip;
+      });
+
+      const allChipsFit = this.__getWrapperWidth() - this.__getUsedWidth(this.$.chips) >= inputWidth;
+      return { chips, allChipsFit };
+    }
+
+    /** @private */
+    __updateChipsCollapsed(items, inputWidth) {
+      const { chips, allChipsFit } = this.__renderAllChips(items, inputWidth);
+
+      if (allChipsFit) {
+        return [];
+      }
+
+      // Not enough space: remove all chips, collapse everything to overflow
+      chips.forEach((chip) => chip.remove());
+      return items.slice();
+    }
+
+    /** @private */
+    __updateChipsHorizontalExpand(items, inputWidth) {
+      const { chips, allChipsFit } = this.__renderAllChips(items, inputWidth);
+
+      if (allChipsFit) {
+        return [];
+      }
+
+      // Remove chips from the end until there is enough width for the input element to fit,
+      // keeping at least one chip visible
+      const wrapperWidth = this.__getWrapperWidth();
+      // Start from the width for the largest count, and measure the exact count only
+      // when the chips would fit with the estimate, as the label width varies per count
+      let overflowWidth = this.__getOverflowWidth(items.length - 1);
+      let visibleCount = chips.length;
+
+      while (visibleCount > 1) {
+        visibleCount -= 1;
+        chips[visibleCount].remove();
+
+        const chipsWidth = this.__getUsedWidth(this.$.chips);
+        if (wrapperWidth - chipsWidth >= inputWidth + overflowWidth) {
+          overflowWidth = this.__getOverflowWidth(items.length - visibleCount);
+          if (wrapperWidth - chipsWidth >= inputWidth + overflowWidth) {
+            break;
+          }
+        }
+      }
+
+      if (visibleCount === 1) {
+        const chipMinWidth = parseInt(getComputedStyle(this).getPropertyValue('--_chip-min-width'));
+        const remainingWidth = wrapperWidth - inputWidth - overflowWidth;
+        chips[0].style.maxWidth = `${Math.max(chipMinWidth, remainingWidth)}px`;
+      }
+
+      return items.slice(visibleCount);
+    }
+
+    /** @private */
+    __updateChipsDefault(items, inputWidth) {
+      const availableWidth = this.__getWrapperWidth() - inputWidth;
+
+      const chipMinWidth = parseInt(getComputedStyle(this).getPropertyValue('--_chip-min-width'));
+
+      // Add chips from the end until remaining width is exceeded
+      for (let i = items.length - 1, refNode = null; i >= 0; i--) {
+        const chip = this.__createChip(items[i]);
+        this.insertBefore(chip, refNode);
+
+        // Reserve space for the overflow chip with the count of the items that are not
+        // added yet, measured with a chip rendered so that the spacing between them counts
+        const remainingWidth =
+          items.length > 1 ? availableWidth - this.__getOverflowWidth(Math.max(i, 1)) : availableWidth;
+
+        if (this.__getUsedWidth(this.$.chips) > remainingWidth) {
+          // If there is no more space for chips, or if there is at least one
+          // chip already shown, collapse all remaining chips to the overflow
+          if (remainingWidth < chipMinWidth || refNode !== null) {
+            chip.remove();
+            return items.slice(0, i + 1);
+          }
+        }
+
+        chip.style.maxWidth = `${remainingWidth}px`;
+        refNode = chip;
+      }
+
+      return [];
+    }
+
+    /** @private */
+    __updateOverflowChip(overflow, items, disabled, readonly) {
+      if (overflow) {
+        const count = items.length;
+
+        overflow.label = `${count}`;
+        overflow.setAttribute('count', `${count}`);
+        overflow.setAttribute('title', this._mergeItemLabels(items));
+        overflow.toggleAttribute('hidden', count === 0);
+
+        overflow.disabled = disabled;
+        overflow.readonly = readonly;
+      }
+    }
+
+    /**
+     * Override method from `ComboBoxItemsMixin` to stop
+     * propagation of the clear button click event.
+     * @param {Event} event
+     * @protected
+     * @override
+     */
+    _onClearButtonClick(event) {
+      event.stopPropagation();
+
+      super._onClearButtonClick(event);
+    }
+
+    /**
+     * Override an event listener from `InputControlMixin` to
+     * stop the change event re-targeted from the input.
+     *
+     * @param {!Event} event
+     * @protected
+     * @override
+     */
+    _onChange(event) {
+      event.stopPropagation();
+    }
+
+    /**
+     * Override an event listener from `KeyboardMixin`.
+     * Do not call `super` in order to override clear
+     * button logic defined in `InputControlMixin`.
+     *
+     * @param {!KeyboardEvent} event
+     * @protected
+     * @override
+     */
+    _onEscape(event) {
+      if (this.readonly) {
+        event.stopPropagation();
+        if (this.opened) {
+          this.close();
+        }
+        return;
+      }
+
+      if (this.clearButtonVisible && !this.opened && this.selectedItems && this.selectedItems.length) {
+        event.stopPropagation();
+        this._onClearAction();
+      }
+
+      super._onEscape(event);
+    }
+
+    /**
+     * Override method from `ComboBoxBaseMixin` to handle Escape pres.
+     * @protected
+     * @override
+     */
+    _onEscapeCancel() {
+      this._closeOrCommit();
+    }
+
+    /**
+     * Override an event listener from `KeyboardMixin` to keep
+     * overlay open when item is selected or unselected.
+     * @param {!Event} event
+     * @protected
+     * @override
+     */
+    _onEnter(event) {
+      if (this.opened) {
+        // Do not submit the surrounding form.
+        event.preventDefault();
+        // Do not trigger global listeners.
+        event.stopPropagation();
+
+        if (this.readonly) {
+          this.close();
+        } else if (this._isSelectAllHighlighted) {
+          this._toggleSelectAll();
+        } else if (this._hasValidInputValue()) {
+          // Keep selected item focused after committing on Enter.
+          const focusedItem = this._highlightedItem;
+          this._commitValue();
+          this._highlightItem(focusedItem);
+        }
+
+        return;
+      }
+
+      super._onEnter(event);
+    }
+
+    /**
+     * Override method from `ComboBoxBaseMixin` to not update focused
+     * item when readonly.
+     * @protected
+     * @override
+     */
+    _onArrowDown() {
+      if (!this.readonly) {
+        super._onArrowDown();
+      } else if (!this.opened) {
+        this.open();
+      }
+    }
+
+    /**
+     * Override method from `ComboBoxBaseMixin` to not update focused
+     * item when readonly.
+     * @protected
+     * @override
+     */
+    _onArrowUp() {
+      if (!this.readonly) {
+        super._onArrowUp();
+      } else if (!this.opened) {
+        this.open();
+      }
+    }
+
+    /**
+     * Override an event listener from `KeyboardMixin`.
+     * @param {KeyboardEvent} event
+     * @protected
+     * @override
+     */
+    _onKeyDown(event) {
+      super._onKeyDown(event);
+
+      if (!this.readonly && this._chips.length > 0) {
+        switch (event.key) {
+          case 'Backspace':
+            this._onBackSpace();
+            break;
+          case 'ArrowLeft':
+          case 'ArrowRight':
+            this._onChipArrow(event);
+            break;
+          default:
+            this._clearChipHighlight();
+            break;
+        }
+      }
+    }
+
+    /** @private */
+    _onChipArrow(event) {
+      if (this.inputElement.selectionStart !== 0) {
+        return;
+      }
+
+      if (this._hasHighlightedChip) {
+        event.preventDefault();
+      }
+
+      const hadHighlightedItem = this._hasHighlightedItem;
+
+      const isPrevKey = this.__isRTL ? event.key === 'ArrowRight' : event.key === 'ArrowLeft';
+      if (isPrevKey) {
+        this._highlightPrevChip();
+      } else {
+        this._highlightNextChip();
+      }
+
+      // The label of the highlighted item was prefilled into the input, so
+      // restore the filter once the highlight moved from the item to a chip.
+      // Place the caret at the start of the input, so that the next arrow
+      // key press continues to navigate the chips instead of moving the caret.
+      if (hadHighlightedItem && this._hasHighlightedChip) {
+        event.preventDefault();
+        this._inputElementValue = this.filter;
+        this._setSelectionRange(0, 0);
+      }
+    }
+
+    /** @private */
+    _onBackSpace() {
+      if (this.inputElement.selectionStart !== 0) {
+        return;
+      }
+
+      const chip = this._highlightedChip;
+      if (chip) {
+        this.__removeItem(chip.item);
+        this._clearChipHighlight();
+      } else {
+        this._highlightLastChip();
+      }
+    }
+
+    /** @private */
+    __updateChipHighlight(oldState) {
+      const chips = this._chips;
+
+      if (oldState?.type === 'chip') {
+        chips[oldState.index]?.removeAttribute('focused');
+      }
+
+      if (this._hasHighlightedChip) {
+        const chip = chips[this._highlightState.index];
+        if (chip) {
+          chip.setAttribute('focused', '');
+          announce(`${this._getItemLabel(chip.item)} ${this.__effectiveI18n.focused}`);
+        }
+      }
+    }
+
+    /**
+     * @param {CustomEvent} event
+     * @protected
+     * @override
+     */
+    _overlaySelectedItemChanged(event) {
+      event.stopPropagation();
+
+      if (this.hasAttribute('closing')) {
+        return;
+      }
+
+      // Do not un-select on click when readonly
+      if (this.readonly) {
+        return;
+      }
+
+      if (event.detail.item instanceof ComboBoxPlaceholder) {
+        return;
+      }
+
+      if (this.opened) {
+        // Store filter value for checking if user input is matching
+        // an item which is already selected, to not un-select it.
+        this._lastFilter = this._inputElementValue;
+        this.__selectItem(event.detail.item);
+      }
+    }
+
+    /** @private */
+    _onItemRemoved(event) {
+      this.__removeItem(event.detail.item);
+    }
+
+    /** @private */
+    _preventBlur(event) {
+      // Prevent mousedown event to keep the input focused
+      // and keep the overlay opened when clicking a chip.
+      event.preventDefault();
+    }
+  };

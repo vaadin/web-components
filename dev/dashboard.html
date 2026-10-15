@@ -1,0 +1,115 @@
+<!doctype html>
+<html lang="en">
+  <head>
+    <meta charset="UTF-8" />
+    <meta http-equiv="X-UA-Compatible" content="IE=edge" />
+    <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+    <title>Dashboard</title>
+    <script type="module" src="./common.js"></script>
+
+    <style>
+      vaadin-dashboard {
+        --vaadin-dashboard-col-min-width: 300px;
+        --vaadin-dashboard-col-max-width: 500px;
+        --vaadin-dashboard-row-min-height: 300px;
+        --vaadin-dashboard-col-max-count: 3;
+      }
+
+      .kpi-number {
+        font-size: 80px;
+        font-weight: bold;
+        color: #4caf50;
+        height: 100%;
+        display: flex;
+        align-items: center;
+        justify-content: center;
+      }
+
+      .chart {
+        height: 100%;
+        background: repeating-linear-gradient(45deg, #e0e0e0, #e0e0e0 10px, #f5f5f5 10px, #f5f5f5 20px);
+      }
+    </style>
+
+    <script type="module">
+      import '@vaadin/dashboard';
+
+      const dashboard = document.querySelector('vaadin-dashboard');
+
+      dashboard.items = [
+        {
+          title: 'Total cost',
+          content: '+203%',
+          type: 'kpi',
+          header: '2023-2024',
+        },
+        {
+          title: 'Sales',
+          type: 'chart',
+          header: '2023-2024',
+          colspan: 2,
+        },
+        {
+          title: 'Section',
+          items: [
+            {
+              title: 'Sales closed this month',
+              rowspan: 2,
+              content: '54 000€',
+              type: 'kpi',
+            },
+            {
+              title: 'Just some number',
+              content: '1234',
+              type: 'kpi',
+              header: '2014-2024',
+            },
+          ],
+        },
+        {
+          title: 'Activity since 2023',
+          type: 'chart',
+        },
+      ];
+
+      dashboard.renderer = (root, _dashboard, { item }) => {
+        if (!root.firstElementChild) {
+          root.append(document.createElement('vaadin-dashboard-widget'));
+        }
+        root.firstElementChild.widgetTitle = item.title;
+        root.firstElementChild.innerHTML = `
+          <span slot="header-content">${item.header || ''}</span>
+          ${item.type === 'chart' ? '<div class="chart"></div>' : `<div class="kpi-number">${item.content}</div>`}
+        `;
+      };
+
+      dashboard.addEventListener('dashboard-item-moved', (e) => {
+        console.log('dashboard-item-moved', e.detail);
+      });
+
+      dashboard.addEventListener('dashboard-item-resized', (e) => {
+        console.log('dashboard-item-resized', e.detail);
+      });
+
+      dashboard.addEventListener('dashboard-item-removed', (e) => {
+        console.log('dashboard-item-removed', e.detail);
+      });
+
+      dashboard.addEventListener('dashboard-item-selected-changed', (e) => {
+        console.log('dashboard-item-selected-changed', e.detail);
+      });
+
+      dashboard.addEventListener('dashboard-item-move-mode-changed', (e) => {
+        console.log('dashboard-item-move-mode-changed', e.detail);
+      });
+
+      dashboard.addEventListener('dashboard-item-resize-mode-changed', (e) => {
+        console.log('dashboard-item-resize-mode-changed', e.detail);
+      });
+    </script>
+  </head>
+
+  <body>
+    <vaadin-dashboard editable></vaadin-dashboard>
+  </body>
+</html>

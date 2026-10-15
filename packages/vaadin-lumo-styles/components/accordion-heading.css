@@ -1,0 +1,15 @@
+/**
+ * @license
+ * Copyright (c) 2017 - 2026 Vaadin Ltd.
+ * This program is available under Apache License Version 2.0, available at https://vaadin.com/license/
+ */
+@import '../src/components/accordion-heading.css';
+@import '../src/components/details-summary.css';
+
+:root,
+:host {
+  --_lumo-vaadin-accordion-heading-inject: 1;
+  --_lumo-vaadin-accordion-heading-inject-modules:
+    lumo_components_details-summary,
+    lumo_components_accordion-heading;
+}

@@ -1,0 +1,183 @@
+/**
+ * @license
+ * Copyright (c) 2021 - 2026 Vaadin Ltd.
+ * This program is available under Apache License Version 2.0, available at https://vaadin.com/license/
+ */
+import { ElementMixin } from '@vaadin/component-base/src/element-mixin.js';
+import { ThemableMixin } from '@vaadin/vaadin-themable-mixin/vaadin-themable-mixin.js';
+import { NumberFieldMixin } from './vaadin-number-field-mixin.js';
+
+/**
+ * Fired when the user commits a value change.
+ */
+export type NumberFieldChangeEvent = Event & {
+  target: NumberField;
+};
+
+/**
+ * Fired when the user commits an unparsable value change and there is no change event.
+ */
+export type NumberFieldUnparsableChangeEvent = CustomEvent;
+
+/**
+ * Fired when the `invalid` property changes.
+ */
+export type NumberFieldInvalidChangedEvent = CustomEvent<{ value: boolean }>;
+
+/**
+ * Fired when the `value` property changes.
+ */
+export type NumberFieldValueChangedEvent = CustomEvent<{ value: string }>;
+
+/**
+ * Fired whenever the field is validated.
+ */
+export type NumberFieldValidatedEvent = CustomEvent<{ valid: boolean }>;
+
+export interface NumberFieldCustomEventMap {
+  'unparsable-change': NumberFieldUnparsableChangeEvent;
+
+  'invalid-changed': NumberFieldInvalidChangedEvent;
+
+  'value-changed': NumberFieldValueChangedEvent;
+
+  validated: NumberFieldValidatedEvent;
+}
+
+export interface NumberFieldEventMap extends HTMLElementEventMap, NumberFieldCustomEventMap {
+  change: NumberFieldChangeEvent;
+}
+
+/**
+ * `<vaadin-number-field>` is an input field web component that only accepts numeric input.
+ *
+ * ```html
+ * <vaadin-number-field label="Balance"></vaadin-number-field>
+ * ```
+ *
+ * ### Styling
+ *
+ * The following shadow DOM parts are available for styling:
+ *
+ * Part name            | Description
+ * ---------------------|----------------
+ * `label`              | The label element
+ * `input-field`        | The element that wraps prefix, value and suffix
+ * `field-button`       | Set on clear, decrease and increase buttons
+ * `clear-button`       | The clear button
+ * `error-message`      | The error message element
+ * `helper-text`        | The helper text element wrapper
+ * `required-indicator` | The `required` state indicator element
+ * `increase-button`    | Increase ("plus") button
+ * `decrease-button`    | Decrease ("minus") button
+ *
+ * The following state attributes are available for styling:
+ *
+ * Attribute            | Description
+ * ---------------------|---------------------------------
+ * `disabled`           | Set when the element is disabled
+ * `has-value`          | Set when the element has a value
+ * `has-label`          | Set when the element has a label
+ * `has-helper`         | Set when the element has helper text or slot
+ * `has-error-message`  | Set when the element has an error message
+ * `has-tooltip`        | Set when the element has a slotted tooltip
+ * `invalid`            | Set when the element is invalid
+ * `input-prevented`    | Temporarily set when invalid input is prevented
+ * `focused`            | Set when the element is focused
+ * `focus-ring`         | Set when the element is keyboard focused
+ * `readonly`           | Set when the element is readonly
+ *
+ * Note, the `input-prevented` state attribute is only supported when `allowedCharPattern` is set.
+ *
+ * The following custom CSS properties are available for styling:
+ *
+ * Custom CSS property                                |
+ * :--------------------------------------------------|
+ * | `--vaadin-field-default-width`                   |
+ * | `--vaadin-input-field-background`                |
+ * | `--vaadin-input-field-border-color`              |
+ * | `--vaadin-input-field-border-radius`             |
+ * | `--vaadin-input-field-border-width`              |
+ * | `--vaadin-input-field-bottom-end-radius`         |
+ * | `--vaadin-input-field-bottom-start-radius`       |
+ * | `--vaadin-input-field-button-text-color`         |
+ * | `--vaadin-input-field-container-gap`             |
+ * | `--vaadin-input-field-disabled-background`       |
+ * | `--vaadin-input-field-disabled-text-color`       |
+ * | `--vaadin-input-field-error-color`               |
+ * | `--vaadin-input-field-error-font-size`           |
+ * | `--vaadin-input-field-error-font-weight`         |
+ * | `--vaadin-input-field-error-line-height`         |
+ * | `--vaadin-input-field-gap`                       |
+ * | `--vaadin-input-field-height`                    |
+ * | `--vaadin-input-field-helper-color`              |
+ * | `--vaadin-input-field-helper-font-size`          |
+ * | `--vaadin-input-field-helper-font-weight`        |
+ * | `--vaadin-input-field-helper-line-height`        |
+ * | `--vaadin-input-field-label-aside-gap`           |
+ * | `--vaadin-input-field-label-aside-text-align`    |
+ * | `--vaadin-input-field-label-aside-width`         |
+ * | `--vaadin-input-field-label-color`               |
+ * | `--vaadin-input-field-label-font-size`           |
+ * | `--vaadin-input-field-label-font-weight`         |
+ * | `--vaadin-input-field-label-line-height`         |
+ * | `--vaadin-input-field-padding`                   |
+ * | `--vaadin-input-field-placeholder-color`         |
+ * | `--vaadin-input-field-required-indicator`        |
+ * | `--vaadin-input-field-required-indicator-color`  |
+ * | `--vaadin-input-field-top-end-radius`            |
+ * | `--vaadin-input-field-top-start-radius`          |
+ * | `--vaadin-input-field-value-color`               |
+ * | `--vaadin-input-field-value-font-size`           |
+ * | `--vaadin-input-field-value-font-weight`         |
+ * | `--vaadin-input-field-value-line-height`         |
+ *
+ * See [Styling Components](https://vaadin.com/docs/latest/styling/styling-components) documentation.
+ *
+ * ### Change events
+ *
+ * Depending on the nature of the value change that the user attempts to commit e.g. by pressing Enter,
+ * the component can fire either a `change` event or an `unparsable-change` event:
+ *
+ * Value change             | Event
+ * :------------------------|:------------------
+ * empty => parsable        | change
+ * empty => unparsable      | unparsable-change
+ * parsable => empty        | change
+ * parsable => parsable     | change
+ * parsable => unparsable   | change
+ * unparsable => empty      | unparsable-change
+ * unparsable => parsable   | change
+ * unparsable => unparsable | -
+ *
+ * Note, there is currently no way to detect unparsable => unparsable changes because the browser
+ * doesn't provide access to unparsable values of native [type=number] inputs.
+ *
+ * @fires {Event} input - Fired when the value is changed by the user: on every typing keystroke, and the value is cleared using the clear button.
+ * @fires {Event} change - Fired when the user commits a value change.
+ * @fires {Event} unparsable-change - Fired when the user commits an unparsable value change and there is no change event.
+ * @fires {CustomEvent} invalid-changed - Fired when the `invalid` property changes.
+ * @fires {CustomEvent} value-changed - Fired when the `value` property changes.
+ * @fires {CustomEvent} validated - Fired whenever the field is validated.
+ */
+declare class NumberField extends NumberFieldMixin(ThemableMixin(ElementMixin(HTMLElement))) {
+  addEventListener<K extends keyof NumberFieldEventMap>(
+    type: K,
+    listener: (this: NumberField, ev: NumberFieldEventMap[K]) => void,
+    options?: AddEventListenerOptions | boolean,
+  ): void;
+
+  removeEventListener<K extends keyof NumberFieldEventMap>(
+    type: K,
+    listener: (this: NumberField, ev: NumberFieldEventMap[K]) => void,
+    options?: EventListenerOptions | boolean,
+  ): void;
+}
+
+declare global {
+  interface HTMLElementTagNameMap {
+    'vaadin-number-field': NumberField;
+  }
+}
+
+export { NumberField };

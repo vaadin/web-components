@@ -1,0 +1,120 @@
+/**
+ * @license
+ * Copyright (c) 2017 - 2026 Vaadin Ltd.
+ * This program is available under Apache License Version 2.0, available at https://vaadin.com/license/
+ */
+@media lumo_components_dashboard-widget {
+  /* Widget states */
+
+  :host([editable]) {
+    --_widget-border-color: var(--lumo-contrast-20pct);
+    --_widget-border-width: 1px;
+  }
+
+  :host([selected]) {
+    background: var(--lumo-primary-color-10pct);
+  }
+
+  :host([resizing])::after {
+    top: -1px;
+    background: var(--_drop-target-background-color);
+    border: var(--_drop-target-border);
+  }
+
+  /* Widget parts */
+
+  header {
+    min-height: var(--lumo-size-l);
+    padding: var(--lumo-space-xs) var(--lumo-space-m);
+  }
+
+  :host([editable]) header {
+    padding: var(--lumo-space-xs);
+  }
+
+  [part='title'] {
+    font-size: var(--lumo-font-size-l);
+    font-weight: 600;
+  }
+
+  #content {
+    min-height: var(--lumo-size-m);
+    border-radius: inherit;
+    border-top-left-radius: 0;
+    border-top-right-radius: 0;
+    overflow: hidden;
+  }
+
+  ::slotted([slot='header-content']) {
+    align-self: center;
+  }
+
+  :host([resize-mode]) #content,
+  :host([move-mode]) #content {
+    opacity: 0.75;
+    filter: blur(10px);
+  }
+
+  /* Resize handle */
+
+  [part~='resize-button'] {
+    --_resize-button-offset: min(var(--_gap), var(--_padding), var(--lumo-space-xs));
+    bottom: calc(-1 * var(--_resize-button-offset));
+    inset-inline-end: calc(-1 * var(--_resize-button-offset));
+    --icon: var(--lumo-icons-resize-handle);
+  }
+
+  /* Accessible resize mode controls */
+
+  [part~='resize-apply-button'] {
+    --icon: var(--lumo-icons-checkmark);
+    font-size: var(--lumo-icon-size-m);
+  }
+
+  [part~='resize-grow-width-button'],
+  [part~='resize-shrink-width-button'] {
+    padding-right: 0;
+    padding-left: 0;
+    min-width: var(--lumo-size-s);
+  }
+
+  [part~='resize-grow-height-button'],
+  [part~='resize-shrink-height-button'] {
+    height: var(--lumo-size-s);
+    padding-right: 0;
+    padding-left: 0;
+  }
+
+  [part~='resize-grow-height-button'],
+  [part~='resize-grow-width-button'] {
+    --icon: var(--lumo-icons-plus);
+  }
+
+  [part~='resize-shrink-height-button'],
+  [part~='resize-shrink-width-button'] {
+    --icon: var(--lumo-icons-minus);
+  }
+
+  /* Windows High Contrast Mode */
+  @media (forced-colors: active) {
+    :host {
+      border: 1px solid;
+    }
+
+    :host([focused]) {
+      outline: 2px solid;
+      outline-offset: 1px;
+    }
+
+    :host([selected]) {
+      outline-width: 1px;
+      outline-offset: 0;
+      outline-color: Highlight;
+    }
+
+    :host([selected][focused]) {
+      outline-width: 3px;
+      outline-offset: 0;
+    }
+  }
+}

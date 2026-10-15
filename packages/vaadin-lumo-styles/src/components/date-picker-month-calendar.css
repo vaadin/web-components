@@ -1,0 +1,156 @@
+/**
+ * @license
+ * Copyright (c) 2017 - 2026 Vaadin Ltd.
+ * This program is available under Apache License Version 2.0, available at https://vaadin.com/license/
+ */
+@media lumo_components_date-picker-month-calendar {
+  :host {
+    font-size: var(--lumo-font-size-m);
+    color: var(--lumo-body-text-color);
+    text-align: center;
+    padding: var(--vaadin-date-picker-month-padding, 0 var(--lumo-space-xs));
+    --_focus-ring-color: var(--vaadin-focus-ring-color, var(--lumo-primary-color-50pct));
+    --_focus-ring-width: var(--vaadin-focus-ring-width, 2px);
+    --_selection-color: var(--vaadin-selection-color, var(--lumo-primary-color));
+    --_selection-color-text: var(--vaadin-selection-color-text, var(--lumo-primary-text-color));
+  }
+
+  [part~='disabled'] {
+    pointer-events: none;
+  }
+
+  /* Month header */
+
+  [part='month-header'] {
+    color: var(--vaadin-date-picker-month-header-color, var(--lumo-header-text-color));
+    font-size: var(--vaadin-date-picker-month-header-font-size, var(--lumo-font-size-l));
+    margin-bottom: var(--lumo-space-m);
+  }
+
+  /* Week days and numbers */
+
+  [part~='weekday'] {
+    color: var(--vaadin-date-picker-weekday-color, var(--lumo-secondary-text-color));
+    font-size: var(--vaadin-date-picker-weekday-font-size, var(--lumo-font-size-xxs));
+    font-weight: var(--vaadin-date-picker-weekday-font-weight, normal);
+    line-height: 1;
+    margin-bottom: var(--lumo-space-s);
+  }
+
+  :host([week-numbers]) table {
+    grid-template-columns: var(--lumo-size-xs) repeat(7, 1fr);
+  }
+
+  :host([week-numbers]) [part~='weekday']:empty {
+    display: flex;
+  }
+
+  [part~='week-number'] {
+    color: var(--vaadin-date-picker-week-number-color, var(--lumo-secondary-text-color));
+    font-size: var(--vaadin-date-picker-week-number-font-size, var(--lumo-font-size-xxs));
+    grid-column: auto;
+    margin: 0;
+  }
+
+  [part~='week-number']::after {
+    display: none;
+  }
+
+  /* Date cells */
+
+  [part~='date'] {
+    border-radius: var(--vaadin-date-picker-date-border-radius, var(--lumo-border-radius-m));
+    height: var(--vaadin-date-picker-date-height, var(--lumo-size-m));
+    transition: color 0.1s;
+  }
+
+  [part~='date']:not(:empty) {
+    cursor: var(--lumo-clickable-cursor);
+  }
+
+  [part~='today'] {
+    color: var(--vaadin-date-picker-date-today-color, var(--_selection-color-text));
+  }
+
+  [part~='selected'] {
+    color: var(--vaadin-date-picker-date-selected-color, var(--lumo-primary-contrast-color));
+  }
+
+  /* Selection, hover and focus indicator */
+
+  [part~='date']::after {
+    top: 50%;
+    left: 50%;
+    translate: -50% -50%;
+    width: 80%;
+    height: 80%;
+    min-width: 2em;
+    min-height: 2em;
+    max-width: 100%;
+    max-height: 100%;
+    aspect-ratio: auto;
+    outline: none;
+  }
+
+  [part~='selected']::after {
+    background: var(--vaadin-date-picker-date-selected-background, var(--_selection-color));
+  }
+
+  [part~='date'][part~='focused']::after {
+    box-shadow:
+      0 0 0 1px var(--lumo-base-color),
+      0 0 0 calc(var(--_focus-ring-width) + 1px) var(--_focus-ring-color);
+  }
+
+  :host(:not([focused])) [part~='date'][part~='focused']::after {
+    animation: vaadin-date-picker-month-calendar-focus-date 1.4s infinite;
+  }
+
+  @keyframes vaadin-date-picker-month-calendar-focus-date {
+    50% {
+      box-shadow:
+        0 0 0 1px var(--lumo-base-color),
+        0 0 0 calc(var(--_focus-ring-width) + 1px) transparent;
+    }
+  }
+
+  [part~='date']:not(:empty):not([part~='disabled']):not([part~='selected']):hover::after {
+    background-color: var(--lumo-primary-color-10pct);
+  }
+
+  @media (pointer: coarse) {
+    [part~='date']:hover:not([part~='selected'])::after,
+    :host(:not([focus-ring])) [part~='focused']:not([part~='selected'])::after {
+      display: none;
+    }
+
+    [part~='date']:not(:empty):not([part~='disabled']):active::after {
+      display: block;
+    }
+
+    :host(:not([focus-ring])) [part~='date'][part~='selected']::after {
+      box-shadow: none;
+    }
+  }
+
+  /* Disabled */
+
+  [disabled] {
+    color: var(--vaadin-date-picker-date-disabled-color, var(--lumo-disabled-text-color));
+    opacity: 1;
+  }
+
+  :host([disabled]) * {
+    color: var(--lumo-disabled-text-color) !important;
+  }
+
+  @media (forced-colors: active) {
+    [part~='date'][part~='focused'] {
+      outline: 1px solid;
+    }
+
+    [part~='date'][part~='selected'] {
+      outline: 3px solid;
+    }
+  }
+}

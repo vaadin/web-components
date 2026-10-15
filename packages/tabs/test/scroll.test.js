@@ -1,0 +1,301 @@
+import { expect } from '@vaadin/chai-plugins';
+import { arrowDown, arrowLeft, arrowRight, arrowUp, fixtureSync, nextFrame, nextRender } from '@vaadin/testing-helpers';
+import sinon from 'sinon';
+import './tabs-test-styles.js';
+import '../src/vaadin-tabs.js';
+
+describe('scrollable tabs', () => {
+  let tabs, items, scroller, forwardButton, backButton;
+
+  beforeEach(async () => {
+    tabs = fixtureSync(`
+      <vaadin-tabs style="width: 315px; height: 150px;">
+        <vaadin-tab>Foo</vaadin-tab>
+        <vaadin-tab>Bar</vaadin-tab>
+        <vaadin-tab>Baz</vaadin-tab>
+        <vaadin-tab>Foo1</vaadin-tab>
+        <vaadin-tab>Bar1</vaadin-tab>
+        <vaadin-tab>Baz1</vaadin-tab>
+        <vaadin-tab>Foo2</vaadin-tab>
+        <vaadin-tab>Bar2</vaadin-tab>
+        <vaadin-tab>Baz2</vaadin-tab>
+        <vaadin-tab>Foo3</vaadin-tab>
+        <vaadin-tab>Bar3</vaadin-tab>
+        <vaadin-tab>Baz3</vaadin-tab>
+        <vaadin-tab>Foo4</vaadin-tab>
+        <vaadin-tab>Bar4</vaadin-tab>
+        <vaadin-tab>Baz4</vaadin-tab>
+      </vaadin-tabs>
+    `);
+    await nextRender();
+    tabs._observer.flush();
+    items = tabs.items;
+    scroller = tabs.shadowRoot.querySelector('[part="tabs"]');
+    forwardButton = tabs.shadowRoot.querySelector('[part="forward-button"]');
+    backButton = tabs.shadowRoot.querySelector('[part="back-button"]');
+  });
+
+  describe('horizontal', () => {
+    beforeEach(async () => {
+      tabs.orientation = 'horizontal';
+      await nextFrame();
+    });
+
+    it('should show next focused item on the right edge of the viewport on "arrow-right" on last visible tab', async () => {
+      tabs.selected = 4;
+      tabs._focus(4);
+      await nextRender();
+      arrowRight(tabs);
+      expect(scroller.getBoundingClientRect().right).to.be.closeTo(items[5].getBoundingClientRect().right, 60);
+    });
+
+    it('should show next focused item on the left edge of the viewport on "arrow-left" on first visible tab', async () => {
+      // Move scroller so the first tab will be out of visible part
+      tabs.selected = 7;
+      tabs._focus(7);
+      await nextRender();
+
+      // Move focus and choose the first visible tab selected
+      tabs.selected = 2;
+      tabs._focus(2);
+      await nextRender();
+
+      arrowLeft(tabs);
+      expect(scroller.getBoundingClientRect().left).to.be.closeTo(items[1].getBoundingClientRect().left, 60);
+    });
+
+    it('should scroll forward when forward button is clicked', () => {
+      const initialScrollLeft = scroller.scrollLeft;
+      forwardButton.click();
+      expect(scroller.scrollLeft).to.be.greaterThan(initialScrollLeft);
+    });
+
+    it('should scroll back when back button is clicked', async () => {
+      tabs.selected = 4;
+      await nextRender();
+      expect(scroller.scrollLeft).to.be.greaterThan(0);
+
+      backButton.click();
+      expect(scroller.scrollLeft).to.be.equal(0);
+    });
+
+    describe('press and hold', () => {
+      let clock;
+
+      beforeEach(() => {
+        clock = sinon.useFakeTimers({ shouldClearNativeTimers: true });
+      });
+
+      afterEach(() => {
+        clock.restore();
+      });
+
+      it('should scroll continuously while forward button is pressed', () => {
+        forwardButton.dispatchEvent(new PointerEvent('pointerdown', { button: 0 }));
+        const firstScroll = scroller.scrollLeft;
+        expect(firstScroll).to.be.greaterThan(0);
+
+        clock.tick(300);
+        expect(scroller.scrollLeft).to.be.greaterThan(firstScroll);
+      });
+
+      it('should not scroll forward on non-primary button press', () => {
+        forwardButton.dispatchEvent(new PointerEvent('pointerdown', { button: 1 }));
+        expect(scroller.scrollLeft).to.equal(0);
+      });
+
+      it('should scroll continuously while back button is pressed', () => {
+        // Move to the end so there is room to scroll back
+        scroller.scrollLeft = scroller.scrollWidth;
+        const startScroll = scroller.scrollLeft;
+
+        backButton.dispatchEvent(new PointerEvent('pointerdown', { button: 0 }));
+        const firstScroll = scroller.scrollLeft;
+        expect(firstScroll).to.be.lessThan(startScroll);
+
+        clock.tick(300);
+        expect(scroller.scrollLeft).to.be.lessThan(firstScroll);
+      });
+
+      it('should not scroll back on non-primary button press', () => {
+        scroller.scrollLeft = scroller.scrollWidth;
+        const startScroll = scroller.scrollLeft;
+
+        backButton.dispatchEvent(new PointerEvent('pointerdown', { button: 1 }));
+        expect(scroller.scrollLeft).to.equal(startScroll);
+      });
+
+      it('should stop scrolling on pointerup', () => {
+        forwardButton.dispatchEvent(new PointerEvent('pointerdown', { button: 0 }));
+        const firstScroll = scroller.scrollLeft;
+
+        forwardButton.dispatchEvent(new PointerEvent('pointerup'));
+        clock.tick(300);
+        expect(scroller.scrollLeft).to.be.equal(firstScroll);
+      });
+
+      it('should not double scroll forward on click that follows pointerdown', () => {
+        forwardButton.dispatchEvent(new PointerEvent('pointerdown', { button: 0 }));
+        const firstScroll = scroller.scrollLeft;
+
+        forwardButton.dispatchEvent(new MouseEvent('click'));
+        expect(scroller.scrollLeft).to.be.equal(firstScroll);
+      });
+
+      it('should not double scroll back on click that follows pointerdown', () => {
+        scroller.scrollLeft = scroller.scrollWidth;
+
+        backButton.dispatchEvent(new PointerEvent('pointerdown', { button: 0 }));
+        const firstScroll = scroller.scrollLeft;
+
+        backButton.dispatchEvent(new MouseEvent('click'));
+        expect(scroller.scrollLeft).to.be.equal(firstScroll);
+      });
+    });
+
+    ['ltr', 'rtl'].forEach((dir) => {
+      describe(dir, () => {
+        let itemsInViewport;
+
+        function getItemsInViewport() {
+          const scrollerRect = scroller.getBoundingClientRect();
+
+          items.forEach((item) => {
+            const itemRect = item.getBoundingClientRect();
+
+            let left = scrollerRect.left;
+            const btnLeft = dir === 'ltr' ? backButton : forwardButton;
+            if (getComputedStyle(btnLeft).opacity === '1') {
+              left += btnLeft.clientWidth;
+            }
+
+            let right = scrollerRect.right;
+            const btnRight = dir === 'ltr' ? forwardButton : backButton;
+            if (getComputedStyle(btnRight).opacity === '1') {
+              right -= btnRight.clientWidth;
+            }
+
+            const inViewport = Math.round(itemRect.left) >= left && Math.round(itemRect.right) <= right;
+            if (inViewport) {
+              itemsInViewport.add(item);
+            } else if (itemsInViewport.has(item)) {
+              itemsInViewport.delete(item);
+            }
+          });
+          return [...itemsInViewport].map((item) => item.textContent);
+        }
+
+        beforeEach(async () => {
+          itemsInViewport = new Set();
+          tabs.setAttribute('dir', dir);
+          await nextRender();
+        });
+
+        it('should have displayed all the items fully when scrolled forward to the end via button', async () => {
+          const allVisibleItems = new Set();
+          getItemsInViewport().forEach((item) => allVisibleItems.add(item));
+
+          while (Math.abs(scroller.scrollLeft) < scroller.scrollWidth - scroller.offsetWidth) {
+            forwardButton.click();
+            await nextRender();
+
+            getItemsInViewport().forEach((item) => allVisibleItems.add(item));
+          }
+
+          expect(allVisibleItems.size).to.equal(items.length);
+        });
+
+        it('should have displayed all the items fully when scrolled back to the start via button', async () => {
+          // Initially scroll to the end
+          tabs._scrollToItem(items.length - 1);
+          await nextRender();
+
+          const allVisibleItems = new Set();
+          getItemsInViewport().forEach((item) => allVisibleItems.add(item));
+
+          while (Math.abs(scroller.scrollLeft) > 0) {
+            backButton.click();
+            await nextRender();
+
+            getItemsInViewport().forEach((item) => allVisibleItems.add(item));
+          }
+
+          expect(allVisibleItems.size).to.equal(items.length);
+        });
+
+        it('should not get stuck with wide tabs when scrolled forward to the end via button', () => {
+          tabs.style.width = '100px';
+
+          let previousScrollLeft;
+          let currentScrollLeft = tabs._scrollerElement.scrollLeft;
+          // Click the forward button until it does not have any effect
+          do {
+            previousScrollLeft = currentScrollLeft;
+            forwardButton.click();
+            currentScrollLeft = tabs._scrollerElement.scrollLeft;
+          } while (previousScrollLeft !== currentScrollLeft);
+
+          const scrollerEndPosition =
+            -tabs.__direction * tabs._scrollerElement.scrollLeft + tabs._scrollerElement.offsetWidth;
+          expect(scrollerEndPosition).to.be.approximately(tabs._scrollerElement.scrollWidth, 1);
+        });
+
+        it('should not get stuck with wide tabs when scrolled back to the start via button', () => {
+          tabs.style.width = '100px';
+
+          // Initially scroll to the end
+          tabs._scrollToItem(items.length - 1);
+
+          let previousScrollLeft;
+          let currentScrollLeft = tabs._scrollerElement.scrollLeft;
+          // Click the back button until it does not have any effect
+          do {
+            previousScrollLeft = currentScrollLeft;
+            backButton.click();
+            currentScrollLeft = tabs._scrollerElement.scrollLeft;
+          } while (previousScrollLeft !== currentScrollLeft);
+
+          expect(tabs._scrollerElement.scrollLeft).to.be.approximately(0, 1);
+        });
+      });
+    });
+  });
+
+  describe('vertical', () => {
+    beforeEach(() => {
+      tabs.orientation = 'vertical';
+      tabs._updateOverflow();
+    });
+
+    it('should move the scroll vertically to display selected item', async () => {
+      expect(scroller.scrollTop).to.be.equal(0);
+      tabs.selected = 5;
+      tabs._focus(5);
+      await nextRender();
+      expect(scroller.scrollTop).to.be.greaterThan(0);
+    });
+
+    it('should show the next focused item on the bottom edge of the viewport on "arrow-down" on last visible tab', async () => {
+      tabs.selected = 5;
+      tabs._focus(5);
+      await nextRender();
+      const scrollPosition = items[5].getBoundingClientRect().bottom;
+      arrowDown(tabs);
+      expect(items[6].getBoundingClientRect().bottom).to.equal(scrollPosition);
+    });
+
+    it('should show the next focused item on the top edge of the viewport on "arrow-up" on first visible tab', async () => {
+      tabs.selected = 7;
+      tabs._focus(7);
+      await nextRender();
+
+      tabs.selected = 2;
+      tabs._focus(2);
+      await nextRender();
+
+      const scrollPosition = items[2].getBoundingClientRect().top;
+      arrowUp(tabs);
+      expect(items[1].getBoundingClientRect().top).to.equal(scrollPosition);
+    });
+  });
+});

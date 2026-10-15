@@ -1,0 +1,150 @@
+/**
+ * @license
+ * Copyright (c) 2016 - 2026 Vaadin Ltd.
+ * This program is available under Apache License Version 2.0, available at https://vaadin.com/license/
+ */
+import { setOrRemoveAttribute } from '@vaadin/component-base/src/dom-utils.js';
+import { getClosestCell } from './vaadin-grid-helpers.js';
+
+/**
+ * A mixin providing common sorter functionality.
+ */
+export const GridSorterMixin = (superClass) =>
+  class GridSorterMixinClass extends superClass {
+    static get properties() {
+      return {
+        /**
+         * JS Path of the property in the item used for sorting the data.
+         */
+        path: {
+          type: String,
+        },
+
+        /**
+         * How to sort the data.
+         * Possible values are `asc` to use an ascending algorithm, `desc` to sort the data in
+         * descending direction, or `null` for not sorting the data.
+         */
+        direction: {
+          type: String,
+          reflectToAttribute: true,
+          notify: true,
+          value: null,
+          sync: true,
+        },
+
+        /**
+         * @type {number | null}
+         * @protected
+         */
+        _order: {
+          type: Number,
+          value: null,
+          sync: true,
+        },
+      };
+    }
+
+    static get observers() {
+      return ['_pathOrDirectionChanged(path, direction)'];
+    }
+
+    /** @protected */
+    ready() {
+      super.ready();
+      this.addEventListener('click', this._onClick.bind(this));
+
+      this.__updateAccessibleName();
+    }
+
+    /** @protected */
+    connectedCallback() {
+      super.connectedCallback();
+
+      if (this._grid) {
+        this._grid.__applySorters();
+      } else {
+        this.__dispatchSorterChangedEvenIfPossible();
+      }
+    }
+
+    /** @protected */
+    disconnectedCallback() {
+      super.disconnectedCallback();
+
+      if (!this.parentNode && this._grid) {
+        this._grid.__removeSorters([this]);
+      } else if (this._grid) {
+        this._grid.__applySorters();
+      }
+    }
+
+    /** @private */
+    _pathOrDirectionChanged() {
+      this.__dispatchSorterChangedEvenIfPossible();
+    }
+
+    /**
+     * Updates the sorter accessible name based on the grid i18n.
+     *
+     * @private
+     */
+    __updateAccessibleName() {
+      // `_grid` is only assigned once the sorter becomes activated.
+      // Resolve the grid from the parent cell column as a fallback.
+      const grid = this._grid || getClosestCell(this)?.getRootNode().host;
+      if (!grid) {
+        return;
+      }
+
+      const ariaLabel = grid.__effectiveI18n.sorter?.replace('{column}', this.textContent.trim());
+      setOrRemoveAttribute(this, 'aria-label', ariaLabel);
+    }
+
+    /** @private */
+    __dispatchSorterChangedEvenIfPossible() {
+      if (this.path === undefined || this.direction === undefined || !this.isConnected) {
+        return;
+      }
+
+      this.dispatchEvent(
+        new CustomEvent('sorter-changed', {
+          detail: { shiftClick: Boolean(this._shiftClick), fromSorterClick: Boolean(this._fromSorterClick) },
+          bubbles: true,
+          composed: true,
+        }),
+      );
+      // Cleaning up as a programatically sorting can be done after some user interaction
+      this._fromSorterClick = false;
+      this._shiftClick = false;
+    }
+
+    /** @private */
+    _getDisplayOrder(order) {
+      return order === null ? '' : order + 1;
+    }
+
+    /** @private */
+    _onClick(e) {
+      if (e.defaultPrevented) {
+        // Something else has already handled the click event, do nothing.
+        return;
+      }
+
+      if (this.matches(':focus-within') && !this.matches(':focus')) {
+        // Some focusable content inside the sorter was clicked, do nothing.
+        return;
+      }
+
+      e.preventDefault();
+      this._shiftClick = e.shiftKey;
+      this._fromSorterClick = true;
+      if (this.direction === 'asc') {
+        this.direction = 'desc';
+      } else if (this.direction === 'desc') {
+        this.direction = null;
+      } else {
+        this.direction = 'asc';
+      }
+    }
+  };

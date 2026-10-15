@@ -1,0 +1,85 @@
+/**
+ * @license
+ * Copyright (c) 2017 - 2026 Vaadin Ltd.
+ * This program is available under Apache License Version 2.0, available at https://vaadin.com/license/
+ */
+import { html, LitElement } from 'lit';
+import { defineCustomElement } from '@vaadin/component-base/src/define.js';
+import { DirMixin } from '@vaadin/component-base/src/dir-mixin.js';
+import { PolylitMixin } from '@vaadin/component-base/src/polylit-mixin.js';
+import { getOverlaysOnTop, isNestedOverlay } from '@vaadin/overlay/src/vaadin-overlay-stack-mixin.js';
+import { LumoInjectionMixin } from '@vaadin/vaadin-themable-mixin/lumo-injection-mixin.js';
+import { ThemableMixin } from '@vaadin/vaadin-themable-mixin/vaadin-themable-mixin.js';
+import { dialogOverlayStyles } from './styles/vaadin-dialog-overlay-base-styles.js';
+import { DialogOverlayMixin } from './vaadin-dialog-overlay-mixin.js';
+
+/**
+ * An element used internally by `<vaadin-dialog>`. Not intended to be used separately.
+ *
+ * @attr {string} theme - The theme variants to apply to the component.
+ * @customElement vaadin-dialog-overlay
+ * @extends HTMLElement
+ * @private
+ */
+class DialogOverlay extends DialogOverlayMixin(DirMixin(ThemableMixin(PolylitMixin(LumoInjectionMixin(LitElement))))) {
+  static get is() {
+    return 'vaadin-dialog-overlay';
+  }
+
+  static get styles() {
+    return dialogOverlayStyles;
+  }
+
+  /**
+   * Override method from OverlayFocusMixin to use owner as focus root
+   * @protected
+   * @override
+   */
+  get _focusRoot() {
+    return this.owner;
+  }
+
+  /** @protected */
+  render() {
+    return html`
+      <div id="backdrop" part="backdrop" ?hidden="${!this.withBackdrop}"></div>
+      <div part="overlay" id="overlay">
+        <section id="resizerContainer" class="resizer-container">
+          <header part="header">
+            <div part="title"><slot name="title"></slot></div>
+            <div part="header-content"><slot name="header-content"></slot></div>
+          </header>
+          <div part="content" id="content"><slot></slot></div>
+          <footer part="footer"><slot name="footer"></slot></footer>
+        </section>
+      </div>
+    `;
+  }
+
+  /**
+   * @param {Event} event
+   * @protected
+   * @override
+   */
+  bringToFront(event) {
+    if (event instanceof Event) {
+      const path = event.composedPath();
+
+      // Do not bring overlay to front if this method is called
+      // on event that originates from a nested dialog content.
+      const isNestedDialogEvent = getOverlaysOnTop(this).some(
+        (overlay) => path.includes(overlay) && isNestedOverlay(this, overlay) && overlay instanceof DialogOverlay,
+      );
+
+      if (isNestedDialogEvent) {
+        return;
+      }
+    }
+
+    super.bringToFront();
+  }
+}
+
+defineCustomElement(DialogOverlay);
+
+export { DialogOverlay };

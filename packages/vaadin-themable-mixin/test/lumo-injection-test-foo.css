@@ -1,0 +1,11 @@
+html,
+:host {
+  --_lumo-test-foo-inject: 1;
+  --_lumo-test-foo-inject-modules: lumo_foo;
+}
+
+@media lumo_foo {
+  [part='content'] {
+    background-color: green;
+  }
+}

@@ -1,0 +1,103 @@
+name: Unit tests
+
+on: pull_request
+
+permissions:
+  contents: read
+
+jobs:
+  chrome:
+    name: Chrome
+    runs-on: ubuntu-latest
+    steps:
+      - uses: actions/checkout@v7
+        with:
+          fetch-depth: '0'
+
+      - name: Setup Node
+        uses: actions/setup-node@v6
+        with:
+          node-version: '24'
+          cache: 'yarn'
+
+      - name: Install Dependencies
+        run: yarn --frozen-lockfile --no-progress --non-interactive
+
+      - name: Test
+        run: yarn test
+  firefox:
+    name: Firefox
+    runs-on: ubuntu-latest
+    steps:
+      - uses: actions/checkout@v7
+        with:
+          fetch-depth: '0'
+
+      - name: Setup Node
+        uses: actions/setup-node@v6
+        with:
+          node-version: '24'
+          cache: 'yarn'
+
+      - name: Install Dependencies
+        run: yarn --frozen-lockfile --no-progress --non-interactive
+
+      - name: Install Playwright
+        run: npx playwright install firefox --with-deps
+
+      - name: Test
+        run: yarn test:firefox
+  webkit:
+    name: WebKit
+    runs-on: ubuntu-latest
+    steps:
+      - uses: actions/checkout@v7
+        with:
+          fetch-depth: '0'
+
+      - name: Setup Node
+        uses: actions/setup-node@v6
+        with:
+          node-version: '24'
+          cache: 'yarn'
+
+      - name: Install Dependencies
+        run: yarn --frozen-lockfile --no-progress --non-interactive
+
+      - name: Install Playwright
+        run: npx playwright install webkit --with-deps
+
+      - name: Test
+        run: yarn test:webkit
+  react:
+    name: React
+    runs-on: ubuntu-latest
+    steps:
+      - uses: actions/checkout@v7
+
+      - name: Setup Node
+        uses: actions/setup-node@v6
+        with:
+          node-version: '24'
+          cache: 'yarn'
+
+      - name: Install Dependencies
+        run: yarn --frozen-lockfile --no-progress --non-interactive
+
+      - name: Install Playwright
+        run: yarn playwright install chromium --with-deps
+
+      - name: Build React packages
+        run: yarn build:react
+
+      - name: Lint TypeScript
+        run: yarn lint:types:react
+
+      - name: Test
+        run: yarn test:react
+
+      - name: Check generated package.json is committed
+        run: git diff --exit-code packages/react-components*/package.json
+
+      - name: Check package integrity
+        run: node react/scripts/check-package.js

@@ -1,0 +1,44 @@
+<!doctype html>
+<html lang="en">
+  <head>
+    <meta charset="UTF-8" />
+    <meta http-equiv="X-UA-Compatible" content="IE=edge" />
+    <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+    <title>CRUD</title>
+    <script type="module" src="./common.js"></script>
+  </head>
+
+  <body>
+    <script type="module">
+      import '@vaadin/crud';
+      import '@vaadin/radio-group';
+
+      const crud = document.querySelector('vaadin-crud');
+      crud.items = [
+        {
+          firstName: 'John',
+          lastName: 'Doe',
+        },
+        {
+          firstName: 'Jane',
+          lastName: 'Doe',
+        },
+      ];
+
+      const group = document.querySelector('vaadin-radio-group');
+      group.addEventListener('change', (e) => {
+        // Changing from "aside" / "bottom" to "" while opened causes issues.
+        crud.editorOpened = false;
+        crud.editorPosition = e.target.value;
+      });
+    </script>
+
+    <vaadin-crud style="height: 75vh"></vaadin-crud>
+
+    <vaadin-radio-group label="Editor position">
+      <vaadin-radio-button label="Default" value="" checked></vaadin-radio-button>
+      <vaadin-radio-button label="Aside" value="aside"></vaadin-radio-button>
+      <vaadin-radio-button label="Bottom" value="bottom"></vaadin-radio-button>
+    </vaadin-radio-group>
+  </body>
+</html>

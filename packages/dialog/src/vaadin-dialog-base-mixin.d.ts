@@ -1,0 +1,95 @@
+/**
+ * @license
+ * Copyright (c) 2017 - 2026 Vaadin Ltd.
+ * This program is available under Apache License Version 2.0, available at https://vaadin.com/license/
+ */
+import type { Constructor } from '@open-wc/dedupe-mixin';
+
+export declare function DialogBaseMixin<T extends Constructor<HTMLElement>>(
+  base: T,
+): Constructor<DialogBaseMixinClass> & T;
+
+export declare class DialogBaseMixinClass {
+  /**
+   * True if the dialog is visible and available for interaction.
+   */
+  opened: boolean;
+
+  /**
+   * Set to true to disable closing dialog on outside click
+   * @attr {boolean} no-close-on-outside-click
+   */
+  noCloseOnOutsideClick: boolean;
+
+  /**
+   * Set to true to disable closing dialog on Escape press
+   * @attr {boolean} no-close-on-esc
+   */
+  noCloseOnEsc: boolean;
+
+  /**
+   * Set to true to remove backdrop and allow click events on background elements.
+   */
+  modeless: boolean;
+
+  /**
+   * Set to true to prevent the dialog from receiving focus
+   * on open and trapping it inside.
+   *
+   * A field with `autofocus` inside the dialog still receives
+   * focus on open.
+   *
+   * @attr {boolean} no-focus-trap
+   * @deprecated This property is deprecated and will be removed in Vaadin 26.
+   */
+  noFocusTrap: boolean;
+
+  /**
+   * Set to true to prevent focus from moving into the dialog on open.
+   *
+   * This property only works for non-modal dialogs and is ignored
+   * for modal ones, where focus must always stay inside.
+   *
+   * A field with `autofocus` inside the dialog still receives
+   * focus on open.
+   *
+   * @attr {boolean} no-autofocus
+   */
+  noAutofocus: boolean;
+
+  /**
+   * The `role` attribute value to be set on the dialog. Defaults to "dialog".
+   *
+   * @attr {string} overlay-role
+   * @deprecated Use standard `role` attribute on the dialog instead
+   */
+  overlayRole: string;
+
+  /**
+   * Set the distance of the dialog from the top of the viewport.
+   * If a unitless number is provided, pixels are assumed.
+   *
+   * Note that the dialog uses an internal container that has some
+   * additional spacing, which can be overridden by the theme.
+   */
+  top: string;
+
+  /**
+   * Set the distance of the dialog from the left of the viewport.
+   * If a unitless number is provided, pixels are assumed.
+   *
+   * Note that the dialog uses an internal container that has some
+   * additional spacing, which can be overridden by the theme.
+   */
+  left: string;
+
+  /**
+   * Set to true to prevent the dialog from moving outside the viewport bounds.
+   * When enabled, all four edges of the dialog will remain visible, for example
+   * when dragging the dialog or when the viewport is resized. Note that the
+   * dialog will also adjust any programmatically configured size and position
+   * so that it stays within the viewport.
+   * @attr {boolean} keep-in-viewport
+   */
+  keepInViewport: boolean;
+}

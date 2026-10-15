@@ -1,0 +1,79 @@
+/**
+ * @license
+ * Copyright (c) 2015 - 2026 Vaadin Ltd.
+ * This program is available under Apache License Version 2.0, available at https://vaadin.com/license/
+ */
+import type { Constructor } from '@open-wc/dedupe-mixin';
+import type { ComboBoxItemRenderer } from './vaadin-combo-box-item-mixin.js';
+
+export declare function ComboBoxScrollerMixin<TItem, TOwner, T extends Constructor<HTMLElement>>(
+  base: T,
+): Constructor<ComboBoxScrollerMixinClass<TItem, TOwner>> & T;
+
+export declare class ComboBoxScrollerMixinClass<TItem, TOwner> {
+  /**
+   * Index of an item that has focus outline and is scrolled into view.
+   * The actual focus still remains in the input field.
+   */
+  focusedIndex: number;
+
+  /**
+   * A full set of items to filter the visible options from.
+   * Set to an empty array when combo-box is not opened.
+   */
+  items: TItem[];
+
+  /**
+   * Set to true while combo-box fetches new page from the data provider.
+   */
+  loading: boolean;
+
+  /**
+   * Whether the combo-box is currently opened or not. If set to false,
+   * calling `scrollIntoView` does not have any effect.
+   */
+  opened: boolean;
+
+  /**
+   * Reference to the owner (combo-box owner), used by the item elements.
+   */
+  owner: TOwner;
+
+  /**
+   * Function used to render the content of every combo-box item.
+   */
+  renderer: ComboBoxItemRenderer<TItem, TOwner> | null | undefined;
+
+  /**
+   * The selected item from the `items` array.
+   */
+  selectedItem: TItem;
+
+  /**
+   * Used to propagate the `theme` attribute from the host element.
+   */
+  theme: string;
+
+  /**
+   * Function used to set a label for every combo-box item.
+   */
+  getItemLabel: (item: TItem) => string;
+
+  /**
+   * Requests an update for the virtualizer to re-render items.
+   */
+  requestContentUpdate(): void;
+
+  /**
+   * Scrolls an item at given index into view. By default the item is made
+   * fully visible at the bottom of the viewport (the behavior wanted on
+   * Arrow Down key press). When `alignToCenter` is `true`, the item is placed
+   * in the middle of the viewport instead, as close to center as the list
+   * allows near its start and end.
+   */
+  scrollIntoView(index: number, alignToCenter?: boolean): void;
+
+  protected _isItemSelected(item: TItem, selectedItem: TItem): boolean;
+
+  protected _updateElement(el: HTMLElement, index: number): void;
+}

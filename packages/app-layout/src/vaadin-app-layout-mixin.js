@@ -1,0 +1,568 @@
+/**
+ * @license
+ * Copyright (c) 2018 - 2026 Vaadin Ltd.
+ * This program is available under Apache License Version 2.0, available at https://vaadin.com/license/
+ */
+import { AriaModalController } from '@vaadin/a11y-base/src/aria-modal-controller.js';
+import { FocusTrapController } from '@vaadin/a11y-base/src/focus-trap-controller.js';
+import { isKeyboardActive } from '@vaadin/a11y-base/src/focus-utils.js';
+import { animationFrame } from '@vaadin/component-base/src/async.js';
+import { Debouncer } from '@vaadin/component-base/src/debounce.js';
+import { I18nMixin } from '@vaadin/component-base/src/i18n-mixin.js';
+
+/**
+ * @typedef {import('./vaadin-app-layout.js').AppLayoutI18n} AppLayoutI18n
+ */
+
+const DEFAULT_I18N = {
+  drawer: 'Drawer',
+};
+
+export const AppLayoutMixin = (superclass) =>
+  class AppLayoutMixinClass extends I18nMixin(superclass) {
+    static get properties() {
+      return {
+        /**
+         * Defines whether navbar or drawer will come first visually.
+         * - By default (`primary-section="navbar"`), the navbar takes the full available width and moves the drawer down.
+         * - If `primary-section="drawer"` is set, then the drawer will move the navbar, taking the full available height.
+         * @attr {navbar|drawer} primary-section
+         */
+        primarySection: {
+          type: String,
+          value: 'navbar',
+          notify: true,
+          reflectToAttribute: true,
+          observer: '__primarySectionChanged',
+          sync: true,
+        },
+
+        /**
+         * Controls whether the drawer is opened (visible) or not.
+         * Its default value depends on the viewport:
+         * - `true`, for desktop size views
+         * - `false`, for mobile size views
+         * @attr {boolean} drawer-opened
+         */
+        drawerOpened: {
+          type: Boolean,
+          notify: true,
+          value: true,
+          reflectToAttribute: true,
+          observer: '__drawerOpenedChanged',
+          sync: true,
+        },
+
+        /**
+         * Drawer is an overlay on top of the content
+         * Controlled via CSS using `--vaadin-app-layout-drawer-overlay: true|false`;
+         */
+        overlay: {
+          type: Boolean,
+          notify: true,
+          readOnly: true,
+          value: false,
+          reflectToAttribute: true,
+          observer: '__overlayChanged',
+          sync: true,
+        },
+
+        /**
+         * A global event that causes the drawer to close (be hidden) when it is in overlay mode.
+         * - The default is `vaadin-router-location-changed` dispatched by Vaadin Router
+         *
+         * @attr {string} close-drawer-on
+         */
+        closeDrawerOn: {
+          type: String,
+          value: 'vaadin-router-location-changed',
+          observer: '_closeDrawerOnChanged',
+        },
+      };
+    }
+
+    static get observers() {
+      return ['__i18nChanged(__effectiveI18n)'];
+    }
+
+    static get defaultI18n() {
+      return DEFAULT_I18N;
+    }
+
+    /**
+     * Helper static method that dispatches a `close-overlay-drawer` event
+     */
+    static dispatchCloseOverlayDrawerEvent() {
+      window.dispatchEvent(new CustomEvent('close-overlay-drawer'));
+    }
+
+    /**
+     * The object used to localize this component. To change the default
+     * localization, set this to an object that provides all properties, or
+     * just the individual properties you want to change.
+     *
+     * When not set, defaults to `undefined`.
+     *
+     * The object has the following structure and default values:
+     * ```js
+     * {
+     *   drawer: 'Drawer'
+     * }
+     * ```
+     * @type {AppLayoutI18n | undefined}
+     */
+    get i18n() {
+      return super.i18n;
+    }
+
+    set i18n(value) {
+      super.i18n = value;
+    }
+
+    constructor() {
+      super();
+      // TODO(jouni): might want to debounce
+      this.__drawerToggleClickListener = this._drawerToggleClick.bind(this);
+      this.__onDrawerKeyDown = this.__onDrawerKeyDown.bind(this);
+      this.__closeOverlayDrawerListener = this.__closeOverlayDrawer.bind(this);
+      this.__trapFocusInDrawer = this.__trapFocusInDrawer.bind(this);
+      this.__releaseFocusFromDrawer = this.__releaseFocusFromDrawer.bind(this);
+
+      // Hide all the elements except the drawer toggle and drawer content
+      this.__ariaModalController = new AriaModalController(this, () => [
+        ...this.querySelectorAll('vaadin-drawer-toggle, [slot="drawer"]'),
+      ]);
+      this.__focusTrapController = new FocusTrapController(this);
+    }
+
+    /** @protected */
+    connectedCallback() {
+      super.connectedCallback();
+
+      this.__resizeObserver = new ResizeObserver((entries) => this.__onResize(entries));
+      this.__resizeObserver.observe(this);
+      this.__resizeObserver.observe(this.$.drawer);
+      this.__resizeObserver.observe(this.$.navbarTop);
+      this.__resizeObserver.observe(this.$.navbarBottom);
+
+      this.addEventListener('drawer-toggle-click', this.__drawerToggleClickListener);
+      window.addEventListener('close-overlay-drawer', this.__closeOverlayDrawerListener);
+      window.addEventListener('keydown', this.__onDrawerKeyDown);
+    }
+
+    /** @protected */
+    ready() {
+      super.ready();
+      this.addController(this.__focusTrapController);
+      this.__setAriaExpanded();
+
+      this.__updateDrawerSize();
+      this._blockAnimationUntilAfterNextRender();
+
+      const { overlayMode, touchOptimized } = this.__readCSSState();
+      this.__setOverlayMode(overlayMode);
+      this.__setTouchOptimized(touchOptimized);
+
+      const { drawerOffsetSize, navbarTopOffsetSize, navbarBottomOffsetSize } = this.__readCSSState();
+      this.__setDrawerOffsetSize(drawerOffsetSize);
+      this.__setNavbarTopOffsetSize(navbarTopOffsetSize);
+      this.__setNavbarBottomOffsetSize(navbarBottomOffsetSize);
+
+      this.$.drawer.addEventListener('transitionstart', () => {
+        this.__isDrawerAnimating = true;
+      });
+
+      this.$.drawer.addEventListener('transitionend', () => {
+        this.__isDrawerAnimating = false;
+        this.__scheduleResize(this.$.drawer);
+      });
+    }
+
+    /** @protected */
+    disconnectedCallback() {
+      super.disconnectedCallback();
+      this.__resizeObserver.disconnect();
+      this.removeEventListener('drawer-toggle-click', this.__drawerToggleClickListener);
+      window.removeEventListener('close-overlay-drawer', this.__closeOverlayDrawerListener);
+      window.removeEventListener('keydown', this.__onDrawerKeyDown);
+    }
+
+    /** @private */
+    __onNavbarSlotChange() {
+      const { touchOptimized } = this.__readCSSState();
+      this.__setTouchOptimized(touchOptimized);
+      this.toggleAttribute('has-navbar', !!this.querySelector('[slot="navbar"]'));
+
+      const { navbarTopOffsetSize, navbarBottomOffsetSize } = this.__readCSSState();
+      this.__setNavbarTopOffsetSize(navbarTopOffsetSize);
+      this.__setNavbarBottomOffsetSize(navbarBottomOffsetSize);
+    }
+
+    /** @private */
+    __onDrawerSlotChange() {
+      this.__updateDrawerSize();
+      this.toggleAttribute('has-drawer', !!this.querySelector('[slot="drawer"]'));
+
+      const { drawerOffsetSize } = this.__readCSSState();
+      this.__setDrawerOffsetSize(drawerOffsetSize);
+    }
+
+    /** @private */
+    __onResize(entries) {
+      cancelAnimationFrame(this.__resizeRaf);
+
+      const isHostResized = entries.some(({ target }) => target === this);
+      const isNavbarResized = entries.some(({ target }) => [this.$.navbarTop, this.$.navbarBottom].includes(target));
+
+      const { overlayMode, touchOptimized, drawerOffsetSize, navbarTopOffsetSize, navbarBottomOffsetSize } =
+        this.__readCSSState();
+
+      const isDrawerAnimating = this.__isDrawerAnimating;
+
+      this.__resizeRaf = requestAnimationFrame(() => {
+        if (isHostResized) {
+          this._blockAnimationUntilAfterNextRender();
+          this.__setOverlayMode(overlayMode);
+        }
+
+        if (isHostResized || isNavbarResized) {
+          this.__setTouchOptimized(touchOptimized);
+        }
+
+        if (!isDrawerAnimating) {
+          this.__setDrawerOffsetSize(drawerOffsetSize);
+          this.__setNavbarTopOffsetSize(navbarTopOffsetSize);
+          this.__setNavbarBottomOffsetSize(navbarBottomOffsetSize);
+        }
+      });
+    }
+
+    /**
+     * A callback for the `primarySection` property observer.
+     *
+     * Ensures the property is set to its default value `navbar`
+     * whenever the new value is not one of the valid values: `navbar`, `drawer`.
+     *
+     * @param {string} value
+     * @private
+     */
+    __primarySectionChanged(value) {
+      const isValid = ['navbar', 'drawer'].includes(value);
+      if (!isValid) {
+        this.primarySection = 'navbar';
+      }
+    }
+
+    /**
+     * A callback for the `drawerOpened` property observer.
+     *
+     * When the drawer opens, the method ensures the drawer has a proper height and sets focus on it.
+     * As long as the drawer is open, the focus is trapped within the drawer.
+     *
+     * When the drawer closes, the method releases focus from the drawer, setting focus on the drawer toggle.
+     *
+     * @param {boolean} drawerOpened
+     * @param {boolean} oldDrawerOpened
+     * @private
+     */
+    __drawerOpenedChanged(drawerOpened, oldDrawerOpened) {
+      if (this.overlay) {
+        if (drawerOpened) {
+          this.__trapFocusInDrawer();
+        } else if (oldDrawerOpened) {
+          this.__releaseFocusFromDrawer();
+        }
+      }
+
+      this.__setAriaExpanded();
+    }
+
+    /**
+     * A callback for the `overlay` property observer.
+     *
+     * When layout resizes while in the overlay mode, drawer opened state
+     * is not changed, but focus trap needs to be removed.
+     *
+     * @param {boolean} overlay
+     * @param {boolean} oldOverlay
+     * @private
+     */
+    __overlayChanged(_overlay, oldOverlay) {
+      if (oldOverlay) {
+        this.__restoreFocus();
+      }
+    }
+
+    /**
+     * A callback for the `i18n` property observer.
+     *
+     * The method ensures the drawer has ARIA attributes updated
+     * once the `i18n` property changes.
+     *
+     * @private
+     */
+    __i18nChanged() {
+      this.__updateDrawerAriaAttributes();
+    }
+
+    /** @private */
+    _drawerToggleClick(e) {
+      e.stopPropagation();
+      this.drawerOpened = !this.drawerOpened;
+    }
+
+    /** @private */
+    __closeOverlayDrawer() {
+      if (this.overlay) {
+        this.drawerOpened = false;
+      }
+    }
+
+    /** @private */
+    __setAriaExpanded() {
+      const toggle = this.querySelector('vaadin-drawer-toggle');
+      if (toggle) {
+        toggle.setAttribute('aria-expanded', this.drawerOpened);
+      }
+    }
+
+    /** @private */
+    __updateDrawerSize() {
+      const childCount = this.querySelectorAll('[slot=drawer]').length;
+      if (childCount === 0) {
+        this.$.drawer.setAttribute('hidden', '');
+        this.style.setProperty('--_vaadin-app-layout-drawer-width', 0);
+      } else {
+        this.$.drawer.removeAttribute('hidden');
+        this.style.removeProperty('--_vaadin-app-layout-drawer-width');
+      }
+    }
+
+    /** @private */
+    __setDrawerOffsetSize(offsetSize) {
+      this.style.setProperty('--_vaadin-app-layout-drawer-offset-size', `${offsetSize}px`);
+    }
+
+    /** @private */
+    __setNavbarTopOffsetSize(offsetSize) {
+      this.style.setProperty('--_vaadin-app-layout-navbar-offset-size', `${offsetSize}px`);
+    }
+
+    /** @private */
+    __setNavbarBottomOffsetSize(offsetSize) {
+      this.style.setProperty('--_vaadin-app-layout-navbar-offset-size-bottom', `${offsetSize}px`);
+    }
+
+    /** @private */
+    __setOverlayMode(overlay) {
+      if (!this.overlay && overlay) {
+        // Changed from not overlay to overlay
+        this._drawerStateSaved = this.drawerOpened;
+        this.drawerOpened = false;
+      }
+
+      this._setOverlay(overlay);
+
+      if (!this.overlay && this._drawerStateSaved) {
+        this.drawerOpened = this._drawerStateSaved;
+        this._drawerStateSaved = null;
+      }
+
+      this.__updateDrawerAriaAttributes();
+    }
+
+    /**
+     * Updates ARIA attributes on the drawer depending on the drawer mode.
+     *
+     * - In the overlay mode, the method marks the drawer with ARIA attributes as a dialog
+     * labelled with the `i18n.drawer` property.
+     * - In the normal mode, the method removes the ARIA attributes that has been set for the overlay mode.
+     *
+     * @private
+     */
+    __updateDrawerAriaAttributes() {
+      const drawer = this.$.drawer;
+      if (this.overlay) {
+        drawer.setAttribute('role', 'dialog');
+        drawer.setAttribute('aria-modal', 'true');
+        drawer.setAttribute('aria-label', this.__effectiveI18n.drawer);
+      } else {
+        drawer.removeAttribute('role');
+        drawer.removeAttribute('aria-modal');
+        drawer.removeAttribute('aria-label');
+      }
+    }
+
+    /**
+     * Returns a promise that resolves when the drawer opening/closing CSS transition ends.
+     *
+     * @return {Promise}
+     * @private
+     */
+    __drawerTransitionComplete() {
+      return Promise.all(this.$.drawer.getAnimations().map((animation) => animation.finished));
+    }
+
+    /** @private */
+    async __trapFocusInDrawer() {
+      // Wait for the drawer CSS transition before focusing the drawer
+      // in order for VoiceOver to have a proper outline.
+      await this.__drawerTransitionComplete();
+
+      if (!this.drawerOpened) {
+        // The drawer has been closed during the CSS transition.
+        return;
+      }
+
+      this.$.drawer.setAttribute('tabindex', '0');
+
+      this.__ariaModalController.showModal();
+      this.__focusTrapController.trapFocus(this.$.drawer);
+    }
+
+    /** @private */
+    async __releaseFocusFromDrawer() {
+      // Wait for the drawer CSS transition in order to restore focus to the toggle
+      // only after `visibility` becomes `hidden`, that is, the drawer becomes inaccessible by the tabbing navigation.
+      await this.__drawerTransitionComplete();
+
+      if (this.drawerOpened) {
+        // The drawer has been opened during the CSS transition.
+        return;
+      }
+
+      this.__restoreFocus();
+
+      // Move focus to the drawer toggle when closing the drawer.
+      const toggle = this.querySelector('vaadin-drawer-toggle');
+      if (toggle) {
+        toggle.focus({ focusVisible: isKeyboardActive() });
+      }
+    }
+
+    /** @private */
+    __restoreFocus() {
+      this.__ariaModalController.close();
+      this.__focusTrapController.releaseFocus();
+      this.$.drawer.removeAttribute('tabindex');
+    }
+
+    /**
+     * Closes the drawer on Escape press if it has been opened in the overlay mode.
+     *
+     * @param {KeyboardEvent} event
+     * @private
+     */
+    __onDrawerKeyDown(event) {
+      if (event.key === 'Escape' && this.overlay) {
+        this.drawerOpened = false;
+      }
+    }
+
+    /** @private */
+    _closeDrawerOnChanged(closeDrawerOn, oldCloseDrawerOn) {
+      if (oldCloseDrawerOn) {
+        window.removeEventListener(oldCloseDrawerOn, this.__closeOverlayDrawerListener);
+      }
+      if (closeDrawerOn) {
+        window.addEventListener(closeDrawerOn, this.__closeOverlayDrawerListener);
+      }
+    }
+
+    /** @private */
+    _onBackdropClick(event) {
+      // End the ghost click window on the first click (see `_onBackdropTouchend`).
+      event.currentTarget.style.removeProperty('pointer-events');
+      this._close();
+    }
+
+    /** @private */
+    _onBackdropTouchend(event) {
+      // Prevent the click event from being fired
+      // on clickable element behind the backdrop
+      event.preventDefault();
+
+      // On iOS home screen (standalone) apps, `preventDefault()` on `touchend`
+      // does not reliably suppress the synthesized "ghost" click, which occurs
+      // on medium-length taps only. Keep the invisible backdrop hit-testable for
+      // a short while after closing, so that if a ghost click occurs it lands on
+      // the backdrop instead of the element behind it.
+      if (navigator.standalone) {
+        const backdrop = event.currentTarget;
+        backdrop.style.pointerEvents = 'auto';
+        // The ghost click arrives shortly after `touchend`.
+        setTimeout(() => backdrop.style.removeProperty('pointer-events'), 400);
+      }
+
+      this._close();
+    }
+
+    /** @protected */
+    _close() {
+      this.drawerOpened = false;
+    }
+
+    /** @private */
+    _getCustomPropertyValue(customProperty) {
+      const customPropertyValue = getComputedStyle(this).getPropertyValue(customProperty);
+      return (customPropertyValue || '').trim().toLowerCase();
+    }
+
+    /** @private */
+    __setTouchOptimized(touchOptimized) {
+      const navbarItems = this.querySelectorAll('[slot*="navbar"]');
+      if (navbarItems.length > 0) {
+        Array.from(navbarItems).forEach((navbar) => {
+          if (navbar.getAttribute('slot').indexOf('touch-optimized') > -1) {
+            navbar.__touchOptimized = true;
+          }
+
+          if (touchOptimized && navbar.__touchOptimized) {
+            navbar.setAttribute('slot', 'navbar-bottom');
+          } else {
+            navbar.setAttribute('slot', 'navbar');
+          }
+        });
+      }
+
+      const hasNavbar = this.$.navbarTop.querySelector('[name=navbar]').assignedNodes().length > 0;
+      this.$.navbarTop.toggleAttribute('hidden', !hasNavbar);
+
+      const hasNavbarBottom = this.$.navbarBottom.querySelector('[name=navbar-bottom]').assignedNodes().length > 0;
+      this.$.navbarBottom.toggleAttribute('hidden', !hasNavbarBottom);
+    }
+
+    /** @protected */
+    _blockAnimationUntilAfterNextRender() {
+      this.setAttribute('no-anim', '');
+
+      this.__debounceAnimation = Debouncer.debounce(this.__debounceAnimation, animationFrame, () => {
+        setTimeout(() => {
+          this.removeAttribute('no-anim');
+        });
+      });
+    }
+
+    /**
+     * Forces the ResizeObserver to re-report the size of the given element,
+     * scheduling a new {@link __onResize} callback even if the size hasn't changed.
+     *
+     * @param {Element} element
+     * @private
+     */
+    __scheduleResize(element) {
+      this.__resizeObserver.unobserve(element);
+      this.__resizeObserver.observe(element);
+    }
+
+    /** @private */
+    __readCSSState() {
+      return {
+        overlayMode: this._getCustomPropertyValue('--vaadin-app-layout-drawer-overlay') === 'true',
+        touchOptimized: this._getCustomPropertyValue('--vaadin-app-layout-touch-optimized') === 'true',
+        drawerOffsetSize: this.$.drawer.getBoundingClientRect().width,
+        navbarTopOffsetSize: this.$.navbarTop.getBoundingClientRect().height,
+        navbarBottomOffsetSize: this.$.navbarBottom.getBoundingClientRect().height,
+      };
+    }
+  };

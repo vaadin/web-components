@@ -1,0 +1,80 @@
+:where(:root),
+:where(:host) {
+  --vaadin-radio-button-marker-size: 6px;
+  --vaadin-checkbox-size: round(1.25em, 2px);
+  --vaadin-radio-button-size: round(1.25em, 2px);
+}
+
+vaadin-checkbox::part(checkbox),
+vaadin-radio-button::part(radio) {
+  transition: background-color 100ms;
+}
+
+vaadin-checkbox:not([disabled], [readonly])::part(checkbox) {
+  background: var(--vaadin-checkbox-background, var(--aura-surface-color));
+}
+
+vaadin-radio-button:not([disabled], [readonly])::part(radio) {
+  background: var(--vaadin-radio-button-background, var(--aura-surface-color));
+}
+
+vaadin-checkbox:not([readonly], [disabled])::part(checkbox),
+vaadin-radio-button:not([disabled])::part(radio) {
+  --aura-surface-level: 4;
+  --aura-surface-opacity: 0.7;
+  box-shadow: var(--aura-shadow-xs);
+}
+
+vaadin-checkbox:not([checked], [indeterminate])::part(checkbox),
+vaadin-radio-button:not([checked])::part(radio) {
+  background-clip: padding-box;
+}
+
+vaadin-checkbox:is([checked], [indeterminate]):not([readonly], [disabled])::part(checkbox) {
+  --vaadin-checkbox-background: var(--aura-accent-color);
+  --_marker-color: var(--vaadin-checkbox-marker-color, var(--aura-accent-contrast-color));
+  --_marker-filter: none;
+  --vaadin-checkbox-border-color: var(--vaadin-border-color-secondary);
+  box-shadow: var(--aura-shadow-s);
+}
+
+vaadin-radio-button[checked]:not([readonly], [disabled])::part(radio) {
+  --vaadin-radio-button-background: var(--aura-accent-color);
+  --_marker-color: var(--vaadin-radio-button-marker-color, var(--aura-accent-contrast-color));
+  --_marker-filter: none;
+  --vaadin-radio-button-border-color: var(--vaadin-border-color-secondary);
+  box-shadow: var(--aura-shadow-s);
+}
+
+vaadin-checkbox:not([readonly], [disabled])::part(checkbox)::before,
+vaadin-radio-button:not([disabled])::part(radio)::before,
+vaadin-switch:not([readonly], [disabled])::part(switch)::before {
+  content: '';
+  position: absolute;
+  inset: calc(var(--vaadin-input-field-border-width, 1px) * -1);
+  border-radius: inherit;
+  background-color: currentColor;
+  opacity: 0;
+  transition:
+    opacity 100ms,
+    background-color 100ms;
+}
+
+vaadin-switch:not([disabled])::part(switch)::before {
+  inset: 0;
+}
+
+@media (any-hover: hover) {
+  vaadin-checkbox:hover:not([readonly], [disabled], [active])::part(checkbox)::before,
+  vaadin-radio-button:hover:not([disabled], [active])::part(radio)::before,
+  vaadin-switch:hover:not([readonly], [disabled], [active])::part(switch)::before {
+    opacity: 0.04;
+  }
+}
+
+vaadin-checkbox[active]:not([readonly], [disabled])::part(checkbox)::before,
+vaadin-radio-button[active]:not([disabled])::part(radio)::before,
+vaadin-switch[active]:not([readonly], [disabled])::part(switch)::before {
+  opacity: 0.1;
+  background: #000;
+}

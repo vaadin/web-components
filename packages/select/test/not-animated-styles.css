@@ -1,0 +1,19 @@
+vaadin-select[opening]::part(overlay),
+vaadin-select[closing]::part(overlay) {
+  animation: none !important;
+}
+
+vaadin-select::part(label),
+vaadin-select::part(field-button),
+vaadin-select::part(helper-text),
+vaadin-select::part(input-field),
+vaadin-select::part(error-message),
+vaadin-select::part(required-indicator),
+vaadin-select input:placeholder-shown {
+  &,
+  &::before,
+  &::after {
+    animation: none !important;
+    transition: none !important;
+  }
+}

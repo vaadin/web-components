@@ -1,0 +1,62 @@
+/* Register a property so that the color is evaluated and cached at the scope where the property is set,
+instead of computing light-dark() only at the scope where the property value is used/referenced. */
+@property --_aura-mdl-page-contained-backdrop {
+  syntax: '<color>';
+  inherits: true;
+  initial-value: transparent;
+}
+
+:where(:root),
+:where(:host) {
+  /* This caches the value of --vaadin-overlay-backdrop-background based on the color-scheme of the root/host element */
+  --_aura-mdl-page-contained-backdrop: var(--vaadin-overlay-backdrop-background);
+}
+
+vaadin-master-detail-layout::part(detail) {
+  background: var(--vaadin-master-detail-layout-detail-background, var(--aura-surface-color) padding-box);
+}
+
+vaadin-master-detail-layout[has-detail][overlay]::part(detail) {
+  --aura-surface-level: 3;
+  --aura-surface-opacity: var(--aura-overlay-surface-opacity);
+  -webkit-backdrop-filter: var(--aura-overlay-backdrop-filter);
+  backdrop-filter: var(--aura-overlay-backdrop-filter);
+  box-shadow: var(
+    --vaadin-master-detail-layout-detail-shadow,
+    inset 1px 0 0 0 var(--aura-overlay-inner-outline-color),
+    -1px 0 0 0 var(--aura-overlay-outline-color),
+    var(--aura-overlay-shadow)
+  );
+  --_inset: var(--aura-master-detail-layout-detail-inset, round(var(--aura-app-layout-inset) / 1.5, 1px));
+  border-radius: clamp(
+    0px,
+    var(--_inset) * 1000,
+    max(var(--vaadin-radius-m), var(--vaadin-radius-l) - round(var(--_inset) / 2, 1px))
+  );
+}
+
+/* Use inset properties instead of `margin` because Chromium 150+ does not re-resolve the auto
+block size when only margin changes. See https://issues.chromium.org/issues/539404705 */
+vaadin-master-detail-layout[has-detail][overlay][orientation='horizontal']::part(detail) {
+  inset-block: var(--_inset);
+  inset-inline-end: var(--_inset);
+}
+
+vaadin-master-detail-layout[has-detail][overlay][orientation='vertical']::part(detail) {
+  inset-inline: var(--_inset);
+  inset-block-end: var(--_inset);
+}
+
+vaadin-master-detail-layout[has-detail][overlay][overlay-containment='page']::part(detail) {
+  border-radius: clamp(0px, var(--_inset) * 1000, var(--vaadin-radius-l));
+}
+
+vaadin-master-detail-layout > vaadin-master-detail-layout,
+vaadin-master-detail-layout:not([overlay])::part(detail) {
+  border-start-end-radius: var(--_app-layout-radius);
+  border-end-end-radius: var(--_app-layout-radius);
+}
+
+vaadin-master-detail-layout[overlay-containment='page'] {
+  --vaadin-overlay-backdrop-background: var(--_aura-mdl-page-contained-backdrop);
+}

@@ -1,0 +1,53 @@
+import { expect } from '@vaadin/chai-plugins';
+import { fixtureSync, nextFrame, nextResize, nextUpdate, oneEvent } from '@vaadin/testing-helpers';
+import '../../src/vaadin-avatar-group.js';
+
+describe('vaadin-avatar-group', () => {
+  let group;
+
+  beforeEach(() => {
+    group = fixtureSync('<vaadin-avatar-group></vaadin-avatar-group>');
+  });
+
+  it('default', async () => {
+    await expect(group).dom.to.equalSnapshot();
+  });
+
+  it('items', async () => {
+    group.items = [{ abbr: 'YY' }, { name: 'Tomi Virkki' }];
+    await nextFrame();
+    await expect(group).dom.to.equalSnapshot();
+  });
+
+  it('theme', async () => {
+    group.items = [{ abbr: 'YY' }, { name: 'Tomi Virkki' }];
+    await nextFrame();
+    group.setAttribute('theme', 'small');
+    await nextUpdate(group);
+    await expect(group).dom.to.equalSnapshot();
+  });
+
+  describe('opened', () => {
+    const SNAPSHOT_CONFIG = {
+      // Some inline CSS styles related to the overlay's position
+      // may slightly change depending on the environment, so ignore them.
+      ignoreAttributes: ['style'],
+    };
+
+    beforeEach(async () => {
+      group.items = [{ name: 'Abc Def' }, { name: 'Ghi Jkl' }, { name: 'Mno Pqr' }, { name: 'Stu Vwx' }];
+      group.maxItemsVisible = 3;
+      await nextResize(group);
+      group._overflow.click();
+      await oneEvent(group.$.overlay, 'vaadin-overlay-open');
+    });
+
+    it('default', async () => {
+      await expect(group).dom.to.equalSnapshot(SNAPSHOT_CONFIG);
+    });
+
+    it('overlay', async () => {
+      await expect(group.$.overlay).dom.to.equalSnapshot(SNAPSHOT_CONFIG);
+    });
+  });
+});

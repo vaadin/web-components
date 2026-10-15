@@ -1,0 +1,109 @@
+/**
+ * @license
+ * Copyright (c) 2000 - 2026 Vaadin Ltd.
+ *
+ * This program is available under Vaadin Commercial License and Service Terms.
+ *
+ *
+ * See https://vaadin.com/commercial-license-and-service-terms for the full
+ * license.
+ */
+import '@vaadin/component-base/src/styles/style-props.js';
+import { css } from 'lit';
+import { widgetFixedHeightDeclarations } from './vaadin-dashboard-layout-base-styles.js';
+import { dashboardWidgetAndSectionStyles } from './vaadin-dashboard-widget-section-base-styles.js';
+
+const widgetStyles = css`
+  :host {
+    display: flex;
+    flex-direction: column;
+    grid-column: var(--_item-column);
+    grid-row: var(--_item-row);
+    position: relative;
+    background: var(--_widget-background);
+    border-radius: var(--_widget-border-radius);
+    box-shadow: var(--_widget-shadow);
+    border: var(--_widget-border-width) solid var(--_widget-border-color);
+
+    /* Pin to the fixed row height when one is set. The widget host's own definition is needed so widgets nested inside sections in vaadin-dashboard-layout (where the layout-level cap doesn't reach) still get capped. */
+    ${widgetFixedHeightDeclarations};
+  }
+
+  :host([hidden]) {
+    display: none !important;
+  }
+
+  :host(:not([editable])) [part~='resize-button'] {
+    display: none;
+  }
+
+  [part~='content'] {
+    flex: 1;
+    overflow: hidden;
+    min-height: 1em;
+    padding: 0 var(--vaadin-dashboard-widget-padding, 0) var(--vaadin-dashboard-widget-padding, 0);
+    border-bottom-left-radius: inherit;
+    border-bottom-right-radius: inherit;
+  }
+
+  [part~='resize-button'] {
+    position: absolute;
+    bottom: 0;
+    inset-inline-end: 0;
+    z-index: 1;
+    overflow: hidden;
+    touch-action: none;
+    cursor: nwse-resize;
+    --icon: var(--_vaadin-icon-resize);
+  }
+
+  :host([dir='rtl']) [part~='resize-button'] {
+    cursor: sw-resize;
+  }
+
+  :host([dir='rtl']) [part~='resize-button'] .icon::before {
+    transform: scaleX(-1);
+  }
+
+  /* Widget states */
+
+  :host([editable]) {
+    --vaadin-dashboard-widget-shadow: var(--_widget-editable-shadow);
+  }
+
+  :host([selected]) {
+    --vaadin-dashboard-widget-shadow: var(--_widget-selected-shadow);
+  }
+
+  :host([resizing])::after {
+    content: '';
+    z-index: 2;
+    position: absolute;
+    top: 0;
+    width: var(--_widget-resizer-width, 0);
+    height: var(--_widget-resizer-height, 0);
+    background: color-mix(in srgb, currentColor 5%, var(--_widget-background) 70%);
+    border-color: color-mix(in srgb, currentColor 10%, transparent);
+    border-width: var(--_widget-border-width);
+    border-style: solid;
+    border-radius: inherit;
+  }
+
+  /* Widget parts */
+  header {
+    padding: var(
+      --vaadin-dashboard-widget-header-padding,
+      var(--vaadin-padding-block-container) var(--vaadin-padding-inline-container)
+    );
+  }
+
+  :host([editable]) header {
+    padding: var(--vaadin-dashboard-widget-header-padding, var(--vaadin-padding-s));
+  }
+
+  header:has([part~='title'][hidden]) {
+    padding: 0;
+  }
+`;
+
+export const dashboardWidgetStyles = [widgetStyles, dashboardWidgetAndSectionStyles];

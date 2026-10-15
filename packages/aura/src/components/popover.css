@@ -1,0 +1,10 @@
+vaadin-popover::part(overlay) {
+  background: var(--vaadin-popover-background, var(--vaadin-overlay-background, var(--aura-surface-color)));
+  box-shadow:
+    var(--aura-overlay-outline-shadow),
+    var(--vaadin-popover-shadow, var(--vaadin-overlay-shadow, var(--aura-overlay-shadow)));
+}
+
+vaadin-popover::part(arrow) {
+  background: var(--vaadin-popover-background, var(--vaadin-overlay-background, var(--aura-surface-color)));
+}

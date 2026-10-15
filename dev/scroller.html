@@ -1,0 +1,51 @@
+<!doctype html>
+<html lang="en">
+  <head>
+    <meta charset="UTF-8" />
+    <meta http-equiv="X-UA-Compatible" content="IE=edge" />
+    <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+    <title>Scroller</title>
+    <script type="module" src="./common.js"></script>
+    <script type="module">
+      import '@vaadin/scroller';
+
+      document.querySelectorAll('.content').forEach((content) => {
+        content.textContent = new Array(1000).fill('content').join(' ');
+      });
+    </script>
+    <style>
+      vaadin-scroller {
+        width: 200px;
+        height: 200px;
+      }
+
+      .content {
+        width: 400px;
+        background-color: white;
+      }
+    </style>
+  </head>
+  <body>
+    <h2 class="heading">Standard variant</h2>
+    <vaadin-scroller>
+      <div class="content"></div>
+    </vaadin-scroller>
+
+    <h2 class="heading">Overflow Indicator Variants</h2>
+
+    <h3 class="heading">Top &amp; Bottom</h3>
+    <vaadin-scroller theme="overflow-indicators">
+      <div class="content"></div>
+    </vaadin-scroller>
+
+    <h3 class="heading">Top Only</h3>
+    <vaadin-scroller theme="overflow-indicator-top">
+      <div class="content"></div>
+    </vaadin-scroller>
+
+    <h3 class="heading">Bottom Only</h3>
+    <vaadin-scroller theme="overflow-indicator-bottom">
+      <div class="content"></div>
+    </vaadin-scroller>
+  </body>
+</html>

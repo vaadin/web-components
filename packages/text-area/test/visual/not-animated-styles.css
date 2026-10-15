@@ -1,0 +1,18 @@
+/* Hide caret */
+vaadin-text-area textarea {
+  caret-color: transparent;
+}
+
+/* Show error message immediately */
+vaadin-text-area::part(label),
+vaadin-text-area::part(input-field),
+vaadin-text-area::part(helper-text),
+vaadin-text-area::part(error-message),
+vaadin-text-area::part(required-indicator) {
+  &,
+  &::before,
+  &::after {
+    animation: none !important;
+    transition: none !important;
+  }
+}

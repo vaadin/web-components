@@ -1,0 +1,28 @@
+/**
+ * @license
+ * Copyright (c) 2017 - 2026 Vaadin Ltd.
+ * This program is available under Apache License Version 2.0, available at https://vaadin.com/license/
+ */
+@media lumo_components_dashboard-layout {
+  #grid {
+    --_default-padding: var(--lumo-space-m);
+    --_default-gap: var(--lumo-space-m);
+    --_default-row-min-height: 12rem;
+  }
+
+  :host([theme~='shaded-background']) {
+    background: var(--lumo-shade-5pct);
+  }
+
+  :host([theme~='elevated-widgets']) {
+    --vaadin-dashboard-widget-shadow: var(--lumo-box-shadow-xs);
+    --vaadin-dashboard-widget-border-color: var(--lumo-contrast-10pct);
+    --vaadin-dashboard-widget-background: linear-gradient(var(--lumo-tint-5pct), var(--lumo-tint-5pct))
+      var(--lumo-base-color);
+  }
+
+  :host([theme~='flat-widgets']) {
+    --vaadin-dashboard-widget-background: var(--lumo-contrast-5pct);
+    --vaadin-dashboard-widget-border-color: transparent;
+  }
+}

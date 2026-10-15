@@ -1,0 +1,817 @@
+import { expect } from '@vaadin/chai-plugins';
+import { fixtureSync, nextFrame, nextRender, oneEvent } from '@vaadin/testing-helpers';
+import { css, html, LitElement } from 'lit';
+import { LumoInjectionMixin } from '../lumo-injection-mixin.js';
+import { registerStyles, ThemableMixin } from '../vaadin-themable-mixin.js';
+
+class TestFoo extends LumoInjectionMixin(ThemableMixin(LitElement)) {
+  static get is() {
+    return 'test-foo';
+  }
+
+  static get version() {
+    return '1.0.0';
+  }
+
+  static get styles() {
+    return css`
+      :host {
+        display: inline-block;
+      }
+
+      [part='content'] {
+        transition: background-color 1ms linear;
+        color: black;
+        background-color: yellow;
+      }
+    `;
+  }
+
+  static get lumoInjector() {
+    return { ...super.lumoInjector, includeBaseStyles: true };
+  }
+
+  render() {
+    return html`<div part="content">Content</div>`;
+  }
+}
+
+customElements.define(TestFoo.is, TestFoo);
+
+class TestBar extends LumoInjectionMixin(LitElement) {
+  static get is() {
+    return 'test-bar';
+  }
+
+  static get version() {
+    return '1.0.0';
+  }
+
+  render() {
+    return html`<test-foo></test-foo>`;
+  }
+}
+
+customElements.define(TestBar.is, TestBar);
+
+class TestBaz extends TestFoo {
+  static get is() {
+    return 'test-baz';
+  }
+
+  static get version() {
+    return '1.0.0';
+  }
+
+  render() {
+    return html`<div part="content">Baz Content</div>`;
+  }
+}
+
+customElements.define(TestBaz.is, TestBaz);
+
+class TestCustomLumoInjectorTagName extends TestFoo {
+  static get is() {
+    return 'test-custom-lumo-injector-tag-name';
+  }
+
+  static get lumoInjector() {
+    return { ...super.lumoInjector, is: 'test-foo' };
+  }
+
+  static get version() {
+    return '1.0.0';
+  }
+
+  render() {
+    return html`<div part="content">Baz Content</div>`;
+  }
+}
+
+customElements.define(TestCustomLumoInjectorTagName.is, TestCustomLumoInjectorTagName);
+
+class TestQux extends LumoInjectionMixin(LitElement) {
+  static get is() {
+    return 'test-qux';
+  }
+
+  static get version() {
+    return '1.0.0';
+  }
+
+  static get styles() {
+    return css`
+      :host {
+        display: inline-block;
+      }
+
+      [part='content'] {
+        transition: background-color 1ms linear;
+        color: black;
+        background-color: yellow;
+      }
+    `;
+  }
+
+  static get lumoInjector() {
+    return { ...super.lumoInjector, includeBaseStyles: true };
+  }
+
+  render() {
+    return html`<div part="content">Content</div>`;
+  }
+}
+
+customElements.define(TestQux.is, TestQux);
+
+class TestQuxNoBase extends LumoInjectionMixin(LitElement) {
+  static get is() {
+    return 'test-qux-no-base';
+  }
+
+  static get version() {
+    return '1.0.0';
+  }
+
+  static get styles() {
+    return css`
+      :host {
+        display: inline-block;
+      }
+
+      [part='content'] {
+        transition: background-color 1ms linear;
+        color: black;
+        background-color: yellow;
+        padding: 10px;
+      }
+    `;
+  }
+
+  // Uses LumoInjectionMixin's default lumoInjector: includeBaseStyles is false.
+
+  render() {
+    return html`<div part="content">Content</div>`;
+  }
+}
+
+customElements.define(TestQuxNoBase.is, TestQuxNoBase);
+
+const TEST_QUX_STYLES = `
+  html, :host {
+    --_lumo-test-qux-inject: 1;
+    --_lumo-test-qux-inject-modules: lumo_qux;
+  }
+
+  @media lumo_qux {
+    [part='content'] {
+      color: red;
+      background-color: green;
+    }
+  }
+`;
+
+const TEST_QUX_NO_BASE_STYLES = `
+  html, :host {
+    --_lumo-test-qux-no-base-inject: 1;
+    --_lumo-test-qux-no-base-inject-modules: lumo_qux-no-base;
+  }
+
+  @media lumo_qux-no-base {
+    [part='content'] {
+      transition: background-color 1ms linear;
+      color: red;
+      background-color: green;
+    }
+  }
+`;
+
+const TEST_FOO_STYLES = `
+  html, :host {
+    --_lumo-test-foo-inject: 1;
+    --_lumo-test-foo-inject-modules: lumo_foo, lumo_non-existing-module;
+  }
+
+  @media lumo_foo {
+    [part='content'] {
+      color: red;
+      background-color: green;
+    }
+  }
+`;
+
+function createTestFooStyleSheet() {
+  const path = import.meta.url.split('/').slice(0, -1).join('/');
+  const link = document.createElement('link');
+  link.rel = 'stylesheet';
+  link.href = `${path}/lumo-injection-test-foo.css`;
+  return link;
+}
+
+describe('Lumo injection', () => {
+  let element, content;
+
+  async function contentTransition() {
+    // Use custom 1ms background transition on the content part to not
+    // rely on global transitions used by StyleObserver under the hood.
+    await oneEvent(content, 'transitionend');
+  }
+
+  function assertInjectedStyle() {
+    // background-color: green
+    expect(getComputedStyle(content).backgroundColor).to.equal('rgb(0, 128, 0)');
+  }
+
+  function assertBaseStyle() {
+    // background-color: yellow
+    expect(getComputedStyle(content).backgroundColor).to.equal('rgb(255, 255, 0)');
+  }
+
+  function assertThemeStyle() {
+    // background-color: cyan
+    expect(getComputedStyle(content).backgroundColor).to.equal('rgb(0, 255, 255)');
+  }
+
+  describe('in global scope', () => {
+    afterEach(() => {
+      document.__lumoInjector?.disconnect();
+      document.__lumoInjector = undefined;
+      document.__cssPropertyObserver?.disconnect();
+      document.__cssPropertyObserver = undefined;
+    });
+
+    describe('styles added after element is connected', () => {
+      beforeEach(async () => {
+        element = fixtureSync('<test-foo></test-foo>');
+        await nextRender();
+        content = element.shadowRoot.querySelector('[part="content"]');
+      });
+
+      it('should inject matching styles added to document using style tag', async () => {
+        const style = document.createElement('style');
+        style.textContent = TEST_FOO_STYLES;
+        document.head.appendChild(style);
+
+        await contentTransition();
+        assertInjectedStyle();
+
+        style.remove();
+
+        await contentTransition();
+        assertBaseStyle();
+      });
+
+      it('should inject matching styles added to document using link element', async () => {
+        const link = createTestFooStyleSheet();
+        document.head.appendChild(link);
+
+        await contentTransition();
+        assertInjectedStyle();
+
+        link.remove();
+
+        await contentTransition();
+        assertBaseStyle();
+      });
+
+      it('should inject matching styles added to document using adoptedStyleSheets', async () => {
+        const sheet = new CSSStyleSheet();
+        sheet.replaceSync(TEST_FOO_STYLES);
+        document.adoptedStyleSheets.push(sheet);
+
+        await contentTransition();
+        assertInjectedStyle();
+
+        document.adoptedStyleSheets.pop();
+
+        await contentTransition();
+        assertBaseStyle();
+      });
+    });
+
+    describe('styles added before element is connected', () => {
+      beforeEach(() => {
+        element = document.createElement('test-foo');
+      });
+
+      afterEach(() => {
+        element.remove();
+      });
+
+      it('should inject matching styles added to document using style tag', async () => {
+        const style = document.createElement('style');
+        style.textContent = TEST_FOO_STYLES;
+        document.head.appendChild(style);
+        await nextRender();
+
+        document.body.appendChild(element);
+        await nextRender();
+        content = element.shadowRoot.querySelector('[part="content"]');
+        assertInjectedStyle();
+
+        style.remove();
+
+        await contentTransition();
+        assertBaseStyle();
+      });
+
+      it('should inject matching styles added to document using link element', async () => {
+        const link = createTestFooStyleSheet();
+        document.head.appendChild(link);
+        await nextRender();
+
+        document.body.appendChild(element);
+        await nextRender();
+        content = element.shadowRoot.querySelector('[part="content"]');
+        assertInjectedStyle();
+
+        link.remove();
+
+        await contentTransition();
+        assertBaseStyle();
+      });
+
+      it('should inject matching styles added to document using adoptedStyleSheets', async () => {
+        const sheet = new CSSStyleSheet();
+        sheet.replaceSync(TEST_FOO_STYLES);
+        document.adoptedStyleSheets.push(sheet);
+        await nextRender();
+
+        document.body.appendChild(element);
+        await nextRender();
+        content = element.shadowRoot.querySelector('[part="content"]');
+
+        assertInjectedStyle();
+
+        document.adoptedStyleSheets.pop();
+
+        await contentTransition();
+        assertBaseStyle();
+      });
+    });
+  });
+
+  describe('in shadow scope', () => {
+    let host;
+
+    beforeEach(() => {
+      host = fixtureSync('<div></div>');
+      host.attachShadow({ mode: 'open' });
+      element = document.createElement('test-foo');
+    });
+
+    afterEach(() => {
+      host.__lumoInjector?.disconnect();
+      host.__lumoInjector = undefined;
+      host.__cssPropertyObserver?.disconnect();
+      host.__cssPropertyObserver = undefined;
+    });
+
+    describe('styles added after element is connected', () => {
+      beforeEach(async () => {
+        host.shadowRoot.appendChild(element);
+        await nextRender();
+        content = element.shadowRoot.querySelector('[part="content"]');
+      });
+
+      it('should inject matching styles added to document using style tag when in shadow scope', async () => {
+        const style = document.createElement('style');
+        style.textContent = TEST_FOO_STYLES;
+        document.head.appendChild(style);
+
+        await contentTransition();
+        assertInjectedStyle();
+
+        style.remove();
+
+        await contentTransition();
+        assertBaseStyle();
+      });
+
+      it('should inject matching styles added to document using link element when in shadow scope', async () => {
+        const link = createTestFooStyleSheet();
+        document.head.appendChild(link);
+
+        await contentTransition();
+        assertInjectedStyle();
+
+        link.remove();
+
+        await contentTransition();
+        assertBaseStyle();
+      });
+
+      it('should inject matching styles added to document using adoptedStyleSheets when in shadow scope', async () => {
+        const sheet = new CSSStyleSheet();
+        sheet.replaceSync(TEST_FOO_STYLES);
+        document.adoptedStyleSheets.push(sheet);
+
+        await contentTransition();
+        assertInjectedStyle();
+
+        document.adoptedStyleSheets.pop();
+
+        await contentTransition();
+        assertBaseStyle();
+      });
+
+      it('should inject matching styles added to enclosing shadow root using style tag', async () => {
+        const style = document.createElement('style');
+        style.textContent = TEST_FOO_STYLES;
+        host.shadowRoot.appendChild(style);
+
+        await contentTransition();
+        assertInjectedStyle();
+
+        style.remove();
+
+        await contentTransition();
+        assertBaseStyle();
+      });
+
+      it('should inject matching styles added to enclosing shadow root using link element', async () => {
+        const link = createTestFooStyleSheet();
+        host.shadowRoot.appendChild(link);
+
+        await contentTransition();
+        assertInjectedStyle();
+
+        link.remove();
+
+        await contentTransition();
+        assertBaseStyle();
+      });
+
+      it('should inject matching styles added to enclosing shadow root using adoptedStyleSheets', async () => {
+        const sheet = new CSSStyleSheet();
+        sheet.replaceSync(TEST_FOO_STYLES);
+        host.shadowRoot.adoptedStyleSheets.push(sheet);
+
+        await contentTransition();
+        assertInjectedStyle();
+
+        host.shadowRoot.adoptedStyleSheets.pop();
+
+        await contentTransition();
+        assertBaseStyle();
+      });
+
+      it('should not apply styles added to enclosing shadow root after moving to document', async () => {
+        const style = document.createElement('style');
+        style.textContent = TEST_FOO_STYLES;
+        host.shadowRoot.appendChild(style);
+
+        await contentTransition();
+        assertInjectedStyle();
+
+        document.body.appendChild(element);
+        assertBaseStyle();
+
+        host.shadowRoot.appendChild(element);
+        assertInjectedStyle();
+      });
+    });
+
+    describe('styles added before element is connected', () => {
+      it('should inject matching styles added to enclosing shadow root using style tag', async () => {
+        const style = document.createElement('style');
+        style.textContent = TEST_FOO_STYLES;
+        host.shadowRoot.appendChild(style);
+        await nextRender();
+
+        host.shadowRoot.appendChild(element);
+        await nextRender();
+        content = element.shadowRoot.querySelector('[part="content"]');
+
+        assertInjectedStyle();
+
+        style.remove();
+
+        await contentTransition();
+        assertBaseStyle();
+      });
+
+      it('should inject matching styles added to enclosing shadow root using link element', async () => {
+        const link = createTestFooStyleSheet();
+        host.shadowRoot.appendChild(link);
+        await nextRender();
+
+        host.shadowRoot.appendChild(element);
+        await nextRender();
+        content = element.shadowRoot.querySelector('[part="content"]');
+
+        assertInjectedStyle();
+
+        link.remove();
+
+        await contentTransition();
+        assertBaseStyle();
+      });
+
+      it('should inject matching styles added to enclosing shadow root using adoptedStyleSheets', async () => {
+        const sheet = new CSSStyleSheet();
+        sheet.replaceSync(TEST_FOO_STYLES);
+        host.shadowRoot.adoptedStyleSheets.push(sheet);
+        await nextRender();
+
+        host.shadowRoot.appendChild(element);
+        await nextRender();
+        content = element.shadowRoot.querySelector('[part="content"]');
+
+        assertInjectedStyle();
+
+        host.shadowRoot.adoptedStyleSheets.pop();
+
+        await contentTransition();
+        assertBaseStyle();
+      });
+    });
+
+    describe('injection disabled', () => {
+      beforeEach(async () => {
+        host.__lumoInjectorDisabled = true;
+        host.shadowRoot.appendChild(element);
+        await nextRender();
+        content = element.shadowRoot.querySelector('[part="content"]');
+      });
+
+      it('should not inject styles', async () => {
+        const style = document.createElement('style');
+        style.textContent = TEST_FOO_STYLES;
+        document.head.appendChild(style);
+
+        await nextFrame();
+        assertBaseStyle();
+
+        style.remove();
+
+        await nextFrame();
+        assertBaseStyle();
+      });
+    });
+  });
+
+  describe('nested component', () => {
+    let host, wrapper, style;
+
+    beforeEach(async () => {
+      host = fixtureSync('<div></div>');
+      host.attachShadow({ mode: 'open' });
+
+      style = document.createElement('style');
+      style.textContent = TEST_FOO_STYLES;
+      host.shadowRoot.appendChild(style);
+      await nextRender();
+
+      wrapper = document.createElement('test-bar');
+    });
+
+    afterEach(() => {
+      host.__lumoInjector?.disconnect();
+      host.__lumoInjector = undefined;
+      host.__cssPropertyObserver?.disconnect();
+      host.__cssPropertyObserver = undefined;
+    });
+
+    it('should inject matching styles added to parent shadow host', async () => {
+      host.shadowRoot.appendChild(wrapper);
+      await nextRender();
+
+      element = wrapper.shadowRoot.querySelector('test-foo');
+      content = element.shadowRoot.querySelector('[part="content"]');
+      assertInjectedStyle();
+
+      style.remove();
+
+      await contentTransition();
+      assertBaseStyle();
+    });
+
+    it('should inject matching styles after moving to parent shadow host', async () => {
+      host.shadowRoot.appendChild(wrapper);
+      await nextRender();
+
+      element = wrapper.shadowRoot.querySelector('test-foo');
+      content = element.shadowRoot.querySelector('[part="content"]');
+
+      host.shadowRoot.appendChild(element);
+
+      assertInjectedStyle();
+    });
+  });
+
+  describe('extending class', () => {
+    beforeEach(async () => {
+      element = fixtureSync('<test-baz></test-baz>');
+      await nextRender();
+      content = element.shadowRoot.querySelector('[part="content"]');
+    });
+
+    afterEach(() => {
+      document.__lumoInjector?.disconnect();
+      document.__lumoInjector = undefined;
+      document.__cssPropertyObserver?.disconnect();
+      document.__cssPropertyObserver = undefined;
+    });
+
+    it('should inject matching styles for the extending component', async () => {
+      const style = document.createElement('style');
+      style.textContent = TEST_FOO_STYLES.replaceAll('foo', 'baz');
+      document.head.appendChild(style);
+
+      await contentTransition();
+      assertInjectedStyle();
+
+      style.remove();
+
+      await contentTransition();
+      assertBaseStyle();
+    });
+  });
+
+  describe('custom tag name', () => {
+    beforeEach(async () => {
+      element = fixtureSync('<test-custom-lumo-injector-tag-name></test-custom-lumo-injector-tag-name>');
+      await nextRender();
+      content = element.shadowRoot.querySelector('[part="content"]');
+    });
+
+    afterEach(() => {
+      document.__lumoInjector?.disconnect();
+      document.__lumoInjector = undefined;
+      document.__cssPropertyObserver?.disconnect();
+      document.__cssPropertyObserver = undefined;
+    });
+
+    it('should inject matching styles for the extending component', async () => {
+      const style = document.createElement('style');
+      style.textContent = TEST_FOO_STYLES;
+      document.head.appendChild(style);
+
+      await contentTransition();
+      assertInjectedStyle();
+
+      style.remove();
+
+      await contentTransition();
+      assertBaseStyle();
+    });
+  });
+
+  describe('forceUpdate', () => {
+    beforeEach(async () => {
+      element = fixtureSync('<test-foo></test-foo>');
+      await nextRender();
+      content = element.shadowRoot.querySelector('[part="content"]');
+    });
+
+    afterEach(() => {
+      document.__lumoInjector?.disconnect();
+      document.__lumoInjector = undefined;
+      document.__cssPropertyObserver?.disconnect();
+      document.__cssPropertyObserver = undefined;
+    });
+
+    it('should update component styles synchronously on forceUpdate', () => {
+      const style = document.createElement('style');
+      style.textContent = TEST_FOO_STYLES;
+      document.head.appendChild(style);
+
+      document.__lumoInjector.forceUpdate();
+      expect(getComputedStyle(content).color).to.equal('rgb(255, 0, 0)'); // red
+
+      style.remove();
+
+      document.__lumoInjector.forceUpdate();
+      expect(getComputedStyle(content).color).to.equal('rgb(0, 0, 0)'); // black
+    });
+  });
+
+  describe('registerStyles', () => {
+    let style;
+
+    before(() => {
+      // Suppress console warning
+      Object.assign(window, { Vaadin: { suppressPostFinalizeStylesWarning: true } });
+    });
+
+    beforeEach(async () => {
+      style = document.createElement('style');
+      style.textContent = TEST_FOO_STYLES;
+      document.head.appendChild(style);
+      await nextRender();
+
+      element = fixtureSync('<test-foo></test-foo>');
+      await nextRender();
+      content = element.shadowRoot.querySelector('[part="content"]');
+    });
+
+    afterEach(() => {
+      style.remove();
+      document.__lumoInjector?.disconnect();
+      document.__lumoInjector = undefined;
+      document.__cssPropertyObserver?.disconnect();
+      document.__cssPropertyObserver = undefined;
+    });
+
+    it('should not remove styles from injected stylesheets when calling registerStyles()', () => {
+      assertInjectedStyle();
+
+      registerStyles(
+        'test-foo',
+        css`
+          :host {
+            color: white;
+          }
+        `,
+      );
+
+      assertInjectedStyle();
+    });
+
+    it('should override styles from injected stylesheets when calling registerStyles()', async () => {
+      assertInjectedStyle();
+
+      registerStyles(
+        'test-foo',
+        css`
+          [part='content'] {
+            background-color: cyan;
+          }
+        `,
+      );
+
+      await contentTransition();
+
+      assertThemeStyle();
+    });
+  });
+
+  describe('without ThemableMixin', () => {
+    beforeEach(async () => {
+      element = fixtureSync('<test-qux></test-qux>');
+      await nextRender();
+      content = element.shadowRoot.querySelector('[part="content"]');
+    });
+
+    afterEach(() => {
+      document.__lumoInjector?.disconnect();
+      document.__lumoInjector = undefined;
+      document.__cssPropertyObserver?.disconnect();
+      document.__cssPropertyObserver = undefined;
+    });
+
+    it('should apply injected styles after element static styles', async () => {
+      const style = document.createElement('style');
+      style.textContent = TEST_QUX_STYLES;
+      document.head.appendChild(style);
+
+      await contentTransition();
+      assertInjectedStyle();
+
+      style.remove();
+
+      await contentTransition();
+      assertBaseStyle();
+    });
+  });
+
+  describe('without ThemableMixin and includeBaseStyles=false', () => {
+    beforeEach(async () => {
+      element = fixtureSync('<test-qux-no-base></test-qux-no-base>');
+      await nextRender();
+      content = element.shadowRoot.querySelector('[part="content"]');
+    });
+
+    afterEach(() => {
+      document.__lumoInjector?.disconnect();
+      document.__lumoInjector = undefined;
+      document.__cssPropertyObserver?.disconnect();
+      document.__cssPropertyObserver = undefined;
+    });
+
+    it('should drop element static styles when injected styles are present', async () => {
+      // Before injection: element static styles apply.
+      assertBaseStyle();
+      expect(getComputedStyle(content).paddingTop).to.equal('10px');
+
+      const style = document.createElement('style');
+      style.textContent = TEST_QUX_NO_BASE_STYLES;
+      document.head.appendChild(style);
+
+      await contentTransition();
+
+      // After injection: only the Lumo stylesheet applies — padding from base styles is gone.
+      assertInjectedStyle();
+      expect(getComputedStyle(content).paddingTop).to.equal('0px');
+
+      style.remove();
+
+      await contentTransition();
+
+      // After removal: element static styles re-apply.
+      assertBaseStyle();
+      expect(getComputedStyle(content).paddingTop).to.equal('10px');
+    });
+  });
+});

@@ -1,0 +1,47 @@
+/**
+ * @license
+ * Copyright (c) 2017 - 2026 Vaadin Ltd.
+ * This program is available under Apache License Version 2.0, available at https://vaadin.com/license/
+ */
+@media lumo_components_avatar-group {
+  :host {
+    --vaadin-avatar-size: var(--lumo-size-m);
+    --vaadin-avatar-group-overlap: 8px;
+    /* Deprecated property name (overlap-border), for backwards compatibility */
+    --vaadin-avatar-group-overlap-border: var(--vaadin-avatar-group-gap, 2px);
+  }
+
+  ::slotted(vaadin-avatar) {
+    --_gap: var(--vaadin-avatar-group-overlap-border);
+    --_outline-width: var(--vaadin-avatar-outline-width);
+    mask-size: calc(300% + var(--vaadin-avatar-group-overlap-border) * 6 - var(--vaadin-avatar-outline-width) * 6);
+  }
+
+  ::slotted(vaadin-avatar:not(:first-of-type)) {
+    margin-inline-start: calc(var(--_overlap) * -1 - var(--vaadin-avatar-outline-width));
+  }
+
+  :host([theme~='xlarge']) {
+    --vaadin-avatar-group-overlap: 12px;
+    --vaadin-avatar-group-overlap-border: 3px;
+    --vaadin-avatar-size: var(--lumo-size-xl);
+  }
+
+  :host([theme~='large']) {
+    --vaadin-avatar-group-overlap: 10px;
+    --vaadin-avatar-group-overlap-border: 3px;
+    --vaadin-avatar-size: var(--lumo-size-l);
+  }
+
+  :host([theme~='small']) {
+    --vaadin-avatar-group-overlap: 6px;
+    --vaadin-avatar-group-overlap-border: 2px;
+    --vaadin-avatar-size: var(--lumo-size-s);
+  }
+
+  :host([theme~='xsmall']) {
+    --vaadin-avatar-group-overlap: 4px;
+    --vaadin-avatar-group-overlap-border: 2px;
+    --vaadin-avatar-size: var(--lumo-size-xs);
+  }
+}

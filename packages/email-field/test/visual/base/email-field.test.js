@@ -1,0 +1,45 @@
+import { fixtureSync } from '@vaadin/testing-helpers';
+import { visualDiff } from '@web/test-runner-visual-regression';
+import '@vaadin/text-field/test/visual/not-animated-styles.css';
+import '../../../src/vaadin-email-field.js';
+
+describe('email-field', () => {
+  let div, element;
+
+  beforeEach(() => {
+    div = document.createElement('div');
+    div.style.display = 'inline-block';
+    div.style.padding = '10px';
+    element = fixtureSync('<vaadin-email-field></vaadin-email-field>', div);
+  });
+
+  describe('states', () => {
+    it('label aside', async () => {
+      element.setAttribute('theme', 'label-aside');
+      element.label = 'Label';
+      await visualDiff(div, 'state-label-aside');
+    });
+
+    ['ltr', 'rtl'].forEach((dir) => {
+      describe(dir, () => {
+        before(() => {
+          document.documentElement.setAttribute('dir', dir);
+        });
+
+        after(() => {
+          document.documentElement.removeAttribute('dir');
+        });
+
+        it('value', async () => {
+          element.value = 'value@example.com';
+          await visualDiff(div, `${dir}-value`);
+        });
+
+        it('placeholder', async () => {
+          element.placeholder = 'Placeholder';
+          await visualDiff(div, `${dir}-placeholder`);
+        });
+      });
+    });
+  });
+});

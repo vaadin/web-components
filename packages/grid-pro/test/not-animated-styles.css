@@ -1,0 +1,4 @@
+vaadin-grid-pro-edit-select[opening]::part(overlay),
+vaadin-grid-pro-edit-select[closing]::part(overlay) {
+  animation: none !important;
+}

@@ -1,0 +1,83 @@
+/**
+ * @license
+ * Copyright (c) 2017 - 2026 Vaadin Ltd.
+ * This program is available under Apache License Version 2.0, available at https://vaadin.com/license/
+ */
+import type { Constructor } from '@open-wc/dedupe-mixin';
+
+export declare function OverlayFocusMixin<T extends Constructor<HTMLElement>>(
+  base: T,
+): Constructor<OverlayFocusMixinClass> & T;
+
+export declare class OverlayFocusMixinClass {
+  /**
+   * Set to true to move focus into the overlay automatically on open
+   * and keep it inside: Tab and Shift+Tab cycle through the overlay's
+   * content until the overlay is closed.
+   *
+   * Focus moves to the first tabbable element in the tab order. This
+   * can be the overlay itself if it has `tabindex` attribute set to `0`
+   * on the host element or the `overlay` shadow DOM part.
+   *
+   * @attr {boolean} focus-trap
+   */
+  focusTrap: boolean;
+
+  /**
+   * Set to true to move focus into the overlay automatically on open.
+   *
+   * Focus moves to the first tabbable element in the tab order. This
+   * can be the overlay itself if it has `tabindex` attribute set to `0`
+   * on the host element or the `overlay` shadow DOM part.
+   *
+   * An element inside the overlay that has `autofocus` set, such as
+   * `<vaadin-text-field autofocus>`, receives focus on open instead,
+   * even when this property is false.
+   */
+  autofocus: boolean;
+
+  /**
+   * Set to true to enable restoring of focus when overlay is closed.
+   * @attr {boolean} restore-focus-on-close
+   */
+  restoreFocusOnClose: boolean;
+
+  /**
+   * Set to specify the element which should be focused on overlay close,
+   * if `restoreFocusOnClose` is set to true.
+   */
+  restoreFocusNode?: HTMLElement;
+
+  /**
+   * Release focus and restore focus after the overlay is closed.
+   */
+  protected _resetFocus(): void;
+
+  /**
+   * Save the previously focused node when the overlay starts to open.
+   */
+  protected _saveFocus(): void;
+
+  /**
+   * Sets up focus after the overlay opening has completed: moves focus into
+   * the overlay if `autofocus` is enabled, and traps focus within the overlay
+   * if `focusTrap` is enabled.
+   */
+  protected _initFocus(): void;
+
+  /**
+   * Returns true if focus is still inside the overlay or on the body element,
+   * otherwise false.
+   *
+   * Focus shouldn't be restored if it's been moved elsewhere by another
+   * component or as a result of a user interaction e.g. the user clicked
+   * on a button outside the overlay while the overlay was open.
+   */
+  protected _shouldRestoreFocus(): boolean;
+
+  /**
+   * Returns true if the overlay contains the given node,
+   * including those within shadow DOM trees.
+   */
+  protected _deepContains(node: Node): boolean;
+}

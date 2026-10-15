@@ -1,0 +1,53 @@
+<!doctype html>
+<html lang="en">
+  <head>
+    <meta charset="UTF-8" />
+    <meta http-equiv="X-UA-Compatible" content="IE=edge" />
+    <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+    <title>Vertical Layout</title>
+    <script type="module" src="./common.js"></script>
+
+    <script type="module">
+      import '@vaadin/vertical-layout';
+    </script>
+
+    <style>
+      .section {
+        flex-direction: column;
+        align-items: initial;
+      }
+
+      vaadin-vertical-layout {
+        outline: 1px dashed blue;
+      }
+
+      vaadin-vertical-layout > div {
+        background: #ccc;
+      }
+    </style>
+  </head>
+
+  <body>
+    <section class="section">
+      <h2 class="heading">Variants</h2>
+
+      <vaadin-vertical-layout theme="margin">
+        <div>Margin</div>
+        <div>Margin</div>
+        <div>Margin</div>
+      </vaadin-vertical-layout>
+
+      <vaadin-vertical-layout theme="padding">
+        <div>Padding</div>
+        <div>Padding</div>
+        <div>Padding</div>
+      </vaadin-vertical-layout>
+
+      <vaadin-vertical-layout theme="spacing">
+        <div>Spacing</div>
+        <div>Spacing</div>
+        <div>Spacing</div>
+      </vaadin-vertical-layout>
+    </section>
+  </body>
+</html>

@@ -1,0 +1,41 @@
+{
+  "name": "@vaadin/lit-renderer",
+  "version": "25.4.0-alpha3",
+  "publishConfig": {
+    "access": "public"
+  },
+  "description": "An abstract Lit directive for adding a renderer to a Vaadin web component",
+  "license": "Apache-2.0",
+  "repository": {
+    "type": "git",
+    "url": "https://github.com/vaadin/web-components.git",
+    "directory": "packages/lit-renderer"
+  },
+  "author": "Vaadin Ltd",
+  "homepage": "https://vaadin.com/components",
+  "bugs": {
+    "url": "https://github.com/vaadin/web-components/issues"
+  },
+  "main": "src/lit-renderer.js",
+  "module": "src/lit-renderer.js",
+  "type": "module",
+  "files": [
+    "src",
+    "vaadin-*.d.ts",
+    "vaadin-*.js"
+  ],
+  "keywords": [
+    "Vaadin",
+    "renderer",
+    "lit"
+  ],
+  "dependencies": {
+    "lit": "^3.0.0"
+  },
+  "devDependencies": {
+    "@vaadin/chai-plugins": "25.4.0-alpha3",
+    "@vaadin/test-runner-commands": "25.4.0-alpha3",
+    "@vaadin/testing-helpers": "^2.0.0",
+    "sinon": "^22.0.0"
+  }
+}

@@ -1,0 +1,43 @@
+{
+  "name": "@vaadin/aura",
+  "version": "25.4.0-alpha3",
+  "publishConfig": {
+    "access": "public"
+  },
+  "description": "Aura is a theme used by Vaadin components",
+  "license": "Apache-2.0",
+  "repository": {
+    "type": "git",
+    "url": "https://github.com/vaadin/web-components.git",
+    "directory": "packages/aura"
+  },
+  "author": "Vaadin Ltd",
+  "homepage": "https://vaadin.com/components",
+  "bugs": {
+    "url": "https://github.com/vaadin/web-components/issues"
+  },
+  "main": "aura.css",
+  "type": "module",
+  "scripts": {
+    "build": "postcss ./aura.css --dir dist"
+  },
+  "files": [
+    "dist",
+    "src",
+    "*.css"
+  ],
+  "keywords": [
+    "vaadin",
+    "aura",
+    "design-system",
+    "web-components",
+    "web-component"
+  ],
+  "devDependencies": {
+    "cssnano": "^9.0.1",
+    "postcss": "^8.5.26",
+    "postcss-cli": "^11.0.1",
+    "postcss-import": "^17.0.0",
+    "postcss-url": "^10.1.4"
+  }
+}

@@ -1,0 +1,52 @@
+<!doctype html>
+<html lang="en">
+  <head>
+    <meta charset="UTF-8" />
+    <meta http-equiv="X-UA-Compatible" content="IE=edge" />
+    <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+    <title>Custom Field</title>
+    <script type="module" src="./common.js"></script>
+  </head>
+
+  <body>
+    <vaadin-custom-field
+      label="Phone number"
+      required
+      error-message="This field is required"
+      helper-text="Your public phone number"
+    >
+      <vaadin-select style="width: 6rem" value="+358" required></vaadin-select>
+      <vaadin-text-field
+        allowed-char-pattern="[0-9]"
+        pattern="[0-9]*"
+        maxlength="4"
+        style="width: 5rem"
+        required
+      ></vaadin-text-field>
+      <vaadin-number-field required></vaadin-number-field>
+      <vaadin-tooltip slot="tooltip" text="Other users will not see this"></vaadin-tooltip>
+    </vaadin-custom-field>
+
+    <script type="module">
+      import '@vaadin/custom-field';
+      import '@vaadin/item';
+      import '@vaadin/list-box';
+      import '@vaadin/number-field';
+      import '@vaadin/text-field';
+      import '@vaadin/select';
+      import '@vaadin/tooltip';
+
+      const select = document.querySelector('vaadin-select');
+      select.focusElement.setAttribute('aria-label', 'Country code');
+      select.items = ['+358', '+46', '+34', '+380'].map((value) => {
+        return {
+          label: value,
+        };
+      });
+
+      document.querySelector('vaadin-text-field').focusElement.setAttribute('aria-label', 'Area code');
+
+      document.querySelector('vaadin-number-field').focusElement.setAttribute('aria-label', 'Number');
+    </script>
+  </body>
+</html>

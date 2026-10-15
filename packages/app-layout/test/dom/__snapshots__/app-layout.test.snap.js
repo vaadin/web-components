@@ -1,0 +1,307 @@
+/* @web/test-runner snapshot v1 */
+export const snapshots = {};
+
+snapshots["vaadin-app-layout host default"] = 
+`<vaadin-app-layout
+  no-anim=""
+  overlay=""
+  primary-section="navbar"
+  style="--_vaadin-app-layout-drawer-width: 0; --_vaadin-app-layout-drawer-offset-size: 0px; --_vaadin-app-layout-navbar-offset-size: 0px; --_vaadin-app-layout-navbar-offset-size-bottom: 0px;"
+>
+</vaadin-app-layout>
+`;
+/* end snapshot vaadin-app-layout host default */
+
+snapshots["vaadin-app-layout host with drawer"] = 
+`<vaadin-app-layout
+  has-drawer=""
+  no-anim=""
+  overlay=""
+  primary-section="navbar"
+  style="--_vaadin-app-layout-drawer-offset-size: 320px; --_vaadin-app-layout-navbar-offset-size: 0px; --_vaadin-app-layout-navbar-offset-size-bottom: 0px;"
+>
+  <div slot="drawer">
+    Drawer Content
+  </div>
+</vaadin-app-layout>
+`;
+/* end snapshot vaadin-app-layout host with drawer */
+
+snapshots["vaadin-app-layout host with navbar"] = 
+`<vaadin-app-layout
+  has-navbar=""
+  no-anim=""
+  overlay=""
+  primary-section="navbar"
+  style="--_vaadin-app-layout-drawer-width: 0; --_vaadin-app-layout-drawer-offset-size: 0px; --_vaadin-app-layout-navbar-offset-size: 34px; --_vaadin-app-layout-navbar-offset-size-bottom: 0px;"
+>
+  <div slot="navbar">
+    Navbar Content
+  </div>
+</vaadin-app-layout>
+`;
+/* end snapshot vaadin-app-layout host with navbar */
+
+snapshots["vaadin-app-layout shadow drawer content desktop layout default"] = 
+`<div
+  id="navbarTop"
+  part="navbar navbar-top"
+>
+  <slot name="navbar">
+  </slot>
+</div>
+<div part="backdrop">
+</div>
+<div
+  id="drawer"
+  part="drawer"
+>
+  <slot
+    id="drawerSlot"
+    name="drawer"
+  >
+  </slot>
+</div>
+<div part="content">
+  <slot>
+  </slot>
+</div>
+<div
+  hidden=""
+  id="navbarBottom"
+  part="navbar navbar-bottom"
+>
+  <slot name="navbar-bottom">
+  </slot>
+</div>
+<div hidden="">
+  <slot
+    id="touchSlot"
+    name="navbar touch-optimized"
+  >
+  </slot>
+</div>
+`;
+/* end snapshot vaadin-app-layout shadow drawer content desktop layout default */
+
+snapshots["vaadin-app-layout shadow drawer content desktop layout drawer closed"] = 
+`<div
+  id="navbarTop"
+  part="navbar navbar-top"
+>
+  <slot name="navbar">
+  </slot>
+</div>
+<div part="backdrop">
+</div>
+<div
+  id="drawer"
+  part="drawer"
+>
+  <slot
+    id="drawerSlot"
+    name="drawer"
+  >
+  </slot>
+</div>
+<div part="content">
+  <slot>
+  </slot>
+</div>
+<div
+  hidden=""
+  id="navbarBottom"
+  part="navbar navbar-bottom"
+>
+  <slot name="navbar-bottom">
+  </slot>
+</div>
+<div hidden="">
+  <slot
+    id="touchSlot"
+    name="navbar touch-optimized"
+  >
+  </slot>
+</div>
+`;
+/* end snapshot vaadin-app-layout shadow drawer content desktop layout drawer closed */
+
+snapshots["vaadin-app-layout shadow drawer content mobile layout default"] = 
+`<div
+  id="navbarTop"
+  part="navbar navbar-top"
+>
+  <slot name="navbar">
+  </slot>
+</div>
+<div part="backdrop">
+</div>
+<div
+  aria-label="Drawer"
+  aria-modal="true"
+  id="drawer"
+  part="drawer"
+  role="dialog"
+>
+  <slot
+    id="drawerSlot"
+    name="drawer"
+  >
+  </slot>
+</div>
+<div part="content">
+  <slot>
+  </slot>
+</div>
+<div
+  hidden=""
+  id="navbarBottom"
+  part="navbar navbar-bottom"
+>
+  <slot name="navbar-bottom">
+  </slot>
+</div>
+<div hidden="">
+  <slot
+    id="touchSlot"
+    name="navbar touch-optimized"
+  >
+  </slot>
+</div>
+`;
+/* end snapshot vaadin-app-layout shadow drawer content mobile layout default */
+
+snapshots["vaadin-app-layout shadow drawer content mobile layout drawer opened"] = 
+`<div
+  id="navbarTop"
+  part="navbar navbar-top"
+>
+  <slot name="navbar">
+  </slot>
+</div>
+<div part="backdrop">
+</div>
+<div
+  aria-label="Drawer"
+  aria-modal="true"
+  id="drawer"
+  part="drawer"
+  role="dialog"
+>
+  <slot
+    id="drawerSlot"
+    name="drawer"
+  >
+  </slot>
+</div>
+<div part="content">
+  <slot>
+  </slot>
+</div>
+<div
+  hidden=""
+  id="navbarBottom"
+  part="navbar navbar-bottom"
+>
+  <slot name="navbar-bottom">
+  </slot>
+</div>
+<div hidden="">
+  <slot
+    id="touchSlot"
+    name="navbar touch-optimized"
+  >
+  </slot>
+</div>
+`;
+/* end snapshot vaadin-app-layout shadow drawer content mobile layout drawer opened */
+
+snapshots["vaadin-app-layout shadow empty desktop layout default"] = 
+`<div
+  id="navbarTop"
+  part="navbar navbar-top"
+>
+  <slot name="navbar">
+  </slot>
+</div>
+<div part="backdrop">
+</div>
+<div
+  hidden=""
+  id="drawer"
+  part="drawer"
+>
+  <slot
+    id="drawerSlot"
+    name="drawer"
+  >
+  </slot>
+</div>
+<div part="content">
+  <slot>
+  </slot>
+</div>
+<div
+  hidden=""
+  id="navbarBottom"
+  part="navbar navbar-bottom"
+>
+  <slot name="navbar-bottom">
+  </slot>
+</div>
+<div hidden="">
+  <slot
+    id="touchSlot"
+    name="navbar touch-optimized"
+  >
+  </slot>
+</div>
+`;
+/* end snapshot vaadin-app-layout shadow empty desktop layout default */
+
+snapshots["vaadin-app-layout shadow empty mobile layout default"] = 
+`<div
+  id="navbarTop"
+  part="navbar navbar-top"
+>
+  <slot name="navbar">
+  </slot>
+</div>
+<div part="backdrop">
+</div>
+<div
+  aria-label="Drawer"
+  aria-modal="true"
+  hidden=""
+  id="drawer"
+  part="drawer"
+  role="dialog"
+>
+  <slot
+    id="drawerSlot"
+    name="drawer"
+  >
+  </slot>
+</div>
+<div part="content">
+  <slot>
+  </slot>
+</div>
+<div
+  hidden=""
+  id="navbarBottom"
+  part="navbar navbar-bottom"
+>
+  <slot name="navbar-bottom">
+  </slot>
+</div>
+<div hidden="">
+  <slot
+    id="touchSlot"
+    name="navbar touch-optimized"
+  >
+  </slot>
+</div>
+`;
+/* end snapshot vaadin-app-layout shadow empty mobile layout default */
+

@@ -1,0 +1,17 @@
+:where(:root),
+:where(:host) {
+  --vaadin-crud-background: var(--aura-surface-color) padding-box;
+}
+
+vaadin-crud-edit {
+  padding: var(--vaadin-padding-xs);
+  --vaadin-icon-visual-size: 0.75lh;
+}
+
+vaadin-crud::part(editor) {
+  background: var(--aura-surface-color);
+}
+
+vaadin-crud vaadin-confirm-dialog {
+  color-scheme: inherit;
+}

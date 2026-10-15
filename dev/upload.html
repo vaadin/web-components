@@ -1,0 +1,102 @@
+<!doctype html>
+<html lang="en">
+  <head>
+    <meta charset="UTF-8" />
+    <meta http-equiv="X-UA-Compatible" content="IE=edge" />
+    <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+    <title>Upload</title>
+    <script type="module" src="./common.js"></script>
+
+    <script type="module">
+      import '@vaadin/radio-group';
+      import '@vaadin/upload';
+      import { createFiles, xhrCreator } from '@vaadin/upload/test/helpers.js';
+
+      const nextUpload = document.querySelector('#next-upload');
+
+      const upload = document.querySelector('vaadin-upload');
+      const nodropUpload = document.querySelector('vaadin-upload[nodrop]');
+
+      // Create a shared XHR creator function that both uploads will use
+      const createConfiguredXhr = () => {
+        if (nextUpload.value === 'successful') {
+          return xhrCreator({ size: 512, uploadTime: 3000, stepTime: 1000 })();
+        } else if (nextUpload.value === 'rejected') {
+          return new XMLHttpRequest();
+        } else if (nextUpload.value === 'error') {
+          return xhrCreator({
+            serverValidation: () => {
+              return {
+                statusText: 'Error',
+              };
+            },
+          })();
+        } else if (nextUpload.value === 'file-too-large') {
+          return xhrCreator({
+            serverValidation: () => {
+              return {
+                status: 413,
+                statusText: 'Payload Too Large',
+              };
+            },
+          })();
+        }
+      };
+
+      // Use the shared function for both upload components
+      upload._createXhr = createConfiguredXhr;
+      nodropUpload._createXhr = createConfiguredXhr;
+
+      const files = [
+        { name: 'Annual Report.docx', complete: true },
+        {
+          name: 'Workflow.pdf',
+          progress: 60,
+          status: '19.7 MB: 60% (remaining time: 00:12:34)',
+        },
+        { name: 'Financials.xlsx', error: 'An error occurred' },
+      ];
+
+      const blobs = createFiles(files.length, 1000, 'application/unknown');
+
+      files.forEach((_, index) => {
+        files[index] = Object.assign(blobs[index], files[index]);
+      });
+
+      upload.files = files;
+    </script>
+  </head>
+
+  <body>
+    <vaadin-upload target="/api/fileupload"></vaadin-upload>
+    <hr style="margin-block: 24px" />
+    <h3>Upload with nodrop (no drag and drop)</h3>
+    <p>
+      Test: This upload component has drag and drop disabled. Click the button to select files. It respects the same
+      "Next file upload" configuration as the first upload.
+    </p>
+    <vaadin-upload nodrop target="/api/fileupload"></vaadin-upload>
+    <hr style="margin-block: 24px" />
+    <vaadin-radio-group label="Next file upload" theme="vertical" id="next-upload">
+      <vaadin-radio-button value="successful" checked label="Successful"></vaadin-radio-button>
+      <vaadin-radio-button value="rejected" label="Rejected"></vaadin-radio-button>
+      <vaadin-radio-button value="error" label="Server error"></vaadin-radio-button>
+      <vaadin-radio-button value="file-too-large" label="File too large (413)"></vaadin-radio-button>
+    </vaadin-radio-group>
+    <hr style="margin-block: 24px" />
+    <h3>no-auto + max-concurrent-uploads=1</h3>
+    <p>
+      Test: Add multiple files, click "Start" on the first file, then try clicking "Start" on another file. The start
+      button should hide and show 0% progress while queued.
+    </p>
+    <vaadin-upload id="no-auto-upload" target="/api/fileupload" no-auto max-concurrent-uploads="1"></vaadin-upload>
+    <script type="module">
+      import { xhrCreator } from '@vaadin/upload/test/helpers.js';
+
+      const noAutoUpload = document.querySelector('#no-auto-upload');
+      noAutoUpload._createXhr = () => {
+        return xhrCreator({ size: 512, uploadTime: 5000, stepTime: 1000 })();
+      };
+    </script>
+  </body>
+</html>

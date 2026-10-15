@@ -1,0 +1,150 @@
+import { resetMouse, sendKeys, sendMouseToElement } from '@vaadin/test-runner-commands';
+import { fixtureSync, mousedown } from '@vaadin/testing-helpers';
+import { visualDiff } from '@web/test-runner-visual-regression';
+import '../../not-animated-styles.css';
+import '../../../src/vaadin-date-picker.js';
+import { untilOverlayRendered } from '../../helpers.js';
+
+describe('date-picker', () => {
+  let div, element;
+
+  beforeEach(() => {
+    div = document.createElement('div');
+    div.style.display = 'inline-block';
+    div.style.padding = '10px';
+    element = fixtureSync('<vaadin-date-picker></vaadin-date-picker>', div);
+  });
+
+  afterEach(() => {
+    // After tests which use sendKeys() the focus-utils.js -> isKeyboardActive is set to true.
+    // Click once here on body to reset it so other tests are not affected by it.
+    // An unwanted focus-ring would be shown in other tests otherwise.
+    mousedown(document.body);
+  });
+
+  describe('states', () => {
+    it('basic', async () => {
+      await visualDiff(div, 'state-basic');
+    });
+
+    it('disabled', async () => {
+      element.disabled = true;
+      await visualDiff(div, 'state-disabled');
+    });
+
+    it('readonly', async () => {
+      element.readonly = true;
+      await visualDiff(div, 'state-readonly');
+    });
+
+    it('label aside', async () => {
+      element.setAttribute('theme', 'label-aside');
+      element.label = 'Label';
+      await visualDiff(div, 'state-label-aside');
+    });
+
+    describe('focus', () => {
+      afterEach(async () => {
+        await resetMouse();
+      });
+
+      it('keyboard focus', async () => {
+        await sendKeys({ press: 'Tab' });
+        await visualDiff(div, 'state-focus-keyboard');
+      });
+
+      it('pointer focus', async () => {
+        element.autoOpenDisabled = true;
+        await sendMouseToElement({ type: 'click', element });
+        await visualDiff(div, 'state-focus-pointer');
+      });
+    });
+  });
+
+  describe('features', () => {
+    ['ltr', 'rtl'].forEach((dir) => {
+      describe(dir, () => {
+        before(() => {
+          document.documentElement.setAttribute('dir', dir);
+        });
+
+        after(() => {
+          document.documentElement.removeAttribute('dir');
+        });
+
+        it('placeholder', async () => {
+          element.placeholder = 'Placeholder';
+          await visualDiff(div, `${dir}-placeholder`);
+        });
+
+        it('value', async () => {
+          element.value = '1991-12-20';
+          await visualDiff(div, `${dir}-value`);
+        });
+
+        it('prefix slot', async () => {
+          const span = document.createElement('span');
+          span.setAttribute('slot', 'prefix');
+          span.textContent = '$';
+          element.appendChild(span);
+          await visualDiff(div, `${dir}-prefix`);
+        });
+
+        describe('dropdown', () => {
+          function openOverlay() {
+            element.opened = true;
+            div.style.height = `${element.offsetHeight + element.$.overlay.$.overlay.offsetHeight}px`;
+            div.style.width = `${element.$.overlay.$.overlay.offsetWidth}px`;
+          }
+
+          it('default', async () => {
+            element.value = '2000-01-01';
+            openOverlay();
+            await visualDiff(div, `${dir}-dropdown`);
+          });
+
+          it('date metadata loading', async () => {
+            element.value = '2000-01-01';
+            // A provider that never resolves keeps the calendar in the loading state.
+            element.dateMetadataProvider = () => new Promise(() => {});
+            openOverlay();
+            await untilOverlayRendered(element);
+            await visualDiff(div, `${dir}-date-metadata-loading`);
+          });
+
+          it('disabled dates', async () => {
+            element.value = '2000-01-01';
+            element.min = '2000-01-01';
+            element.max = '2000-01-20';
+            openOverlay();
+            await visualDiff(div, `${dir}-disabled-dates`);
+          });
+
+          it('keyboard focused date', async () => {
+            element.value = '2000-01-01';
+            openOverlay();
+            await untilOverlayRendered(element);
+            element.inputElement.focus();
+            await sendKeys({ press: 'Tab' });
+            await visualDiff(div, `${dir}-focused-date`);
+          });
+
+          it('week numbers', async () => {
+            element.value = '2000-01-01';
+            element.showWeekNumbers = true;
+            element.i18n = { firstDayOfWeek: 1 };
+            openOverlay();
+            await visualDiff(div, `${dir}-week-numbers`);
+          });
+
+          it('fullscreen', async () => {
+            element.value = '2000-01-01';
+            element._fullscreen = true;
+            await openOverlay();
+            await visualDiff(element._overlayContent, `${dir}-fullscreen`);
+          });
+        });
+      });
+    });
+  });
+});

@@ -1,0 +1,55 @@
+/**
+ * @license
+ * Copyright (c) 2000 - 2026 Vaadin Ltd.
+ * This program is available under Apache License Version 2.0, available at https://vaadin.com/license/
+ */
+@import '../src/mixins/field-base.css';
+@import '../src/mixins/field-button.css';
+@import '../src/mixins/field-error-message.css';
+@import '../src/mixins/field-helper.css';
+@import '../src/mixins/field-helper-above.css';
+@import '../src/mixins/field-label.css';
+@import '../src/mixins/field-label-aside.css';
+@import '../src/mixins/field-required.css';
+@import '../src/mixins/menu-overlay-core.css';
+@import '../src/mixins/menu-overlay-ext.css';
+@import '../src/mixins/overlay.css';
+@import '../src/mixins/sr-only.css';
+@import '../src/components/item.css';
+@import '../src/components/list-box.css';
+@import '../src/components/select-overlay.css';
+@import '../src/components/select-value-button.css';
+@import '../src/components/select.css';
+@import './input-container.css';
+
+:root,
+:host {
+  --_lumo-vaadin-select-inject: 1;
+  --_lumo-vaadin-select-inject-modules:
+    lumo_mixins_field-label,
+    lumo_mixins_field-label-aside,
+    lumo_mixins_field-required,
+    lumo_mixins_field-error-message,
+    lumo_mixins_field-button,
+    lumo_mixins_field-helper,
+    lumo_mixins_field-helper-above,
+    lumo_mixins_field-base,
+    lumo_mixins_sr-only,
+    lumo_components_select;
+
+  --_lumo-vaadin-select-item-inject: 1;
+  --_lumo-vaadin-select-item-inject-modules: lumo_components_item;
+
+  --_lumo-vaadin-select-overlay-inject: 1;
+  --_lumo-vaadin-select-overlay-inject-modules:
+    lumo_mixins_overlay,
+    lumo_mixins_menu-overlay-core,
+    lumo_mixins_menu-overlay-ext,
+    lumo_components_select-overlay;
+
+  --_lumo-vaadin-select-list-box-inject: 1;
+  --_lumo-vaadin-select-list-box-inject-modules: lumo_components_list-box;
+
+  --_lumo-vaadin-select-value-button-inject: 1;
+  --_lumo-vaadin-select-value-button-inject-modules: lumo_components_select-value-button;
+}

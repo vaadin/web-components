@@ -1,0 +1,435 @@
+/**
+ * @license
+ * Copyright (c) 2015 - 2026 Vaadin Ltd.
+ * This program is available under Apache License Version 2.0, available at https://vaadin.com/license/
+ */
+import { get } from '@vaadin/component-base/src/path-utils.js';
+import { ComboBoxBaseMixin } from './vaadin-combo-box-base-mixin.js';
+import { ComboBoxPlaceholder } from './vaadin-combo-box-placeholder.js';
+
+/**
+ * Checks if the value is supported as an item value in this control.
+ *
+ * @param {unknown} value
+ * @return {boolean}
+ */
+function isValidValue(value) {
+  return value !== undefined && value !== null;
+}
+
+/**
+ * Returns the index of the first item that satisfies the provided testing function
+ * ignoring placeholder items.
+ *
+ * @param {Array<ComboBoxItem | string>} items
+ * @param {Function} callback
+ * @return {number}
+ */
+function findItemIndex(items, callback) {
+  return items.findIndex((item) => {
+    if (item instanceof ComboBoxPlaceholder) {
+      return false;
+    }
+
+    return callback(item);
+  });
+}
+
+export const ComboBoxItemsMixin = (superClass) =>
+  class ComboBoxItemsMixinClass extends ComboBoxBaseMixin(superClass) {
+    static get properties() {
+      return {
+        /**
+         * A full set of items to filter the visible options from.
+         * The items can be of either `String` or `Object` type.
+         * @type {!Array<!ComboBoxItem | string> | undefined}
+         */
+        items: {
+          type: Array,
+          sync: true,
+          observer: '_itemsChanged',
+        },
+
+        /**
+         * A subset of items, filtered based on the user input. Filtered items
+         * can be assigned directly to omit the internal filtering functionality.
+         * The items can be of either `String` or `Object` type.
+         * @type {!Array<!ComboBoxItem | string> | undefined}
+         */
+        filteredItems: {
+          type: Array,
+          observer: '_filteredItemsChanged',
+          sync: true,
+        },
+
+        /**
+         * Filtering string the user has typed into the input field.
+         */
+        filter: {
+          type: String,
+          value: '',
+          notify: true,
+          sync: true,
+        },
+
+        /**
+         * A function that is used to generate the label for dropdown
+         * items based on the item. Receives one argument:
+         * - `item` The item to generate the label for.
+         */
+        itemLabelGenerator: {
+          type: Object,
+        },
+
+        /**
+         * Path for label of the item. If `items` is an array of objects, the
+         * `itemLabelPath` is used to fetch the displayed string label for each
+         * item.
+         *
+         * The item label is also used for matching items when processing user
+         * input, i.e., for filtering and selecting items.
+         * @attr {string} item-label-path
+         */
+        itemLabelPath: {
+          type: String,
+          value: 'label',
+          observer: '_itemLabelPathChanged',
+          sync: true,
+        },
+
+        /**
+         * Path for the value of the item. If `items` is an array of objects, the
+         * `itemValuePath:` is used to fetch the string value for the selected
+         * item.
+         *
+         * The item value is used in the `value` property of the combo box,
+         * to provide the form value.
+         * @attr {string} item-value-path
+         */
+        itemValuePath: {
+          type: String,
+          value: 'value',
+          sync: true,
+        },
+
+        /**
+         * Path for the id of the item. If `items` is an array of objects,
+         * the `itemIdPath` is used to compare and identify the same item
+         * in the selection and in `filteredItems` (items given by the
+         * `dataProvider` callback).
+         * @attr {string} item-id-path
+         */
+        itemIdPath: {
+          type: String,
+          sync: true,
+        },
+
+        /**
+         * Controls which item is automatically set to be selected, for
+         * example on Enter, when the typed filter only partially matches
+         * its label. The item that will be selected is highlighted in the
+         * dropdown while typing:
+         *
+         * - `none` (default): an item is automatically set to be selected only when the filter matches its label exactly.
+         * - `first-match`: the first item in the filtered results is automatically set to be selected.
+         * - `only-match`: the item is automatically set to be selected when filtering narrows the results to a single item.
+         *
+         * In general, an exact match is always set to be selected and takes
+         * precedence over partial matches, regardless of the mode.
+         *
+         * A partial match is only applied while the dropdown is open. For
+         * example, when auto-open is disabled with `autoOpenDisabled`, typing
+         * does not highlight a match or set it to be selected until the
+         * dropdown is opened.
+         *
+         * This feature cannot be used together with custom values, because a
+         * partial match is also a valid custom value. A partial match is not
+         * applied when custom values are allowed with `allowCustomValue`.
+         *
+         * @attr {none|first-match|only-match} partial-match-mode
+         */
+        partialMatchMode: {
+          type: String,
+          value: 'none',
+        },
+      };
+    }
+
+    /**
+     * @param {Object} props
+     * @protected
+     */
+    updated(props) {
+      super.updated(props);
+
+      if (props.has('filter')) {
+        this._filterChanged(this.filter);
+      }
+
+      if (props.has('itemLabelGenerator')) {
+        this.requestContentUpdate();
+      }
+    }
+
+    /**
+     * Requests an update for the content of items.
+     * While performing the update, it invokes the renderer (passed in the `renderer` property) once an item.
+     *
+     * It is not guaranteed that the update happens immediately (synchronously) after it is requested.
+     */
+    requestContentUpdate() {
+      if (!this._scroller) {
+        return;
+      }
+
+      this._scroller.requestContentUpdate();
+
+      this._getItemElements().forEach((item) => {
+        item.requestContentUpdate();
+      });
+    }
+
+    /**
+     * Override method from `ComboBoxBaseMixin` to deselect
+     * dropdown item by requesting content update on clear.
+     * @param {Event} event
+     * @protected
+     * @override
+     */
+    _onClearButtonClick(event) {
+      super._onClearButtonClick(event);
+
+      if (this.opened) {
+        this.requestContentUpdate();
+      }
+    }
+
+    /**
+     * Override an event listener from `ComboBoxBaseMixin` to update
+     * the filter and open the dropdown on user input.
+     * @param {!Event} event
+     * @protected
+     * @override
+     */
+    _onInput(event) {
+      const filter = this._inputElementValue;
+
+      if (this.filter === filter) {
+        // Filter and input value might get out of sync, while keyboard navigating for example.
+        // Afterwards, input value might be changed to the same value as used in filtering.
+        // In situation like these, we need to make sure all the filter changes handlers are run.
+        this._filterChanged(this.filter);
+      } else {
+        this.filter = filter;
+      }
+
+      if (!this.opened && !this._isClearButton(event) && !this.autoOpenDisabled) {
+        this.opened = true;
+      }
+    }
+
+    /**
+     * Override method from `ComboBoxBaseMixin` to focus the item matching
+     * the filter when the dropdown is opened after typing, which is possible
+     * when `autoOpenDisabled` is enabled.
+     *
+     * @protected
+     * @override
+     */
+    _onOpened() {
+      super._onOpened();
+
+      if (this.filter && !this._hasHighlightedItem) {
+        this._highlightItemAt(this.__getItemIndexByFilter(this._dropdownItems));
+      }
+    }
+
+    /**
+     * Override method from `ComboBoxBaseMixin` to handle item label path.
+     * @protected
+     * @override
+     */
+    _getItemLabel(item) {
+      if (typeof this.itemLabelGenerator === 'function' && item) {
+        return this.itemLabelGenerator(item) || '';
+      }
+
+      let label = item && this.itemLabelPath ? get(this.itemLabelPath, item) : undefined;
+      if (label === undefined || label === null) {
+        label = item ? item.toString() : '';
+      }
+      return label;
+    }
+
+    /** @protected */
+    _getItemValue(item) {
+      let value = item && this.itemValuePath ? get(this.itemValuePath, item) : undefined;
+      if (value === undefined) {
+        value = item ? item.toString() : '';
+      }
+      return value;
+    }
+
+    /**
+     * Override method from `ComboBoxBaseMixin` to compare object items
+     * by the value at `itemIdPath` instead of by identity.
+     * @param {unknown} item
+     * @param {unknown} other
+     * @return {boolean}
+     * @protected
+     * @override
+     */
+    _isSameItem(item, other) {
+      if (this.itemIdPath && item && other) {
+        const id = get(this.itemIdPath, item);
+        if (id !== undefined) {
+          return id === get(this.itemIdPath, other);
+        }
+      }
+
+      return super._isSameItem(item, other);
+    }
+
+    /** @private */
+    _itemLabelPathChanged(itemLabelPath) {
+      if (typeof itemLabelPath !== 'string') {
+        console.error('You should set itemLabelPath to a valid string');
+      }
+    }
+
+    /** @private */
+    _filterChanged(filter) {
+      // Scroll to the top of the list whenever the filter changes.
+      this._scrollIntoView(0);
+
+      this._clearItemHighlight();
+
+      if (this.items) {
+        this.filteredItems = this._filterItems(this.items, filter);
+      } else {
+        // With certain use cases (e. g., external filtering), `items` are
+        // undefined. Filtering is unnecessary per se, but the filteredItems
+        // observer should still be invoked to update focused item.
+        this._filteredItemsChanged(this.filteredItems);
+      }
+    }
+
+    /** @private */
+    _itemsChanged(items, oldItems) {
+      this._ensureItemsOrDataProvider(() => {
+        this.items = oldItems;
+      });
+
+      if (items) {
+        this.filteredItems = items.slice(0);
+      } else if (oldItems) {
+        // Only clear filteredItems if the component had items previously but got cleared
+        this.filteredItems = null;
+      }
+    }
+
+    /** @private */
+    _filteredItemsChanged(filteredItems) {
+      this._setDropdownItems(filteredItems);
+    }
+
+    /**
+     * Provide items to be rendered in the dropdown. Override this method
+     * to change the items to render, e.g. to show custom items.
+     *
+     * @param {Array} newItems
+     * @protected
+     */
+    _setDropdownItems(newItems) {
+      const highlightedItem = this._highlightedItem;
+      this._dropdownItems = newItems;
+
+      this.__restoreItemHighlight(highlightedItem);
+    }
+
+    /**
+     * Highlights the given item again if it is still among the dropdown
+     * items, which keeps the highlight in place when more items are
+     * loading. Otherwise the item matching the filter is highlighted, or none.
+     * @private
+     */
+    __restoreItemHighlight(item) {
+      const items = this._dropdownItems;
+
+      // When both the previously highlighted entry and the new entry at the
+      // same index are placeholders (e.g. the Flow connector mid-scroll
+      // re-pushing `_setDropdownItems`), preserve the highlight until
+      // a follow-up call lands a real item at that position.
+      if (item instanceof ComboBoxPlaceholder && items[this._highlightedItemIndex] instanceof ComboBoxPlaceholder) {
+        return;
+      }
+
+      const index = this.__getItemIndexByValue(items, this._getItemValue(item));
+      this._highlightItemAt(index > -1 ? index : this.__getItemIndexByFilter(items));
+    }
+
+    /** @private */
+    _filterItems(arr, filter) {
+      if (!arr) {
+        return arr;
+      }
+
+      const filteredItems = arr.filter((item) => {
+        filter = filter ? filter.toString().toLowerCase() : '';
+        // Check if item contains input value.
+        return this._getItemLabel(item).toString().toLowerCase().indexOf(filter) > -1;
+      });
+
+      return filteredItems;
+    }
+
+    /**
+     * Returns the first item that matches the provided value.
+     * @protected
+     */
+    __getItemIndexByValue(items, value) {
+      if (!items || !isValidValue(value)) {
+        return -1;
+      }
+
+      return findItemIndex(items, (item) => {
+        return this._getItemValue(item) === value;
+      });
+    }
+
+    /**
+     * Returns the first item that matches the provided label.
+     * Labels are matched against each other case insensitively.
+     * @protected
+     */
+    __getItemIndexByLabel(items, label) {
+      if (!items || !label) {
+        return -1;
+      }
+
+      return findItemIndex(items, (item) => {
+        return this._getItemLabel(item).toString().toLowerCase() === label.toString().toLowerCase();
+      });
+    }
+
+    /** @private */
+    __getItemIndexByFilter(items) {
+      // An item whose label matches the filter exactly takes precedence.
+      const exactMatchIndex = this.__getItemIndexByLabel(items, this.filter);
+      if (exactMatchIndex > -1) {
+        return exactMatchIndex;
+      }
+
+      if (!this.opened || !items || items.length === 0 || !this.filter || this.allowCustomValue) {
+        return -1;
+      }
+
+      if (this.partialMatchMode === 'first-match' || (this.partialMatchMode === 'only-match' && items.length === 1)) {
+        // Skip an item that is not yet loaded. Once the item is loaded,
+        // the focused index is updated again.
+        return items[0] instanceof ComboBoxPlaceholder ? -1 : 0;
+      }
+
+      return -1;
+    }
+  };

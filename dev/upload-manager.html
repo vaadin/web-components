@@ -1,0 +1,57 @@
+<!doctype html>
+<html lang="en">
+  <head>
+    <meta charset="UTF-8" />
+    <meta http-equiv="X-UA-Compatible" content="IE=edge" />
+    <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+    <title>Upload Manager</title>
+    <script type="module" src="./common.js"></script>
+
+    <style>
+      /* Drop Zone */
+      vaadin-upload-drop-zone {
+        padding: 16px;
+        text-align: center;
+        color: #666;
+        margin: 16px 0;
+        border: 2px dashed #ccc;
+        border-radius: 8px;
+      }
+    </style>
+  </head>
+
+  <body>
+    <h1>Upload Manager Demo</h1>
+    <p>This page demonstrates the headless <code>UploadManager</code> class.</p>
+
+    <div class="demo-controls">
+      <vaadin-upload-button id="upload-button">Upload Files...</vaadin-upload-button>
+    </div>
+
+    <vaadin-upload-drop-zone id="dropzone">
+      <p>Drop files here</p>
+    </vaadin-upload-drop-zone>
+
+    <vaadin-upload-file-list id="file-list"></vaadin-upload-file-list>
+
+    <script type="module">
+      import '@vaadin/upload/vaadin-upload-button.js';
+      import '@vaadin/upload/vaadin-upload-drop-zone.js';
+      import '@vaadin/upload/vaadin-upload-file-list.js';
+      import { xhrCreator } from '@vaadin/upload/test/helpers.js';
+      import { UploadManager } from '@vaadin/upload/vaadin-upload-manager.js';
+
+      // Create the manager
+      const manager = new UploadManager({
+        target: '/api/upload',
+      });
+      // Use mock XHR
+      manager._createXhr = xhrCreator({ size: 512, uploadTime: 3000, stepTime: 500 });
+
+      // Link components to manager
+      document.querySelector('#upload-button').manager = manager;
+      document.querySelector('#dropzone').manager = manager;
+      document.querySelector('#file-list').manager = manager;
+    </script>
+  </body>
+</html>

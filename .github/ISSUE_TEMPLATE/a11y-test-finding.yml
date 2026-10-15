@@ -1,0 +1,32 @@
+name: A11y issue
+description: Report an accessibility issue
+labels: ["a11y"]
+body:
+  - type: textarea
+    id: problem-description
+    attributes:
+      label: What is the problem?
+    validations:
+      required: true
+  - type: checkboxes
+    id: browsers
+    attributes:
+      label: Browsers
+      description: Which browsers did this problem occur in?
+      options:
+        - label: Chrome
+        - label: Firefox
+        - label: Safari
+        - label: Safari on iOS
+        - label: Edge
+  - type: checkboxes
+    id: screen-readers
+    attributes:
+      label: Screen Readers
+      description: Which screen reader did this problem occur with?
+      options:
+        - label: None
+        - label: NVDA
+        - label: JAWS
+        - label: VoiceOver on MacOS
+        - label: VoiceOver on iOS

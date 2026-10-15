@@ -1,0 +1,36 @@
+/**
+ * @license
+ * Copyright (c) 2017 - 2026 Vaadin Ltd.
+ * This program is available under Apache License Version 2.0, available at https://vaadin.com/license/
+ */
+
+/**
+ * Checks if the argument is a touch event and if so, returns a first touch.
+ * On `touchend`, `touches` is empty and the released point is in `changedTouches`.
+ * Otherwise, if the mouse event was passed, returns it as is.
+ */
+declare function getMouseOrFirstTouchEvent(e: MouseEvent | TouchEvent): MouseEvent | Touch;
+
+export { getMouseOrFirstTouchEvent };
+
+/**
+ * Checks whether a mouse or touch event is in window.
+ */
+declare function eventInWindow(e: MouseEvent | TouchEvent): boolean;
+
+export { eventInWindow };
+
+/**
+ * Remembers where a pointer gesture started, to tell a click from a drag once it ends.
+ */
+export declare class ClickTracker {
+  /**
+   * Stores the position where the gesture started.
+   */
+  start(e: MouseEvent | TouchEvent): void;
+
+  /**
+   * Returns true if the pointer hasn't moved since the gesture started.
+   */
+  isClick(e: MouseEvent | TouchEvent): boolean;
+}

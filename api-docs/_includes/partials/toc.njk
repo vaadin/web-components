@@ -1,0 +1,19 @@
+<aside>
+  {% set toc = content | toc %}
+  {% if (toc | length) %}
+  <div class="toc">
+    <h2 class="toc__label" id="app-panel-toc">
+      On this page
+    </h2>
+    <ul class="toc__list" role="list" aria-labelledby="app-panel-toc">
+      {% for item in toc %}
+      <li style="--level: {{ item.level }}" class="toc__item">
+        <a href="#{{ item.id }}" class="toc__link">
+          {{ item.text | safe }}
+        </a>
+      </li>
+      {% endfor %}
+    </ul>
+  </div>
+  {% endif %}
+</aside>

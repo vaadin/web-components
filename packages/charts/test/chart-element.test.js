@@ -1,0 +1,648 @@
+import { expect } from '@vaadin/chai-plugins';
+import { aTimeout, fixtureSync, nextFrame, nextRender, nextResize, oneEvent } from '@vaadin/testing-helpers';
+import sinon from 'sinon';
+import './chart-not-animated-styles.js';
+import '../src/vaadin-chart.js';
+
+describe('vaadin-chart', () => {
+  describe('custom element definition', () => {
+    let chart, tagName;
+
+    beforeEach(() => {
+      chart = fixtureSync('<vaadin-chart></vaadin-chart>');
+      tagName = chart.tagName.toLowerCase();
+    });
+
+    it('should be defined in custom element registry', () => {
+      expect(customElements.get(tagName)).to.be.ok;
+    });
+
+    it('should have a valid static "is" getter', () => {
+      expect(customElements.get(tagName).is).to.equal(tagName);
+    });
+  });
+
+  describe('creating element', () => {
+    let chart;
+
+    beforeEach(() => {
+      chart = document.createElement('vaadin-chart');
+    });
+
+    afterEach(() => {
+      document.body.removeChild(chart);
+    });
+
+    it('should create a chart with empty title', async () => {
+      document.body.appendChild(chart);
+      await oneEvent(chart, 'chart-load');
+      const title = chart.$.chart.querySelector('.highcharts-title');
+      expect(title).to.be.ok;
+      expect(title.textContent).to.be.empty;
+    });
+
+    it('should set a chart title with attribute', async () => {
+      chart.setAttribute('title', 'Custom title');
+      document.body.appendChild(chart);
+      await oneEvent(chart, 'chart-load');
+      const title = chart.$.chart.querySelector('.highcharts-title');
+      expect(title).to.be.ok;
+      expect(title.textContent).to.equal('Custom title');
+    });
+
+    it('should set a chart title using update', async () => {
+      chart.updateConfiguration({ title: { text: 'Awesome chart' } });
+      document.body.appendChild(chart);
+      await oneEvent(chart, 'chart-load');
+      expect(chart.$.chart.querySelector('.highcharts-title').textContent).to.equal('Awesome chart');
+    });
+
+    it('should support adding chart series', async () => {
+      const series = document.createElement('vaadin-chart-series');
+      series.values = [10, 20, 30, 40, 50];
+      chart.appendChild(series);
+      document.body.appendChild(chart);
+      await oneEvent(chart, 'chart-add-series');
+      expect(Array.from(chart.$.chart.querySelectorAll('.highcharts-series'))).to.have.lengthOf(1);
+    });
+  });
+
+  describe('gantt', () => {
+    let chart;
+
+    beforeEach(async () => {
+      chart = fixtureSync('<vaadin-chart type="gantt"></vaadin-chart>');
+      await oneEvent(chart, 'chart-load');
+    });
+
+    it('should create gantt chart with gantt type', () => {
+      expect(chart.configuration.options.isGantt).to.be.ok;
+    });
+  });
+
+  describe('organization', () => {
+    let chart;
+
+    // Chart re-measures the labels, which are otherwise positioned before the
+    // styled-mode label CSS applies. See the TODO in vaadin-chart-mixin.js.
+    // On 12.2.0: ~7 px deviation with the workaround, ~73 px without it.
+    function worstLabelDeviation() {
+      const nodes = chart.configuration.series[0].nodes.filter((node) => node.graphic && node.dataLabel);
+      expect(nodes).to.have.lengthOf(13);
+
+      return nodes.reduce((worst, node) => {
+        const box = node.graphic.element.getBoundingClientRect();
+        const label = node.dataLabel.element.getBoundingClientRect();
+        const dx = label.left + label.width / 2 - (box.left + box.width / 2);
+        const dy = label.top + label.height / 2 - (box.top + box.height / 2);
+        return Math.max(worst, Math.hypot(dx, dy));
+      }, 0);
+    }
+
+    // The type can sit on the chart or on the series, and only the series knows it
+    // by the time the labels are re-measured.
+    function fixtureWithType({ chartType = '', seriesType = '' } = {}) {
+      return fixtureSync(`
+        <vaadin-chart ${chartType} title="Acme" style="width: 800px; height: 500px"
+          additional-options='{ "chart": { "inverted": true } }'>
+          <vaadin-chart-series
+            ${seriesType}
+            title="Acme"
+            values='[
+              ["Acme", "Head Office"], ["Acme", "Labs"],
+              ["Head Office", "Coyote Building"], ["Head Office", "Road Runner Building"],
+              ["Coyote Building", "Sales"], ["Coyote Building", "Marketing"],
+              ["Road Runner Building", "Administration"], ["Road Runner Building", "MDs Office"],
+              ["Sales", "Joseph Miler"], ["Marketing", "Erik Perez"],
+              ["Administration", "Ewan Herbert"], ["MDs Office", "Sally Brown"]
+            ]'
+            additional-options='{
+              "keys": ["from", "to"],
+              "levels": [{ "level": 0, "height": 25 }, { "level": 1, "height": 25 }],
+              "nodeWidth": 65
+            }'
+          ></vaadin-chart-series>
+        </vaadin-chart>
+      `);
+    }
+
+    async function whenLabelsMeasured() {
+      await oneEvent(chart, 'chart-load');
+      // Wait to the next animation frame for label re-measurement.
+      await nextFrame();
+      await nextFrame();
+    }
+
+    it('should centre every data label on its own node', async () => {
+      chart = fixtureWithType({ chartType: 'type="organization"' });
+      await whenLabelsMeasured();
+      expect(worstLabelDeviation()).to.be.below(20);
+    });
+
+    it('should centre the labels when only the series declares the type', async () => {
+      chart = fixtureWithType({ seriesType: 'type="organization"' });
+      await whenLabelsMeasured();
+      expect(worstLabelDeviation()).to.be.below(20);
+    });
+
+    it('should not resize the chart while re-measuring the labels', async () => {
+      chart = fixtureWithType({ chartType: 'type="organization"' });
+      const spy = sinon.spy();
+      chart.addEventListener('chart-end-resize', spy);
+      await whenLabelsMeasured();
+      expect(spy).to.not.be.called;
+    });
+  });
+
+  describe('configuration', () => {
+    const DATA = [29.9, 71.5, 106.4, 129.2, 144.0, 176.0, 135.6, 148.5, 216.4, 194.1, 95.6, 54.4];
+    const MONTHS = ['Jan', 'Feb', 'Mar', 'Apr', 'May', 'Jun', 'Jul', 'Aug', 'Sep', 'Oct', 'Nov', 'Dec'];
+
+    let chart, config;
+
+    beforeEach(async () => {
+      chart = fixtureSync('<vaadin-chart></vaadin-chart>');
+      await oneEvent(chart, 'chart-load');
+      config = chart.configuration;
+    });
+
+    it('should set chart title using configuration', () => {
+      config.setTitle({ text: 'Custom title' });
+
+      const title = chart.$.chart.querySelector('.highcharts-title');
+      expect(title).to.be.ok;
+      expect(title.textContent).to.equal('Custom title');
+    });
+
+    it('should create chart series using configuration', () => {
+      config.addSeries({ type: 'column', data: DATA });
+
+      const series = chart.$.chart.querySelectorAll('.highcharts-series');
+      expect(series).to.have.lengthOf(1);
+      expect(series[0].classList.contains('highcharts-column-series')).to.be.true;
+      expect(series[0].querySelectorAll('.highcharts-point')).to.have.lengthOf(DATA.length);
+    });
+
+    it('should set chart categories using configuration', () => {
+      config.addSeries({ type: 'column', data: DATA });
+      config.xAxis[0].setCategories(MONTHS);
+
+      const categories = chart.$.chart.querySelectorAll('.highcharts-xaxis-labels > text');
+      expect(categories.length).to.equal(MONTHS.length);
+      expect(Array.from(categories).map((c) => c.textContent)).to.deep.equal(MONTHS);
+    });
+  });
+
+  describe('update', () => {
+    const DATA = [29.9, 71.5, 106.4, 129.2, 144.0, 176.0, 135.6, 148.5, 216.4, 194.1, 95.6, 54.4];
+    const MONTHS = ['Jan', 'Feb', 'Mar', 'Apr', 'May', 'Jun', 'Jul', 'Aug', 'Sep', 'Oct', 'Nov', 'Dec'];
+
+    let chart;
+
+    beforeEach(async () => {
+      chart = fixtureSync('<vaadin-chart></vaadin-chart>');
+      await oneEvent(chart, 'chart-load');
+    });
+
+    it('should set chart title using update', async () => {
+      chart.updateConfiguration({ title: { text: 'Custom title' } });
+      await oneEvent(chart, 'chart-redraw');
+      const title = chart.$.chart.querySelector('.highcharts-title');
+      expect(title).to.be.ok;
+      expect(title.textContent).to.equal('Custom title');
+    });
+
+    it('should set chart credits using update', async () => {
+      chart.updateConfiguration({ credits: { enabled: true, text: 'Vaadin' } });
+      await oneEvent(chart, 'chart-redraw');
+      const credits = chart.$.chart.querySelector('.highcharts-credits');
+      expect(credits).to.be.ok;
+      expect(credits.textContent).to.equal('Vaadin');
+    });
+
+    it('should create chart series using update', async () => {
+      chart.updateConfiguration({
+        series: [
+          {
+            type: 'column',
+            data: DATA,
+          },
+        ],
+      });
+      await oneEvent(chart, 'chart-redraw');
+      const series = chart.$.chart.querySelectorAll('.highcharts-series');
+      expect(series).to.have.lengthOf(1);
+      expect(series[0].classList.contains('highcharts-column-series')).to.be.true;
+      expect(series[0].querySelectorAll('.highcharts-point')).to.have.lengthOf(DATA.length);
+    });
+
+    it('should set chart categories using update', async () => {
+      chart.updateConfiguration({
+        xAxis: {
+          categories: MONTHS,
+        },
+        series: [
+          {
+            type: 'column',
+            data: DATA,
+          },
+        ],
+      });
+      await oneEvent(chart, 'chart-redraw');
+      const categories = chart.$.chart.querySelectorAll('.highcharts-xaxis-labels > text');
+      expect(categories.length).to.equal(MONTHS.length);
+      expect(Array.from(categories).map((c) => c.textContent)).to.deep.equal(MONTHS);
+    });
+
+    it('should clear chart title using reset flag', async () => {
+      chart.updateConfiguration({ title: { text: 'Custom title' } });
+      chart.updateConfiguration({}, true);
+      await oneEvent(chart, 'chart-redraw');
+      const title = chart.$.chart.querySelector('.highcharts-title');
+      expect(title).to.be.ok;
+      expect(title.textContent).to.be.empty;
+    });
+
+    describe('ignored keys', () => {
+      afterEach(() => {
+        delete Object.prototype.injected;
+      });
+
+      it('should not copy the __proto__ key of a JSON configuration', async () => {
+        chart.updateConfiguration(JSON.parse('{"__proto__": {"injected": "yes"}}'));
+        await nextFrame();
+        expect({}.injected).to.be.undefined;
+      });
+    });
+  });
+
+  describe('series', () => {
+    let chart;
+
+    beforeEach(async () => {
+      chart = fixtureSync(`
+        <vaadin-chart>
+          <vaadin-chart-series values="[10, 20, 30, 40, 50]"></vaadin-chart-series>
+        </vaadin-chart>
+      `);
+      await oneEvent(chart, 'chart-load');
+    });
+
+    it('should have one series defined using HTML', () => {
+      const series = chart.configuration.series;
+      expect(series.length).to.be.equal(1);
+
+      const values = series[0].data.map(({ y }) => y);
+      expect(values).to.deep.equal([10, 20, 30, 40, 50]);
+    });
+
+    it('should remove series when element is removed', async () => {
+      const series = chart.$.chart.querySelectorAll('.highcharts-series');
+      expect(series).to.have.lengthOf(1);
+      chart.removeChild(chart.querySelector('vaadin-chart-series'));
+      await aTimeout(20);
+      expect(chart.$.chart.querySelectorAll('.highcharts-series').length).to.equal(0);
+    });
+
+    it('should apply options passed using update', async () => {
+      chart.updateConfiguration({
+        series: [
+          {
+            name: 'series-name',
+          },
+        ],
+      });
+      const series = chart.configuration.series[0];
+      await oneEvent(chart, 'chart-redraw');
+      expect(series.name).to.be.equal('series-name');
+    });
+
+    it('should preserve configuration on multiple update calls', async () => {
+      chart.updateConfiguration({
+        series: [
+          {
+            innerSize: 40,
+          },
+        ],
+      });
+      chart.updateConfiguration({
+        series: [
+          {
+            name: 'name of the series',
+            type: 'area',
+          },
+        ],
+      });
+      await oneEvent(chart, 'chart-redraw');
+      const series = chart.configuration.series;
+      expect(series[0].options.innerSize).to.equal(40);
+      expect(series[0].name).to.equal('name of the series');
+      expect(series[0].type).to.equal('area');
+    });
+
+    it('should handle merging multiple series', async () => {
+      chart.updateConfiguration({
+        series: [{ name: 'series 1' }, { name: 'series 2' }],
+      });
+      chart.updateConfiguration({
+        series: [null, { innerSize: 100 }],
+      });
+      await oneEvent(chart, 'chart-redraw');
+      const series = chart.configuration.series;
+      expect(series[0].name).to.equal('series 1');
+      expect(series[1].name).to.equal('series 2');
+      expect(series[1].options.innerSize).to.equal(100);
+    });
+  });
+
+  describe('width', () => {
+    let chart;
+
+    beforeEach(async () => {
+      chart = fixtureSync('<vaadin-chart style="width: 400px"></vaadin-chart>');
+      await oneEvent(chart, 'chart-load');
+    });
+
+    it('should propagate width to the chart container', () => {
+      const rect = chart.$.chart.getBoundingClientRect();
+      expect(rect.width).to.be.equal(400);
+      expect(chart.configuration.chartWidth).to.be.equal(400);
+    });
+
+    it('should update container width on chart resize', async () => {
+      chart.style.width = '300px';
+      await oneEvent(chart, 'chart-end-resize');
+      const rect = chart.$.chart.getBoundingClientRect();
+      expect(rect.width).to.be.equal(300);
+      expect(chart.configuration.chartWidth).to.be.equal(300);
+    });
+
+    it('should use intrinsic width when container provides no width', async () => {
+      chart = fixtureSync(`
+        <div style="display: inline-flex; height: 300px">
+          <vaadin-chart></vaadin-chart>
+        </div>`).querySelector('vaadin-chart');
+
+      await nextResize(chart);
+
+      expect(chart.offsetHeight).to.be.equal(300);
+      expect(chart.offsetWidth).to.be.greaterThan(0);
+      expect(chart.configuration.chartHeight).to.be.equal(chart.offsetHeight);
+    });
+
+    it('should resize from intrinsic width to explicit width', async () => {
+      chart = fixtureSync(`
+        <div style="display: inline-flex; height: 300px">
+          <vaadin-chart></vaadin-chart>
+        </div>`).querySelector('vaadin-chart');
+
+      await nextResize(chart);
+
+      chart.style.width = '100px';
+      await nextResize(chart);
+
+      expect(chart.offsetHeight).to.be.equal(300);
+      expect(chart.offsetWidth).to.be.equal(100);
+      expect(chart.configuration.chartWidth).to.be.equal(chart.offsetWidth);
+    });
+
+    it('should collapse to zero width when container width is zero', async () => {
+      chart = fixtureSync(`
+        <div style="display: inline-flex; height: 300px; width: 0px">
+          <vaadin-chart></vaadin-chart>
+        </div>`).querySelector('vaadin-chart');
+
+      await nextResize(chart);
+
+      expect(chart.offsetHeight).to.be.equal(300);
+      expect(chart.offsetWidth).to.be.equal(0);
+    });
+  });
+
+  describe('height', () => {
+    let chart;
+
+    beforeEach(async () => {
+      chart = fixtureSync('<vaadin-chart style="height: 200px"></vaadin-chart>');
+      await oneEvent(chart, 'chart-load');
+    });
+
+    it('should propagate height to the chart container', () => {
+      const rect = chart.$.chart.getBoundingClientRect();
+      expect(rect.height).to.be.equal(200);
+      expect(chart.configuration.chartHeight).to.be.equal(200);
+    });
+
+    it('should update container height on chart resize', async () => {
+      chart.style.height = '300px';
+      await oneEvent(chart, 'chart-end-resize');
+      const rect = chart.$.chart.getBoundingClientRect();
+      expect(rect.height).to.be.equal(300);
+      expect(chart.configuration.chartHeight).to.be.equal(300);
+    });
+
+    it('should not cause container height expansion in flex layout', async () => {
+      const chartMinHeight = 300;
+      const siblingHeight = 5;
+
+      // See https://github.com/vaadin/web-components/issues/10316
+      chart = fixtureSync(`
+        <div style="display: flex">
+          <div>
+              <vaadin-chart style="height: 100%; min-height: ${chartMinHeight}px;"></vaadin-chart>
+              <div style="height: ${siblingHeight}px"></div>
+          </div>
+        </div>`).querySelector('vaadin-chart');
+
+      await nextResize(chart);
+
+      expect(chart.offsetHeight).to.be.equal(chartMinHeight + siblingHeight);
+      expect(chart.configuration.chartHeight).to.be.equal(chart.offsetHeight);
+    });
+
+    it('should use intrinsic height when container provides no height', async () => {
+      chart = fixtureSync(`
+        <div style="display: flex; width: 300px">
+          <vaadin-chart></vaadin-chart>
+        </div>`).querySelector('vaadin-chart');
+
+      await nextResize(chart);
+
+      expect(chart.offsetWidth).to.be.equal(300);
+      expect(chart.offsetHeight).to.be.greaterThan(0);
+      expect(chart.configuration.chartHeight).to.be.equal(chart.offsetHeight);
+    });
+
+    it('should resize from intrinsic height to explicit height', async () => {
+      chart = fixtureSync(`
+        <div style="display: flex; width: 300px">
+          <vaadin-chart></vaadin-chart>
+        </div>`).querySelector('vaadin-chart');
+
+      await nextResize(chart);
+
+      chart.style.height = '100px';
+      await nextResize(chart);
+
+      expect(chart.offsetWidth).to.be.equal(300);
+      expect(chart.offsetHeight).to.be.equal(100);
+      expect(chart.configuration.chartHeight).to.be.equal(chart.offsetHeight);
+    });
+
+    it('should collapse to zero height when container height is zero', async () => {
+      chart = fixtureSync(`
+        <div style="display: flex; width: 300px; height: 0px">
+          <vaadin-chart></vaadin-chart>
+        </div>`).querySelector('vaadin-chart');
+
+      await nextResize(chart);
+
+      expect(chart.offsetWidth).to.be.equal(300);
+      expect(chart.offsetHeight).to.be.equal(0);
+    });
+  });
+
+  describe('resize', () => {
+    let layout, charts;
+
+    beforeEach(async () => {
+      layout = fixtureSync(`
+        <div style="display: flex; width: 1000px; height: 300px;">
+          <vaadin-chart>
+            <vaadin-chart-series values="[1,7,3,1,5,6]"></vaadin-chart-series>
+          </vaadin-chart>
+          <vaadin-chart timeline>
+            <vaadin-chart-series values="[1,7,3,1,5,6]"></vaadin-chart-series>
+          </vaadin-chart>
+        </div>
+      `);
+      charts = Array.from(layout.querySelectorAll('vaadin-chart'));
+      await oneEvent(charts[0], 'chart-load');
+    });
+
+    it('should update chart width when container width changes', async () => {
+      expect(layout.getBoundingClientRect().width).to.be.equal(1000);
+      expect(charts[0].configuration.chartWidth).to.be.equal(500);
+      expect(charts[1].configuration.chartWidth).to.be.equal(500);
+
+      layout.style.width = '500px';
+      await oneEvent(charts[0], 'chart-end-resize');
+      await aTimeout(100);
+
+      expect(layout.getBoundingClientRect().width).to.be.equal(500);
+      expect(charts[0].configuration.chartWidth).to.be.equal(250);
+      expect(charts[1].configuration.chartWidth).to.be.equal(250);
+    });
+
+    it('should update chart height when container height changes', async () => {
+      expect(layout.getBoundingClientRect().height).to.be.equal(300);
+      expect(charts[0].configuration.chartHeight).to.be.equal(300);
+      expect(charts[1].configuration.chartHeight).to.be.equal(300);
+
+      layout.style.height = '200px';
+      await oneEvent(charts[0], 'chart-end-resize');
+      await aTimeout(200);
+
+      expect(layout.getBoundingClientRect().height).to.be.equal(200);
+      expect(charts[0].configuration.chartHeight).to.be.equal(200);
+      expect(charts[1].configuration.chartHeight).to.be.equal(200);
+    });
+  });
+
+  describe('RTL', () => {
+    let chart;
+
+    beforeEach(async () => {
+      chart = fixtureSync(`
+        <vaadin-chart>
+          <vaadin-chart-series values="[10, 20, 30, 40, 50]"></vaadin-chart-series>
+        </vaadin-chart>
+      `);
+      await oneEvent(chart, 'chart-load');
+    });
+
+    afterEach(() => {
+      document.documentElement.removeAttribute('dir');
+    });
+
+    it('should not create horizontal scroll when dir is set to RTL', () => {
+      const scrollWidth = document.documentElement.scrollWidth;
+      document.dir = 'rtl';
+      expect(scrollWidth).to.be.equal(document.documentElement.scrollWidth);
+    });
+  });
+
+  describe('performance', () => {
+    let chart, redrawSpy;
+
+    beforeEach(async () => {
+      chart = fixtureSync(`<vaadin-chart></vaadin-chart>`);
+      await nextRender();
+
+      redrawSpy = sinon.spy(chart.configuration, 'redraw');
+    });
+
+    it('should redraw the chart only 1 time when using update', async () => {
+      chart.updateConfiguration({
+        title: 'Title',
+        xAxis: {
+          categories: ['2021', '2022', '2023', '2024'],
+        },
+        yAxis: {
+          title: 'Values',
+        },
+        credits: {
+          enabled: true,
+          title: 'Vaadin',
+        },
+        series: [
+          {
+            name: 'Series 1',
+            data: [0, 100, 200, 300],
+          },
+          {
+            name: 'Series 2',
+            data: [0, 100, 200, 300],
+          },
+        ],
+      });
+
+      await nextRender();
+
+      expect(redrawSpy.calledOnce).to.be.true;
+    });
+
+    describe('adding a series', () => {
+      it('should redraw the chart only 2 times', async () => {
+        const series = fixtureSync(`<vaadin-chart-series values="[1, 2, 3, 4]"></vaadin-chart-series>`);
+
+        chart.appendChild(series);
+        await nextFrame();
+
+        // The number of times the chart is redrawn may be optimized later.
+        expect(redrawSpy.callCount).to.be.equal(2);
+      });
+    });
+
+    describe('replacing a series', () => {
+      beforeEach(async () => {
+        const series = fixtureSync(`<vaadin-chart-series values="[1, 2]"></vaadin-chart-series>`);
+
+        chart.appendChild(series);
+        await nextFrame();
+
+        redrawSpy.resetHistory();
+      });
+
+      it('should redraw the chart only 4 times', async () => {
+        const series = fixtureSync(`<vaadin-chart-series values="[1, 2, 3, 4]"></vaadin-chart-series>`);
+
+        chart.replaceChild(series, chart.firstElementChild);
+        await nextFrame();
+
+        // The number of times the chart is redrawn may be optimized later.
+        expect(redrawSpy.callCount).to.equal(4);
+      });
+    });
+  });
+});

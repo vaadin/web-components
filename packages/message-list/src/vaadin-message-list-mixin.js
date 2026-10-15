@@ -1,0 +1,396 @@
+/**
+ * @license
+ * Copyright (c) 2021 - 2026 Vaadin Ltd.
+ * This program is available under Apache License Version 2.0, available at https://vaadin.com/license/
+ */
+import { html, nothing, render } from 'lit';
+import { ifDefined } from 'lit/directives/if-defined.js';
+import { keyed } from 'lit/directives/keyed.js';
+import { KeyboardDirectionMixin } from '@vaadin/a11y-base/src/keyboard-direction-mixin.js';
+import { timeOut } from '@vaadin/component-base/src/async.js';
+import { Debouncer } from '@vaadin/component-base/src/debounce.js';
+
+const DEFAULT_TYPING_INDICATOR_TEXT = 'Typing…';
+
+export const MessageListMixin = (superClass) =>
+  class MessageListMixinClass extends KeyboardDirectionMixin(superClass) {
+    static get properties() {
+      return {
+        /**
+         * An array of objects which will be rendered as messages.
+         * The message objects can have the following properties:
+         * ```js
+         * Array<{
+         *   text: string,
+         *   time: string,
+         *   userName: string,
+         *   userAbbr: string,
+         *   userImg: string,
+         *   userColorIndex: number,
+         *   className: string,
+         *   theme: string,
+         *   attachments: Array<{
+         *     name: string,
+         *     url: string,
+         *     type: string
+         *   }>
+         * }>
+         * ```
+         *
+         * When a message has attachments, they are rendered in the message's shadow DOM.
+         * Image attachments (type starting with "image/") show a thumbnail preview,
+         * while other attachments show a document icon with the file name.
+         * Clicking an attachment dispatches an `attachment-click` event.
+         */
+        items: {
+          type: Array,
+          value: () => [],
+          sync: true,
+        },
+
+        /**
+         * When set to `true`, the message text is parsed as Markdown.
+         */
+        markdown: {
+          type: Boolean,
+          reflectToAttribute: true,
+        },
+
+        /**
+         * When set to `true`, new messages are announced to assistive technologies using ARIA live regions.
+         * @attr {boolean} announce-messages
+         */
+        announceMessages: {
+          type: Boolean,
+          value: false,
+          observer: '__announceChanged',
+          sync: true,
+        },
+
+        /**
+         * An array of objects which will be rendered as avatars.
+         * The user objects can have the following properties:
+         * ```js
+         * Array<{
+         *   name: string,
+         *   abbr: string,
+         *   img: string,
+         *   colorIndex: number
+         * }>
+         * ```
+         * @private
+         */
+        _usersTyping: {
+          type: Array,
+          value: () => [],
+          observer: '__typingIndicatorChanged',
+          sync: true,
+        },
+
+        /** @private */
+        _typingIndicatorText: {
+          type: String,
+          value: DEFAULT_TYPING_INDICATOR_TEXT,
+          observer: '__typingIndicatorChanged',
+        },
+
+        /** @private */
+        _typingIndicatorType: {
+          type: String,
+          observer: '__typingIndicatorChanged',
+        },
+      };
+    }
+
+    /** @protected */
+    get _messages() {
+      return [...this.querySelectorAll('vaadin-message:not([slot="typing-indicator"])')];
+    }
+
+    /**
+     * The text announced to assistive technology while users are typing,
+     * empty when no one is typing.
+     *
+     * @return {string}
+     * @private
+     */
+    get __typingStatus() {
+      const users = this._usersTyping;
+      if (!users || users.length === 0) {
+        return '';
+      }
+      return [this.__getTypingUserNames(users), this.__typingIndicatorText].filter(Boolean).join(' ');
+    }
+
+    /**
+     * The text shown next to the names of the typing users. Falls back to the
+     * default text when the property is cleared, which is what a server-side
+     * integration does when it removes the property.
+     *
+     * @return {string}
+     * @private
+     */
+    get __typingIndicatorText() {
+      return this._typingIndicatorText ?? DEFAULT_TYPING_INDICATOR_TEXT;
+    }
+
+    /** @protected */
+    ready() {
+      super.ready();
+
+      // Make screen readers announce new messages
+      this.setAttribute('aria-relevant', 'additions');
+      this.setAttribute('role', 'region');
+    }
+
+    /** @protected */
+    updated(props) {
+      super.updated(props);
+
+      if (props.has('items')) {
+        this._itemsChanged(this.items, props.get('items'));
+      }
+
+      if (props.has('markdown')) {
+        this.__markdownChanged(this.markdown);
+      }
+    }
+
+    /**
+     * Handles attachment-click events from child messages and dispatches
+     * a new event enriched with the item.
+     * @param {CustomEvent} e
+     * @param {Object} item
+     * @private
+     */
+    __onAttachmentClick(e, item) {
+      this.dispatchEvent(
+        new CustomEvent('attachment-click', {
+          detail: {
+            ...e.detail,
+            item,
+          },
+        }),
+      );
+    }
+
+    /**
+     * Override method inherited from `KeyboardDirectionMixin`
+     * to use the list of message elements as items.
+     *
+     * @return {Element[]}
+     * @protected
+     * @override
+     */
+    _getItems() {
+      return this._messages;
+    }
+
+    /**
+     * Override method inherited from `KeyboardDirectionMixin`
+     * to scroll the focused message into view, since the mixin
+     * itself focuses items with `preventScroll: true`.
+     *
+     * @protected
+     * @override
+     */
+    _focusItem(item, options, navigating) {
+      super._focusItem(item, options, navigating);
+      if (item && navigating) {
+        item.scrollIntoView({ block: 'nearest' });
+      }
+    }
+
+    /** @private */
+    _itemsChanged(newVal, oldVal) {
+      const items = newVal || [];
+      const oldItems = oldVal || [];
+
+      if (items.length || oldItems.length) {
+        const focusedIndex = this._getIndexOfFocusableElement();
+        const closeToBottom = this.scrollHeight < this.clientHeight + this.scrollTop + 50;
+
+        this._renderMessages(items);
+        this._setTabIndexesByIndex(focusedIndex);
+        if (oldItems.length) {
+          this.__enableScrollSnapping();
+        }
+
+        if (items.length > oldItems.length && closeToBottom) {
+          this.__scrollToLastMessagePending = true;
+          this.__flushScrollToLastMessage();
+        }
+      }
+    }
+
+    /**
+     * Scrolls to the last message, unless the markdown component is still loading,
+     * in which case the final height of the messages is not yet known.
+     * @private
+     */
+    __flushScrollToLastMessage() {
+      if (!this.__scrollToLastMessagePending || (this.markdown && !customElements.get('vaadin-markdown'))) {
+        return;
+      }
+
+      this.__scrollToLastMessagePending = false;
+      requestAnimationFrame(() => this._scrollToLastMessage());
+    }
+
+    /** @private */
+    __typingIndicatorChanged() {
+      const hadIndicator = !!this.querySelector('[slot="typing-indicator"]');
+      const closeToBottom = this.scrollHeight < this.clientHeight + this.scrollTop + 50;
+
+      this._renderMessages(this.items);
+
+      if (closeToBottom && !hadIndicator && this.querySelector('[slot="typing-indicator"]')) {
+        // The indicator grows the list, keep it in view like a new message
+        this.__scrollToLastMessagePending = true;
+        this.__flushScrollToLastMessage();
+      }
+    }
+
+    /** @private */
+    __markdownChanged(markdown) {
+      if (markdown && !customElements.get('vaadin-markdown')) {
+        // Dynamically import the markdown component
+        import('@vaadin/markdown/src/vaadin-markdown.js')
+          // Wait until the component is defined
+          .then(() => customElements.whenDefined('vaadin-markdown'))
+          // The messages grow once the markdown content is rendered
+          .then(() => this.__flushScrollToLastMessage());
+      }
+      this._renderMessages(this.items);
+    }
+
+    /**
+     * Formats the names of the typing users as a localized list, falling back
+     * to the abbreviation for users that have no name. The list is joined in
+     * the language of the element, so that it matches the typing indicator text.
+     * @private
+     */
+    __getTypingUserNames(users) {
+      const names = users.map((user) => user.name || user.abbr).filter((name) => !!name);
+      const language = this.lang || document.documentElement.lang || navigator.language;
+      if (this.__listFormatLanguage !== language) {
+        this.__listFormatLanguage = language;
+        try {
+          this.__listFormat = new Intl.ListFormat(language, { type: 'conjunction' });
+        } catch {
+          // Invalid language tag, e.g. "en_US", fall back to the browser language
+          this.__listFormat = new Intl.ListFormat(navigator.language, { type: 'conjunction' });
+        }
+      }
+      return this.__listFormat.format(names);
+    }
+
+    /**
+     * Renders the typing indicator. It is inert and hidden from assistive
+     * technology, which is informed through the status live region instead.
+     *
+     * The avatar group is keyed by the users array so that a new group is
+     * created whenever the users change. Updating the items of an existing
+     * group would make it announce the changed users as joined and left.
+     * @private
+     */
+    __renderTypingIndicator() {
+      const users = this._usersTyping;
+      if (users.length === 0) {
+        return nothing;
+      }
+
+      return html`<vaadin-message
+        slot="typing-indicator"
+        typing-indicator="${this._typingIndicatorType || ''}"
+        aria-hidden="true"
+        inert
+        .userName="${this.__getTypingUserNames(users)}"
+        >${keyed(users, html`<vaadin-avatar-group slot="avatar" .items="${users}"></vaadin-avatar-group>`)}<span
+          >${this.__typingIndicatorText}</span
+        ></vaadin-message
+      >`;
+    }
+
+    /** @private */
+    _renderMessages(items) {
+      render(
+        html`
+          ${items.map(
+            (item) => html`
+              <vaadin-message
+                role="listitem"
+                .time="${item.time}"
+                .userAbbr="${item.userAbbr}"
+                .userName="${item.userName}"
+                .userImg="${item.userImg}"
+                .userColorIndex="${item.userColorIndex}"
+                .attachments="${item.attachments}"
+                theme="${ifDefined(item.theme)}"
+                class="${ifDefined(item.className)}"
+                @focusin="${this._onMessageFocusIn}"
+                @attachment-click="${(e) => this.__onAttachmentClick(e, item)}"
+                >${
+                  this.markdown
+                    ? html`<vaadin-markdown .content=${item.text} line-breaks></vaadin-markdown>`
+                    : item.text
+                }<vaadin-avatar slot="avatar"></vaadin-avatar
+              ></vaadin-message>
+            `,
+          )}${this.__renderTypingIndicator()}
+        `,
+        this,
+        { host: this },
+      );
+    }
+
+    /** @private */
+    _scrollToLastMessage() {
+      if (this.items.length > 0) {
+        this.scrollTop = this.scrollHeight - this.clientHeight;
+      }
+    }
+
+    /** @private */
+    __enableScrollSnapping() {
+      this.$.list.style.setProperty('--_vaadin-message-list-scroll-snap-align', 'end');
+      // Disable scroll-snapping after a delay to allow the user to freely scroll
+      // without being snapped back to the bottom.
+      this.__debounceScrollSnapping = Debouncer.debounce(this.__debounceScrollSnapping, timeOut.after(500), () => {
+        this.$.list.style.removeProperty('--_vaadin-message-list-scroll-snap-align');
+      });
+    }
+
+    /** @private */
+    _onMessageFocusIn(e) {
+      const target = e.composedPath().find((node) => node instanceof customElements.get('vaadin-message'));
+      this._setTabIndexesByMessage(target);
+    }
+
+    /**
+     * @param {number} index
+     * @protected
+     */
+    _setTabIndexesByIndex(index) {
+      const message = this._messages[index] || this._messages[0];
+      this._setTabIndexesByMessage(message);
+    }
+
+    /** @private */
+    _setTabIndexesByMessage(message) {
+      this._messages.forEach((e) => {
+        e.tabIndex = e === message ? 0 : -1;
+      });
+    }
+
+    /** @private */
+    _getIndexOfFocusableElement() {
+      const index = this._messages.findIndex((e) => e.tabIndex === 0);
+      return index !== -1 ? index : 0;
+    }
+
+    /** @private */
+    __announceChanged(announceMessages) {
+      this.ariaLive = announceMessages ? 'polite' : null;
+    }
+  };

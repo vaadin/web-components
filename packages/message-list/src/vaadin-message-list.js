@@ -1,0 +1,130 @@
+/**
+ * @license
+ * Copyright (c) 2021 - 2026 Vaadin Ltd.
+ * This program is available under Apache License Version 2.0, available at https://vaadin.com/license/
+ */
+import './vaadin-message.js';
+import '@vaadin/avatar-group/src/vaadin-avatar-group.js';
+import { html, LitElement } from 'lit';
+import { screenReaderOnly } from '@vaadin/a11y-base/src/styles/sr-only-styles.js';
+import { defineCustomElement } from '@vaadin/component-base/src/define.js';
+import { ElementMixin } from '@vaadin/component-base/src/element-mixin.js';
+import { PolylitMixin } from '@vaadin/component-base/src/polylit-mixin.js';
+import { SlotStylesMixin } from '@vaadin/component-base/src/slot-styles-mixin.js';
+import { ThemableMixin } from '@vaadin/vaadin-themable-mixin/vaadin-themable-mixin.js';
+import { messageListStyles } from './styles/vaadin-message-list-base-styles.js';
+import { MessageListMixin } from './vaadin-message-list-mixin.js';
+
+/**
+ * `<vaadin-message-list>` is a Web Component for showing an ordered list of messages. The messages are rendered as <vaadin-message>
+ *
+ * ### Example
+ *
+ * To create a new message list, add the component to the page:
+ *
+ * ```html
+ * <vaadin-message-list></vaadin-message-list>
+ * ```
+ *
+ * Provide the messages to the message list with the [`items`](#/elements/vaadin-message-list#property-items) property.
+ *
+ * ```js
+ * document.querySelector('vaadin-message-list').items = [
+ *   { text: 'Hello list', time: 'yesterday', userName: 'Matt Mambo', userAbbr: 'MM', userColorIndex: 1 },
+ *   { text: 'Another message', time: 'right now', userName: 'Linsey Listy', userAbbr: 'LL', userColorIndex: 2, userImg: '/static/img/avatar.jpg' }
+ * ];
+ * ```
+ *
+ * ### Styling
+ *
+ * The following shadow DOM parts are available for styling:
+ *
+ * Part name | Description
+ * ----------|----------------
+ * `list`    | The container wrapping messages.
+ *
+ * The following custom CSS properties are available for styling:
+ *
+ * Custom CSS property                |
+ * :--------------------------------- |
+ * `--vaadin-message-list-max-width`  |
+ * `--vaadin-message-list-padding`    |
+ *
+ * ### Built-in Theme Variants
+ *
+ * `<vaadin-message-list>` supports the following theme variants:
+ *
+ * Theme variant        | Description
+ * ---------------------|---------------
+ * `theme="bubble"`     | Shows the messages as chat bubbles
+ * `theme="one-to-one"` | Hides the avatar and name of every message, for a chat between two participants. Works together with `bubble`
+ *
+ * See the [`<vaadin-message>`](#/elements/vaadin-message) documentation for the available
+ * theme variants, state attributes and stylable shadow parts of message elements.
+ *
+ * See [Styling Components](https://vaadin.com/docs/latest/styling/styling-components) documentation.
+ *
+ * @fires {CustomEvent} attachment-click - Fired when an attachment is clicked.
+ *
+ * @attr {string} theme - The theme variants to apply to the component.
+ * @customElement vaadin-message-list
+ * @extends HTMLElement
+ */
+class MessageList extends SlotStylesMixin(MessageListMixin(ElementMixin(ThemableMixin(PolylitMixin(LitElement))))) {
+  static get is() {
+    return 'vaadin-message-list';
+  }
+
+  static get styles() {
+    return [messageListStyles, screenReaderOnly];
+  }
+
+  /** @protected */
+  render() {
+    return html`
+      <div part="list" role="list" id="list">
+        <slot></slot>
+        <slot name="typing-indicator"></slot>
+      </div>
+      <div role="status" class="sr-only">${this.__typingStatus}</div>
+    `;
+  }
+
+  /** @protected */
+  get slotStyles() {
+    const tag = this.localName;
+    return [
+      `
+      ${tag} vaadin-message:has(> vaadin-markdown:not(:defined)) {
+        visibility: hidden;
+      }
+
+      ${tag} :where(vaadin-markdown > :is(h1, h2, h3, h4, h5, h6, p, ul, ol):first-child) {
+        margin-top: 0;
+      }
+
+      ${tag} :where(vaadin-markdown > :is(h1, h2, h3, h4, h5, h6, p, ul, ol):last-child) {
+        margin-bottom: 0;
+      }
+
+      ${tag}[theme~='bubble'] :where(vaadin-message[theme~='self'])::part(name),
+      ${tag}[theme~='bubble'][theme~='one-to-one'] :where(vaadin-message)::part(name) {
+        border: 0 !important;
+        clip: rect(1px, 1px, 1px, 1px) !important;
+        clip-path: inset(50%) !important;
+        height: 1px !important;
+        margin: -1px !important;
+        overflow: hidden !important;
+        padding: 0 !important;
+        position: absolute !important;
+        width: 1px !important;
+        white-space: nowrap !important;
+      }
+      `,
+    ];
+  }
+}
+
+defineCustomElement(MessageList);
+
+export { MessageList };

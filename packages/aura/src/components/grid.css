@@ -1,0 +1,20 @@
+:where(:root),
+:where(:host) {
+  --vaadin-grid-row-selected-background-color: color-mix(in srgb, var(--aura-accent-color) 10%, transparent);
+  --vaadin-grid-background: linear-gradient(var(--aura-surface-color), var(--aura-surface-color))
+    var(--aura-background-color) padding-box;
+}
+
+:is(vaadin-grid, vaadin-crud-grid, vaadin-grid-pro)::part(empty-state) {
+  display: flex;
+  align-items: center;
+  justify-content: center;
+}
+
+vaadin-grid-sorter::part(indicators) {
+  transition: color 120ms;
+}
+
+:is(vaadin-grid, vaadin-crud, vaadin-grid-pro)[theme~='no-row-borders'] {
+  --vaadin-grid-row-border-width: 0px;
+}

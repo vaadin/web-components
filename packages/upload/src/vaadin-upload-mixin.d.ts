@@ -1,0 +1,247 @@
+/**
+ * @license
+ * Copyright (c) 2016 - 2026 Vaadin Ltd.
+ * This program is available under Apache License Version 2.0, available at https://vaadin.com/license/
+ */
+import type { Constructor } from '@open-wc/dedupe-mixin';
+import type { I18nMixinClass } from '@vaadin/component-base/src/i18n-mixin.js';
+import type { UploadFileListI18n } from './vaadin-upload-file-list-mixin.js';
+import type { UploadFile as UploadManagerFile } from './vaadin-upload-manager.js';
+
+export interface UploadFile extends UploadManagerFile {
+  elapsedStr: string;
+  remainingStr: string;
+  totalStr: string;
+  loadedStr: string;
+  error: string;
+}
+
+export interface UploadI18n extends UploadFileListI18n {
+  dropFiles?: {
+    one?: string;
+    many?: string;
+  };
+  addFiles?: {
+    one?: string;
+    many?: string;
+  };
+}
+
+export type UploadMethod = 'POST' | 'PUT';
+
+export type UploadFormat = 'raw' | 'multipart';
+
+export declare function UploadMixin<T extends Constructor<HTMLElement>>(
+  base: T,
+): Constructor<UploadMixinClass> & Constructor<I18nMixinClass<UploadI18n>> & T;
+
+export declare class UploadMixinClass {
+  /**
+   * If true, the user cannot interact with this element.
+   */
+  disabled: boolean;
+
+  /**
+   * Define whether the element supports dropping files on it for uploading.
+   * By default it's enabled in desktop and disabled in touch devices
+   * because mobile devices do not support drag events in general. Setting
+   * it false means that drop is enabled even in touch-devices, and true
+   * disables drop in all devices.
+   */
+  nodrop: boolean;
+
+  /**
+   * The server URL. The default value is an empty string, which means that
+   * _window.location_ will be used.
+   */
+  target: string;
+
+  /**
+   * HTTP Method used to send the files. Only POST and PUT are allowed.
+   */
+  method: UploadMethod;
+
+  /**
+   * Key-Value map to send to the server. If you set this property as an
+   * attribute, use a valid JSON string, for example:
+   * ```html
+   * <vaadin-upload headers='{"X-Foo": "Bar"}'></vaadin-upload>
+   * ```
+   */
+  headers: object | string | null;
+
+  /**
+   * Max time in milliseconds for the entire upload process, if exceeded the
+   * request will be aborted. Zero means that there is no timeout.
+   */
+  timeout: number;
+
+  /**
+   * The array of files being processed, or already uploaded.
+   *
+   * Each element is a [`File`](https://developer.mozilla.org/en-US/docs/Web/API/File)
+   * object with a number of extra properties  to track the upload process:
+   * - `uploadTarget`: The target URL used to upload this file.
+   * - `elapsed`: Elapsed time since the upload started.
+   * - `elapsedStr`: Human-readable elapsed time.
+   * - `remaining`: Number of seconds remaining for the upload to finish.
+   * - `remainingStr`: Human-readable remaining time for the upload to finish.
+   * - `progress`: Percentage of the file already uploaded.
+   * - `speed`: Upload speed in kB/s.
+   * - `size`: File size in bytes.
+   * - `totalStr`: Human-readable total size of the file.
+   * - `loaded`: Bytes transferred so far.
+   * - `loadedStr`: Human-readable uploaded size at the moment.
+   * - `status`: Status of the upload process.
+   * - `error`: Error message in case the upload failed.
+   * - `abort`: True if the file was canceled by the user.
+   * - `complete`: True when the file was transferred to the server.
+   * - `uploading`: True while transferring data to the server.
+   */
+  files: UploadFile[];
+
+  /**
+   * Limit of files to upload, by default it is unlimited. If the value is
+   * set to one, native file browser will prevent selecting multiple files.
+   * @attr {number} max-files
+   */
+  maxFiles: number;
+
+  /**
+   * Specifies if the maximum number of files have been uploaded
+   * @attr {boolean} max-files-reached
+   */
+  readonly maxFilesReached: boolean;
+
+  /**
+   * Specifies the types of files that the server accepts.
+   * Syntax: a comma-separated list of MIME type patterns (wildcards are
+   * allowed) or file extensions.
+   * Notice that MIME types are widely supported, while file extensions
+   * are only implemented in certain browsers, so avoid using it.
+   * Example: accept="video/*,image/tiff" or accept=".pdf,audio/mp3"
+   */
+  accept: string;
+
+  /**
+   * Specifies the maximum file size in bytes allowed to upload.
+   * Notice that it is a client-side constraint, which will be checked before
+   * sending the request. Obviously you need to do the same validation in
+   * the server-side and be sure that they are aligned.
+   * @attr {number} max-file-size
+   */
+  maxFileSize: number;
+
+  /**
+   * Specifies the 'name' property at Content-Disposition for multipart uploads.
+   * This property is ignored when uploadFormat is 'raw'.
+   * @attr {string} form-data-name
+   */
+  formDataName: string;
+
+  /**
+   * Prevents upload(s) from immediately uploading upon adding file(s).
+   * When set, you must manually trigger uploads using the `uploadFiles` method
+   * @attr {boolean} no-auto
+   */
+  noAuto: boolean;
+
+  /**
+   * Set the withCredentials flag on the request.
+   * @attr {boolean} with-credentials
+   */
+  withCredentials: boolean;
+
+  /**
+   * Pass-through to input's capture attribute. Allows user to trigger device inputs
+   * such as camera or microphone immediately.
+   */
+  capture: string | null | undefined;
+
+  /**
+   * Specifies the upload format to use when sending files to the server.
+   * - 'raw': Send file as raw binary data with the file's MIME type as Content-Type (default)
+   * - 'multipart': Send file using multipart/form-data encoding
+   * @attr {string} upload-format
+   */
+  uploadFormat: UploadFormat;
+
+  /**
+   * Specifies the maximum number of files that can be uploaded simultaneously.
+   * This helps prevent browser performance degradation and XHR limitations when
+   * uploading large numbers of files. Files exceeding this limit will be queued
+   * and uploaded as active uploads complete.
+   * @attr {number} max-concurrent-uploads
+   * @default 3
+   */
+  maxConcurrentUploads: number;
+
+  /**
+   * The object used to localize this component. To change the default
+   * localization, set this to an object that provides all properties, or
+   * just the individual properties you want to change.
+   *
+   * When not set, defaults to `undefined`.
+   *
+   * The object has the following JSON structure and default values:
+   *
+   * ```js
+   * {
+   *   dropFiles: {
+   *     one: 'Drop file here',
+   *     many: 'Drop files here'
+   *   },
+   *   addFiles: {
+   *     one: 'Upload File...',
+   *     many: 'Upload Files...'
+   *   },
+   *   error: {
+   *     tooManyFiles: 'Too Many Files.',
+   *     fileIsTooBig: 'File is Too Big.',
+   *     incorrectFileType: 'Incorrect File Type.'
+   *   },
+   *   uploading: {
+   *     status: {
+   *       connecting: 'Connecting...',
+   *       stalled: 'Stalled',
+   *       processing: 'Processing File...',
+   *       held: 'Queued'
+   *     },
+   *     remainingTime: {
+   *       prefix: 'remaining time: ',
+   *       unknown: 'unknown remaining time'
+   *     },
+   *     error: {
+   *       serverUnavailable: 'Upload failed, please try again later',
+   *       unexpectedServerError: 'Upload failed due to server error',
+   *       forbidden: 'Upload forbidden',
+   *       fileTooLarge: 'File is too large'
+   *     }
+   *   },
+   *   file: {
+   *     retry: 'Retry',
+   *     start: 'Start',
+   *     remove: 'Remove'
+   *   },
+   *   units: {
+   *     size: ['B', 'kB', 'MB', 'GB', 'TB', 'PB', 'EB', 'ZB', 'YB'],
+   *     sizeBase: 1000
+   *   },
+   *   formatSize: function(bytes) {
+   *     // returns the size followed by the best suitable unit
+   *   },
+   *   formatTime: function(seconds, [secs, mins, hours]) {
+   *     // returns a 'HH:MM:SS' string
+   *   }
+   * }
+   * ```
+   */
+  i18n: UploadI18n | undefined;
+
+  /**
+   * Triggers the upload of any files that are not completed
+   *
+   * @param files Files being uploaded. Defaults to all outstanding files
+   */
+  uploadFiles(files?: UploadFile | UploadFile[]): void;
+}

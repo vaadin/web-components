@@ -1,0 +1,107 @@
+/**
+ * @license
+ * Copyright (c) 2019 - 2026 Vaadin Ltd.
+ * This program is available under Apache License Version 2.0, available at https://vaadin.com/license/
+ */
+import './vaadin-menu-bar-submenu.js';
+import './vaadin-menu-bar-button.js';
+import { html, LitElement } from 'lit';
+import { defineCustomElement } from '@vaadin/component-base/src/define.js';
+import { ElementMixin } from '@vaadin/component-base/src/element-mixin.js';
+import { PolylitMixin } from '@vaadin/component-base/src/polylit-mixin.js';
+import { LumoInjectionMixin } from '@vaadin/vaadin-themable-mixin/lumo-injection-mixin.js';
+import { ThemableMixin } from '@vaadin/vaadin-themable-mixin/vaadin-themable-mixin.js';
+import { menuBarStyles } from './styles/vaadin-menu-bar-base-styles.js';
+import { MenuBarMixin } from './vaadin-menu-bar-mixin.js';
+
+/**
+ * `<vaadin-menu-bar>` is a Web Component providing a set of horizontally stacked buttons offering
+ * the user quick access to a consistent set of commands. Each button can toggle a submenu with
+ * support for additional levels of nested menus.
+ *
+ * To create the menu bar, first add the component to the page:
+ *
+ * ```html
+ * <vaadin-menu-bar></vaadin-menu-bar>
+ * ```
+ *
+ * And then use [`items`](#/elements/vaadin-menu-bar#property-items) property to initialize the structure:
+ *
+ * ```js
+ * document.querySelector('vaadin-menu-bar').items = [{text: 'File'}, {text: 'Edit'}];
+ * ```
+ *
+ * ### Styling
+ *
+ * The following shadow DOM parts are exposed for styling:
+ *
+ * Part name         | Description
+ * ------------------|----------------
+ * `container`       | The container wrapping menu bar buttons.
+ *
+ * The following state attributes are available for styling:
+ *
+ * Attribute           | Description
+ * --------------------|----------------------------------
+ * `disabled`          | Set when the menu bar is disabled
+ * `has-overflow`      | Set when one or more buttons are collapsed into the overflow sub-menu
+ * `has-single-button` | Set when there is only one button visible
+ *
+ * The following custom CSS properties are available for styling:
+ *
+ * Custom CSS property         |
+ * :---------------------------|
+ * | `--vaadin-menu-bar-gap`   |
+ *
+ * See [Styling Components](https://vaadin.com/docs/latest/styling/styling-components) documentation.
+ *
+ * ### Internal components
+ *
+ * In addition to `<vaadin-menu-bar>` itself, the following internal
+ * components are themable:
+ *
+ * - `<vaadin-menu-bar-button>` - has the same API as [`<vaadin-button>`](#/elements/vaadin-button).
+ * - `<vaadin-menu-bar-item>` - has the same API as [`<vaadin-item>`](#/elements/vaadin-item).
+ * - `<vaadin-menu-bar-list-box>` - has the same API as [`<vaadin-list-box>`](#/elements/vaadin-list-box).
+ * - `<vaadin-menu-bar-submenu>` - has the same API as [`<vaadin-context-menu>`](#/elements/vaadin-context-menu).
+ *
+ * The `<vaadin-menu-bar-item>` sub-menu elements have the following additional state attributes
+ * on top of the built-in `<vaadin-item>` state attributes:
+ *
+ * Attribute  | Description
+ * ---------- |-------------
+ * `expanded` | Expanded parent item.
+ *
+ * @fires {CustomEvent<boolean>} item-selected - Fired when a submenu item or menu bar button without children is clicked.
+ *
+ * @attr {string} theme - The theme variants to apply to the component.
+ * @customElement vaadin-menu-bar
+ * @extends HTMLElement
+ */
+class MenuBar extends MenuBarMixin(ElementMixin(ThemableMixin(PolylitMixin(LumoInjectionMixin(LitElement))))) {
+  static get is() {
+    return 'vaadin-menu-bar';
+  }
+
+  static get styles() {
+    return menuBarStyles;
+  }
+
+  /** @protected */
+  render() {
+    return html`
+      <div part="container" @click="${this.__onButtonClick}" @mouseover="${this._onMouseOver}">
+        <slot></slot>
+        <slot name="overflow"></slot>
+      </div>
+
+      <slot name="submenu"></slot>
+
+      <slot name="tooltip"></slot>
+    `;
+  }
+}
+
+defineCustomElement(MenuBar);
+
+export { MenuBar };

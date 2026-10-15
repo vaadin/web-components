@@ -1,0 +1,17 @@
+{
+  "bracketSpacing": true,
+  "printWidth": 120,
+  "trailingComma": "all",
+  "tabWidth": 2,
+  "singleQuote": true,
+  "htmlWhitespaceSensitivity": "strict",
+  "endOfLine": "auto",
+  "overrides": [
+    {
+      "files": ["packages/vaadin-lumo-styles/components/*.css", "packages/vaadin-lumo-styles/test/fixtures/*.css"],
+      "options": {
+        "printWidth": 40
+      }
+    }
+  ]
+}

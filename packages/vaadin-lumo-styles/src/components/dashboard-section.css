@@ -1,0 +1,80 @@
+/**
+ * @license
+ * Copyright (c) 2017 - 2026 Vaadin Ltd.
+ * This program is available under Apache License Version 2.0, available at https://vaadin.com/license/
+ */
+@media lumo_components_dashboard-section {
+  :host {
+    gap: var(--_gap, 1rem);
+    --_section-outline-offset: calc(min(var(--_gap), var(--_padding)) / 3);
+    --_focus-ring-offset: calc((var(--_section-outline-offset) - var(--_focus-ring-width)));
+    border-radius: var(--lumo-border-radius-l);
+    border: none;
+    margin: 0;
+    padding: 0;
+  }
+
+  header {
+    margin-bottom: calc(-1 * var(--_section-outline-offset));
+    line-height: var(--lumo-line-height-s);
+    padding-inline: var(--lumo-space-s);
+    min-height: var(--lumo-size-l);
+    align-items: center;
+  }
+
+  [part='title'] {
+    font-size: var(--lumo-font-size-xl);
+    font-weight: 600;
+    white-space: nowrap;
+    line-height: var(--lumo-line-height-m);
+  }
+
+  /* Section states */
+
+  :host([editable]) {
+    outline: 1px solid var(--lumo-contrast-10pct);
+    outline-offset: calc(var(--_section-outline-offset) - 1px);
+    background: var(--lumo-contrast-5pct);
+    box-shadow: 0 0 0 var(--_section-outline-offset) var(--lumo-contrast-5pct);
+  }
+
+  :host([editable]) header {
+    padding-inline: var(--lumo-space-xs);
+  }
+
+  :host([focused]) {
+    outline: var(--_focus-ring-width) solid var(--_focus-ring-color);
+    outline-offset: var(--_focus-ring-offset);
+  }
+
+  :host([selected]) {
+    background: var(--lumo-primary-color-10pct);
+    box-shadow: 0 0 0 var(--_section-outline-offset) var(--lumo-primary-color-10pct);
+  }
+
+  :host([selected]:not([focused])) {
+    outline-color: var(--lumo-primary-color-50pct);
+  }
+
+  :host([move-mode]) ::slotted(*) {
+    --_widget-opacity: 0.3;
+    --_widget-filter: blur(10px);
+  }
+
+  :host([dragging]) {
+    background: var(--_drop-target-background-color);
+    outline: var(--_drop-target-border);
+    box-shadow: 0 0 0 var(--_section-outline-offset) var(--_drop-target-background-color) !important;
+    border-color: transparent !important;
+  }
+
+  /* Accessible move mode controls */
+
+  [part~='move-backward-button'] {
+    inset-inline-start: calc(-1 * var(--_section-outline-offset));
+  }
+
+  [part~='move-forward-button'] {
+    inset-inline-end: calc(-1 * var(--_section-outline-offset));
+  }
+}

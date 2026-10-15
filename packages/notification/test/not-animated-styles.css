@@ -1,0 +1,6 @@
+/* Not scoped by state, because the transitions also apply to cards that are not opening or closing */
+vaadin-notification-card {
+  animation: none !important;
+  --vaadin-overlay-animation-duration: 0s !important;
+  --vaadin-overlay-animation-delay: 0s !important;
+}

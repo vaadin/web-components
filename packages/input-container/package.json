@@ -1,0 +1,49 @@
+{
+  "name": "@vaadin/input-container",
+  "version": "25.4.0-alpha3",
+  "publishConfig": {
+    "access": "public"
+  },
+  "description": "vaadin-input-container",
+  "license": "Apache-2.0",
+  "repository": {
+    "type": "git",
+    "url": "https://github.com/vaadin/web-components.git",
+    "directory": "packages/input-container"
+  },
+  "author": "Vaadin Ltd",
+  "homepage": "https://vaadin.com/components",
+  "bugs": {
+    "url": "https://github.com/vaadin/web-components/issues"
+  },
+  "main": "vaadin-input-container.js",
+  "module": "vaadin-input-container.js",
+  "type": "module",
+  "files": [
+    "src",
+    "vaadin-*.d.ts",
+    "vaadin-*.js",
+    "custom-elements.json"
+  ],
+  "keywords": [
+    "Vaadin",
+    "web-components",
+    "web-component"
+  ],
+  "dependencies": {
+    "@vaadin/component-base": "25.4.0-alpha3",
+    "@vaadin/vaadin-themable-mixin": "25.4.0-alpha3",
+    "lit": "^3.0.0"
+  },
+  "devDependencies": {
+    "@vaadin/aura": "25.4.0-alpha3",
+    "@vaadin/chai-plugins": "25.4.0-alpha3",
+    "@vaadin/icon": "25.4.0-alpha3",
+    "@vaadin/icons": "25.4.0-alpha3",
+    "@vaadin/test-runner-commands": "25.4.0-alpha3",
+    "@vaadin/testing-helpers": "^2.0.0",
+    "@vaadin/vaadin-lumo-styles": "25.4.0-alpha3",
+    "sinon": "^22.0.0"
+  },
+  "customElements": "custom-elements.json"
+}

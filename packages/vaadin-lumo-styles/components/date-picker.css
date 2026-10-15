@@ -1,0 +1,57 @@
+/**
+ * @license
+ * Copyright (c) 2017 - 2026 Vaadin Ltd.
+ * This program is available under Apache License Version 2.0, available at https://vaadin.com/license/
+ */
+@import '../src/mixins/field-base.css';
+@import '../src/mixins/field-button.css';
+@import '../src/mixins/field-error-message.css';
+@import '../src/mixins/field-helper.css';
+@import '../src/mixins/field-helper-above.css';
+@import '../src/mixins/field-label.css';
+@import '../src/mixins/field-label-aside.css';
+@import '../src/mixins/field-required.css';
+@import '../src/mixins/loader.css';
+@import '../src/mixins/menu-overlay-core.css';
+@import '../src/mixins/menu-overlay-ext.css';
+@import '../src/mixins/overlay.css';
+@import '../src/components/date-picker-month-calendar.css';
+@import '../src/components/date-picker-overlay-content.css';
+@import '../src/components/date-picker-overlay.css';
+@import '../src/components/date-picker-year.css';
+@import '../src/components/date-picker.css';
+@import './button.css';
+@import './input-container.css';
+
+:root,
+:host {
+  --_lumo-vaadin-date-picker-inject: 1;
+  --_lumo-vaadin-date-picker-inject-modules:
+    lumo_mixins_field-label,
+    lumo_mixins_field-label-aside,
+    lumo_mixins_field-required,
+    lumo_mixins_field-error-message,
+    lumo_mixins_field-button,
+    lumo_mixins_field-helper,
+    lumo_mixins_field-helper-above,
+    lumo_mixins_field-base,
+    lumo_components_date-picker;
+
+  --_lumo-vaadin-date-picker-year-inject: 1;
+  --_lumo-vaadin-date-picker-year-inject-modules: lumo_components_date-picker-year;
+
+  --_lumo-vaadin-date-picker-overlay-inject: 1;
+  --_lumo-vaadin-date-picker-overlay-inject-modules:
+    lumo_mixins_overlay,
+    lumo_mixins_menu-overlay-core,
+    lumo_mixins_menu-overlay-ext,
+    lumo_components_date-picker-overlay;
+
+  --_lumo-vaadin-date-picker-overlay-content-inject: 1;
+  --_lumo-vaadin-date-picker-overlay-content-inject-modules:
+    lumo_mixins_loader,
+    lumo_components_date-picker-overlay-content;
+
+  --_lumo-vaadin-month-calendar-inject: 1;
+  --_lumo-vaadin-month-calendar-inject-modules: lumo_components_date-picker-month-calendar;
+}

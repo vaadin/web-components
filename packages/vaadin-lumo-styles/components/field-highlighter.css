@@ -1,0 +1,23 @@
+/**
+ * @license
+ * Copyright (c) 2000 - 2026 Vaadin Ltd.
+ * This program is available under Apache License Version 2.0, available at https://vaadin.com/license/
+ */
+@import '../src/mixins/overlay.css';
+@import '../src/components/field-outline.css';
+@import '../src/components/user-tag.css';
+@import '../src/components/user-tags-overlay.css';
+
+:root,
+:host {
+  --_lumo-vaadin-user-tags-overlay-inject: 1;
+  --_lumo-vaadin-user-tags-overlay-inject-modules:
+    lumo_mixins_overlay,
+    lumo_components_user-tags-overlay;
+
+  --_lumo-vaadin-user-tag-inject: 1;
+  --_lumo-vaadin-user-tag-inject-modules: lumo_components_user-tag;
+
+  --_lumo-vaadin-field-outline-inject: 1;
+  --_lumo-vaadin-field-outline-inject-modules: lumo_components_field-outline;
+}

@@ -1,0 +1,213 @@
+/**
+ * @license
+ * Copyright (c) 2016 - 2026 Vaadin Ltd.
+ * This program is available under Apache License Version 2.0, available at https://vaadin.com/license/
+ */
+import { updatePart } from './vaadin-grid-helpers.js';
+
+export const RowDetailsMixin = (superClass) =>
+  class RowDetailsMixin extends superClass {
+    static get properties() {
+      return {
+        /**
+         * An array containing references to items with open row details.
+         * @type {!Array<!GridItem>}
+         */
+        detailsOpenedItems: {
+          type: Array,
+          value: () => [],
+          sync: true,
+        },
+
+        /**
+         * Custom function for rendering the content of the row details.
+         * Receives three arguments:
+         *
+         * - `root` The row details content DOM element. Append your content to it.
+         * - `grid` The `<vaadin-grid>` element.
+         * - `model` The object with the properties related with
+         *   the rendered item, contains:
+         *   - `model.index` The index of the item.
+         *   - `model.item` The item.
+         *   - `model.level` The number of the item's tree sublevel, starts from 0.
+         *   - `model.expanded` True if the item's tree sublevel is expanded.
+         *   - `model.selected` True if the item is selected.
+         *
+         * @type {GridRowDetailsRenderer | null | undefined}
+         */
+        rowDetailsRenderer: {
+          type: Function,
+          sync: true,
+        },
+
+        /**
+         * @type {!Array<!HTMLElement> | undefined}
+         * @protected
+         */
+        _detailsCells: {
+          type: Array,
+        },
+
+        /**
+         * Set of opened details item ids
+         * @private
+         */
+        __detailsOpenedKeys: {
+          type: Object,
+          computed: '__computeDetailsOpenedKeys(itemIdPath, detailsOpenedItems)',
+        },
+      };
+    }
+
+    static get observers() {
+      return [
+        '_detailsOpenedItemsChanged(detailsOpenedItems, rowDetailsRenderer)',
+        '_rowDetailsRendererChanged(rowDetailsRenderer)',
+      ];
+    }
+
+    /** @protected */
+    ready() {
+      super.ready();
+
+      this._detailsCellResizeObserver = new ResizeObserver((entries) => {
+        entries.forEach(({ target: cell }) => {
+          this._updateDetailsCellHeight(cell.parentElement);
+        });
+      });
+    }
+
+    /** @private */
+    _rowDetailsRendererChanged(rowDetailsRenderer) {
+      if (!rowDetailsRenderer) {
+        return;
+      }
+
+      if (this._columnTree) {
+        // Only update the rows if the column tree has already been initialized
+        this._getRenderedRows().forEach((row) => {
+          if (!row.querySelector('.details-cell')) {
+            this.__initRow(row, this._columnTree[this._columnTree.length - 1]);
+            this.__updateRow(row);
+            return;
+          }
+
+          if (row.hasAttribute('details-opened')) {
+            this.__updateRow(row);
+          }
+        });
+      }
+    }
+
+    /** @private */
+    _detailsOpenedItemsChanged(_detailsOpenedItems, rowDetailsRenderer) {
+      this._getRenderedRows().forEach((row) => {
+        if (row.hasAttribute('details-opened') !== !!(rowDetailsRenderer && this._isDetailsOpened(row._item))) {
+          this.__updateRow(row);
+        }
+      });
+    }
+
+    /**
+     * @param {!HTMLElement} cell
+     * @protected
+     */
+    _configureDetailsCell(cell) {
+      updatePart(cell, 'cell', true);
+      updatePart(cell, 'details-cell', true);
+      // Freeze the details cell, so that it does not scroll horizontally
+      // with the normal cells. This way it looks less weird.
+      cell.toggleAttribute('frozen', true);
+
+      this._detailsCellResizeObserver.observe(cell);
+    }
+
+    /** @private */
+    __teardownDetailsCell(cell) {
+      this._detailsCellResizeObserver.unobserve(cell);
+    }
+
+    /**
+     * @param {!HTMLElement} row
+     * @param {boolean} detailsOpened
+     * @protected
+     */
+    _toggleDetailsCell(row, detailsOpened) {
+      const cell = row.querySelector('.details-cell');
+      if (!cell) {
+        return;
+      }
+
+      cell.hidden = !detailsOpened;
+
+      if (cell.hidden) {
+        return;
+      }
+
+      // Assigns a renderer when the details cell is opened.
+      // The details cell content is rendered later in the `__updateRow` method.
+      if (this.rowDetailsRenderer) {
+        cell._renderer = this.rowDetailsRenderer;
+      }
+    }
+
+    /** @protected */
+    _updateDetailsCellHeight(row) {
+      const cell = row.querySelector('.details-cell');
+      if (!cell) {
+        return;
+      }
+
+      this.__updateDetailsRowPadding(row, cell);
+      // Ensure the row has correct padding after frame (the resize observer might miss it)
+      requestAnimationFrame(() => this.__updateDetailsRowPadding(row, cell));
+    }
+
+    /** @private */
+    __updateDetailsRowPadding(row, cell) {
+      if (cell.hidden) {
+        row.style.removeProperty('padding-bottom');
+      } else {
+        row.style.setProperty('padding-bottom', `${cell.offsetHeight}px`);
+      }
+    }
+
+    /**
+     * @param {!GridItem} item
+     * @return {boolean}
+     * @protected
+     */
+    _isDetailsOpened(item) {
+      return this.__detailsOpenedKeys?.has(this.getItemId(item));
+    }
+
+    /** @private */
+    __computeDetailsOpenedKeys(_itemIdPath, detailsOpenedItems) {
+      const items = detailsOpenedItems || [];
+      const keys = new Set();
+      items.forEach((item) => {
+        keys.add(this.getItemId(item));
+      });
+      return keys;
+    }
+
+    /**
+     * Open the details row of a given item.
+     * @param {!GridItem} item
+     */
+    openItemDetails(item) {
+      if (!this._isDetailsOpened(item)) {
+        this.detailsOpenedItems = [...this.detailsOpenedItems, item];
+      }
+    }
+
+    /**
+     * Close the details row of a given item.
+     * @param {!GridItem} item
+     */
+    closeItemDetails(item) {
+      if (this._isDetailsOpened(item)) {
+        this.detailsOpenedItems = this.detailsOpenedItems.filter((i) => !this._itemsEqual(i, item));
+      }
+    }
+  };

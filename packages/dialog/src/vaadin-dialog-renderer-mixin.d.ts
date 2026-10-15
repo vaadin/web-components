@@ -1,0 +1,85 @@
+/**
+ * @license
+ * Copyright (c) 2017 - 2026 Vaadin Ltd.
+ * This program is available under Apache License Version 2.0, available at https://vaadin.com/license/
+ */
+import type { Constructor } from '@open-wc/dedupe-mixin';
+import type { DialogRenderer } from './vaadin-dialog.js';
+
+export declare function DialogRendererMixin<T extends Constructor<HTMLElement>>(
+  base: T,
+): Constructor<DialogRendererMixinClass> & T;
+
+export declare class DialogRendererMixinClass {
+  /**
+   * Custom function for rendering the content of the dialog.
+   * Receives two arguments:
+   *
+   * - `root` The root container DOM element. Append your content to it.
+   * - `dialog` The reference to the `<vaadin-dialog>` element.
+   *
+   * @deprecated Add content elements as children of the dialog instead
+   */
+  renderer: DialogRenderer | null | undefined;
+
+  /**
+   * String used for rendering a dialog title.
+   *
+   * If both `headerTitle` and `headerRenderer` are defined, the title
+   * and the elements created by the renderer will be placed next to
+   * each other, with the title coming first.
+   *
+   * When `headerTitle` is set, the attribute `has-title` is set on the dialog.
+   * @attr {string} header-title
+   */
+  headerTitle: string | null | undefined;
+
+  /**
+   * The ARIA heading level, used to set the `aria-level` attribute
+   * on the title element. When not set, defaults to `1` for modal
+   * dialogs and `2` for modeless dialogs.
+   *
+   * @attr {number} heading-level
+   */
+  headingLevel: number | null | undefined;
+
+  /**
+   * Custom function for rendering the dialog header.
+   * Receives two arguments:
+   *
+   * - `root` The root container DOM element. Append your content to it.
+   * - `dialog` The reference to the `<vaadin-dialog>` element.
+   *
+   * If both `headerTitle` and `headerRenderer` are defined, the title
+   * and the elements created by the renderer will be placed next to
+   * each other, with the title coming first.
+   *
+   * When `headerRenderer` is set, the attribute `has-header` is set on the dialog.
+   *
+   * @deprecated Add header content as children of the dialog using `slot="header-content"` instead
+   */
+  headerRenderer: DialogRenderer | null | undefined;
+
+  /**
+   * Custom function for rendering the dialog footer.
+   * Receives two arguments:
+   *
+   * - `root` The root container DOM element. Append your content to it.
+   * - `dialog` The reference to the `<vaadin-dialog>` element.
+   *
+   * When `footerRenderer` is set, the attribute `has-footer` is set on the dialog.
+   *
+   * @deprecated Add footer content as children of the dialog using `slot="footer"` instead
+   */
+  footerRenderer: DialogRenderer | null | undefined;
+
+  /**
+   * While performing the update, it invokes the renderer passed in the `renderer` property,
+   * as well as `headerRender` and `footerRenderer` properties, if these are defined.
+   *
+   * It is not guaranteed that the update happens immediately (synchronously) after it is requested.
+   *
+   * @deprecated This method is only used with renderers and will be removed in Vaadin 26
+   */
+  requestContentUpdate(): void;
+}

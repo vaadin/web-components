@@ -1,0 +1,68 @@
+<!doctype html>
+<html lang="en">
+  <head>
+    <meta charset="UTF-8" />
+    <meta http-equiv="X-UA-Compatible" content="IE=edge" />
+    <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+    <title>Multi Select Combo box</title>
+    <script type="module" src="./common.js"></script>
+  </head>
+  <body>
+    <vaadin-multi-select-combo-box
+      label="Element"
+      clear-button-visible
+      required
+      error-message="Select at least one"
+      allow-custom-value
+      auto-expand-horizontally
+      auto-expand-vertically
+    ></vaadin-multi-select-combo-box>
+
+    <script type="module">
+      import '@vaadin/multi-select-combo-box';
+
+      const comboBox = document.querySelector('vaadin-multi-select-combo-box');
+
+      comboBox.items = [
+        'Hydrogen',
+        'Helium',
+        'Lithium',
+        'Beryllium',
+        'Boron',
+        'Carbon',
+        'Nitrogen',
+        'Oxygen',
+        'Fluorine',
+        'Neon',
+        'Sodium',
+        'Magnesium',
+        'Aluminum',
+        'Silicon',
+        'Phosphorus',
+        'Sulfur',
+        'Chlorine',
+        'Argon',
+        'Potassium',
+        'Calcium',
+        'Scandium',
+        'Titanium',
+        'Vanadium',
+        'Chromium',
+        'Manganese',
+        'Iron',
+        'Cobalt',
+        'Nickel',
+        'Copper',
+        'Zinc',
+      ];
+
+      comboBox.selectedItems = ['Hydrogen', 'Helium', 'Lithium'];
+
+      comboBox.addEventListener('custom-value-set', (event) => {
+        const item = event.detail;
+        comboBox.items.push(item);
+        comboBox.selectedItems = [...comboBox.selectedItems, item];
+      });
+    </script>
+  </body>
+</html>

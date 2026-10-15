@@ -1,0 +1,5 @@
+/* Freeze the typing indicator mask animation */
+vaadin-message::part(content),
+vaadin-message::part(message) {
+  animation: none !important;
+}

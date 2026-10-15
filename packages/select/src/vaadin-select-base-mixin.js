@@ -1,0 +1,685 @@
+/**
+ * @license
+ * Copyright (c) 2017 - 2026 Vaadin Ltd.
+ * This program is available under Apache License Version 2.0, available at https://vaadin.com/license/
+ */
+import { DelegateFocusMixin } from '@vaadin/a11y-base/src/delegate-focus-mixin.js';
+import { KeyboardMixin } from '@vaadin/a11y-base/src/keyboard-mixin.js';
+import { DelegateStateMixin } from '@vaadin/component-base/src/delegate-state-mixin.js';
+import { setOrRemoveAttribute } from '@vaadin/component-base/src/dom-utils.js';
+import { MediaQueryController } from '@vaadin/component-base/src/media-query-controller.js';
+import { TooltipController } from '@vaadin/component-base/src/tooltip-controller.js';
+import { generateUniqueId } from '@vaadin/component-base/src/unique-id-utils.js';
+import { FieldMixin } from '@vaadin/field-base/src/field-mixin.js';
+import { LabelController } from '@vaadin/field-base/src/label-controller.js';
+import { ButtonController } from './button-controller.js';
+
+export const SelectBaseMixin = (superClass) =>
+  class SelectBaseMixin extends DelegateFocusMixin(DelegateStateMixin(KeyboardMixin(FieldMixin(superClass)))) {
+    static get properties() {
+      return {
+        /**
+         * An array containing items that will be rendered as the options of the select.
+         *
+         * #### Example
+         * ```js
+         * select.items = [
+         *   { label: 'Most recent first', value: 'recent' },
+         *   { component: 'hr' },
+         *   { label: 'Rating: low to high', value: 'rating-asc', className: 'asc' },
+         *   { label: 'Rating: high to low', value: 'rating-desc', className: 'desc' },
+         *   { component: 'hr' },
+         *   { label: 'Price: low to high', value: 'price-asc', disabled: true },
+         *   { label: 'Price: high to low', value: 'price-desc', disabled: true }
+         * ];
+         * ```
+         *
+         * Note: each item is rendered by default as the internal `<vaadin-select-item>` that is an extension of `<vaadin-item>`.
+         * To render the item with a custom component, provide a tag name by the `component` property.
+         *
+         * @type {!Array<!SelectItemData>}
+         */
+        items: {
+          type: Array,
+        },
+
+        /**
+         * Set when the select is open
+         */
+        opened: {
+          type: Boolean,
+          value: false,
+          notify: true,
+          observer: '_openedChanged',
+          reflectToAttribute: true,
+          sync: true,
+        },
+
+        /**
+         * Custom function for rendering the content of the `<vaadin-select>`.
+         * Receives two arguments:
+         *
+         * - `root` The internal container DOM element. Append your content to it.
+         * - `select` The reference to the `<vaadin-select>` element.
+         *
+         * @type {!SelectRenderer | undefined}
+         * @deprecated Use a slotted `<vaadin-select-list-box>` or the `items` property instead
+         */
+        renderer: {
+          type: Object,
+        },
+
+        /**
+         * The `value` property of the selected item, or an empty string
+         * if no item is selected.
+         * On change or initialization, the component finds the item which matches the
+         * value and displays it.
+         * If no value is provided to the component, it selects the first item without
+         * value or empty value.
+         * Hint: If you do not want to select any item by default, you can either set all
+         * the values of inner vaadin-items, or set the vaadin-select value to
+         * an inexistent value in the items list.
+         */
+        value: {
+          type: String,
+          value: '',
+          notify: true,
+          observer: '_valueChanged',
+          sync: true,
+        },
+
+        /**
+         * The name of this element.
+         */
+        name: {
+          type: String,
+        },
+
+        /**
+         * A hint to the user of what can be entered in the control.
+         * The placeholder will be displayed in the case that there
+         * is no item selected, or the selected item has an empty
+         * string label, or the selected item has no label and it's
+         * DOM content is empty.
+         */
+        placeholder: {
+          type: String,
+        },
+
+        /**
+         * When present, it specifies that the element is read-only.
+         */
+        readonly: {
+          type: Boolean,
+          value: false,
+          reflectToAttribute: true,
+        },
+
+        /**
+         * Defines whether the overlay should overlap the target element
+         * in the y-axis, or be positioned right above/below it.
+         *
+         * @attr {boolean} no-vertical-overlap
+         */
+        noVerticalOverlap: {
+          type: Boolean,
+          value: false,
+        },
+
+        /** @private */
+        _phone: Boolean,
+
+        /** @private */
+        _phoneMediaQuery: {
+          value: '(max-width: 450px), (max-height: 450px)',
+        },
+
+        /** @private */
+        _inputContainer: Object,
+
+        /** @private */
+        _items: Object,
+
+        /**
+         * The `<vaadin-select-list-box>` slotted directly into the overlay slot.
+         * @private
+         */
+        __slottedListBox: {
+          type: Object,
+          sync: true,
+        },
+      };
+    }
+
+    static get delegateAttrs() {
+      return [...super.delegateAttrs, 'invalid'];
+    }
+
+    static get observers() {
+      return [
+        '_updateAriaExpanded(opened, focusElement)',
+        '_updateSelectedItem(value, _items, placeholder, focusElement)',
+      ];
+    }
+
+    constructor() {
+      super();
+
+      this._itemId = `value-${this.localName}-${generateUniqueId()}`;
+      this._srLabelController = new LabelController(this);
+      this._srLabelController.slotName = 'sr-label';
+    }
+
+    /** @protected */
+    disconnectedCallback() {
+      super.disconnectedCallback();
+
+      // Making sure the select is closed and removed from DOM after detaching the select.
+      this.opened = false;
+    }
+
+    /** @protected */
+    ready() {
+      super.ready();
+
+      this._inputContainer = this.shadowRoot.querySelector('[part~="input-field"]');
+      this._overlayElement = this.$.overlay;
+
+      this._valueButtonController = new ButtonController(this);
+      this.addController(this._valueButtonController);
+
+      this.addController(this._srLabelController);
+
+      this.addController(
+        new MediaQueryController(this._phoneMediaQuery, (matches) => {
+          this._phone = matches;
+        }),
+      );
+
+      this._tooltipController = new TooltipController(this);
+      this._tooltipController.setPosition('top');
+      this._tooltipController.setAriaTarget(this.focusElement);
+      this.addController(this._tooltipController);
+    }
+
+    /** @protected */
+    updated(props) {
+      super.updated(props);
+
+      if (props.has('_phone')) {
+        this.toggleAttribute('phone', this._phone);
+      }
+
+      if (props.has('items') || props.has('renderer') || props.has('__slottedListBox')) {
+        if (this.__slottedListBox && (this.items?.length || this.renderer)) {
+          throw new Error(
+            'A slotted <vaadin-select-list-box> cannot be used together with the "items" or "renderer" property.',
+          );
+        }
+      }
+
+      if (props.has('items')) {
+        this._overlayElement.requestContentUpdate();
+      }
+
+      if (props.has('__slottedListBox')) {
+        const slottedListBox = this.__slottedListBox;
+        if (slottedListBox) {
+          this._assignMenuElement(slottedListBox);
+        } else if (props.get('__slottedListBox')) {
+          this._menuElement = null;
+          this._items = null;
+          this.__lastMenuElement = null;
+        }
+      }
+
+      if (props.has('accessibleName')) {
+        this._srLabelController.setLabel(this.accessibleName);
+      }
+
+      // Validate when the required constraint is removed.
+      if (props.has('required') && this.required === false) {
+        this._requestValidation();
+      }
+    }
+
+    /**
+     * Requests an update for the content of the select.
+     * While performing the update, it invokes the renderer passed in the `renderer` property.
+     *
+     * It is not guaranteed that the update happens immediately (synchronously) after it is requested.
+     *
+     * @deprecated This method is deprecated and will be removed in Vaadin 26
+     */
+    requestContentUpdate() {
+      if (!this._overlayElement) {
+        return;
+      }
+
+      this._overlayElement.requestContentUpdate();
+    }
+
+    /**
+     * Detects a `<vaadin-select-list-box>` slotted directly into the overlay
+     * slot (instead of the default one rendered into slotted `div` element).
+     *
+     * @param {!Event} e
+     * @private
+     */
+    __onOverlaySlotChange(e) {
+      this.__slottedListBox = e.target.assignedElements().find((el) => el._hasVaadinListMixin);
+    }
+
+    /**
+     * @param {HTMLElement} menuElement
+     * @protected
+     */
+    _assignMenuElement(menuElement) {
+      if (menuElement && menuElement !== this.__lastMenuElement) {
+        this._menuElement = menuElement;
+
+        // Ensure items are initialized
+        this.__initMenuItems(menuElement);
+
+        menuElement.addEventListener('items-changed', () => {
+          this.__initMenuItems(menuElement);
+        });
+
+        menuElement.addEventListener('selected-changed', () => this.__updateValueButton());
+        // Use capture phase to make it possible for `<vaadin-grid-pro-edit-select>`
+        // to override and handle the keydown event before the value change happens.
+        menuElement.addEventListener('keydown', (e) => this._onKeyDownInside(e), true);
+        menuElement.addEventListener(
+          'click',
+          (e) => {
+            const item = e.composedPath().find((el) => el._hasVaadinItemMixin);
+            this.__dispatchChangePending = Boolean(item?.value !== undefined && item.value !== this.value);
+            this.opened = false;
+          },
+          true,
+        );
+
+        // Store the menu element reference
+        this.__lastMenuElement = menuElement;
+      }
+
+      // When the renderer was re-assigned so that menu element is preserved
+      // but its items have changed, make sure selected property is updated.
+      if (this._menuElement && this._menuElement.items) {
+        this._updateSelectedItem(this.value, this._menuElement.items);
+      }
+    }
+
+    /** @private */
+    __initMenuItems(menuElement) {
+      if (menuElement.items) {
+        this._items = menuElement.items;
+      }
+    }
+
+    /** @private */
+    _valueChanged(value, oldValue) {
+      this.toggleAttribute('has-value', Boolean(value));
+
+      // Skip validation during initialization and when
+      // a change event is scheduled, as validation will be
+      // triggered by `__dispatchChange()` in that case.
+      if (oldValue !== undefined && !this.__dispatchChangePending) {
+        this._requestValidation();
+      }
+    }
+
+    /**
+     * Opens the overlay if the field is not read-only.
+     *
+     * @private
+     */
+    _onClick(event) {
+      if (this.disabled) {
+        return;
+      }
+
+      // Prevent parent components such as `vaadin-grid`
+      // from handling the click event after it bubbles.
+      event.preventDefault();
+
+      this.opened = !this.readonly;
+    }
+
+    /**
+     * Override an event listener from `KeyboardMixin`
+     * stop propagation when closing overlay on Escape.
+     *
+     * @param {!KeyboardEvent} event
+     * @protected
+     * @override
+     */
+    _onEscape(event) {
+      if (this.opened) {
+        event.stopPropagation();
+        this.opened = false;
+      }
+    }
+
+    /** @private */
+    _onToggleMouseDown(event) {
+      // Prevent mousedown event to avoid blur and preserve focused state
+      // while opening, and to restore focus-ring attribute on closing.
+      event.preventDefault();
+
+      // Clicking the `vaadin-input-container` focuses the value button
+      // but clicking the toggle button does not, so we handle it here.
+      if (!this.opened) {
+        this.focusElement.focus();
+      }
+    }
+
+    /**
+     * @param {!KeyboardEvent} e
+     * @protected
+     * @override
+     */
+    _onKeyDown(e) {
+      super._onKeyDown(e);
+
+      if (e.altKey || e.shiftKey || e.ctrlKey || e.metaKey) {
+        return;
+      }
+
+      if (e.target === this.focusElement && !this.readonly && !this.disabled && !this.opened) {
+        if (/^(Enter|SpaceBar|\s|ArrowDown|Down|ArrowUp|Up)$/u.test(e.key)) {
+          e.preventDefault();
+          this.opened = true;
+        } else if (/[\p{L}\p{Nd}]/u.test(e.key) && e.key.length === 1) {
+          const selected = this._menuElement.selected;
+          const currentIdx = selected ?? -1;
+          const newIdx = this._menuElement._searchKey(currentIdx, e.key);
+          if (newIdx >= 0) {
+            this.__dispatchChangePending = true;
+
+            // Announce the value selected with the first letter shortcut
+            this._updateAriaLive(true);
+            this._menuElement.selected = newIdx;
+          }
+        }
+      }
+    }
+
+    /**
+     * @param {!KeyboardEvent} e
+     * @protected
+     */
+    _onKeyDownInside(e) {
+      if (e.key === 'Tab') {
+        // Temporarily set tabindex to prevent moving focus
+        // to the value button element on item Shift + Tab
+        this.focusElement.setAttribute('tabindex', '-1');
+        this._overlayElement.restoreFocusOnClose = false;
+        this.opened = false;
+        setTimeout(() => {
+          this.focusElement.setAttribute('tabindex', '0');
+          this._overlayElement.restoreFocusOnClose = true;
+        });
+      }
+    }
+
+    /** @private */
+    _openedChanged(opened, oldOpened) {
+      if (opened) {
+        if (this.disabled || this.readonly) {
+          // Disallow programmatic opening when disabled or readonly
+          this.opened = false;
+          return;
+        }
+
+        // Avoid multiple announcements when a value gets selected from the dropdown
+        this._updateAriaLive(false);
+
+        // Preserve focus-ring to restore it later
+        const hasFocusRing = this.hasAttribute('focus-ring');
+        this._openedWithFocusRing = hasFocusRing;
+
+        // Opened select should not keep focus-ring
+        if (hasFocusRing) {
+          this.removeAttribute('focus-ring');
+        }
+      } else if (oldOpened) {
+        if (this._openedWithFocusRing) {
+          this.setAttribute('focus-ring', '');
+        }
+
+        // Skip validation when a change event is scheduled, as validation
+        // will be triggered by `__dispatchChange()` in that case.
+        // Also, skip validation when closed on Escape or Tab keys.
+        if (!this.__dispatchChangePending && !this._keyboardActive) {
+          this._requestValidation();
+        }
+      }
+    }
+
+    /** @private */
+    _updateAriaExpanded(opened, focusElement) {
+      if (focusElement) {
+        focusElement.setAttribute('aria-expanded', opened ? 'true' : 'false');
+      }
+    }
+
+    /** @private */
+    _updateAriaLive(ariaLive) {
+      if (this.focusElement) {
+        setOrRemoveAttribute(this.focusElement, 'aria-live', ariaLive && 'polite');
+      }
+    }
+
+    /** @private */
+    __attachSelectedItem(selected) {
+      let labelItem;
+
+      const label = selected.getAttribute('label');
+      if (label) {
+        labelItem = this.__createItemElement({ label });
+      } else {
+        labelItem = selected.cloneNode(true);
+      }
+
+      // Store reference to the original item
+      labelItem._sourceItem = selected;
+
+      this.__appendValueItemElement(labelItem, this.focusElement);
+
+      // Ensure the item gets proper styles
+      labelItem.selected = true;
+    }
+
+    /**
+     * @param {!SelectItemData} item
+     * @private
+     */
+    __createItemElement(item) {
+      const itemElement = document.createElement(item.component || 'vaadin-select-item');
+      if (item.label) {
+        itemElement.textContent = item.label;
+      }
+      if (item.value) {
+        itemElement.value = item.value;
+      }
+      if (item.disabled) {
+        itemElement.disabled = item.disabled;
+      }
+      if (item.className) {
+        itemElement.className = item.className;
+      }
+      return itemElement;
+    }
+
+    /**
+     * @param {!HTMLElement} itemElement
+     * @param {!HTMLElement} parent
+     * @private
+     */
+    __appendValueItemElement(itemElement, parent) {
+      parent.appendChild(itemElement);
+      itemElement.removeAttribute('tabindex');
+      itemElement.removeAttribute('aria-selected');
+      itemElement.removeAttribute('role');
+      itemElement.removeAttribute('focused');
+      itemElement.removeAttribute('focus-ring');
+      itemElement.removeAttribute('active');
+      itemElement.setAttribute('id', this._itemId);
+    }
+
+    /** @private */
+    __updateValueButton() {
+      const valueButton = this.focusElement;
+
+      if (!valueButton) {
+        return;
+      }
+
+      valueButton.innerHTML = '';
+
+      const selected = this._items ? this._items[this._menuElement.selected] : undefined;
+
+      valueButton.removeAttribute('placeholder');
+
+      if (this._hasContent(selected)) {
+        this.__attachSelectedItem(selected);
+      } else if (this.placeholder) {
+        const item = this.__createItemElement({ label: this.placeholder });
+        this.__appendValueItemElement(item, valueButton);
+        valueButton.setAttribute('placeholder', '');
+      }
+
+      if (!this._valueChanging && selected) {
+        this._selectedChanging = true;
+        this.value = selected.value || '';
+        if (this.__dispatchChangePending) {
+          this.__dispatchChange();
+        }
+        delete this._selectedChanging;
+      }
+
+      this.__updateFieldAriaControllerLabelledBy();
+    }
+
+    /** @private */
+    _hasContent(item) {
+      if (!item) {
+        return false;
+      }
+      const hasText = Boolean(item.hasAttribute('label') ? item.getAttribute('label') : item.textContent.trim());
+      const hasChildren = item.childElementCount > 0;
+      return hasText || hasChildren;
+    }
+
+    /** @private */
+    _updateSelectedItem(value, items, placeholder) {
+      if (items) {
+        const valueAsString = value == null ? value : value.toString();
+        this._menuElement.selected = items.reduce((prev, item, idx) => {
+          return prev === undefined && item.value === valueAsString ? idx : prev;
+        }, undefined);
+        if (!this._selectedChanging) {
+          this._valueChanging = true;
+          this.__updateValueButton();
+          delete this._valueChanging;
+        }
+      } else if (placeholder) {
+        this.__updateValueButton();
+      }
+    }
+
+    /**
+     * Override method inherited from `FocusMixin` to not remove focused
+     * state when select is opened and focus moves to list-box.
+     * @return {boolean}
+     * @protected
+     * @override
+     */
+    _shouldRemoveFocus(event) {
+      return !this.contains(event.relatedTarget);
+    }
+
+    /**
+     * Override method inherited from `FocusMixin` to validate on blur.
+     * @param {boolean} focused
+     * @protected
+     * @override
+     */
+    _setFocused(focused) {
+      super._setFocused(focused);
+
+      // Do not validate when focusout is caused by document
+      // losing focus, which happens on browser tab switch.
+      if (!focused && document.hasFocus()) {
+        this._requestValidation();
+      }
+    }
+
+    /**
+     * Returns true if the current value satisfies all constraints (if any)
+     *
+     * @return {boolean}
+     */
+    checkValidity() {
+      return !this.required || this.readonly || !!this.value;
+    }
+
+    /**
+     * Renders items when they are provided by the `items` property and clears the content otherwise.
+     * @param {!HTMLElement} root
+     * @param {!Select} _select
+     * @private
+     */
+    __defaultRenderer(root, _select) {
+      if (!this.items || this.items.length === 0) {
+        root.textContent = '';
+        return;
+      }
+
+      let listBox = root.firstElementChild;
+      if (!listBox) {
+        listBox = document.createElement('vaadin-select-list-box');
+        root.appendChild(listBox);
+      }
+
+      listBox.textContent = '';
+      this.items.forEach((item) => {
+        listBox.appendChild(this.__createItemElement(item));
+      });
+    }
+
+    /** @private */
+    __dispatchChange() {
+      this._requestValidation();
+      this.dispatchEvent(new CustomEvent('change', { bubbles: true }));
+      this.__dispatchChangePending = false;
+    }
+
+    /** @override */
+    __updateFieldAriaControllerLabel() {
+      // NO-OP
+    }
+
+    /** @override */
+    __updateFieldAriaControllerLabelledBy() {
+      let labelId;
+      if (this.accessibleNameRef) {
+        labelId = this.accessibleNameRef;
+      } else if (this.accessibleName) {
+        labelId = this._srLabelController.defaultId;
+      } else if (this.hasAttribute('has-label')) {
+        labelId = this._labelNode?.id;
+      }
+
+      const selectedItem = this._items?.[this._menuElement.selected];
+      const itemId = selectedItem || this.placeholder ? this._itemId : null;
+
+      const ids = [labelId, itemId].filter(Boolean);
+      if (ids.length > 0) {
+        this._fieldAriaController.setLabelledBy(ids.join(' '));
+      } else {
+        this._fieldAriaController.setLabelledBy(null);
+      }
+    }
+  };

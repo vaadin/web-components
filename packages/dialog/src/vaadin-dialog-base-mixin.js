@@ -1,0 +1,236 @@
+/**
+ * @license
+ * Copyright (c) 2017 - 2026 Vaadin Ltd.
+ * This program is available under Apache License Version 2.0, available at https://vaadin.com/license/
+ */
+import { setOrRemoveAttribute } from '@vaadin/component-base/src/dom-utils.js';
+
+export const DialogBaseMixin = (superClass) =>
+  class DialogBaseMixin extends superClass {
+    static get properties() {
+      return {
+        /**
+         * True if the dialog is visible and available for interaction.
+         */
+        opened: {
+          type: Boolean,
+          reflectToAttribute: true,
+          value: false,
+          notify: true,
+          sync: true,
+        },
+
+        /**
+         * Set to true to disable closing dialog on outside click
+         * @attr {boolean} no-close-on-outside-click
+         */
+        noCloseOnOutsideClick: {
+          type: Boolean,
+          value: false,
+        },
+
+        /**
+         * Set to true to disable closing dialog on Escape press
+         * @attr {boolean} no-close-on-esc
+         */
+        noCloseOnEsc: {
+          type: Boolean,
+          value: false,
+        },
+
+        /**
+         * Set to true to remove backdrop and allow click events on background elements.
+         */
+        modeless: {
+          type: Boolean,
+          value: false,
+        },
+
+        /**
+         * Set to true to prevent the dialog from receiving focus
+         * on open and trapping it inside.
+         *
+         * A field with `autofocus` inside the dialog still receives
+         * focus on open.
+         *
+         * @attr {boolean} no-focus-trap
+         * @deprecated This property is deprecated and will be removed in Vaadin 26.
+         */
+        noFocusTrap: {
+          type: Boolean,
+          value: false,
+        },
+
+        /**
+         * Set to true to prevent focus from moving into the dialog on open.
+         *
+         * This property only works for non-modal dialogs and is ignored
+         * for modal ones, where focus must always stay inside.
+         *
+         * A field with `autofocus` inside the dialog still receives
+         * focus on open.
+         *
+         * @attr {boolean} no-autofocus
+         */
+        noAutofocus: {
+          type: Boolean,
+          value: false,
+        },
+
+        /**
+         * Set the distance of the dialog from the top of the viewport.
+         * If a unitless number is provided, pixels are assumed.
+         *
+         * Note that the dialog uses an internal container that has some
+         * additional spacing, which can be overridden by the theme.
+         */
+        top: {
+          type: String,
+        },
+
+        /**
+         * Set the distance of the dialog from the left of the viewport.
+         * If a unitless number is provided, pixels are assumed.
+         *
+         * Note that the dialog uses an internal container that has some
+         * additional spacing, which can be overridden by the theme.
+         */
+        left: {
+          type: String,
+        },
+
+        /**
+         * The `role` attribute value to be set on the dialog. Defaults to "dialog".
+         *
+         * @attr {string} overlay-role
+         * @deprecated Use standard `role` attribute on the dialog instead
+         */
+        overlayRole: {
+          type: String,
+        },
+
+        /**
+         * Set to true to prevent the dialog from moving outside the viewport bounds.
+         * When enabled, all four edges of the dialog will remain visible, for example
+         * when dragging the dialog or when the viewport is resized. Note that the
+         * dialog will also adjust any programmatically configured size and position
+         * so that it stays within the viewport.
+         * @attr {boolean} keep-in-viewport
+         */
+        keepInViewport: {
+          type: Boolean,
+          value: false,
+          reflectToAttribute: true,
+        },
+      };
+    }
+
+    static get observers() {
+      return ['__positionChanged(top, left)'];
+    }
+
+    /** @protected */
+    ready() {
+      super.ready();
+
+      const overlay = this.$.overlay;
+
+      overlay.addEventListener('vaadin-overlay-outside-click', this._handleOutsideClick.bind(this));
+      overlay.addEventListener('vaadin-overlay-escape-press', this._handleEscPress.bind(this));
+      overlay.addEventListener('vaadin-overlay-closed', this.__handleOverlayClosed.bind(this));
+
+      this._overlayElement = overlay;
+
+      if (!this.hasAttribute('role')) {
+        this.role = 'dialog';
+      }
+
+      this.setAttribute('tabindex', '0');
+    }
+
+    /** @protected */
+    updated(props) {
+      super.updated(props);
+
+      if (props.has('overlayRole')) {
+        this.role = this.overlayRole || 'dialog';
+      }
+
+      if (props.has('modeless')) {
+        setOrRemoveAttribute(this, 'aria-modal', !this.modeless);
+      }
+    }
+
+    /** @private */
+    __handleOverlayClosed() {
+      this.dispatchEvent(new CustomEvent('closed'));
+    }
+
+    /** @protected */
+    connectedCallback() {
+      super.connectedCallback();
+      // Restore opened state if overlay was opened when disconnecting
+      if (this.__restoreOpened) {
+        this.opened = true;
+      }
+    }
+
+    /** @protected */
+    disconnectedCallback() {
+      super.disconnectedCallback();
+      // Automatically close the overlay when dialog is removed from DOM
+      // Using a timeout to avoid toggling opened state, and dispatching change
+      // events, when just moving the dialog in the DOM
+      setTimeout(() => {
+        if (!this.isConnected) {
+          this.__restoreOpened = this.opened;
+          this.opened = false;
+        }
+      });
+    }
+
+    /** @protected */
+    _onOverlayOpened(e) {
+      if (e.detail.value === false) {
+        this.opened = false;
+      }
+    }
+
+    /**
+     * Close the dialog if `noCloseOnOutsideClick` isn't set to true
+     * @private
+     */
+    _handleOutsideClick(e) {
+      if (this.noCloseOnOutsideClick) {
+        e.preventDefault();
+      }
+    }
+
+    /**
+     * Close the dialog if `noCloseOnEsc` isn't set to true
+     * @private
+     */
+    _handleEscPress(e) {
+      if (this.noCloseOnEsc) {
+        e.preventDefault();
+      }
+    }
+
+    /** @private */
+    _bringOverlayToFront(event) {
+      if (!this.modeless) {
+        return;
+      }
+      this._overlayElement.bringToFront(event);
+    }
+
+    /** @private */
+    __positionChanged(top, left) {
+      requestAnimationFrame(() => this.$.overlay.setBounds({ top, left }));
+    }
+
+    /** @private */
+    __sizeChanged(width, height) {
+      requestAnimationFrame(() => this.$.overlay.setBounds({ width, height }, false));
+    }
+  };

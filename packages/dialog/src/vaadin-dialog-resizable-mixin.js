@@ -1,0 +1,159 @@
+/**
+ * @license
+ * Copyright (c) 2017 - 2026 Vaadin Ltd.
+ * This program is available under Apache License Version 2.0, available at https://vaadin.com/license/
+ */
+import { isKeyboardActive } from '@vaadin/a11y-base/src/focus-utils.js';
+import { ClickTracker, eventInWindow, getMouseOrFirstTouchEvent } from './vaadin-dialog-utils.js';
+export const DialogResizableMixin = (superClass) =>
+  class VaadinDialogResizableMixin extends superClass {
+    static get properties() {
+      return {
+        /**
+         * Set to true to enable resizing the dialog by dragging the corners and edges.
+         */
+        resizable: {
+          type: Boolean,
+          value: false,
+          reflectToAttribute: true,
+        },
+      };
+    }
+
+    /** @protected */
+    ready() {
+      super.ready();
+      this._originalBounds = {};
+      this._originalMouseCoords = {};
+      this.__resizeTracker = new ClickTracker();
+      this._resizeListeners = { start: {}, resize: {}, stop: {} };
+      this._addResizeListeners();
+    }
+
+    /** @private */
+    _addResizeListeners() {
+      // Note: edge controls added before corners
+      ['n', 'e', 's', 'w', 'nw', 'ne', 'se', 'sw'].forEach((direction) => {
+        const resizer = document.createElement('div');
+        this._resizeListeners.start[direction] = (e) => this._startResize(e, direction);
+        this._resizeListeners.resize[direction] = (e) => this._resize(e, direction);
+        this._resizeListeners.stop[direction] = (e) => this._stopResize(e, direction);
+        if (direction.length === 1) {
+          resizer.classList.add('edge');
+        }
+        resizer.classList.add('resizer');
+        resizer.classList.add(direction);
+        resizer.addEventListener('mousedown', this._resizeListeners.start[direction]);
+        resizer.addEventListener('touchstart', this._resizeListeners.start[direction]);
+        this.$.overlay.$.resizerContainer.appendChild(resizer);
+      });
+    }
+
+    /**
+     * @param {!MouseEvent | !TouchEvent} e
+     * @param {!DialogResizableDirection} direction
+     * @protected
+     */
+    _startResize(e, direction) {
+      // Don't initiate when there's more than 1 touch (pinch zoom)
+      if (e.type === 'touchstart' && e.touches.length > 1) {
+        return;
+      }
+
+      if (e.button === 0 || e.touches) {
+        e.preventDefault();
+        // `preventDefault()` above cancels the native focus change, restored in `_stopResize()`
+        this.__resizeTracker.start(e);
+
+        this._originalBounds = this.$.overlay.getBounds();
+        const event = getMouseOrFirstTouchEvent(e);
+        this._originalMouseCoords = { top: event.pageY, left: event.pageX };
+        window.addEventListener('mousemove', this._resizeListeners.resize[direction]);
+        window.addEventListener('touchmove', this._resizeListeners.resize[direction]);
+        window.addEventListener('mouseup', this._resizeListeners.stop[direction]);
+        window.addEventListener('touchend', this._resizeListeners.stop[direction]);
+        this.$.overlay.setBounds(this._originalBounds);
+        this.$.overlay.setAttribute('has-bounds-set', '');
+
+        const { width, height, top, left } = this._originalBounds;
+        this.dispatchEvent(new CustomEvent('resize-start', { detail: { width, height, top, left } }));
+      }
+    }
+
+    /**
+     * @param {!MouseEvent | !TouchEvent} e
+     * @param {!DialogResizableDirection} resizer
+     * @protected
+     */
+    _resize(e, resizer) {
+      const event = getMouseOrFirstTouchEvent(e);
+      if (eventInWindow(event)) {
+        const minimumSize = 40;
+        resizer.split('').forEach((direction) => {
+          switch (direction) {
+            case 'n': {
+              const height = this._originalBounds.height - (event.pageY - this._originalMouseCoords.top);
+              const top = this._originalBounds.top + (event.pageY - this._originalMouseCoords.top);
+              if (height > minimumSize) {
+                this.top = top;
+                this.height = height;
+              }
+              break;
+            }
+            case 'e': {
+              const width = this._originalBounds.width + (event.pageX - this._originalMouseCoords.left);
+              if (width > minimumSize) {
+                this.width = width;
+              }
+              break;
+            }
+            case 's': {
+              const height = this._originalBounds.height + (event.pageY - this._originalMouseCoords.top);
+              if (height > minimumSize) {
+                this.height = height;
+              }
+              break;
+            }
+            case 'w': {
+              const width = this._originalBounds.width - (event.pageX - this._originalMouseCoords.left);
+              const left = this._originalBounds.left + (event.pageX - this._originalMouseCoords.left);
+              if (width > minimumSize) {
+                this.left = left;
+                this.width = width;
+              }
+              break;
+            }
+            default:
+              break;
+          }
+        });
+      }
+    }
+
+    /**
+     * @param {!MouseEvent | !TouchEvent} e
+     * @param {!DialogResizableDirection} direction
+     * @protected
+     */
+    _stopResize(e, direction) {
+      // Focus on click, not on resize, so that resizing the dialog doesn't interrupt editing
+      if (this.__resizeTracker.isClick(e) && !this.$.overlay.containsFocus()) {
+        this.focus({ preventScroll: true, focusVisible: isKeyboardActive() });
+      }
+
+      window.removeEventListener('mousemove', this._resizeListeners.resize[direction]);
+      window.removeEventListener('touchmove', this._resizeListeners.resize[direction]);
+      window.removeEventListener('mouseup', this._resizeListeners.stop[direction]);
+      window.removeEventListener('touchend', this._resizeListeners.stop[direction]);
+      this.dispatchEvent(new CustomEvent('resize', { detail: this._getResizeDimensions() }));
+    }
+
+    /**
+     * @return {!DialogResizeDimensions}
+     * @protected
+     */
+    _getResizeDimensions() {
+      const { width, height, top, left } = getComputedStyle(this.$.overlay.$.overlay);
+      return { width, height, top, left };
+    }
+  };

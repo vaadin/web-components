@@ -1,0 +1,78 @@
+/**
+ * @license
+ * Copyright (c) 2021 - 2026 Vaadin Ltd.
+ * This program is available under Apache License Version 2.0, available at https://vaadin.com/license/
+ */
+import { html, LitElement } from 'lit';
+import { ComboBoxPlaceholder } from '@vaadin/combo-box/src/vaadin-combo-box-placeholder.js';
+import { ComboBoxScrollerMixin } from '@vaadin/combo-box/src/vaadin-combo-box-scroller-mixin.js';
+import { defineCustomElement } from '@vaadin/component-base/src/define.js';
+import { PolylitMixin } from '@vaadin/component-base/src/polylit-mixin.js';
+import { multiSelectComboBoxScrollerStyles } from './styles/vaadin-multi-select-combo-box-scroller-base-styles.js';
+
+/**
+ * An element used internally by `<vaadin-multi-select-combo-box>`. Not intended to be used separately.
+ *
+ * @customElement vaadin-multi-select-combo-box-scroller
+ * @extends HTMLElement
+ * @private
+ */
+class MultiSelectComboBoxScroller extends ComboBoxScrollerMixin(PolylitMixin(LitElement)) {
+  static get is() {
+    return 'vaadin-multi-select-combo-box-scroller';
+  }
+
+  static get styles() {
+    return multiSelectComboBoxScrollerStyles;
+  }
+
+  /** @protected */
+  render() {
+    return html`
+      <div id="selector">
+        <slot></slot>
+      </div>
+    `;
+  }
+
+  /** @protected */
+  ready() {
+    super.ready();
+
+    this.setAttribute('aria-multiselectable', 'true');
+  }
+
+  /**
+   * Override method from `ComboBoxScrollerMixin` to check
+   * the item against the selected items of the owner.
+   * @protected
+   * @override
+   */
+  _isItemSelected(item) {
+    if (item instanceof ComboBoxPlaceholder) {
+      return false;
+    }
+
+    if (this.owner.readonly) {
+      return false;
+    }
+
+    return this.owner.selectedItems.some((selectedItem) => this.owner._isSameItem(item, selectedItem));
+  }
+
+  /**
+   * @param {HTMLElement} el
+   * @param {number} index
+   * @protected
+   * @override
+   */
+  _updateElement(el, index) {
+    super._updateElement(el, index);
+
+    el.toggleAttribute('readonly', this.owner.readonly);
+  }
+}
+
+defineCustomElement(MultiSelectComboBoxScroller);
+
+export { MultiSelectComboBoxScroller };

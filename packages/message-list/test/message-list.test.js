@@ -1,0 +1,969 @@
+import { expect } from '@vaadin/chai-plugins';
+import { sendKeys } from '@vaadin/test-runner-commands';
+import {
+  arrowDown,
+  arrowRight,
+  arrowUp,
+  aTimeout,
+  end,
+  fixtureSync,
+  focusin,
+  focusout,
+  home,
+  mousedown,
+  nextRender,
+  nextResize,
+  nextUpdate,
+  tabKeyDown,
+} from '@vaadin/testing-helpers';
+import sinon from 'sinon';
+import '../src/vaadin-message-list.js';
+
+describe('message-list', () => {
+  let messageList, messages;
+
+  beforeEach(() => {
+    const root = document.documentElement;
+    root.style.setProperty('--vaadin-user-color-1', 'purple');
+    root.style.setProperty('--vaadin-user-color-2', 'blue');
+
+    messageList = fixtureSync('<vaadin-message-list></vaadin-message-list>');
+
+    // Transparent 1px gif
+    const img = 'data:image/gif;base64,R0lGODlhAQABAIAAAAAAAP///yH5BAEAAAAALAAAAAABAAEAAAIBRAA7';
+    messages = [
+      {
+        text: 'A message in the stream of messages',
+        time: '9:34 AM',
+        userName: 'Joan Doe',
+        userAbbr: 'JD',
+        userImg: img,
+        userColorIndex: 1,
+        theme: 'fancy',
+      },
+      {
+        text: 'A message in the stream of messages',
+        time: '9:35 AM',
+        userName: 'Joan Doe',
+        userAbbr: 'JD',
+        userImg: img,
+        userColorIndex: 1,
+      },
+      {
+        text: 'A message in the stream of messages',
+        time: '9:36 AM',
+        userName: 'Joan Doe',
+        userAbbr: 'JD',
+        userImg: img,
+        userColorIndex: 1,
+      },
+      {
+        text: 'Call upon the times of glory',
+        time: '2:34 PM',
+        userName: 'Steve Mops',
+        userAbbr: 'SM',
+        userColorIndex: 2,
+      },
+    ];
+  });
+
+  describe('custom element definition', () => {
+    let tagName;
+
+    beforeEach(() => {
+      tagName = messageList.tagName.toLowerCase();
+    });
+
+    it('should be defined in custom element registry', () => {
+      expect(customElements.get(tagName)).to.be.ok;
+    });
+
+    it('should have a valid static "is" getter', () => {
+      expect(customElements.get(tagName).is).to.equal(tagName);
+    });
+  });
+
+  it('message list should be initially empty', () => {
+    expect(messageList.items).to.be.empty;
+  });
+
+  describe('max width', () => {
+    let list;
+
+    beforeEach(async () => {
+      messageList.items = messages;
+      messageList.style.width = '500px';
+      messageList.style.setProperty('--vaadin-message-list-max-width', '200px');
+      list = messageList.shadowRoot.querySelector('[part="list"]');
+      await nextRender();
+    });
+
+    it('should limit the width of the list content', () => {
+      expect(list.getBoundingClientRect().width).to.equal(200);
+    });
+
+    it('should center the list content horizontally', () => {
+      const listRect = list.getBoundingClientRect();
+      const listRootRect = messageList.getBoundingClientRect();
+      expect(listRect.left - listRootRect.left).to.equal(listRootRect.right - listRect.right);
+    });
+  });
+
+  describe('document overflow', () => {
+    let list;
+
+    beforeEach(async () => {
+      // The padding moves the list away from the left edge of the page: visually hidden
+      // elements use a negative margin, and overflow at negative x does not scroll the page
+      const wrapper = fixtureSync(`
+        <div style="height: 200px; overflow: auto; padding: 16px">
+          <vaadin-message-list></vaadin-message-list>
+        </div>
+      `);
+      list = wrapper.firstElementChild;
+      list.items = Array.from({ length: 50 }, (_, i) => ({
+        text: `Message ${i}`,
+        userName: 'User',
+        theme: i % 2 === 0 ? 'self' : undefined,
+      }));
+      await nextRender();
+    });
+
+    ['', 'bubble'].forEach((theme) => {
+      it(`should not overflow the document with theme="${theme}"`, async () => {
+        list.setAttribute('theme', theme);
+        await nextRender();
+        const { scrollHeight, clientHeight } = document.documentElement;
+        expect(scrollHeight).to.be.at.most(clientHeight);
+      });
+    });
+  });
+
+  describe('items property', () => {
+    beforeEach(async () => {
+      messageList.items = messages;
+      await nextRender();
+    });
+
+    it('should render vaadin-message element for each item', () => {
+      const items = messageList.querySelectorAll('vaadin-message');
+      expect(items.length).to.equal(4);
+    });
+
+    it('should not throw when items is undefined', () => {
+      expect(() => {
+        messageList.items = undefined;
+      }).to.not.throw();
+    });
+
+    it('message properties should be correctly set', () => {
+      const firstMessage = messageList.querySelector('vaadin-message');
+      expect(firstMessage.time).to.be.equal(messages[0].time);
+      expect(firstMessage.userName).to.be.equal(messages[0].userName);
+      expect(firstMessage.userAbbr).to.be.equal(messages[0].userAbbr);
+      expect(firstMessage.userImg).to.be.equal(messages[0].userImg);
+      expect(firstMessage.userColorIndex).to.be.equal(messages[0].userColorIndex);
+      expect(firstMessage.textContent).to.be.equal(messages[0].text);
+      expect(firstMessage.getAttribute('theme')).to.be.equal(messages[0].theme);
+    });
+
+    describe('adding / removing', () => {
+      it('should remove vaadin-message elements for removed items', async () => {
+        messageList.items = [messages[1], messages[2]];
+        await nextRender();
+        const items = messageList.querySelectorAll('vaadin-message');
+        expect(items.length).to.equal(2);
+      });
+
+      it('should append vaadin-message elements for items added at the end', async () => {
+        messageList.items = [messages[1], messages[2], { userAbbr: 'SK', text: 'Hi' }];
+        await nextRender();
+        const items = messageList.querySelectorAll('vaadin-message');
+        expect(items.length).to.equal(3);
+        expect(items[2].textContent).to.equal('Hi');
+      });
+
+      it('should insert vaadin-message elements for items added in the middle', async () => {
+        messageList.items = [messages[1], { userAbbr: 'SK', text: 'Hi' }, messages[2]];
+        await nextRender();
+        const items = messageList.querySelectorAll('vaadin-message');
+        expect(items.length).to.equal(3);
+        expect(items[1].textContent).to.equal('Hi');
+      });
+
+      it('should reuse existing vaadin-message element when updating items', async () => {
+        const firstMessage = messageList.querySelector('vaadin-message');
+        messageList.items = [messages[1], messages[2]];
+        await nextRender();
+        const items = messageList.querySelectorAll('vaadin-message');
+        expect(items.length).to.equal(2);
+        expect(items[0]).to.eql(firstMessage);
+        expect(items[1]).to.not.eql(firstMessage);
+      });
+
+      it('should not remove vaadin-avatar elements when updating items', async () => {
+        messageList.items = [{ text: '', userName: 'Assistant' }];
+        await nextRender();
+        expect(messageList.querySelector('vaadin-avatar')).to.be.ok;
+      });
+    });
+
+    describe('scroll', () => {
+      beforeEach(async () => {
+        // message-list uses hardcoded 50px threshold to detect
+        // whether to scroll on adding a message, which expects
+        // a message to have > 50px height so we add a padding.
+        fixtureSync(`
+          <style>
+            vaadin-message {
+              padding: 8px 0;
+            }
+          </style>
+        `);
+        messageList.style.height = '100px';
+        await nextResize(messageList);
+      });
+
+      it('should scroll when height is less than content', () => {
+        expect(messageList.scrollTop).to.be.equal(0);
+        messageList.scrollBy(0, 1000);
+        expect(messageList.scrollTop).to.be.at.least(1);
+      });
+
+      it('should scroll to bottom on adding new messages', async () => {
+        messageList.scrollBy(0, 1000);
+        const scrollTopBeforeMessage = messageList.scrollTop;
+        messageList.items = [
+          ...messageList.items,
+          {
+            text: 'A new message arrives!',
+            time: '2:35 PM',
+            userName: 'Steve Mops',
+            userAbbr: 'SM',
+            userColorIndex: 2,
+          },
+        ];
+        await nextRender();
+        expect(messageList.scrollTop).to.be.at.least(scrollTopBeforeMessage + 1);
+      });
+
+      it('should scroll to bottom when the typing indicator is added', async () => {
+        messageList.scrollBy(0, 1000);
+        const scrollTopBefore = messageList.scrollTop;
+        messageList._usersTyping = [{ name: 'Steve Mops', abbr: 'SM' }];
+        await nextRender();
+        expect(messageList.scrollTop).to.be.at.least(scrollTopBefore + 1);
+      });
+
+      it('should not scroll to the typing indicator if not at the bottom', async () => {
+        messageList._usersTyping = [{ name: 'Steve Mops', abbr: 'SM' }];
+        await nextRender();
+        expect(messageList.scrollTop).to.be.equal(0);
+      });
+
+      it('should not scroll if not at the bottom', async () => {
+        messageList.items = [
+          ...messageList.items,
+          {
+            text: 'A new message arrives!',
+            time: '2:35 PM',
+            userName: 'Steve Mops',
+            userAbbr: 'SM',
+            userColorIndex: 2,
+          },
+        ];
+        await nextRender();
+        expect(messageList.scrollTop).to.be.equal(0);
+      });
+
+      it('should scroll to bottom on appending message text', async () => {
+        // Scroll to end
+        messageList.scrollBy(0, 1000);
+        await nextRender();
+
+        // Append text to last message
+        messageList.items.at(-1).text += '\nfoo';
+        messageList.items = [...messageList.items];
+        await nextRender();
+        await nextRender();
+
+        // Verify scrolled to bottom
+        expect(messageList.scrollTop).to.be.closeTo(messageList.scrollHeight - messageList.clientHeight, 1);
+      });
+
+      it('should not scroll if not at the bottom on appending message text', async () => {
+        const scrollTopBeforeAppend = messageList.scrollTop;
+
+        // Append text to last message while still at top
+        messageList.items.at(-1).text += '\nfoo';
+        messageList.items = [...messageList.items];
+        await nextRender();
+        await nextRender();
+
+        // Verify scroll position unchanged
+        expect(messageList.scrollTop).to.be.equal(scrollTopBeforeAppend);
+      });
+
+      it('should not snap to bottom after snap duration expires', async () => {
+        // Scroll to end
+        messageList.scrollBy(0, 1000);
+        await nextRender();
+
+        // Append text to last message
+        messageList.items.at(-1).text += '\nfoo';
+        messageList.items = [...messageList.items];
+
+        // Wait for snap behavior to expire (500ms + buffer)
+        await aTimeout(600);
+
+        // Now scroll up manually
+        const scrollTopBefore = messageList.scrollTop;
+        messageList.scrollTop -= 20;
+
+        // Should be able to scroll up freely
+        expect(messageList.scrollTop).to.be.equal(scrollTopBefore - 20);
+      });
+    });
+
+    describe('tabindex', () => {
+      it('should set tabindex 0 on first message after removing the one that had it previously', async () => {
+        const messages = messageList.querySelectorAll('vaadin-message');
+        const thirdMessage = messages[2];
+
+        // Click on third item to give it tabindex=0
+        thirdMessage.dispatchEvent(new CustomEvent('mousedown', { composed: true, bubbles: true }));
+        thirdMessage.dispatchEvent(new CustomEvent('focus', { composed: true, bubbles: true }));
+        thirdMessage.dispatchEvent(new CustomEvent('mouseup', { composed: true, bubbles: true }));
+
+        // Set message list to shorter than three items, so that tabIndex=0 can't be maintained on third item
+        messageList.items = [
+          {
+            text: 'This is a new list',
+            time: '2:35 PM',
+            userName: 'Steve Mops',
+            userAbbr: 'SM',
+            userColorIndex: 2,
+          },
+          {
+            text: 'With two items',
+            time: '2:35 PM',
+            userName: 'Steve Mops',
+            userAbbr: 'SM',
+            userColorIndex: 2,
+          },
+        ];
+        await nextRender();
+        const firstMessage = messages[0];
+        // Verify that the first item got the new tabIndex=0.
+        expect(firstMessage.tabIndex).to.be.equal(0);
+      });
+
+      it('should preserve tabindex when adding new messages', async () => {
+        const secondMessage = messageList.querySelectorAll('vaadin-message')[1];
+        mousedown(secondMessage);
+        focusin(secondMessage);
+        messageList.items = [
+          ...messageList.items,
+          {
+            text: 'A new message arrives!',
+            time: '2:35 PM',
+            userName: 'Steve Mops',
+            userAbbr: 'SM',
+            userColorIndex: 2,
+          },
+        ];
+        await nextRender();
+        const messages = messageList.querySelectorAll('vaadin-message');
+        messages.forEach((msg, idx) => {
+          expect(msg.tabIndex).to.equal(idx === 1 ? 0 : -1);
+        });
+      });
+
+      it('should preserve tabindex when removing messages if possible', async () => {
+        const secondMessage = messageList.querySelectorAll('vaadin-message')[1];
+        mousedown(secondMessage);
+        focusin(secondMessage);
+
+        // Set message list to two items
+        messageList.items = [
+          {
+            text: 'This is a new list',
+            time: '2:35 PM',
+            userName: 'Steve Mops',
+            userAbbr: 'SM',
+            userColorIndex: 2,
+          },
+          {
+            text: 'With two items',
+            time: '2:35 PM',
+            userName: 'Steve Mops',
+            userAbbr: 'SM',
+            userColorIndex: 2,
+          },
+        ];
+
+        await nextRender();
+        const messages = messageList.querySelectorAll('vaadin-message');
+        // Verify that the second item got the new tabIndex=0.
+        expect(messages[0].tabIndex).to.be.equal(-1);
+        expect(messages[1].tabIndex).to.be.equal(0);
+      });
+    });
+  });
+
+  describe('focus', () => {
+    let messageElements, message;
+
+    beforeEach(async () => {
+      messageList.items = messages;
+      await nextRender();
+      messageElements = messageList.querySelectorAll('vaadin-message');
+      message = messageElements[1];
+    });
+
+    it('should set focused attribute on message focusin', () => {
+      focusin(message);
+      expect(message.hasAttribute('focused')).to.be.true;
+    });
+
+    it('should remove focused attribute on message focusout', () => {
+      focusin(message);
+      focusout(message);
+      expect(message.hasAttribute('focused')).to.be.false;
+    });
+
+    it('should set focus-ring attribute on message focusin after Tab', () => {
+      tabKeyDown(document.body);
+      focusin(message);
+      expect(message.hasAttribute('focus-ring')).to.be.true;
+    });
+
+    it('should not set the focus-ring attribute on message mousedown', () => {
+      tabKeyDown(document.body);
+      mousedown(document.body);
+      focusin(message);
+      expect(message.hasAttribute('focus-ring')).to.be.false;
+    });
+
+    it('should set focus-ring attribute on message focusin after Tab', () => {
+      tabKeyDown(document.body);
+      focusin(message);
+      expect(message.hasAttribute('focus-ring')).to.be.true;
+    });
+
+    it('should update tabindex for message elements on focusin', () => {
+      focusin(message);
+      messageElements.forEach((msg, idx) => {
+        expect(msg.tabIndex).to.equal(idx === 1 ? 0 : -1);
+      });
+    });
+  });
+
+  describe('keyboard navigation', () => {
+    let messageElements;
+
+    beforeEach(async () => {
+      messageList.items = messages;
+      await nextRender();
+      messageElements = messageList.querySelectorAll('vaadin-message');
+    });
+
+    it('should set tabindex on the next message on "arrow-down" keydown', () => {
+      messageElements[0].focus();
+      arrowDown(messageElements[0]);
+      messageElements.forEach((msg, idx) => {
+        expect(msg.tabIndex).to.equal(idx === 1 ? 0 : -1);
+      });
+    });
+
+    it('should move focus to the next message on "arrow-down" keydown', () => {
+      messageElements[0].focus();
+      arrowDown(messageElements[0]);
+      expect(messageElements[0].hasAttribute('focused')).to.be.false;
+      expect(messageElements[1].hasAttribute('focused')).to.be.true;
+    });
+
+    it('should focus first message on last message "arrow-down" keydown', () => {
+      messageElements[3].focus();
+      arrowDown(messageElements[3]);
+      expect(messageElements[3].hasAttribute('focused')).to.be.false;
+      expect(messageElements[0].hasAttribute('focused')).to.be.true;
+    });
+
+    it('should move focus to the previous message on "arrow-up" keydown', () => {
+      messageElements[1].focus();
+      arrowUp(messageElements[1]);
+      expect(messageElements[1].hasAttribute('focused')).to.be.false;
+      expect(messageElements[0].hasAttribute('focused')).to.be.true;
+    });
+
+    it('should focus last message on first message "arrow-down" keydown', () => {
+      messageElements[0].focus();
+      arrowUp(messageElements[0]);
+      expect(messageElements[0].hasAttribute('focused')).to.be.false;
+      expect(messageElements[3].hasAttribute('focused')).to.be.true;
+    });
+
+    it('should move focus to the first message on "home" keydown', () => {
+      messageElements[2].focus();
+      home(messageElements[2]);
+      expect(messageElements[2].hasAttribute('focused')).to.be.false;
+      expect(messageElements[0].hasAttribute('focused')).to.be.true;
+    });
+
+    it('should move focus to the last message on "end" keydown', () => {
+      messageElements[1].focus();
+      end(messageElements[1]);
+      expect(messageElements[1].hasAttribute('focused')).to.be.false;
+      expect(messageElements[3].hasAttribute('focused')).to.be.true;
+    });
+
+    it('should set focus-ring attribute when moving focus using keyboard', () => {
+      expect(messageElements[1].hasAttribute('focus-ring')).to.be.false;
+      messageElements[0].focus();
+      arrowDown(messageElements[0]);
+      expect(messageElements[1].hasAttribute('focus-ring')).to.be.true;
+    });
+
+    it('should ignore keydown events when Ctrl modifier key is pressed', () => {
+      messageElements[1].focus();
+      arrowDown(messageElements[1]);
+      arrowDown(messageElements[2], ['ctrl']);
+      expect(messageElements[3].hasAttribute('focused')).to.be.false;
+      expect(messageElements[2].hasAttribute('focused')).to.be.true;
+    });
+
+    it('should not change focus when unrelated key is pressed', () => {
+      messageElements[0].focus();
+      arrowDown(messageElements[0]);
+      arrowRight(messageElements[1]);
+      expect(messageElements[1].hasAttribute('focused')).to.be.true;
+    });
+
+    it('should scroll focused message into view on keyboard navigation', () => {
+      messageList.style.height = '50px';
+      messageElements[0].focus();
+      expect(messageList.scrollTop).to.equal(0);
+
+      arrowDown(messageElements[0]);
+      arrowDown(messageElements[1]);
+      arrowDown(messageElements[2]);
+      expect(messageList.scrollTop).to.be.greaterThan(0);
+    });
+  });
+
+  describe('a11y', () => {
+    it('should toggle aria live', () => {
+      expect(messageList.getAttribute('aria-live')).to.be.null;
+      messageList.announceMessages = true;
+      expect(messageList.getAttribute('aria-live')).to.equal('polite');
+      messageList.announceMessages = false;
+      expect(messageList.getAttribute('aria-live')).to.be.null;
+    });
+  });
+
+  describe('typing indicator', () => {
+    const users = [
+      { name: 'Linsey Listy', abbr: 'LL', colorIndex: 2 },
+      { name: 'Matt Mambo', abbr: 'MM', colorIndex: 1 },
+    ];
+
+    function getTypingIndicator() {
+      return messageList.querySelector('[slot="typing-indicator"]');
+    }
+
+    before(() => {
+      Object.defineProperty(navigator, 'language', { configurable: true, value: 'en-US' });
+    });
+
+    after(() => {
+      delete navigator.language;
+    });
+
+    beforeEach(async () => {
+      messageList.items = messages;
+      await nextRender();
+    });
+
+    it('should not create typing indicator when no one is typing', () => {
+      expect(getTypingIndicator()).to.be.null;
+    });
+
+    it('should create typing indicator when users are typing', async () => {
+      messageList._usersTyping = users;
+      await nextRender();
+      const indicator = getTypingIndicator();
+      expect(indicator.localName).to.equal('vaadin-message');
+      expect(indicator.checkVisibility()).to.be.true;
+    });
+
+    it('should create typing indicator synchronously when users start typing', () => {
+      messageList._usersTyping = users;
+      expect(getTypingIndicator()).to.be.not.null;
+    });
+
+    it('should set names of the typing users on the typing indicator', async () => {
+      messageList._usersTyping = users;
+      await nextRender();
+      expect(getTypingIndicator().userName).to.equal('Linsey Listy and Matt Mambo');
+    });
+
+    it('should fall back to the abbreviation for users without a name', async () => {
+      messageList._usersTyping = [{ abbr: 'LL' }, users[1]];
+      await nextRender();
+      expect(getTypingIndicator().userName).to.equal('LL and Matt Mambo');
+    });
+
+    it('should not render a name for users without a name or abbreviation', async () => {
+      messageList._usersTyping = [{ colorIndex: 3 }, users[1]];
+      await nextRender();
+      expect(getTypingIndicator().userName).to.equal('Matt Mambo');
+    });
+
+    it('should join the user names in the language of the element', async () => {
+      messageList.lang = 'fi';
+      messageList._usersTyping = users;
+      await nextRender();
+      expect(getTypingIndicator().userName).to.equal('Linsey Listy ja Matt Mambo');
+    });
+
+    it('should fall back to the browser language for an invalid element language', async () => {
+      messageList.lang = 'en_US';
+      messageList._usersTyping = users;
+      await nextRender();
+      expect(getTypingIndicator().userName).to.equal('Linsey Listy and Matt Mambo');
+    });
+
+    it('should set typing users as the avatar group items', async () => {
+      messageList._usersTyping = users;
+      await nextRender();
+      const avatarGroup = getTypingIndicator().querySelector('vaadin-avatar-group');
+      expect(avatarGroup.getAttribute('slot')).to.equal('avatar');
+      const avatars = [...avatarGroup.querySelectorAll('vaadin-avatar:not([slot])')];
+      expect(avatars.map((avatar) => avatar.name)).to.eql(users.map((user) => user.name));
+    });
+
+    it('should set the typing indicator text', async () => {
+      messageList._usersTyping = users;
+      await nextRender();
+      expect(getTypingIndicator().querySelector('span').textContent).to.equal('Typing…');
+    });
+
+    it('should update the typing indicator text', async () => {
+      messageList._usersTyping = users;
+      await nextRender();
+      messageList._typingIndicatorText = 'is typing';
+      await nextUpdate(messageList);
+      expect(getTypingIndicator().querySelector('span').textContent).to.equal('is typing');
+    });
+
+    it('should restore the default typing indicator text when cleared', async () => {
+      messageList._usersTyping = users;
+      await nextRender();
+      messageList._typingIndicatorText = 'is typing';
+      await nextUpdate(messageList);
+
+      messageList._typingIndicatorText = null;
+      await nextUpdate(messageList);
+
+      expect(getTypingIndicator().querySelector('span').textContent).to.equal('Typing…');
+    });
+
+    it('should reflect the typing indicator type to an attribute', async () => {
+      messageList._typingIndicatorType = 'ellipsis';
+      messageList._usersTyping = users;
+      await nextRender();
+      expect(getTypingIndicator().getAttribute('typing-indicator')).to.equal('ellipsis');
+    });
+
+    it('should update the typing indicator type while users are typing', async () => {
+      messageList._usersTyping = users;
+      await nextRender();
+      messageList._typingIndicatorType = 'minimal';
+      await nextUpdate(messageList);
+      expect(getTypingIndicator().getAttribute('typing-indicator')).to.equal('minimal');
+    });
+
+    it('should render an icon for the ellipsis typing indicator', async () => {
+      messageList._typingIndicatorType = 'ellipsis';
+      messageList._usersTyping = users;
+      await nextRender();
+      const message = getTypingIndicator().shadowRoot.querySelector('[part="message"]');
+      const { backgroundColor, maskImage, width, height } = getComputedStyle(message, '::before');
+      expect(maskImage).to.contain('svg');
+      expect(backgroundColor).to.equal(getComputedStyle(message).color);
+      expect(width).to.equal(height);
+      expect(parseFloat(width)).to.be.above(0);
+    });
+
+    it('should remove the typing indicator when no one is typing anymore', async () => {
+      messageList._usersTyping = users;
+      await nextRender();
+      messageList._usersTyping = [];
+      await nextRender();
+      expect(getTypingIndicator()).to.be.null;
+    });
+
+    it('should render the typing indicator again when users start typing again', async () => {
+      messageList._usersTyping = users;
+      await nextRender();
+
+      messageList._usersTyping = [];
+      messageList._usersTyping = [users[0]];
+      await nextRender();
+      expect(getTypingIndicator().userName).to.equal('Linsey Listy');
+    });
+
+    it('should update the typing indicator in place when the users change', async () => {
+      messageList._usersTyping = [users[0]];
+      await nextRender();
+      const indicator = getTypingIndicator();
+
+      messageList._usersTyping = users;
+      await nextRender();
+      expect(getTypingIndicator() === indicator).to.be.true;
+      expect(indicator.userName).to.equal('Linsey Listy and Matt Mambo');
+    });
+
+    it('should keep the typing indicator when messages are removed', async () => {
+      messageList._usersTyping = users;
+      await nextRender();
+      const indicator = getTypingIndicator();
+
+      messageList.items = [];
+      await nextRender();
+      expect(getTypingIndicator()).to.equal(indicator);
+      expect(indicator.checkVisibility()).to.be.true;
+    });
+
+    it('should not include the typing indicator in the messages', async () => {
+      messageList._usersTyping = users;
+      await nextRender();
+      expect(messageList._messages).to.have.lengthOf(messages.length);
+      expect(messageList._messages).to.not.include(getTypingIndicator());
+    });
+
+    it('should not move focus to the typing indicator on keyboard navigation', async () => {
+      messageList._usersTyping = users;
+      await nextRender();
+
+      // Navigating past the last message wraps around to the first one
+      const lastMessage = messageList._messages[messageList._messages.length - 1];
+      lastMessage.focus();
+      arrowDown(lastMessage);
+      expect(messageList._messages[0].hasAttribute('focused')).to.be.true;
+      expect(getTypingIndicator().hasAttribute('focused')).to.be.false;
+    });
+
+    it('should hide the typing indicator from assistive technology', async () => {
+      messageList._usersTyping = users;
+      await nextRender();
+      expect(getTypingIndicator().getAttribute('aria-hidden')).to.equal('true');
+    });
+
+    it('should make the typing indicator inert', async () => {
+      messageList._usersTyping = users;
+      await nextRender();
+      expect(getTypingIndicator().inert).to.be.true;
+    });
+
+    it('should not announce typing users changes', async () => {
+      // Global live region used by the avatar group announcements
+      const region = document.querySelector('body > [aria-live]');
+      messageList._usersTyping = users;
+      await nextRender();
+      region.textContent = '';
+
+      const clock = sinon.useFakeTimers();
+      try {
+        // Fresh user objects, like Flow sends them
+        messageList._usersTyping = [...users.map((user) => ({ ...user })), { name: 'Joan Doe', abbr: 'JD' }];
+        await clock.tickAsync(200);
+        expect(region.textContent).to.equal('');
+      } finally {
+        clock.restore();
+      }
+    });
+
+    it('should not focus the typing indicator avatars', async () => {
+      messageList._usersTyping = users;
+      await nextRender();
+      const indicator = getTypingIndicator();
+      const avatar = indicator.querySelector('vaadin-avatar');
+      avatar.focus();
+      expect(indicator.contains(document.activeElement)).to.be.false;
+    });
+
+    describe('status live region', () => {
+      let status;
+
+      beforeEach(() => {
+        status = messageList.shadowRoot.querySelector('[role="status"]');
+      });
+
+      it('should have an empty status live region before anyone is typing', () => {
+        expect(status).to.be.ok;
+        expect(status.textContent.trim()).to.equal('');
+      });
+
+      it('should visually hide the status live region', async () => {
+        messageList._usersTyping = users;
+        await nextUpdate(messageList);
+        const rect = status.getBoundingClientRect();
+        expect(rect.width).to.be.at.most(1);
+        expect(rect.height).to.be.at.most(1);
+      });
+
+      it('should set the names of typing users and the text as status', async () => {
+        messageList._usersTyping = users;
+        await nextUpdate(messageList);
+        expect(status.textContent.trim()).to.equal('Linsey Listy and Matt Mambo Typing…');
+      });
+
+      it('should update the status when the typing users change', async () => {
+        messageList._usersTyping = users;
+        await nextUpdate(messageList);
+        messageList._usersTyping = [users[0]];
+        await nextUpdate(messageList);
+        expect(status.textContent.trim()).to.equal('Linsey Listy Typing…');
+      });
+
+      it('should update the status when the typing indicator text changes', async () => {
+        messageList._usersTyping = users;
+        messageList._typingIndicatorText = 'are typing';
+        await nextUpdate(messageList);
+        expect(status.textContent.trim()).to.equal('Linsey Listy and Matt Mambo are typing');
+      });
+
+      it('should only use the names when the typing indicator text is empty', async () => {
+        messageList._usersTyping = users;
+        messageList._typingIndicatorText = '';
+        await nextUpdate(messageList);
+        expect(status.textContent.trim()).to.equal('Linsey Listy and Matt Mambo');
+      });
+
+      it('should use the default text in the status when the text is cleared', async () => {
+        messageList._usersTyping = users;
+        messageList._typingIndicatorText = 'are typing';
+        await nextUpdate(messageList);
+
+        messageList._typingIndicatorText = null;
+        await nextUpdate(messageList);
+
+        expect(status.textContent.trim()).to.equal('Linsey Listy and Matt Mambo Typing…');
+      });
+
+      it('should clear the status when no one is typing anymore', async () => {
+        messageList._usersTyping = users;
+        await nextUpdate(messageList);
+        messageList._usersTyping = [];
+        await nextUpdate(messageList);
+        expect(status.textContent.trim()).to.equal('');
+      });
+    });
+
+    it('should move focus out of the message list on Tab from the last message', async () => {
+      // A focusable element after the list, like the message input in a chat
+      const button = fixtureSync('<button>Send</button>');
+      messageList._usersTyping = users;
+      await nextRender();
+      const lastMessage = messageList._messages[messageList._messages.length - 1];
+      lastMessage.focus();
+      await sendKeys({ press: 'Tab' });
+      expect(document.activeElement).to.equal(button);
+    });
+  });
+
+  describe('attachments', () => {
+    const imgUrl = 'data:image/gif;base64,R0lGODlhAQABAIAAAAAAAP///yH5BAEAAAAALAAAAAABAAEAAAIBRAA7';
+
+    beforeEach(async () => {
+      messageList.items = [
+        {
+          text: 'Message with attachments',
+          userName: 'Joan Doe',
+          attachments: [
+            { name: 'photo.png', url: imgUrl, type: 'image/png' },
+            { name: 'document.pdf', url: 'http://example.com/doc.pdf', type: 'application/pdf' },
+          ],
+        },
+        {
+          text: 'Message without attachments',
+          userName: 'Steve Mops',
+        },
+      ];
+      await nextRender();
+    });
+
+    it('should pass attachments property to vaadin-message', () => {
+      const firstMessage = messageList.querySelector('vaadin-message');
+      expect(firstMessage.attachments).to.have.length(2);
+      expect(firstMessage.attachments[0].name).to.equal('photo.png');
+    });
+
+    it('should render attachments in message shadow DOM', () => {
+      const firstMessage = messageList.querySelector('vaadin-message');
+      const attachments = firstMessage.shadowRoot.querySelectorAll('[part~="attachment"]');
+      expect(attachments.length).to.equal(2);
+    });
+
+    it('should not render attachments for message without attachments property', () => {
+      const secondMessage = messageList.querySelectorAll('vaadin-message')[1];
+      const attachmentsContainer = secondMessage.shadowRoot.querySelector('[part="attachments"]');
+      expect(attachmentsContainer).to.be.null;
+    });
+
+    it('should dispatch attachment-click event with attachment and item', () => {
+      const spy = sinon.spy();
+      messageList.addEventListener('attachment-click', spy);
+
+      const firstMessage = messageList.querySelector('vaadin-message');
+      const button = firstMessage.shadowRoot.querySelector('[part~="attachment-file"]');
+      button.click();
+
+      expect(spy.calledOnce).to.be.true;
+      const detail = spy.firstCall.args[0].detail;
+      expect(detail.attachment.name).to.equal('document.pdf');
+      expect(detail.item).to.equal(messageList.items[0]);
+    });
+
+    it('should include correct item for second message', async () => {
+      // Add attachments to the second item
+      messageList.items = [
+        ...messageList.items.slice(0, 1),
+        {
+          ...messageList.items[1],
+          attachments: [{ name: 'other.pdf', type: 'application/pdf' }],
+        },
+      ];
+      await nextRender();
+
+      const spy = sinon.spy();
+      messageList.addEventListener('attachment-click', spy);
+
+      const secondMessage = messageList.querySelectorAll('vaadin-message')[1];
+      const button = secondMessage.shadowRoot.querySelector('[part~="attachment-file"]');
+      button.click();
+
+      expect(spy.calledOnce).to.be.true;
+      const detail = spy.firstCall.args[0].detail;
+      expect(detail.attachment.name).to.equal('other.pdf');
+      expect(detail.item).to.equal(messageList.items[1]);
+    });
+
+    it('should update attachments when items change', async () => {
+      messageList.items = [
+        {
+          text: 'Updated message',
+          userName: 'Joan Doe',
+          attachments: [{ name: 'new-file.txt', type: 'text/plain' }],
+        },
+      ];
+      await nextRender();
+
+      const message = messageList.querySelector('vaadin-message');
+      expect(message.attachments).to.have.length(1);
+      expect(message.attachments[0].name).to.equal('new-file.txt');
+    });
+  });
+});

@@ -1,0 +1,50 @@
+/**
+ * @license
+ * Copyright (c) 2000 - 2026 Vaadin Ltd.
+ *
+ * This program is available under Vaadin Commercial License and Service Terms.
+ *
+ *
+ * See https://vaadin.com/commercial-license-and-service-terms for the full
+ * license.
+ */
+import '@vaadin/component-base/src/styles/style-props.js';
+import { css } from 'lit';
+import { dialogOverlayStyles } from '@vaadin/dialog/src/styles/vaadin-dialog-overlay-base-styles.js';
+
+const crudDialogOverlay = css`
+  [part='header'] {
+    color: var(--vaadin-dialog-title-color, var(--vaadin-text-color));
+    font-size: var(--vaadin-dialog-title-font-size, 1em);
+    font-weight: var(--vaadin-dialog-title-font-weight, 600);
+    line-height: var(--vaadin-dialog-title-line-height, inherit);
+    padding: var(--vaadin-crud-header-padding, var(--vaadin-dialog-padding, var(--vaadin-padding-l)));
+  }
+
+  ::slotted([slot='header']) {
+    color: inherit !important;
+    display: contents;
+    font: inherit !important;
+    overflow-wrap: anywhere;
+  }
+
+  :host(:is(*, #id)) [part='content'] {
+    overflow: auto;
+    overscroll-behavior: contain;
+    padding: var(--vaadin-crud-form-padding, var(--vaadin-padding-l));
+    padding-top: calc(var(--vaadin-focus-ring-width, 2px) + 2px);
+    margin-top: calc(var(--vaadin-focus-ring-width, 2px) * -1 - 2px);
+    margin-bottom: 0;
+  }
+
+  ::slotted([slot='form']) {
+    --vaadin-crud-form-padding: 0;
+  }
+
+  [part='footer'] {
+    justify-content: normal;
+    background: var(--vaadin-crud-footer-background, transparent);
+  }
+`;
+
+export const crudDialogOverlayStyles = [...dialogOverlayStyles, crudDialogOverlay];

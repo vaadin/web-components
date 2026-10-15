@@ -1,0 +1,219 @@
+/**
+ * @license
+ * Copyright (c) 2017 - 2026 Vaadin Ltd.
+ * This program is available under Apache License Version 2.0, available at https://vaadin.com/license/
+ */
+import { ActiveMixin } from '@vaadin/a11y-base/src/active-mixin.js';
+import { DelegateFocusMixin } from '@vaadin/a11y-base/src/delegate-focus-mixin.js';
+import { setOrRemoveAttribute } from '@vaadin/component-base/src/dom-utils.js';
+import { SlotStylesMixin } from '@vaadin/component-base/src/slot-styles-mixin.js';
+import { CheckedMixin } from '@vaadin/field-base/src/checked-mixin.js';
+import { FieldMixin } from '@vaadin/field-base/src/field-mixin.js';
+import { InputController } from '@vaadin/field-base/src/input-controller.js';
+import { LabelledInputController } from '@vaadin/field-base/src/labelled-input-controller.js';
+
+/**
+ * A mixin providing common checkbox functionality.
+ */
+export const CheckboxMixin = (superclass) =>
+  class CheckboxMixinClass extends SlotStylesMixin(
+    FieldMixin(CheckedMixin(DelegateFocusMixin(ActiveMixin(superclass)))),
+  ) {
+    static get properties() {
+      return {
+        /**
+         * The name of the control, which is submitted with the form data.
+         */
+        name: {
+          type: String,
+          value: '',
+        },
+
+        /**
+         * When true, the user cannot modify the value of the control.
+         * The difference between `disabled` and `readonly` is that the
+         * read-only element remains focusable, is announced by screen
+         * readers and its value can be submitted as part of the form.
+         */
+        readonly: {
+          type: Boolean,
+          value: false,
+          reflectToAttribute: true,
+        },
+      };
+    }
+
+    static get observers() {
+      return ['__readonlyChanged(readonly, inputElement)'];
+    }
+
+    /** @override */
+    static get delegateAttrs() {
+      return [...super.delegateAttrs, 'name', 'invalid', 'required'];
+    }
+
+    constructor() {
+      super();
+
+      this._setType('checkbox');
+
+      this._boundOnInputClick = this._onInputClick.bind(this);
+
+      /**
+       * Set the string "on" as the default value for the checkbox following the HTML specification:
+       * https://html.spec.whatwg.org/multipage/input.html#dom-input-value-default-on
+       * @internal to not document it in CEM
+       */
+      this.value = 'on';
+
+      /**
+       * Set tabindex to 0 by default to not lose focus on click in Safari
+       * See https://github.com/vaadin/web-components/pull/6780
+       * @internal to not document it in CEM
+       */
+      this.tabindex = 0;
+    }
+
+    /** @protected */
+    get slotStyles() {
+      const tag = this.localName;
+
+      // Needed to override `opacity: 1` set on `input` by Tailwind CSS.
+      // See https://github.com/vaadin/web-components/issues/8881
+      return [
+        `
+          ${tag} > input[slot='input'] {
+            opacity: 0;
+          }
+        `,
+      ];
+    }
+
+    /** @protected */
+    ready() {
+      super.ready();
+
+      this.addController(
+        new InputController(this, (input) => {
+          this._setInputElement(input);
+          this._setFocusElement(input);
+          this.stateTarget = input;
+          this.ariaTarget = input;
+        }),
+      );
+      this.addController(new LabelledInputController(this.inputElement, this._labelController));
+
+      this._createPropertyObserver('checked', '_checkedChanged');
+    }
+
+    /** @protected */
+    updated(props) {
+      super.updated(props);
+
+      // Validate when the required constraint is removed.
+      if (props.has('required') && this.required === false) {
+        this._requestValidation();
+      }
+    }
+
+    /**
+     * Override method inherited from `ActiveMixin` to only set the `active`
+     * attribute for clicks that actually toggle the checked state.
+     *
+     * @param {Event} event
+     * @return {boolean}
+     * @protected
+     * @override
+     */
+    _shouldSetActive(event) {
+      const [target] = event.composedPath();
+
+      const togglesChecked =
+        target === this.inputElement ||
+        target.part.contains('required-indicator') ||
+        (this._labelNode.contains(target) && !target.closest('a'));
+
+      if (this.readonly || !togglesChecked) {
+        return false;
+      }
+
+      return super._shouldSetActive(event);
+    }
+
+    /**
+     * Override method inherited from `InputMixin`.
+     * @param {!HTMLElement} input
+     * @protected
+     * @override
+     */
+    _addInputListeners(input) {
+      super._addInputListeners(input);
+
+      input.addEventListener('click', this._boundOnInputClick);
+    }
+
+    /**
+     * Override method inherited from `InputMixin`.
+     * @param {!HTMLElement} input
+     * @protected
+     * @override
+     */
+    _removeInputListeners(input) {
+      super._removeInputListeners(input);
+
+      input.removeEventListener('click', this._boundOnInputClick);
+    }
+
+    /** @private */
+    _onInputClick(event) {
+      // Prevent native checkbox checked change
+      if (this.readonly) {
+        event.preventDefault();
+      }
+    }
+
+    /** @private */
+    __readonlyChanged(readonly, inputElement) {
+      if (!inputElement) {
+        return;
+      }
+
+      // Use aria-readonly since native checkbox doesn't support readonly
+      setOrRemoveAttribute(inputElement, 'aria-readonly', readonly);
+    }
+
+    /**
+     * @override
+     * @return {boolean}
+     */
+    checkValidity() {
+      return !this.required || !!this.checked;
+    }
+
+    /**
+     * Override method inherited from `FocusMixin` to validate on blur.
+     * @param {boolean} focused
+     * @protected
+     */
+    _setFocused(focused) {
+      super._setFocused(focused);
+
+      // Do not validate when focusout is caused by document
+      // losing focus, which happens on browser tab switch.
+      if (!focused && document.hasFocus()) {
+        this._requestValidation();
+      }
+    }
+
+    /** @private */
+    _checkedChanged(checked, oldChecked) {
+      if (checked || oldChecked) {
+        this._requestValidation();
+      }
+    }
+
+    /** @private */
+    _onRequiredIndicatorClick() {
+      this._labelNode.click();
+    }
+  };

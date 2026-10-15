@@ -1,0 +1,185 @@
+/**
+ * @license
+ * Copyright (c) 2019 - 2026 Vaadin Ltd.
+ * This program is available under Apache License Version 2.0, available at https://vaadin.com/license/
+ */
+import { isElementFocused } from '@vaadin/a11y-base/src/focus-utils.js';
+import { KeyboardDirectionMixin } from '@vaadin/a11y-base/src/keyboard-direction-mixin.js';
+import { SlotObserver } from '@vaadin/component-base/src/slot-observer.js';
+import { AccordionPanel } from './vaadin-accordion-panel.js';
+
+/**
+ * A mixin providing common accordion functionality.
+ */
+export const AccordionMixin = (superClass) =>
+  class AccordionMixinClass extends KeyboardDirectionMixin(superClass) {
+    static get properties() {
+      return {
+        /**
+         * The index of currently opened panel. First panel is opened by
+         * default. Only one panel can be opened at the same time.
+         * Setting null or undefined closes all the accordion panels.
+         */
+        opened: {
+          type: Number,
+          value: 0,
+          notify: true,
+          reflectToAttribute: true,
+        },
+
+        /**
+         * The ARIA heading level, used to set the `aria-level` attribute
+         * on the `<vaadin-accordion-heading>` element of each panel.
+         *
+         * By default, no `aria-level` is set and the headings are announced by
+         * screen readers using their default level. Set this property to expose
+         * the headings at the level that matches the surrounding page structure.
+         *
+         * @attr {number} heading-level
+         */
+        headingLevel: {
+          type: Number,
+        },
+
+        /**
+         * The list of `<vaadin-accordion-panel>` child elements.
+         * It is populated from the elements passed to the light DOM,
+         * and updated dynamically when adding or removing panels.
+         * @type {!Array<!AccordionPanel>}
+         */
+        items: {
+          type: Array,
+          readOnly: true,
+          notify: true,
+        },
+      };
+    }
+
+    static get observers() {
+      return ['_updateItems(items, opened)'];
+    }
+
+    constructor() {
+      super();
+      this._boundUpdateOpened = this._updateOpened.bind(this);
+    }
+
+    /**
+     * Override getter from `KeyboardDirectionMixin`
+     * to check if the heading element has focus.
+     *
+     * @return {Element | null}
+     * @protected
+     * @override
+     */
+    get focused() {
+      return (this._getItems() || []).find((item) => isElementFocused(item.focusElement));
+    }
+
+    /**
+     * @param {FocusOptions=} options
+     * @protected
+     * @override
+     */
+    focus(options) {
+      if (this._observer) {
+        this._observer.flush();
+      }
+      super.focus(options);
+    }
+
+    /** @protected */
+    ready() {
+      super.ready();
+
+      const slot = this.shadowRoot.querySelector('slot');
+      this._observer = new SlotObserver(slot, (info) => {
+        this._setItems(this._filterItems(Array.from(this.children)));
+
+        this._filterItems(info.addedNodes).forEach((el) => {
+          el.addEventListener('opened-changed', this._boundUpdateOpened);
+        });
+      });
+    }
+
+    /** @protected */
+    updated(props) {
+      super.updated(props);
+
+      if (props.has('items') || props.has('headingLevel')) {
+        (this.items || []).forEach((item) => {
+          item._headingLevel = this.headingLevel;
+        });
+      }
+    }
+
+    /**
+     * Override method inherited from `KeyboardDirectionMixin`
+     * to use the stored list of accordion panels as items.
+     *
+     * @return {Element[]}
+     * @protected
+     * @override
+     */
+    _getItems() {
+      return this.items;
+    }
+
+    /**
+     * @param {!Array<!Element>} array
+     * @return {!Array<!AccordionPanel>}
+     * @protected
+     */
+    _filterItems(array) {
+      return array.filter((el) => el instanceof AccordionPanel);
+    }
+
+    /** @private */
+    _updateItems(items, opened) {
+      if (items) {
+        this.__itemsSync = true;
+        const itemToOpen = items[opened];
+        items.forEach((item) => {
+          item.opened = item === itemToOpen;
+        });
+        this.__itemsSync = false;
+      }
+    }
+
+    /**
+     * Override an event listener from `KeyboardMixin`
+     * to only handle details toggle buttons events.
+     *
+     * @param {!KeyboardEvent} event
+     * @protected
+     * @override
+     */
+    _onKeyDown(event) {
+      // Only check keyboard events on details toggle buttons
+      if (!this.items.some((item) => item.focusElement === event.target)) {
+        return;
+      }
+
+      super._onKeyDown(event);
+    }
+
+    /** @private */
+    _updateOpened(e) {
+      // Item sync applies the current opened index to each item, in which
+      // case we don't need to update the opened index again.
+      if (this.__itemsSync) {
+        return;
+      }
+      const target = this._filterItems(e.composedPath())[0];
+      const idx = this.items.indexOf(target);
+      if (e.detail.value) {
+        if (target.disabled || idx === -1) {
+          return;
+        }
+
+        this.opened = idx;
+      } else if (!this.items.some((item) => item.opened)) {
+        this.opened = null;
+      }
+    }
+  };

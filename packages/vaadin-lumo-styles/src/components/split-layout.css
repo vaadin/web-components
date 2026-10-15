@@ -1,0 +1,60 @@
+/**
+ * @license
+ * Copyright (c) 2017 - 2026 Vaadin Ltd.
+ * This program is available under Apache License Version 2.0, available at https://vaadin.com/license/
+ */
+@media lumo_components_split-layout {
+  [part='splitter'] {
+    --_focus-ring-color: var(--vaadin-focus-ring-color, var(--lumo-primary-color-50pct));
+    --_focus-ring-width: var(--vaadin-focus-ring-width, 2px);
+    --_splitter-size: var(--vaadin-split-layout-splitter-size, var(--lumo-space-s));
+    --_splitter-target-size: var(--vaadin-split-layout-splitter-target-size, var(--lumo-space-s));
+    --_handle-size: var(--vaadin-split-layout-handle-size, var(--lumo-space-xs));
+    --_handle-target-size: var(--vaadin-split-layout-handle-target-size, var(--lumo-size-m));
+    background: var(--vaadin-split-layout-splitter-background, var(--lumo-contrast-5pct));
+    transition: 0.1s background-color;
+  }
+
+  :host([focus-ring]) [part='splitter']::after {
+    outline: var(--_focus-ring-width) solid var(--_focus-ring-color);
+  }
+
+  [part='handle'] {
+    background: var(--vaadin-split-layout-handle-background, var(--lumo-contrast-30pct));
+    border-radius: var(--lumo-border-radius-s);
+  }
+
+  /* Active style */
+  [part='splitter']:active [part='handle'] {
+    background: var(--lumo-contrast-50pct);
+  }
+
+  /* Small overrides */
+  :host([theme~='small']) > [part='splitter'] {
+    --vaadin-split-layout-handle-size: 5px;
+    background: var(--lumo-contrast-10pct);
+  }
+
+  /* Minimal */
+  :host([theme~='minimal']) > [part='splitter'] {
+    --vaadin-split-layout-splitter-size: 0px;
+    --vaadin-split-layout-handle-size: 5px;
+    --vaadin-split-layout-splitter-target-size: 5px;
+  }
+
+  :host([theme~='minimal']) > [part='splitter'] > [part='handle'] {
+    opacity: 0;
+  }
+
+  :host([theme~='minimal']) > [part='splitter']:is(:hover, :active) > [part='handle'],
+  :host([theme~='minimal'][focus-ring]) > [part='splitter'] > [part='handle'] {
+    opacity: 1;
+  }
+
+  /* Hover style */
+  @media (any-hover: hover) {
+    [part='splitter']:hover [part='handle'] {
+      background-color: var(--lumo-contrast-40pct);
+    }
+  }
+}

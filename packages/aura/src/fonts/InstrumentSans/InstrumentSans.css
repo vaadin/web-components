@@ -1,0 +1,13 @@
+/*
+Copyright 2022 The Instrument Sans Project Authors (https://github.com/Instrument/instrument-sans)
+
+This Font Software is licensed under the SIL Open Font License, Version 1.1.
+This license is included in the LICENSE.txt file, and is also available with a FAQ at: https://openfontlicense.org
+*/
+@font-face {
+  font-family: 'Instrument Sans';
+  src: url(./InstrumentSans.woff2) format('woff2');
+  font-display: swap;
+  font-style: normal;
+  font-weight: 400 700;
+}

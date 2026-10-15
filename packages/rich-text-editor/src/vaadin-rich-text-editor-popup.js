@@ -1,0 +1,183 @@
+/**
+ * @license
+ * Copyright (c) 2000 - 2026 Vaadin Ltd.
+ *
+ * This program is available under Vaadin Commercial License and Service Terms.
+ *
+ * See https://vaadin.com/commercial-license-and-service-terms for the full
+ * license.
+ */
+import { css, html, LitElement, render } from 'lit';
+import { defineCustomElement } from '@vaadin/component-base/src/define.js';
+import { DirMixin } from '@vaadin/component-base/src/dir-mixin.js';
+import { PolylitMixin } from '@vaadin/component-base/src/polylit-mixin.js';
+import { OverlayMixin } from '@vaadin/overlay/src/vaadin-overlay-mixin.js';
+import { PositionMixin } from '@vaadin/overlay/src/vaadin-overlay-position-mixin.js';
+import { LumoInjectionMixin } from '@vaadin/vaadin-themable-mixin/lumo-injection-mixin.js';
+import { ThemableMixin } from '@vaadin/vaadin-themable-mixin/vaadin-themable-mixin.js';
+import { richTextEditorPopupOverlayStyles } from './styles/vaadin-rich-text-editor-popup-overlay-base-styles.js';
+
+/**
+ * An element used internally by `<vaadin-rich-text-editor>`. Not intended to be used separately.
+ *
+ * @customElement vaadin-rich-text-editor-popup
+ * @extends HTMLElement
+ * @private
+ */
+class RichTextEditorPopup extends PolylitMixin(LitElement) {
+  static get is() {
+    return 'vaadin-rich-text-editor-popup';
+  }
+
+  static get styles() {
+    return css`
+      :host([opened]),
+      :host([opening]),
+      :host([closing]) {
+        display: block !important;
+        position: fixed;
+      }
+
+      :host,
+      :host([hidden]) {
+        display: none !important;
+      }
+    `;
+  }
+
+  static get properties() {
+    return {
+      target: {
+        type: Object,
+      },
+
+      opened: {
+        type: Boolean,
+        reflectToAttribute: true,
+        notify: true,
+      },
+
+      colors: {
+        type: Array,
+      },
+    };
+  }
+
+  static get observers() {
+    return ['__openedOrTargetChanged(opened, target)', '__colorsChanged(colors)'];
+  }
+
+  /** @protected */
+  render() {
+    return html`
+      <vaadin-rich-text-editor-popup-overlay
+        id="overlay"
+        .owner="${this}"
+        .opened="${this.opened}"
+        .positionTarget="${this.target}"
+        no-vertical-overlap
+        horizontal-align="start"
+        vertical-align="top"
+        focus-trap
+        exportparts="overlay, content"
+        @opened-changed="${this._onOpenedChanged}"
+        @vaadin-overlay-escape-press="${this._onOverlayEscapePress}"
+      >
+        <slot></slot>
+      </vaadin-rich-text-editor-popup-overlay>
+    `;
+  }
+
+  /** @private */
+  _onOpenedChanged(event) {
+    this.opened = event.detail.value;
+  }
+
+  /** @private */
+  _onOverlayEscapePress() {
+    this.target.focus();
+  }
+
+  /** @private */
+  _onColorClick(e) {
+    const { color } = e.target.dataset;
+    this.dispatchEvent(new CustomEvent('color-selected', { detail: { color } }));
+  }
+
+  /** @private */
+  __colorsChanged(colors) {
+    render(
+      html`
+        ${colors.map(
+          (color) => html`
+            <button data-color="${color}" style="--_btn-background: ${color}" @click="${this._onColorClick}"></button>
+          `,
+        )}
+      `,
+      this,
+      { host: this },
+    );
+  }
+
+  /** @private */
+  __openedOrTargetChanged(opened, target) {
+    if (target) {
+      target.setAttribute('aria-expanded', opened ? 'true' : 'false');
+    }
+  }
+}
+
+defineCustomElement(RichTextEditorPopup);
+
+export { RichTextEditorPopup };
+
+/**
+ * An element used internally by `<vaadin-rich-text-editor>`. Not intended to be used separately.
+ *
+ * @attr {string} theme - The theme variants to apply to the component.
+ * @customElement vaadin-rich-text-editor-popup-overlay
+ * @extends HTMLElement
+ * @private
+ */
+class RichTextEditorPopupOverlay extends PositionMixin(
+  OverlayMixin(DirMixin(ThemableMixin(PolylitMixin(LumoInjectionMixin(LitElement))))),
+) {
+  static get is() {
+    return 'vaadin-rich-text-editor-popup-overlay';
+  }
+
+  static get styles() {
+    return richTextEditorPopupOverlayStyles;
+  }
+
+  /** @protected */
+  render() {
+    return html`
+      <div part="overlay" id="overlay">
+        <div part="content" id="content">
+          <slot></slot>
+        </div>
+      </div>
+    `;
+  }
+
+  /**
+   * Override method from OverlayFocusMixin to use owner as content root
+   * @protected
+   * @override
+   */
+  get _contentRoot() {
+    return this.owner;
+  }
+
+  /**
+   * Override method from OverlayFocusMixin to use owner as focus root
+   * @protected
+   * @override
+   */
+  get _focusRoot() {
+    return this.owner;
+  }
+}
+
+defineCustomElement(RichTextEditorPopupOverlay);

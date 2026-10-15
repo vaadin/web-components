@@ -1,0 +1,29 @@
+/* The marker entrance animations rely on their fill modes to hold the end
+   state (the glow slide-in opens the mask, --vaadin-ai-field-marker-remove-mask
+   clears the field mask), so `animation: none` would freeze the initial
+   frames instead. Zero the durations and delays to jump straight to the
+   settled end state. */
+vaadin-ai-field-marker::before,
+vaadin-ai-field-marker .badge,
+:has(> vaadin-ai-field-marker)::part(input-field),
+:has(> vaadin-ai-field-marker)::part(input-fields),
+:has(> vaadin-ai-field-marker)::part(group-field) {
+  animation-duration: 0s !important;
+  animation-delay: 0s !important;
+  transition: none !important;
+}
+
+/* Freeze the infinite "AI is working" shimmer halfway through a slide so the
+   dimmed band shows at a deterministic position in the middle of the field. */
+[ai-working] {
+  animation-delay: -0.5s !important;
+  animation-play-state: paused !important;
+}
+
+/* Disable the badge tooltip and popover overlay animations. */
+vaadin-tooltip[opening]::part(overlay),
+vaadin-tooltip[closing]::part(overlay),
+vaadin-popover[opening]::part(overlay),
+vaadin-popover[closing]::part(overlay) {
+  animation: none !important;
+}

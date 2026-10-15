@@ -1,0 +1,372 @@
+import { expect } from '@vaadin/chai-plugins';
+import {
+  esc,
+  fixtureSync,
+  makeSoloTouchEvent,
+  mousedown,
+  nextFrame,
+  nextRender,
+  nextResize,
+  oneEvent,
+} from '@vaadin/testing-helpers';
+import sinon from 'sinon';
+import './not-animated-styles.css';
+import '../src/vaadin-app-layout.js';
+import '../src/vaadin-drawer-toggle.js';
+
+describe('vaadin-app-layout', () => {
+  let layout;
+
+  describe('custom element definition', () => {
+    let tagName;
+
+    beforeEach(() => {
+      layout = fixtureSync('<vaadin-app-layout></vaadin-app-layout>');
+      tagName = layout.tagName.toLowerCase();
+    });
+
+    it('should be defined in custom element registry', () => {
+      expect(customElements.get(tagName)).to.be.ok;
+    });
+
+    it('should have a valid static "is" getter', () => {
+      expect(customElements.get(tagName).is).to.equal(tagName);
+    });
+  });
+
+  describe('primarySection', () => {
+    beforeEach(() => {
+      layout = fixtureSync('<vaadin-app-layout></vaadin-app-layout>');
+    });
+
+    it('should be set to navbar by default', () => {
+      expect(layout.primarySection).to.equal('navbar');
+    });
+
+    it('should reflect to primary-section attribute', () => {
+      expect(layout.getAttribute('primary-section')).to.equal('navbar');
+    });
+
+    it('should fire "primary-section-changed" event when property changes', () => {
+      const spy = sinon.spy();
+      layout.addEventListener('primary-section-changed', spy);
+      layout.primarySection = 'drawer';
+      expect(spy.calledOnce).to.be.true;
+    });
+
+    it('should fallback to navbar if invalid "primarySection" is set', () => {
+      layout.primarySection = 'foobar';
+      expect(layout.primarySection).to.equal('navbar');
+    });
+  });
+
+  describe('drawer', () => {
+    let drawer, backdrop, toggle;
+
+    async function fixtureLayout(layoutMode) {
+      const overlayMode = String(layoutMode === 'mobile');
+
+      layout = fixtureSync(`
+        <vaadin-app-layout style="--vaadin-app-layout-drawer-overlay: ${overlayMode}; --vaadin-app-layout-transition-duration: 0s;">
+          <vaadin-drawer-toggle id="toggle" slot="navbar"></vaadin-drawer-toggle>
+          <section slot="drawer">
+            <p>Item 1</p>
+            <p>Item 2</p>
+            <p>Item 3</p>
+          </section>
+          <main>Page content</main>
+        </vaadin-app-layout>
+      `);
+      await nextRender();
+      toggle = layout.querySelector('#toggle');
+      drawer = layout.shadowRoot.querySelector('[part=drawer]');
+      backdrop = layout.shadowRoot.querySelector('[part=backdrop]');
+      // Wait for the initial resize observer callback
+      await nextResize(layout);
+      await nextFrame();
+    }
+
+    describe('desktop layout', () => {
+      beforeEach(async () => {
+        await fixtureLayout('desktop');
+      });
+
+      it('should be opened by default', () => {
+        expect(layout.drawerOpened).to.be.true;
+      });
+
+      it('should have the CSS visibility set to visible by default', () => {
+        expect(getComputedStyle(drawer).visibility).to.equal('visible');
+      });
+
+      it('should toggle the CSS visibility on drawerOpened property toggle', () => {
+        layout.drawerOpened = false;
+        expect(getComputedStyle(drawer).visibility).to.equal('hidden');
+        layout.drawerOpened = true;
+        expect(getComputedStyle(drawer).visibility).to.equal('visible');
+      });
+
+      it('should reflect drawerOpened property to the attribute', () => {
+        layout.drawerOpened = false;
+        expect(layout.hasAttribute('drawer-opened')).to.be.false;
+        layout.drawerOpened = true;
+        expect(layout.hasAttribute('drawer-opened')).to.be.true;
+      });
+
+      it('should toggle the drawer on toggle click', () => {
+        toggle.click();
+        expect(layout.drawerOpened).to.be.false;
+        toggle.click();
+        expect(layout.drawerOpened).to.be.true;
+      });
+
+      it('should fire "drawer-opened-changed" event on drawerOpened property toggle', () => {
+        const spy = sinon.spy();
+        layout.addEventListener('drawer-opened-changed', spy);
+        layout.drawerOpened = false;
+        expect(spy.calledOnce).to.be.true;
+        layout.drawerOpened = true;
+        expect(spy.calledTwice).to.be.true;
+      });
+
+      it('should not close the drawer on navigation event', () => {
+        window.dispatchEvent(new CustomEvent('vaadin-router-location-changed'));
+        expect(layout.drawerOpened).to.be.true;
+      });
+
+      it('should not close the drawer on Escape press', () => {
+        esc(drawer);
+        expect(layout.drawerOpened).to.be.true;
+      });
+
+      it('should not close the drawer on global Escape press', () => {
+        esc(document.body);
+        expect(layout.drawerOpened).to.be.true;
+      });
+
+      it('should set aria-expanded on the toggle to true by default', () => {
+        expect(toggle.getAttribute('aria-expanded')).to.equal('true');
+        layout.drawerOpened = true;
+        expect(getComputedStyle(drawer).visibility).to.equal('visible');
+      });
+
+      it('should update aria-expanded on drawerOpened property change', () => {
+        layout.drawerOpened = false;
+        expect(toggle.getAttribute('aria-expanded')).to.equal('false');
+        layout.drawerOpened = true;
+        expect(toggle.getAttribute('aria-expanded')).to.equal('true');
+      });
+
+      it('should use the drawer width as offset width', async () => {
+        fixtureSync(`
+          <style>
+            vaadin-app-layout::part(drawer) {
+              width: 100px;
+            }
+          </style>
+        `);
+
+        await nextRender();
+        const { width } = layout.$.drawer.getBoundingClientRect();
+
+        expect(width).to.be.equal(100);
+      });
+    });
+
+    describe('mobile layout', () => {
+      beforeEach(async () => {
+        await fixtureLayout('mobile');
+      });
+
+      it('should be closed by default', () => {
+        expect(layout.drawerOpened).to.be.false;
+      });
+
+      it('should have the CSS visibility set to hidden by default', () => {
+        expect(getComputedStyle(drawer).visibility).to.equal('hidden');
+      });
+
+      it('should toggle the CSS visibility on drawerOpened property toggle', () => {
+        layout.drawerOpened = true;
+        expect(getComputedStyle(drawer).visibility).to.equal('visible');
+        layout.drawerOpened = false;
+        expect(getComputedStyle(drawer).visibility).to.equal('hidden');
+      });
+
+      it('should not change tabindex attribute on consecutive drawer open/close', async () => {
+        const spy = sinon.spy();
+        new MutationObserver(spy).observe(drawer, { attributes: true, attributeFilter: ['tabindex'] });
+        layout.drawerOpened = true;
+        layout.drawerOpened = false;
+        await nextFrame();
+        expect(spy.called).to.be.false;
+      });
+
+      it('should move focus to the drawer when opening the drawer', async () => {
+        toggle.focus();
+        layout.drawerOpened = true;
+        await nextFrame();
+        expect(layout.shadowRoot.activeElement).to.equal(drawer);
+      });
+
+      it('should move focus to the drawer after the opening animation completes', async () => {
+        layout.style.setProperty('--vaadin-app-layout-transition-duration', '100ms');
+        toggle.focus();
+        layout.drawerOpened = true;
+        await nextFrame();
+        expect(document.activeElement).to.equal(toggle);
+        await oneEvent(drawer, 'transitionend');
+        expect(layout.shadowRoot.activeElement).to.equal(drawer);
+      });
+
+      it('should update aria-label attribute on the drawer on i18n.drawer property change', () => {
+        layout.i18n = { ...layout.i18n, drawer: 'New Value' };
+        expect(drawer.getAttribute('aria-label')).to.equal('New Value');
+      });
+
+      describe('opened', () => {
+        beforeEach(async () => {
+          layout.drawerOpened = true;
+          await nextFrame();
+        });
+
+        it('should close the drawer on Escape press', () => {
+          esc(drawer);
+          expect(layout.drawerOpened).to.be.false;
+        });
+
+        it('should close the drawer on global Escape press', () => {
+          esc(document.body);
+          expect(layout.drawerOpened).to.be.false;
+        });
+
+        it('should close the drawer on backdrop click', () => {
+          backdrop.click();
+          expect(layout.drawerOpened).to.be.false;
+        });
+
+        it('should close the drawer on backdrop touchend', () => {
+          makeSoloTouchEvent('touchend', null, backdrop);
+          expect(layout.drawerOpened).to.be.false;
+        });
+
+        it('should prevent touchend event on backdrop', () => {
+          const event = makeSoloTouchEvent('touchend', null, backdrop);
+          expect(event.defaultPrevented).to.be.true;
+        });
+
+        it('should not make the backdrop hit-testable after touchend when not standalone', () => {
+          makeSoloTouchEvent('touchend', null, backdrop);
+          expect(backdrop.style.pointerEvents).to.equal('');
+        });
+
+        // The backdrop is kept hit-testable for a while to catch the ghost click.
+        describe('standalone (iOS home screen)', () => {
+          let standaloneDescriptor, clock;
+
+          beforeEach(() => {
+            standaloneDescriptor = Object.getOwnPropertyDescriptor(navigator, 'standalone');
+            Object.defineProperty(navigator, 'standalone', { configurable: true, value: true });
+            clock = sinon.useFakeTimers();
+          });
+
+          afterEach(() => {
+            clock.restore();
+            if (standaloneDescriptor) {
+              Object.defineProperty(navigator, 'standalone', standaloneDescriptor);
+            } else {
+              delete navigator.standalone;
+            }
+          });
+
+          it('should keep the backdrop hit-testable after touchend', () => {
+            makeSoloTouchEvent('touchend', null, backdrop);
+            expect(backdrop.style.pointerEvents).to.equal('auto');
+          });
+
+          it('should stop keeping the backdrop hit-testable after the timeout', () => {
+            makeSoloTouchEvent('touchend', null, backdrop);
+            clock.tick(500);
+            expect(backdrop.style.pointerEvents).to.equal('');
+          });
+
+          it('should stop keeping the backdrop hit-testable after a click', () => {
+            makeSoloTouchEvent('touchend', null, backdrop);
+            backdrop.click();
+            expect(backdrop.style.pointerEvents).to.equal('');
+          });
+        });
+
+        it('should close the drawer when calling helper method', () => {
+          layout.constructor.dispatchCloseOverlayDrawerEvent();
+          expect(layout.drawerOpened).to.be.false;
+        });
+
+        it('should close the drawer when dispatching custom event', () => {
+          window.dispatchEvent(new CustomEvent('close-overlay-drawer'));
+          expect(layout.drawerOpened).to.be.false;
+        });
+
+        it('should not react to the custom event after being disconnected', () => {
+          layout.remove();
+          window.dispatchEvent(new CustomEvent('close-overlay-drawer'));
+          expect(layout.drawerOpened).to.be.true;
+        });
+
+        it('should close the drawer on navigation event', () => {
+          window.dispatchEvent(new CustomEvent('vaadin-router-location-changed'));
+          expect(layout.drawerOpened).to.be.false;
+        });
+
+        it('should move focus to the drawer toggle when closing the drawer', async () => {
+          layout.drawerOpened = false;
+          await nextFrame();
+          expect(document.activeElement).to.equal(toggle);
+        });
+
+        it('should move focus to the drawer toggle after the closing animation completes', async () => {
+          layout.style.setProperty('--vaadin-app-layout-transition-duration', '100ms');
+          layout.drawerOpened = false;
+          await nextFrame();
+          expect(layout.shadowRoot.activeElement).to.equal(drawer);
+          await oneEvent(drawer, 'transitionend');
+          expect(document.activeElement).to.equal(toggle);
+        });
+
+        it('should not call focus() on the drawer toggle on consecutive drawer close/open', async () => {
+          const spy = sinon.spy(toggle, 'focus');
+          layout.drawerOpened = false;
+          layout.drawerOpened = true;
+          await nextFrame();
+          expect(spy.called).to.be.false;
+        });
+
+        it('should focus the drawer toggle with focusVisible: false on closing with mouse', async () => {
+          const spy = sinon.spy(toggle, 'focus');
+          mousedown(document.body);
+          layout.drawerOpened = false;
+          await nextFrame();
+          expect(spy.firstCall.args[0]).to.eql({ focusVisible: false });
+        });
+
+        it('should focus the drawer toggle with focusVisible: true on closing with keyboard', async () => {
+          const spy = sinon.spy(toggle, 'focus');
+          esc(drawer);
+          await nextFrame();
+          expect(spy.firstCall.args[0]).to.eql({ focusVisible: true });
+        });
+
+        it('should remove drawer tabindex when it resizes from the overlay mode', async () => {
+          expect(drawer.hasAttribute('tabindex')).to.be.true;
+
+          // Force it to desktop layout
+          layout.style.setProperty('--vaadin-app-layout-drawer-overlay', 'false');
+          layout.__setOverlayMode(false);
+          await nextRender();
+
+          expect(drawer.hasAttribute('tabindex')).to.be.false;
+        });
+      });
+    });
+  });
+});

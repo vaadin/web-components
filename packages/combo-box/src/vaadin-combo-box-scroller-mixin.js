@@ -1,0 +1,452 @@
+/**
+ * @license
+ * Copyright (c) 2015 - 2026 Vaadin Ltd.
+ * This program is available under Apache License Version 2.0, available at https://vaadin.com/license/
+ */
+import { setOrRemoveAttribute } from '@vaadin/component-base/src/dom-utils.js';
+import { generateUniqueId } from '@vaadin/component-base/src/unique-id-utils.js';
+import { Virtualizer } from '@vaadin/component-base/src/virtualizer.js';
+import { ComboBoxPlaceholder } from './vaadin-combo-box-placeholder.js';
+
+export const ComboBoxScrollerMixin = (superClass) =>
+  class ComboBoxScrollerMixin extends superClass {
+    static get properties() {
+      return {
+        /**
+         * A full set of items to filter the visible options from.
+         * Set to an empty array when combo-box is not opened.
+         */
+        items: {
+          type: Array,
+          sync: true,
+          observer: '__itemsChanged',
+        },
+
+        /**
+         * Index of an item that has focus outline and is scrolled into view.
+         * The actual focus still remains in the input field.
+         */
+        focusedIndex: {
+          type: Number,
+          sync: true,
+          observer: '__focusedIndexChanged',
+        },
+
+        /**
+         * Set to true while combo-box fetches new page from the data provider.
+         */
+        loading: {
+          type: Boolean,
+          sync: true,
+          observer: '__loadingChanged',
+        },
+
+        /**
+         * Whether the combo-box is currently opened or not. If set to false,
+         * calling `scrollIntoView` does not have any effect.
+         */
+        opened: {
+          type: Boolean,
+          sync: true,
+          observer: '__openedChanged',
+        },
+
+        /**
+         * The selected item from the `items` array.
+         */
+        selectedItem: {
+          type: Object,
+          sync: true,
+          observer: '__selectedItemChanged',
+        },
+
+        /**
+         * A function used to generate CSS class names for dropdown
+         * items based on the item. The return value should be the
+         * generated class name as a string, or multiple class names
+         * separated by whitespace characters.
+         */
+        itemClassNameGenerator: {
+          type: Object,
+          observer: '__itemClassNameGeneratorChanged',
+        },
+
+        /**
+         * Reference to the owner (combo-box owner), used by the item elements.
+         */
+        owner: {
+          type: Object,
+        },
+
+        /**
+         * Function used to set a label for every combo-box item.
+         */
+        getItemLabel: {
+          type: Object,
+        },
+
+        /**
+         * Function used to render the content of every combo-box item.
+         */
+        renderer: {
+          type: Object,
+          sync: true,
+          observer: '__rendererChanged',
+        },
+
+        /**
+         * Used to propagate the `theme` attribute from the host element.
+         */
+        theme: {
+          type: String,
+        },
+      };
+    }
+
+    constructor() {
+      super();
+      this.__boundOnItemClick = this.__onItemClick.bind(this);
+    }
+
+    /** @private */
+    get _viewportTotalPaddingBottom() {
+      if (this._cachedViewportTotalPaddingBottom === undefined) {
+        const itemsStyle = window.getComputedStyle(this.$.selector);
+        this._cachedViewportTotalPaddingBottom = [itemsStyle.paddingBottom, itemsStyle.borderBottomWidth]
+          .map((v) => {
+            return parseInt(v, 10);
+          })
+          .reduce((sum, v) => {
+            return sum + v;
+          });
+      }
+
+      return this._cachedViewportTotalPaddingBottom;
+    }
+
+    /** @protected */
+    ready() {
+      super.ready();
+
+      this.setAttribute('role', 'listbox');
+
+      // Ensure every instance has unique ID
+      this.id = `${this.localName}-${generateUniqueId()}`;
+
+      // Allow extensions to customize tag name for the items
+      this.__hostTagName = this.constructor.is.replace('-scroller', '');
+
+      this.addEventListener('click', (e) => e.stopPropagation());
+
+      this.__patchWheelOverScrolling();
+    }
+
+    /**
+     * Updates the virtualizer's size and items.
+     */
+    requestContentUpdate() {
+      if (!this.__virtualizer) {
+        return;
+      }
+
+      if (this.items) {
+        this.__virtualizer.size = this.items.length;
+      }
+
+      if (this.opened) {
+        this.__virtualizer.update();
+      }
+    }
+
+    /**
+     * Scrolls an item at given index into view. By default the item is made
+     * fully visible at the bottom of the viewport (the behavior wanted on
+     * Arrow Down key press). When `alignToCenter` is `true`, the item is placed
+     * in the middle of the viewport instead, as close to center as the list
+     * allows near its start and end.
+     * @param {number} index
+     * @param {boolean} [alignToCenter=false]
+     */
+    scrollIntoView(index, alignToCenter = false) {
+      if (!this.__virtualizer || !(this.opened && index >= 0)) {
+        return;
+      }
+
+      // If the target row is already fully visible, leave the scroll untouched.
+      // Re-running scrollToIndex would snap an unaligned scrollTop to a row
+      // boundary — a visible jump when only the focus ring should move (arrow
+      // navigation, clicks). Centering always repositions, so it skips this.
+      const renderedTarget = [...this.children].find((el) => !el.hidden && el.index === index);
+      if (!alignToCenter && renderedTarget) {
+        const targetRect = renderedTarget.getBoundingClientRect();
+        const scrollerRect = this.getBoundingClientRect();
+        if (
+          targetRect.top >= scrollerRect.top &&
+          targetRect.bottom + this._viewportTotalPaddingBottom <= scrollerRect.bottom
+        ) {
+          return;
+        }
+      }
+
+      // When centering, scrolling straight to the target index renders it (the
+      // native `scrollIntoView({ block: 'center' })` below then centers it), so
+      // no index recalculation is needed.
+      let targetIndex = index;
+
+      if (!alignToCenter) {
+        const visibleItemsCount = this._visibleItemsCount();
+        if (index > this.__virtualizer.lastVisibleIndex - 1) {
+          // Index is below the bottom, scrolling down. Make the item appear at the bottom.
+          // First scroll to target (will be at the top of the scroller) to make sure it's rendered.
+          this.__virtualizer.scrollToIndex(index);
+          // Then calculate the index for the following scroll (to get the target to bottom of the scroller).
+          targetIndex = index - visibleItemsCount + 1;
+        } else if (index > this.__virtualizer.firstVisibleIndex) {
+          // The item is already visible, scrolling is unnecessary per se. But we need to trigger iron-list to set
+          // the correct scrollTop on the scrollTarget. Scrolling to firstVisibleIndex.
+          targetIndex = this.__virtualizer.firstVisibleIndex;
+        }
+      }
+      this.__virtualizer.scrollToIndex(Math.max(0, targetIndex));
+
+      // Flush so the rect-based correction below runs on settled positions.
+      this.__virtualizer.flush();
+
+      const target = [...this.children].find((el) => !el.hidden && el.index === index);
+      if (!target) {
+        return;
+      }
+      if (alignToCenter) {
+        // Center the now-rendered row in the viewport. The browser clamps near
+        // the list start and end, placing the row as close to center as the
+        // list allows.
+        target.scrollIntoView({ block: 'center' });
+        return;
+      }
+      const targetRect = target.getBoundingClientRect();
+      const scrollerRect = this.getBoundingClientRect();
+      const targetBottom = targetRect.bottom + this._viewportTotalPaddingBottom;
+      if (targetBottom > scrollerRect.bottom) {
+        this.scrollTop += targetBottom - scrollerRect.bottom;
+      } else if (targetRect.top < scrollerRect.top) {
+        this.scrollTop -= scrollerRect.top - targetRect.top;
+      }
+    }
+
+    /**
+     * @param {string | object} item
+     * @param {string | object} selectedItem
+     * @return {boolean}
+     * @protected
+     */
+    _isItemSelected(item, selectedItem) {
+      if (item instanceof ComboBoxPlaceholder) {
+        return false;
+      }
+
+      return this.owner._isSameItem(item, selectedItem);
+    }
+
+    /** @private */
+    __initVirtualizer() {
+      this.__virtualizer = new Virtualizer({
+        createElements: this.__createElements.bind(this),
+        updateElement: this._updateElement.bind(this),
+        elementsContainer: this,
+        scrollTarget: this,
+        scrollContainer: this.$.selector,
+        reorderElements: true,
+        // Combo-box items have a CSS-defined minimum height, so the virtualizer's
+        // height placeholder logic can be disabled. This helps save reflows which
+        // might otherwise be triggered by this logic because it reads the row height
+        // right after updating the rows' content.
+        __disableHeightPlaceholder: true,
+      });
+    }
+
+    /** @private */
+    __itemsChanged(items) {
+      if (items && this.__virtualizer) {
+        this.requestContentUpdate();
+      }
+    }
+
+    /** @private */
+    __loadingChanged() {
+      this.requestContentUpdate();
+    }
+
+    /** @private */
+    __openedChanged(opened) {
+      if (opened) {
+        if (!this.__virtualizer) {
+          this.__initVirtualizer();
+        }
+
+        this.requestContentUpdate();
+
+        // The focused index can change while closed, when scrolling to it is skipped
+        if (this.focusedIndex >= 0 && !this.loading) {
+          this.scrollIntoView(this.focusedIndex);
+        }
+        return;
+      }
+
+      // Reset the DOM scrollTop and the virtualizer adapter's
+      // `_scrollPosition` cache. Without the cache reset, the adapter's
+      // ResizeObserver restores the prior offset when the overlay becomes
+      // visible again, leaving the next open stuck at the previous offset
+      // (or blank with dataProvider) until the user scrolls. The
+      // virtualizer's own `scrollToIndex` can't help — by the time this
+      // observer runs, `offsetHeight` is already 0 and its scroll API is
+      // a no-op. Guarded on `_scrollPosition > 0` so the reset is skipped
+      // when there is nothing to reset (e.g. the initial observer run
+      // before the dropdown has ever been opened); unconditionally
+      // touching `scrollTop` on connect can affect the outer document's
+      // scroll position (see the combo-box re-layout integration test).
+      const adapter = this.__virtualizer && this.__virtualizer.__adapter;
+      if (adapter && adapter._scrollPosition > 0) {
+        this.scrollTop = 0;
+        adapter._scrollPosition = 0;
+      }
+    }
+
+    /** @private */
+    __selectedItemChanged() {
+      this.requestContentUpdate();
+    }
+
+    /** @private */
+    __itemClassNameGeneratorChanged(generator, oldGenerator) {
+      if (generator || oldGenerator) {
+        this.requestContentUpdate();
+      }
+    }
+
+    /** @private */
+    __focusedIndexChanged(index, oldIndex) {
+      if (index !== oldIndex) {
+        this.requestContentUpdate();
+      }
+
+      // Do not jump back to the previously focused item while loading
+      // when requesting next page from the data provider on scroll.
+      if (index >= 0 && !this.loading) {
+        this.scrollIntoView(index);
+      }
+    }
+
+    /** @private */
+    __rendererChanged(renderer, oldRenderer) {
+      if (renderer || oldRenderer) {
+        this.requestContentUpdate();
+      }
+    }
+
+    /** @private */
+    __createElements(count) {
+      return [...Array(count)].map(() => {
+        const item = document.createElement(`${this.__hostTagName}-item`);
+        item.addEventListener('click', this.__boundOnItemClick);
+        // Negative tabindex prevents the item content from being focused.
+        item.tabIndex = '-1';
+        item.style.width = '100%';
+        return item;
+      });
+    }
+
+    /**
+     * @param {HTMLElement} el
+     * @param {number} index
+     * @protected
+     */
+    _updateElement(el, index) {
+      const item = this.items[index];
+      const focusedIndex = this.focusedIndex;
+      const selected = this._isItemSelected(item, this.selectedItem);
+
+      el.setProperties({
+        item,
+        index,
+        label: this.getItemLabel(item),
+        selected,
+        renderer: this.renderer,
+        focused: !this.loading && focusedIndex === index,
+      });
+
+      if (typeof this.itemClassNameGenerator === 'function') {
+        el.className = this.itemClassNameGenerator(item);
+      } else if (el.className !== '') {
+        el.className = '';
+      }
+
+      el.id = `${this.__hostTagName}-item-${index}`;
+      el.setAttribute('role', index !== undefined ? 'option' : false);
+      el.setAttribute('aria-selected', selected.toString());
+      el.setAttribute('aria-posinset', index + 1);
+      el.setAttribute('aria-setsize', this.items.length);
+
+      setOrRemoveAttribute(el, 'theme', this.theme);
+
+      if (item instanceof ComboBoxPlaceholder) {
+        this.__requestItemByIndex(index);
+      }
+    }
+
+    /** @private */
+    __onItemClick(e) {
+      this.dispatchEvent(new CustomEvent('selection-changed', { detail: { item: e.currentTarget.item } }));
+    }
+
+    /**
+     * We want to prevent the kinetic scrolling energy from being transferred from the overlay contents over to the parent.
+     * Further improvement ideas: after the contents have been scrolled to the top or bottom and scrolling has stopped, it could allow
+     * scrolling the parent similarly to touch scrolling.
+     * @private
+     */
+    __patchWheelOverScrolling() {
+      this.$.selector.addEventListener('wheel', (e) => {
+        const scrolledToTop = this.scrollTop === 0;
+        const scrolledToBottom = this.scrollHeight - this.scrollTop - this.clientHeight <= 1;
+        if (scrolledToTop && e.deltaY < 0) {
+          e.preventDefault();
+        } else if (scrolledToBottom && e.deltaY > 0) {
+          e.preventDefault();
+        }
+      });
+    }
+
+    /**
+     * Dispatches an `index-requested` event for the given index to notify
+     * the data provider that it should start loading the page containing the requested index.
+     *
+     * The event is dispatched asynchronously to prevent an immediate page request and therefore
+     * a possible infinite recursion in case the data provider implements page request cancelation logic
+     * by invoking data provider page callbacks with an empty array.
+     * The infinite recursion may occur otherwise since invoking a data provider page callback with an empty array
+     * triggers a synchronous scroller update and, if the callback corresponds to the currently visible page,
+     * the scroller will synchronously request the page again which may lead to looping in the end.
+     * That was the case for the Flow counterpart:
+     * https://github.com/vaadin/flow-components/issues/3553#issuecomment-1239344828
+     * @private
+     */
+    __requestItemByIndex(index) {
+      requestAnimationFrame(() => {
+        this.dispatchEvent(
+          new CustomEvent('index-requested', {
+            detail: {
+              index,
+            },
+          }),
+        );
+      });
+    }
+
+    /** @private */
+    _visibleItemsCount() {
+      // Ensure items are positioned
+      this.__virtualizer.scrollToIndex(this.__virtualizer.firstVisibleIndex);
+      const hasItems = this.__virtualizer.size > 0;
+      return hasItems ? this.__virtualizer.lastVisibleIndex - this.__virtualizer.firstVisibleIndex + 1 : 0;
+    }
+  };

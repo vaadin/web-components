@@ -1,0 +1,76 @@
+/**
+ * @license
+ * Copyright (c) 2021 - 2026 Vaadin Ltd.
+ * This program is available under Apache License Version 2.0, available at https://vaadin.com/license/
+ */
+import type { Constructor } from '@open-wc/dedupe-mixin';
+import type { FocusMixinClass } from '@vaadin/a11y-base/src/focus-mixin.js';
+
+export interface MessageAttachment {
+  name?: string;
+  url?: string;
+  type?: string;
+}
+
+/**
+ * Fired when an attachment is clicked.
+ */
+export type MessageAttachmentClickEvent = CustomEvent<{ attachment: MessageAttachment }>;
+
+export declare function MessageMixin<T extends Constructor<HTMLElement>>(
+  base: T,
+): Constructor<FocusMixinClass> & Constructor<MessageMixinClass> & T;
+
+export declare class MessageMixinClass {
+  /**
+   * Time of sending the message. It is rendered as-is to the part='time' slot,
+   * so the formatting is up to you.
+   */
+  time: string | null | undefined;
+
+  /**
+   * The name of the user posting the message.
+   * It will be placed in the name part to indicate who has sent the message.
+   * It is also used as a tooltip for the avatar.
+   * Example: `message.userName = "Jessica Jacobs";`
+   * @attr {string} user-name
+   */
+  userName: string | null | undefined;
+
+  /**
+   * The abbreviation of the user.
+   * The abbreviation will be passed on to avatar of the message.
+   * If the user does not have an avatar picture set with `userImg`, `userAbbr` will be shown in the avatar.
+   * Example: `message.userAbbr = "JJ";`
+   * @attr {string} user-abbr
+   */
+  userAbbr: string | null | undefined;
+
+  /**
+   * An URL for a user image.
+   * The image will be used in the avatar component to show who has sent the message.
+   * Example: `message.userImg = "/static/img/avatar.jpg";`
+   * @attr {string} user-img
+   */
+  userImg: string | null | undefined;
+
+  /**
+   * A color index to be used to render the color of the avatar.
+   * Also sets `--vaadin-message-user-color` custom CSS property.
+   *
+   * @attr {number} user-color-index
+   */
+  userColorIndex: number | null | undefined;
+
+  /**
+   * An array of attachment objects to display with the message.
+   * Each attachment object can have the following properties:
+   * - `name`: The name of the attachment file
+   * - `url`: The URL of the attachment
+   * - `type`: The MIME type of the attachment (e.g., 'image/png', 'application/pdf')
+   *
+   * Image attachments (type starting with "image/") show a thumbnail preview,
+   * while other attachments show a document icon with the file name.
+   */
+  attachments: MessageAttachment[] | null | undefined;
+}

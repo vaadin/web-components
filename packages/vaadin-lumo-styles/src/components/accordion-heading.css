@@ -1,0 +1,27 @@
+/**
+ * @license
+ * Copyright (c) 2017 - 2026 Vaadin Ltd.
+ * This program is available under Apache License Version 2.0, available at https://vaadin.com/license/
+ */
+@media lumo_components_accordion-heading {
+  :host {
+    display: block;
+    padding: 0;
+  }
+
+  button {
+    justify-content: inherit;
+    width: 100%;
+    margin: 0;
+    text-align: inherit;
+  }
+
+  [part='content'] {
+    padding: var(--lumo-space-s) 0;
+  }
+
+  :host([theme~='filled']) {
+    padding-top: 0;
+    padding-bottom: 0;
+  }
+}

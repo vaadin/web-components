@@ -1,0 +1,56 @@
+<!doctype html>
+<html lang="en">
+  <head>
+    <meta charset="UTF-8" />
+    <meta http-equiv="X-UA-Compatible" content="IE=edge" />
+    <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+    <title>Messages</title>
+    <script type="module" src="./common.js"></script>
+
+    <script type="module">
+      import '@vaadin/message-input';
+      import '@vaadin/message-list';
+      import '@vaadin/tooltip';
+
+      const list = document.querySelector('vaadin-message-list');
+      list.items = [
+        {
+          text: 'Nature does not hurry, yet everything gets accomplished.',
+          time: 'yesterday',
+          userName: 'Matt Mambo',
+          userColorIndex: 1,
+        },
+        {
+          text: 'Using your talent, hobby or profession in a way that makes you contribute with something good to this world is truly the way to go.',
+          time: 'right now',
+          userName: 'Linsey Listy',
+          userColorIndex: 2,
+        },
+      ];
+
+      const input = document.querySelector('vaadin-message-input');
+      input.addEventListener('submit', (e) => {
+        const message = e.detail.value;
+        list.items = [
+          ...list.items,
+          {
+            text: message,
+            time: 'now',
+            userName: 'You',
+            userColorIndex: 0,
+          },
+        ];
+      });
+    </script>
+  </head>
+
+  <body>
+    <h2 class="heading">Default</h2>
+    <vaadin-message-list announce-messages></vaadin-message-list>
+    <vaadin-message-input>
+      <vaadin-tooltip slot="tooltip" text="Press Enter to send"></vaadin-tooltip>
+    </vaadin-message-input>
+    <h2 class="heading">Icon-Button Variant</h2>
+    <vaadin-message-input theme="icon-button"></vaadin-message-input>
+  </body>
+</html>

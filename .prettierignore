@@ -1,0 +1,4 @@
+packages/**/test/dom/__snapshots__/*.snap.js
+
+# ignore minified quill library
+packages/rich-text-editor/vendor/vaadin-quill.js

@@ -1,0 +1,57 @@
+---
+toc: true
+---
+
+<!doctype html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+  <meta name="description" content="{{ description or metadata.description }}" />
+  <title>{{ title or metadata.title }}</title>
+  <meta name="generator" content="{{ eleventy.generator }}" />
+  <link rel="shortcut icon" href="/favicon.ico" type="image/x-icon" />
+  <link href="/css/index.css" rel="stylesheet" />
+</head>
+
+<body>
+  <div class="app-layout">
+    {% include "partials/header.njk" %}
+
+    <div class="app-layout__wrapper">
+      {% include "partials/navigation.njk" %}
+
+      <div class="app-layout__content">
+        <div class="page">
+          <main class="page__main">
+            <article>
+              <div class="page__header">
+              <h1 class="page__title">
+                {{ title }}
+              </h1>
+
+              {% if toc %}
+                {% include "partials/actions.njk" %}
+              {% endif %}
+              </div>
+
+              <div class="article">
+                {{ content | safe }}
+              </div>
+            </article>
+          </main>
+
+          {% if toc %}
+            <div class="page__panel">
+              {% include 'partials/toc.njk' %}
+            </div>
+          {% endif %}
+        </div>
+      </div>
+    </div>
+  </div>
+
+  <script src="/js/copy-code.js"></script>
+  <script src="/js/copy-markdown.js"></script>
+</body>
+</html>

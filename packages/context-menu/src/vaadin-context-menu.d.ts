@@ -1,0 +1,346 @@
+/**
+ * @license
+ * Copyright (c) 2016 - 2026 Vaadin Ltd.
+ * This program is available under Apache License Version 2.0, available at https://vaadin.com/license/
+ */
+import type { ElementMixinClass } from '@vaadin/component-base/src/element-mixin.js';
+import type { ThemePropertyMixinClass } from '@vaadin/vaadin-themable-mixin/vaadin-theme-property-mixin.js';
+import type { ContextMenuMixinClass } from './vaadin-context-menu-mixin.js';
+import type { ContextMenuItem, ContextMenuItemData } from './vaadin-contextmenu-items-mixin.js';
+
+export { ContextMenuItem, ContextMenuItemData };
+
+export type ContextMenuPosition =
+  | 'bottom-end'
+  | 'bottom-start'
+  | 'bottom'
+  | 'end-bottom'
+  | 'end-top'
+  | 'end'
+  | 'start-bottom'
+  | 'start-top'
+  | 'start'
+  | 'top-end'
+  | 'top-start'
+  | 'top';
+
+export interface ContextMenuRendererContext {
+  target: HTMLElement;
+  detail?: { sourceEvent: Event };
+}
+
+export type ContextMenuRenderer = (
+  root: HTMLElement,
+  contextMenu: ContextMenu,
+  context: ContextMenuRendererContext,
+) => void;
+
+/**
+ * Fired when the `opened` property changes.
+ */
+export type ContextMenuOpenedChangedEvent = CustomEvent<{ value: boolean }>;
+
+/**
+ * Fired when an item is selected when the context menu is populated using the `items` API.
+ */
+export type ContextMenuItemSelectedEvent<TItem extends ContextMenuItemData = ContextMenuItemData> = CustomEvent<{
+  value: TItem;
+}>;
+
+/**
+ * Fired when the context menu is closed.
+ */
+export type ContextMenuClosedEvent = CustomEvent;
+
+export interface ContextMenuCustomEventMap<TItem extends ContextMenuItemData = ContextMenuItemData> {
+  'opened-changed': ContextMenuOpenedChangedEvent;
+
+  'item-selected': ContextMenuItemSelectedEvent<TItem>;
+
+  /**
+   * @deprecated This event is deprecated and will be removed in Vaadin 26. Use `closed` instead.
+   */
+  'close-all-menus': Event;
+
+  /**
+   * @deprecated This event is deprecated and will be removed in Vaadin 26. Use `closed` instead.
+   */
+  'items-outside-click': Event;
+
+  closed: ContextMenuClosedEvent;
+}
+
+export interface ContextMenuEventMap<TItem extends ContextMenuItemData = ContextMenuItemData>
+  extends HTMLElementEventMap, ContextMenuCustomEventMap<TItem> {}
+
+/**
+ * `<vaadin-context-menu>` is a Web Component for creating context menus.
+ *
+ * ### Items
+ *
+ * Items is a higher level convenience API for defining a (hierarchical) menu structure for the component.
+ * If a menu item has a non-empty `children` set, a sub-menu with the child items is opened
+ * next to the parent menu on mouseover, tap or a right arrow keypress.
+ *
+ * When an item is selected, `<vaadin-context-menu>` dispatches an "item-selected" event
+ * with the selected item as `event.detail.value` property.
+ * If item does not have `keepOpen` property the menu will be closed.
+ *
+ * ```javascript
+ * contextMenu.items = [
+ *   { text: 'Menu Item 1', theme: 'primary', className: 'first', children:
+ *     [
+ *       { text: 'Menu Item 1-1', checked: true, keepOpen: true },
+ *       { text: 'Menu Item 1-2' }
+ *     ]
+ *   },
+ *   { component: 'hr' },
+ *   { text: 'Menu Item 2', children:
+ *     [
+ *       { text: 'Menu Item 2-1' },
+ *       { text: 'Menu Item 2-2', disabled: true }
+ *     ]
+ *   },
+ *   { text: 'Menu Item 3', disabled: true, className: 'last' }
+ * ];
+ *
+ * contextMenu.addEventListener('item-selected', e => {
+ *   const item = e.detail.value;
+ *   console.log(`${item.text} selected`);
+ * });
+ * ```
+ *
+ * **NOTE:** when the `items` array is defined, the renderer cannot be used.
+ *
+ * #### Disabled menu items
+ *
+ * When disabled, menu items are rendered as "dimmed".
+ *
+ * By default, disabled items are not focusable and don't react to hover.
+ * As a result, they are hidden from assistive technologies, and it's not
+ * possible to show a tooltip to explain why they are disabled. This can
+ * be addressed by enabling the feature flag `accessibleDisabledMenuItems`,
+ * which makes disabled items focusable and hoverable, while still
+ * preventing them from being activated:
+ *
+ * ```js
+ * // Set before any context menu is attached to the DOM.
+ * window.Vaadin.featureFlags.accessibleDisabledMenuItems = true;
+ * ```
+ *
+ * #### Item tooltips
+ *
+ * Menu items can have tooltips that are shown on hover and keyboard
+ * focus. To enable them, add a slotted `<vaadin-tooltip>` element
+ * and set the `tooltip` property on each item that should have one:
+ *
+ * ```html
+ * <vaadin-context-menu>
+ *   <vaadin-tooltip slot="tooltip"></vaadin-tooltip>
+ * </vaadin-context-menu>
+ * ```
+ *
+ * ### Slotted list-box
+ *
+ * The content of the menu can also be populated by providing a custom
+ * `<vaadin-context-menu-list-box>` with the `overlay` slot:
+ *
+ * ```html
+ * <vaadin-context-menu>
+ *   <vaadin-context-menu-list-box slot="overlay">
+ *     <vaadin-context-menu-item>Edit</vaadin-context-menu-item>
+ *     <vaadin-context-menu-item>Delete</vaadin-context-menu-item>
+ *   </vaadin-context-menu-list-box>
+ * </vaadin-context-menu>
+ * ```
+ *
+ * **Note:** slotted list-box supports a single root-level menu only and
+ * cannot be combined with the `items` or `renderer` API.
+ *
+ * ### Rendering
+ *
+ * The content of the menu can be populated by using the renderer callback function.
+ *
+ * The renderer function provides `root`, `contextMenu`, `model` arguments when applicable.
+ * Generate DOM content by using `model` object properties if needed, append it to the `root`
+ * element and control the state of the host element by accessing `contextMenu`. Before generating
+ * new content, the renderer function should check if there is already content in `root` for reusing it.
+ *
+ * ```html
+ * <vaadin-context-menu id="contextMenu">
+ *  <p>This paragraph has a context menu.</p>
+ * </vaadin-context-menu>
+ * ```
+ * ```js
+ * const contextMenu = document.querySelector('#contextMenu');
+ * contextMenu.renderer = (root, contextMenu, context) => {
+ *   let listBox = root.firstElementChild;
+ *   if (!listBox) {
+ *     listBox = document.createElement('vaadin-list-box');
+ *     root.appendChild(listBox);
+ *   }
+ *
+ *   let item = listBox.querySelector('vaadin-item');
+ *   if (!item) {
+ *     item = document.createElement('vaadin-item');
+ *     listBox.appendChild(item);
+ *   }
+ *   item.textContent = 'Content of the selector: ' + context.target.textContent;
+ * };
+ * ```
+ *
+ * You can access the menu context inside the renderer using
+ * `context.target` and `context.detail`.
+ *
+ * Renderer is called on the opening of the context-menu and each time the related context is updated.
+ * DOM generated during the renderer call can be reused
+ * in the next renderer call and will be provided with the `root` argument.
+ * On first call it will be empty.
+ *
+ * ### `vaadin-contextmenu` Gesture Event
+ *
+ * `vaadin-contextmenu` is a gesture event (a custom event),
+ * which is dispatched after either `contextmenu` or long touch events.
+ * This enables support for both mouse and touch environments in a uniform way.
+ *
+ * `<vaadin-context-menu>` opens the menu overlay on the `vaadin-contextmenu`
+ * event by default.
+ *
+ * ### Menu Listener
+ *
+ * By default, the `<vaadin-context-menu>` element listens for the menu opening
+ * event on itself. In case if you do not want to wrap the target, you can listen for
+ * events on an element outside the `<vaadin-context-menu>` by setting the
+ * `listenOn` property:
+ *
+ * ```html
+ * <vaadin-context-menu id="contextMenu"></vaadin-context-menu>
+ *
+ * <div id="menuListener">The element that listens for the contextmenu event.</div>
+ * ```
+ * ```javascript
+ * const contextMenu = document.querySelector('#contextMenu');
+ * contextMenu.listenOn = document.querySelector('#menuListener');
+ * ```
+ *
+ * ### Filtering Menu Targets
+ *
+ * By default, the listener element and all its descendants open the context
+ * menu. You can filter the menu targets to a smaller set of elements inside
+ * the listener element by setting the `selector` property.
+ *
+ * In the following example, only the elements matching `.has-menu` will open the context menu:
+ *
+ * ```html
+ * <vaadin-context-menu selector=".has-menu">
+ *   <p class="has-menu">This paragraph opens the context menu</p>
+ *   <p>This paragraph does not open the context menu</p>
+ * </vaadin-context-menu>
+ * ```
+ *
+ * ### Menu Context
+ *
+ * You can use the following properties in the renderer function:
+ *
+ * - `target` is the menu opening event target, which is the element that
+ * the user has called the context menu for
+ * - `detail` is the menu opening event detail
+ *
+ * In the following example, the menu item text is composed with the contents
+ * of the element that opened the menu:
+ *
+ * ```html
+ * <vaadin-context-menu selector="li" id="contextMenu">
+ *   <ul>
+ *     <li>Foo</li>
+ *     <li>Bar</li>
+ *     <li>Baz</li>
+ *   </ul>
+ * </vaadin-context-menu>
+ * ```
+ * ```js
+ * const contextMenu = document.querySelector('#contextMenu');
+ * contextMenu.renderer = (root, contextMenu, context) => {
+ *   let listBox = root.firstElementChild;
+ *   if (!listBox) {
+ *     listBox = document.createElement('vaadin-list-box');
+ *     root.appendChild(listBox);
+ *   }
+ *
+ *   let item = listBox.querySelector('vaadin-item');
+ *   if (!item) {
+ *     item = document.createElement('vaadin-item');
+ *     listBox.appendChild(item);
+ *   }
+ *   item.textContent = 'The menu target: ' + context.target.textContent;
+ * };
+ * ```
+ *
+ * ### Styling
+ *
+ * The following shadow DOM parts are available for styling:
+ *
+ * Part name        | Description
+ * -----------------|-------------------------------------------
+ * `backdrop`       | Backdrop of the overlay
+ * `overlay`        | The overlay container
+ * `content`        | The overlay content
+ *
+ * ### Custom CSS Properties
+ *
+ * The following custom CSS properties are available for styling:
+ *
+ * Custom CSS property                   | Description
+ * --------------------------------------|-------------
+ * `--vaadin-context-menu-offset-top`    | Used as an offset when using `position` and the context menu is aligned vertically below the target
+ * `--vaadin-context-menu-offset-bottom` | Used as an offset when using `position` and the context menu is aligned vertically above the target
+ * `--vaadin-context-menu-offset-start`  | Used as an offset when using `position` and the context menu is aligned horizontally after the target
+ * `--vaadin-context-menu-offset-end`    | Used as an offset when using `position` and the context menu is aligned horizontally before the target
+ *
+ * See [Styling Components](https://vaadin.com/docs/latest/styling/styling-components) documentation.
+ *
+ * ### Related components
+ *
+ * In addition to `<vaadin-context-menu>` itself, the following components are themable:
+ *
+ * - [`<vaadin-context-menu-item>`](#/elements/vaadin-context-menu-item) - an item element.
+ * - [`<vaadin-context-menu-list-box>`](#/elements/vaadin-context-menu-list-box) - a list-box element.
+ *
+ * @fires {CustomEvent} opened-changed - Fired when the `opened` property changes.
+ * @fires {CustomEvent} item-selected - Fired when an item is selected when the context menu is populated using the `items` API.
+ * @fires {CustomEvent} closed - Fired when the context menu is closed.
+ * @fires {CustomEvent} close-all-menus - Fired when all menus should close, e.g., after pressing Tab or on submenu close. This event is deprecated and will be removed in Vaadin 26. Use `closed` instead.
+ * @fires {CustomEvent} items-outside-click - Fired when a click happens outside any open sub-menus. This event is deprecated and will be removed in Vaadin 26. Use `closed` instead.
+ */
+declare class ContextMenu<TItem extends ContextMenuItemData = ContextMenuItemData> extends HTMLElement {
+  /**
+   * Position of the overlay with respect to the target.
+   * Supported values: null, `top-start`, `top`, `top-end`,
+   * `bottom-start`, `bottom`, `bottom-end`, `start-top`,
+   * `start`, `start-bottom`, `end-top`, `end`, `end-bottom`.
+   */
+  position: ContextMenuPosition | null | undefined;
+
+  addEventListener<K extends keyof ContextMenuEventMap>(
+    type: K,
+    listener: (this: ContextMenu<TItem>, ev: ContextMenuEventMap<TItem>[K]) => void,
+    options?: AddEventListenerOptions | boolean,
+  ): void;
+
+  removeEventListener<K extends keyof ContextMenuEventMap>(
+    type: K,
+    listener: (this: ContextMenu<TItem>, ev: ContextMenuEventMap<TItem>[K]) => void,
+    options?: EventListenerOptions | boolean,
+  ): void;
+}
+
+interface ContextMenu<TItem extends ContextMenuItemData = ContextMenuItemData>
+  extends ContextMenuMixinClass<TItem>, ElementMixinClass, ThemePropertyMixinClass {}
+
+declare global {
+  interface HTMLElementTagNameMap {
+    'vaadin-context-menu': ContextMenu;
+  }
+}
+
+export { ContextMenu };

@@ -1,0 +1,61 @@
+import { expect } from '@vaadin/chai-plugins';
+import { fixtureSync, nextUpdate } from '@vaadin/testing-helpers';
+import '../../src/vaadin-message-input.js';
+import { resetUniqueId } from '@vaadin/component-base/src/unique-id-utils.js';
+
+describe('vaadin-message-input', () => {
+  let input;
+
+  beforeEach(() => {
+    resetUniqueId();
+  });
+
+  describe('host', () => {
+    beforeEach(async () => {
+      input = fixtureSync('<vaadin-message-input></vaadin-message-input>');
+      await nextUpdate(input);
+    });
+
+    it('default', async () => {
+      await expect(input).dom.to.equalSnapshot();
+    });
+
+    it('value', async () => {
+      input.value = 'value';
+      await expect(input).dom.to.equalSnapshot();
+    });
+
+    it('disabled', async () => {
+      input.disabled = true;
+      await expect(input).dom.to.equalSnapshot();
+    });
+  });
+
+  describe('host with content slots', () => {
+    beforeEach(async () => {
+      input = fixtureSync(`
+        <vaadin-message-input>
+          <div slot="header">Header</div>
+          <span slot="prefix">Prefix</span>
+          <div slot="footer">Footer</div>
+        </vaadin-message-input>
+      `);
+      await nextUpdate(input);
+    });
+
+    it('default', async () => {
+      await expect(input).dom.to.equalSnapshot();
+    });
+  });
+
+  describe('shadow', () => {
+    beforeEach(async () => {
+      input = fixtureSync('<vaadin-message-input></vaadin-message-input>');
+      await nextUpdate(input);
+    });
+
+    it('default', async () => {
+      await expect(input).shadowDom.to.equalSnapshot();
+    });
+  });
+});

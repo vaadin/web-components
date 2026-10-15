@@ -1,0 +1,61 @@
+<!doctype html>
+<html lang="en">
+  <head>
+    <meta charset="UTF-8" />
+    <meta http-equiv="X-UA-Compatible" content="IE=edge" />
+    <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+    <title>TabSheet</title>
+    <script type="module" src="./common.js"></script>
+  </head>
+
+  <body>
+    <vaadin-tabsheet>
+      <vaadin-tabs slot="tabs">
+        <vaadin-tab id="tab-1">Tab 1</vaadin-tab>
+        <vaadin-tab id="tab-2">Tab 2</vaadin-tab>
+      </vaadin-tabs>
+
+      <div tab="tab-1">Content 1</div>
+      <div tab="tab-2">Content 2</div>
+    </vaadin-tabsheet>
+
+    <button id="add">Add</button>
+    <button id="remove">Remove</button>
+
+    <script type="module">
+      import '@vaadin/tabsheet';
+
+      const tabsheet = document.querySelector('vaadin-tabsheet');
+
+      document.querySelector('#add').addEventListener('click', () => {
+        // Add new tab and panel
+        const tab = document.createElement('vaadin-tab');
+        const idx = document.querySelectorAll('vaadin-tab').length + 1;
+        tab.id = `tab-${idx}`;
+        tab.textContent = `Tab ${idx}`;
+
+        const panel = document.createElement('div');
+        panel.setAttribute('tab', `tab-${idx}`);
+        panel.textContent = `Content ${idx}`;
+
+        tabsheet.querySelector('vaadin-tabs').append(tab);
+        tabsheet.append(panel);
+      });
+
+      document.querySelector('#remove').addEventListener('click', () => {
+        const idx = document.querySelectorAll('vaadin-tab').length;
+
+        // Remove tab and panel
+        const tab = document.getElementById(`tab-${idx}`);
+        const panel = document.querySelector(`[tab="tab-${idx}"]`);
+        tab.remove();
+        panel.remove();
+
+        // Select previous tab
+        if (tabsheet.selected === idx - 1) {
+          tabsheet.selected = tabsheet.selected - 1;
+        }
+      });
+    </script>
+  </body>
+</html>

@@ -1,0 +1,153 @@
+/**
+ * @license
+ * Copyright (c) 2000 - 2026 Vaadin Ltd.
+ * This program is available under Apache License Version 2.0, available at https://vaadin.com/license/
+ */
+
+@media lumo_components_upload-file {
+  :host {
+    padding: var(--vaadin-upload-file-padding, var(--lumo-space-s) 0);
+    gap: var(--vaadin-upload-file-gap, 0 var(--lumo-space-xs));
+    border-radius: var(--vaadin-upload-file-border-radius, var(--lumo-border-radius-s));
+    --_focus-ring-color: var(--vaadin-focus-ring-color, var(--lumo-primary-color-50pct));
+    --_focus-ring-width: var(--vaadin-focus-ring-width, 2px);
+  }
+
+  :host(:focus-visible) {
+    outline: var(--_focus-ring-width) solid var(--_focus-ring-color);
+    outline-offset: calc(var(--_focus-ring-width) * -1);
+  }
+
+  [part='loader'] {
+    display: none;
+  }
+
+  [part='name'] {
+    color: var(--vaadin-upload-file-name-color, var(--lumo-body-text-color));
+    white-space: nowrap;
+  }
+
+  [part='status'] {
+    color: var(--vaadin-upload-file-status-color, var(--lumo-secondary-text-color));
+    font-size: var(--vaadin-upload-file-status-font-size, var(--lumo-font-size-s));
+  }
+
+  [part='error'] {
+    color: var(--vaadin-upload-file-error-color, var(--lumo-error-text-color));
+    font-size: var(--vaadin-upload-file-error-font-size, var(--lumo-font-size-s));
+  }
+
+  [part='commands'] {
+    align-self: start;
+  }
+
+  [part$='icon'] {
+    font-size: var(--lumo-icon-size-m);
+    font-family: 'lumo-icons';
+    line-height: 1;
+    align-self: start;
+  }
+
+  [part$='button'] {
+    border: none;
+    box-shadow: none;
+    outline: none;
+    padding: 0;
+    border-radius: var(--lumo-border-radius-s);
+    cursor: var(--lumo-clickable-cursor);
+  }
+
+  [part$='button']:focus {
+    outline: var(--_focus-ring-width) solid var(--_focus-ring-color);
+    outline-offset: calc(var(--_focus-ring-width) * -1);
+  }
+
+  /* Vertically align icons / buttons with the first line of text */
+  [part$='icon'],
+  [part$='button'] {
+    margin-top: calc((1em * var(--lumo-line-height-m) - var(--lumo-icon-size-m)) / 2);
+  }
+
+  [part$='icon']::before,
+  [part$='button']::before {
+    background: transparent;
+    mask-image: none;
+    width: auto;
+    height: auto;
+  }
+
+  [part='done-icon']::before {
+    content: var(--lumo-icons-checkmark);
+    color: var(--lumo-primary-text-color);
+  }
+
+  [part='warning-icon']::before {
+    content: var(--lumo-icons-error);
+    color: var(--lumo-error-text-color);
+  }
+
+  [part='start-button']::before {
+    content: var(--lumo-icons-play);
+  }
+
+  [part='retry-button']::before {
+    content: var(--lumo-icons-reload);
+  }
+
+  [part='remove-button']::before {
+    content: var(--lumo-icons-cross);
+  }
+
+  ::slotted([slot='progress']) {
+    margin-inline-end: calc(var(--lumo-icon-size-m) + var(--lumo-space-xs));
+  }
+
+  /* THUMBNAILS VARIANT */
+
+  :host([theme~='thumbnails']) {
+    background: var(--lumo-contrast-5pct);
+    border-radius: var(--lumo-border-radius-l);
+    gap: 0;
+
+    [part$='icon'] {
+      margin: 0;
+    }
+
+    [part='done-icon'] {
+      background: var(--lumo-contrast-5pct);
+    }
+
+    [part='warning-icon'] {
+      background: var(--lumo-error-color-10pct);
+    }
+
+    & [part='meta'] {
+      margin-inline-start: var(--lumo-space-s);
+      overflow: hidden;
+    }
+
+    & [part='commands'] {
+      padding-inline: var(--lumo-space-xs);
+      align-self: center;
+
+      & > button {
+        margin: 0;
+        width: var(--lumo-size-xs);
+        height: var(--lumo-size-xs);
+      }
+    }
+  }
+
+  :host([theme~='thumbnails']) ::slotted([slot='progress']) {
+    opacity: 1;
+    margin: 0;
+    height: auto;
+    --lumo-border-radius-m: 0;
+    --lumo-primary-color: var(--lumo-primary-color-10pct);
+    --lumo-contrast-10pct: transparent;
+  }
+
+  :host([uploading]) [part='loader'] {
+    display: block;
+  }
+}

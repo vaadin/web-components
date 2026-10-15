@@ -1,0 +1,172 @@
+/**
+ * @license
+ * Copyright (c) 2017 - 2026 Vaadin Ltd.
+ * This program is available under Apache License Version 2.0, available at https://vaadin.com/license/
+ */
+import { html, LitElement } from 'lit';
+import { defineCustomElement } from '@vaadin/component-base/src/define.js';
+import { ElementMixin } from '@vaadin/component-base/src/element-mixin.js';
+import { PolylitMixin } from '@vaadin/component-base/src/polylit-mixin.js';
+import { TooltipController } from '@vaadin/component-base/src/tooltip-controller.js';
+import { LumoInjectionMixin } from '@vaadin/vaadin-themable-mixin/lumo-injection-mixin.js';
+import { ThemableMixin } from '@vaadin/vaadin-themable-mixin/vaadin-themable-mixin.js';
+import { checkboxStyles } from './styles/vaadin-checkbox-base-styles.js';
+import { CheckboxMixin } from './vaadin-checkbox-mixin.js';
+
+/**
+ * `<vaadin-checkbox>` is an input field representing a binary choice.
+ *
+ * ```html
+ * <vaadin-checkbox label="I accept the terms and conditions"></vaadin-checkbox>
+ * ```
+ *
+ * ### Styling
+ *
+ * The following shadow DOM parts are available for styling:
+ *
+ * Part name            | Description
+ * ---------------------|-------------
+ * `checkbox`           | The element representing a stylable custom checkbox
+ * `label`              | The slotted label element wrapper
+ * `helper-text`        | The slotted helper text element wrapper
+ * `error-message`      | The slotted error message element wrapper
+ * `required-indicator` | The `required` state indicator element
+ *
+ * The following state attributes are available for styling:
+ *
+ * Attribute            | Description
+ * ---------------------|-------------
+ * `active`             | Set when the checkbox is activated with mouse, touch or the keyboard.
+ * `checked`            | Set when the checkbox is checked.
+ * `disabled`           | Set when the checkbox is disabled.
+ * `readonly`           | Set when the checkbox is readonly.
+ * `focus-ring`         | Set when the checkbox is focused using the keyboard.
+ * `focused`            | Set when the checkbox is focused.
+ * `indeterminate`      | Set when the checkbox is in the indeterminate state.
+ * `invalid`            | Set when the checkbox is invalid.
+ * `has-label`          | Set when the checkbox has a label.
+ * `has-helper`         | Set when the checkbox has helper text.
+ * `has-error-message`  | Set when the checkbox has an error message.
+ * `has-tooltip`        | Set when the checkbox has a slotted tooltip.
+ *
+ * The following custom CSS properties are available for styling:
+ *
+ * Custom CSS property                                |
+ * :--------------------------------------------------|
+ * | `--vaadin-checkbox-background`                   |
+ * | `--vaadin-checkbox-border-color`                 |
+ * | `--vaadin-checkbox-border-radius`                |
+ * | `--vaadin-checkbox-border-width`                 |
+ * | `--vaadin-checkbox-gap`                          |
+ * | `--vaadin-checkbox-label-color`                  |
+ * | `--vaadin-checkbox-label-font-size`              |
+ * | `--vaadin-checkbox-label-font-weight`            |
+ * | `--vaadin-checkbox-label-line-height`            |
+ * | `--vaadin-checkbox-marker-color`                 |
+ * | `--vaadin-checkbox-marker-size`                  |
+ * | `--vaadin-checkbox-size`                         |
+ * | `--vaadin-input-field-error-color`               |
+ * | `--vaadin-input-field-error-font-size`           |
+ * | `--vaadin-input-field-error-font-weight`         |
+ * | `--vaadin-input-field-error-line-height`         |
+ * | `--vaadin-input-field-helper-color`              |
+ * | `--vaadin-input-field-helper-font-size`          |
+ * | `--vaadin-input-field-helper-font-weight`        |
+ * | `--vaadin-input-field-helper-line-height`        |
+ * | `--vaadin-input-field-required-indicator`        |
+ * | `--vaadin-input-field-required-indicator-color`  |
+ *
+ * See [Styling Components](https://vaadin.com/docs/latest/styling/styling-components) documentation.
+ *
+ * @fires {Event} change - Fired when the checkbox is checked or unchecked by the user.
+ * @fires {CustomEvent} checked-changed - Fired when the `checked` property changes.
+ * @fires {CustomEvent} indeterminate-changed - Fired when the `indeterminate` property changes.
+ * @fires {CustomEvent} invalid-changed - Fired when the `invalid` property changes.
+ * @fires {CustomEvent} validated - Fired whenever the field is validated.
+ *
+ * @attr {string} theme - The theme variants to apply to the component.
+ * @customElement vaadin-checkbox
+ * @extends HTMLElement
+ */
+class Checkbox extends CheckboxMixin(ElementMixin(ThemableMixin(PolylitMixin(LumoInjectionMixin(LitElement))))) {
+  static get is() {
+    return 'vaadin-checkbox';
+  }
+
+  static get styles() {
+    return checkboxStyles;
+  }
+
+  static get properties() {
+    return {
+      /**
+       * True if the checkbox is in the indeterminate state which means
+       * it is not possible to say whether it is checked or unchecked.
+       * The state is reset once the user switches the checkbox by hand.
+       *
+       * https://developer.mozilla.org/en-US/docs/Web/HTML/Reference/Elements/input/checkbox#indeterminate_state_checkboxes
+       */
+      indeterminate: {
+        type: Boolean,
+        notify: true,
+        value: false,
+        reflectToAttribute: true,
+      },
+    };
+  }
+
+  /** @override */
+  static get delegateProps() {
+    return [...super.delegateProps, 'indeterminate'];
+  }
+
+  /** @protected */
+  render() {
+    return html`
+      <div class="vaadin-checkbox-container">
+        <div part="checkbox" aria-hidden="true"></div>
+        <slot name="input"></slot>
+        <div part="label">
+          <slot name="label"></slot>
+          <div part="required-indicator" @click="${this._onRequiredIndicatorClick}"></div>
+        </div>
+        <div part="helper-text">
+          <slot name="helper"></slot>
+        </div>
+        <div part="error-message">
+          <slot name="error-message"></slot>
+        </div>
+      </div>
+      <slot name="tooltip"></slot>
+    `;
+  }
+
+  /** @protected */
+  ready() {
+    super.ready();
+
+    this._tooltipController = new TooltipController(this);
+    this._tooltipController.setAriaTarget(this.inputElement);
+    this.addController(this._tooltipController);
+  }
+
+  /**
+   * Override method inherited from `CheckedMixin` to reset
+   * `indeterminate` when the checkbox is toggled by the user.
+   *
+   * @param {boolean} checked
+   * @protected
+   * @override
+   */
+  _toggleChecked(checked) {
+    if (this.indeterminate) {
+      this.indeterminate = false;
+    }
+
+    super._toggleChecked(checked);
+  }
+}
+
+defineCustomElement(Checkbox);
+
+export { Checkbox };

@@ -1,0 +1,11 @@
+vaadin-checkbox-group::part(label),
+vaadin-checkbox-group::part(helper-text),
+vaadin-checkbox-group::part(error-message),
+vaadin-checkbox-group::part(required-indicator) {
+  &,
+  &::before,
+  &::after {
+    animation: none !important;
+    transition: none !important;
+  }
+}

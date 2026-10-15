@@ -1,0 +1,240 @@
+/**
+ * @license
+ * Copyright (c) 2017 - 2026 Vaadin Ltd.
+ * This program is available under Apache License Version 2.0, available at https://vaadin.com/license/
+ */
+import { FocusRestorationController } from '@vaadin/a11y-base/src/focus-restoration-controller.js';
+import { FocusTrapController } from '@vaadin/a11y-base/src/focus-trap-controller.js';
+import {
+  getDeepActiveElement,
+  getTabbableElements,
+  isElementFocused,
+  isElementHidden,
+  isKeyboardActive,
+} from '@vaadin/a11y-base/src/focus-utils.js';
+
+export const OverlayFocusMixin = (superClass) =>
+  class OverlayFocusMixin extends superClass {
+    static get properties() {
+      return {
+        /**
+         * Set to true to move focus into the overlay automatically on open
+         * and keep it inside: Tab and Shift+Tab cycle through the overlay's
+         * content until the overlay is closed.
+         *
+         * Focus moves to the first tabbable element in the tab order. This
+         * can be the overlay itself if it has `tabindex` attribute set to `0`
+         * on the host element or the `overlay` shadow DOM part.
+         *
+         * @attr {boolean} focus-trap
+         */
+        focusTrap: {
+          type: Boolean,
+          value: false,
+        },
+
+        /**
+         * Set to true to move focus into the overlay automatically on open.
+         *
+         * Focus moves to the first tabbable element in the tab order. This
+         * can be the overlay itself if it has `tabindex` attribute set to `0`
+         * on the host element or the `overlay` shadow DOM part.
+         *
+         * An element inside the overlay that has `autofocus` set, such as
+         * `<vaadin-text-field autofocus>`, receives focus on open instead,
+         * even when this property is false.
+         */
+        autofocus: {
+          type: Boolean,
+          value: false,
+        },
+
+        /**
+         * Set to true to enable restoring of focus when overlay is closed.
+         * @attr {boolean} restore-focus-on-close
+         */
+        restoreFocusOnClose: {
+          type: Boolean,
+          value: false,
+        },
+
+        /**
+         * Set to specify the element which should be focused on overlay close,
+         * if `restoreFocusOnClose` is set to true.
+         * @type {HTMLElement}
+         */
+        restoreFocusNode: {
+          type: HTMLElement,
+        },
+      };
+    }
+
+    /**
+     * Whether the overlay moves, traps and restores focus. Override to return
+     * false in overlays that never do: focus properties are then ignored and
+     * the focus controllers are not created.
+     * @protected
+     */
+    static get manageFocus() {
+      return true;
+    }
+
+    constructor() {
+      super();
+
+      this.__manageFocus = this.constructor.manageFocus;
+
+      if (this.__manageFocus) {
+        this.__focusTrapController = new FocusTrapController(this);
+        this.__focusRestorationController = new FocusRestorationController();
+      }
+    }
+
+    /**
+     * Override to specify another element used as a content root,
+     * e.g. slotted into the overlay, rather than overlay itself.
+     * @protected
+     */
+    get _contentRoot() {
+      return this;
+    }
+
+    /** @protected */
+    ready() {
+      super.ready();
+
+      if (this.__manageFocus) {
+        this.addController(this.__focusTrapController);
+        this.addController(this.__focusRestorationController);
+      }
+    }
+
+    /**
+     * Override to specify another element used as a focus root,
+     * e.g. the overlay's owner element, rather than overlay part.
+     * @protected
+     */
+    get _focusRoot() {
+      return this.$.overlay;
+    }
+
+    /**
+     * Release focus and restore focus after the overlay is closed.
+     *
+     * @protected
+     */
+    _resetFocus() {
+      if (!this.__manageFocus) {
+        return;
+      }
+
+      if (this.focusTrap) {
+        this.__focusTrapController.releaseFocus();
+      }
+
+      if (this.restoreFocusOnClose && this._shouldRestoreFocus()) {
+        const focusVisible = isKeyboardActive();
+        const preventScroll = !focusVisible;
+        this.__focusRestorationController.restoreFocus({ preventScroll, focusVisible });
+      }
+    }
+
+    /**
+     * Save the previously focused node when the overlay starts to open.
+     *
+     * @protected
+     */
+    _saveFocus() {
+      if (!this.__manageFocus) {
+        return;
+      }
+
+      if (this.restoreFocusOnClose) {
+        this.__focusRestorationController.saveFocus(this.restoreFocusNode);
+      }
+    }
+
+    /**
+     * Sets up focus after the overlay opening has completed: moves focus to
+     * the first element with `autofocus` inside the overlay, otherwise to the
+     * first tabbable element if the `autofocus` property is set, and traps
+     * focus if `focusTrap` is set.
+     *
+     * @protected
+     */
+    _initFocus() {
+      if (!this.__manageFocus || isElementHidden(this._focusRoot)) {
+        return;
+      }
+
+      const tabbables = getTabbableElements(this._focusRoot);
+      if (!tabbables.some(isElementFocused)) {
+        const target = tabbables.find((el) => this.#hasAutofocus(el)) ?? (this.autofocus ? tabbables[0] : null);
+        target?.focus({ focusVisible: isKeyboardActive() });
+      }
+
+      if (this.focusTrap) {
+        this.__focusTrapController.trapFocus(this._focusRoot);
+      }
+    }
+
+    /**
+     * Returns true if focus is still inside the overlay or on the body element,
+     * otherwise false.
+     *
+     * Focus shouldn't be restored if it's been moved elsewhere by another
+     * component or as a result of a user interaction e.g. the user clicked
+     * on a button outside the overlay while the overlay was open.
+     *
+     * @protected
+     * @return {boolean}
+     */
+    _shouldRestoreFocus() {
+      const activeElement = getDeepActiveElement();
+      return activeElement === document.body || this._deepContains(activeElement);
+    }
+
+    /**
+     * Returns true if the overlay contains the given node,
+     * including those within shadow DOM trees.
+     *
+     * @param {Node} node
+     * @return {boolean}
+     * @protected
+     */
+    _deepContains(node) {
+      if (this._contentRoot.contains(node)) {
+        return true;
+      }
+      let n = node;
+      const doc = node.ownerDocument;
+      // Walk from node to content root or `document`
+      while (n && n !== doc && n !== this._contentRoot) {
+        n = n.parentNode || n.host;
+      }
+      return n === this._contentRoot;
+    }
+
+    /**
+     * Returns true if the element has `autofocus`, or belongs to a custom
+     * element that has it (e.g. the input of `<vaadin-text-field autofocus>`).
+     * As with native `autofocus`, a plain `<div autofocus>` does not apply to
+     * its children. Stops at the focus root, whose `autofocus` refers to the overlay.
+     * Walks the flat tree, the same way tabbables are collected from the focus root,
+     * so it never leaves the overlay when content is slotted from the owner.
+     *
+     * @param {HTMLElement} element
+     * @return {boolean}
+     */
+    #hasAutofocus(element) {
+      const focusRoot = this._focusRoot;
+      let node = element;
+      while (node && node !== focusRoot && node !== this) {
+        if (node.autofocus && (node === element || customElements.get(node.localName))) {
+          return true;
+        }
+        node = node.assignedSlot || node.parentNode || node.host;
+      }
+      return false;
+    }
+  };

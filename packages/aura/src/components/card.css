@@ -1,0 +1,35 @@
+:where(:root),
+:where(:host) {
+  --vaadin-card-title-font-weight: var(--aura-font-weight-medium);
+  --vaadin-card-title-font-size: var(--aura-font-size-l);
+  --vaadin-card-title-line-height: var(--aura-line-height-l);
+  --vaadin-card-padding: calc(var(--vaadin-padding-l) - var(--vaadin-card-border-width));
+  --vaadin-card-gap: var(--vaadin-gap-m) var(--vaadin-gap-l);
+  --vaadin-card-border-width: 1px;
+}
+
+vaadin-card {
+  background: var(--vaadin-card-background, var(--aura-surface-color) padding-box);
+  background-clip: padding-box;
+  --aura-surface-level: 2;
+  --aura-surface-opacity: 0.5;
+}
+
+vaadin-card[theme~='elevated'] {
+  --aura-surface-opacity: 0.7;
+  --aura-surface-level: 3;
+  background: var(--aura-surface-color) padding-box;
+  box-shadow: var(--vaadin-card-shadow, var(--aura-shadow-xs));
+  --vaadin-card-border-color: light-dark(
+    color-mix(in srgb, var(--vaadin-border-color-secondary) 70%, var(--aura-shadow-color)),
+    var(--vaadin-border-color-secondary)
+  );
+}
+
+vaadin-card[theme~='outlined'] {
+  --vaadin-card-border-color: var(--vaadin-border-color);
+}
+
+vaadin-card[theme~='stretch-media']:not([theme~='cover-media']) [slot='media']:is(img, video, svg, vaadin-icon) {
+  border-radius: var(--vaadin-radius-s);
+}

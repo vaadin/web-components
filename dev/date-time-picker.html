@@ -1,0 +1,24 @@
+<!doctype html>
+<html lang="en">
+  <head>
+    <meta charset="UTF-8" />
+    <meta http-equiv="X-UA-Compatible" content="IE=edge" />
+    <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+    <title>Date Time picker</title>
+    <script type="module" src="./common.js"></script>
+    <script type="module">
+      import '@vaadin/date-time-picker';
+      import '@vaadin/tooltip';
+    </script>
+  </head>
+  <body>
+    <vaadin-date-time-picker
+      label="Birth date and time"
+      error-message="error-message"
+      min="2019-09-01T08:00"
+      max="2019-09-30T22:00"
+    >
+      <vaadin-tooltip slot="tooltip" text="You will have a personal discount"></vaadin-tooltip>
+    </vaadin-date-time-picker>
+  </body>
+</html>

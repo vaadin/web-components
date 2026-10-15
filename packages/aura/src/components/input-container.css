@@ -1,0 +1,51 @@
+:where(:root),
+:where(:host),
+:where([theme]) {
+  --vaadin-input-field-error-color: var(--aura-red-text);
+}
+
+::part(input-field),
+vaadin-message-input,
+vaadin-input-container {
+  background: var(--vaadin-input-field-background, var(--aura-surface-color));
+  --aura-surface-level: 4;
+  --aura-surface-opacity: 0.7;
+  background-clip: padding-box;
+  caret-color: var(--vaadin-focus-ring-color);
+}
+
+:not([readonly], [disabled])::part(input-field),
+vaadin-message-input:not([readonly], [disabled]) {
+  box-shadow: var(--aura-shadow-xs);
+}
+
+[readonly]::part(input-field) {
+  --aura-surface-opacity: 0;
+}
+
+[disabled]::part(input-field) {
+  background-color: var(--vaadin-input-field-disabled-background, var(--vaadin-background-container));
+}
+
+[disabled]::part(helper-text) {
+  opacity: 0.5;
+}
+
+::part(field-button) {
+  transition: color 100ms;
+  --vaadin-icon-visual-size: 90%;
+}
+
+::part(clear-button) {
+  --vaadin-icon-visual-size: 75%;
+}
+
+:not([readonly], [disabled])::part(field-button):active {
+  color: var(--vaadin-text-color);
+}
+
+@media (any-hover: hover) {
+  :not([readonly], [disabled])::part(field-button):hover {
+    color: var(--vaadin-text-color);
+  }
+}

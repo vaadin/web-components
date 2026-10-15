@@ -1,0 +1,3 @@
+vaadin-overlay::part(backdrop) {
+  animation: none !important;
+}
