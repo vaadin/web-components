@@ -2,6 +2,7 @@ import fs from 'node:fs';
 import os from 'node:os';
 import path from 'node:path';
 import {
+  byName,
   getElements,
   INTERNAL_PACKAGES,
   listPackages,
@@ -29,7 +30,7 @@ function getWebTypesPackages() {
     .filter(({ elements }) => elements.length > 0);
 }
 
-const byName = (a, b) => a.name.localeCompare(b.name);
+const byItemName = (a, b) => byName(a.name, b.name);
 
 /**
  * The `deprecated` flag or message of a manifest item for its web-types entry.
@@ -91,7 +92,7 @@ function createPlainElementDefinition(packageJson, elementDeclaration) {
   // `<vaadin-icon>`, and are not listed.
   const attributes = (elementDeclaration.attributes || [])
     .filter((attribute) => attribute.type)
-    .sort(byName)
+    .sort(byItemName)
     .map((attribute) => ({
       name: attribute.name,
       description: transformDescription(packageJson, attribute.description || ''),
@@ -102,7 +103,7 @@ function createPlainElementDefinition(packageJson, elementDeclaration) {
     }));
 
   const properties = getPublicWritableProperties(elementDeclaration)
-    .sort(byName)
+    .sort(byItemName)
     .map((prop) => ({
       name: prop.name,
       description: transformDescription(packageJson, prop.description || ''),
@@ -112,7 +113,7 @@ function createPlainElementDefinition(packageJson, elementDeclaration) {
       ...deprecation(prop),
     }));
 
-  const events = (elementDeclaration.events || []).sort(byName).map((event) => ({
+  const events = (elementDeclaration.events || []).sort(byItemName).map((event) => ({
     name: event.name,
     description: transformDescription(packageJson, event.description || ''),
     ...deprecation(event),
@@ -159,13 +160,13 @@ function createLitElementDefinition(packageJson, elementDeclaration) {
   }
 
   const publicProperties = getPublicWritableProperties(elementDeclaration);
-  const propertyBindings = publicProperties.sort(byName).map((prop) => {
+  const propertyBindings = publicProperties.sort(byItemName).map((prop) => {
     const prefix = mapType(prop.type).includes('boolean') ? '?' : '.';
     return toLitAttribute(`${prefix}${prop.name}`, prop);
   });
 
   const eventBindings = (elementDeclaration.events || [])
-    .sort(byName)
+    .sort(byItemName)
     .map((event) => toLitAttribute(`@${event.name}`, event));
 
   return {
