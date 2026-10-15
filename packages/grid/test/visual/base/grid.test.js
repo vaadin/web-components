@@ -88,9 +88,9 @@ describe('overflowing last row border', () => {
   let element;
 
   beforeEach(async () => {
-    // The row with 50px content fits in the 80px grid, its 40px bottom border does not
+    // The row with 50px content fits in the 70px grid, its 10px bottom border does not
     element = fixtureSync(`
-      <vaadin-grid style="width: 300px; height: 80px; --vaadin-grid-row-border-width: 40px;">
+      <vaadin-grid style="width: 300px; height: 70px; --vaadin-grid-row-border-width: 10px;">
         <vaadin-grid-column></vaadin-grid-column>
         <vaadin-grid-column></vaadin-grid-column>
       </vaadin-grid>
@@ -113,8 +113,14 @@ describe('overflowing last row border', () => {
     await visualDiff(element, 'overflowing-last-row-border');
   });
 
-  it('focused', async () => {
+  it('row focused', async () => {
     await sendKeys({ press: 'Tab' });
-    await visualDiff(element, 'overflowing-last-row-border-focused');
+    await sendKeys({ press: 'ArrowLeft' });
+    await visualDiff(element, 'overflowing-last-row-border-row-focused');
+  });
+
+  it('cell focused', async () => {
+    await sendKeys({ press: 'Tab' });
+    await visualDiff(element, 'overflowing-last-row-border-cell-focused');
   });
 });
