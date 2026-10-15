@@ -299,6 +299,25 @@ describe('grid focus', () => {
     });
   });
 
+  describe('single body row', () => {
+    beforeEach(async () => {
+      element.items = users.slice(0, 1);
+      await nextRender();
+      await sendKeys({ press: 'Tab' });
+      await sendKeys({ press: 'Tab' });
+      await sendKeys({ press: 'ArrowLeft' });
+    });
+
+    it('row', async () => {
+      await visualDiff(element, 'single-body-row');
+    });
+
+    it('cell', async () => {
+      await sendKeys({ press: 'ArrowRight' });
+      await visualDiff(element, 'single-body-row-cell');
+    });
+  });
+
   describe('single body row without footer', () => {
     beforeEach(async () => {
       element.items = users.slice(0, 1);
