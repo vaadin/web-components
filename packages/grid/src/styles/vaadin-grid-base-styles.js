@@ -226,7 +226,7 @@ export const gridStyles = css`
 
   /* Block borders / Last body row */
 
-  .last-row::after {
+  #table[has-footer] .last-row::after {
     bottom: 0;
   }
 
@@ -248,9 +248,14 @@ export const gridStyles = css`
     .last-row {
       contain: layout;
     }
+  }
 
-    .last-row .details-cell::after,
-    .last-row-cell:not(.details-opened-row-cell)::after {
+  :host([all-rows-visible]),
+  :host([overflow~='top']),
+  :host([overflow~='bottom']) {
+    #table:not([has-footer]) .last-row::after,
+    #table:not([has-footer]) .last-row .details-cell::after,
+    #table:not([has-footer]) .last-row-cell:not(.details-opened-row-cell)::after {
       bottom: 0;
     }
   }
