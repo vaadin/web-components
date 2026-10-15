@@ -175,12 +175,12 @@ describe('scroll on attach', () => {
   });
 });
 
-describe('last row height', () => {
+describe('overflow by less than row border', () => {
   let grid;
 
   beforeEach(async () => {
     grid = fixtureSync(`
-      <vaadin-grid style="width: 200px; height: 600px;">
+      <vaadin-grid style="width: 200px; height: 600px; --vaadin-grid-row-border-width: 5px;">
         <vaadin-grid-column path="name"></vaadin-grid-column>
       </vaadin-grid>
     `);
@@ -193,17 +193,17 @@ describe('last row height', () => {
     grid.items = Array.from({ length: 8 }, (_, i) => ({ name: `Row ${i}` }));
     flushGrid(grid);
     await nextFrame();
-  });
 
-  it('should not change when content overflows', async () => {
-    const lastRow = grid.$.items.querySelector('.last-row');
-    const height = lastRow.offsetHeight;
-
-    grid.style.height = '200px';
+    // Content height including the last row bottom border
+    const lastCell = grid.$.items.querySelector('.last-row-cell');
+    const contentHeight = lastCell.getBoundingClientRect().bottom - grid.$.table.getBoundingClientRect().top;
+    // Make the table 2px shorter than the content, less than the 5px border
+    grid.style.height = `${grid.offsetHeight - (grid.$.table.clientHeight - contentHeight) - 2}px`;
     await nextResize(grid);
     await nextFrame();
+  });
 
-    expect(grid.getAttribute('overflow')).to.equal('bottom');
-    expect(lastRow.offsetHeight).to.equal(height);
+  it('should keep overflow attribute in sync with scroll state', () => {
+    expect(grid.hasAttribute('overflow')).to.equal(grid.$.table.scrollHeight > grid.$.table.clientHeight);
   });
 });
