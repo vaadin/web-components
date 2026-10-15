@@ -1,8 +1,8 @@
-import { isStaticMember } from '@custom-elements-manifest/analyzer/src/utils/ast-helpers.js';
-import { extractMixinNodes } from '@custom-elements-manifest/analyzer/src/utils/mixins.js';
 import fs from 'node:fs';
 import { byName, isPrimitiveType } from './lib/cem-helpers.js';
+import { classPrivacyPlugin } from './plugins/class-privacy.js';
 import { inheritancePlugin } from './plugins/inheritance.js';
+import { readonlyPlugin } from './plugins/readonly.js';
 
 const inheritanceDenyList = ['PolylitMixin', 'DirMixin'];
 
@@ -59,81 +59,6 @@ function sortName(a, b) {
 
   // names must be equal
   return 0;
-}
-
-/**
- * CEM plugin that marks `readOnly: true` properties as `readonly` in custom-elements.json
- * to filter them out of Lit property bindings when generating web-types-lit.json files.
- */
-function readonlyPlugin() {
-  return {
-    analyzePhase({ ts, node, moduleDoc }) {
-      const mixinNodes = extractMixinNodes(node);
-      const classNode = mixinNodes ? mixinNodes.mixinClass : ts.isClassDeclaration(node) ? node : undefined;
-      if (!classNode) return;
-
-      // Find `static get properties()` method
-      for (const member of classNode.members || []) {
-        if (!ts.isGetAccessorDeclaration(member) || !isStaticMember(member) || member.name?.text !== 'properties') {
-          continue;
-        }
-
-        // Find the return statement's object literal
-        const returnStmt = member.body?.statements?.find(ts.isReturnStatement);
-        const returnObj = returnStmt?.expression;
-        if (!returnObj || !ts.isObjectLiteralExpression(returnObj)) continue;
-
-        for (const prop of returnObj.properties) {
-          if (!ts.isPropertyAssignment(prop)) continue;
-          const propName = prop.name?.text;
-          if (!propName) continue;
-
-          // Check if the property config object has `readOnly: true`
-          const configObj = prop.initializer;
-          if (!ts.isObjectLiteralExpression(configObj)) continue;
-
-          const hasReadOnly = configObj.properties.some(
-            (p) =>
-              ts.isPropertyAssignment(p) &&
-              p.name?.text === 'readOnly' &&
-              p.initializer?.kind === ts.SyntaxKind.TrueKeyword,
-          );
-          if (!hasReadOnly) continue;
-
-          // Find the matching member in moduleDoc declarations and mark it readonly
-          for (const declaration of moduleDoc.declarations || []) {
-            const cemMember = declaration.members?.find((m) => m.name === propName);
-            if (cemMember) {
-              cemMember.readonly = true;
-            }
-          }
-        }
-      }
-    },
-  };
-}
-
-/**
- * CEM plugin that marks class declarations with `@private` or `@protected` JSDoc tags
- * so they can be filtered out during the packageLinkPhase.
- */
-function classPrivacyPlugin() {
-  return {
-    analyzePhase({ ts, node, moduleDoc }) {
-      if (!ts.isClassDeclaration(node) || !node.name) return;
-
-      const tag = (node.jsDoc || [])
-        .flatMap((doc) => doc.tags || [])
-        .find((t) => t.tagName?.text === 'private' || t.tagName?.text === 'protected');
-
-      if (!tag) return;
-
-      const decl = moduleDoc.declarations?.find((d) => d.name === node.name.text);
-      if (decl) {
-        decl.privacy = tag.tagName.text;
-      }
-    },
-  };
 }
 
 export default {

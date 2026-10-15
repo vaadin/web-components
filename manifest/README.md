@@ -36,6 +36,8 @@ yarn workspace @vaadin/manifest-tools compare --base origin/main
 
 The following custom [CEM analyzer plugins](https://custom-elements-manifest.open-wc.org/analyzer/plugins/authoring/) are used:
 
-| Path                     | Purpose                                                                        |
-| ------------------------ | ------------------------------------------------------------------------------ |
-| `plugins/inheritance.js` | Applies inheritance from the own items of each class and mixin, nearest first. |
+| Path                       | Purpose                                                                        |
+| -------------------------- | ------------------------------------------------------------------------------ |
+| `plugins/class-privacy.js` | Sets the privacy of a class from its `@private` or `@protected` JSDoc tag.     |
+| `plugins/inheritance.js`   | Applies inheritance from the own items of each class and mixin, nearest first. |
+| `plugins/readonly.js`      | Marks the fields declared with `readOnly: true` as `readonly`.                 |
