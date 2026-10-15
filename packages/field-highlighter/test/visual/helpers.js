@@ -6,9 +6,9 @@ const users = [
   { id: 'c', name: 'Admin', colorIndex: 2, fieldIndex: 0 },
 ];
 
-export const setUsers = (field) => {
+export const setUsers = (field, fieldUsers = users) => {
   FieldHighlighter.init(field);
-  FieldHighlighter.setUsers(field, users);
+  FieldHighlighter.setUsers(field, fieldUsers);
   // Mimic focus to show highlight and badges
   field.dispatchEvent(new CustomEvent('mouseenter'));
 };

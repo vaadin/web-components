@@ -13,7 +13,11 @@ export const packagesDir = path.join(rootDir, 'packages');
 // Define custom elements used only inside other components
 export const INTERNAL_PACKAGES = new Set(['field-highlighter', 'input-container', 'overlay']);
 
-// Code unit order, independent of locale
+/**
+ * Compares two strings by UTF-16 code unit, like the default `Array.prototype.sort`.
+ * The scripts use it wherever a generated file must come out byte-identical on
+ * every machine, as `localeCompare` depends on the locale and the ICU version.
+ */
 export const byName = (a, b) => {
   if (a === b) {
     return 0;
@@ -21,13 +25,27 @@ export const byName = (a, b) => {
   return a < b ? -1 : 1;
 };
 
+const PRIMITIVE_TYPE = /^(string|number|boolean|null|undefined)(\s*\|\s*(string|number|boolean|null|undefined))*$/iu;
+
+/**
+ * Tells whether a type can be set from an HTML attribute: `string`, `number`,
+ * `boolean`, `null`, `undefined`, or a union of them. Objects, arrays, functions
+ * and renderers only have a property.
+ * @param {string} text the `type.text` of a manifest item
+ * @return {boolean}
+ */
+export const isPrimitiveType = (text) => PRIMITIVE_TYPE.test(text);
+
 /**
  * Lists the directory names of the public packages under `packages/`, sorted.
  * @return {string[]}
  */
 export function listPackages() {
   const pathToLerna = path.normalize('./node_modules/.bin/lerna');
-  const output = execSync(`${pathToLerna} ls --json --loglevel silent`, { cwd: rootDir }); // NOSONAR
+  // Nx takes the topmost directory with `node_modules/nx` as the workspace
+  // root, which is the wrong one for a worktree nested in another checkout
+  const env = { ...process.env, NX_WORKSPACE_ROOT_PATH: rootDir };
+  const output = execSync(`${pathToLerna} ls --json --loglevel silent`, { cwd: rootDir, env }); // NOSONAR
   return JSON.parse(output.toString())
     .filter((project) => path.dirname(project.location) === packagesDir)
     .map((project) => path.basename(project.location))

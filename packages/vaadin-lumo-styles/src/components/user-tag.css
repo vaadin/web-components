@@ -9,7 +9,7 @@
     box-sizing: border-box;
     margin: 0 0 var(--vaadin-user-tag-offset);
     opacity: 0;
-    height: 1.3rem;
+    min-height: 1.3rem;
     transition: opacity 0.2s ease-in-out;
     background-color: var(--vaadin-user-tag-color);
     color: #fff;
@@ -34,10 +34,10 @@
 
   [part='name'] {
     overflow: hidden;
-    white-space: nowrap;
+    white-space: pre;
     text-overflow: ellipsis;
     box-sizing: border-box;
-    height: 1.3rem;
+    min-height: 1.3rem;
     font-size: 13px;
     color: var(--lumo-primary-contrast-color);
     padding: 0.3em calc(0.3em + var(--lumo-border-radius-s) / 4);
