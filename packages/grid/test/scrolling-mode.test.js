@@ -174,3 +174,36 @@ describe('scroll on attach', () => {
     expect(scrollTop).to.equal(newScrollTop);
   });
 });
+
+describe('last row height', () => {
+  let grid;
+
+  beforeEach(async () => {
+    grid = fixtureSync(`
+      <vaadin-grid style="width: 200px; height: 600px;">
+        <vaadin-grid-column path="name"></vaadin-grid-column>
+      </vaadin-grid>
+    `);
+    // Make cell content taller than the cell min-height from the test styles,
+    // so that cell borders take part in the row height
+    grid.querySelector('vaadin-grid-column').renderer = (root, _, model) => {
+      root.textContent = model.item.name;
+      root.style.height = '50px';
+    };
+    grid.items = Array.from({ length: 8 }, (_, i) => ({ name: `Row ${i}` }));
+    flushGrid(grid);
+    await nextFrame();
+  });
+
+  it('should not change when content overflows', async () => {
+    const lastRow = grid.$.items.querySelector('.last-row');
+    const height = lastRow.offsetHeight;
+
+    grid.style.height = '200px';
+    await nextResize(grid);
+    await nextFrame();
+
+    expect(grid.getAttribute('overflow')).to.equal('bottom');
+    expect(lastRow.offsetHeight).to.equal(height);
+  });
+});

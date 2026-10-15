@@ -237,16 +237,21 @@ export const gridStyles = css`
 
   /* Block borders / Last body row without footer */
 
-  :host([all-rows-visible]),
-  :host([overflow~='top']),
-  :host([overflow~='bottom']) {
-    #table:not([has-footer]) .last-row .details-cell,
-    #table:not([has-footer]) .last-row-cell:not(.details-opened-row-cell) {
-      border-bottom-style: none;
+  #table:not([has-footer]) {
+    /* Push the bottom border out of the row box, so the row height does not include it */
+    .last-row .details-cell,
+    .last-row-cell {
+      margin-bottom: calc(var(--_row-border-width) * -1);
+    }
 
-      &::after {
-        bottom: 0;
-      }
+    /* Treat the border outside the row box as ink overflow, so it does not extend the scroll range */
+    .last-row {
+      contain: layout;
+    }
+
+    .last-row .details-cell::after,
+    .last-row-cell:not(.details-opened-row-cell)::after {
+      bottom: 0;
     }
   }
 
