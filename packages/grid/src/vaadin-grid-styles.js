@@ -121,6 +121,11 @@ registerStyles(
       width: 100%;
       box-sizing: border-box;
       margin: 0;
+      /* Browser default tr styles use vertical-align: inherit and border-color: inherit,
+         which force every row to restyle when #items, #header or #footer gets a new
+         transform on horizontal scroll. Resetting them makes horizontal scrolling faster. */
+      vertical-align: initial;
+      border-color: initial;
     }
 
     [part~='row'][loading] [part~='body-cell'] ::slotted(vaadin-grid-cell-content) {
