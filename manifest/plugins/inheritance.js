@@ -77,10 +77,9 @@ export function inheritancePlugin() {
 
   /**
    * Lists the snapshots of the ancestors of a declaration nearest first, each once.
-   * `dedupeMixin` skips a mixin that the superclass already has, so a mixin applied
-   * more than once takes the place of its innermost application, the last one in
-   * depth-first order. A mixin without `dedupeMixin` is applied again instead, which
-   * only moves private members of a few components, so the rule applies to all.
+   * A mixin applied more than once is listed at its innermost application, as
+   * `dedupeMixin` skips the outer ones. The few mixins applied twice without it
+   * have no override in between, so the same rule applies to them.
    * @return {object[]}
    */
   function ancestorsNearestFirst(snapshot) {
