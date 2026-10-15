@@ -137,6 +137,7 @@ describe('validation', () => {
         timePicker.open();
 
         touchend(timePicker.$.overlay);
+        timePicker.$.overlay.click();
 
         expect(validateSpy).to.be.not.called;
         expect(timePicker.invalid).to.be.false;

@@ -179,16 +179,71 @@ describe('interactions', () => {
 
       const spy = sinon.spy(input, 'blur');
       overlay.dispatchEvent(new CustomEvent('touchstart'));
-      expect(spy.callCount).to.eql(0);
+      expect(spy).to.be.not.called;
     });
 
-    it('should blur the input on overlay touchend', () => {
+    it('should not blur the input on overlay touchend', () => {
       comboBox.focus();
       comboBox.open();
 
       const spy = sinon.spy(input, 'blur');
       overlay.dispatchEvent(new CustomEvent('touchend'));
-      expect(spy.callCount).to.eql(1);
+      expect(spy).to.be.not.called;
+    });
+
+    it('should blur the input on click outside of items after touchend', () => {
+      comboBox.focus();
+      comboBox.open();
+
+      const spy = sinon.spy(input, 'blur');
+      const selector = comboBox._scroller.$.selector;
+      fire(selector, 'touchend');
+      selector.click();
+
+      expect(spy).to.be.calledOnce;
+      expect(comboBox.opened).to.be.true;
+    });
+
+    it('should blur the input on item click after touchend', async () => {
+      comboBox.focus();
+      comboBox.open();
+
+      const spy = sinon.spy(input, 'blur');
+      const item = getFirstItem(comboBox);
+      fire(item, 'touchend');
+      item.click();
+      await nextUpdate(comboBox);
+
+      expect(spy).to.be.calledOnce;
+      expect(comboBox.opened).to.be.false;
+      expect(comboBox.value).to.equal('foo');
+    });
+
+    it('should not blur the input on item click without touchend', async () => {
+      comboBox.focus();
+      comboBox.open();
+
+      const spy = sinon.spy(input, 'blur');
+      getFirstItem(comboBox).click();
+      await nextUpdate(comboBox);
+
+      expect(spy).to.be.not.called;
+      expect(comboBox.value).to.equal('foo');
+    });
+
+    it('should not blur the input on item click after touchend without click and re-opening', async () => {
+      comboBox.focus();
+      comboBox.open();
+      fire(getFirstItem(comboBox), 'touchend');
+      comboBox.close();
+      await nextUpdate(comboBox);
+
+      comboBox.open();
+      await nextUpdate(comboBox);
+
+      const spy = sinon.spy(input, 'blur');
+      getFirstItem(comboBox).click();
+      expect(spy).to.be.not.called;
     });
 
     it('should blur the input on overlay touchmove', () => {
