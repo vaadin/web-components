@@ -6,7 +6,7 @@ import '@vaadin/vaadin-lumo-styles/components/pdf-viewer.css';
 import '../../enable-feature-flag.js';
 import '../../../vaadin-pdf-viewer.js';
 import type { PdfViewer } from '../../../vaadin-pdf-viewer.js';
-import { fixtureUrl, nextRenderIdle } from '../../helpers.js';
+import { currentMatchShown, fixtureUrl, nextRenderIdle } from '../../helpers.js';
 
 describe('pdf-viewer', () => {
   let div: HTMLElement;
@@ -84,10 +84,7 @@ describe('pdf-viewer', () => {
     element.querySelector<HTMLElement>('vaadin-pdf-viewer-button[icon="find"]')!.click();
     await nextRender();
     await sendKeys({ type: 'quick' });
-    // Wait for the search and the highlights
-    for (let i = 0; i < 50 && !element.shadowRoot!.querySelector('.find-match.current'); i++) {
-      await nextFrame();
-    }
+    await currentMatchShown(element);
     await visualDiff(div, 'find');
   });
 
@@ -194,9 +191,7 @@ describe('pdf-viewer', () => {
       element.querySelector<HTMLElement>('vaadin-pdf-viewer-button[icon="find"]')!.click();
       await nextRender();
       await sendKeys({ type: 'quick' });
-      for (let i = 0; i < 50 && !element.shadowRoot!.querySelector('.find-match.current'); i++) {
-        await nextFrame();
-      }
+      await currentMatchShown(element);
       await visualDiff(div, 'large-text-find');
     });
 

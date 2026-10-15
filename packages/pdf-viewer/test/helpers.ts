@@ -1,4 +1,4 @@
-import { oneEvent } from '@vaadin/testing-helpers';
+import { nextFrame, oneEvent } from '@vaadin/testing-helpers';
 import type { PdfViewer } from '../vaadin-pdf-viewer.js';
 
 export type Fixture =
@@ -30,6 +30,30 @@ export async function loadDocument(viewer: PdfViewer, name: Fixture): Promise<vo
  */
 export async function nextRenderIdle(viewer: PdfViewer): Promise<void> {
   await oneEvent(viewer, 'render-idle');
+}
+
+/**
+ * Waits until a scroll, which can be animated, has settled.
+ */
+export async function scrollSettled(element: HTMLElement): Promise<void> {
+  let last = -1;
+  let stableFrames = 0;
+  for (let i = 0; i < 120 && stableFrames < 3; i++) {
+    await nextFrame();
+    stableFrames = element.scrollTop === last ? stableFrames + 1 : 0;
+    last = element.scrollTop;
+  }
+}
+
+/**
+ * Waits until the current find match is highlighted and the viewer has
+ * finished scrolling to it, which is animated when its page is rendered.
+ */
+export async function currentMatchShown(viewer: PdfViewer): Promise<void> {
+  for (let i = 0; i < 50 && !viewer.shadowRoot!.querySelector('.find-match.current'); i++) {
+    await nextFrame();
+  }
+  await scrollSettled(viewer.shadowRoot!.querySelector<HTMLElement>('[part="content"]')!);
 }
 
 /**

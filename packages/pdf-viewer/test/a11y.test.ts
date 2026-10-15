@@ -5,21 +5,10 @@ import sinon from 'sinon';
 import './enable-feature-flag.js';
 import '../vaadin-pdf-viewer.js';
 import type { PdfViewer } from '../vaadin-pdf-viewer.js';
-import { loadDocument, nextRenderIdle } from './helpers.js';
+import { loadDocument, nextRenderIdle, scrollSettled } from './helpers.js';
 
 describe('accessibility', () => {
   let viewer: PdfViewer;
-
-  /** Waits until a scroll, which can be animated, has settled. */
-  async function scrollSettled(element: HTMLElement) {
-    let last = -1;
-    let stableFrames = 0;
-    for (let i = 0; i < 120 && stableFrames < 3; i++) {
-      await nextFrame();
-      stableFrames = element.scrollTop === last ? stableFrames + 1 : 0;
-      last = element.scrollTop;
-    }
-  }
 
   function getContent() {
     return viewer.shadowRoot!.querySelector<HTMLElement>('[part="content"]')!;
