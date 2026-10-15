@@ -200,7 +200,7 @@ describe('interactions', () => {
       fire(selector, 'touchend');
       selector.click();
 
-      expect(spy.callCount).to.eql(1);
+      expect(spy).to.be.calledOnce;
       expect(comboBox.opened).to.be.true;
     });
 
@@ -214,7 +214,7 @@ describe('interactions', () => {
       item.click();
       await nextUpdate(comboBox);
 
-      expect(spy.callCount).to.eql(1);
+      expect(spy).to.be.calledOnce;
       expect(comboBox.opened).to.be.false;
       expect(comboBox.value).to.equal('foo');
     });
