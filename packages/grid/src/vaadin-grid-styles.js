@@ -147,6 +147,12 @@ registerStyles(
       white-space: nowrap;
     }
 
+    [part~='cell'] {
+      /* Browser default td styles use vertical-align: inherit, which forces every
+         cell in a row to restyle when the row's style changes. */
+      vertical-align: initial;
+    }
+
     [part~='cell'] > [tabindex] {
       display: flex;
       align-items: inherit;
