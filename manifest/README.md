@@ -23,12 +23,19 @@ yarn workspace @vaadin/manifest-tools compare --base origin/main
 
 ## Files
 
-| Path                                 | Purpose                                                                  |
-| ------------------------------------ | ------------------------------------------------------------------------ |
-| `custom-elements-manifest.config.js` | Analyzer config with the Vaadin plugins.                                 |
-| `plugins/preserve-overrides.js`      | Analyzer plugin that keeps the own type and privacy of overridden items. |
-| `scripts/split-cem.js`               | Splits the root `custom-elements.json` into one manifest per package.    |
-| `scripts/cem-api.js`                 | Writes API snapshots of both outputs and compares two of them.           |
-| `lib/cem-helpers.js`                 | Shared helpers that read packages and manifests.                         |
-| `lib/api-snapshot.js`                | Pure functions that build the snapshots, the diff and the PR comment.    |
-| `test/`                              | Unit tests that run with `node --test`.                                  |
+| Path                                 | Purpose                                                               |
+| ------------------------------------ | --------------------------------------------------------------------- |
+| `custom-elements-manifest.config.js` | Analyzer config with the Vaadin plugins.                              |
+| `scripts/split-cem.js`               | Splits the root `custom-elements.json` into one manifest per package. |
+| `scripts/cem-api.js`                 | Writes API snapshots of both outputs and compares two of them.        |
+| `lib/cem-helpers.js`                 | Shared helpers that read packages and manifests.                      |
+| `lib/api-snapshot.js`                | Pure functions that build the snapshots, the diff and the PR comment. |
+| `test/`                              | Unit tests that run with `node --test`.                               |
+
+## Plugins
+
+The following custom [CEM analyzer plugins](https://custom-elements-manifest.open-wc.org/analyzer/plugins/authoring/) are used:
+
+| Path                     | Purpose                                                                        |
+| ------------------------ | ------------------------------------------------------------------------------ |
+| `plugins/inheritance.js` | Applies inheritance from the own items of each class and mixin, nearest first. |
