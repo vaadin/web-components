@@ -1,0 +1,199 @@
+# Updates Playwright to the latest version and opens a pull request.
+#
+# Before the pull request is opened, the visual tests run with the new version.
+# Screenshots that fail are replaced with the new ones in a separate commit, so
+# that the reviewer can check them for regressions. Other test failures are
+# left for the checks of the pull request.
+#
+# Only one update pull request is open at a time: while one is open, the
+# workflow does nothing.
+
+name: Update Playwright
+
+on:
+  workflow_dispatch:
+
+concurrency:
+  group: ${{ github.workflow }}
+  cancel-in-progress: false
+
+permissions:
+  contents: read
+
+jobs:
+  update:
+    name: Update version
+    # The pull request targets main, so the update must start from main too
+    if: github.ref == 'refs/heads/main'
+    runs-on: ubuntu-latest
+    permissions:
+      contents: read
+      pull-requests: read
+    outputs:
+      version: ${{ steps.update.outputs.version }}
+
+    steps:
+      - uses: actions/checkout@v7
+        with:
+          persist-credentials: false
+
+      - name: Check for an open pull request
+        id: check
+        env:
+          GH_TOKEN: ${{ github.token }}
+        run: |
+          open=$(gh pr list --repo "$GITHUB_REPOSITORY" --state open --limit 500 --json headRefName \
+            --jq '[.[] | select(.headRefName | startswith("update-playwright-"))] | length')
+          if [ "$open" != "0" ]; then
+            echo "A Playwright update pull request is still open, skipping." | tee -a "$GITHUB_STEP_SUMMARY"
+            exit 0
+          fi
+          echo "update=true" >> "$GITHUB_OUTPUT"
+
+      - uses: actions/setup-node@v6
+        if: ${{ steps.check.outputs.update }}
+        with:
+          node-version: '24'
+          cache: 'yarn'
+
+      # Writes the version to the outputs only when the files were updated
+      - name: Update Playwright
+        id: update
+        if: ${{ steps.check.outputs.update }}
+        run: |
+          node scripts/updatePlaywright.js
+          git diff > playwright.patch
+
+      - uses: actions/upload-artifact@v6
+        if: ${{ steps.update.outputs.version }}
+        with:
+          name: playwright-patch
+          path: playwright.patch
+
+  screenshots:
+    name: Screenshots (${{ matrix.name }})
+    needs: update
+    if: ${{ needs.update.outputs.version }}
+    runs-on: ubuntu-latest
+    container:
+      image: mcr.microsoft.com/playwright:v${{ needs.update.outputs.version }}-noble
+      options: --ipc=host
+    env:
+      PLAYWRIGHT_SKIP_BROWSER_DOWNLOAD: 1
+
+    strategy:
+      fail-fast: false
+      matrix:
+        include:
+          - name: base
+            args: --config web-test-runner-base.config.js
+          - name: lumo
+            args: --config web-test-runner-lumo.config.js
+          - name: aura
+            args: --config web-test-runner-aura.config.js
+          - name: aura-dark
+            args: --config web-test-runner-aura.config.js --dark
+
+    steps:
+      - uses: actions/checkout@v7
+        with:
+          persist-credentials: false
+
+      - uses: actions/download-artifact@v8
+        with:
+          name: playwright-patch
+
+      - name: Apply update
+        run: |
+          git config --global --add safe.directory "$GITHUB_WORKSPACE"
+          git apply playwright.patch
+          rm playwright.patch
+
+      - name: Install Dependencies
+        run: yarn --frozen-lockfile --no-progress --non-interactive
+
+      - name: Visual tests
+        id: tests
+        continue-on-error: true
+        run: yarn test ${{ matrix.args }} --all
+
+      # A failed test writes the new screenshot to `failed/<name>.png`, next to
+      # the `baseline` folder, and the difference to `failed/<name>-diff.png`
+      - name: Update failed screenshots
+        if: ${{ steps.tests.outcome == 'failure' }}
+        run: |
+          failed=$(find packages -path '*/failed/*.png' ! -name '*-diff.png')
+          if [ -z "$failed" ]; then
+            echo "::warning::Visual tests failed without failed screenshots, see the test output."
+            exit 0
+          fi
+          for file in $failed; do
+            cp "$file" "$(dirname "$(dirname "$file")")/baseline/"
+          done
+          git diff --binary -- ':(glob)packages/**/baseline/*.png' > screenshots.patch
+
+      - uses: actions/upload-artifact@v6
+        if: ${{ steps.tests.outcome == 'failure' }}
+        with:
+          name: screenshots-${{ matrix.name }}
+          path: screenshots.patch
+          if-no-files-found: ignore
+
+  pull-request:
+    name: Open pull request
+    needs: [update, screenshots]
+    if: ${{ needs.update.outputs.version }}
+    runs-on: ubuntu-latest
+
+    steps:
+      # Pushes with the bot token: branches and pull requests created with the
+      # default token do not start the checks of the pull request
+      - uses: actions/checkout@v7
+        with:
+          token: ${{ secrets.VAADIN_BOT_TOKEN }}
+
+      - uses: actions/download-artifact@v8
+        with:
+          path: ${{ runner.temp }}/patches
+
+      - name: Commit and open pull request
+        env:
+          GH_TOKEN: ${{ secrets.VAADIN_BOT_TOKEN }}
+          VERSION: ${{ needs.update.outputs.version }}
+          PATCHES: ${{ runner.temp }}/patches
+        run: |
+          branch="update-playwright-$VERSION"
+          title="chore: upgrade Playwright version to $VERSION"
+
+          git config user.name "github-actions[bot]"
+          git config user.email "41898282+github-actions[bot]@users.noreply.github.com"
+          git switch -c "$branch"
+
+          git apply "$PATCHES/playwright-patch/playwright.patch"
+          git commit -am "$title"
+
+          bullets="- Updated \`playwright\` in \`package.json\` and \`react/package.json\`, which the visual tests also use for the Playwright Docker image"
+          for patch in "$PATCHES"/screenshots-*/screenshots.patch; do
+            if [ -f "$patch" ]; then
+              git apply "$patch"
+            fi
+          done
+          if ! git diff --quiet; then
+            count=$(git diff --name-only | wc -l)
+            git commit -am "test: update screenshots for Playwright $VERSION"
+            bullets="$bullets
+          - Updated $count screenshots that failed with the new version
+            - Check them for regressions before merging"
+          fi
+
+          # Replaces the branch of an update pull request that was closed without merging
+          git push --force origin "$branch"
+          gh pr create --base main --head "$branch" --title "$title" --body "## Description
+
+          Upgraded Playwright to [$VERSION](https://github.com/microsoft/playwright/releases/tag/v$VERSION).
+
+          $bullets
+
+          ## Type of change
+
+          - Internal change"
