@@ -77,44 +77,47 @@ Java (sketch, no code in the prototype):
 ```java
 @Tag("vaadin-panel")
 @JsModule("@vaadin/panel/src/vaadin-panel.js")
-public class Panel extends Component implements HasSize, HasStyle {
+public class Panel extends Component implements HasEnabled, HasSize, HasStyle {
     public Panel();
+    public Panel(Component... content);
     public Panel(String title);
     public Panel(String title, Component... content);
 
+    // Title, same shape as Card
     public void setTitle(String title);                  // headerTitle, removes a title component
     public void setTitle(String title, Integer headingLevel);
-    public String getTitle();
     public void setTitle(Component title);               // slot="title", clears headerTitle
-    public Component getTitleComponent();
-    public void setTitleHeadingLevel(Integer level);     // headingLevel, 1 to 6, default 2
-    public Integer getTitleHeadingLevel();
+    public Component getTitle();                         // the title component, or null
+    public String getTitleAsText();                      // headerTitle, or ""
+    public void setHeadingLevel(Integer level);          // headingLevel, 1 to 6, null resets to 2
+    public Integer getHeadingLevel();
 
+    // Single-occupant slot
     public void setHeaderPrefix(Component component);    // null empties the slot
     public Component getHeaderPrefix();
 
-    public void setHeaderSuffix(Component... components); // replaces all suffix children
-    public Component[] getHeaderSuffixComponents();
+    // Multi-occupant areas
+    public HasComponents getContent();
+    public HasComponents getHeaderSuffix();
+    public HasComponents getFooter();
 
-    public void setContent(Component... components);     // replaces all content children
-    public Component[] getContentComponents();
-
-    public void setFooter(Component... components);      // replaces all footer children
-    public Component[] getFooterComponents();
-
-    public void clear();                                 // empties title, slots, content and footer
+    // Content shortcuts
+    public void add(Component... components);            // getContent().add
+    public void add(Collection<Component> components);
+    public void add(String text);
+    public void remove(Component... components);         // getContent().remove
+    public void remove(Collection<Component> components);
+    public void removeAll();                             // getContent().removeAll
 }
-// No HasComponents. getChildren(), removeAll() and addComponentAtIndex() are not overridden.
-// getContent(), getFooter() and getHeaderSuffix() stay free for a later container API.
+// No HasComponents. getChildren() is not overridden.
 // No HasThemeVariant until a variant exists.
 ```
 
 ```java
-var panel = new Panel("Edit User");
+var panel = new Panel("Edit User", form);
 panel.setHeaderPrefix(closeButton);
-panel.setHeaderSuffix(cancelButton, saveButton);
-panel.setContent(form);
-panel.setFooter(deleteButton);
+panel.getHeaderSuffix().add(cancelButton, saveButton);
+panel.getFooter().add(deleteButton);
 ```
 
 React (generated wrapper, sketch only):
@@ -149,7 +152,8 @@ The API review must confirm these names:
 
 - The component name `Panel`
 - The `header-prefix` and `header-suffix` slot names
-- The Flow setter names and the `get*Components()` getters
+- The Flow container accessors `getContent()`, `getHeaderSuffix()` and `getFooter()`, and the `add`, `remove` and `removeAll` shortcuts
+- The name of the shared V26 interface for the shortcuts, with `HasContent` as the working name
 
 ### Requirements
 
@@ -232,16 +236,23 @@ The API review must confirm these names:
 
 **Flow**
 
-- [ ] `Panel()`, `Panel(String title)` and `Panel(String title, Component... content)` constructors
-- [ ] `setTitle(String)`, `setTitle(String, Integer)` and `setTitle(Component)` work the same as in Card.
-- [ ] `setTitleHeadingLevel(Integer)` sets the heading level of the generated title.
+- [ ] `Panel()`, `Panel(Component...)`, `Panel(String title)` and `Panel(String title, Component... content)` constructors
+- [ ] `setTitle(String)`, `setTitle(String, Integer)`, `setTitle(Component)`, `getTitle()` and `getTitleAsText()` work the same as in Card.
+- [ ] When the developer calls `setTitle(String)`, the component removes the title component. When the developer calls `setTitle(Component)`, the component removes `headerTitle`.
+- [ ] `setHeadingLevel(Integer)` sets the `headingLevel` property. When the argument is `null`, the component removes the property and the default level 2 applies. `getHeadingLevel()` returns `null` in that case.
 - [ ] `setHeaderPrefix(Component)` sets the `header-prefix` slot. When the argument is `null`, the slot becomes empty.
-- [ ] `setHeaderSuffix(Component...)`, `setContent(Component...)` and `setFooter(Component...)` replace all children of their area.
-- [ ] `getHeaderSuffixComponents()`, `getContentComponents()` and `getFooterComponents()` return `Component[]`.
-- [ ] `clear()` removes the title, the slot children, the content and the footer.
+- [ ] `getContent()`, `getHeaderSuffix()` and `getFooter()` return a `HasComponents` view of their area. Each call returns the same instance.
+  - [ ] `getChildren()` on a view lists the children of that area only.
+  - [ ] `add` on a view sets the `slot` attribute of the area. A component that moves from another area leaves that area.
+  - [ ] `removeAll()` on a view clears that area only.
+  - [ ] `remove` on a view throws `IllegalArgumentException` for a child of the panel in another area. For a component with no parent, it does nothing.
+  - [ ] `add(String)` on `getHeaderSuffix()` or `getFooter()` throws `IllegalArgumentException`.
+- [ ] `add`, `remove` and `removeAll` on the panel act on the content area only.
+- [ ] `getContent().bindChildren(...)` binds the content area to a signal. `bindChildren` on a named area throws `UnsupportedOperationException`.
 - [ ] `getChildren()` returns all children of all areas. The component does not override it.
-- [ ] When `beforeEnter` calls the setters again, the view shows the new item without old header, content or footer children.
-- [ ] `HasSize` and `HasStyle`
+- [ ] `HasEnabled`, `HasSize` and `HasStyle`. `setEnabled` on a view throws and names `Panel.setEnabled`.
+- [ ] When a view keeps its children as fields, `beforeEnter` updates their data and adds nothing again.
+- [ ] Feature flag `panelComponent`. When the flag is off, attaching the component throws `PanelExperimentalFeatureException`.
 - [ ] Browserless tester `PanelTester` with methods to get the title text and the components of each area
 
 **React**
@@ -318,10 +329,12 @@ None. The component is new.
 
 ### Follow-ups
 
-- **StarPass Flow class**: A StarPass-local Flow `Panel` class replaces `base/ui/ViewLayout.java`. It proves `clear()` and the replace setters on 6 detail views and the user editor.
+- **StarPass Flow class**: A StarPass-local Flow `Panel` class replaces `base/ui/ViewLayout.java`. It proves the area views and the shortcuts on 6 detail views and the user editor.
 - **Screen reader check**: The team checks the region role on use case 6 with NVDA and VoiceOver.
 - **Themes**: Lumo and Aura styles, with indicator lines and a surface variant.
-- **Container API**: When the Flow container RFC is ready, `getContent()` and `getFooter()` can return `HasComponents` views.
+- **Card and Dialog**: Card and Dialog add the same area views in 25.x. In V26 they drop `HasComponents` and implement the shared shortcut interface.
+- **Shared class in Flow**: The area views come from an internal `SlotContentManager` class in flow-components. A Flow issue asks to move it to `flow-server`.
+- **Tooling**: Copilot and the browserless-test remove helper check for `HasComponents`. Both need a Panel case before the feature flag goes away.
 - **Scroll API**: When a view shows a new item, the developer wants to scroll the content to the top.
 - **Issue update**: The team posts the prototype link and the decisions in issue #224.
 
@@ -343,20 +356,31 @@ Rejected options:
 
 **Q: Why does the Flow component not implement `HasComponents`?**
 
-The Flow API has a replace setter for each area: `setHeaderSuffix(Component...)`, `setContent(Component...)` and `setFooter(Component...)`. This shape avoids the problem of flow-components#9280:
+The panel has 3 areas that hold several components: the content, the header suffix and the footer. `HasComponents` on the panel makes `removeAll()`, `addComponentAtIndex()` and `getChildren()` ambiguous across these areas. This is the problem of flow-components#9280.
 
-- The component does not implement `HasComponents`, so `removeAll()` and `addComponentAtIndex()` cannot act on all slots.
+The Flow API gives each area the API that fits it:
+
+- The title and the header prefix hold 1 component each. They have a setter and a getter, as in Card.
+- The content, the header suffix and the footer each have a `HasComponents` view: `getContent()`, `getHeaderSuffix()` and `getFooter()`.
+- `add`, `remove` and `removeAll` on the panel are shortcuts for `getContent()`.
 - The component does not override `getChildren()`, so the component tree stays true for Copilot and browserless tests.
-- The names `getContent()`, `getFooter()` and `getHeaderSuffix()` stay free for a later container API.
 
 Rejected options:
 
 - `HasComponents` for the content plus setters for the slots, the Card model. With a `getChildren()` override, the tree is wrong. Without it, `removeAll()` also clears the header.
-- Container accessors that return `HasComponents` views. They need a shared `SlotContentManager` in flow-components, and the RFC is open.
+- A replace setter for each area, for example `setFooter(Component...)` and `getFooterComponents()`. Card and Dialog cannot use this shape without a new idiom. The area views can be the shared shape for Panel, Card and Dialog.
+
+**Q: Why does the Flow API use area views and not replace setters?**
+
+The first draft had replace setters and `clear()`. The issue comment https://github.com/vaadin/web-components/issues/224#issuecomment-6216165803 replaced them with area views, based on the discussion in flow-components#9280. Card and Dialog can add the same views in 25.x and drop `HasComponents` in V26. `add` of a child that is already attached does not duplicate it, so a reused view needs no `clear()`.
 
 **Q: Are the web component properties `headerTitle` and `headingLevel`?**
 
-Yes. The names are the same as in Dialog. `headerTitle` does not clash with the native `title` attribute, which shows a tooltip. The names do not repeat the component name, as `panelTitle` would. The Flow names follow Flow Card: `setTitle()` and `setTitleHeadingLevel()`.
+Yes. The names are the same as in Dialog. `headerTitle` does not clash with the native `title` attribute, which shows a tooltip. The names do not repeat the component name, as `panelTitle` would. The Flow title methods follow Flow Card: `setTitle()`, `getTitle()` and `getTitleAsText()`.
+
+**Q: Why is the Flow heading level method `setHeadingLevel` and not `setTitleHeadingLevel`?**
+
+The name matches the web component property `headingLevel`. Flow Accordion and Login use the same name. Flow Card uses `setTitleHeadingLevel`, but the panel property has no `title` prefix.
 
 **Q: Why does the host have the `region` role by default?**
 
