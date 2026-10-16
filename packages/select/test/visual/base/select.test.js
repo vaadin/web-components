@@ -175,7 +175,7 @@ describe('select', () => {
           element.value = 'long';
         });
 
-        // A physical alignment only differs from the start when it points to the end
+        // Physical alignments keep their side on overflow, which is only visible when it is the end side
         ['align-center', 'align-end', dir === 'rtl' ? 'align-left' : 'align-right'].forEach((theme) => {
           it(theme, async () => {
             element.setAttribute('theme', theme);
