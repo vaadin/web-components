@@ -5,6 +5,7 @@
  */
 import '@vaadin/component-base/src/styles/style-props.js';
 import { css } from 'lit';
+import { registerCSSProperty } from '@vaadin/component-base/src/css-utils.js';
 
 export const field = css`
   :host {
@@ -242,8 +243,17 @@ export const fieldLabelAside = css`
   }
 `;
 
+// Register as a length to not break max() below when set to auto
+registerCSSProperty({
+  name: '--_field-input-custom-height',
+  syntax: '<length>',
+  inherits: false,
+  initialValue: '0px',
+});
+
 export const fieldInputHeight = css`
   :host {
-    --_field-input-height: max(var(--vaadin-input-field-height, 0px), var(--_field-input-default-height));
+    --_field-input-custom-height: var(--vaadin-input-field-height, 0px);
+    --_field-input-height: max(var(--_field-input-custom-height), var(--_field-input-default-height));
   }
 `;
