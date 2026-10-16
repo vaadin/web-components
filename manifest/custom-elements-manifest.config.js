@@ -6,7 +6,7 @@ import { publicApiPlugin } from './plugins/public-api.js';
 import { readonlyPlugin } from './plugins/readonly.js';
 
 export default {
-  globs: ['packages/**/src/(vaadin-*.js|*-mixin.js)'],
+  globs: ['packages/**/src/(vaadin-*.js|*-mixin.js)', 'labs/*/src/(vaadin-*.js|*-mixin.js)'],
   packagejson: false,
   litelement: true,
   // `globby` lists the files in no fixed order, and the analyzer applies

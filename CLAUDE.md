@@ -9,6 +9,7 @@ This is the Vaadin Web Components monorepo - a collection of high-quality, acces
 ### Monorepo Structure
 
 - `packages/`: Individual component packages (each has src/, test/, and entry files)
+- `labs/`: Experimental components in one package, `@vaadin/labs`, one sub-folder per component with the inner layout of a package. Rules in `guidelines/labs.md`
 - `packages/component-base/`: Core utilities and mixins shared across components
 - `packages/a11y-base/`: Accessibility mixins and utilities
 - `packages/field-base/`: Field component mixins and utilities

@@ -140,7 +140,7 @@ function parseLog(log) {
           pos = 'head';
         } else if (line.startsWith(' ')) {
           commit.body = String(commit.body);
-        } else if (/^packages\/.*/u.test(line)) {
+        } else if (/^packages\/.*/u.test(line) || /^labs\/[^/]+\//u.test(line)) {
           const wc = line.split('/')[1];
           if (!commit.components.includes(wc)) {
             commit.components.push(wc);

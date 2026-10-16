@@ -46,6 +46,13 @@ packages/{name}/
 The Lumo and Aura per-component CSS files live in `packages/vaadin-lumo-styles/`
 and `packages/aura/` respectively — see [Theming](theming.md).
 
+## Experimental components start in `labs/`
+
+A new experimental component starts in `labs/<name>/`, not in `packages/`.
+The `labs/<name>/` folder has the same inner layout as a package, without
+`package.json`, `LICENSE` and `README.md`. It graduates to `packages/<name>/`
+with a folder move. See [Labs](labs.md) for the steps.
+
 ## Root-level entrypoints
 
 Only **publicly exposed components** get `vaadin-{name}.js` files at the

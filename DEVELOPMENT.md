@@ -107,6 +107,12 @@ Run tests for single package:
 yarn test --group combo-box
 ```
 
+Components in `labs/` use their name as the group, the same as packages:
+
+```sh
+yarn test --group <name>
+```
+
 Debug tests for single package:
 
 ```sh

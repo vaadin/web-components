@@ -1,3 +1,4 @@
+import path from 'node:path';
 import * as ts from 'typescript';
 
 function findPropertyAccessForMember(node: ts.Node, memberName: string): ts.PropertyAccessExpression | undefined {
@@ -26,6 +27,7 @@ export class TypeContext {
   private checker: ts.TypeChecker;
   private relatedTypes = new Map<string, RelatedTypeInfo>();
   private elementSchema: any;
+  private rootDir: string;
 
   constructor(elementSchema: any) {
     this.elementSchema = elementSchema;
@@ -34,6 +36,7 @@ export class TypeContext {
     const className = elementSchema.name;
     const configPath = ts.findConfigFile('../', ts.sys.fileExists, 'tsconfig.json');
     if (!configPath) throw new Error('tsconfig.json not found');
+    this.rootDir = path.dirname(path.resolve(configPath));
 
     const configFile = ts.readConfigFile(configPath, ts.sys.readFile);
     const parsed = ts.parseJsonConfigFileContent(configFile.config, ts.sys, './');
@@ -113,10 +116,13 @@ export class TypeContext {
   }
 
   private findDeclaration(typeName: string): RelatedTypeDeclaration | undefined {
-    // Only consider declaration files in monorepo packages
+    // Only consider declaration files in monorepo packages and labs
     const relatedSourceFiles = this.program
       .getSourceFiles()
-      .filter((file) => file.fileName.includes(`/packages/`))
+      .filter(
+        (file) =>
+          file.fileName.includes(`/packages/`) || path.relative(this.rootDir, file.fileName).startsWith('labs/'),
+      )
       .filter((file) => file.isDeclarationFile);
 
     const typeNameLower = typeName.toLowerCase();

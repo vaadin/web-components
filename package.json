@@ -13,7 +13,7 @@
     "dev:build": "yarn workspace dev build",
     "dev:start": "yarn workspace dev start",
     "lint": "npm-run-all --parallel lint:*",
-    "lint:css": "stylelint --ignore-path .gitignore \"packages/**/src/**/*.js\" \"packages/vaadin-lumo-styles/mixins/*.js\" \"packages/**/*.css\" \"dev/**/*.html\"",
+    "lint:css": "stylelint --ignore-path .gitignore \"packages/**/src/**/*.js\" \"labs/**/src/**/*.js\" \"packages/vaadin-lumo-styles/mixins/*.js\" \"packages/**/*.css\" \"dev/**/*.html\"",
     "lint:js": "eslint",
     "lint:types": "tsc",
     "lint:types:react": "yarn workspace react-components-tooling lint:types",
@@ -96,6 +96,7 @@
   "workspaces": [
     "test/*",
     "packages/*",
+    "labs",
     "api-docs",
     "dev",
     "manifest",

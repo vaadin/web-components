@@ -48,13 +48,17 @@ function fillMissingFields(nearerItem, fartherItem) {
  * path of the module that declares it, `packages/<package>/src/<file>.js`.
  * The analyzer records a relative import with a leading slash, as it resolves
  * it against `file:///`, and a bare import as a package. A `@vaadin/<package>`
- * import points to the workspace of that name under `packages/`.
+ * import points to the workspace of that name under `packages/`, and a
+ * `@vaadin/labs` import to `labs/`.
  * @param {{ name: string, module?: string, package?: string }} reference
  * @return {string | undefined} undefined for a package outside this repo, such as `lit`
  */
 function referencedModulePath(reference) {
   if (reference.module) {
     return reference.module.replace(/^\//u, '');
+  }
+  if (reference.package?.startsWith('@vaadin/labs/')) {
+    return reference.package.slice('@vaadin/'.length);
   }
   if (reference.package?.startsWith('@vaadin/')) {
     return `packages/${reference.package.slice('@vaadin/'.length)}`;

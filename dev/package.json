@@ -35,6 +35,7 @@
     "@vaadin/horizontal-layout": "25.4.0-alpha3",
     "@vaadin/icon": "25.4.0-alpha3",
     "@vaadin/integer-field": "25.4.0-alpha3",
+    "@vaadin/labs": "25.4.0-alpha3",
     "@vaadin/list-box": "25.4.0-alpha3",
     "@vaadin/map": "25.4.0-alpha3",
     "@vaadin/menu-bar": "25.4.0-alpha3",

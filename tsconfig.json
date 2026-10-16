@@ -14,7 +14,7 @@
     "allowImportingTsExtensions": true,
     "allowSyntheticDefaultImports": true
   },
-  "include": ["packages/**/*.ts", "test"],
+  "include": ["packages/**/*.ts", "labs/**/*.ts", "test"],
   // React packages are type-checked by react/tsconfig.json
   "exclude": ["packages/react-components*/**", "react/**"]
 }

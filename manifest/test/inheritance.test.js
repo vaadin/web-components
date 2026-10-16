@@ -261,6 +261,26 @@ describe('inheritancePlugin', () => {
     assert.equal(checkValidity.inheritedFrom.name, 'ConstraintsMixin');
   });
 
+  test('should resolve a mixin imported from @vaadin/labs to labs/', () => {
+    const modules = [
+      {
+        path: 'labs/sandbox/src/vaadin-sandbox-mixin.js',
+        declarations: [{ kind: 'mixin', name: 'SandboxMixin', members: [field('label', 'string')] }],
+      },
+      {
+        path: 'labs/other/src/vaadin-other.js',
+        declarations: [
+          {
+            kind: 'class',
+            name: 'Other',
+            mixins: [{ name: 'SandboxMixin', package: '@vaadin/labs/sandbox/src/vaadin-sandbox-mixin.js' }],
+          },
+        ],
+      },
+    ];
+    assert.deepEqual(names(declaration(analyze(modules), 'Other').members), ['label<SandboxMixin']);
+  });
+
   test('should give the same result for any module order', () => {
     const forward = analyze(fieldModules);
     const reversed = analyze([...fieldModules].reverse());
