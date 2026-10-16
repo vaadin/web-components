@@ -53,6 +53,11 @@ const main = async () => {
   const currentVersion = getCurrentVersion();
   const version = process.argv[2] || (await getLatestVersion());
 
+  // The version ends up in URLs, files, branch names and the workflow outputs
+  if (!/^\d+\.\d+\.\d+$/u.test(version)) {
+    throw new Error('Invalid Playwright version, expected a release version like 1.2.3');
+  }
+
   if (version === currentVersion) {
     console.log(`Playwright is up to date (${version}).`);
     return;
