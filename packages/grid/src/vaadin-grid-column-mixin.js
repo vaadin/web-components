@@ -309,17 +309,6 @@ export const ColumnBaseMixin = (superClass) =>
     disconnectedCallback() {
       super.disconnectedCallback();
 
-      // Releases the column cells after the column is detached
-      requestAnimationFrame(() => {
-        // Skip if the column has been attached again
-        if (this._grid) {
-          return;
-        }
-
-        this._cells = [];
-        this._sizerCell = null;
-      });
-
       this.#cachedGrid = undefined;
     }
 
