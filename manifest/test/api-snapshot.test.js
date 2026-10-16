@@ -110,6 +110,25 @@ describe('snapshotManifest', () => {
     ]);
   });
 
+  test('should flag the default of attributes and properties', () => {
+    const snapshot = snapshotManifest(
+      manifestOf({
+        attributes: [{ name: 'opened', fieldName: 'opened', type: { text: 'boolean' }, default: 'false' }],
+        members: [
+          { kind: 'field', name: 'opened', type: { text: 'boolean' }, attribute: 'opened', default: 'false' },
+          { kind: 'field', name: 'label', type: { text: 'string' }, default: "'Search\n...'" },
+          { kind: 'field', name: 'items', type: { text: 'Item[]' } },
+        ],
+      }),
+    );
+    assert.deepEqual(snapshot.split('\n').slice(1, 5), [
+      '  attribute opened: boolean [default=false]',
+      '  property items: Item[]',
+      "  property label: string [default='Search ...']",
+      '  property opened: boolean [attribute=opened] [default=false]',
+    ]);
+  });
+
   test('should flag a deprecated element in its header', () => {
     const snapshot = snapshotManifest(manifestOf({ deprecated: 'Use vaadin-y' }));
     assert.equal(snapshot, 'vaadin-x (X) [deprecated]\n');
@@ -134,7 +153,7 @@ describe('snapshotManifest', () => {
 });
 
 describe('snapshotWebTypes', () => {
-  test('should render attributes and properties with a string or a list type', () => {
+  test('should render attributes and properties with a string or a list type and a default', () => {
     const snapshot = snapshotWebTypes([
       {
         contributions: {
@@ -142,8 +161,13 @@ describe('snapshotWebTypes', () => {
             elements: [
               {
                 name: 'vaadin-x',
-                attributes: [{ name: 'disabled', value: { type: 'boolean' } }],
-                js: { properties: [{ name: 'items', value: { type: ['Item[]', 'undefined'] } }, { name: 'renderer' }] },
+                attributes: [{ name: 'disabled', value: { type: 'boolean' }, default: 'false' }],
+                js: {
+                  properties: [
+                    { name: 'items', value: { type: ['Item[]', 'undefined'] }, default: '[]' },
+                    { name: 'renderer' },
+                  ],
+                },
               },
             ],
           },
@@ -154,8 +178,8 @@ describe('snapshotWebTypes', () => {
       snapshot,
       [
         'vaadin-x',
-        '  attribute disabled: boolean',
-        '  property items: Item[] | undefined',
+        '  attribute disabled: boolean [default=false]',
+        '  property items: Item[] | undefined [default=[]]',
         '  property renderer',
         '',
       ].join('\n'),
