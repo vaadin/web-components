@@ -145,6 +145,15 @@ describe('timers', () => {
       expect(tooltip.opened).to.be.not.ok;
     });
 
+    it('should still open after the delay when moved in the DOM meanwhile', async () => {
+      tabKeyDown(document.body);
+      target.focus();
+      target.parentNode.appendChild(tooltip);
+
+      await aTimeout(1);
+      expect(overlay.opened).to.be.true;
+    });
+
     it('should still open after the delay when another tooltip is removed meanwhile', async () => {
       const other = fixtureSync('<vaadin-tooltip text="other"></vaadin-tooltip>');
       await nextUpdate(other);

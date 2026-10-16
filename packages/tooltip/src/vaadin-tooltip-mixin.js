@@ -428,7 +428,12 @@ export const TooltipMixin = (superClass) =>
         this._stateController.close(true);
       } else {
         // A tooltip waiting for its delay must not open while detached.
-        this._stateController.cancelOpen();
+        // Avoid cancelling if the tooltip is just moved in the DOM.
+        queueMicrotask(() => {
+          if (!this.isConnected) {
+            this._stateController.cancelOpen();
+          }
+        });
       }
       this._isConnected = false;
 
