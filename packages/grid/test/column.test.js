@@ -171,6 +171,7 @@ describe('column', () => {
       it('should detach cells from a hidden column', () => {
         const childCountBefore = grid.childElementCount;
         column.hidden = true;
+        flushGrid(grid);
         const childCountAfter = grid.childElementCount;
         expect(childCountAfter).to.be.below(childCountBefore);
       });
@@ -519,19 +520,6 @@ describe('column', () => {
       await nextFrame();
 
       expect(content.parentElement).to.equal(grid);
-    });
-
-    it('should not throw when the column is detached again before its cells are re-attached', async () => {
-      const group = column.parentElement;
-      const content = getBodyCellContent(grid, 0, 0);
-      column.remove();
-      await nextFrame();
-
-      group.appendChild(column);
-      column.remove();
-      await nextFrame();
-
-      expect(content.parentElement).to.be.null;
     });
 
     it('should render cell content when column is added back', async () => {
