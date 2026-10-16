@@ -32,6 +32,13 @@ function getWebTypesPackages() {
 const byName = (a, b) => a.name.localeCompare(b.name);
 
 /**
+ * The `deprecated` flag or message of a manifest item for its web-types entry.
+ * @param {{ deprecated?: boolean | string }} item
+ * @return {{ deprecated?: boolean | string }}
+ */
+const deprecation = (item) => (item.deprecated ? { deprecated: item.deprecated } : {});
+
+/**
  * Maps a type such as `'boolean | null | undefined'` into an array of type
  * strings, such as `['boolean', 'null', 'undefined']`
  * @param {{ text: string }} [type] - The type object
@@ -91,6 +98,7 @@ function createPlainElementDefinition(packageJson, elementDeclaration) {
       value: {
         type: mapType(attribute.type),
       },
+      ...deprecation(attribute),
     }));
 
   const properties = getPublicWritableProperties(elementDeclaration)
@@ -101,16 +109,19 @@ function createPlainElementDefinition(packageJson, elementDeclaration) {
       value: {
         type: mapType(prop.type),
       },
+      ...deprecation(prop),
     }));
 
   const events = (elementDeclaration.events || []).sort(byName).map((event) => ({
     name: event.name,
     description: transformDescription(packageJson, event.description || ''),
+    ...deprecation(event),
   }));
 
   return {
     name: elementDeclaration.tagName,
     description: transformDescription(packageJson, elementDeclaration.description || ''),
+    ...deprecation(elementDeclaration),
     attributes,
     js: {
       properties,
@@ -136,25 +147,26 @@ function createPlainWebTypes(packageJson, packageElements) {
 }
 
 function createLitElementDefinition(packageJson, elementDeclaration) {
-  function toLitAttribute(name, description) {
+  function toLitAttribute(name, item) {
     return {
       name,
-      description: transformDescription(packageJson, description || ''),
+      description: transformDescription(packageJson, item.description || ''),
       // Type checking does not work with template tagged literals.
       // Since this Lit binding should use an expression, just declare it as such.
       value: { kind: 'expression' },
+      ...deprecation(item),
     };
   }
 
   const publicProperties = getPublicWritableProperties(elementDeclaration);
   const propertyBindings = publicProperties.sort(byName).map((prop) => {
     const prefix = mapType(prop.type).includes('boolean') ? '?' : '.';
-    return toLitAttribute(`${prefix}${prop.name}`, prop.description);
+    return toLitAttribute(`${prefix}${prop.name}`, prop);
   });
 
   const eventBindings = (elementDeclaration.events || [])
     .sort(byName)
-    .map((event) => toLitAttribute(`@${event.name}`, event.description));
+    .map((event) => toLitAttribute(`@${event.name}`, event));
 
   return {
     name: elementDeclaration.tagName,
