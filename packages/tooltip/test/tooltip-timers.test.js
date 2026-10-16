@@ -148,7 +148,9 @@ describe('timers', () => {
     it('should still open after the delay when moved in the DOM meanwhile', async () => {
       tabKeyDown(document.body);
       target.focus();
-      target.parentNode.appendChild(tooltip);
+      const parent = tooltip.parentElement;
+      tooltip.remove();
+      parent.appendChild(tooltip);
 
       await aTimeout(1);
       expect(overlay.opened).to.be.true;
