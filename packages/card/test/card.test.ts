@@ -106,6 +106,22 @@ describe('vaadin-card', () => {
         await nextRender();
         expect(getCustomTitleElement()).to.equal(customTitleElement);
       });
+
+      it('should not modify custom title element when it is removed', async () => {
+        customTitleElement.remove();
+        await nextRender();
+        expect(customTitleElement.textContent).to.equal('Custom title element');
+        expect(customTitleElement.hasAttribute('aria-level')).to.be.false;
+      });
+
+      it('should use custom title element when it is removed and added again', async () => {
+        customTitleElement.remove();
+        await nextRender();
+        card.appendChild(customTitleElement);
+        await nextRender();
+        expect(getCustomTitleElement()).to.equal(customTitleElement);
+        expect(customTitleElement.textContent).to.equal('Custom title element');
+      });
     });
   });
 

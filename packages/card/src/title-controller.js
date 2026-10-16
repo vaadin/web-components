@@ -86,7 +86,8 @@ export class TitleController extends SlotChildObserveController {
   /**
    * Override method inherited from `SlotChildObserveController` to drop the
    * labelling once the generated title node leaves the slot and is not
-   * replaced by a custom title.
+   * replaced by a custom title. Also releases the removed node, so that
+   * the same node can be added again.
    *
    * @param {Node} node
    * @protected
@@ -95,6 +96,10 @@ export class TitleController extends SlotChildObserveController {
   teardownNode(node) {
     if (this.getSlotChild() !== this.defaultNode) {
       this.host.removeAttribute('aria-labelledby');
+    }
+
+    if (node === this.node) {
+      this.node = null;
     }
 
     super.teardownNode(node);
