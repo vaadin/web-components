@@ -547,6 +547,22 @@ describe('column', () => {
       expect(getContainerCellContent(grid.$.footer, 0, 0).textContent).to.equal('footer1');
       expect(getBodyCellContent(grid, 0, 0).textContent).to.equal('cell');
     });
+
+    it('should not keep cells of a hidden column after it is removed and added back', async () => {
+      const group = column.parentElement;
+      column.hidden = true;
+      flushGrid(grid);
+
+      column.remove();
+      await nextFrame();
+
+      group.insertBefore(column, group.firstElementChild);
+      column.hidden = false;
+      await nextFrame();
+      flushGrid(grid);
+
+      expect(column._cells.length).to.equal(getPhysicalItems(grid).length + 1);
+    });
   });
 
   describe('removed column', () => {

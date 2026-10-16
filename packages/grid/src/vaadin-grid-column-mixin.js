@@ -305,38 +305,18 @@ export const ColumnBaseMixin = (superClass) =>
     }
 
     /** @protected */
-    connectedCallback() {
-      super.connectedCallback();
-
-      // Adds the column cells to the grid after the column is attached
-      requestAnimationFrame(() => {
-        // Skip if the column has been detached
-        if (!this._grid) {
-          return;
-        }
-
-        this._cells?.forEach((cell) => {
-          if (!cell._content.parentNode) {
-            this._grid.appendChild(cell._content);
-          }
-        });
-      });
-    }
-
-    /** @protected */
     disconnectedCallback() {
       super.disconnectedCallback();
 
-      // Removes the column cells from the grid after the column is detached
+      // Releases the column cells after the column is detached
       requestAnimationFrame(() => {
         // Skip if the column has been attached again
         if (this._grid) {
           return;
         }
 
-        this._cells?.forEach((cell) => {
-          cell._content.parentNode?.removeChild(cell._content);
-        });
+        this._cells = [];
+        this._sizerCell = null;
       });
 
       this._gridValue = undefined;
