@@ -123,13 +123,26 @@ describe('select', () => {
   });
 
   describe('alignment', () => {
-    it('align-center overflow', async () => {
-      element.setAttribute('theme', 'align-center');
-      element.style.width = '120px';
-      element.items = [{ label: 'An item with a long label', value: 'long' }];
-      element.value = 'long';
-      await nextFrame();
-      await visualDiff(div, 'align-center-overflow');
+    afterEach(() => {
+      document.documentElement.removeAttribute('dir');
+    });
+
+    // In RTL, align-left aligns to the end
+    [
+      ['align-center', 'ltr'],
+      ['align-end', 'ltr'],
+      ['align-right', 'ltr'],
+      ['align-left', 'rtl'],
+    ].forEach(([theme, dir]) => {
+      it(`${theme} ${dir} overflow`, async () => {
+        document.documentElement.setAttribute('dir', dir);
+        element.setAttribute('theme', theme);
+        element.style.width = '120px';
+        element.items = [{ label: 'An item with a long label', value: 'long' }];
+        element.value = 'long';
+        await nextFrame();
+        await visualDiff(div, `${dir}-${theme}-overflow`);
+      });
     });
   });
 
