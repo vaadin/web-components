@@ -14,7 +14,7 @@ import {
   byName,
   isElement,
   listPackages,
-  packagesDir,
+  packageDir,
   readManifest,
   readPackageJson,
   rootDir,
@@ -152,7 +152,7 @@ for (const metaPackage of META_PACKAGES) {
   };
 
   for (const [name, content] of Object.entries(files)) {
-    const file = path.join(packagesDir, metaPackage.dir, name);
+    const file = path.join(packageDir(metaPackage.dir), name);
 
     if (check) {
       if (!fs.existsSync(file) || fs.readFileSync(file, 'utf-8') !== content) {

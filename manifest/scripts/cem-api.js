@@ -26,6 +26,7 @@ import {
   snapshotManifest,
   snapshotWebTypes,
 } from '../lib/api-snapshot.js';
+import { listPackageDirs, packageDir } from '../lib/cem-helpers.js';
 
 const USAGE =
   'Usage: yarn workspace @vaadin/manifest-tools compare [--base <ref>] [--out <dir>] [--base-label <text>] [--head-label <text>]';
@@ -57,14 +58,6 @@ const run = (cmd, cmdArgs, cwd) =>
 
 const CONFIG = 'manifest/custom-elements-manifest.config.js';
 
-/** @return {string[]} the package directory names, sorted, without stray files such as `.DS_Store` */
-const packageDirs = (dir) =>
-  fs
-    .readdirSync(path.join(dir, 'packages'), { withFileTypes: true })
-    .filter((entry) => entry.isDirectory())
-    .map((entry) => entry.name)
-    .sort();
-
 /**
  * @param {string} dir the checkout to generate the manifests in
  * @return {{ manifest: object, webTypes: object[] }}
@@ -76,9 +69,9 @@ function generate(dir) {
 
   // Leftovers of another revision would end up in the snapshot
   fs.rmSync(path.join(dir, 'custom-elements.json'), { force: true });
-  for (const pkg of packageDirs(dir)) {
+  for (const pkg of listPackageDirs(dir)) {
     for (const file of ['custom-elements.json', 'web-types.json', 'web-types.lit.json']) {
-      fs.rmSync(path.join(dir, 'packages', pkg, file), { force: true });
+      fs.rmSync(path.join(packageDir(pkg, dir), file), { force: true });
     }
   }
 
@@ -88,8 +81,8 @@ function generate(dir) {
 
   const manifest = JSON.parse(fs.readFileSync(path.join(dir, 'custom-elements.json'), 'utf-8'));
   const webTypes = [];
-  for (const pkg of packageDirs(dir)) {
-    const filePath = path.join(dir, 'packages', pkg, 'web-types.json');
+  for (const pkg of listPackageDirs(dir)) {
+    const filePath = path.join(packageDir(pkg, dir), 'web-types.json');
     if (fs.existsSync(filePath)) {
       webTypes.push(JSON.parse(fs.readFileSync(filePath, 'utf-8')));
     }
