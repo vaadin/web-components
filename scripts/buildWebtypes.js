@@ -39,6 +39,13 @@ const byName = (a, b) => a.name.localeCompare(b.name);
 const deprecation = (item) => (item.deprecated ? { deprecated: item.deprecated } : {});
 
 /**
+ * The `default` of a manifest item for its web-types entry, the source text of the value.
+ * @param {{ default?: string }} item
+ * @return {{ default?: string }}
+ */
+const defaultValue = (item) => (item.default === undefined ? {} : { default: item.default });
+
+/**
  * Maps a type such as `'boolean | null | undefined'` into an array of type
  * strings, such as `['boolean', 'null', 'undefined']`
  * @param {{ text: string }} [type] - The type object
@@ -98,6 +105,7 @@ function createPlainElementDefinition(packageJson, elementDeclaration) {
       value: {
         type: mapType(attribute.type),
       },
+      ...defaultValue(attribute),
       ...deprecation(attribute),
     }));
 
@@ -109,6 +117,7 @@ function createPlainElementDefinition(packageJson, elementDeclaration) {
       value: {
         type: mapType(prop.type),
       },
+      ...defaultValue(prop),
       ...deprecation(prop),
     }));
 
