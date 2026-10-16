@@ -1,0 +1,217 @@
+<!doctype html>
+<html lang="en">
+  <head>
+    <meta charset="UTF-8" />
+    <meta http-equiv="X-UA-Compatible" content="IE=edge" />
+    <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+    <title>Panel</title>
+    <script type="module" src="./common.js"></script>
+    <style>
+      .phone {
+        height: 560px;
+        width: 360px;
+        border: 1px solid #ccc;
+      }
+
+      .wide {
+        height: 480px;
+        width: 800px;
+        border: 1px solid #ccc;
+      }
+
+      .text {
+        padding: 0 var(--vaadin-padding-s, 8px);
+      }
+
+      .placeholder {
+        display: flex;
+        align-items: center;
+        justify-content: center;
+        height: 100%;
+      }
+
+      .hero {
+        display: block;
+        width: 100%;
+        height: 200px;
+        object-fit: cover;
+        background: linear-gradient(135deg, #3a1c71, #d76d77, #ffaf7b);
+      }
+    </style>
+    <script type="module">
+      window.Vaadin ||= {};
+      window.Vaadin.featureFlags ||= {};
+      window.Vaadin.featureFlags.panelComponent = true;
+
+      await import('@vaadin/panel');
+      await import('@vaadin/badge');
+      await import('@vaadin/button');
+      await import('@vaadin/form-layout');
+      await import('@vaadin/grid');
+      await import('@vaadin/horizontal-layout');
+      await import('@vaadin/icon');
+      await import('@vaadin/icons');
+      await import('@vaadin/master-detail-layout');
+      await import('@vaadin/message-input');
+      await import('@vaadin/message-list');
+      await import('@vaadin/tabsheet');
+      await import('@vaadin/text-field');
+      await import('@vaadin/vertical-layout');
+
+      const items = Array.from({ length: 100 }, (_, i) => ({
+        reference: `IRST-${289163384 + i}`,
+        customer: `Customer ${i + 1}`,
+      }));
+      document.querySelectorAll('vaadin-grid').forEach((grid) => {
+        grid.items = items;
+      });
+
+      document.querySelector('vaadin-message-list').items = Array.from({ length: 20 }, (_, i) => ({
+        text: `Message number ${i + 1}`,
+        userName: i % 2 ? 'Support' : 'Customer',
+      }));
+
+      // Scenario 7: the form loads 1 second after the panel is attached.
+      setTimeout(() => {
+        const form = document.createElement('vaadin-form-layout');
+        form.innerHTML = Array.from(
+          { length: 12 },
+          (_, i) => `<vaadin-text-field label="Field ${i + 1}"></vaadin-text-field>`,
+        ).join('');
+        form.style.padding = '0 8px';
+        document.querySelector('#user-editor').appendChild(form);
+      }, 1000);
+    </script>
+  </head>
+
+  <body>
+    <section class="section">
+      <h2 class="heading">1. Bookings list</h2>
+      <div class="phone">
+        <vaadin-panel header-title="Bookings">
+          <vaadin-button slot="header-prefix" theme="tertiary icon" aria-label="Toggle drawer">
+            <vaadin-icon icon="vaadin:menu"></vaadin-icon>
+          </vaadin-button>
+          <vaadin-grid style="height: 100%">
+            <vaadin-grid-column path="reference"></vaadin-grid-column>
+            <vaadin-grid-column path="customer"></vaadin-grid-column>
+          </vaadin-grid>
+        </vaadin-panel>
+      </div>
+    </section>
+
+    <section class="section">
+      <h2 class="heading">2. Booking Details</h2>
+      <div class="phone">
+        <vaadin-panel>
+          <vaadin-button slot="header-prefix" theme="tertiary icon" aria-label="Back">
+            <vaadin-icon icon="vaadin:arrow-left"></vaadin-icon>
+          </vaadin-button>
+          <div slot="title">
+            <h2 style="margin: 0">Booking Details</h2>
+            <span>IRST-289163384</span>
+          </div>
+          <vaadin-badge slot="header-suffix">Confirmed</vaadin-badge>
+          <vaadin-tabsheet>
+            <vaadin-tabs slot="tabs">
+              <vaadin-tab id="overview-tab">Overview</vaadin-tab>
+              <vaadin-tab id="payment-tab">Payment</vaadin-tab>
+            </vaadin-tabs>
+            <div tab="overview-tab">
+              <p style="height: 600px">Trip overview. Scroll to see more.</p>
+            </div>
+            <div tab="payment-tab">Payment details</div>
+          </vaadin-tabsheet>
+          <vaadin-vertical-layout slot="footer" theme="spacing-s" style="flex: 1">
+            <vaadin-button theme="primary" style="width: 100%">Check In</vaadin-button>
+            <vaadin-horizontal-layout theme="spacing-s" style="width: 100%">
+              <vaadin-button style="flex: 1">Refund</vaadin-button>
+              <vaadin-button theme="error" style="flex: 1">Cancel Booking</vaadin-button>
+            </vaadin-horizontal-layout>
+          </vaadin-vertical-layout>
+        </vaadin-panel>
+      </div>
+    </section>
+
+    <section class="section">
+      <h2 class="heading">3. Planet details</h2>
+      <div class="phone">
+        <vaadin-panel header-title="Kepler-22b">
+          <vaadin-button slot="header-prefix" theme="tertiary icon" aria-label="Back">
+            <vaadin-icon icon="vaadin:arrow-left"></vaadin-icon>
+          </vaadin-button>
+          <vaadin-button slot="header-suffix" theme="tertiary icon" aria-label="Add to favorites">
+            <vaadin-icon icon="vaadin:star-o"></vaadin-icon>
+          </vaadin-button>
+          <div class="hero" role="img" aria-label="Planet"></div>
+          <div class="text">
+            <p>Kepler-22b is an exoplanet that orbits within the habitable zone of a Sun-like star.</p>
+            <p style="height: 400px">More planet facts.</p>
+          </div>
+          <vaadin-button slot="footer" theme="primary" style="flex: 1">Book a Trip</vaadin-button>
+        </vaadin-panel>
+      </div>
+    </section>
+
+    <section class="section">
+      <h2 class="heading">4. Invoices placeholder</h2>
+      <div class="phone">
+        <vaadin-panel header-title="Invoices">
+          <vaadin-button slot="header-prefix" theme="tertiary icon" aria-label="Back">
+            <vaadin-icon icon="vaadin:arrow-left"></vaadin-icon>
+          </vaadin-button>
+          <div class="placeholder">No invoices yet</div>
+        </vaadin-panel>
+      </div>
+    </section>
+
+    <section class="section">
+      <h2 class="heading">5. Chat</h2>
+      <div class="phone">
+        <vaadin-panel header-title="Support">
+          <vaadin-button slot="header-suffix" theme="tertiary icon" aria-label="Info">
+            <vaadin-icon icon="vaadin:info-circle-o"></vaadin-icon>
+          </vaadin-button>
+          <vaadin-message-list></vaadin-message-list>
+          <vaadin-message-input slot="footer" style="flex: 1"></vaadin-message-input>
+        </vaadin-panel>
+      </div>
+    </section>
+
+    <section class="section">
+      <h2 class="heading">6. Master-Detail Layout</h2>
+      <div class="wide">
+        <vaadin-master-detail-layout master-size="400px" detail-size="360px">
+          <vaadin-panel header-title="Bookings">
+            <vaadin-grid style="height: 100%">
+              <vaadin-grid-column path="reference"></vaadin-grid-column>
+              <vaadin-grid-column path="customer"></vaadin-grid-column>
+            </vaadin-grid>
+          </vaadin-panel>
+          <vaadin-panel slot="detail" header-title="IRST-289163384">
+            <vaadin-button slot="header-prefix" theme="tertiary icon" aria-label="Close">
+              <vaadin-icon icon="vaadin:close"></vaadin-icon>
+            </vaadin-button>
+            <div class="text">
+              <p style="height: 800px">Booking details. Scroll to see more.</p>
+            </div>
+            <vaadin-button slot="footer">Refund</vaadin-button>
+          </vaadin-panel>
+        </vaadin-master-detail-layout>
+      </div>
+    </section>
+
+    <section class="section">
+      <h2 class="heading">7. User editor</h2>
+      <div class="phone">
+        <vaadin-panel id="user-editor" header-title="Edit User">
+          <vaadin-button slot="header-prefix" theme="tertiary icon" aria-label="Close">
+            <vaadin-icon icon="vaadin:close"></vaadin-icon>
+          </vaadin-button>
+          <vaadin-button slot="header-suffix" theme="tertiary">Cancel</vaadin-button>
+          <vaadin-button slot="header-suffix" theme="primary">Save</vaadin-button>
+        </vaadin-panel>
+      </div>
+    </section>
+  </body>
+</html>
