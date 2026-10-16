@@ -50,7 +50,7 @@ class MenuBarItem extends ItemMixin(ThemableMixin(DirMixin(PolylitMixin(LumoInje
 
   /** @override */
   __shouldAllowFocusWhenDisabled() {
-    return window.Vaadin.featureFlags.accessibleDisabledMenuItems;
+    return true;
   }
 }
 

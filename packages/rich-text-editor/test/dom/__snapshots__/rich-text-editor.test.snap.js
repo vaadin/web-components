@@ -42,6 +42,7 @@ snapshots["vaadin-rich-text-editor host"] =
     <vaadin-button
       role="button"
       slot="cancel-button"
+      style="--_vaadin-button-disabled-pointer-events: auto;"
       tabindex="0"
       theme="tertiary"
     >
@@ -51,6 +52,7 @@ snapshots["vaadin-rich-text-editor host"] =
       hidden=""
       role="button"
       slot="reject-button"
+      style="--_vaadin-button-disabled-pointer-events: auto;"
       tabindex="0"
       theme="error"
     >
@@ -59,6 +61,7 @@ snapshots["vaadin-rich-text-editor host"] =
     <vaadin-button
       role="button"
       slot="confirm-button"
+      style="--_vaadin-button-disabled-pointer-events: auto;"
       tabindex="0"
       theme="primary"
     >

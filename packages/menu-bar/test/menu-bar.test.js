@@ -78,14 +78,10 @@ describe('root menu layout', () => {
     });
   });
 
-  it('should set tabindex to 0 when the button is not disabled in tab navigation', () => {
+  it('should set tabindex to 0 on all buttons in tab navigation', () => {
     menu.tabNavigation = true;
     buttons.forEach((btn) => {
-      if (btn.disabled) {
-        expect(btn.getAttribute('tabindex')).to.equal('-1');
-      } else {
-        expect(btn.getAttribute('tabindex')).to.equal('0');
-      }
+      expect(btn.getAttribute('tabindex')).to.equal('0');
     });
   });
 

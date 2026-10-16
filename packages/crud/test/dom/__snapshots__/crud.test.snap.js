@@ -26,6 +26,7 @@ snapshots["vaadin-crud host default"] =
     <vaadin-button
       role="button"
       slot="cancel-button"
+      style="--_vaadin-button-disabled-pointer-events: auto;"
       tabindex="0"
       theme="tertiary"
     >
@@ -35,6 +36,7 @@ snapshots["vaadin-crud host default"] =
       hidden=""
       role="button"
       slot="reject-button"
+      style="--_vaadin-button-disabled-pointer-events: auto;"
       tabindex="0"
       theme="error tertiary"
     >
@@ -43,6 +45,7 @@ snapshots["vaadin-crud host default"] =
     <vaadin-button
       role="button"
       slot="confirm-button"
+      style="--_vaadin-button-disabled-pointer-events: auto;"
       tabindex="0"
       theme="primary"
     >
@@ -72,6 +75,7 @@ snapshots["vaadin-crud host default"] =
     <vaadin-button
       role="button"
       slot="cancel-button"
+      style="--_vaadin-button-disabled-pointer-events: auto;"
       tabindex="0"
       theme="tertiary"
     >
@@ -81,6 +85,7 @@ snapshots["vaadin-crud host default"] =
       hidden=""
       role="button"
       slot="reject-button"
+      style="--_vaadin-button-disabled-pointer-events: auto;"
       tabindex="0"
       theme="error tertiary"
     >
@@ -89,6 +94,7 @@ snapshots["vaadin-crud host default"] =
     <vaadin-button
       role="button"
       slot="confirm-button"
+      style="--_vaadin-button-disabled-pointer-events: auto;"
       tabindex="0"
       theme="primary error"
     >
@@ -219,6 +225,7 @@ snapshots["vaadin-crud host default"] =
       <vaadin-crud-edit
         aria-label="Edit"
         role="button"
+        style="--_vaadin-button-disabled-pointer-events: auto;"
         tabindex="0"
       >
       </vaadin-crud-edit>
@@ -227,6 +234,7 @@ snapshots["vaadin-crud host default"] =
   <vaadin-button
     role="button"
     slot="new-button"
+    style="--_vaadin-button-disabled-pointer-events: auto;"
     tabindex="0"
   >
     New item
@@ -241,7 +249,8 @@ snapshots["vaadin-crud host default"] =
     disabled=""
     role="button"
     slot="save-button"
-    tabindex="-1"
+    style="--_vaadin-button-disabled-pointer-events: auto;"
+    tabindex="0"
     theme="primary"
   >
     Save
@@ -249,6 +258,7 @@ snapshots["vaadin-crud host default"] =
   <vaadin-button
     role="button"
     slot="cancel-button"
+    style="--_vaadin-button-disabled-pointer-events: auto;"
     tabindex="0"
     theme="tertiary"
   >
@@ -258,6 +268,7 @@ snapshots["vaadin-crud host default"] =
     hidden=""
     role="button"
     slot="delete-button"
+    style="--_vaadin-button-disabled-pointer-events: auto;"
     tabindex="0"
     theme="tertiary error"
   >

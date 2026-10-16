@@ -94,6 +94,7 @@ snapshots["vaadin-login-form host default"] =
   <vaadin-button
     role="button"
     slot="submit"
+    style="--_vaadin-button-disabled-pointer-events: auto;"
     tabindex="0"
     theme="primary submit"
   >
@@ -102,6 +103,7 @@ snapshots["vaadin-login-form host default"] =
   <vaadin-button
     role="button"
     slot="forgot-password"
+    style="--_vaadin-button-disabled-pointer-events: auto;"
     tabindex="0"
     theme="tertiary small"
   >
@@ -214,6 +216,7 @@ snapshots["vaadin-login-form host required"] =
   <vaadin-button
     role="button"
     slot="submit"
+    style="--_vaadin-button-disabled-pointer-events: auto;"
     tabindex="0"
     theme="primary submit"
   >
@@ -222,6 +225,7 @@ snapshots["vaadin-login-form host required"] =
   <vaadin-button
     role="button"
     slot="forgot-password"
+    style="--_vaadin-button-disabled-pointer-events: auto;"
     tabindex="0"
     theme="tertiary small"
   >
@@ -324,6 +328,7 @@ snapshots["vaadin-login-form host i18n"] =
   <vaadin-button
     role="button"
     slot="submit"
+    style="--_vaadin-button-disabled-pointer-events: auto;"
     tabindex="0"
     theme="primary submit"
   >
@@ -332,6 +337,7 @@ snapshots["vaadin-login-form host i18n"] =
   <vaadin-button
     role="button"
     slot="forgot-password"
+    style="--_vaadin-button-disabled-pointer-events: auto;"
     tabindex="0"
     theme="tertiary small"
   >
@@ -434,6 +440,7 @@ snapshots["vaadin-login-form host i18n-partial"] =
   <vaadin-button
     role="button"
     slot="submit"
+    style="--_vaadin-button-disabled-pointer-events: auto;"
     tabindex="0"
     theme="primary submit"
   >
@@ -442,6 +449,7 @@ snapshots["vaadin-login-form host i18n-partial"] =
   <vaadin-button
     role="button"
     slot="forgot-password"
+    style="--_vaadin-button-disabled-pointer-events: auto;"
     tabindex="0"
     theme="tertiary small"
   >
@@ -554,6 +562,7 @@ snapshots["vaadin-login-form host i18n-required"] =
   <vaadin-button
     role="button"
     slot="submit"
+    style="--_vaadin-button-disabled-pointer-events: auto;"
     tabindex="0"
     theme="primary submit"
   >
@@ -562,6 +571,7 @@ snapshots["vaadin-login-form host i18n-required"] =
   <vaadin-button
     role="button"
     slot="forgot-password"
+    style="--_vaadin-button-disabled-pointer-events: auto;"
     tabindex="0"
     theme="tertiary small"
   >
@@ -664,6 +674,7 @@ snapshots["vaadin-login-form host noForgotPassword"] =
   <vaadin-button
     role="button"
     slot="submit"
+    style="--_vaadin-button-disabled-pointer-events: auto;"
     tabindex="0"
     theme="primary submit"
   >
@@ -673,6 +684,7 @@ snapshots["vaadin-login-form host noForgotPassword"] =
     hidden=""
     role="button"
     slot="forgot-password"
+    style="--_vaadin-button-disabled-pointer-events: auto;"
     tabindex="0"
     theme="tertiary small"
   >
