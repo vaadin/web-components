@@ -1,0 +1,20 @@
+<!doctype html>
+<html lang="en">
+  <head>
+    <meta charset="UTF-8" />
+    <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+    <title>Date Range Picker</title>
+    <script type="module" src="../common.js"></script>
+    <script type="module">
+      window.Vaadin ??= {};
+      window.Vaadin.featureFlags ??= {};
+      window.Vaadin.featureFlags.dateRangePickerComponent = true;
+    </script>
+    <script type="module">
+      import '@vaadin/labs/vaadin-date-range-picker.js';
+    </script>
+  </head>
+  <body>
+    <vaadin-date-range-picker></vaadin-date-range-picker>
+  </body>
+</html>
