@@ -23,6 +23,12 @@ concurrency:
 permissions:
   contents: read
 
+env:
+  # Maintenance branches that the update is cherry-picked to, as `target/*`
+  # labels on the pull request. Update the list when a branch is added or
+  # no longer gets Playwright updates.
+  TARGET_BRANCHES: 25.2 25.3
+
 jobs:
   update:
     name: Update version
@@ -192,9 +198,14 @@ jobs:
             - Check them for regressions before merging"
           fi
 
+          labels=()
+          for target in $TARGET_BRANCHES; do
+            labels+=(--label "target/$target")
+          done
+
           # Replaces the branch of an update pull request that was closed without merging
           git push --force origin "$branch"
-          gh pr create --base main --head "$branch" --title "$title" --body "## Description
+          gh pr create --base main --head "$branch" --title "$title" "${labels[@]}" --body "## Description
 
           Upgraded Playwright to [$VERSION](https://github.com/microsoft/playwright/releases/tag/v$VERSION).
 
