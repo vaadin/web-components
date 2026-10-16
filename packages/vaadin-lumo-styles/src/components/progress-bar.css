@@ -19,6 +19,8 @@
     height: 100%;
     border-radius: var(--lumo-border-radius-m);
     background-color: var(--lumo-contrast-10pct);
+    box-shadow: inset 0 0 0 var(--vaadin-progress-bar-border-width, 0)
+      var(--vaadin-progress-bar-border-color, var(--lumo-contrast-50pct));
   }
 
   [part='value'] {

@@ -28,6 +28,19 @@ Once installed, import the component in your application:
 import '@vaadin/progress-bar';
 ```
 
+## Track contrast
+
+In Lumo and Aura, enable a border to make the full progress track easier to see:
+
+```css
+:root {
+  --vaadin-progress-bar-border-width: 1px;
+}
+```
+
+This also applies to progress bars in the standard upload file list. Set
+`--vaadin-progress-bar-border-color` to customize the border for your background.
+
 ## Contributing
 
 Read the [contributing guide](https://vaadin.com/docs/latest/contributing) to learn about our development process, how to propose bugfixes and improvements, and how to test your changes to Vaadin components.
