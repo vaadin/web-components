@@ -298,7 +298,7 @@ export const ColumnBaseMixin = (superClass) =>
       /**
        * A stable unique id assigned once per column instance. Used to build
        * cell content slot names that stay stable across re-renders, so lit
-       * can reuse the cell content elements when the column tree changes.
+       * keeps the cell content elements when other columns change.
        *
        * @protected
        */
@@ -469,11 +469,6 @@ export const ColumnBaseMixin = (superClass) =>
       this.parentElement?._columnPropChanged?.('hidden', hidden);
 
       if (!!hidden !== !!this._previousHidden && this._grid) {
-        if (hidden === true) {
-          this._cells?.forEach((cell) => {
-            cell._content.parentNode?.removeChild(cell._content);
-          });
-        }
         this._grid._debouncerHiddenChanged = Debouncer.debounce(
           this._grid._debouncerHiddenChanged,
           animationFrame,
