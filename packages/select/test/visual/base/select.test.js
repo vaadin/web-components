@@ -123,25 +123,26 @@ describe('select', () => {
   });
 
   describe('alignment', () => {
-    afterEach(() => {
-      document.documentElement.removeAttribute('dir');
+    beforeEach(() => {
+      element.style.width = '120px';
     });
 
-    // In RTL, align-left aligns to the end
-    [
-      ['align-center', 'ltr'],
-      ['align-end', 'ltr'],
-      ['align-right', 'ltr'],
-      ['align-left', 'rtl'],
-    ].forEach(([theme, dir]) => {
-      it(`${theme} ${dir} overflow`, async () => {
-        document.documentElement.setAttribute('dir', dir);
+    ['align-center', 'align-end'].forEach((theme) => {
+      it(theme, async () => {
         element.setAttribute('theme', theme);
-        element.style.width = '120px';
+        element.value = 'value-1';
+        await nextFrame();
+        await visualDiff(div, theme);
+      });
+    });
+
+    ['align-center', 'align-end', 'align-right'].forEach((theme) => {
+      it(`${theme} overflow`, async () => {
+        element.setAttribute('theme', theme);
         element.items = [{ label: 'An item with a long label', value: 'long' }];
         element.value = 'long';
         await nextFrame();
-        await visualDiff(div, `${dir}-${theme}-overflow`);
+        await visualDiff(div, `${theme}-overflow`);
       });
     });
   });
