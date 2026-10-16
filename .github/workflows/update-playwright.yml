@@ -11,6 +11,9 @@
 name: Update Playwright
 
 on:
+  schedule:
+    # Monday morning, so that the pull request is there at the start of the week
+    - cron: '0 5 * * 1'
   workflow_dispatch:
 
 concurrency:
