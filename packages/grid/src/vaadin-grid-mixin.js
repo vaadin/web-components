@@ -76,6 +76,8 @@ export const GridMixin = (superClass) =>
       ),
     ),
   ) {
+    #renderedColumns = [];
+
     static get observers() {
       return ['_columnTreeChanged(_columnTree)', '_flatSizeChanged(_flatSize, __virtualizer, _hasData, _columnTree)'];
     }
@@ -387,7 +389,16 @@ export const GridMixin = (superClass) =>
     }
 
     /** @private */
-    _columnTreeChanged() {
+    _columnTreeChanged(columnTree) {
+      const columns = columnTree.at(-1);
+      columns
+        .filter((column) => !this.#renderedColumns.includes(column))
+        .forEach((column) => {
+          column._cells = [];
+          column._sizerCell = null;
+        });
+      this.#renderedColumns = columns;
+
       this._renderColumnTree();
       this.__updateColumnsBodyContentHidden();
     }
