@@ -462,9 +462,10 @@ export const GridMixin = (superClass) =>
 
     /**
      * @param {!HTMLElement} row
+     * @param {{ skipRenderers?: boolean }} options
      * @private
      */
-    __updateRow(row) {
+    __updateRow(row, { skipRenderers = false } = {}) {
       this.__renderBodyRow(row);
 
       this.__a11yUpdateRowRowindex(row);
@@ -492,15 +493,17 @@ export const GridMixin = (superClass) =>
       this._filterDragAndDrop(row, model);
       this.__updateDragSourceParts(row, model);
 
-      iterateChildren(row, (cell) => {
-        if (cell._column && !cell._column.isConnected) {
-          return;
-        }
-        if (cell._renderer) {
-          const owner = cell._column || this;
-          cell._renderer.call(owner, cell._content, owner, model);
-        }
-      });
+      if (!skipRenderers) {
+        iterateChildren(row, (cell) => {
+          if (cell._column && !cell._column.isConnected) {
+            return;
+          }
+          if (cell._renderer) {
+            const owner = cell._column || this;
+            cell._renderer.call(owner, cell._content, owner, model);
+          }
+        });
+      }
 
       this._updateDetailsCellHeight(row);
 
