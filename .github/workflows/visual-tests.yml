@@ -12,11 +12,30 @@ env:
   PLAYWRIGHT_SKIP_BROWSER_DOWNLOAD: 1
 
 jobs:
+  # The Playwright image must have the same version as the `playwright` package
+  playwright:
+    name: Playwright version
+    runs-on: ubuntu-latest
+    outputs:
+      version: ${{ steps.version.outputs.version }}
+
+    steps:
+      - uses: actions/checkout@v7
+        with:
+          ref: ${{ env._HEAD_SHA }}
+          sparse-checkout: package.json
+          sparse-checkout-cone-mode: false
+
+      - name: Read version
+        id: version
+        run: echo "version=$(node -p "require('./package.json').resolutions.playwright")" >> "$GITHUB_OUTPUT"
+
   base:
     name: Base
+    needs: playwright
     runs-on: ubuntu-latest
     container:
-      image: mcr.microsoft.com/playwright:v1.64.1-noble
+      image: mcr.microsoft.com/playwright:v${{ needs.playwright.outputs.version }}-noble
       options: --ipc=host
 
     steps:
@@ -51,9 +70,10 @@ jobs:
 
   lumo:
     name: Lumo
+    needs: playwright
     runs-on: ubuntu-latest
     container:
-      image: mcr.microsoft.com/playwright:v1.64.1-noble
+      image: mcr.microsoft.com/playwright:v${{ needs.playwright.outputs.version }}-noble
       options: --ipc=host
 
     steps:
@@ -89,9 +109,10 @@ jobs:
 
   aura:
     name: Aura
+    needs: playwright
     runs-on: ubuntu-latest
     container:
-      image: mcr.microsoft.com/playwright:v1.64.1-noble
+      image: mcr.microsoft.com/playwright:v${{ needs.playwright.outputs.version }}-noble
       options: --ipc=host
 
     steps:
