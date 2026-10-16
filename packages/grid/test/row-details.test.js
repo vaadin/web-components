@@ -37,7 +37,7 @@ describe('row details', () => {
     flushGrid(grid);
   }
 
-  it('should not increase row init count', () => {
+  it('should not increase row render count', () => {
     grid = fixtureSync(`
       <vaadin-grid style="width: 50px; height: 400px" size="100">
         <vaadin-grid-column></vaadin-grid-column>
@@ -46,7 +46,7 @@ describe('row details', () => {
     grid.rowDetailsRenderer = simpleDetailsRenderer;
     grid.querySelector('vaadin-grid-column').renderer = indexRenderer;
 
-    const spy = sinon.spy(grid, '__initRow');
+    const spy = sinon.spy(grid, '__renderBodyRow');
     grid.size = 1;
     grid.dataProvider = infiniteDataProvider;
     flushGrid(grid);
