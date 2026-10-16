@@ -1,0 +1,47 @@
+:where(:root),
+:where(:host) {
+  --vaadin-stepper-accent-color: var(--aura-accent-color);
+  --vaadin-stepper-accent-contrast-color: var(--aura-accent-contrast-color);
+  --vaadin-stepper-error-color: var(--aura-red-text);
+  --vaadin-stepper-error-contrast-color: var(--aura-background-color);
+  --vaadin-stepper-indicator-background: var(--aura-surface-color);
+  --vaadin-stepper-indicator-border-color: var(--vaadin-border-color-secondary);
+}
+
+vaadin-stepper {
+  --vaadin-stepper-indicator-size: 1.75rem;
+  --vaadin-stepper-indicator-font-size: var(--aura-font-size-s);
+  font-weight: var(--aura-font-weight-medium);
+}
+
+vaadin-stepper[theme~='small'] {
+  --vaadin-stepper-indicator-size: 1.375rem;
+  --vaadin-stepper-indicator-font-size: var(--aura-font-size-xs);
+  --vaadin-stepper-font-size: var(--aura-font-size-s);
+}
+
+vaadin-step::part(link) {
+  transition: color 80ms;
+}
+
+vaadin-step[current]::part(indicator) {
+  box-shadow: 0 0 0 3px color-mix(in srgb, var(--aura-accent-color) 20%, transparent);
+}
+
+vaadin-step[current] {
+  --vaadin-stepper-indicator-background: var(--aura-surface-color);
+}
+
+vaadin-step[current]::part(label) {
+  color: var(--aura-accent-text-color);
+}
+
+@media (any-hover: hover) {
+  vaadin-step:not([disabled])::part(link):hover {
+    color: var(--vaadin-text-color);
+  }
+}
+
+vaadin-step:not([disabled])::part(link):active {
+  background: var(--vaadin-background-container);
+}

@@ -1,0 +1,67 @@
+<!doctype html>
+<html lang="en">
+  <head>
+    <meta charset="UTF-8" />
+    <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+    <title>Stepper</title>
+    <script type="module" src="./common.js"></script>
+    <script type="module">
+      window.Vaadin.featureFlags.stepperComponent = true;
+      await import('@vaadin/stepper');
+    </script>
+  </head>
+
+  <body>
+    <section class="section">
+      <h2 class="heading">Horizontal</h2>
+      <vaadin-stepper style="width: 100%" aria-label="Checkout progress">
+        <vaadin-step completed path="#cart">Shopping cart</vaadin-step>
+        <vaadin-step current path="#shipping">Shipping & billing</vaadin-step>
+        <vaadin-step>Payment method</vaadin-step>
+        <vaadin-step>Confirmation</vaadin-step>
+      </vaadin-stepper>
+    </section>
+
+    <section class="section">
+      <h2 class="heading">Horizontal, small</h2>
+      <vaadin-stepper theme="small" style="width: 100%">
+        <vaadin-step completed path="#cart">Shopping cart</vaadin-step>
+        <vaadin-step current path="#shipping">Shipping & billing</vaadin-step>
+        <vaadin-step>Payment method</vaadin-step>
+        <vaadin-step>Confirmation</vaadin-step>
+      </vaadin-stepper>
+    </section>
+
+    <section class="section">
+      <h2 class="heading">Vertical, with descriptions</h2>
+      <vaadin-stepper orientation="vertical">
+        <vaadin-step completed path="#flux">
+          Quantum flux analysis
+          <span slot="description">Initiate the analysis for dimensional harmonization</span>
+        </vaadin-step>
+        <vaadin-step completed invalid path="#config">
+          Nebulicious configuration
+          <span slot="description">Configure the parameters for intergalactic harmonization</span>
+        </vaadin-step>
+        <vaadin-step current path="#calibration">
+          Hyperspectral calibrations
+          <span slot="description">Optimize the quantum entanglement matrices</span>
+        </vaadin-step>
+        <vaadin-step path="#validation" disabled>
+          Transmogrification validation
+          <span slot="description">Validate integrity for inter-realm transference</span>
+        </vaadin-step>
+      </vaadin-stepper>
+    </section>
+
+    <section class="section">
+      <h2 class="heading">Vertical, small</h2>
+      <vaadin-stepper orientation="vertical" theme="small">
+        <vaadin-step completed>Account</vaadin-step>
+        <vaadin-step current>Organization</vaadin-step>
+        <vaadin-step>Integrations</vaadin-step>
+        <vaadin-step>Invite team</vaadin-step>
+      </vaadin-stepper>
+    </section>
+  </body>
+</html>

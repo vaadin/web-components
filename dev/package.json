@@ -53,6 +53,7 @@
     "@vaadin/select": "25.4.0-alpha3",
     "@vaadin/side-nav": "25.4.0-alpha3",
     "@vaadin/split-layout": "25.4.0-alpha3",
+    "@vaadin/stepper": "25.4.0-alpha3",
     "@vaadin/tabs": "25.4.0-alpha3",
     "@vaadin/text-area": "25.4.0-alpha3",
     "@vaadin/text-field": "25.4.0-alpha3",

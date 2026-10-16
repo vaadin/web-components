@@ -1,0 +1,27 @@
+/**
+ * @license
+ * Copyright (c) 2026 - 2026 Vaadin Ltd.
+ * This program is available under Apache License Version 2.0, available at https://vaadin.com/license/
+ */
+@media lumo_components_stepper {
+  :host {
+    --vaadin-stepper-indicator-size: var(--lumo-size-s);
+    --vaadin-stepper-indicator-font-size: var(--lumo-font-size-s);
+    --vaadin-stepper-indicator-border-color: var(--lumo-contrast-30pct);
+    --vaadin-stepper-indicator-background: var(--lumo-base-color);
+    --vaadin-stepper-accent-color: var(--lumo-primary-color);
+    --vaadin-stepper-accent-contrast-color: var(--lumo-primary-contrast-color);
+    --vaadin-stepper-error-color: var(--lumo-error-text-color);
+    --vaadin-stepper-error-contrast-color: var(--lumo-error-contrast-color);
+    --vaadin-stepper-connector-color: var(--lumo-contrast-30pct);
+    font-family: var(--lumo-font-family);
+    font-size: var(--vaadin-stepper-font-size, var(--lumo-font-size-m));
+    line-height: var(--lumo-line-height-s);
+  }
+
+  :host([theme~='small']) {
+    --vaadin-stepper-indicator-size: var(--lumo-size-xs);
+    --vaadin-stepper-indicator-font-size: var(--lumo-font-size-xs);
+    --vaadin-stepper-font-size: var(--lumo-font-size-s);
+  }
+}
