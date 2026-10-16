@@ -121,6 +121,8 @@ jobs:
       # the `baseline` folder, and the difference to `failed/<name>-diff.png`
       - name: Update failed screenshots
         if: ${{ steps.tests.outcome == 'failure' }}
+        env:
+          PATCH: screenshots-${{ matrix.name }}.patch
         run: |
           failed=$(find packages -path '*/failed/*.png' ! -name '*-diff.png')
           if [ -z "$failed" ]; then
@@ -130,13 +132,13 @@ jobs:
           for file in $failed; do
             cp "$file" "$(dirname "$(dirname "$file")")/baseline/"
           done
-          git diff --binary -- ':(glob)packages/**/baseline/*.png' > screenshots.patch
+          git diff --binary -- ':(glob)packages/**/baseline/*.png' > "$PATCH"
 
       - uses: actions/upload-artifact@v6
         if: ${{ steps.tests.outcome == 'failure' }}
         with:
           name: screenshots-${{ matrix.name }}
-          path: screenshots.patch
+          path: screenshots-${{ matrix.name }}.patch
           if-no-files-found: ignore
 
   pull-request:
@@ -155,6 +157,7 @@ jobs:
       - uses: actions/download-artifact@v8
         with:
           path: ${{ runner.temp }}/patches
+          merge-multiple: true
 
       - name: Commit and open pull request
         env:
@@ -169,11 +172,11 @@ jobs:
           git config user.email "41898282+github-actions[bot]@users.noreply.github.com"
           git switch -c "$branch"
 
-          git apply "$PATCHES/playwright-patch/playwright.patch"
+          git apply "$PATCHES/playwright.patch"
           git commit -am "$title"
 
           bullets="- Updated \`playwright\` in \`package.json\` and \`react/package.json\`, which the visual tests also use for the Playwright Docker image"
-          for patch in "$PATCHES"/screenshots-*/screenshots.patch; do
+          for patch in "$PATCHES"/screenshots-*.patch; do
             if [ -f "$patch" ]; then
               git apply "$patch"
             fi
