@@ -12,7 +12,6 @@ import { defineCustomElement } from '@vaadin/component-base/src/define.js';
 import { ElementMixin } from '@vaadin/component-base/src/element-mixin.js';
 import { PolylitMixin } from '@vaadin/component-base/src/polylit-mixin.js';
 import { TooltipController } from '@vaadin/component-base/src/tooltip-controller.js';
-import { InputControlMixin } from '@vaadin/field-base/src/input-control-mixin.js';
 import { InputController } from '@vaadin/field-base/src/input-controller.js';
 import { LabelledInputController } from '@vaadin/field-base/src/labelled-input-controller.js';
 import { inputFieldShared } from '@vaadin/field-base/src/styles/input-field-shared-styles.js';
@@ -218,9 +217,7 @@ import { DatePickerMixin } from './vaadin-date-picker-mixin.js';
  * @customElement vaadin-date-picker
  * @extends HTMLElement
  */
-class DatePicker extends DatePickerMixin(
-  InputControlMixin(ThemableMixin(ElementMixin(PolylitMixin(LumoInjectionMixin(LitElement))))),
-) {
+class DatePicker extends DatePickerMixin(ThemableMixin(ElementMixin(PolylitMixin(LumoInjectionMixin(LitElement))))) {
   static get is() {
     return 'vaadin-date-picker';
   }
