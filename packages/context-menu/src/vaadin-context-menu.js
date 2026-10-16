@@ -220,6 +220,8 @@ import { ContextMenuMixin } from './vaadin-context-menu-mixin.js';
  *
  * ### Styling
  *
+ * The host uses `display: contents` so wrapping a target does not affect its layout.
+ *
  * The following shadow DOM parts are available for styling:
  *
  * Part name        | Description
@@ -266,7 +268,7 @@ class ContextMenu extends ContextMenuMixin(ElementMixin(ThemePropertyMixin(Polyl
   static get styles() {
     return css`
       :host {
-        display: block;
+        display: contents;
       }
 
       :host([hidden]) {

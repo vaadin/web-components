@@ -23,6 +23,18 @@ describe('position', () => {
     defaultOffset = 0.1 + parseInt(getComputedStyle(overlay).getPropertyValue('--_default-offset'));
   });
 
+  it('should preserve inline layout around a wrapped target', async () => {
+    const container = fixtureSync(`
+      <div style="white-space: nowrap">
+        <span>Before</span><vaadin-context-menu><span>Target</span></vaadin-context-menu><span>After</span>
+      </div>
+    `);
+    await nextRender();
+    const [before, wrappedTarget, after] = container.querySelectorAll('span');
+    expect(wrappedTarget.getBoundingClientRect().top).to.equal(before.getBoundingClientRect().top);
+    expect(after.getBoundingClientRect().top).to.equal(before.getBoundingClientRect().top);
+  });
+
   // Overlay above the target (position="top-*")
   function assertPlacedAbove(overlayRect, targetRect) {
     expect(overlayRect.bottom).to.be.closeTo(targetRect.top, defaultOffset);
