@@ -77,6 +77,6 @@ export const selectStyles = css`
   }
 
   :host([theme~='align-right']) ::slotted([slot='value']) {
-    justify-content: safe right;
+    justify-content: right;
   }
 `;

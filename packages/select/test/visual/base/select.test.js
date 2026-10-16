@@ -125,24 +125,27 @@ describe('select', () => {
   describe('alignment', () => {
     beforeEach(() => {
       element.style.width = '120px';
+      element.items = [{ label: 'An item with a long label', value: 'long' }];
+      element.value = 'long';
     });
 
-    ['align-center', 'align-end'].forEach((theme) => {
-      it(theme, async () => {
-        element.setAttribute('theme', theme);
-        element.value = 'value-1';
-        await nextFrame();
-        await visualDiff(div, theme);
-      });
+    afterEach(() => {
+      document.documentElement.removeAttribute('dir');
     });
 
-    ['align-center', 'align-end', 'align-right'].forEach((theme) => {
-      it(`${theme} overflow`, async () => {
+    [
+      ['align-center', 'ltr'],
+      ['align-center', 'rtl'],
+      ['align-end', 'ltr'],
+      ['align-end', 'rtl'],
+      ['align-left', 'rtl'],
+      ['align-right', 'ltr'],
+    ].forEach(([theme, dir]) => {
+      it(`${theme} ${dir} overflow`, async () => {
+        document.documentElement.setAttribute('dir', dir);
         element.setAttribute('theme', theme);
-        element.items = [{ label: 'An item with a long label', value: 'long' }];
-        element.value = 'long';
         await nextFrame();
-        await visualDiff(div, `${theme}-overflow`);
+        await visualDiff(div, `${dir}-${theme}-overflow`);
       });
     });
   });
