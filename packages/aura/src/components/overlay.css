@@ -33,6 +33,7 @@
   vaadin-context-menu,
   vaadin-crud,
   vaadin-date-picker,
+  vaadin-date-range-picker,
   vaadin-dialog,
   vaadin-login-overlay,
   vaadin-menu-bar-submenu,
@@ -56,6 +57,7 @@
 :where(
   vaadin-combo-box,
   vaadin-date-picker,
+  vaadin-date-range-picker,
   vaadin-menu-bar-submenu,
   vaadin-multi-select-combo-box,
   vaadin-rich-text-editor-popup,

@@ -122,6 +122,17 @@ describe('select', () => {
     });
   });
 
+  describe('alignment', () => {
+    it('align-center overflow', async () => {
+      element.setAttribute('theme', 'align-center');
+      element.style.width = '120px';
+      element.items = [{ label: 'An item with a long label', value: 'long' }];
+      element.value = 'long';
+      await nextFrame();
+      await visualDiff(div, 'align-center-overflow');
+    });
+  });
+
   ['ltr', 'rtl'].forEach((dir) => {
     describe(dir, () => {
       before(() => {
