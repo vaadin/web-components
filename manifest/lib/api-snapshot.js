@@ -84,6 +84,9 @@ function itemLines(items, kind, detail = () => '', flags = () => []) {
   );
 }
 
+/** The `default=` flag of an item with a default value, false otherwise. */
+const defaultFlag = (item) => item.default !== undefined && `default=${oneLine(item.default)}`;
+
 function memberLine(member) {
   const prefix = member.static ? 'static-' : '';
   const deprecated = member.deprecated && 'deprecated';
@@ -95,6 +98,7 @@ function memberLine(member) {
       member.attribute && `attribute=${member.attribute}`,
       member.reflects && 'reflects',
       member.readonly && 'readonly',
+      defaultFlag(member),
       deprecated,
     ]);
   }
@@ -109,7 +113,7 @@ export function snapshotManifest(manifest) {
   const blocks = getElements(manifest).map((decl) => ({
     header: `${decl.tagName} (${decl.name})${decl.deprecated ? ' [deprecated]' : ''}`,
     lines: [
-      ...itemLines(decl.attributes, 'attribute', typeDetail),
+      ...itemLines(decl.attributes, 'attribute', typeDetail, (attr) => [defaultFlag(attr)]),
       ...(decl.members || []).filter(isPublic).map(memberLine).filter(Boolean),
       ...itemLines(
         decl.events?.filter((event) => event.name),
@@ -126,7 +130,7 @@ export function snapshotManifest(manifest) {
         decl.cssProperties,
         'cssprop',
         (prop) => (prop.syntax ? `: ${oneLine(prop.syntax)}` : ''),
-        (prop) => [prop.default !== undefined && `default=${oneLine(prop.default)}`],
+        (prop) => [defaultFlag(prop)],
       ),
     ],
   }));
@@ -151,8 +155,8 @@ export function snapshotWebTypes(files) {
     (data.contributions?.html?.elements || []).map((element) => ({
       header: element.name,
       lines: [
-        ...itemLines(element.attributes, 'attribute', unionDetail),
-        ...itemLines(element.js?.properties, 'property', unionDetail),
+        ...itemLines(element.attributes, 'attribute', unionDetail, (attr) => [defaultFlag(attr)]),
+        ...itemLines(element.js?.properties, 'property', unionDetail, (prop) => [defaultFlag(prop)]),
         ...itemLines(element.js?.events, 'event'),
         ...itemLines(element.css?.parts, 'part'),
         ...itemLines(element.css?.properties, 'cssprop'),
