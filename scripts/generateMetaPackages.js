@@ -37,11 +37,12 @@ const EXTERNAL_DEPENDENCIES = new Set([
   '@vaadin/vaadin-usage-statistics',
 ]);
 
-// React wrappers are published on their own
+// React wrappers are published on their own, labs components are experimental
 const skippedDirs = new Set([
   ...META_PACKAGES.map((metaPackage) => metaPackage.dir),
   'react-components',
   'react-components-pro',
+  'labs',
 ]);
 
 /**

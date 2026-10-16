@@ -50,4 +50,4 @@ jobs:
       # a flow-components snapshot must reference that exact URL, or npm
       # installs a second copy of the package.
       - name: Publish
-        run: yarn pkg-pr-new publish './packages/*' --no-compact --commentWithSha --packageManager=npm,yarn
+        run: yarn pkg-pr-new publish './packages/*' './labs' --no-compact --commentWithSha --packageManager=npm,yarn

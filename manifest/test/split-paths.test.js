@@ -6,6 +6,7 @@ import {
   entryPointModule,
   extractPackageName,
   findEntryPoints,
+  labsEntrySource,
   splitManifest,
   transformModulePath,
   transformReference,
@@ -14,17 +15,23 @@ import { createTree } from './create-tree.js';
 
 test('extractPackageName reads the package of a module path', () => {
   assert.equal(extractPackageName('packages/button/src/vaadin-button.js'), 'button');
+  assert.equal(extractPackageName('labs/sandbox/src/vaadin-sandbox.js'), 'labs');
   assert.equal(extractPackageName('src/vaadin-button.js'), null);
   assert.equal(extractPackageName('packagesx/button.js'), null);
+  assert.equal(extractPackageName('labsx/sandbox.js'), null);
 });
 
 test('transformModulePath strips the package prefix', () => {
   assert.equal(transformModulePath('packages/button/src/vaadin-button.js'), 'src/vaadin-button.js');
+  assert.equal(transformModulePath('labs/sandbox/src/vaadin-sandbox.js'), 'sandbox/src/vaadin-sandbox.js');
 });
 
 test('transformReference keeps same-package references relative', () => {
   for (const module of ['/packages/button/src/foo.js', 'packages/button/src/foo.js']) {
     assert.deepEqual(transformReference({ name: 'A', module }, 'button'), { name: 'A', module: 'src/foo.js' });
+  }
+  for (const module of ['/labs/sandbox/src/foo.js', 'labs/sandbox/src/foo.js']) {
+    assert.deepEqual(transformReference({ name: 'A', module }, 'labs'), { name: 'A', module: 'sandbox/src/foo.js' });
   }
 });
 
@@ -35,6 +42,10 @@ test('transformReference turns other-package references into package references'
       package: '@vaadin/a11y-base/src/foo.js',
     });
   }
+  assert.deepEqual(transformReference({ name: 'A', module: 'packages/a11y-base/src/foo.js' }, 'labs'), {
+    name: 'A',
+    package: '@vaadin/a11y-base/src/foo.js',
+  });
 });
 
 test('transformReference keeps relative and external references', () => {
@@ -69,6 +80,30 @@ test('deepTransform transforms nested references', () => {
   });
 });
 
+test('deepTransform keeps labs references relative inside labs', () => {
+  const mod = {
+    path: 'labs/sandbox/src/vaadin-sandbox.js',
+    declarations: [
+      {
+        mixins: [{ name: 'ElementMixin', module: 'packages/component-base/src/element-mixin.js' }],
+        superclass: { name: 'Base', module: '/labs/sandbox/src/base.js' },
+      },
+    ],
+  };
+  assert.deepEqual(deepTransform(mod, 'labs').declarations[0], {
+    mixins: [{ name: 'ElementMixin', package: '@vaadin/component-base/src/element-mixin.js' }],
+    superclass: { name: 'Base', module: 'sandbox/src/base.js' },
+  });
+});
+
+test('labsEntrySource reads the source module of a root re-export', () => {
+  const content = "import './sandbox/vaadin-sandbox.js';\n\nexport * from './sandbox/vaadin-sandbox.js';\n";
+  assert.equal(labsEntrySource(content), 'sandbox/src/vaadin-sandbox.js');
+  assert.equal(labsEntrySource('export * from "./sandbox/vaadin-sandbox.js";'), 'sandbox/src/vaadin-sandbox.js');
+  assert.equal(labsEntrySource("export * from './src/vaadin-sandbox.js';"), null);
+  assert.equal(labsEntrySource('export * from \'./sandbox/vaadin-sandbox.js";'), null);
+});
+
 test('findEntryPoints lists the root entry points with their source modules', (t) => {
   const root = createTree(t, {
     'packages/grid/vaadin-grid.js': '',
@@ -89,6 +124,26 @@ test('findEntryPoints sorts the entry points by name whatever the file system or
     findEntryPoints('grid', '/repo').map((entry) => entry.path),
     ['vaadin-grid-column.js', 'vaadin-grid.js'],
   );
+});
+
+test('findEntryPoints lists only the root re-exports of labs', (t) => {
+  const root = createTree(t, {
+    'labs/vaadin-sandbox.js': "export * from './sandbox/vaadin-sandbox.js';",
+    'labs/sandbox/vaadin-sandbox.js': "export * from './src/vaadin-sandbox.js';",
+    'labs/sandbox/src/vaadin-sandbox.js': '',
+  });
+  assert.deepEqual(findEntryPoints('labs', root), [
+    { path: 'vaadin-sandbox.js', source: 'sandbox/src/vaadin-sandbox.js' },
+  ]);
+});
+
+test('findEntryPoints warns about a labs re-export of an unexpected form', (t) => {
+  const root = createTree(t, { 'labs/vaadin-sandbox.js': "export { Sandbox } from './sandbox/vaadin-sandbox.js';" });
+  const warn = mock.method(console, 'warn', () => {});
+  t.after(() => warn.mock.restore());
+  assert.deepEqual(findEntryPoints('labs', root), []);
+  assert.equal(warn.mock.callCount(), 1);
+  assert.match(warn.mock.calls[0].arguments[0], /labs\/vaadin-sandbox\.js/u);
 });
 
 test('entryPointModule re-exports the source module', () => {
@@ -176,7 +231,49 @@ test('splitManifest builds one manifest per package with the entry points first'
   });
 });
 
-test('splitManifest skips and warns about a module outside packages/', (t) => {
+test('splitManifest builds the labs manifest with the root re-exports as entry points', (t) => {
+  const root = createTree(t, {
+    'labs/vaadin-sandbox.js': "export * from './sandbox/vaadin-sandbox.js';",
+    'labs/sandbox/vaadin-sandbox.js': "export * from './src/vaadin-sandbox.js';",
+    'labs/sandbox/src/vaadin-sandbox.js': '',
+  });
+  const rootManifest = {
+    schemaVersion: '1.0.0',
+    readme: '',
+    modules: [
+      {
+        kind: 'javascript-module',
+        path: 'labs/sandbox/src/vaadin-sandbox.js',
+        declarations: [{ kind: 'class', name: 'Sandbox' }],
+        exports: [
+          {
+            kind: 'custom-element-definition',
+            name: 'vaadin-sandbox',
+            declaration: { name: 'Sandbox', module: 'labs/sandbox/src/vaadin-sandbox.js' },
+          },
+        ],
+      },
+    ],
+  };
+
+  const manifests = splitManifest(rootManifest, root);
+
+  assert.deepEqual([...manifests.keys()], ['labs']);
+  assert.deepEqual(
+    manifests.get('labs').modules.map((mod) => mod.path),
+    ['vaadin-sandbox.js', 'sandbox/src/vaadin-sandbox.js'],
+  );
+  assert.deepEqual(manifests.get('labs').modules[0].exports[0].declaration, {
+    name: '*',
+    module: 'sandbox/src/vaadin-sandbox.js',
+  });
+  assert.deepEqual(manifests.get('labs').modules[1].exports[0].declaration, {
+    name: 'Sandbox',
+    module: 'sandbox/src/vaadin-sandbox.js',
+  });
+});
+
+test('splitManifest skips and warns about a module outside packages/ and labs/', (t) => {
   const root = createTree(t, {});
   const warn = mock.method(console, 'warn', () => {});
   t.after(() => warn.mock.restore());

@@ -32,7 +32,16 @@ const USAGE =
   'Usage: yarn workspace @vaadin/manifest-tools compare [--base <ref>] [--out <dir>] [--base-label <text>] [--head-label <text>]';
 
 // The files that the manifests are generated from, as git pathspecs
-const INPUTS = ['packages/*/src/*', 'manifest', 'scripts/buildWebtypes.js', 'patches', 'yarn.lock'];
+const INPUTS = [
+  'packages/*/src/*',
+  'labs/*/src/*',
+  'labs/*/vaadin-*.js',
+  'labs/vaadin-*.js',
+  'manifest',
+  'scripts/buildWebtypes.js',
+  'patches',
+  'yarn.lock',
+];
 
 const [command, ...args] = process.argv.slice(2);
 const option = (name) => {

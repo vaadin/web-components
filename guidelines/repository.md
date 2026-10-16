@@ -33,12 +33,14 @@ The repo is a Lerna + Yarn workspaces monorepo (`lerna.json`, root
 | Workspace    | Purpose                                                         |
 | ------------ | --------------------------------------------------------------- |
 | `packages/*` | Public component packages (published to npm under `@vaadin/*`). |
+| `labs`       | Experimental components in one package, `@vaadin/labs`.         |
 | `test/*`     | Private testing infrastructure (not published).                 |
 | `dev`        | Manual-test playground; one HTML page per component.            |
 | `api-docs`   | Eleventy site that generates per-release API documentation.     |
 
 For the layout of an individual package under `packages/*`, see
-[Package Structure](package-structure.md).
+[Package Structure](package-structure.md). For the rules of `labs`, see
+[Labs](labs.md).
 
 ### Private packages
 
