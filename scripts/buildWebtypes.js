@@ -6,7 +6,7 @@ import {
   getElements,
   INTERNAL_PACKAGES,
   listPackages,
-  packagesDir,
+  packageDir,
   readManifest,
   readPackageJson,
 } from '../manifest/lib/cem-helpers.js';
@@ -227,11 +227,11 @@ function buildWebTypes() {
 
     const plainWebTypes = createPlainWebTypes(packageJson, elements);
     const plainWebTypesJson = JSON.stringify(plainWebTypes, null, 2);
-    fs.writeFileSync(path.join(packagesDir, dir, PLAIN_WEB_TYPES_FILE), plainWebTypesJson, 'utf8');
+    fs.writeFileSync(path.join(packageDir(dir), PLAIN_WEB_TYPES_FILE), plainWebTypesJson, 'utf8');
 
     const litWebTypes = createLitWebTypes(packageJson, elements);
     const litWebTypesJson = JSON.stringify(litWebTypes, null, 2);
-    fs.writeFileSync(path.join(packagesDir, dir, LIT_WEB_TYPES_FILE), litWebTypesJson, 'utf8');
+    fs.writeFileSync(path.join(packageDir(dir), LIT_WEB_TYPES_FILE), litWebTypesJson, 'utf8');
   });
 }
 
@@ -257,7 +257,7 @@ function modifyPackageJson() {
     packageJson['web-types'] = [PLAIN_WEB_TYPES_FILE, LIT_WEB_TYPES_FILE];
 
     const fileContent = JSON.stringify(packageJson, null, 2) + os.EOL;
-    fs.writeFileSync(path.join(packagesDir, dir, 'package.json'), fileContent, 'utf8');
+    fs.writeFileSync(path.join(packageDir(dir), 'package.json'), fileContent, 'utf8');
   });
 }
 

@@ -26,6 +26,7 @@ For repository-level commands (install, start, lint, test) see `CLAUDE.md`.
 | [Repository](repository.md)                             | Looking up the tech stack, test tooling, and workspace layout.                |
 | [Design](design.md)                                     | Designing the API and behavior of a new component before implementation.      |
 | [Package Structure](package-structure.md)               | Scaffolding a new component package.                                          |
+| [Labs](labs.md)                                         | Adding, graduating, and dropping an experimental component in `labs/`.        |
 | [Component Implementation](component-implementation.md) | Building the element class: mixins, properties, lifecycle hooks, controllers. |
 | [Common packages](common-packages.md)                   | Reusing shared mixins, controllers, and utilities before reinventing them.    |
 | [Documenting](documenting.md)                           | Authoring JSDoc for proper API docs generation.                               |

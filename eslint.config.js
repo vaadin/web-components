@@ -64,6 +64,7 @@ export default [
       'packages/**/vendor/*.js',
       'packages/**/dist/*.js',
       'packages/**/test/dom/__snapshots__/*.snap.js',
+      'labs/**/test/dom/__snapshots__/*.snap.js',
       'packages/**/test/*.generated.test.js',
       'packages/react-components*/*.{js,d.ts,map}',
       'packages/react-components*/{generated,renderers,utils,css}/**',
@@ -154,7 +155,7 @@ export default [
     },
   },
   {
-    files: ['packages/**/*', 'test/integration/**', 'dev/**/*', 'api-docs/js/**'],
+    files: ['packages/**/*', 'labs/**/*', 'test/integration/**', 'dev/**/*', 'api-docs/js/**'],
     languageOptions: {
       globals: {
         ...globals.browser,
@@ -166,7 +167,7 @@ export default [
     plugins: { html },
   },
   {
-    files: ['packages/*/src/**/*.js'],
+    files: ['packages/*/src/**/*.js', 'labs/*/src/**/*.js'],
     rules: {
       'no-restricted-syntax': [
         'error',
@@ -183,13 +184,13 @@ export default [
     },
   },
   {
-    files: ['packages/*/src/**/*.d.ts'],
+    files: ['packages/*/src/**/*.d.ts', 'labs/*/src/**/*.d.ts'],
     rules: {
       '@typescript-eslint/no-unused-vars': ['error', { varsIgnorePattern: '^TItem' }],
     },
   },
   {
-    files: ['packages/*/src/**/*.{ts,tsx,js}'],
+    files: ['packages/*/src/**/*.{ts,tsx,js}', 'labs/*/src/**/*.{ts,tsx,js}'],
     rules: {
       'custom-rules/license-header': ['error', { licenseHeader: LICENSE_HEADER }],
     },
@@ -236,7 +237,7 @@ export default [
     },
   },
   {
-    files: ['packages/**/test/**', 'test/integration/**'],
+    files: ['packages/**/test/**', 'labs/**/test/**', 'test/integration/**'],
     languageOptions: {
       globals: {
         ...globals.mocha,
@@ -263,6 +264,19 @@ export default [
               // Sibling group
               '^\\.',
             ],
+          ],
+        },
+      ],
+    },
+  },
+  {
+    files: ['packages/**/*.{js,ts,tsx}'],
+    rules: {
+      'no-restricted-imports': [
+        'error',
+        {
+          patterns: [
+            { group: ['@vaadin/labs', '@vaadin/labs/*', '**/labs/**'], message: 'packages must not depend on labs' },
           ],
         },
       ],

@@ -133,7 +133,7 @@ jobs:
         env:
           PATCH: screenshots-${{ matrix.name }}.patch
         run: |
-          failed=$(find packages -path '*/failed/*.png' ! -name '*-diff.png')
+          failed=$(find packages labs -path '*/failed/*.png' ! -name '*-diff.png')
           if [ -z "$failed" ]; then
             echo "::warning::Visual tests failed without failed screenshots, see the test output."
             exit 0
@@ -141,7 +141,7 @@ jobs:
           for file in $failed; do
             cp "$file" "$(dirname "$(dirname "$file")")/baseline/"
           done
-          git diff --binary -- ':(glob)packages/**/baseline/*.png' > "$PATCH"
+          git diff --binary -- ':(glob)packages/**/baseline/*.png' ':(glob)labs/**/baseline/*.png' > "$PATCH"
 
       - uses: actions/upload-artifact@v6
         if: ${{ steps.tests.outcome == 'failure' }}

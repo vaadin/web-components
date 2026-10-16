@@ -1,6 +1,6 @@
 {
   "$schema": "node_modules/lerna/schemas/lerna-schema.json",
-  "packages": ["test/*", "packages/*", "api-docs", "dev", "manifest", "react"],
+  "packages": ["test/*", "packages/*", "labs", "api-docs", "dev", "manifest", "react"],
   "npmClient": "yarn",
   "version": "25.4.0-alpha3"
 }

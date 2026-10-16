@@ -67,6 +67,7 @@ jobs:
           name: base-screenshots
           path: |
             packages/*/test/visual/base/screenshots/*/failed/*.png
+            labs/*/test/visual/base/screenshots/*/failed/*.png
 
   lumo:
     name: Lumo
@@ -106,6 +107,7 @@ jobs:
           path: |
             packages/*/test/visual/lumo/screenshots/*/failed/*.png
             packages/vaadin-lumo-styles/test/visual/screenshots/failed/*.png
+            labs/*/test/visual/lumo/screenshots/*/failed/*.png
 
   aura:
     name: Aura
@@ -148,3 +150,5 @@ jobs:
           path: |
             packages/*/test/visual/aura/screenshots/dark/*/failed/*.png
             packages/*/test/visual/aura/screenshots/default/*/failed/*.png
+            labs/*/test/visual/aura/screenshots/dark/*/failed/*.png
+            labs/*/test/visual/aura/screenshots/default/*/failed/*.png

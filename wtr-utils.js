@@ -6,6 +6,7 @@ import minimist from 'minimist';
 import { execSync } from 'node:child_process';
 import fs from 'node:fs';
 import path from 'node:path';
+import { listComponentDirs, rootDir } from './manifest/lib/cem-helpers.js';
 import { cssImportPlugin } from './web-dev-server.config.js';
 
 const argv = minimist(process.argv.slice(2));
@@ -44,6 +45,13 @@ const hasGroupParam = process.argv.includes('--group');
 const hasCoverageParam = process.argv.includes('--coverage');
 const hasAllParam = process.argv.includes('--all');
 
+// Component name to its directory relative to the repo root, e.g. `packages/button` or `labs/sandbox`
+const components = listComponentDirs();
+const componentDirs = new Map(
+  components.map(({ name, dir }) => [name, path.relative(rootDir, dir).split(path.sep).join('/')]),
+);
+const labsComponents = components.filter(({ pkg }) => pkg === 'labs').map(({ name }) => name);
+
 /**
  * Check if lockfile has changed.
  */
@@ -58,37 +66,33 @@ const isLockfileChanged = () => {
 const getChangedPackages = () => {
   const pathToLerna = path.normalize('./node_modules/.bin/lerna');
   const output = execSync(`${pathToLerna} la --since origin/main --json --loglevel silent`); // NOSONAR
-  return JSON.parse(output.toString()).map((project) => project.name.replace('@vaadin/', ''));
+  // `@vaadin/labs` stands for every component in `labs/`
+  return JSON.parse(output.toString())
+    .map((project) => project.name.replace('@vaadin/', ''))
+    .flatMap((name) => (name === 'labs' ? labsComponents : [name]));
 };
 
 /**
  * Get all available packages with unit tests.
  */
 const getAllUnitPackages = () => {
-  return fs
-    .readdirSync('packages')
-    .filter(
-      (dir) =>
-        fs.statSync(`packages/${dir}`).isDirectory() && globSync(`packages/${dir}/test/*.test.{js,ts}`).length > 0,
-    );
+  return [...componentDirs.keys()].filter(
+    (pkg) => globSync(`${componentDirs.get(pkg)}/test/*.test.{js,ts}`).length > 0,
+  );
 };
 
 /**
  * Get all available packages with snapshot tests.
  */
 const getAllSnapshotPackages = () => {
-  return fs
-    .readdirSync('packages')
-    .filter((dir) => fs.statSync(`packages/${dir}`).isDirectory() && fs.existsSync(`packages/${dir}/test/dom`));
+  return [...componentDirs.keys()].filter((pkg) => fs.existsSync(`${componentDirs.get(pkg)}/test/dom`));
 };
 
 /**
  * Get all available packages with visual tests.
  */
 const getAllVisualPackages = () => {
-  return fs
-    .readdirSync('packages')
-    .filter((dir) => fs.statSync(`packages/${dir}`).isDirectory() && fs.existsSync(`packages/${dir}/test/visual`));
+  return [...componentDirs.keys()].filter((pkg) => fs.existsSync(`${componentDirs.get(pkg)}/test/visual`));
 };
 
 /**
@@ -135,7 +139,7 @@ const getSnapshotTestGroups = (packages) => {
   return packages.map((pkg) => {
     return {
       name: pkg,
-      files: `packages/${pkg}/test/dom/*.test.{js,ts}`,
+      files: `${componentDirs.get(pkg)}/test/dom/*.test.{js,ts}`,
     };
   });
 };
@@ -146,7 +150,7 @@ const getSnapshotTestGroups = (packages) => {
 const getUnitTestGroups = (packages) => {
   return packages.map((pkg) => {
     const filesGlob = argv.glob || '*';
-    return { name: pkg, files: `packages/${pkg}/test/${filesGlob}.test.{js,ts}` };
+    return { name: pkg, files: `${componentDirs.get(pkg)}/test/${filesGlob}.test.{js,ts}` };
   });
 };
 
@@ -164,8 +168,8 @@ const getVisualTestGroups = (packages, theme) => {
     return {
       name: pkg,
       files: [
-        `packages/${pkg}/test/visual/${filesGlob}.test.{js,ts}`,
-        `packages/${pkg}/test/visual/${theme}/${filesGlob}.test.{js,ts}`,
+        `${componentDirs.get(pkg)}/test/visual/${filesGlob}.test.{js,ts}`,
+        `${componentDirs.get(pkg)}/test/visual/${theme}/${filesGlob}.test.{js,ts}`,
       ],
     };
   });
@@ -210,7 +214,10 @@ const getScreenshotFileName = ({ name, testFile }, type, diff) => {
     folder = path.join(folder, `${argv.dark ? 'dark' : 'default'}`);
   }
 
-  if (path.matchesGlob(testFile, '**/packages/!(vaadin-lumo-styles|field-base)/**')) {
+  if (
+    path.matchesGlob(testFile, '**/packages/!(vaadin-lumo-styles|field-base)/**') ||
+    path.matchesGlob(path.relative(rootDir, testFile), 'labs/*/**')
+  ) {
     folder = path.join(folder, path.basename(testFile).replace(/\.test\.(js|ts)$/u, ''));
   }
 
