@@ -548,17 +548,18 @@ describe('column', () => {
       expect(getBodyCellContent(grid, 0, 0).textContent).to.equal('cell');
     });
 
-    it('should not keep cells of a hidden column after it is removed and added back', async () => {
+    it('should not keep cells of a hidden column after it is removed and added back', () => {
       const group = column.parentElement;
       column.hidden = true;
       flushGrid(grid);
 
       column.remove();
-      await nextFrame();
+      group._observer.flush();
+      flushGrid(grid);
 
       group.insertBefore(column, group.firstElementChild);
       column.hidden = false;
-      await nextFrame();
+      group._observer.flush();
       flushGrid(grid);
 
       expect(column._cells.length).to.equal(getPhysicalItems(grid).length + 1);
