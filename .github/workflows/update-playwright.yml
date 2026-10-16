@@ -23,6 +23,8 @@ permissions:
 jobs:
   update:
     name: Update version
+    # The pull request targets main, so the update must start from main too
+    if: github.ref == 'refs/heads/main'
     runs-on: ubuntu-latest
     permissions:
       contents: read
