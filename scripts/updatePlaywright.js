@@ -2,12 +2,12 @@
 
 /**
  * Updates Playwright to the latest version on npm, or to the given version:
- * the `playwright` version in the root and React `package.json`, the
- * Playwright Docker image of the visual tests workflow, and `yarn.lock`.
+ * the `playwright` version in the root and React `package.json`, and
+ * `yarn.lock`. The visual tests use the Playwright Docker image of the version
+ * in the root `package.json`.
  *
  * Does nothing when the Docker image of the version is not published yet. The
- * image usually follows the npm release within an hour, but can take days, and
- * the visual tests need both to have the same version.
+ * image usually follows the npm release within an hour, but can take days.
  *
  * Writes `version` to $GITHUB_OUTPUT when the files were updated.
  *
@@ -17,11 +17,10 @@ import { execFileSync } from 'node:child_process';
 import fs from 'node:fs';
 
 const PACKAGE_FILES = ['package.json', 'react/package.json'];
-const WORKFLOW_FILE = '.github/workflows/visual-tests.yml';
 
 const getCurrentVersion = () => {
   const { resolutions } = JSON.parse(fs.readFileSync('package.json', 'utf-8'));
-  return resolutions.playwright.replace(/^~/u, '');
+  return resolutions.playwright;
 };
 
 const getLatestVersion = async () => {
@@ -67,13 +66,8 @@ const main = async () => {
   console.log(`Updating Playwright from ${currentVersion} to ${version}.`);
 
   PACKAGE_FILES.forEach((file) => {
-    replaceInFile(file, `"playwright": "~${currentVersion}"`, `"playwright": "~${version}"`);
+    replaceInFile(file, `"playwright": "${currentVersion}"`, `"playwright": "${version}"`);
   });
-  replaceInFile(
-    WORKFLOW_FILE,
-    `mcr.microsoft.com/playwright:v${currentVersion}-noble`,
-    `mcr.microsoft.com/playwright:v${version}-noble`,
-  );
 
   // Updates the lockfile entries of the changed version ranges only
   execFileSync('yarn', ['install', '--ignore-scripts', '--no-progress', '--non-interactive'], { stdio: 'inherit' });
