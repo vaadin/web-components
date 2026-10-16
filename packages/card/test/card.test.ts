@@ -100,8 +100,9 @@ describe('vaadin-card', () => {
         expect(getCustomTitleElement()).to.not.exist;
       });
 
-      it('should not clear custom title element when empty string title is set', async () => {
-        card.cardTitle = '';
+      it('should not clear custom title element when blank string title is set', async () => {
+        // A custom title already sets `cardTitle` to '', use a blank string to trigger an update
+        card.cardTitle = ' ';
         await nextRender();
         expect(getCustomTitleElement()).to.equal(customTitleElement);
       });
