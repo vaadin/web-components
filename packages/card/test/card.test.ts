@@ -37,66 +37,67 @@ describe('vaadin-card', () => {
       });
     }
 
-    it('should create title element with default aria-level when title property is set', async () => {
-      const stringTitle = 'Some title';
-      card.cardTitle = stringTitle;
-      await nextRender();
-      const stringTitleElement = getStringTitleElement();
-      expect(stringTitleElement).to.exist;
-      expect(stringTitleElement.getAttribute('aria-level')).to.equal('2');
-      expect(stringTitleElement.textContent).to.equal(stringTitle);
+    describe('default title', () => {
+      beforeEach(async () => {
+        card.cardTitle = 'Some title';
+        await nextRender();
+      });
+
+      it('should create title element with default aria-level', () => {
+        const stringTitleElement = getStringTitleElement();
+        expect(stringTitleElement).to.exist;
+        expect(stringTitleElement.getAttribute('aria-level')).to.equal('2');
+        expect(stringTitleElement.textContent).to.equal('Some title');
+      });
+
+      it('should update aria-level when heading level changes', async () => {
+        card.titleHeadingLevel = 3;
+        await nextRender();
+        expect(getStringTitleElement().getAttribute('aria-level')).to.equal('3');
+      });
+
+      it('should use default heading level when set to null', async () => {
+        card.titleHeadingLevel = 3;
+        await nextRender();
+        card.titleHeadingLevel = null;
+        await nextRender();
+        expect(getStringTitleElement().getAttribute('aria-level')).to.equal('2');
+      });
+
+      it('should clear string title when custom title element is used', async () => {
+        card.appendChild(fixtureSync('<span slot="title">Custom title element</span>'));
+        await nextRender();
+        expect(card.cardTitle).to.be.not.ok;
+        expect(getStringTitleElement()).to.not.exist;
+      });
+
+      it('should clear string title when empty string title is set', async () => {
+        card.cardTitle = '';
+        await nextRender();
+        expect(getStringTitleElement()).to.not.exist;
+      });
     });
 
-    it('should update aria-level when heading level changes', async () => {
-      card.cardTitle = 'Some title';
-      card.titleHeadingLevel = 3;
-      await nextRender();
-      const stringTitleElement = getStringTitleElement();
-      expect(stringTitleElement.getAttribute('aria-level')).to.equal('3');
-    });
+    describe('custom title', () => {
+      let customTitleElement: HTMLElement;
 
-    it('should use default heading level when set to null', async () => {
-      card.titleHeadingLevel = 3;
-      card.cardTitle = 'Some title';
-      card.titleHeadingLevel = null;
-      await nextRender();
-      expect(getStringTitleElement().getAttribute('aria-level')).to.equal('2');
-    });
+      beforeEach(async () => {
+        customTitleElement = fixtureSync('<span slot="title">Custom title element</span>');
+        card.appendChild(customTitleElement);
+        await nextRender();
+      });
 
-    it('should clear string title when custom title element is used', async () => {
-      card.cardTitle = 'Some title';
-      await nextRender();
-      const customTitleElement = fixtureSync('<span slot="title">Custom title element</span>');
-      card.appendChild(customTitleElement);
-      await nextRender();
-      expect(card.cardTitle).to.be.not.ok;
-      expect(getStringTitleElement()).to.not.exist;
-    });
+      it('should clear custom title element when string title is set', async () => {
+        card.cardTitle = 'Some title';
+        await nextRender();
+        expect(getCustomTitleElement()).to.not.exist;
+      });
 
-    it('should clear string title when empty string title is set', async () => {
-      card.cardTitle = 'Some title';
-      await nextRender();
-      card.cardTitle = '';
-      await nextRender();
-      expect(getStringTitleElement()).to.not.exist;
-    });
-
-    it('should clear custom title element when string title is set', async () => {
-      const customTitleElement = fixtureSync('<span slot="title">Custom title element</span>');
-      card.appendChild(customTitleElement);
-      await nextRender();
-      card.cardTitle = 'Some title';
-      await nextRender();
-      expect(getCustomTitleElement()).to.not.exist;
-    });
-
-    it('should not clear custom title element when empty string title is set', async () => {
-      const customTitleElement = fixtureSync('<span slot="title">Custom title element</span>');
-      card.appendChild(customTitleElement);
-      await nextRender();
-      card.cardTitle = '';
-      await nextRender();
-      expect(getCustomTitleElement()).to.exist;
+      it('should not clear custom title element when empty string title is set', async () => {
+        card.cardTitle = '';
+        await nextRender();
+        expect(getCustomTitleElement()).to.equal(customTitleElement);
+      });
     });
   });
 
