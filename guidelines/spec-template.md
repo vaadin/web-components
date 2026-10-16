@@ -3,7 +3,7 @@
 <!--
 How to use this template:
 
-1. Copy this file to `packages/{component-name}/spec/spec.md`.
+1. Copy this file to `packages/{component-name}/spec/spec.md`, or to `labs/{component-name}/spec/spec.md` for a labs component.
 2. Replace each `{placeholder}` with real text.
 3. Use the prototype, the use-case app and the issue research as sources.
 4. Delete the sections and groups that do not apply.
