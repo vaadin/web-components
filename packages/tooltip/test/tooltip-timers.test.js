@@ -135,6 +135,16 @@ describe('timers', () => {
       document.removeEventListener('keydown', spy);
     });
 
+    it('should not open after the delay when removed meanwhile in manual mode', async () => {
+      // Components like grid open a manual tooltip with a delay through the state controller
+      tooltip.manual = true;
+      tooltip._stateController.open({ focus: true });
+      tooltip.remove();
+
+      await aTimeout(1);
+      expect(tooltip.opened).to.be.not.ok;
+    });
+
     it('should still open after the delay when another tooltip is removed meanwhile', async () => {
       const other = fixtureSync('<vaadin-tooltip text="other"></vaadin-tooltip>');
       await nextUpdate(other);

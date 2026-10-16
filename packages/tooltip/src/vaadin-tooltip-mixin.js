@@ -426,7 +426,7 @@ export const TooltipMixin = (superClass) =>
 
       if (this.opened && !this.manual) {
         this._stateController.close(true);
-      } else if (!this.manual) {
+      } else {
         // A tooltip waiting for its delay must not open while detached.
         this._stateController.cancelOpen();
       }
