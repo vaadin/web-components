@@ -436,13 +436,14 @@ export const GridMixin = (superClass) =>
       // This render uses the current hidden state of all columns,
       // so a pending render from a hidden change is not needed
       this._debouncerHiddenChanged?.cancel();
+      this.__renderBodyDebouncer?.cancel();
 
       iterateChildren(this.$.items, (row) => {
         this.__updateRow(row);
       });
 
       this.__renderHeaderFooter();
-      this.__renderSizerRow();
+      this.__renderSizer();
 
       this._columnTree.at(-1).forEach((column) => {
         column.performUpdate?.();
