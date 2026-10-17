@@ -81,7 +81,6 @@ export const ColumnBaseMixin = (superClass) =>
           type: Boolean,
           value: false,
           sync: true,
-          observer: '_hiddenChanged',
         },
 
         /**
@@ -262,6 +261,7 @@ export const ColumnBaseMixin = (superClass) =>
         '_onFooterRendererOrBindingChanged(_footerRenderer, _footerCell)',
         '_resizableChanged(resizable)',
         '_reorderStatusChanged(_reorderStatus, _headerCell, _footerCell, _cells)',
+        '_hiddenChanged(hidden, _headerCell, _footerCell, _cells)',
         '_rowHeaderChanged(rowHeader, _cells)',
         '__headerFooterPartNameChanged(headerPartName, footerPartName)',
       ];
@@ -462,10 +462,10 @@ export const ColumnBaseMixin = (superClass) =>
     }
 
     /** @private */
-    _hiddenChanged(hidden, oldHidden) {
+    _hiddenChanged(hidden) {
       this.parentElement?._columnPropChanged?.('hidden', hidden);
 
-      if (!!hidden !== !!oldHidden && this._grid) {
+      if (!!hidden !== !!this._previousHidden && this._grid) {
         this._grid._debouncerHiddenChanged = Debouncer.debounce(
           this._grid._debouncerHiddenChanged,
           animationFrame,
@@ -477,6 +477,7 @@ export const ColumnBaseMixin = (superClass) =>
         this._grid._debounceUpdateFrozenColumn?.();
         this._grid._resetKeyboardNavigation?.();
       }
+      this._previousHidden = hidden;
     }
 
     /** @protected */
