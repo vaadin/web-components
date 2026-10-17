@@ -446,6 +446,7 @@ export const GridMixin = (superClass) =>
       this.__renderSizer();
 
       this._columnTree.at(-1).forEach((column) => {
+        column._cells = [...(column._cells ?? [])];
         column.performUpdate?.();
       });
 
