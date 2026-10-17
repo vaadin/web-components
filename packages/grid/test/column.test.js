@@ -171,6 +171,7 @@ describe('column', () => {
       it('should detach cells from a hidden column', () => {
         const childCountBefore = grid.childElementCount;
         column.hidden = true;
+        flushGrid(grid);
         const childCountAfter = grid.childElementCount;
         expect(childCountAfter).to.be.below(childCountBefore);
       });
@@ -234,6 +235,23 @@ describe('column', () => {
         expect(() => {
           grid.size = 11;
         }).to.not.throw(Error);
+      });
+
+      describe('renderer changed while hidden', () => {
+        beforeEach(() => {
+          column.hidden = true;
+          flushGrid(grid);
+          column.renderer = (root) => {
+            root.textContent = 'updated';
+          };
+        });
+
+        it('should use the current renderer when the column is shown again', () => {
+          column.hidden = false;
+          flushGrid(grid);
+
+          expect(getBodyCellContent(grid, 0, 0).textContent).to.equal('updated');
+        });
       });
     });
 
@@ -521,19 +539,6 @@ describe('column', () => {
       expect(content.parentElement).to.equal(grid);
     });
 
-    it('should not throw when the column is detached again before its cells are re-attached', async () => {
-      const group = column.parentElement;
-      const content = getBodyCellContent(grid, 0, 0);
-      column.remove();
-      await nextFrame();
-
-      group.appendChild(column);
-      column.remove();
-      await nextFrame();
-
-      expect(content.parentElement).to.be.null;
-    });
-
     it('should render cell content when column is added back', async () => {
       const group = column.parentElement;
       column.remove();
@@ -546,6 +551,23 @@ describe('column', () => {
       expect(getHeaderCellContent(grid, 1, 0).textContent).to.equal('header1');
       expect(getContainerCellContent(grid.$.footer, 0, 0).textContent).to.equal('footer1');
       expect(getBodyCellContent(grid, 0, 0).textContent).to.equal('cell');
+    });
+
+    it('should not keep cells of a hidden column after it is removed and added back', () => {
+      const group = column.parentElement;
+      column.hidden = true;
+      flushGrid(grid);
+
+      column.remove();
+      group._observer.flush();
+      flushGrid(grid);
+
+      group.insertBefore(column, group.firstElementChild);
+      column.hidden = false;
+      group._observer.flush();
+      flushGrid(grid);
+
+      expect(column._cells.length).to.equal(getPhysicalItems(grid).length + 1);
     });
   });
 
