@@ -7,6 +7,8 @@ import { html, nothing, render } from 'lit';
 import { cache } from 'lit/directives/cache.js';
 import { classMap } from 'lit/directives/class-map.js';
 import { repeat } from 'lit/directives/repeat.js';
+import { microTask } from '@vaadin/component-base/src/async.js';
+import { Debouncer } from '@vaadin/component-base/src/debounce.js';
 import { partMap } from '@vaadin/component-base/src/directives/part-map.js';
 import { generateUniqueId } from '@vaadin/component-base/src/unique-id-utils.js';
 import { bodyCell } from './directives/body-cell-directive.js';
@@ -31,6 +33,22 @@ export const BodyRenderingMixin = (superClass) =>
     }
 
     /** @private */
+    __scheduleRenderBody() {
+      this.__renderBodyDebouncer = Debouncer.debounce(this.__renderBodyDebouncer, microTask, () => {
+        this.__renderBody();
+      });
+    }
+
+    /** @private */
+    __renderBody() {
+      this.__renderBodyDebouncer?.cancel();
+
+      [...this.$.items.children].forEach((row) => {
+        this.__renderBodyRow(row);
+      });
+    }
+
+    /** @private */
     __renderBodyRow(row) {
       const state = this.#getRowState(row);
       render(this.#bodyRowTemplate(state), row.__renderRoot, { host: this });
@@ -43,7 +61,16 @@ export const BodyRenderingMixin = (superClass) =>
     }
 
     /** @private */
-    __renderSizerRow() {
+    __scheduleRenderSizer() {
+      this.__renderSizerDebouncer = Debouncer.debounce(this.__renderSizerDebouncer, microTask, () => {
+        this.__renderSizer();
+      });
+    }
+
+    /** @private */
+    __renderSizer() {
+      this.__renderSizerDebouncer?.cancel();
+
       render(this.#sizerRowTemplate(), this.$.sizer, { host: this });
     }
 
