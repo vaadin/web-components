@@ -204,6 +204,8 @@ export const ColumnReorderingMixin = (superClass) =>
           this._swapColumnOrders(this._draggedColumn, levelColumnsInOrder[i + direction]);
         }
 
+        this.__renderBody();
+        this.__renderSizer();
         this.__renderHeaderFooter();
       }
 
@@ -444,10 +446,8 @@ export const ColumnReorderingMixin = (superClass) =>
     _swapColumnOrders(column1, column2) {
       [column1._order, column2._order] = [column2._order, column1._order];
 
-      [...this.$.items.children].forEach((row) => {
-        this.__renderBodyRow(row);
-      });
-      this.__renderSizerRow();
+      this.__scheduleRenderBody();
+      this.__scheduleRenderSizer();
 
       this.__scheduleRenderHeaderFooter();
       this._debounceUpdateFrozenColumn();

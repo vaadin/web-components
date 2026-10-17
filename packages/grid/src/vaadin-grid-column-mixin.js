@@ -253,7 +253,7 @@ export const ColumnBaseMixin = (superClass) =>
         '_frozenChanged(frozen, _headerCell, _footerCell, _cells)',
         '_frozenToEndChanged(frozenToEnd, _headerCell, _footerCell, _cells)',
         '_flexGrowChanged(flexGrow, _cells)',
-        '_textAlignChanged(textAlign, _cells)',
+        '_textAlignChanged(textAlign)',
         '_lastFrozenChanged(_lastFrozen)',
         '_firstFrozenToEndChanged(_firstFrozenToEnd)',
         '_onRendererOrBindingChanged(_renderer, _cells, _bodyContentHidden, path)',
@@ -458,9 +458,7 @@ export const ColumnBaseMixin = (superClass) =>
 
       this._grid?.__scheduleRenderHeaderFooter?.();
 
-      this._cells?.forEach((cell) => {
-        cell._content.style.textAlign = textAlign;
-      });
+      this._grid?.__scheduleRenderBody?.();
     }
 
     /** @private */
