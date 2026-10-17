@@ -549,6 +549,10 @@ export const InlineEditingMixin = (superClass) =>
 
       // Focus current cell as fallback
       if (!nextCell) {
+        if (this._lazyColumns) {
+          // Make sure the cell of the edited column is rendered again
+          this.scrollToColumn(column);
+        }
         nextCell = cell;
         nextIndex = model.index;
       }

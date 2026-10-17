@@ -704,6 +704,25 @@ describe('edit column', () => {
         await sendKeys({ press: 'Enter' });
         expect(getCellEditor(cell)).to.be.ok;
       });
+
+      describe('no editable cells after the edited cell', () => {
+        let cell;
+
+        beforeEach(async () => {
+          grid.querySelectorAll('vaadin-grid-pro-edit-column').forEach((column) => {
+            column.isCellEditable = () => column.path === 'col1';
+          });
+          cell = getRowCells(getRows(grid.$.items)[1]).find((c) => c._column.path === 'col1');
+          cell.focus();
+          await sendKeys({ press: 'Enter' });
+        });
+
+        it('should stop editing and keep focus in the edited cell with Tab', async () => {
+          await sendKeys({ press: 'Tab' });
+          expect(grid.querySelector('vaadin-grid-pro-edit-text-field')).to.not.be.ok;
+          expect(cell.matches(':focus-within')).to.be.true;
+        });
+      });
     });
   });
 
