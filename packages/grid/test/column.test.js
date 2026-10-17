@@ -236,6 +236,23 @@ describe('column', () => {
           grid.size = 11;
         }).to.not.throw(Error);
       });
+
+      describe('renderer changed while hidden', () => {
+        beforeEach(() => {
+          column.hidden = true;
+          flushGrid(grid);
+          column.renderer = (root) => {
+            root.textContent = 'updated';
+          };
+        });
+
+        it('should use the current renderer when the column is shown again', () => {
+          column.hidden = false;
+          flushGrid(grid);
+
+          expect(getBodyCellContent(grid, 0, 0).textContent).to.equal('updated');
+        });
+      });
     });
 
     describe('path', () => {
