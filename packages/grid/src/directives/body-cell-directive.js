@@ -12,22 +12,22 @@ import { AsyncDirective, directive } from 'lit/async-directive.js';
  */
 export class BodyCellDirective extends AsyncDirective {
   #grid;
-  #column;
   #cell;
 
   update(part, [grid, column]) {
     if (!this.#cell) {
       this.#grid = grid;
-      this.#column = column;
       this.#cell = part.element;
+      this.#cell._column = column;
       this.register(column, this.#cell);
     }
     return nothing;
   }
 
   disconnected() {
-    if (!this.#grid._columnTree.at(-1).includes(this.#column)) {
-      this.unregister(this.#column, this.#cell);
+    const column = this.#cell._column;
+    if (!this.#grid._columnTree.at(-1).includes(column)) {
+      this.unregister(column, this.#cell);
     }
   }
 
