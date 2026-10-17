@@ -93,7 +93,6 @@ export const BodyRenderingMixin = (superClass) =>
                   @mousedown="${this.__onCellMouseDown}"
                   @mouseenter="${this.__onCellMouseEnter}"
                   @mouseleave="${this.__onCellMouseLeave}"
-                  ._column="${column}"
                   ${bodyCell(this, column)}
                 >
                   ${cellContent(this, `vaadin-grid-body-cell-content-${rowId}-${column._id}`, {
@@ -141,7 +140,7 @@ export const BodyRenderingMixin = (superClass) =>
               column.hidden
                 ? nothing
                 : html`
-                    <td part="cell body-cell" class="cell body-cell" ._column="${column}" ${sizerCell(this, column)}>
+                    <td part="cell body-cell" class="cell body-cell" ${sizerCell(this, column)}>
                       ${cellContent(this, `vaadin-grid-sizer-cell-content-${column._id}`)}
                     </td>
                   `,
