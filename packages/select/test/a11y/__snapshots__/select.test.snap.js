@@ -16,6 +16,18 @@ snapshots["vaadin-select placeholder"] =
 - combobox "Size" [haspopup=listbox]: Choose a size`;
 /* end snapshot vaadin-select placeholder */
 
+snapshots["vaadin-select helper text"] = 
+`- text: Size
+- combobox "Size" [haspopup=listbox]:
+  - /description: Pick one size
+- text: Pick one size`;
+/* end snapshot vaadin-select helper text */
+
+snapshots["vaadin-select accessible name"] = 
+`- text: Size
+- combobox "T-shirt size" [haspopup=listbox]`;
+/* end snapshot vaadin-select accessible name */
+
 snapshots["vaadin-select disabled"] = 
 `- text: Size
 - combobox "Size" [disabled, haspopup=listbox]`;
