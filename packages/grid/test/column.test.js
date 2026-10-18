@@ -168,6 +168,18 @@ describe('column', () => {
         expect(column._footerCell.parentElement).to.be.not.ok;
       });
 
+      it('should run the renderer of other columns once per row when a column is hidden', () => {
+        const renderer = sinon.spy();
+        columns[1].renderer = renderer;
+        flushGrid(grid);
+        renderer.resetHistory();
+
+        column.hidden = true;
+        flushGrid(grid);
+
+        expect(renderer.callCount).to.equal(getPhysicalItems(grid).length);
+      });
+
       it('should detach cells from a hidden column', () => {
         const childCountBefore = grid.childElementCount;
         column.hidden = true;

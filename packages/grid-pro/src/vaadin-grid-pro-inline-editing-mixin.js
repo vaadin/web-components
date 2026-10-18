@@ -561,7 +561,7 @@ export const InlineEditingMixin = (superClass) =>
      * @param {!HTMLElement} row
      * @private
      */
-    __updateRow(row) {
+    __updateRow(row, ...args) {
       const item = this.__getRowItem(row);
       if (this.__edited) {
         const { cell, model } = this.__edited;
@@ -573,7 +573,7 @@ export const InlineEditingMixin = (superClass) =>
           this._stopEdit();
         }
       }
-      super.__updateRow(row, item);
+      super.__updateRow(row, ...args);
     }
 
     /**
