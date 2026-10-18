@@ -1,4 +1,5 @@
 import { expect } from '@vaadin/chai-plugins';
+import { resetMouse, sendMouseToElement } from '@vaadin/test-runner-commands';
 import { fixtureSync, nextRender, nextUpdate, oneEvent } from '@vaadin/testing-helpers';
 import '../not-animated-styles.css';
 import '../../src/vaadin-popover.js';
@@ -65,5 +66,17 @@ describe('vaadin-popover', () => {
     await open();
     await expect(wrapper).to.equalA11yTreeSnapshot();
     await expect(wrapper).to.be.accessible();
+  });
+
+  it('hover trigger', async () => {
+    popover.trigger = ['hover'];
+    popover.hoverDelay = 0;
+    await nextUpdate(popover);
+    const opened = oneEvent(popover.$.overlay, 'vaadin-overlay-open');
+    await sendMouseToElement({ type: 'move', element: wrapper.querySelector('#target') });
+    await opened;
+    await expect(wrapper).to.equalA11yTreeSnapshot();
+    await expect(wrapper).to.be.accessible();
+    await resetMouse();
   });
 });
