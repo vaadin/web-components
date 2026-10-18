@@ -46,3 +46,11 @@ snapshots["vaadin-popover overlay role"] =
     - checkbox "Dark mode"`;
 /* end snapshot vaadin-popover overlay role */
 
+snapshots["vaadin-popover hover trigger"] = 
+`- button "Settings" [haspopup=dialog, expanded]:
+  - /controls: dialog "Settings"
+- dialog "Settings":
+  - group:
+    - checkbox "Dark mode"`;
+/* end snapshot vaadin-popover hover trigger */
+
