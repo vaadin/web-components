@@ -48,3 +48,16 @@ snapshots["vaadin-select opened"] =
     - option "Large" [disabled]`;
 /* end snapshot vaadin-select opened */
 
+snapshots["vaadin-select helper text"] = 
+`- text: Size
+- button "Size" [haspopup=listbox, expanded=false]:
+  - /description: Pick one size
+- text: Pick one size`;
+/* end snapshot vaadin-select helper text */
+
+snapshots["vaadin-select accessible name"] = 
+`- text: Size
+- button "T-shirt size" [haspopup=listbox, expanded=false]
+- text: "T-shirt size"`;
+/* end snapshot vaadin-select accessible name */
+

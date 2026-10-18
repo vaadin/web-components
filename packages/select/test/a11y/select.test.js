@@ -34,6 +34,20 @@ describe('vaadin-select', () => {
     await expect(select).to.be.accessible();
   });
 
+  it('helper text', async () => {
+    select.helperText = 'Pick one size';
+    await nextUpdate(select);
+    await expect(select).to.equalA11yTreeSnapshot();
+    await expect(select).to.be.accessible();
+  });
+
+  it('accessible name', async () => {
+    select.accessibleName = 'T-shirt size';
+    await nextUpdate(select);
+    await expect(select).to.equalA11yTreeSnapshot();
+    await expect(select).to.be.accessible();
+  });
+
   it('disabled', async () => {
     select.disabled = true;
     await nextUpdate(select);
