@@ -705,7 +705,7 @@ describe('edit column', () => {
         expect(getCellEditor(cell)).to.be.ok;
       });
 
-      it('should focus last edited cell if there are no more editable cells with Tab', async () => {
+      it('should stay on the edited cell if there are no more editable cells with Tab', async () => {
         grid.querySelectorAll('vaadin-grid-pro-edit-column').forEach((column) => {
           column.isCellEditable = () => column.path === 'col1';
         });
