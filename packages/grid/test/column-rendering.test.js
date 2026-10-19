@@ -228,21 +228,21 @@ import {
       expect(secondRect.top).to.equal(firstRect.bottom + detailsHeight);
     });
 
-    it('should render new appended column', async () => {
-      grid = fixtureSync(`
-        <vaadin-grid item-id-path="name" column-rendering="lazy">
-          <vaadin-grid-column path="name"></vaadin-grid-column>
-        </vaadin-grid>
-      `);
-      grid.items = [{ name: `Item 1` }];
-      await nextResize(grid);
-      flushGrid(grid);
+    it('should render cells of an appended column when scrolled into view', async () => {
+      const column = document.createElement('vaadin-grid-column');
+      const index = columns.length;
+      column.renderer = Sinon.spy((root) => {
+        root.__columnIndex = index;
+        root.textContent = `${cellContent} ${index}`;
+      });
+      columns.push(column);
 
-      const newColumn = document.createElement('vaadin-grid-column');
-      grid.appendChild(newColumn);
+      grid.appendChild(column);
       await nextFrame();
 
-      expect(isColumnInViewport(newColumn)).to.be.true;
+      await scrollHorizontally(grid.$.table.scrollWidth);
+
+      expectBodyCellUpdated(index);
     });
 
     it('should render cells of a column moved from another grid when scrolled into view', async () => {
