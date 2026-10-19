@@ -12,6 +12,9 @@ import { updateCellState } from './vaadin-grid-helpers.js';
 
 export const ColumnBaseMixin = (superClass) =>
   class ColumnBaseMixin extends superClass {
+    /** @type {Grid | undefined} */
+    #grid;
+
     static get properties() {
       return {
         /**
@@ -273,10 +276,10 @@ export const ColumnBaseMixin = (superClass) =>
      * @protected
      */
     get _grid() {
-      if (!this._gridValue) {
-        this._gridValue = this._findHostGrid();
+      if (!this.#grid) {
+        this.#grid = this._findHostGrid();
       }
-      return this._gridValue;
+      return this.#grid;
     }
 
     /**
@@ -340,7 +343,7 @@ export const ColumnBaseMixin = (superClass) =>
         });
       });
 
-      this._gridValue = undefined;
+      this.#grid = undefined;
     }
 
     /**
