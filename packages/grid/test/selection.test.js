@@ -1369,7 +1369,7 @@ describe('select row accessible name', () => {
       await nextRender();
     });
 
-    it('should use the row header cell text when the row is updated', async () => {
+    it('should use the row header cell text after selecting an item', async () => {
       grid.selectItem(grid.items[0]);
       await nextRender();
 
