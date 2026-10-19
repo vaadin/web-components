@@ -46,6 +46,10 @@ export class ButtonController extends SlotController {
   setLabel(label) {
     const { node } = this;
 
+    if (!node) {
+      return;
+    }
+
     if (node === this.defaultNode) {
       node.textContent = label;
       return;

@@ -190,6 +190,22 @@ describe('message-input', () => {
 
       expect(customButton.hasAttribute('aria-label')).to.be.false;
     });
+
+    it('should not update aria-label on a custom button after it is removed', async () => {
+      const customButton = document.createElement('button');
+      customButton.setAttribute('slot', 'button');
+      customButton.innerHTML = '<svg aria-hidden="true"><path d="M0 0h1v1H0z"></path></svg>';
+      button.replaceWith(customButton);
+      await nextFrame();
+
+      customButton.remove();
+      await nextFrame();
+
+      messageInput.i18n = { send: 'Lähetä' };
+      await nextFrame();
+
+      expect(customButton.getAttribute('aria-label')).to.equal('Send');
+    });
   });
 
   describe('disabled', () => {
