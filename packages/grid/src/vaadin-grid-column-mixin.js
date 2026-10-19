@@ -276,9 +276,7 @@ export const ColumnBaseMixin = (superClass) =>
      * @protected
      */
     get _grid() {
-      if (!this.#grid) {
-        this.#grid = this._findHostGrid();
-      }
+      this.#grid ??= this._findHostGrid();
       return this.#grid;
     }
 
