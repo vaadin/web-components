@@ -17,7 +17,7 @@ export declare class LabelMixinClass {
    */
   label: string | null | undefined;
 
-  protected readonly _labelNode: HTMLLabelElement;
+  protected readonly _labelNode: HTMLLabelElement | null;
 
   protected _labelController: LabelController;
 

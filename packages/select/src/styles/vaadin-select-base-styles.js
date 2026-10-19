@@ -70,7 +70,7 @@ export const selectStyles = css`
   }
 
   :host([theme~='align-end']) ::slotted([slot='value']) {
-    justify-content: end;
+    justify-content: safe end;
   }
 
   :host([theme~='align-left']) ::slotted([slot='value']) {

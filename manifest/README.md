@@ -23,21 +23,23 @@ yarn workspace @vaadin/manifest-tools compare --base origin/main
 
 ## Files
 
-| Path                                 | Purpose                                                               |
-| ------------------------------------ | --------------------------------------------------------------------- |
-| `custom-elements-manifest.config.js` | Analyzer config with the Vaadin plugins.                              |
-| `scripts/split-cem.js`               | Splits the root `custom-elements.json` into one manifest per package. |
-| `scripts/cem-api.js`                 | Writes API snapshots of both outputs and compares two of them.        |
-| `lib/cem-helpers.js`                 | Shared helpers that read packages and manifests.                      |
-| `lib/api-snapshot.js`                | Pure functions that build the snapshots, the diff and the PR comment. |
-| `test/`                              | Unit tests that run with `node --test`.                               |
+| Path                                 | Purpose                                                                  |
+| ------------------------------------ | ------------------------------------------------------------------------ |
+| `custom-elements-manifest.config.js` | Analyzer config with the Vaadin plugins.                                 |
+| `scripts/split-cem.js`               | Splits the root `custom-elements.json` into one manifest per package.    |
+| `scripts/cem-api.js`                 | Writes API snapshots of both outputs and compares two of them.           |
+| `lib/cem-helpers.js`                 | Shared helpers that read packages and manifests.                         |
+| `lib/split-paths.js`                 | Functions that map module paths and split the root manifest per package. |
+| `lib/api-snapshot.js`                | Pure functions that build the snapshots, the diff and the PR comment.    |
+| `test/`                              | Unit tests that run with `node --test`.                                  |
 
 ## Plugins
 
 The following custom [CEM analyzer plugins](https://custom-elements-manifest.open-wc.org/analyzer/plugins/authoring/) are used:
 
-| Path                       | Purpose                                                                        |
-| -------------------------- | ------------------------------------------------------------------------------ |
-| `plugins/class-privacy.js` | Sets the privacy of a class from its `@private` or `@protected` JSDoc tag.     |
-| `plugins/inheritance.js`   | Applies inheritance from the own items of each class and mixin, nearest first. |
-| `plugins/readonly.js`      | Marks the fields declared with `readOnly: true` as `readonly`.                 |
+| Path                       | Purpose                                                                                                   |
+| -------------------------- | --------------------------------------------------------------------------------------------------------- |
+| `plugins/class-privacy.js` | Sets the privacy of a class from its `@private` or `@protected` JSDoc tag.                                |
+| `plugins/inheritance.js`   | Applies inheritance from the own items of each class and mixin, nearest first.                            |
+| `plugins/public-api.js`    | Keeps only the public API: drops private items and internal attributes, sorts, and removes empty modules. |
+| `plugins/readonly.js`      | Marks the fields declared with `readOnly: true` as `readonly`.                                            |

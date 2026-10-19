@@ -8,7 +8,7 @@ import path from 'node:path';
 import { fileURLToPath } from 'node:url';
 
 export const rootDir = path.resolve(path.dirname(fileURLToPath(import.meta.url)), '../..');
-export const packagesDir = path.join(rootDir, 'packages');
+const packagesDir = path.join(rootDir, 'packages');
 
 // Define custom elements used only inside other components
 export const INTERNAL_PACKAGES = new Set(['field-highlighter', 'input-container', 'overlay']);
@@ -52,12 +52,39 @@ export function listPackages() {
     .sort(byName);
 }
 
+/** @return {string[]} the names of the sub-directories, without stray files such as `.DS_Store` */
+const subDirs = (dir) =>
+  fs
+    .readdirSync(dir, { withFileTypes: true })
+    .filter((entry) => entry.isDirectory())
+    .map((entry) => entry.name);
+
+/**
+ * Lists the package directory names by scanning the file system, without lerna.
+ * Unlike `listPackages()`, it works on any checkout, such as the base worktree
+ * of `cem-api.js`.
+ * @param {string} [root] the checkout to scan
+ * @return {string[]} the `packages/*` directories, sorted
+ */
+export function listPackageDirs(root = rootDir) {
+  return subDirs(path.join(root, 'packages')).sort(byName);
+}
+
+/**
+ * @param {string} name a package directory name
+ * @param {string} [root] the checkout
+ * @return {string} the absolute package directory
+ */
+export function packageDir(name, root = rootDir) {
+  return path.join(root, 'packages', name);
+}
+
 /**
  * @param {string} dir
  * @return {object}
  */
 export function readPackageJson(dir) {
-  return JSON.parse(fs.readFileSync(path.join(packagesDir, dir, 'package.json'), 'utf-8'));
+  return JSON.parse(fs.readFileSync(path.join(packageDir(dir), 'package.json'), 'utf-8'));
 }
 
 /**
@@ -66,7 +93,7 @@ export function readPackageJson(dir) {
  */
 export function readManifest(dir) {
   try {
-    return JSON.parse(fs.readFileSync(path.join(packagesDir, dir, 'custom-elements.json'), 'utf-8'));
+    return JSON.parse(fs.readFileSync(path.join(packageDir(dir), 'custom-elements.json'), 'utf-8'));
   } catch (error) {
     if (error.code === 'ENOENT') {
       return null;

@@ -281,6 +281,48 @@ describe('SlotController', () => {
       expect(teardownSpy.called).to.be.true;
       expect(teardownSpy.firstCall.args[0]).to.equal(defaultNode);
     });
+
+    it('should reset node reference when custom slot child is removed', async () => {
+      const custom = document.createElement('div');
+      custom.setAttribute('slot', 'foo');
+      element.appendChild(custom);
+      await nextFrame();
+
+      custom.remove();
+      await nextFrame();
+      expect(controller.node).to.be.null;
+      expect(controller.nodes).to.be.undefined;
+    });
+
+    it('should call initCustomNode again when the same custom child is added back', async () => {
+      const custom = document.createElement('div');
+      custom.setAttribute('slot', 'foo');
+      element.appendChild(custom);
+      await nextFrame();
+
+      custom.remove();
+      await nextFrame();
+
+      const initSpy = sinon.spy(controller, 'initCustomNode');
+      element.appendChild(custom);
+      await nextFrame();
+      expect(initSpy).to.be.calledOnceWith(custom);
+      expect(controller.node).to.equal(custom);
+    });
+
+    it('should keep reference to the new node when custom slot child is replaced', async () => {
+      const custom = document.createElement('div');
+      custom.setAttribute('slot', 'foo');
+      element.appendChild(custom);
+      await nextFrame();
+
+      const other = document.createElement('div');
+      other.setAttribute('slot', 'foo');
+      element.appendChild(other);
+      await nextFrame();
+      expect(custom.isConnected).to.be.false;
+      expect(controller.node).to.equal(other);
+    });
   });
 
   describe('Slot observing disabled', () => {
