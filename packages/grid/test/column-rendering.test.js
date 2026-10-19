@@ -338,6 +338,18 @@ import {
         expect(getBodyCellContent(0).textContent).to.equal('updated 0');
       });
 
+      it('should not re-render cells of columns that stay in the viewport', async () => {
+        resetRenderers();
+        await scrollHorizontally(-100);
+        expect(columns.at(-1).renderer.called).to.be.false;
+      });
+
+      it('should render cells of revisited columns once', async () => {
+        resetRenderers();
+        await scrollHorizontally(-grid.$.table.scrollWidth);
+        expect(columns[0].renderer.calledOnce).to.be.true;
+      });
+
       it('should maintain the sequential DOM order of the cells', async () => {
         expectCellsDomOrderToMatchColumnOrder();
 

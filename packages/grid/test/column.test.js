@@ -235,6 +235,23 @@ describe('column', () => {
           grid.size = 11;
         }).to.not.throw(Error);
       });
+
+      describe('renderer changed while hidden', () => {
+        beforeEach(() => {
+          column.hidden = true;
+          flushGrid(grid);
+          column.renderer = (root) => {
+            root.textContent = 'updated';
+          };
+        });
+
+        it('should use the current renderer when the column is shown again', () => {
+          column.hidden = false;
+          flushGrid(grid);
+
+          expect(getBodyCellContent(grid, 0, 0).textContent).to.equal('updated');
+        });
+      });
     });
 
     describe('path', () => {
@@ -547,6 +564,23 @@ describe('column', () => {
       expect(getContainerCellContent(grid.$.footer, 0, 0).textContent).to.equal('footer1');
       expect(getBodyCellContent(grid, 0, 0).textContent).to.equal('cell');
     });
+
+    it('should not keep cells of a hidden column after it is removed and added back', () => {
+      const group = column.parentElement;
+      column.hidden = true;
+      flushGrid(grid);
+
+      column.remove();
+      group._observer.flush();
+      flushGrid(grid);
+
+      group.insertBefore(column, group.firstElementChild);
+      column.hidden = false;
+      group._observer.flush();
+      flushGrid(grid);
+
+      expect(column._cells.length).to.equal(getPhysicalItems(grid).length + 1);
+    });
   });
 
   describe('removed column', () => {
@@ -636,5 +670,36 @@ describe('column - simple grid', () => {
     flushGrid(grid);
     expect(group.hidden).to.be.true;
     expect(spy).to.be.calledOnce;
+  });
+});
+
+describe('column - moved to another grid', () => {
+  let sourceGrid, targetGrid, column;
+
+  beforeEach(() => {
+    [targetGrid, sourceGrid] = fixtureSync(`
+      <div>
+        <vaadin-grid size="1">
+          <vaadin-grid-column path="value"></vaadin-grid-column>
+        </vaadin-grid>
+        <vaadin-grid size="1">
+          <vaadin-grid-column path="value"></vaadin-grid-column>
+          <vaadin-grid-column path="value"></vaadin-grid-column>
+        </vaadin-grid>
+      </div>
+    `).children;
+    targetGrid.dataProvider = infiniteDataProvider;
+    sourceGrid.dataProvider = infiniteDataProvider;
+    flushGrid(targetGrid);
+    flushGrid(sourceGrid);
+    column = sourceGrid.querySelector('vaadin-grid-column');
+  });
+
+  it('should keep the sizer cell of the target grid when the source grid updates last', () => {
+    targetGrid.appendChild(column);
+    flushGrid(targetGrid);
+    flushGrid(sourceGrid);
+
+    expect(column._sizerCell.parentElement).to.equal(targetGrid.$.sizer);
   });
 });
