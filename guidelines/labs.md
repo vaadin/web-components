@@ -7,7 +7,7 @@ graduate to `packages/<name>/`. For the layout of a regular package, see
 ## Rules
 
 1. **Same tag names, same feature flags**: a labs component uses the `vaadin-<name>` tag. It turns on a feature flag through `static get experimental()`. The main element returns `true`, and each sub-element returns the flag key of the main element.
-2. **Graduation is a move**: `labs/<name>/` has the inner layout of `packages/<name>/`, so no import in `src/` or `test/` changes.
+2. **Ready to move**: `labs/<name>/` has the inner layout of `packages/<name>/`, so a component can move to `packages/` as a folder.
 3. **Tests still run**: labs has a lower review bar, not a lower CI bar.
 4. **One resolver**: scripts find component directories with `listComponentDirs()` from `manifest/lib/cem-helpers.js`.
 5. **No dependency from `packages/` to `labs/`**: stable code never imports experimental code. ESLint enforces this rule.
@@ -62,6 +62,8 @@ yarn test:base --group <name>
 
 ## Graduate a component
 
+Pre-requisite: platform PRD issue created with a decision.
+
 1. Run `git mv labs/<name> packages/<name>`.
 2. Add `package.json`, `LICENSE` and `README.md` to `packages/<name>/`.
 3. Delete `labs/vaadin-<name>.js` and `labs/vaadin-<name>.d.ts`.
@@ -70,9 +72,6 @@ yarn test:base --group <name>
 6. Run `yarn release:cem && yarn release:meta` to add the package to the meta packages.
 7. Add the package to the dependencies of `packages/react-components/package.json` for React wrappers.
 8. Update the import path in Flow from `@vaadin/labs/vaadin-<name>.js` to `@vaadin/<name>`.
-
-The import path changes at graduation.
-Applications replace `@vaadin/labs/vaadin-<name>.js` with `@vaadin/<name>`.
 
 ## Drop a component
 

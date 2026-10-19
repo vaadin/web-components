@@ -50,8 +50,8 @@ and `packages/aura/` respectively — see [Theming](theming.md).
 
 A new experimental component starts in `labs/<name>/`, not in `packages/`.
 The `labs/<name>/` folder has the same inner layout as a package, without
-`package.json`, `LICENSE` and `README.md`. It graduates to `packages/<name>/`
-with a folder move. See [Labs](labs.md) for the steps.
+`package.json`, `LICENSE` and `README.md`. It can move to `packages/<name>/`
+as a folder later. See [Labs](labs.md).
 
 ## Root-level entrypoints
 
