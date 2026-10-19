@@ -80,14 +80,6 @@ test('listComponentDirs skips a labs folder with only test/', (t) => {
   ]);
 });
 
-test('listComponentDirs works without labs', (t) => {
-  const root = createTree(t, files('packages/button/package.json'));
-  assert.deepEqual(
-    listComponentDirs(root).map((component) => component.name),
-    ['button'],
-  );
-});
-
 test('listComponentDirs throws when a name exists in packages and labs', (t) => {
   const root = createTree(t, files('packages/sandbox/src/vaadin-sandbox.js', 'labs/sandbox/src/vaadin-sandbox.js'));
   assert.throws(() => listComponentDirs(root), /"sandbox" exists in both/u);
@@ -101,8 +93,12 @@ test('listPackageDirs lists the package directories plus labs, sorted', (t) => {
   assert.deepEqual(listPackageDirs(root), ['button', 'card', 'labs']);
 });
 
-test('listPackageDirs works without labs', (t) => {
+test('listComponentDirs and listPackageDirs work without labs', (t) => {
   const root = createTree(t, files('packages/button/package.json'));
+  assert.deepEqual(
+    listComponentDirs(root).map((component) => component.name),
+    ['button'],
+  );
   assert.deepEqual(listPackageDirs(root), ['button']);
 });
 

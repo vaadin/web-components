@@ -13,6 +13,34 @@ import {
 } from '../lib/split-paths.js';
 import { createTree } from './create-tree.js';
 
+/** Replaces `console.warn` until the end of the test and returns the mock. */
+const mockWarn = (t) => {
+  const warn = mock.method(console, 'warn', () => {});
+  t.after(() => warn.mock.restore());
+  return warn.mock;
+};
+
+/** A labs component with its root re-export, the inner entry file and the source module. */
+const LABS_TREE = {
+  'labs/vaadin-sandbox.js': "export * from './sandbox/vaadin-sandbox.js';",
+  'labs/sandbox/vaadin-sandbox.js': "export * from './src/vaadin-sandbox.js';",
+  'labs/sandbox/src/vaadin-sandbox.js': '',
+};
+
+/** A root manifest module with one declaration and one export of it. */
+const module = (path, declaration, exportKind = 'js') => ({
+  kind: 'javascript-module',
+  path,
+  declarations: [declaration],
+  exports: [{ kind: exportKind, name: declaration.name, declaration: { name: declaration.name, module: path } }],
+});
+
+// The same shapes as `packages/button` and `labs/sandbox` see them
+const PACKAGES = [
+  { pkg: 'button', prefix: 'packages/button', inner: 'src' },
+  { pkg: 'labs', prefix: 'labs/sandbox', inner: 'sandbox/src' },
+];
+
 test('extractPackageName reads the package of a module path', () => {
   assert.equal(extractPackageName('packages/button/src/vaadin-button.js'), 'button');
   assert.equal(extractPackageName('labs/sandbox/src/vaadin-sandbox.js'), 'labs');
@@ -27,25 +55,22 @@ test('transformModulePath strips the package prefix', () => {
 });
 
 test('transformReference keeps same-package references relative', () => {
-  for (const module of ['/packages/button/src/foo.js', 'packages/button/src/foo.js']) {
-    assert.deepEqual(transformReference({ name: 'A', module }, 'button'), { name: 'A', module: 'src/foo.js' });
-  }
-  for (const module of ['/labs/sandbox/src/foo.js', 'labs/sandbox/src/foo.js']) {
-    assert.deepEqual(transformReference({ name: 'A', module }, 'labs'), { name: 'A', module: 'sandbox/src/foo.js' });
+  for (const { pkg, prefix, inner } of PACKAGES) {
+    for (const module of [`/${prefix}/src/foo.js`, `${prefix}/src/foo.js`]) {
+      assert.deepEqual(transformReference({ name: 'A', module }, pkg), { name: 'A', module: `${inner}/foo.js` });
+    }
   }
 });
 
 test('transformReference turns other-package references into package references', () => {
-  for (const module of ['/packages/a11y-base/src/foo.js', 'packages/a11y-base/src/foo.js']) {
-    assert.deepEqual(transformReference({ name: 'A', module }, 'button'), {
-      name: 'A',
-      package: '@vaadin/a11y-base/src/foo.js',
-    });
+  for (const { pkg } of PACKAGES) {
+    for (const module of ['/packages/a11y-base/src/foo.js', 'packages/a11y-base/src/foo.js']) {
+      assert.deepEqual(transformReference({ name: 'A', module }, pkg), {
+        name: 'A',
+        package: '@vaadin/a11y-base/src/foo.js',
+      });
+    }
   }
-  assert.deepEqual(transformReference({ name: 'A', module: 'packages/a11y-base/src/foo.js' }, 'labs'), {
-    name: 'A',
-    package: '@vaadin/a11y-base/src/foo.js',
-  });
 });
 
 test('transformReference keeps relative and external references', () => {
@@ -60,40 +85,26 @@ test('transformReference keeps relative and external references', () => {
 });
 
 test('deepTransform transforms nested references', () => {
-  const mod = {
-    path: 'packages/button/src/vaadin-button.js',
-    declarations: [
-      {
-        mixins: [{ name: 'ElementMixin', module: 'packages/component-base/src/element-mixin.js' }],
-        superclass: { name: 'Base', module: '/packages/button/src/base.js' },
-      },
-    ],
-  };
-  assert.deepEqual(deepTransform(mod, 'button'), {
-    path: 'packages/button/src/vaadin-button.js',
-    declarations: [
-      {
-        mixins: [{ name: 'ElementMixin', package: '@vaadin/component-base/src/element-mixin.js' }],
-        superclass: { name: 'Base', module: 'src/base.js' },
-      },
-    ],
-  });
-});
-
-test('deepTransform keeps labs references relative inside labs', () => {
-  const mod = {
-    path: 'labs/sandbox/src/vaadin-sandbox.js',
-    declarations: [
-      {
-        mixins: [{ name: 'ElementMixin', module: 'packages/component-base/src/element-mixin.js' }],
-        superclass: { name: 'Base', module: '/labs/sandbox/src/base.js' },
-      },
-    ],
-  };
-  assert.deepEqual(deepTransform(mod, 'labs').declarations[0], {
-    mixins: [{ name: 'ElementMixin', package: '@vaadin/component-base/src/element-mixin.js' }],
-    superclass: { name: 'Base', module: 'sandbox/src/base.js' },
-  });
+  for (const { pkg, prefix, inner } of PACKAGES) {
+    const mod = {
+      path: `${prefix}/src/vaadin-x.js`,
+      declarations: [
+        {
+          mixins: [{ name: 'ElementMixin', module: 'packages/component-base/src/element-mixin.js' }],
+          superclass: { name: 'Base', module: `/${prefix}/src/base.js` },
+        },
+      ],
+    };
+    assert.deepEqual(deepTransform(mod, pkg), {
+      path: `${prefix}/src/vaadin-x.js`,
+      declarations: [
+        {
+          mixins: [{ name: 'ElementMixin', package: '@vaadin/component-base/src/element-mixin.js' }],
+          superclass: { name: 'Base', module: `${inner}/base.js` },
+        },
+      ],
+    });
+  }
 });
 
 test('labsEntrySource reads the source module of a root re-export', () => {
@@ -127,11 +138,7 @@ test('findEntryPoints sorts the entry points by name whatever the file system or
 });
 
 test('findEntryPoints lists only the root re-exports of labs', (t) => {
-  const root = createTree(t, {
-    'labs/vaadin-sandbox.js': "export * from './sandbox/vaadin-sandbox.js';",
-    'labs/sandbox/vaadin-sandbox.js': "export * from './src/vaadin-sandbox.js';",
-    'labs/sandbox/src/vaadin-sandbox.js': '',
-  });
+  const root = createTree(t, LABS_TREE);
   assert.deepEqual(findEntryPoints('labs', root), [
     { path: 'vaadin-sandbox.js', source: 'sandbox/src/vaadin-sandbox.js' },
   ]);
@@ -139,11 +146,10 @@ test('findEntryPoints lists only the root re-exports of labs', (t) => {
 
 test('findEntryPoints warns about a labs re-export of an unexpected form', (t) => {
   const root = createTree(t, { 'labs/vaadin-sandbox.js': "export { Sandbox } from './sandbox/vaadin-sandbox.js';" });
-  const warn = mock.method(console, 'warn', () => {});
-  t.after(() => warn.mock.restore());
+  const warn = mockWarn(t);
   assert.deepEqual(findEntryPoints('labs', root), []);
-  assert.equal(warn.mock.callCount(), 1);
-  assert.match(warn.mock.calls[0].arguments[0], /labs\/vaadin-sandbox\.js/u);
+  assert.equal(warn.callCount(), 1);
+  assert.match(warn.calls[0].arguments[0], /labs\/vaadin-sandbox\.js/u);
 });
 
 test('entryPointModule re-exports the source module', () => {
@@ -161,44 +167,19 @@ test('splitManifest builds one manifest per package with the entry points first'
     'packages/button/vaadin-button-mixin.js': '',
     'packages/a11y-base/src/focus-mixin.js': '',
   });
+  const focusMixin = module('packages/a11y-base/src/focus-mixin.js', { kind: 'mixin', name: 'FocusMixin' });
+  const button = module(
+    'packages/button/src/vaadin-button.js',
+    {
+      kind: 'class',
+      name: 'Button',
+      superclass: { name: 'LitElement', package: 'lit' },
+      mixins: [{ name: 'FocusMixin', module: '/packages/a11y-base/src/focus-mixin.js' }],
+    },
+    'custom-element-definition',
+  );
   // The per-package manifests copy the schema version and readme of the root manifest
-  const rootManifest = {
-    schemaVersion: '2.1.0',
-    readme: 'README.md',
-    modules: [
-      {
-        kind: 'javascript-module',
-        path: 'packages/a11y-base/src/focus-mixin.js',
-        declarations: [{ kind: 'mixin', name: 'FocusMixin' }],
-        exports: [
-          {
-            kind: 'js',
-            name: 'FocusMixin',
-            declaration: { name: 'FocusMixin', module: 'packages/a11y-base/src/focus-mixin.js' },
-          },
-        ],
-      },
-      {
-        kind: 'javascript-module',
-        path: 'packages/button/src/vaadin-button.js',
-        declarations: [
-          {
-            kind: 'class',
-            name: 'Button',
-            superclass: { name: 'LitElement', package: 'lit' },
-            mixins: [{ name: 'FocusMixin', module: '/packages/a11y-base/src/focus-mixin.js' }],
-          },
-        ],
-        exports: [
-          {
-            kind: 'custom-element-definition',
-            name: 'vaadin-button',
-            declaration: { name: 'Button', module: 'packages/button/src/vaadin-button.js' },
-          },
-        ],
-      },
-    ],
-  };
+  const rootManifest = { schemaVersion: '2.1.0', readme: 'README.md', modules: [focusMixin, button] };
 
   const manifests = splitManifest(rootManifest, root);
 
@@ -206,79 +187,39 @@ test('splitManifest builds one manifest per package with the entry points first'
   assert.deepEqual(manifests.get('a11y-base'), {
     schemaVersion: '2.1.0',
     readme: 'README.md',
-    modules: [
-      {
-        kind: 'javascript-module',
-        path: 'src/focus-mixin.js',
-        declarations: [{ kind: 'mixin', name: 'FocusMixin' }],
-        exports: [
-          { kind: 'js', name: 'FocusMixin', declaration: { name: 'FocusMixin', module: 'src/focus-mixin.js' } },
-        ],
-      },
-    ],
+    modules: [module('src/focus-mixin.js', { kind: 'mixin', name: 'FocusMixin' })],
   });
   // `vaadin-button-mixin.js` has no source module in the manifest, so it gets no entry
-  assert.deepEqual(
-    manifests.get('button').modules.map((mod) => mod.path),
-    ['vaadin-button.js', 'src/vaadin-button.js'],
-  );
-  assert.deepEqual(manifests.get('button').modules[1].declarations[0].mixins, [
+  const [entry, source] = manifests.get('button').modules;
+  assert.deepEqual([entry.path, source.path], ['vaadin-button.js', 'src/vaadin-button.js']);
+  assert.deepEqual(source.declarations[0].mixins, [
     { name: 'FocusMixin', package: '@vaadin/a11y-base/src/focus-mixin.js' },
   ]);
-  assert.deepEqual(manifests.get('button').modules[1].exports[0].declaration, {
-    name: 'Button',
-    module: 'src/vaadin-button.js',
-  });
+  assert.deepEqual(source.exports[0].declaration, { name: 'Button', module: 'src/vaadin-button.js' });
 });
 
 test('splitManifest builds the labs manifest with the root re-exports as entry points', (t) => {
-  const root = createTree(t, {
-    'labs/vaadin-sandbox.js': "export * from './sandbox/vaadin-sandbox.js';",
-    'labs/sandbox/vaadin-sandbox.js': "export * from './src/vaadin-sandbox.js';",
-    'labs/sandbox/src/vaadin-sandbox.js': '',
-  });
-  const rootManifest = {
-    schemaVersion: '1.0.0',
-    readme: '',
-    modules: [
-      {
-        kind: 'javascript-module',
-        path: 'labs/sandbox/src/vaadin-sandbox.js',
-        declarations: [{ kind: 'class', name: 'Sandbox' }],
-        exports: [
-          {
-            kind: 'custom-element-definition',
-            name: 'vaadin-sandbox',
-            declaration: { name: 'Sandbox', module: 'labs/sandbox/src/vaadin-sandbox.js' },
-          },
-        ],
-      },
-    ],
-  };
+  const root = createTree(t, LABS_TREE);
+  const sandbox = module(
+    'labs/sandbox/src/vaadin-sandbox.js',
+    { kind: 'class', name: 'Sandbox' },
+    'custom-element-definition',
+  );
 
-  const manifests = splitManifest(rootManifest, root);
+  const manifests = splitManifest({ schemaVersion: '1.0.0', readme: '', modules: [sandbox] }, root);
 
   assert.deepEqual([...manifests.keys()], ['labs']);
-  assert.deepEqual(
-    manifests.get('labs').modules.map((mod) => mod.path),
-    ['vaadin-sandbox.js', 'sandbox/src/vaadin-sandbox.js'],
-  );
-  assert.deepEqual(manifests.get('labs').modules[0].exports[0].declaration, {
-    name: '*',
-    module: 'sandbox/src/vaadin-sandbox.js',
-  });
-  assert.deepEqual(manifests.get('labs').modules[1].exports[0].declaration, {
-    name: 'Sandbox',
-    module: 'sandbox/src/vaadin-sandbox.js',
-  });
+  const [entry, source] = manifests.get('labs').modules;
+  assert.deepEqual([entry.path, source.path], ['vaadin-sandbox.js', 'sandbox/src/vaadin-sandbox.js']);
+  assert.deepEqual(entry.exports[0].declaration, { name: '*', module: 'sandbox/src/vaadin-sandbox.js' });
+  assert.deepEqual(source.exports[0].declaration, { name: 'Sandbox', module: 'sandbox/src/vaadin-sandbox.js' });
 });
 
 test('splitManifest skips and warns about a module outside packages/ and labs/', (t) => {
   const root = createTree(t, {});
-  const warn = mock.method(console, 'warn', () => {});
-  t.after(() => warn.mock.restore());
+  const warn = mockWarn(t);
   const manifests = splitManifest({ schemaVersion: '1.0.0', readme: '', modules: [{ path: 'dev/foo.js' }] }, root);
   assert.equal(manifests.size, 0);
-  assert.equal(warn.mock.callCount(), 1);
-  assert.match(warn.mock.calls[0].arguments[0], /dev\/foo\.js/u);
+  assert.equal(warn.callCount(), 1);
+  assert.match(warn.calls[0].arguments[0], /dev\/foo\.js/u);
 });
