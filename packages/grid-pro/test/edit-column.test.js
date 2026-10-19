@@ -705,25 +705,21 @@ describe('edit column', () => {
         expect(getCellEditor(cell)).to.be.ok;
       });
 
-      // Focus button mode that is active on MacOS causes issues with Tab key navigation in Firefox when run with Playwright
-      (isFirefox && isMac ? it.skip : it)(
-        'should stop editing and focus last edited cell if there are no more editable cells with Tab',
-        async () => {
-          grid.querySelectorAll('vaadin-grid-pro-edit-column').forEach((column) => {
-            column.isCellEditable = () => column.path === 'col1';
-          });
-          const cell = getCellByColumnPath('col1', 1);
-          cell.focus();
-          await sendKeys({ press: 'Enter' });
-          expect(getCellEditor(cell)).to.be.ok;
+      it('should stop editing and focus last edited cell if there are no more editable cells with Tab', async () => {
+        grid.querySelectorAll('vaadin-grid-pro-edit-column').forEach((column) => {
+          column.isCellEditable = () => column.path === 'col1';
+        });
+        const cell = getCellByColumnPath('col1', 1);
+        cell.focus();
+        await sendKeys({ press: 'Enter' });
+        expect(getCellEditor(cell)).to.be.ok;
 
-          await sendKeys({ press: 'Tab' });
-          expect(grid.querySelector('vaadin-grid-pro-edit-text-field')).to.not.be.ok;
-          const target = cell._focusButton || cell;
-          expect(grid.shadowRoot.activeElement).to.equal(target);
-          expect(grid.hasAttribute('navigating')).to.be.true;
-        },
-      );
+        await sendKeys({ press: 'Tab' });
+        expect(grid.querySelector('vaadin-grid-pro-edit-text-field')).to.not.be.ok;
+        const target = cell._focusButton || cell;
+        expect(grid.shadowRoot.activeElement).to.equal(target);
+        expect(grid.hasAttribute('navigating')).to.be.true;
+      });
     });
   });
 
