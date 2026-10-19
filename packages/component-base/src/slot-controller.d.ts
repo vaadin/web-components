@@ -14,7 +14,7 @@ export class SlotController extends EventTarget implements ReactiveController {
   /**
    * The slotted node managed by the controller.
    */
-  node: HTMLElement;
+  node: HTMLElement | null;
 
   /**
    * The list of slotted nodes managed by the controller.

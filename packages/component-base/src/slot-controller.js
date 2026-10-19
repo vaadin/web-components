@@ -216,7 +216,11 @@ export class SlotController extends EventTarget {
       );
 
       if (removedNodes.length) {
-        this.nodes = current.filter((node) => !removedNodes.includes(node));
+        if (this.multiple) {
+          this.nodes = current.filter((node) => !removedNodes.includes(node));
+        } else if (removedNodes.includes(this.node)) {
+          this.node = null;
+        }
 
         removedNodes.forEach((node) => {
           this.teardownNode(node);

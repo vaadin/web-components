@@ -215,6 +215,14 @@ describe('checkbox', () => {
         expect(checkbox.hasAttribute('active')).to.be.false;
       });
 
+      it('should not set active attribute on helper element click after custom label is removed', async () => {
+        label.remove();
+        checkbox.helperText = 'Helper';
+        await nextFrame();
+        mousedown(checkbox.querySelector('[slot="helper"]'));
+        expect(checkbox.hasAttribute('active')).to.be.false;
+      });
+
       it('should not set active attribute on error message element click', async () => {
         checkbox.errorMessage = 'Error';
         checkbox.invalid = true;
