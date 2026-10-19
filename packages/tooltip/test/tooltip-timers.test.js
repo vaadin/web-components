@@ -501,7 +501,6 @@ describe('timers', () => {
         tabKeyDown(document.body);
         focusin(targets[0]);
         tooltips[0].remove();
-        await aTimeout(0);
         wrapper.appendChild(tooltips[0]);
 
         await aTimeout(2);
