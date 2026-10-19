@@ -349,11 +349,10 @@ export const ColumnBaseMixin = (superClass) =>
      * @protected
      */
     _findHostGrid() {
-      // eslint-disable-next-line @typescript-eslint/no-this-alias, consistent-this
-      let el = this;
+      let el = this.assignedSlot || this.parentNode;
       // Custom elements extending grid must have a specific localName
       while (el && !/^vaadin.*grid(-pro)?$/u.test(el.localName)) {
-        el = el.assignedSlot ? el.assignedSlot.parentNode : el.parentNode;
+        el = el.assignedSlot || el.parentNode;
       }
       return el || undefined;
     }
