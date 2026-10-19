@@ -458,10 +458,9 @@ describe('row details', () => {
       expect(bodyRow.style.paddingBottom).to.equal('');
     });
 
-    it('should clear row padding bottom when renderer is cleared', async () => {
+    it('should clear row padding bottom when renderer is cleared', () => {
       grid.detailsOpenedItems = [...grid.items];
       grid.rowDetailsRenderer = null;
-      await nextFrame();
       expect(bodyRow.style.paddingBottom).to.equal('');
     });
 
