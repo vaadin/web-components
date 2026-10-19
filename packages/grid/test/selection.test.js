@@ -1353,7 +1353,7 @@ describe('select row accessible name', () => {
     });
   });
 
-  describe('row header scrolled out of the lazy rendering viewport', () => {
+  describe('row header scrolled out of view with lazy columns', () => {
     beforeEach(async () => {
       grid = fixtureSync(`
         <vaadin-grid column-rendering="lazy" style="width: 300px; height: 300px;">
