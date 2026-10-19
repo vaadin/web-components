@@ -353,7 +353,7 @@ export const ColumnBaseMixin = (superClass) =>
       let el = this;
       // Custom elements extending grid must have a specific localName
       while (el && !/^vaadin.*grid(-pro)?$/u.test(el.localName)) {
-        el = el.assignedSlot || el.parentNode;
+        el = el.assignedSlot ? el.assignedSlot.parentNode : el.parentNode;
       }
       return el || undefined;
     }
