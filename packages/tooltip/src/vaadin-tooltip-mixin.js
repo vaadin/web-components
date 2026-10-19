@@ -110,15 +110,6 @@ class TooltipStateController {
     }
   }
 
-  /**
-   * Cancel a scheduled opening of this tooltip, e.g. when it is removed meanwhile.
-   */
-  cancelOpen() {
-    if (warmUpTooltip === this.host) {
-      this.__abortWarmUp();
-    }
-  }
-
   /** @private */
   _isOpened() {
     return this.host.opened;
@@ -156,8 +147,9 @@ class TooltipStateController {
       if (warmedUp) {
         // Warmed up, show the tooltip.
         this.__showTooltip();
-      } else if (warmUpTimeout == null) {
-        // Ensure there is no duplicate warm up.
+      } else if (warmUpTimeout == null || !warmUpTooltip.isConnected) {
+        // Ensure there is no duplicate warm up, unless its tooltip was removed.
+        this.__abortWarmUp();
         this.__scheduleWarmUp(isFocus);
       }
     }
@@ -223,8 +215,10 @@ class TooltipStateController {
     warmUpTimeout = setTimeout(() => {
       warmUpTimeout = null;
       warmUpTooltip = null;
-      warmedUp = true;
-      this.__showTooltip();
+      // Do not open a tooltip that was removed while waiting.
+      if (this.host.isConnected) {
+        this.__showTooltip();
+      }
     }, delay);
   }
 }
@@ -426,14 +420,6 @@ export const TooltipMixin = (superClass) =>
 
       if (this.opened && !this.manual) {
         this._stateController.close(true);
-      } else {
-        // A tooltip waiting for its delay must not open while detached.
-        // Avoid cancelling if the tooltip is just moved in the DOM.
-        queueMicrotask(() => {
-          if (!this.isConnected) {
-            this._stateController.cancelOpen();
-          }
-        });
       }
       this._isConnected = false;
 

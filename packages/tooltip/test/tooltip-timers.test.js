@@ -156,6 +156,36 @@ describe('timers', () => {
       expect(overlay.opened).to.be.true;
     });
 
+    it('should not block another tooltip warm up when removed meanwhile', async () => {
+      const other = fixtureSync('<vaadin-tooltip text="other" focus-delay="1"></vaadin-tooltip>');
+      const otherTarget = fixtureSync('<input>');
+      other.target = otherTarget;
+      await nextUpdate(other);
+      tabKeyDown(document.body);
+      target.focus();
+      tooltip.remove();
+      // Another tooltip requests opening within the delay of the removed one
+      otherTarget.focus();
+
+      await aTimeout(1);
+      expect(tooltip.opened).to.be.not.ok;
+      expect(other.opened).to.be.true;
+      other.remove();
+      otherTarget.remove();
+    });
+
+    it('should still open after the delay when moved in the DOM in a later task', async () => {
+      tabKeyDown(document.body);
+      target.focus();
+      const parent = tooltip.parentElement;
+      tooltip.remove();
+      await aTimeout(0);
+      parent.appendChild(tooltip);
+
+      await aTimeout(1);
+      expect(overlay.opened).to.be.true;
+    });
+
     it('should still open after the delay when another tooltip is removed meanwhile', async () => {
       const other = fixtureSync('<vaadin-tooltip text="other"></vaadin-tooltip>');
       await nextUpdate(other);
