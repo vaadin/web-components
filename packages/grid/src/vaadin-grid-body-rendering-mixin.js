@@ -156,18 +156,14 @@ export const BodyRenderingMixin = (superClass) =>
     };
 
     #sizerRowTemplate = () => {
-      const columns = this._getColumnsInOrder();
-
-      return html`
-        ${repeat(
-          columns,
-          (column) => column._id,
-          (column) => html`
-            <td part="cell body-cell" class="cell body-cell" ${sizerCell(column)}>
-              ${cellContent(this, `vaadin-grid-sizer-cell-content-${column._id}`)}
-            </td>
-          `,
-        )}
-      `;
+      return repeat(
+        this._getColumnsInOrder(),
+        (column) => column._id,
+        (column) => html`
+          <td part="cell body-cell" class="cell body-cell" ${sizerCell(column)}>
+            ${cellContent(this, `vaadin-grid-sizer-cell-content-${column._id}`)}
+          </td>
+        `,
+      );
     };
   };
