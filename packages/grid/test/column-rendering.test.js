@@ -245,6 +245,39 @@ import {
       expect(isColumnInViewport(newColumn)).to.be.true;
     });
 
+    describe(`column moved from another grid - ${dir}`, () => {
+      let sourceGrid, column;
+
+      beforeEach(() => {
+        sourceGrid = fixtureSync(`
+          <vaadin-grid>
+            <vaadin-grid-column></vaadin-grid-column>
+            <vaadin-grid-column></vaadin-grid-column>
+          </vaadin-grid>
+        `);
+        sourceGrid.items = grid.items;
+        flushGrid(sourceGrid);
+
+        column = sourceGrid.querySelector('vaadin-grid-column');
+        const index = columns.length;
+        column.renderer = Sinon.spy((root) => {
+          root.__columnIndex = index;
+          root.textContent = `${cellContent} ${index}`;
+        });
+        columns.push(column);
+      });
+
+      it('should render cells of the moved column when scrolled into view', async () => {
+        grid.appendChild(column);
+        flushGrid(grid);
+        flushGrid(sourceGrid);
+
+        await scrollHorizontally(grid.$.table.scrollWidth);
+
+        expectBodyCellUpdated(columns.length - 1);
+      });
+    });
+
     describe(`scroll horizontally - ${dir}`, () => {
       /**
        * Expect the cells DOM order to match the column order
@@ -344,7 +377,7 @@ import {
         expect(columns.at(-1).renderer.called).to.be.false;
       });
 
-      it('should render cells of revisited columns once', async () => {
+      it('should render cells of columns once on revisit', async () => {
         resetRenderers();
         await scrollHorizontally(-grid.$.table.scrollWidth);
         expect(columns[0].renderer.calledOnce).to.be.true;
@@ -523,39 +556,6 @@ import {
 
           expectCellsVisualOrderToMatchColumnOrder();
         });
-      });
-    });
-
-    describe(`column moved from another grid - ${dir}`, () => {
-      let sourceGrid, column;
-
-      beforeEach(() => {
-        sourceGrid = fixtureSync(`
-          <vaadin-grid>
-            <vaadin-grid-column></vaadin-grid-column>
-            <vaadin-grid-column></vaadin-grid-column>
-          </vaadin-grid>
-        `);
-        sourceGrid.items = grid.items;
-        flushGrid(sourceGrid);
-
-        column = sourceGrid.querySelector('vaadin-grid-column');
-        const index = columns.length;
-        column.renderer = Sinon.spy((root) => {
-          root.__columnIndex = index;
-          root.textContent = `${cellContent} ${index}`;
-        });
-        columns.push(column);
-      });
-
-      it('should render cells of the moved column when scrolled into view', async () => {
-        grid.appendChild(column);
-        flushGrid(grid);
-        flushGrid(sourceGrid);
-
-        await scrollHorizontally(grid.$.table.scrollWidth);
-
-        expectBodyCellUpdated(columns.length - 1);
       });
     });
 

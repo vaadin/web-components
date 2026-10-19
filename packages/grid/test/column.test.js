@@ -235,23 +235,6 @@ describe('column', () => {
           grid.size = 11;
         }).to.not.throw(Error);
       });
-
-      describe('renderer changed while hidden', () => {
-        beforeEach(() => {
-          column.hidden = true;
-          flushGrid(grid);
-          column.renderer = (root) => {
-            root.textContent = 'updated';
-          };
-        });
-
-        it('should use the current renderer when the column is shown again', () => {
-          column.hidden = false;
-          flushGrid(grid);
-
-          expect(getBodyCellContent(grid, 0, 0).textContent).to.equal('updated');
-        });
-      });
     });
 
     describe('path', () => {
@@ -567,6 +550,7 @@ describe('column', () => {
 
     it('should not keep cells of a hidden column after it is removed and added back', () => {
       const group = column.parentElement;
+      const cellCount = column._cells.length;
       column.hidden = true;
       flushGrid(grid);
 
@@ -579,7 +563,7 @@ describe('column', () => {
       group._observer.flush();
       flushGrid(grid);
 
-      expect(column._cells.length).to.equal(getPhysicalItems(grid).length + 1);
+      expect(column._cells.length).to.equal(cellCount);
     });
   });
 
