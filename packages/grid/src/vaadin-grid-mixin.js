@@ -395,7 +395,6 @@ export const GridMixin = (superClass) =>
         .filter((column) => !this.#renderedColumns.includes(column))
         .forEach((column) => {
           column._cells = [];
-          column._sizerCell = null;
         });
       this.#renderedColumns = columns;
 
