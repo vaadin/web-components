@@ -174,6 +174,26 @@ describe('timers', () => {
       otherTarget.remove();
     });
 
+    it('should not warm up other tooltips when the delay elapses after being removed', async () => {
+      const other = fixtureSync('<vaadin-tooltip text="other" focus-delay="1"></vaadin-tooltip>');
+      const otherTarget = fixtureSync('<input>');
+      other.target = otherTarget;
+      await nextUpdate(other);
+      tabKeyDown(document.body);
+      target.focus();
+      tooltip.remove();
+      await aTimeout(1);
+
+      // Another tooltip still waits for its own delay
+      otherTarget.focus();
+      expect(other.opened).to.be.not.ok;
+
+      await aTimeout(1);
+      expect(other.opened).to.be.true;
+      other.remove();
+      otherTarget.remove();
+    });
+
     it('should still open after the delay when moved in the DOM in a later task', async () => {
       tabKeyDown(document.body);
       target.focus();
