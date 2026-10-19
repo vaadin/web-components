@@ -72,7 +72,6 @@ describe('renderers', () => {
 
     it('should apply an update to hidden column cells', () => {
       column.hidden = true;
-      flushGrid(grid);
       column.renderer = (root) => {
         root.textContent = 'updated';
       };

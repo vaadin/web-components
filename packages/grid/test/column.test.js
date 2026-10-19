@@ -549,21 +549,18 @@ describe('column', () => {
     });
 
     it('should not keep cells of a hidden column after it is removed and added back', () => {
-      const group = column.parentElement;
-      const cellCount = column._cells.length;
-      column.hidden = true;
+      const cellCount = emptyColumn._cells.length;
+      emptyColumn.hidden = true;
       flushGrid(grid);
 
-      column.remove();
-      group._observer.flush();
+      emptyColumn.remove();
       flushGrid(grid);
 
-      group.insertBefore(column, group.firstElementChild);
-      column.hidden = false;
-      group._observer.flush();
+      grid.appendChild(emptyColumn);
+      emptyColumn.hidden = false;
       flushGrid(grid);
 
-      expect(column._cells.length).to.equal(cellCount);
+      expect(emptyColumn._cells.length).to.equal(cellCount);
     });
   });
 

@@ -245,37 +245,29 @@ import {
       expect(isColumnInViewport(newColumn)).to.be.true;
     });
 
-    describe(`column moved from another grid - ${dir}`, () => {
-      let sourceGrid, column;
+    it('should render cells of a column moved from another grid when scrolled into view', async () => {
+      const sourceGrid = fixtureSync(`
+        <vaadin-grid>
+          <vaadin-grid-column></vaadin-grid-column>
+        </vaadin-grid>
+      `);
+      flushGrid(sourceGrid);
 
-      beforeEach(() => {
-        sourceGrid = fixtureSync(`
-          <vaadin-grid>
-            <vaadin-grid-column></vaadin-grid-column>
-            <vaadin-grid-column></vaadin-grid-column>
-          </vaadin-grid>
-        `);
-        sourceGrid.items = grid.items;
-        flushGrid(sourceGrid);
-
-        column = sourceGrid.querySelector('vaadin-grid-column');
-        const index = columns.length;
-        column.renderer = Sinon.spy((root) => {
-          root.__columnIndex = index;
-          root.textContent = `${cellContent} ${index}`;
-        });
-        columns.push(column);
+      const column = sourceGrid.firstElementChild;
+      const index = columns.length;
+      column.renderer = Sinon.spy((root) => {
+        root.__columnIndex = index;
+        root.textContent = `${cellContent} ${index}`;
       });
+      columns.push(column);
 
-      it('should render cells of the moved column when scrolled into view', async () => {
-        grid.appendChild(column);
-        flushGrid(grid);
-        flushGrid(sourceGrid);
+      grid.appendChild(column);
+      flushGrid(grid);
+      flushGrid(sourceGrid);
 
-        await scrollHorizontally(grid.$.table.scrollWidth);
+      await scrollHorizontally(grid.$.table.scrollWidth);
 
-        expectBodyCellUpdated(columns.length - 1);
-      });
+      expectBodyCellUpdated(index);
     });
 
     describe(`scroll horizontally - ${dir}`, () => {
@@ -378,7 +370,6 @@ import {
       });
 
       it('should render cells of columns once on revisit', async () => {
-        resetRenderers();
         await scrollHorizontally(-grid.$.table.scrollWidth);
         expect(columns[0].renderer.calledOnce).to.be.true;
       });

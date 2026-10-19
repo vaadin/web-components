@@ -1356,17 +1356,16 @@ describe('select row accessible name', () => {
   describe('row header scrolled out of view with lazy columns', () => {
     beforeEach(async () => {
       grid = fixtureSync(`
-        <vaadin-grid column-rendering="lazy" style="width: 300px; height: 300px;">
+        <vaadin-grid column-rendering="lazy" style="width: 300px;">
           <vaadin-grid-selection-column frozen></vaadin-grid-selection-column>
-          <vaadin-grid-column path="name" row-header width="150px" flex-grow="0"></vaadin-grid-column>
-          <vaadin-grid-column width="800px" flex-grow="0"></vaadin-grid-column>
+          <vaadin-grid-column path="name" row-header></vaadin-grid-column>
+          <vaadin-grid-column width="800px"></vaadin-grid-column>
         </vaadin-grid>
       `);
       grid.items = [{ name: 'John' }];
       flushGrid(grid);
       await nextResize(grid);
       grid.scrollToColumn(2);
-      await nextRender();
     });
 
     it('should use the last rendered row header text on select', async () => {
