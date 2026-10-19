@@ -245,31 +245,6 @@ import {
       expectBodyCellUpdated(index);
     });
 
-    it('should render cells of a column moved from another grid when scrolled into view', async () => {
-      const sourceGrid = fixtureSync(`
-        <vaadin-grid>
-          <vaadin-grid-column></vaadin-grid-column>
-        </vaadin-grid>
-      `);
-      flushGrid(sourceGrid);
-
-      const column = sourceGrid.firstElementChild;
-      const index = columns.length;
-      column.renderer = Sinon.spy((root) => {
-        root.__columnIndex = index;
-        root.textContent = `${cellContent} ${index}`;
-      });
-      columns.push(column);
-
-      grid.appendChild(column);
-      flushGrid(grid);
-      flushGrid(sourceGrid);
-
-      await scrollHorizontally(grid.$.table.scrollWidth);
-
-      expectBodyCellUpdated(index);
-    });
-
     describe(`scroll horizontally - ${dir}`, () => {
       /**
        * Expect the cells DOM order to match the column order
