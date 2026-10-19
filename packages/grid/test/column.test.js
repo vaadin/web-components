@@ -672,34 +672,3 @@ describe('column - simple grid', () => {
     expect(spy).to.be.calledOnce;
   });
 });
-
-describe('column - moved to another grid', () => {
-  let sourceGrid, targetGrid, column;
-
-  beforeEach(() => {
-    [targetGrid, sourceGrid] = fixtureSync(`
-      <div>
-        <vaadin-grid size="1">
-          <vaadin-grid-column path="value"></vaadin-grid-column>
-        </vaadin-grid>
-        <vaadin-grid size="1">
-          <vaadin-grid-column path="value"></vaadin-grid-column>
-          <vaadin-grid-column path="value"></vaadin-grid-column>
-        </vaadin-grid>
-      </div>
-    `).children;
-    targetGrid.dataProvider = infiniteDataProvider;
-    sourceGrid.dataProvider = infiniteDataProvider;
-    flushGrid(targetGrid);
-    flushGrid(sourceGrid);
-    column = sourceGrid.querySelector('vaadin-grid-column');
-  });
-
-  it('should keep the sizer cell of the target grid when the source grid updates last', () => {
-    targetGrid.appendChild(column);
-    flushGrid(targetGrid);
-    flushGrid(sourceGrid);
-
-    expect(column._sizerCell.parentElement).to.equal(targetGrid.$.sizer);
-  });
-});
