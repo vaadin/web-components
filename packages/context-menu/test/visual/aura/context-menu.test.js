@@ -6,7 +6,7 @@ import '../../../vaadin-context-menu.js';
 import { openSubMenus } from '../../helpers.js';
 
 describe('context-menu', () => {
-  let element;
+  let element, target;
 
   const contextmenu = (target) => {
     const domRect = target.getBoundingClientRect();
@@ -17,7 +17,7 @@ describe('context-menu', () => {
       clientY: domRect.y,
     });
 
-    target.listenOn.dispatchEvent(e);
+    target.dispatchEvent(e);
   };
 
   beforeEach(async () => {
@@ -26,12 +26,13 @@ describe('context-menu', () => {
         <div style="padding: 10px">Target</div>
       </vaadin-context-menu>
     `);
+    target = element.firstElementChild;
     await nextUpdate(element);
   });
 
   it('basic', async () => {
     element.items = [{ text: 'Item 1' }, { text: 'Item 2' }];
-    contextmenu(element);
+    contextmenu(target);
     await nextRender();
     await visualDiff(document.body, 'basic');
   });
@@ -58,7 +59,7 @@ describe('context-menu', () => {
       { text: 'Menu Item 3', disabled: true },
       { text: 'Menu Item 4', className: 'aura-accent-red' },
     ];
-    contextmenu(element);
+    contextmenu(target);
     await openSubMenus(element);
     await nextRender();
     await visualDiff(document.body, 'nested');
