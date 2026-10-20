@@ -276,14 +276,13 @@ export const GridMixin = (superClass) =>
 
       if (props.has('dir')) {
         // Transforms calculated for the previous direction can push the header,
-        // body and footer containers and the frozen cells outside the table and
-        // increase its scroll width, so reset them before calculating the new
-        // scroll position.
-        [this.$.header, this.$.items, this.$.footer, ...this._frozenCells, ...this._frozenToEndCells].forEach(
-          (element) => {
-            element.style.transform = '';
-          },
-        );
+        // body and footer containers and the frozen-to-end cells outside the
+        // table and increase its scroll width, so reset them before calculating
+        // the new scroll position. The frozen cells don't need this, as their
+        // transforms only push them past the start edge, which isn't scrollable.
+        [this.$.header, this.$.items, this.$.footer, ...this._frozenToEndCells].forEach((element) => {
+          element.style.transform = '';
+        });
         // The columns in the viewport and their offset with lazy column
         // rendering depend on the direction as well
         this.__updateColumnsBodyContentHidden();

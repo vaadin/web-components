@@ -80,6 +80,22 @@ const frozenGridFixture = (frozen, frozenToEnd) => {
       expect(grid._updateFrozenColumn.callCount).to.equal(1);
     });
 
+    it('should keep frozen cells at the start when the direction changes after scrolling', async () => {
+      grid.$.table.scrollLeft = isRTL ? -50 : 50;
+      await nextRender();
+
+      document.documentElement.setAttribute('dir', isRTL ? 'ltr' : 'rtl');
+      await nextRender();
+
+      const frozenCellRect = getRowCells(getRows(grid.$.header)[0])[0].getBoundingClientRect();
+      const tableRect = grid.$.table.getBoundingClientRect();
+      if (isRTL) {
+        expect(frozenCellRect.left).to.equal(tableRect.left);
+      } else {
+        expect(frozenCellRect.right).to.equal(tableRect.right);
+      }
+    });
+
     ['header', 'body'].forEach((container) => {
       describe(container, () => {
         const defaultCellWidth = 100;
