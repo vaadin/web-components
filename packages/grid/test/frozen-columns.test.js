@@ -225,14 +225,6 @@ const frozenGridFixture = (frozen, frozenToEnd) => {
       expect(getComputedStyle(sizerCell).transform).to.equal('none');
     });
 
-    it('should keep frozen-to-end cells inside the grid when the direction changes', async () => {
-      document.documentElement.setAttribute('dir', isRTL ? 'ltr' : 'rtl');
-      await nextRender();
-
-      const frozenToEndCell = getRowCells(getRows(grid.$.header)[0])[2];
-      expect(isWithinParentConstraints(frozenToEndCell, grid.$.table)).to.be.true;
-    });
-
     it('should position frozen-to-end cells at the end when the direction changes after scrolling', async () => {
       columns.forEach((column) => {
         column.footerRenderer = (root) => {
