@@ -266,7 +266,7 @@ class ContextMenu extends ContextMenuMixin(ElementMixin(ThemePropertyMixin(Polyl
   static get styles() {
     return css`
       :host {
-        display: block;
+        display: contents;
       }
 
       :host([hidden]) {

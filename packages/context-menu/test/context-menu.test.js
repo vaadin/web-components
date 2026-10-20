@@ -28,6 +28,10 @@ describe('vaadin-context-menu', () => {
       await nextRender();
     });
 
+    it('should have display: contents by default', () => {
+      expect(getComputedStyle(menu).display).to.equal('contents');
+    });
+
     it('should have display: none when hidden', () => {
       menu.setAttribute('hidden', '');
       expect(getComputedStyle(menu).display).to.equal('none');
