@@ -54,20 +54,6 @@ describe('validation', () => {
       });
     });
 
-    describe('default pattern', () => {
-      validAddresses.forEach((address) => {
-        it(`should match ${address}`, () => {
-          expect(new RegExp(emailField.pattern, 'v').test(address)).to.be.true;
-        });
-      });
-
-      invalidAddresses.forEach((address) => {
-        it(`should not match ${address}`, () => {
-          expect(new RegExp(emailField.pattern, 'v').test(address)).to.be.false;
-        });
-      });
-    });
-
     describe('invalid email addresses', () => {
       invalidAddresses.forEach((address) => {
         it(`should treat ${address} as invalid`, async () => {
@@ -75,6 +61,7 @@ describe('validation', () => {
           await nextUpdate(emailField);
           emailField.validate();
           expect(emailField.invalid).to.be.true;
+          expect(emailField.inputElement.validity.patternMismatch).to.be.true;
         });
       });
     });
