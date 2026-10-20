@@ -249,6 +249,34 @@ const frozenGridFixture = (frozen, frozenToEnd) => {
       expect(isWithinParentConstraints(frozenToEndCell, grid.$.table)).to.be.true;
     });
 
+    it('should position frozen-to-end cells at the end when the direction changes after scrolling', async () => {
+      columns.forEach((column) => {
+        column.footerRenderer = (root) => {
+          root.textContent = 'footer';
+        };
+      });
+      flushGrid(grid);
+      grid.$.table.scrollLeft = isRTL ? -50 : 50;
+      await nextRender();
+
+      document.documentElement.setAttribute('dir', isRTL ? 'ltr' : 'rtl');
+      // Wait for the direction observer to set the dir of the grid, then update
+      // the grid synchronously to check the cells before the next frame
+      await Promise.resolve();
+      flushGrid(grid);
+
+      const table = grid.$.table;
+      const contentLeft = table.getBoundingClientRect().left + table.clientLeft;
+      [grid.$.header, grid.$.items, grid.$.footer].forEach((container) => {
+        const frozenToEndCellRect = getRowCells(getRows(container)[0])[2].getBoundingClientRect();
+        if (isRTL) {
+          expect(frozenToEndCellRect.right).to.equal(contentLeft + table.clientWidth);
+        } else {
+          expect(frozenToEndCellRect.left).to.equal(contentLeft);
+        }
+      });
+    });
+
     it('should update frozen-to-end positioning when scrollbar affects layout during data changes', async () => {
       grid.style.width = '200px';
       // Simulate a wide scrollbar like with Windows
@@ -426,35 +454,6 @@ const frozenGridFixture = (frozen, frozenToEnd) => {
         });
       });
     });
-  });
-});
-
-describe('columns frozen to end direction change', () => {
-  let grid;
-
-  beforeEach(async () => {
-    [grid] = frozenGridFixture(false, true);
-    document.documentElement.setAttribute('dir', 'ltr');
-    flushGrid(grid);
-    await nextRender();
-  });
-
-  afterEach(() => document.documentElement.removeAttribute('dir'));
-
-  it('should position frozen-to-end cells for RTL when switching from a scrolled LTR grid', async () => {
-    grid.$.table.scrollLeft = 50;
-    await nextRender();
-
-    const frozenToEndCell = getRowCells(getRows(grid.$.header)[0])[2];
-    document.documentElement.setAttribute('dir', 'rtl');
-    // Wait for the direction observer to set the dir of the grid, then update
-    // the grid synchronously to check the cell before the next frame
-    await Promise.resolve();
-    flushGrid(grid);
-    const { x } = frozenToEndCell.getBoundingClientRect();
-
-    await nextRender();
-    expect(frozenToEndCell.getBoundingClientRect().x).to.equal(x);
   });
 });
 

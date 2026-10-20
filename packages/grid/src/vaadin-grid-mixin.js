@@ -275,11 +275,9 @@ export const GridMixin = (superClass) =>
       }
 
       if (props.has('dir')) {
-        // Transforms calculated for the previous direction can push the header,
-        // body and footer containers and the frozen-to-end cells outside the
-        // table and increase its scroll width, so reset them before calculating
-        // the new scroll position. The frozen cells don't need this, as their
-        // transforms only push them past the start edge, which isn't scrollable.
+        // Transforms calculated for the previous direction can push the
+        // containers and the frozen-to-end cells outside the table and increase
+        // its scroll width, so reset them before calculating the new position.
         [this.$.header, this.$.items, this.$.footer, ...this._frozenToEndCells].forEach((element) => {
           element.style.transform = '';
         });
@@ -287,10 +285,6 @@ export const GridMixin = (superClass) =>
         // rendering depend on the direction as well
         this.__updateColumnsBodyContentHidden();
         this.__updateHorizontalScrollPosition();
-
-        // WebKit reports a too large scroll width until the next frame after
-        // switching from RTL to LTR, so update the positions again then.
-        requestAnimationFrame(() => this.__updateHorizontalScrollPosition());
       }
     }
 
