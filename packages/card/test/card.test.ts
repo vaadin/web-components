@@ -83,17 +83,27 @@ describe('vaadin-card', () => {
         expect(card.getAttribute('heading-level')).to.equal('3');
       });
 
-      it('should forward deprecated titleHeadingLevel to headingLevel', async () => {
-        card.titleHeadingLevel = 3;
-        await nextRender();
-        expect(card.headingLevel).to.equal(3);
-        expect(getStringTitleElement().getAttribute('aria-level')).to.equal('3');
-      });
+      describe('deprecated titleHeadingLevel', () => {
+        it('should update aria-level when title heading level changes', async () => {
+          card.titleHeadingLevel = 3;
+          await nextRender();
+          expect(card.headingLevel).to.equal(3);
+          expect(getStringTitleElement().getAttribute('aria-level')).to.equal('3');
+        });
 
-      it('should update aria-level when deprecated title-heading-level attribute changes', async () => {
-        card.setAttribute('title-heading-level', '4');
-        await nextRender();
-        expect(getStringTitleElement().getAttribute('aria-level')).to.equal('4');
+        it('should use default heading level when title heading level set to null', async () => {
+          card.titleHeadingLevel = 3;
+          await nextRender();
+          card.titleHeadingLevel = null;
+          await nextRender();
+          expect(getStringTitleElement().getAttribute('aria-level')).to.equal('2');
+        });
+
+        it('should update aria-level when title-heading-level attribute changes', async () => {
+          card.setAttribute('title-heading-level', '4');
+          await nextRender();
+          expect(getStringTitleElement().getAttribute('aria-level')).to.equal('4');
+        });
       });
 
       it('should clear string title when custom title element is used', async () => {
