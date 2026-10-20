@@ -251,8 +251,9 @@ registerCSSProperty({
   initialValue: '0px',
 });
 
+// Register on ::before so that em and lh resolve with the input font and line-height
 export const fieldInputHeight = css`
-  :host {
+  :host::before {
     --_field-input-custom-height: var(--vaadin-input-field-height, 0px);
     --_field-input-height: max(var(--_field-input-custom-height), var(--_field-input-default-height));
   }
