@@ -139,7 +139,6 @@ export const ColumnBaseMixin = (superClass) =>
         _bodyContentHidden: {
           type: Boolean,
           value: false,
-          sync: true,
         },
 
         /**
@@ -257,7 +256,7 @@ export const ColumnBaseMixin = (superClass) =>
         '_frozenChanged(frozen, _headerCell, _footerCell, _cells)',
         '_frozenToEndChanged(frozenToEnd, _headerCell, _footerCell, _cells)',
         '_flexGrowChanged(flexGrow, _cells)',
-        '_textAlignChanged(textAlign, _cells)',
+        '_textAlignChanged(textAlign)',
         '_lastFrozenChanged(_lastFrozen)',
         '_firstFrozenToEndChanged(_firstFrozenToEnd)',
         '_onRendererOrBindingChanged(_renderer, _cells, _bodyContentHidden, path)',
@@ -299,7 +298,7 @@ export const ColumnBaseMixin = (superClass) =>
       /**
        * A stable unique id assigned once per column instance. Used to build
        * cell content slot names that stay stable across re-renders, so lit
-       * can reuse the cell content elements when the column tree changes.
+       * keeps the cell content elements when other columns change.
        *
        * @protected
        */
@@ -307,39 +306,8 @@ export const ColumnBaseMixin = (superClass) =>
     }
 
     /** @protected */
-    connectedCallback() {
-      super.connectedCallback();
-
-      // Adds the column cells to the grid after the column is attached
-      requestAnimationFrame(() => {
-        // Skip if the column has been detached
-        if (!this._grid) {
-          return;
-        }
-
-        this._cells?.forEach((cell) => {
-          if (!cell._content.parentNode) {
-            this._grid.appendChild(cell._content);
-          }
-        });
-      });
-    }
-
-    /** @protected */
     disconnectedCallback() {
       super.disconnectedCallback();
-
-      // Removes the column cells from the grid after the column is detached
-      requestAnimationFrame(() => {
-        // Skip if the column has been attached again
-        if (this._grid) {
-          return;
-        }
-
-        this._cells?.forEach((cell) => {
-          cell._content.parentNode?.removeChild(cell._content);
-        });
-      });
 
       this.#cachedGrid = undefined;
     }
@@ -491,9 +459,7 @@ export const ColumnBaseMixin = (superClass) =>
 
       this._grid?.__scheduleRenderHeaderFooter?.();
 
-      this._cells?.forEach((cell) => {
-        cell._content.style.textAlign = textAlign;
-      });
+      this._grid?.__scheduleRenderBody?.();
     }
 
     /** @private */
@@ -501,16 +467,11 @@ export const ColumnBaseMixin = (superClass) =>
       this.parentElement?._columnPropChanged?.('hidden', hidden);
 
       if (!!hidden !== !!this._previousHidden && this._grid) {
-        if (hidden === true) {
-          this._cells?.forEach((cell) => {
-            cell._content.parentNode?.removeChild(cell._content);
-          });
-        }
         this._grid._debouncerHiddenChanged = Debouncer.debounce(
           this._grid._debouncerHiddenChanged,
           animationFrame,
           () => {
-            this._grid?._renderColumnTree?.(this._grid._columnTree);
+            this._grid?._renderColumnTree?.();
           },
         );
 
@@ -865,7 +826,6 @@ export const GridColumnMixin = (superClass) =>
          */
         _cells: {
           type: Array,
-          sync: true,
         },
       };
     }
