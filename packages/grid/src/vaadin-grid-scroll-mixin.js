@@ -134,6 +134,24 @@ export const ScrollMixin = (superClass) =>
       this.addController(this.__overflowController);
     }
 
+    /** @protected */
+    updated(props) {
+      super.updated(props);
+
+      if (props.has('dir')) {
+        // Transforms calculated for the previous direction can push the
+        // containers and the frozen-to-end cells outside the table and increase
+        // its scroll width, so reset them before calculating the new position.
+        [this.$.header, this.$.items, this.$.footer, ...this._frozenToEndCells].forEach((element) => {
+          element.style.transform = '';
+        });
+        // The columns in the viewport and their offset with lazy column
+        // rendering depend on the direction as well
+        this.__updateColumnsBodyContentHidden();
+        this.__updateHorizontalScrollPosition();
+      }
+    }
+
     /**
      * Scroll to a specific row index in the virtual list. Note that the row index is
      * not always the same for any particular item. For example, sorting or filtering

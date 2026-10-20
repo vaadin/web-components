@@ -273,19 +273,6 @@ export const GridMixin = (superClass) =>
         // the scroll position has to be recalculated.
         this.__updateHorizontalScrollPosition();
       }
-
-      if (props.has('dir')) {
-        // Transforms calculated for the previous direction can push the
-        // containers and the frozen-to-end cells outside the table and increase
-        // its scroll width, so reset them before calculating the new position.
-        [this.$.header, this.$.items, this.$.footer, ...this._frozenToEndCells].forEach((element) => {
-          element.style.transform = '';
-        });
-        // The columns in the viewport and their offset with lazy column
-        // rendering depend on the direction as well
-        this.__updateColumnsBodyContentHidden();
-        this.__updateHorizontalScrollPosition();
-      }
     }
 
     /** @private */
