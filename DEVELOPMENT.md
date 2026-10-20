@@ -317,6 +317,8 @@ Re-generate SVG icon sets and icon fonts from individual SVG files for the packa
 npm i -g @web-padawan/wc-icons-tool
 ```
 
+Run from the repo root:
+
 ```sh
 wc-icons-tool
 ```
