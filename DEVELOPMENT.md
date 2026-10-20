@@ -314,12 +314,17 @@ The tooling lives in the private `manifest/` workspace, and `yarn test:manifest`
 Re-generate SVG icon sets and icon fonts from individual SVG files for the packages that have them (e.g. `vaadin-icons`):
 
 ```sh
-npm -i @web-padawan/wc-icon-tool
+npm i -g @web-padawan/wc-icons-tool
 ```
 
+Run from the repo root:
+
 ```sh
-wc-icon-tool
+wc-icons-tool
 ```
+
+To update icon generation script, contribute to [wc-icons-tool](https://github.com/web-padawan/wc-icons-tool) repository.
+It has been [moved](https://github.com/vaadin/web-components/pull/10797) from the monorepo to reduce Gulp and related dev dependencies.
 
 ### Using a local clone of the repo
 
