@@ -28,6 +28,7 @@ const invalidAddresses = [
   'あいうえお@example.com',
   'email@example.com (Joe Smith)',
   'email@example..com',
+  'email@.example.com',
   'email.@example.com',
   '.email@example.com',
   'email@example',
@@ -49,6 +50,20 @@ describe('validation', () => {
           await nextUpdate(emailField);
           emailField.validate();
           expect(emailField.invalid).to.be.false;
+        });
+      });
+    });
+
+    describe('default pattern', () => {
+      validAddresses.forEach((address) => {
+        it(`should match ${address}`, () => {
+          expect(new RegExp(emailField.pattern, 'v').test(address)).to.be.true;
+        });
+      });
+
+      invalidAddresses.forEach((address) => {
+        it(`should not match ${address}`, () => {
+          expect(new RegExp(emailField.pattern, 'v').test(address)).to.be.false;
         });
       });
     });
