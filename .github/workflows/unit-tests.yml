@@ -8,7 +8,7 @@ permissions:
 jobs:
   chrome:
     name: Chrome
-    runs-on: ubuntu-latest
+    runs-on: ubuntu-26.04
     steps:
       - uses: actions/checkout@v7
         with:
@@ -27,7 +27,7 @@ jobs:
         run: yarn test
   firefox:
     name: Firefox
-    runs-on: ubuntu-latest
+    runs-on: ubuntu-26.04
     steps:
       - uses: actions/checkout@v7
         with:
@@ -49,7 +49,7 @@ jobs:
         run: yarn test:firefox
   webkit:
     name: WebKit
-    runs-on: ubuntu-latest
+    runs-on: ubuntu-26.04
     steps:
       - uses: actions/checkout@v7
         with:
@@ -71,7 +71,7 @@ jobs:
         run: yarn test:webkit
   react:
     name: React
-    runs-on: ubuntu-latest
+    runs-on: ubuntu-26.04
     steps:
       - uses: actions/checkout@v7
 
