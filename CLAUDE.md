@@ -77,15 +77,15 @@ yarn start:lumo       # Start with Lumo theme specifically
 yarn start:aura       # Start with Aura theme specifically
 ```
 
-### Testing
+### Unit Tests
 
 ```bash
-yarn test                                            # Run tests for changed packages only
-yarn test --all                                      # Run tests for all packages
-yarn test --group combo-box                          # Run tests for single package
-yarn test --group combo-box --glob="data-provider*"  # Run specific tests for single package
-yarn test:firefox                                    # Run tests in Firefox
-yarn test:webkit                                     # Run tests in WebKit
+yarn test                                            # Run unit tests for changed packages only
+yarn test --all                                      # Run unit tests for all packages
+yarn test --group combo-box                          # Run unit tests for single package
+yarn test --group combo-box --glob="data-provider*"  # Run specific unit tests for single package
+yarn test:firefox                                    # Run unit tests in Firefox
+yarn test:webkit                                     # Run unit tests in WebKit
 ```
 
 ### Visual and Snapshot Tests
