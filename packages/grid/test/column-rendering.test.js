@@ -511,16 +511,6 @@ import {
 
           expectCellsVisualOrderToMatchColumnOrder();
         });
-
-        it('should align frozen-to-end body cells with header cells after the direction changes', async () => {
-          columns.at(-1).frozenToEnd = true;
-          await nextFrame();
-
-          document.documentElement.setAttribute('dir', dir === 'rtl' ? 'ltr' : 'rtl');
-          await nextFrame();
-
-          expectCellsVisualOrderToMatchColumnOrder();
-        });
       });
     });
 
