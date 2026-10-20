@@ -64,7 +64,14 @@ declare class Card extends ElementMixin(ThemableMixin(HTMLElement)) {
 
   /**
    * Sets the heading level (`aria-level`) for the string-based title. If not set, the level defaults to 2. Setting values outside the range [1, 6] can cause accessibility issues.
+   * @attr {number} heading-level
+   */
+  headingLevel: number | null | undefined;
+
+  /**
+   * Sets the heading level (`aria-level`) for the string-based title.
    * @attr {number} title-heading-level
+   * @deprecated Use `headingLevel` instead. This property will be removed in Vaadin 26.
    */
   titleHeadingLevel: number | null | undefined;
 }
