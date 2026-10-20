@@ -1,6 +1,6 @@
 import { expect } from '@vaadin/chai-plugins';
 import { resetMouse, sendKeys, sendMouse, sendMouseToElement } from '@vaadin/test-runner-commands';
-import { click, fixtureSync, listenOnce, mousedown, nextFrame, nextRender } from '@vaadin/testing-helpers';
+import { click, fixtureSync, listenOnce, mousedown, nextFrame, nextRender, nextResize } from '@vaadin/testing-helpers';
 import sinon from 'sinon';
 import './grid-test-styles.js';
 import '../all-imports.js';
@@ -1350,6 +1350,29 @@ describe('select row accessible name', () => {
     it('should use the row header cell text for the placeholder', () => {
       expect(getBodyCheckbox(0).accessibleName).to.equal('Select Row John');
       expect(getBodyCheckbox(1).accessibleName).to.equal('Select Row Jane');
+    });
+  });
+
+  describe('row header scrolled out of view with lazy columns', () => {
+    beforeEach(async () => {
+      grid = fixtureSync(`
+        <vaadin-grid column-rendering="lazy" style="width: 300px;">
+          <vaadin-grid-selection-column frozen></vaadin-grid-selection-column>
+          <vaadin-grid-column path="name" row-header></vaadin-grid-column>
+          <vaadin-grid-column width="800px"></vaadin-grid-column>
+        </vaadin-grid>
+      `);
+      grid.items = [{ name: 'John' }];
+      flushGrid(grid);
+      await nextResize(grid);
+      grid.scrollToColumn(2);
+    });
+
+    it('should use the last rendered row header text on select', async () => {
+      grid.selectItem(grid.items[0]);
+      await nextRender();
+
+      expect(getBodyCheckbox(0).accessibleName).to.equal('Select Row John');
     });
   });
 

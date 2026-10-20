@@ -458,6 +458,12 @@ describe('row details', () => {
       expect(bodyRow.style.paddingBottom).to.equal('');
     });
 
+    it('should clear row padding bottom when renderer is cleared', () => {
+      grid.detailsOpenedItems = [...grid.items];
+      grid.rowDetailsRenderer = null;
+      expect(bodyRow.style.paddingBottom).to.equal('');
+    });
+
     it('should update the row height when details cell height changes', async () => {
       grid.detailsOpenedItems = [...grid.items];
       await nextFrame();

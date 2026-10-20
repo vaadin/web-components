@@ -547,6 +547,21 @@ describe('column', () => {
       expect(getContainerCellContent(grid.$.footer, 0, 0).textContent).to.equal('footer1');
       expect(getBodyCellContent(grid, 0, 0).textContent).to.equal('cell');
     });
+
+    it('should not keep cells of a hidden column after it is removed and added back', () => {
+      const cellCount = emptyColumn._cells.length;
+      emptyColumn.hidden = true;
+      flushGrid(grid);
+
+      emptyColumn.remove();
+      flushGrid(grid);
+
+      grid.appendChild(emptyColumn);
+      emptyColumn.hidden = false;
+      flushGrid(grid);
+
+      expect(emptyColumn._cells.length).to.equal(cellCount);
+    });
   });
 
   describe('removed column', () => {

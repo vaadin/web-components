@@ -610,8 +610,8 @@ describe('edit column', () => {
         await aTimeout(UPDATE_CONTENT_VISIBILITY_DEBOUNCER_TIMEOUT);
       }
 
-      function getCellByColumnPath(columnPath) {
-        const row = getRows(grid.$.items)[0];
+      function getCellByColumnPath(columnPath, rowIndex = 0) {
+        const row = getRows(grid.$.items)[rowIndex];
         const cells = getRowCells(row);
         const cell = cells.find((c) => c._column.path === columnPath);
         expect(cell, `Could not find cell for column with path ${columnPath}`).to.be.ok;
@@ -703,6 +703,17 @@ describe('edit column', () => {
         cell.focus();
         await sendKeys({ press: 'Enter' });
         expect(getCellEditor(cell)).to.be.ok;
+      });
+
+      it('should stay on the edited cell if there are no more editable cells with Tab', async () => {
+        grid.querySelectorAll('vaadin-grid-pro-edit-column').forEach((column) => {
+          column.isCellEditable = () => column.path === 'col1';
+        });
+        const cell = getCellByColumnPath('col1', 1);
+        cell.focus();
+        await sendKeys({ press: 'Enter' });
+        await sendKeys({ press: 'Tab' });
+        expect(cell.matches(':focus-within')).to.be.true;
       });
     });
   });
