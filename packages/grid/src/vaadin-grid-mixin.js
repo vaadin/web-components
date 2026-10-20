@@ -282,6 +282,10 @@ export const GridMixin = (superClass) =>
           cell.style.transform = '';
         });
         this.__updateHorizontalScrollPosition();
+
+        // WebKit reports a too large scroll width until the next frame after
+        // switching from RTL to LTR, so update the positions again then.
+        requestAnimationFrame(() => this.__updateHorizontalScrollPosition());
       }
     }
 
