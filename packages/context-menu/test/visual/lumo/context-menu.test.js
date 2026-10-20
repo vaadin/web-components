@@ -12,7 +12,7 @@ import '../../../vaadin-context-menu.js';
 import { openSubMenus } from '../../helpers.js';
 
 describe('context-menu', () => {
-  let element;
+  let element, target;
 
   ['ltr', 'rtl'].forEach((dir) => {
     const contextmenu = (target) => {
@@ -25,7 +25,7 @@ describe('context-menu', () => {
         clientY: domRect.y,
       });
 
-      target.listenOn.dispatchEvent(e);
+      target.dispatchEvent(e);
     };
 
     describe(dir, () => {
@@ -44,6 +44,7 @@ describe('context-menu', () => {
               <div style="padding: 10px">Target</div>
             </vaadin-context-menu>
           `);
+          target = element.firstElementChild;
           element.renderer = (root) => {
             root.innerHTML = `
               <vaadin-list-box>
@@ -56,7 +57,7 @@ describe('context-menu', () => {
         });
 
         it('basic', async () => {
-          contextmenu(element);
+          contextmenu(target);
           await nextRender();
           await visualDiff(document.body, `${dir}-basic`);
         });
@@ -69,6 +70,7 @@ describe('context-menu', () => {
               <div style="padding: 10px">Target</div>
             </vaadin-context-menu>
           `);
+          target = element.firstElementChild;
           element.renderer = (root) => {
             root.innerHTML = `
               <vaadin-list-box>
@@ -83,16 +85,16 @@ describe('context-menu', () => {
         });
 
         it('basic', async () => {
-          contextmenu(element);
+          contextmenu(target);
           await nextRender();
           await visualDiff(document.body, `${dir}-long`);
         });
 
         it('bottom', async () => {
-          element.style.position = 'absolute';
-          element.style.bottom = '50px';
-          element.style.right = '50px';
-          contextmenu(element);
+          target.style.position = 'absolute';
+          target.style.bottom = '50px';
+          target.style.right = '50px';
+          contextmenu(target);
           await nextRender();
           await visualDiff(document.body, `${dir}-long-bottom`);
         });
@@ -105,6 +107,7 @@ describe('context-menu', () => {
               <div style="padding: 10px">Target</div>
             </vaadin-context-menu>
           `);
+          target = element.firstElementChild;
           await nextUpdate(element);
         });
 
@@ -129,7 +132,7 @@ describe('context-menu', () => {
             },
             { text: 'Menu Item 3', disabled: true },
           ];
-          contextmenu(element);
+          contextmenu(target);
           await openSubMenus(element);
           await nextRender();
           await visualDiff(document.body, `${dir}-items`);
@@ -150,8 +153,9 @@ describe('context-menu', () => {
             </div>
           `);
           element = wrapper.firstElementChild;
+          target = element.firstElementChild;
           element.items = [{ text: 'Item 1' }, { text: 'Item 2' }];
-          element.listenOn = element.querySelector('#target');
+          element.listenOn = target;
           await nextUpdate(element);
         });
 
@@ -172,7 +176,7 @@ describe('context-menu', () => {
           it(position, async () => {
             element.position = position;
             await nextUpdate(element);
-            contextmenu(element);
+            contextmenu(target);
             await nextRender();
             await visualDiff(wrapper, `${dir}-${position}`);
           });
@@ -196,13 +200,14 @@ describe('context-menu', () => {
           <div style="padding: 10px">Target</div>
         </vaadin-context-menu>
       `);
+      target = element.firstElementChild;
       element.items = [{ text: 'Item 1' }, { text: 'Item 2' }];
       await nextUpdate(element);
     });
 
     it('dark', async () => {
       element.openOn = 'click';
-      element.firstElementChild.click();
+      target.click();
       await nextRender();
       await visualDiff(document.body, 'dark');
     });
