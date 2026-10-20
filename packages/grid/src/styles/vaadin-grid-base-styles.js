@@ -235,7 +235,7 @@ export const gridStyles = css`
 
   /* Block borders / Last body row */
 
-  .last-row::after {
+  #table[has-footer] .last-row::after {
     bottom: 0;
   }
 
@@ -246,16 +246,26 @@ export const gridStyles = css`
 
   /* Block borders / Last body row without footer */
 
+  #table:not([has-footer]) {
+    /* Push the bottom border out of the row box, so the row height does not include it */
+    .last-row .details-cell,
+    .last-row-cell {
+      margin-bottom: calc(var(--_row-border-width) * -1);
+    }
+
+    /* Treat the border outside the row box as ink overflow, so it does not extend the scroll range */
+    .last-row {
+      contain: layout;
+    }
+  }
+
   :host([all-rows-visible]),
   :host([overflow~='top']),
   :host([overflow~='bottom']) {
-    #table:not([has-footer]) .last-row .details-cell,
-    #table:not([has-footer]) .last-row-cell:not(.details-opened-row-cell) {
-      border-bottom-style: none;
-
-      &::after {
-        bottom: 0;
-      }
+    #table:not([has-footer]) .last-row::after,
+    #table:not([has-footer]) .last-row .details-cell::after,
+    #table:not([has-footer]) .last-row-cell:not(.details-opened-row-cell)::after {
+      bottom: 0;
     }
   }
 
