@@ -275,12 +275,15 @@ export const GridMixin = (superClass) =>
       }
 
       if (props.has('dir')) {
-        // Transforms calculated for the previous direction can push the frozen
-        // cells outside the table and increase its scroll width, so reset them
-        // before calculating the new scroll position.
-        [...this._frozenCells, ...this._frozenToEndCells].forEach((cell) => {
-          cell.style.transform = '';
-        });
+        // Transforms calculated for the previous direction can push the header,
+        // body and footer containers and the frozen cells outside the table and
+        // increase its scroll width, so reset them before calculating the new
+        // scroll position.
+        [this.$.header, this.$.items, this.$.footer, ...this._frozenCells, ...this._frozenToEndCells].forEach(
+          (element) => {
+            element.style.transform = '';
+          },
+        );
         this.__updateHorizontalScrollPosition();
 
         // WebKit reports a too large scroll width until the next frame after

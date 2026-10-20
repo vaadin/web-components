@@ -413,6 +413,35 @@ const frozenGridFixture = (frozen, frozenToEnd) => {
   });
 });
 
+describe('columns frozen to end direction change', () => {
+  let grid;
+
+  beforeEach(async () => {
+    [grid] = frozenGridFixture(false, true);
+    document.documentElement.setAttribute('dir', 'ltr');
+    flushGrid(grid);
+    await nextRender();
+  });
+
+  afterEach(() => document.documentElement.removeAttribute('dir'));
+
+  it('should position frozen-to-end cells for RTL when switching from a scrolled LTR grid', async () => {
+    grid.$.table.scrollLeft = 50;
+    await nextRender();
+
+    const frozenToEndCell = getRowCells(getRows(grid.$.header)[0])[2];
+    document.documentElement.setAttribute('dir', 'rtl');
+    // Wait for the direction observer to set the dir of the grid, then update
+    // the grid synchronously to check the cell before the next frame
+    await Promise.resolve();
+    flushGrid(grid);
+    const { x } = frozenToEndCell.getBoundingClientRect();
+
+    await nextRender();
+    expect(frozenToEndCell.getBoundingClientRect().x).to.equal(x);
+  });
+});
+
 describe('frozen columns in a column group', () => {
   let grid;
 
