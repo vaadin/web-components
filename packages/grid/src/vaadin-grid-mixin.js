@@ -284,6 +284,9 @@ export const GridMixin = (superClass) =>
             element.style.transform = '';
           },
         );
+        // The columns in the viewport and their offset with lazy column
+        // rendering depend on the direction as well
+        this.__updateColumnsBodyContentHidden();
         this.__updateHorizontalScrollPosition();
 
         // WebKit reports a too large scroll width until the next frame after
