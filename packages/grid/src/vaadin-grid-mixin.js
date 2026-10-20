@@ -273,6 +273,16 @@ export const GridMixin = (superClass) =>
         // the scroll position has to be recalculated.
         this.__updateHorizontalScrollPosition();
       }
+
+      if (props.has('dir')) {
+        // Transforms calculated for the previous direction can push the frozen
+        // cells outside the table and increase its scroll width, so reset them
+        // before calculating the new scroll position.
+        [...this._frozenCells, ...this._frozenToEndCells].forEach((cell) => {
+          cell.style.transform = '';
+        });
+        this.__updateHorizontalScrollPosition();
+      }
     }
 
     /** @private */
