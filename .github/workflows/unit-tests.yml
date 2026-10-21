@@ -23,9 +23,6 @@ jobs:
       - name: Install Dependencies
         run: yarn --frozen-lockfile --no-progress --non-interactive
 
-      - name: Install Playwright
-        run: npx playwright install chrome --with-deps
-
       - name: Test
         run: yarn test
   firefox:
