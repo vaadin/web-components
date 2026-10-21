@@ -11,7 +11,7 @@
 - **Reproduced on:** vaadin/web-components @ `main` (25.4.0-alpha3, cb9b2fcdf8)
 - **Present on main?:** yes (still broken)
 - **Theme / Browser:** base / Chromium (Playwright) on macOS
-- **Screenshot** (static bug): ![Drag via edit column: no grid-dragstart, drop has dragged=null](https://raw.githubusercontent.com/vaadin/web-components/<commit-sha>/repro-10483.png)
+- **Screenshot** (static bug): ![Drag via edit column: no grid-dragstart, drop has dragged=null](https://raw.githubusercontent.com/vaadin/web-components/ed69f148f0246fce4f67aa14aab1d337529306e9/repro-10483.png)
 
 ## Observed behavior
 
