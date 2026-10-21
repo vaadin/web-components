@@ -698,9 +698,12 @@ class AiFieldMarker extends SlotStylesMixin(I18nMixin(DirMixin(PolylitMixin(LitE
     this.#capturedValue = this.#annotatedValue();
 
     if (this.working) {
-      // Apply the working state directly: on a reconnect no `working`
-      // property change triggers updated(), which handles the first connect.
-      this.#startWorking();
+      // Enter the working state in the update the connect requested, not
+      // right away: the host may still change the field in the same task, for
+      // example Flow applying the field's read-only state from the same
+      // server response after adding the marker, and the read-only state to
+      // restore must include that change.
+      this.requestUpdate('working', false);
     } else {
       this.#announcePending = true;
     }
