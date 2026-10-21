@@ -150,7 +150,7 @@ export const DragAndDropMixin = (superClass) =>
       if (this.rowsDraggable) {
         let row = e.target;
         if (row.localName === 'vaadin-grid-cell-content') {
-          // The draggable node is the cell content element on browsers that support native shadow
+          // The draggable node is the cell content element
           row = getClosestCell(row)?.__parentRow;
         }
         if (!row || row.parentNode !== this.$.items) {
