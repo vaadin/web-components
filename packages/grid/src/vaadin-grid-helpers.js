@@ -16,7 +16,12 @@ import { getClosestElement } from '@vaadin/component-base/src/dom-utils.js';
  */
 export function getClosestCell(node) {
   const content = getClosestElement('vaadin-grid-cell-content', node);
-  return content?.assignedSlot?.parentElement;
+  const parent = content?.assignedSlot?.parentElement;
+  // In focus button mode, the slot is wrapped in a button inside the cell
+  if (parent && parent.parentElement?._focusButton === parent) {
+    return parent.parentElement;
+  }
+  return parent;
 }
 
 /**
