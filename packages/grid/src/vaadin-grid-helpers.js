@@ -8,20 +8,14 @@ import { Debouncer } from '@vaadin/component-base/src/debounce.js';
 import { getClosestElement } from '@vaadin/component-base/src/dom-utils.js';
 
 /**
- * Returns the grid cell that contains the given node, or `undefined` if the
- * node is not inside a cell's content.
+ * Returns the grid cell that contains the given node, if any.
  *
  * @param {Node} node
- * @return {HTMLElement | undefined}
+ * @return {HTMLElement | null | undefined}
  */
 export function getClosestCell(node) {
   const content = getClosestElement('vaadin-grid-cell-content', node);
-  const parent = content?.assignedSlot?.parentElement;
-  // In focus button mode, the slot is wrapped in a button inside the cell
-  if (parent && parent.parentElement?._focusButton === parent) {
-    return parent.parentElement;
-  }
-  return parent;
+  return content?.assignedSlot?.closest('.cell');
 }
 
 /**

@@ -9,6 +9,7 @@
  */
 import { getDeepActiveElement } from '@vaadin/a11y-base/src/focus-utils.js';
 import { get, set } from '@vaadin/component-base/src/path-utils.js';
+import { getClosestCell } from '@vaadin/grid/src/vaadin-grid-helpers.js';
 
 export const GridProEditColumnMixin = (superClass) =>
   class extends superClass {
@@ -118,7 +119,7 @@ export const GridProEditColumnMixin = (superClass) =>
       this._focusButtonMode = navigator.platform.includes('Mac');
 
       this.__editModeRenderer = function (root, column) {
-        const cell = root.assignedSlot.parentNode;
+        const cell = getClosestCell(root);
 
         const tagName = column._getEditorTagName(cell);
         if (!root.firstElementChild || root.firstElementChild.localName.toLowerCase() !== tagName) {
