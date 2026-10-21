@@ -15,7 +15,7 @@ import { getClosestElement } from '@vaadin/component-base/src/dom-utils.js';
  */
 export function getClosestCell(node) {
   const content = getClosestElement('vaadin-grid-cell-content', node);
-  return content?.assignedSlot?.closest('td, th');
+  return content?.assignedSlot?.closest('.cell');
 }
 
 /**
