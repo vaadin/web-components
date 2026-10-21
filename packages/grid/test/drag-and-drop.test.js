@@ -9,6 +9,7 @@ import {
   cellDraggableAttribute,
   dragAndDropOver,
   flushGrid,
+  getBodyCell,
   getBodyCellContent,
   getFirstCell,
   getHeaderCellContent,
@@ -452,6 +453,29 @@ describe('drag and drop', () => {
       it('should generate drag image with offset', () => {
         const event = fireDragStart();
         expect(event.dataTransfer.setDragImage.getCall(0).args.length).to.equal(3);
+      });
+
+      describe('focus button mode', () => {
+        beforeEach(() => {
+          const column = document.createElement('vaadin-grid-column');
+          column.path = 'first';
+          column._focusButtonMode = true;
+          grid.appendChild(column);
+          flushGrid(grid);
+        });
+
+        it('should dispatch a grid specific event when dragging a focus button mode cell', () => {
+          fireDragStart(getBodyCellContent(grid, 0, 2));
+          expect(dragStartSpy).to.be.calledOnce;
+          const event = dragStartSpy.getCall(0).args[0];
+          expect(event.detail.draggedItems).to.eql([grid.items[0]]);
+        });
+
+        it('should use the row as drag image when dragging a focus button mode cell', () => {
+          const event = fireDragStart(getBodyCellContent(grid, 0, 2));
+          const row = getBodyCell(grid, 0, 0).parentElement;
+          expect(event.dataTransfer.setDragImage.getCall(0).args[0]).to.equal(row);
+        });
       });
     });
 

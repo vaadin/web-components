@@ -4,6 +4,7 @@
  * This program is available under Apache License Version 2.0, available at https://vaadin.com/license/
  */
 import { addListener, setTouchAction } from '@vaadin/component-base/src/gestures.js';
+import { getClosestCell } from './vaadin-grid-helpers.js';
 
 /**
  * A mixin that provides basic functionality for the
@@ -225,7 +226,7 @@ export const GridSelectionColumnBaseMixin = (superClass) =>
       // the row have run in the current task, as the selection column may
       // render before the row header column.
       queueMicrotask(() => {
-        const row = root.assignedSlot?.parentElement?.__parentRow;
+        const row = getClosestCell(root)?.__parentRow;
         if (!checkbox.isConnected || !row) {
           return;
         }

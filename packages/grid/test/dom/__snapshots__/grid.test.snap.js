@@ -124,7 +124,7 @@ snapshots["vaadin-grid basic shadow default"] =
     <tbody
       id="items"
       role="rowgroup"
-      style="transform: translate(0px, 0px); height: 72px;"
+      style="transform: translate(0px, 0px); height: 71px;"
     >
       <tr
         aria-rowindex="2"
@@ -364,7 +364,7 @@ snapshots["vaadin-grid basic shadow selected"] =
     <tbody
       id="items"
       role="rowgroup"
-      style="transform: translate(0px, 0px); height: 72px;"
+      style="transform: translate(0px, 0px); height: 71px;"
     >
       <tr
         aria-rowindex="2"
@@ -605,7 +605,7 @@ snapshots["vaadin-grid basic shadow details opened"] =
     <tbody
       id="items"
       role="rowgroup"
-      style="transform: translate(0px, 0px); height: 72px;"
+      style="transform: translate(0px, 0px); height: 71px;"
     >
       <tr
         aria-rowindex="2"
@@ -824,7 +824,7 @@ snapshots["vaadin-grid basic shadow hidden column"] =
     <tbody
       id="items"
       role="rowgroup"
-      style="transform: translate(0px, 0px); height: 72px;"
+      style="transform: translate(0px, 0px); height: 71px;"
     >
       <tr
         aria-rowindex="2"
@@ -1009,7 +1009,7 @@ snapshots["vaadin-grid basic shadow hidden column selected"] =
     <tbody
       id="items"
       role="rowgroup"
-      style="transform: translate(0px, 0px); height: 72px;"
+      style="transform: translate(0px, 0px); height: 71px;"
     >
       <tr
         aria-rowindex="2"
@@ -1868,7 +1868,7 @@ snapshots["vaadin-grid hidden column group with group header"] =
     <tbody
       id="items"
       role="rowgroup"
-      style="transform: translate(0px, 0px); height: 72px;"
+      style="transform: translate(0px, 0px); height: 71px;"
     >
       <tr
         aria-rowindex="1"
@@ -2095,7 +2095,7 @@ snapshots["vaadin-grid hidden column group with group and column header"] =
     <tbody
       id="items"
       role="rowgroup"
-      style="transform: translate(0px, 0px); height: 72px;"
+      style="transform: translate(0px, 0px); height: 71px;"
     >
       <tr
         aria-rowindex="1"
@@ -2321,7 +2321,7 @@ snapshots["vaadin-grid hidden column group with group footer"] =
     <tbody
       id="items"
       role="rowgroup"
-      style="transform: translate(0px, 0px); height: 72px;"
+      style="transform: translate(0px, 0px); height: 71px;"
     >
       <tr
         aria-rowindex="1"
@@ -2544,7 +2544,7 @@ snapshots["vaadin-grid column reordering reordered"] =
   <tbody
     id="items"
     role="rowgroup"
-    style="transform: translate(0px, 0px); height: 72px;"
+    style="transform: translate(0px, 0px); height: 71px;"
   >
     <tr
       aria-rowindex="2"
@@ -2773,7 +2773,7 @@ snapshots["vaadin-grid column reordering reordered details opened"] =
   <tbody
     id="items"
     role="rowgroup"
-    style="transform: translate(0px, 0px); height: 108px;"
+    style="transform: translate(0px, 0px); height: 107px;"
   >
     <tr
       aria-rowindex="2"

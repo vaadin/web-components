@@ -8,6 +8,7 @@ const card = document.createElement('vaadin-card');
 
 // Properties
 assertType<string>(card.cardTitle);
+assertType<number | null | undefined>(card.headingLevel);
 assertType<number | null | undefined>(card.titleHeadingLevel);
 
 // Mixins

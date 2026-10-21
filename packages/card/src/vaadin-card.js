@@ -93,7 +93,18 @@ class Card extends ElementMixin(ThemableMixin(PolylitMixin(LumoInjectionMixin(Li
       /**
        * Sets the heading level (`aria-level`) for the string-based title. If not set, the level defaults to 2. Setting values outside the range [1, 6] can cause accessibility issues.
        *
+       * @attr {number} heading-level
+       */
+      headingLevel: {
+        type: Number,
+        reflectToAttribute: true,
+      },
+
+      /**
+       * Sets the heading level (`aria-level`) for the string-based title.
+       *
        * @attr {number} title-heading-level
+       * @deprecated Use `headingLevel` instead. This property will be removed in Vaadin 26.
        */
       titleHeadingLevel: {
         type: Number,
@@ -147,6 +158,15 @@ class Card extends ElementMixin(ThemableMixin(PolylitMixin(LumoInjectionMixin(Li
   }
 
   /** @protected */
+  willUpdate(props) {
+    super.willUpdate(props);
+
+    if (props.has('titleHeadingLevel')) {
+      this.headingLevel = this.titleHeadingLevel;
+    }
+  }
+
+  /** @protected */
   updated(props) {
     super.updated(props);
 
@@ -154,8 +174,8 @@ class Card extends ElementMixin(ThemableMixin(PolylitMixin(LumoInjectionMixin(Li
       this.__titleController.setTitle(this.cardTitle);
     }
 
-    if (props.has('titleHeadingLevel')) {
-      this.__titleController.setLevel(this.titleHeadingLevel);
+    if (props.has('headingLevel')) {
+      this.__titleController.setLevel(this.headingLevel);
     }
   }
 

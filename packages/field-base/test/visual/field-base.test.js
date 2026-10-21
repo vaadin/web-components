@@ -83,6 +83,17 @@ describe('field-base', () => {
             div.style.setProperty('--vaadin-input-field-height', '56px');
             await visualDiff(div, `${dir}-css-props-label-height`);
           });
+
+          it('custom input field height auto', async () => {
+            div.style.setProperty('--vaadin-input-field-height', 'auto');
+            await visualDiff(div, `${dir}-css-props-height-auto`);
+          });
+
+          it('custom input field height in em', async () => {
+            div.style.setProperty('--vaadin-input-field-value-font-size', '20px');
+            div.style.setProperty('--vaadin-input-field-height', '3em');
+            await visualDiff(div, `${dir}-css-props-height-em`);
+          });
         });
       });
     });
