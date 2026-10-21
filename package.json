@@ -74,7 +74,7 @@
   },
   "resolutions": {
     "@open-wc/semantic-dom-diff": "^0.20.1",
-    "playwright": "^1.48.2"
+    "playwright": "^1.50.1"
   },
   "lint-staged": {
     "*.{js,ts}": [
