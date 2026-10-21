@@ -36,6 +36,8 @@ Each component declares which modules to inject, keyed by its tag name:
 
 Declaring them on both `:root` and `:host` makes them work whether Lumo is loaded into the document or into a shadow root.
 
+To detect changes of these properties, the injector runs a CSS transition on them and listens for transition events. This approach is adapted from [style-observer](https://github.com/LeaVerou/style-observer).
+
 ## Where styles are looked up
 
 Each component is linked to a root: the document, or the closest shadow root that does not belong to another Vaadin component. For example, a component inside `vaadin-grid` in the document uses the document, and a component inside a Lit element's shadow root uses that shadow root.
@@ -75,3 +77,4 @@ The flag must be set before any Vaadin component inside the root is connected. I
 
 - Style sheets the browser does not allow reading (for example cross-origin without CORS) are skipped with a warning.
 - Adding or removing Lumo at runtime is picked up asynchronously, so components can briefly show the old styles.
+- Because the `--_lumo-*-inject` properties are declared on `:root` and `:host`, DevTools lists them as inherited styles for every element you inspect, which makes the Styles panel harder to read. Declaring them on the `::before` pseudo-element instead avoided this, but caused a regression: pseudo-element values are not inherited, so components in nested shadow roots did not get Lumo after switching themes at runtime.
