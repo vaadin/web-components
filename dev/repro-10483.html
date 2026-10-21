@@ -1,0 +1,42 @@
+<!doctype html>
+<html lang="en">
+  <head>
+    <meta charset="UTF-8" />
+    <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+    <title>Repro #10483</title>
+    <script type="module" src="./common.js"></script>
+    <script type="module">
+      import '@vaadin/grid-pro';
+      import '@vaadin/grid-pro/vaadin-grid-pro-edit-column.js';
+
+      const grid = document.querySelector('#grid');
+      const log = document.querySelector('#log');
+      grid.items = ['Alpha', 'Bravo', 'Charlie', 'Delta'].map((title) => ({ title }));
+
+      const editColumn = grid.querySelector('vaadin-grid-pro-edit-column');
+      document.querySelector('#env').textContent =
+        `${navigator.platform} / _focusButtonMode: ${editColumn._focusButtonMode}`;
+
+      let dragged = null;
+      grid.addEventListener('grid-dragstart', (e) => {
+        dragged = e.detail.draggedItems;
+        log.textContent += `grid-dragstart: ${dragged.map((i) => i.title)}\n`;
+      });
+      grid.addEventListener('grid-drop', (e) => {
+        log.textContent += `grid-drop: target=${e.detail.dropTargetItem?.title} ${e.detail.dropLocation}, dragged=${dragged ? dragged.map((i) => i.title) : 'null'}\n`;
+      });
+      grid.addEventListener('grid-dragend', () => {
+        log.textContent += 'grid-dragend\n';
+        dragged = null;
+      });
+    </script>
+  </head>
+  <body>
+    <p id="env"></p>
+    <vaadin-grid-pro id="grid" rows-draggable drop-mode="between" all-rows-visible style="width: 600px">
+      <vaadin-grid-column header="Position (plain)" path="title" id="plain"></vaadin-grid-column>
+      <vaadin-grid-pro-edit-column header="Title (edit)" path="title" id="edit"></vaadin-grid-pro-edit-column>
+    </vaadin-grid-pro>
+    <pre id="log"></pre>
+  </body>
+</html>
