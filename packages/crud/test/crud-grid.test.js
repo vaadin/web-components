@@ -203,35 +203,30 @@ describe('crud grid', () => {
   });
 
   describe('edit button', () => {
-    let column;
+    let column, spy;
 
     beforeEach(() => {
       grid = fixtureSync('<vaadin-grid><vaadin-grid-column></vaadin-grid-column></vaadin-grid>');
-      column = grid.querySelector('vaadin-grid-column');
-    });
-
-    async function renderItems(template) {
-      column.renderer = (root) => {
-        root.innerHTML = template;
-      };
       grid.items = [...items, { ...items[0], _id: 2 }];
       flushGrid(grid);
-      await nextRender();
-    }
-
-    it('should fire edit event with the row item', async () => {
-      await renderItems('<vaadin-crud-edit></vaadin-crud-edit>');
-      const spy = sinon.spy();
+      column = grid.querySelector('vaadin-grid-column');
+      spy = sinon.spy();
       grid.addEventListener('edit', spy);
+    });
+
+    it('should fire edit event with the row item', () => {
+      column.renderer = (root) => {
+        root.innerHTML = '<vaadin-crud-edit></vaadin-crud-edit>';
+      };
       getBodyCellContent(grid, 1, 0).querySelector('vaadin-crud-edit').click();
       expect(spy).to.be.calledOnce;
       expect(spy.firstCall.args[0].detail).to.eql({ item: grid.items[1], index: 1 });
     });
 
-    it('should fire edit event when the edit button is wrapped in the cell content', async () => {
-      await renderItems('<div><vaadin-crud-edit></vaadin-crud-edit></div>');
-      const spy = sinon.spy();
-      grid.addEventListener('edit', spy);
+    it('should fire edit event when the edit button is wrapped in the cell content', () => {
+      column.renderer = (root) => {
+        root.innerHTML = '<div><vaadin-crud-edit></vaadin-crud-edit></div>';
+      };
       getBodyCellContent(grid, 1, 0).querySelector('vaadin-crud-edit').click();
       expect(spy).to.be.calledOnce;
       expect(spy.firstCall.args[0].detail).to.eql({ item: grid.items[1], index: 1 });
