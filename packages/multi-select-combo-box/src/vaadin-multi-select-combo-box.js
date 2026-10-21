@@ -25,6 +25,7 @@ import { css, registerStyles, ThemableMixin } from '@vaadin/vaadin-themable-mixi
 
 const multiSelectComboBox = css`
   :host {
+    max-width: 100%;
     --input-min-width: var(--vaadin-multi-select-combo-box-input-min-width, 4em);
     --_chip-min-width: var(--vaadin-multi-select-combo-box-chip-min-width, 50px);
   }
