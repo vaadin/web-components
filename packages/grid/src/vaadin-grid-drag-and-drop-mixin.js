@@ -149,12 +149,7 @@ export const DragAndDropMixin = (superClass) =>
         let row = e.target;
         if (row.localName === 'vaadin-grid-cell-content') {
           // The draggable node is the cell content element
-          let cell = row.assignedSlot.parentNode;
-          // In focus button mode, the slot is wrapped in a button inside the cell
-          if (cell.parentNode._focusButton === cell) {
-            cell = cell.parentNode;
-          }
-          row = cell.__parentRow;
+          row = row.assignedSlot.closest('.row');
         }
         if (!row || row.parentNode !== this.$.items) {
           return;
