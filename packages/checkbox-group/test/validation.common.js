@@ -39,14 +39,20 @@ describe('validation', () => {
   });
 
   describe('basic', () => {
+    let firstGlobalFocusable;
+
     beforeEach(async () => {
-      group = fixtureSync(`
-        <vaadin-checkbox-group>
-          <vaadin-checkbox name="language" value="en" label="English"></vaadin-checkbox>
-          <vaadin-checkbox name="language" value="fr" label="Français"></vaadin-checkbox>
-          <vaadin-checkbox name="language" value="de" label="Deutsch"></vaadin-checkbox>
-        </vaadin-checkbox-group>
-      `);
+      [firstGlobalFocusable, group] = fixtureSync(
+        `<div>
+          <input id="first-global-focusable" />
+          <vaadin-checkbox-group>
+            <vaadin-checkbox name="language" value="en" label="English"></vaadin-checkbox>
+            <vaadin-checkbox name="language" value="fr" label="Français"></vaadin-checkbox>
+            <vaadin-checkbox name="language" value="de" label="Deutsch"></vaadin-checkbox>
+          </vaadin-checkbox-group>
+        </div>`,
+      ).children;
+      firstGlobalFocusable.focus();
       await nextRender();
       validateSpy = sinon.spy(group, 'validate');
     });

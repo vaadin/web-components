@@ -40,7 +40,12 @@ describe('validation', () => {
 
   describe('basic', () => {
     beforeEach(async () => {
-      checkbox = fixtureSync('<vaadin-checkbox label="Checkbox"></vaadin-checkbox>');
+      checkbox = fixtureSync(
+        `<div>
+          <vaadin-checkbox label="Checkbox"></vaadin-checkbox>
+          <input id="last-global-focusable" />
+        </div>`,
+      ).firstElementChild;
       await nextRender();
       validateSpy = sinon.spy(checkbox, 'validate');
     });
@@ -65,9 +70,7 @@ describe('validation', () => {
       expect(validateSpy.called).to.be.false;
 
       // Blur the checkbox.
-      await sendKeys({ down: 'Shift' });
       await sendKeys({ press: 'Tab' });
-      await sendKeys({ up: 'Shift' });
 
       expect(validateSpy.calledOnce).to.be.true;
     });

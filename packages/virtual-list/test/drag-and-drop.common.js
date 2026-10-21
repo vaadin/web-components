@@ -43,6 +43,7 @@ describe('drag and drop', () => {
     const initialItemsMaxHeight = items.style.maxHeight;
     const initialVirtualListOverflow = virtualList.style.overflow;
     await dragElement(draggedElement);
+    await nextFrame();
     expect(items.style.maxHeight).to.equal(initialItemsMaxHeight);
     expect(virtualList.style.overflow).to.equal(initialVirtualListOverflow);
   }

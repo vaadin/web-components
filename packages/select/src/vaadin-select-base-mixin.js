@@ -65,6 +65,7 @@ export const SelectBaseMixin = (superClass) =>
           notify: true,
           reflectToAttribute: true,
           observer: '_openedChanged',
+          sync: true,
         },
 
         /**

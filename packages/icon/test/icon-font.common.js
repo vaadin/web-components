@@ -26,6 +26,19 @@ async function onceResized(icon) {
   }
 }
 
+/**
+ * Resolves once the ResizeObserver callback is invoked for the element.
+ */
+function nextResize(element) {
+  return new Promise((resolve) => {
+    const observer = new ResizeObserver(() => {
+      observer.disconnect();
+      setTimeout(resolve);
+    });
+    observer.observe(element);
+  });
+}
+
 describe('vaadin-icon - icon fonts', () => {
   beforeEach(() => {
     fixtureSync(`
@@ -70,12 +83,22 @@ describe('vaadin-icon - icon fonts', () => {
     });
 
     it('should subtract vertical padding from height', async () => {
+      // Workaround to trigger cqh recalculation in Safari and Firefox
+      // https://github.com/vaadin/web-components/issues/8397
+      async function iconRender(icon) {
+        icon.style.display = 'block';
+        await nextResize(icon);
+        icon.style.display = '';
+      }
+
       icon.style.padding = '5px';
       await onceResized(icon);
+      await iconRender(icon);
       expect(parseInt(getComputedStyle(icon, ':before').height)).to.be.closeTo(14, 1);
 
       icon.style.padding = '7px';
       await onceResized(icon);
+      await iconRender(icon);
       expect(parseInt(getComputedStyle(icon, ':before').height)).to.be.closeTo(10, 1);
     });
   });

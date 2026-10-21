@@ -8,7 +8,7 @@ permissions:
 jobs:
   chrome:
     name: Chrome
-    runs-on: ubuntu-22.04
+    runs-on: ubuntu-24.04
     steps:
       - uses: actions/checkout@v6
         with:
@@ -27,7 +27,7 @@ jobs:
         run: yarn test
   firefox:
     name: Firefox
-    runs-on: ubuntu-22.04
+    runs-on: ubuntu-24.04
     steps:
       - uses: actions/checkout@v6
         with:
@@ -43,13 +43,13 @@ jobs:
         run: yarn --frozen-lockfile --no-progress --non-interactive
 
       - name: Install Playwright
-        run: npx playwright install-deps firefox
+        run: npx playwright install firefox --with-deps
 
       - name: Test
         run: yarn test:firefox
   webkit:
     name: WebKit
-    runs-on: ubuntu-22.04
+    runs-on: ubuntu-24.04
     steps:
       - uses: actions/checkout@v6
         with:
@@ -65,7 +65,7 @@ jobs:
         run: yarn --frozen-lockfile --no-progress --non-interactive
 
       - name: Install Playwright
-        run: npx playwright install-deps webkit
+        run: npx playwright install webkit --with-deps
 
       - name: Test
         run: yarn test:webkit
