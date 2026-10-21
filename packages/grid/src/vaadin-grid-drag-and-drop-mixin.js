@@ -148,10 +148,10 @@ export const DragAndDropMixin = (superClass) =>
       if (this.rowsDraggable) {
         let row = e.target;
         if (row.localName === 'vaadin-grid-cell-content') {
-          // The draggable node is the cell content element on browsers that support native shadow
-          row = row.assignedSlot.parentNode.parentNode;
+          // The draggable node is the cell content element
+          row = row.assignedSlot.closest('.row');
         }
-        if (row.parentNode !== this.$.items) {
+        if (!row || row.parentNode !== this.$.items) {
           return;
         }
 
