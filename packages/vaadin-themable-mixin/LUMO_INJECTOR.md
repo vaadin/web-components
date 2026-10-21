@@ -69,7 +69,7 @@ const shadow = this.attachShadow({ mode: 'open' });
 shadow.__lumoInjectorDisabled = true;
 ```
 
-Added for **Copilot**, which uses its own styles on top of the base styles. Without the flag, the application's Lumo would interfere with them.
+Added for **Copilot**, which uses its own styles on top of the base styles. Without the flag, the application's Lumo would interfere with them. See [vaadin/copilot-internal#9753](https://github.com/vaadin/copilot-internal/pull/9753) for how Copilot uses it.
 
 The flag must be set before any Vaadin component inside the root is connected. It blocks Lumo from both the document and the root itself.
 
