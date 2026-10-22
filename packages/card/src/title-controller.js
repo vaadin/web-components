@@ -3,15 +3,15 @@
  * Copyright (c) 2024 - 2026 Vaadin Ltd.
  * This program is available under Apache License Version 2.0, available at https://vaadin.com/license/
  */
-import { SlotChildObserveController } from '@vaadin/component-base/src/slot-child-observe-controller.js';
+import { SlotController } from '@vaadin/component-base/src/slot-controller.js';
 
 /**
  * A controller to manage the card title element.
  */
-export class TitleController extends SlotChildObserveController {
+export class TitleController extends SlotController {
   constructor(host) {
     // Do not provide tag name, as we create the title lazily.
-    super(host, 'title', null, { uniqueIdPrefix: 'card-title' });
+    super(host, 'title', null, { useUniqueId: true, uniqueIdPrefix: 'card-title' });
   }
 
   /**
@@ -70,10 +70,8 @@ export class TitleController extends SlotChildObserveController {
   }
 
   /**
-   * Override method inherited from `SlotChildObserveController` to handle a
-   * custom title element. Skips the default `super` call so the custom node
-   * keeps no generated ID. Clears the string title property, as a custom
-   * title takes over.
+   * Override method inherited from `SlotController` to clear the string
+   * title property, as a custom title takes over.
    *
    * @param {Node} _node
    * @protected
@@ -84,28 +82,31 @@ export class TitleController extends SlotChildObserveController {
   }
 
   /**
-   * Override method inherited from `SlotChildObserveController` to drop the
-   * labelling once the generated title node leaves the slot and is not
-   * replaced by a custom title.
+   * Override method inherited from `SlotController` to drop the labelling
+   * once the generated title node leaves the slot, and to restore the
+   * generated title once a custom title leaves an empty slot.
    *
-   * @param {Node} node
+   * @param {Node} _node
    * @protected
    * @override
    */
-  teardownNode(node) {
-    if (this.getSlotChild() !== this.defaultNode) {
+  teardownNode(_node) {
+    const child = this.getSlotChild();
+
+    if (child !== this.defaultNode) {
       this.host.removeAttribute('aria-labelledby');
     }
 
-    super.teardownNode(node);
+    if (!child) {
+      this.restoreDefaultNode();
+      this.updateDefaultNode(this.node);
+    }
   }
 
   /**
-   * Override method inherited from `SlotChildObserveController`
-   * to create the default title element lazily as needed.
+   * Create the default title element lazily as needed.
    *
    * @protected
-   * @override
    */
   restoreDefaultNode() {
     const { title } = this;
@@ -115,25 +116,21 @@ export class TitleController extends SlotChildObserveController {
       this.tagName = 'div';
 
       const node = this.attachDefaultNode();
+      node.id = this.defaultId;
       this.initNode(node);
     }
   }
 
   /**
-   * Override method inherited from `SlotChildObserveController`
-   * to update the default title element.
+   * Update the default title element.
    *
    * @param {Node | undefined} node
    * @protected
-   * @override
    */
   updateDefaultNode(node) {
     if (node) {
       node.textContent = this.title;
       node.setAttribute('aria-level', this.level || 2);
     }
-
-    // Notify the host after update.
-    super.updateDefaultNode(node);
   }
 }
