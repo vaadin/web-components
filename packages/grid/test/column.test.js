@@ -235,6 +235,25 @@ describe('column', () => {
           grid.size = 11;
         }).to.not.throw(Error);
       });
+
+      describe('all columns hidden', () => {
+        beforeEach(() => {
+          grid.size = 1000;
+          flushGrid(grid);
+          [...columns, emptyColumn].forEach((col) => {
+            col.hidden = true;
+          });
+          flushGrid(grid);
+        });
+
+        it('should not render a row for every item when a column is shown again', async () => {
+          column.hidden = false;
+          await nextFrame();
+          flushGrid(grid);
+
+          expect(grid.$.items.childElementCount).to.be.below(100);
+        });
+      });
     });
 
     describe('path', () => {
