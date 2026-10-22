@@ -118,6 +118,14 @@ describe('vaadin-card', () => {
         await nextRender();
         expect(getStringTitleElement()).to.not.exist;
       });
+
+      it('should restore string title when title element is removed', async () => {
+        getStringTitleElement().remove();
+        await nextRender();
+        const stringTitleElement = getStringTitleElement();
+        expect(stringTitleElement.textContent).to.equal('Some title');
+        expect(card.getAttribute('aria-labelledby')).to.equal(stringTitleElement.id);
+      });
     });
 
     describe('custom title', () => {
