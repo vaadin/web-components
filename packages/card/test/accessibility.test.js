@@ -41,6 +41,15 @@ describe('accessibility', () => {
         await nextRender();
         expect(card.getAttribute('aria-labelledby')).to.equal(customTitleElement.id);
       });
+
+      it('should set aria-labelledby attribute to string title id when custom title is removed', async () => {
+        const customTitleElement = fixtureSync('<span slot="title">Custom title element</span>');
+        card.appendChild(customTitleElement);
+        await nextRender();
+        customTitleElement.remove();
+        await nextRender();
+        expect(card.getAttribute('aria-labelledby')).to.equal(getStringTitleElement().id);
+      });
     });
 
     describe('custom title', () => {
@@ -60,10 +69,10 @@ describe('accessibility', () => {
         expect(card.getAttribute('aria-labelledby')).to.equal(customTitleElement.id);
       });
 
-      it('should set aria-labelledby attribute to string title id when string title replaces custom title', async () => {
+      it('should keep aria-labelledby attribute set to custom title id when string title is set', async () => {
         card.cardTitle = 'Some title';
         await nextRender();
-        expect(card.getAttribute('aria-labelledby')).to.equal(getStringTitleElement().id);
+        expect(card.getAttribute('aria-labelledby')).to.equal(customTitleElement.id);
       });
 
       it('should set aria-labelledby attribute to new custom title id when custom title is replaced', async () => {
