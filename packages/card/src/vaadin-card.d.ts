@@ -57,7 +57,7 @@ import { ThemableMixin } from '@vaadin/vaadin-themable-mixin/vaadin-themable-mix
  */
 declare class Card extends ElementMixin(ThemableMixin(HTMLElement)) {
   /**
-   * The title of the card. When set, any custom slotted title is removed and this string-based title is used instead. The card is labelled with `aria-labelledby` by the title element in the `title` slot, generated or custom.
+   * The title of the card. A custom slotted title takes precedence over this property. The card is labelled with `aria-labelledby` by the title element in the `title` slot, generated or custom.
    * @attr {string} card-title
    */
   cardTitle: string;

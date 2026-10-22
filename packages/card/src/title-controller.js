@@ -27,15 +27,15 @@ export class TitleController extends SlotController {
     this.title = title;
 
     if (title && title.trim() !== '') {
-      // The string title replaces a custom slotted title, if any.
-      const child = this.getSlotChild();
-      if (child && child !== this.defaultNode) {
-        child.remove();
+      // A custom slotted title takes precedence over the string title.
+      if (!this.getSlotChild()) {
+        this.restoreDefaultNode();
       }
 
-      // Create or restore the default title node.
-      this.restoreDefaultNode();
-      this.updateDefaultNode(this.node);
+      // When the default title is used, update it.
+      if (this.node && this.node === this.defaultNode) {
+        this.updateDefaultNode(this.node);
+      }
     } else if (this.node && this.node === this.defaultNode) {
       // Clearing the string title removes the generated node.
       this.node.remove();
@@ -81,8 +81,7 @@ export class TitleController extends SlotController {
 
   /**
    * Override method inherited from `SlotController` to set a generated ID
-   * on a custom title without one, and to clear the string title property,
-   * as a custom title takes over.
+   * on a custom title without one.
    *
    * @param {Node} node
    * @protected
@@ -92,8 +91,6 @@ export class TitleController extends SlotController {
     if (!node.id) {
       node.id = this.defaultId;
     }
-
-    this.host.cardTitle = '';
   }
 
   /**
