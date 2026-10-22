@@ -12,116 +12,32 @@ import { SlotController } from './slot-controller.js';
  */
 export class SlotChildObserveController extends SlotController {
   /** @type {MutationObserver} */
-  #nodeObserver;
+  #nodeObserver = new MutationObserver(() => this.update());
 
   constructor(host, slot, tagName, config = {}) {
     super(host, slot, tagName, { ...config, useUniqueId: true });
   }
 
   /**
-   * Override to initialize the newly added custom node.
-   *
-   * @param {Node} node
-   * @protected
-   * @override
-   */
-  initCustomNode(node) {
-    this.#updateNodeId(node);
-    this._notifyChange(node);
-  }
-
-  /**
-   * Override to notify the controller host about removal of
-   * the custom node, and to apply the default one if needed.
+   * Override to apply host property values to the node. Called on every
+   * update, also when the node text changes, so only write values that differ.
    *
    * @param {Node} _node
    * @protected
-   * @override
    */
-  teardownNode(_node) {
-    const node = this.getSlotChild();
-
-    // Custom node is added to the slot
-    if (node && node !== this.defaultNode) {
-      this._notifyChange(node);
-    } else {
-      this.restoreDefaultNode();
-      this.updateDefaultNode(this.node);
-    }
-  }
+  updateNode(_node) {}
 
   /**
-   * Override method inherited from `SlotMixin`
-   * to set ID attribute on the default node.
-   *
-   * @return {Node}
-   * @protected
-   * @override
-   */
-  attachDefaultNode() {
-    const node = super.attachDefaultNode();
-
-    if (node) {
-      this.#updateNodeId(node);
-    }
-
-    return node;
-  }
-
-  /**
-   * Override to restore default node when a custom one is removed.
-   *
-   * @protected
-   */
-  restoreDefaultNode() {
-    // To be implemented
-  }
-
-  /**
-   * Override to update default node text on property change.
+   * Override method inherited from `SlotController` to set ID
+   * on the new node and observe its ID and text content.
    *
    * @param {Node} node
    * @protected
+   * @override
    */
-  updateDefaultNode(node) {
-    this._notifyChange(node);
-  }
+  initNode(node) {
+    this.#setDefaultId(node);
 
-  /**
-   * Setup the mutation observer on the node to update ID and notify host.
-   * Node doesn't get observed automatically until this method is called.
-   *
-   * @param {Node} node
-   * @protected
-   */
-  observeNode(node) {
-    // Stop observing the previous node, if any.
-    if (this.#nodeObserver) {
-      this.#nodeObserver.disconnect();
-    }
-
-    this.#nodeObserver = new MutationObserver((mutations) => {
-      mutations.forEach((mutation) => {
-        const target = mutation.target;
-
-        // Ensure the mutation target is the currently connected node
-        // to ignore async mutations dispatched for removed element.
-        const isCurrentNodeMutation = target === this.node;
-
-        if (mutation.type === 'attributes') {
-          // We use attributeFilter to only observe ID mutation,
-          // no need to check for attribute name separately.
-          if (isCurrentNodeMutation) {
-            this.#updateNodeId(target);
-          }
-        } else if (isCurrentNodeMutation || target.parentElement === this.node) {
-          // Node text content has changed.
-          this._notifyChange(this.node);
-        }
-      });
-    });
-
-    // Observe changes to node ID attribute, text content and children.
     this.#nodeObserver.observe(node, {
       attributes: true,
       attributeFilter: ['id'],
@@ -129,12 +45,50 @@ export class SlotChildObserveController extends SlotController {
       subtree: true,
       characterData: true,
     });
+
+    super.initNode(node);
+  }
+
+  /**
+   * Override method inherited from `SlotController`
+   * to stop observing the removed node.
+   *
+   * @param {Node} _node
+   * @protected
+   * @override
+   */
+  teardownNode(_node) {
+    this.#nodeObserver.disconnect();
+  }
+
+  /**
+   * Override method inherited from `SlotController` to apply property values
+   * to the node and notify the host. Call it when a host property used by
+   * `updateNode()` changes.
+   *
+   * @protected
+   * @override
+   */
+  update() {
+    if (!this.initialized) {
+      return;
+    }
+
+    super.update();
+
+    const { node } = this;
+    if (node) {
+      this.#setDefaultId(node);
+      this.updateNode(node);
+    }
+
+    this._notifyChange(node);
   }
 
   /**
    * Fire an event to notify the controller host about node changes.
    *
-   * @param {Node} node
+   * @param {Node | null} node
    * @protected
    */
   _notifyChange(node) {
@@ -145,15 +99,8 @@ export class SlotChildObserveController extends SlotController {
     );
   }
 
-  /**
-   * Set default ID on the node in case it is an HTML element.
-   *
-   * @param {Node} node
-   */
-  #updateNodeId(node) {
-    // When in multiple mode, only set ID attribute on the element in default slot.
-    const isFirstNode = !this.nodes || node === this.nodes[0];
-    if (node.nodeType === Node.ELEMENT_NODE && (!this.multiple || isFirstNode) && !node.id) {
+  #setDefaultId(node) {
+    if (node.nodeType === Node.ELEMENT_NODE && !node.id) {
       node.id = this.defaultId;
     }
   }

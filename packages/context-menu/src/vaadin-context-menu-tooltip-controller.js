@@ -16,7 +16,7 @@ export class ContextMenuTooltipController extends SlotController {
   }
 
   /** @override */
-  initCustomNode(tooltipNode) {
+  initNode(tooltipNode) {
     tooltipNode.manual = true;
     tooltipNode.generator ||= ({ item }) => item?.tooltip;
   }

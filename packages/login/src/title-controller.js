@@ -20,17 +20,7 @@ export class TitleController extends SlotChildObserveController {
    */
   setTitle(title) {
     this.title = title;
-
-    // Restore the default title, if needed.
-    const titleNode = this.getSlotChild();
-    if (!titleNode) {
-      this.restoreDefaultNode();
-    }
-
-    // When default title is used, update it.
-    if (this.node === this.defaultNode) {
-      this.updateDefaultNode(this.node);
-    }
+    this.update();
   }
 
   /**
@@ -40,61 +30,27 @@ export class TitleController extends SlotChildObserveController {
    */
   setLevel(level) {
     this.level = level;
-
-    // When default title is used, update it.
-    if (this.node === this.defaultNode) {
-      this.updateDefaultNode(this.node);
-    }
+    this.update();
   }
 
   /**
-   * Override method inherited from `SlotController`
-   * to customize heading on the default title node.
+   * Override method inherited from `SlotChildObserveController`
+   * to update the default title element, and to label the host by the title.
    *
    * @param {Node} node
    * @protected
    * @override
    */
-  initNode(node) {
+  updateNode(node) {
     if (node === this.defaultNode) {
       node.setAttribute('role', 'heading');
+      node.setAttribute('aria-level', this.level);
+      const text = this.title ?? '';
+      if (node.textContent !== text) {
+        node.textContent = text;
+      }
     }
 
     this.host.setAttribute('aria-labelledby', node.id);
-  }
-
-  /**
-   * Override method inherited from `SlotChildObserveController`
-   * to restore the default title element.
-   *
-   * @protected
-   * @override
-   */
-  restoreDefaultNode() {
-    const { title } = this;
-
-    // Restore the default title.
-    if (title && title.trim() !== '') {
-      const node = this.attachDefaultNode();
-      this.initNode(node);
-    }
-  }
-
-  /**
-   * Override method inherited from `SlotChildObserveController`
-   * to update the default title element.
-   *
-   * @param {Node | undefined} node
-   * @protected
-   * @override
-   */
-  updateDefaultNode(node) {
-    if (node) {
-      node.textContent = this.title;
-      node.setAttribute('aria-level', this.level);
-    }
-
-    // Notify the host after update.
-    super.updateDefaultNode(node);
   }
 }

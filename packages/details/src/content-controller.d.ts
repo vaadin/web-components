@@ -3,11 +3,11 @@
  * Copyright (c) 2019 - 2026 Vaadin Ltd.
  * This program is available under Apache License Version 2.0, available at https://vaadin.com/license/
  */
-import { SlotChildObserveController } from '@vaadin/component-base/src/slot-child-observe-controller.js';
+import { SlotController } from '@vaadin/component-base/src/slot-controller.js';
 
 /**
  * A controller to manage the default content slot.
  */
-export class ContentController extends SlotChildObserveController {
+export class ContentController extends SlotController {
   constructor(host: HTMLElement);
 }

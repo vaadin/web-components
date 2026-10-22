@@ -23,7 +23,7 @@ export class TooltipController extends SlotController {
    * @protected
    * @override
    */
-  initCustomNode(tooltipNode) {
+  initNode(tooltipNode) {
     tooltipNode.target = this.target;
 
     if (this.ariaTarget !== undefined) {

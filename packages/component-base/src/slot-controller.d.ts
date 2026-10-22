@@ -18,7 +18,7 @@ export class SlotController extends EventTarget implements ReactiveController {
 
   /**
    * The list of slotted nodes managed by the controller.
-   * Only used when `multiple` property is set to `true`.
+   * Contains at most one node unless `multiple` is set to `true`.
    */
   nodes: HTMLElement[];
 
@@ -56,32 +56,21 @@ export class SlotController extends EventTarget implements ReactiveController {
   getSlotChild(): Node;
 
   /**
-   * Create and attach default node using the provided tag name, if any.
-   */
-  protected attachDefaultNode(): Node | undefined;
-
-  /**
-   * Run both `initCustomNode` and `initNode` for a custom slotted node.
-   */
-  protected initAddedNode(node: Node): void;
-
-  /**
-   * Run `slotInitializer` for the node managed by the controller.
+   * Set up a node once it starts being managed by the controller,
+   * either a default or a custom one. Runs `slotInitializer` by default.
    */
   protected initNode(node: Node): void;
 
   /**
-   * Override to initialize the newly added custom node.
-   */
-  protected initCustomNode(node: Node): void;
-
-  /**
-   * Override to cleanup slotted node when it's removed.
+   * Override to clean up a node once it is no longer managed by the controller.
    */
   protected teardownNode(node: Node): void;
 
   /**
-   * Setup the observer to manage slot content changes.
+   * Update the managed nodes to match the slot children, and attach the
+   * default node when there are no custom ones. Calls `teardownNode()`
+   * for the nodes that left the slot and `initNode()` for the new ones.
+   * Does nothing until the controller is connected to the host.
    */
-  protected observeSlot(): void;
+  protected update(): void;
 }

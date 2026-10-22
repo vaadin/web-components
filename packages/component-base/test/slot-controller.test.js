@@ -256,8 +256,8 @@ describe('SlotController', () => {
       expect(defaultNode.isConnected).to.be.false;
     });
 
-    it('should call initCustomNode for custom slot child when it is added', async () => {
-      const initSpy = sinon.spy(controller, 'initCustomNode');
+    it('should call initNode for custom slot child when it is added', async () => {
+      const initSpy = sinon.spy(controller, 'initNode');
 
       const custom = document.createElement('div');
       custom.textContent = 'bar';
@@ -282,7 +282,7 @@ describe('SlotController', () => {
       expect(teardownSpy.firstCall.args[0]).to.equal(defaultNode);
     });
 
-    it('should reset node reference when custom slot child is removed', async () => {
+    it('should restore default node when custom slot child is removed', async () => {
       const custom = document.createElement('div');
       custom.setAttribute('slot', 'foo');
       element.appendChild(custom);
@@ -290,11 +290,11 @@ describe('SlotController', () => {
 
       custom.remove();
       await nextFrame();
-      expect(controller.node).to.be.null;
-      expect(controller.nodes).to.be.undefined;
+      expect(defaultNode.isConnected).to.be.true;
+      expect(controller.node).to.equal(defaultNode);
     });
 
-    it('should call initCustomNode again when the same custom child is added back', async () => {
+    it('should call initNode again when the same custom child is added back', async () => {
       const custom = document.createElement('div');
       custom.setAttribute('slot', 'foo');
       element.appendChild(custom);
@@ -303,7 +303,7 @@ describe('SlotController', () => {
       custom.remove();
       await nextFrame();
 
-      const initSpy = sinon.spy(controller, 'initCustomNode');
+      const initSpy = sinon.spy(controller, 'initNode');
       element.appendChild(custom);
       await nextFrame();
       expect(initSpy).to.be.calledOnceWith(custom);
@@ -352,8 +352,8 @@ describe('SlotController', () => {
       expect(defaultNode.isConnected).to.be.true;
     });
 
-    it('should not call initCustomNode for custom slot child when it is added', async () => {
-      const initSpy = sinon.spy(controller, 'initCustomNode');
+    it('should not call initNode for custom slot child when it is added', async () => {
+      const initSpy = sinon.spy(controller, 'initNode');
 
       const custom = document.createElement('div');
       custom.textContent = 'bar';
@@ -438,8 +438,8 @@ describe('SlotController', () => {
         expect(controller.node).to.equal(custom);
       });
 
-      it('should not call initCustomNode for element with data-slot-ignore', async () => {
-        const initSpy = sinon.spy(controller, 'initCustomNode');
+      it('should not call initNode for element with data-slot-ignore', async () => {
+        const initSpy = sinon.spy(controller, 'initNode');
 
         const ignored = document.createElement('div');
         ignored.setAttribute('slot', 'foo');

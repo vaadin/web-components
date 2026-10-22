@@ -48,7 +48,7 @@ class TabsSlotController extends SlotController {
     this.host.selected = this.tabs.selected;
   }
 
-  initCustomNode(tabs) {
+  initNode(tabs) {
     if (!(tabs instanceof customElements.get('vaadin-tabs'))) {
       throw Error('The "tabs" slot of a <vaadin-tabsheet> must only contain a <vaadin-tabs> element!');
     }
