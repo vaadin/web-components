@@ -38,6 +38,7 @@ export const InputFieldMixin = (superclass) =>
          */
         autocorrect: {
           type: String,
+          reflectToAttribute: true,
         },
 
         /**
