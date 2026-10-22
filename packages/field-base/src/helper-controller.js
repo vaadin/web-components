@@ -10,8 +10,7 @@ import { SlotChildObserveController } from '@vaadin/component-base/src/slot-chil
  */
 export class HelperController extends SlotChildObserveController {
   constructor(host) {
-    // Do not provide tag name, as we create helper lazily.
-    super(host, 'helper', null);
+    super(host, 'helper', 'div');
   }
 
   /**
@@ -35,22 +34,30 @@ export class HelperController extends SlotChildObserveController {
   }
 
   /**
-   * Override method inherited from `SlotChildObserveController`
+   * Override method inherited from `SlotController`
    * to create the default helper element lazily as needed.
+   *
+   * @return {boolean}
+   * @protected
+   * @override
+   */
+  shouldAttachDefaultNode() {
+    const { helperText } = this;
+    return Boolean(helperText && helperText.trim() !== '');
+  }
+
+  /**
+   * Override method inherited from `SlotChildObserveController`
+   * to restore and observe the default helper element.
    *
    * @protected
    * @override
    */
   restoreDefaultNode() {
-    const { helperText } = this;
+    const helperNode = this.attachDefaultNode();
 
-    // No helper yet, create one.
-    if (helperText && helperText.trim() !== '') {
-      this.tagName = 'div';
-
-      const helperNode = this.attachDefaultNode();
-
-      // Observe the default node.
+    // Observe the default node.
+    if (helperNode) {
       this.observeNode(helperNode);
     }
   }

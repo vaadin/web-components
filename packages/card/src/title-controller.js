@@ -14,8 +14,7 @@ export class TitleController extends SlotController {
   #labelId;
 
   constructor(host) {
-    // Do not provide tag name, as we create the title lazily.
-    super(host, 'title', null, { useUniqueId: true, uniqueIdPrefix: 'card-title' });
+    super(host, 'title', 'div', { useUniqueId: true, uniqueIdPrefix: 'card-title' });
   }
 
   /**
@@ -117,18 +116,26 @@ export class TitleController extends SlotController {
   }
 
   /**
-   * Create the default title element lazily as needed.
+   * Override method inherited from `SlotController`
+   * to create the default title element lazily as needed.
+   *
+   * @return {boolean}
+   * @protected
+   * @override
+   */
+  shouldAttachDefaultNode() {
+    const { title } = this;
+    return Boolean(title && title.trim() !== '');
+  }
+
+  /**
+   * Restore the default title element, if needed.
    *
    * @protected
    */
   restoreDefaultNode() {
-    const { title } = this;
-
-    // No title yet, create one.
-    if (title && title.trim() !== '') {
-      this.tagName = 'div';
-
-      const node = this.attachDefaultNode();
+    const node = this.attachDefaultNode();
+    if (node) {
       node.id = this.defaultId;
       this.initNode(node);
     }

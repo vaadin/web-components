@@ -98,6 +98,10 @@ export class SlotController extends EventTarget {
    * @protected
    */
   attachDefaultNode() {
+    if (!this.shouldAttachDefaultNode()) {
+      return undefined;
+    }
+
     const { host, slotName, tagName } = this;
 
     // Check if the node was created previously and if so, reuse it.
@@ -120,6 +124,17 @@ export class SlotController extends EventTarget {
     }
 
     return node;
+  }
+
+  /**
+   * Override to attach the default node only when needed,
+   * for example, when the corresponding host property is set.
+   *
+   * @return {boolean}
+   * @protected
+   */
+  shouldAttachDefaultNode() {
+    return true;
   }
 
   /**

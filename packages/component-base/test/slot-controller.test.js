@@ -685,4 +685,31 @@ describe('SlotController', () => {
       });
     });
   });
+
+  describe('shouldAttachDefaultNode', () => {
+    class LazySlotController extends SlotController {
+      shouldAttachDefaultNode() {
+        return this.attach;
+      }
+    }
+
+    beforeEach(() => {
+      element = fixtureSync(`<${tag}></${tag}>`);
+      controller = new LazySlotController(element, 'foo', 'div');
+      element.addController(controller);
+    });
+
+    it('should not attach default node when shouldAttachDefaultNode returns false', () => {
+      expect(element.querySelector('[slot="foo"]')).to.be.null;
+      expect(controller.node).to.be.undefined;
+    });
+
+    it('should attach default node once shouldAttachDefaultNode returns true', () => {
+      controller.attach = true;
+      const node = controller.attachDefaultNode();
+      expect(node).to.be.ok;
+      expect(node.parentNode).to.equal(element);
+      expect(controller.node).to.equal(node);
+    });
+  });
 });
