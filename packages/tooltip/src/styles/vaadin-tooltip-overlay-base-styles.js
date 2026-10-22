@@ -13,7 +13,7 @@ export const tooltipOverlayStyles = css`
   }
 
   [part='overlay'] {
-    overflow: visible;
+    overscroll-behavior: auto;
     max-width: var(--vaadin-tooltip-max-width, 40ch);
     padding: var(
       --vaadin-tooltip-padding,
