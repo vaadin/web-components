@@ -44,7 +44,6 @@
     "@web/test-runner": "^0.19.0",
     "@web/test-runner-commands": "^0.9.0",
     "@web/test-runner-playwright": "^0.11.0",
-    "@web/test-runner-puppeteer": "^0.17.0",
     "@web/test-runner-saucelabs": "^0.13.0",
     "@web/test-runner-visual-regression": "^0.10.0",
     "axios": "^0.26.0",
@@ -74,7 +73,7 @@
   },
   "resolutions": {
     "@open-wc/semantic-dom-diff": "^0.20.1",
-    "playwright": "^1.48.2"
+    "playwright": "^1.50.1"
   },
   "lint-staged": {
     "*.{js,ts}": [
