@@ -12,6 +12,7 @@ import { Debouncer } from '@vaadin/component-base/src/debounce.js';
 import { partMap } from '@vaadin/component-base/src/directives/part-map.js';
 import { generateUniqueId } from '@vaadin/component-base/src/unique-id-utils.js';
 import { bodyCell } from './directives/body-cell-directive.js';
+import { bodyRow } from './directives/body-row-directive.js';
 import { cellContent } from './directives/cell-content-directive.js';
 import { detailsCell } from './directives/details-cell-directive.js';
 import { sizerCell } from './directives/sizer-cell-directive.js';
@@ -93,7 +94,7 @@ export const BodyRenderingMixin = (superClass) =>
 
     #bodyRowTemplate = ({ rowId, item, cells } = {}) => {
       return html`
-        <tr role="row" tabindex="-1" part="row body-row" class="row body-row" ?loading="${!item}">
+        <tr role="row" tabindex="-1" part="row body-row" class="row body-row" ?loading="${!item}" ${bodyRow()}>
           ${repeat(
             cells ?? [],
             ({ column }) => column._id,
