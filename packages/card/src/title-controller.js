@@ -3,12 +3,16 @@
  * Copyright (c) 2024 - 2026 Vaadin Ltd.
  * This program is available under Apache License Version 2.0, available at https://vaadin.com/license/
  */
+import { addValuesToAttribute, removeValuesFromAttribute } from '@vaadin/component-base/src/dom-utils.js';
 import { SlotController } from '@vaadin/component-base/src/slot-controller.js';
 
 /**
  * A controller to manage the card title element.
  */
 export class TitleController extends SlotController {
+  /** @type {string | undefined} */
+  #labelId;
+
   constructor(host) {
     // Do not provide tag name, as we create the title lazily.
     super(host, 'title', null, { useUniqueId: true, uniqueIdPrefix: 'card-title' });
@@ -53,51 +57,60 @@ export class TitleController extends SlotController {
   }
 
   /**
-   * Override method inherited from `SlotController` to set up the default
-   * title node as a heading and label the card by it. The heading role and
-   * `aria-labelledby` are only applied to the generated string title, never
-   * to a custom slotted title.
+   * Override method inherited from `SlotController` to label the card by
+   * the title node instead of the previous one, and to set up the generated
+   * title node as a heading. A custom title keeps its own role.
    *
    * @param {Node} node
    * @protected
    * @override
    */
   initNode(node) {
-    if (node && node === this.defaultNode) {
-      node.setAttribute('role', 'heading');
-      this.host.setAttribute('aria-labelledby', node.id);
+    if (!node) {
+      return;
     }
+
+    if (node === this.defaultNode) {
+      node.setAttribute('role', 'heading');
+    }
+
+    removeValuesFromAttribute(this.host, 'aria-labelledby', this.#labelId);
+    this.#labelId = node.id;
+    addValuesToAttribute(this.host, 'aria-labelledby', this.#labelId);
   }
 
   /**
-   * Override method inherited from `SlotController` to clear the string
-   * title property, as a custom title takes over.
+   * Override method inherited from `SlotController` to set a generated ID
+   * on a custom title without one, and to clear the string title property,
+   * as a custom title takes over.
    *
-   * @param {Node} _node
+   * @param {Node} node
    * @protected
    * @override
    */
-  initCustomNode(_node) {
+  initCustomNode(node) {
+    if (!node.id) {
+      node.id = this.defaultId;
+    }
+
     this.host.cardTitle = '';
   }
 
   /**
    * Override method inherited from `SlotController` to drop the labelling
-   * once the generated title node leaves the slot, and to restore the
-   * generated title once a custom title leaves an empty slot.
+   * once the slot is empty, and to restore the generated title once a custom
+   * title leaves an empty slot. A title that replaces another one is
+   * initialized before the old one is torn down.
    *
    * @param {Node} _node
    * @protected
    * @override
    */
   teardownNode(_node) {
-    const child = this.getSlotChild();
+    if (!this.getSlotChild()) {
+      removeValuesFromAttribute(this.host, 'aria-labelledby', this.#labelId);
+      this.#labelId = undefined;
 
-    if (child !== this.defaultNode) {
-      this.host.removeAttribute('aria-labelledby');
-    }
-
-    if (!child) {
       this.restoreDefaultNode();
       this.updateDefaultNode(this.node);
     }
