@@ -486,9 +486,6 @@ export const SelectBaseMixin = (superClass) =>
       labelItem._sourceItem = selected;
 
       this.__appendValueItemElement(labelItem, this.focusElement);
-
-      // Ensure the item gets proper styles
-      labelItem.selected = true;
     }
 
     /**
@@ -520,6 +517,7 @@ export const SelectBaseMixin = (superClass) =>
     __appendValueItemElement(itemElement, parent) {
       parent.appendChild(itemElement);
       itemElement.removeAttribute('tabindex');
+      itemElement.removeAttribute('selected');
       itemElement.removeAttribute('aria-selected');
       itemElement.removeAttribute('role');
       itemElement.removeAttribute('focused');
