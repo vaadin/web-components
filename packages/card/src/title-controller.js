@@ -30,10 +30,7 @@ export class TitleController extends SlotController {
       // A custom slotted title takes precedence over the string title.
       if (!this.getSlotChild()) {
         this.restoreDefaultNode();
-      }
-
-      // When the default title is used, update it.
-      if (this.node && this.node === this.defaultNode) {
+      } else if (this.node === this.defaultNode) {
         this.updateDefaultNode(this.node);
       }
     } else if (this.node && this.node === this.defaultNode) {
@@ -109,12 +106,11 @@ export class TitleController extends SlotController {
       this.#labelId = undefined;
 
       this.restoreDefaultNode();
-      this.updateDefaultNode(this.node);
     }
   }
 
   /**
-   * Create the default title element lazily as needed.
+   * Create and update the default title element lazily as needed.
    *
    * @protected
    */
@@ -128,19 +124,18 @@ export class TitleController extends SlotController {
       const node = this.attachDefaultNode();
       node.id = this.defaultId;
       this.initNode(node);
+      this.updateDefaultNode(node);
     }
   }
 
   /**
    * Update the default title element.
    *
-   * @param {Node | undefined} node
+   * @param {Node} node
    * @protected
    */
   updateDefaultNode(node) {
-    if (node) {
-      node.textContent = this.title;
-      node.setAttribute('aria-level', this.level || 2);
-    }
+    node.textContent = this.title;
+    node.setAttribute('aria-level', this.level || 2);
   }
 }
