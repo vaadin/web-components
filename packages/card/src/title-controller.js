@@ -28,10 +28,11 @@ export class TitleController extends SlotController {
 
     if (title && title.trim() !== '') {
       // A custom slotted title takes precedence over the string title.
-      if (!this.getSlotChild()) {
+      const child = this.getSlotChild();
+      if (!child) {
         this.restoreDefaultNode();
-      } else if (this.node === this.defaultNode) {
-        this.updateDefaultNode(this.node);
+      } else if (child === this.defaultNode) {
+        this.updateDefaultNode(child);
       }
     } else if (this.node && this.node === this.defaultNode) {
       // Clearing the string title removes the generated node.

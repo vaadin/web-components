@@ -138,6 +138,15 @@ describe('vaadin-card', () => {
       });
     });
 
+    it('should keep custom title element when string title is set in the same task', async () => {
+      const customTitleElement = fixtureSync('<span slot="title">Custom title element</span>');
+      card.appendChild(customTitleElement);
+      card.setProperties({ cardTitle: 'Some title' });
+      await nextRender();
+      expect(getCustomTitleElement()).to.equal(customTitleElement);
+      expect(getStringTitleElement()).to.not.exist;
+    });
+
     describe('custom title', () => {
       let customTitleElement: HTMLElement;
 
