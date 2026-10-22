@@ -10,6 +10,9 @@ import { SlotController } from '@vaadin/component-base/src/slot-controller.js';
  * A controller to manage the card title element.
  */
 export class TitleController extends SlotController {
+  /** @type {string | undefined} */
+  #labelId;
+
   constructor(host) {
     // Do not provide tag name, as we create the title lazily.
     super(host, 'title', null, { useUniqueId: true, uniqueIdPrefix: 'card-title' });
@@ -55,8 +58,8 @@ export class TitleController extends SlotController {
 
   /**
    * Override method inherited from `SlotController` to label the card by
-   * the title node, and to set up the generated title node as a heading.
-   * A custom title keeps its own role.
+   * the title node instead of the previous one, and to set up the generated
+   * title node as a heading. A custom title keeps its own role.
    *
    * @param {Node} node
    * @protected
@@ -71,7 +74,9 @@ export class TitleController extends SlotController {
       node.setAttribute('role', 'heading');
     }
 
-    addValuesToAttribute(this.host, 'aria-labelledby', node.id);
+    removeValuesFromAttribute(this.host, 'aria-labelledby', this.#labelId);
+    this.#labelId = node.id;
+    addValuesToAttribute(this.host, 'aria-labelledby', this.#labelId);
   }
 
   /**
@@ -85,7 +90,7 @@ export class TitleController extends SlotController {
    */
   initCustomNode(node) {
     if (!node.id) {
-      node.id = this.constructor.generateId(this.host, 'card-title');
+      node.id = this.defaultId;
     }
 
     this.host.cardTitle = '';
@@ -93,17 +98,19 @@ export class TitleController extends SlotController {
 
   /**
    * Override method inherited from `SlotController` to drop the labelling
-   * by the title node that leaves the slot, and to restore the generated
-   * title once a custom title leaves an empty slot.
+   * once the slot is empty, and to restore the generated title once a custom
+   * title leaves an empty slot. A title that replaces another one is
+   * initialized before the old one is torn down.
    *
-   * @param {Node} node
+   * @param {Node} _node
    * @protected
    * @override
    */
-  teardownNode(node) {
-    removeValuesFromAttribute(this.host, 'aria-labelledby', node.id);
-
+  teardownNode(_node) {
     if (!this.getSlotChild()) {
+      removeValuesFromAttribute(this.host, 'aria-labelledby', this.#labelId);
+      this.#labelId = undefined;
+
       this.restoreDefaultNode();
       this.updateDefaultNode(this.node);
     }

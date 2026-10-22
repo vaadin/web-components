@@ -50,11 +50,11 @@ snapshots["vaadin-card host header"] =
 snapshots["vaadin-card host title"] = 
 `<vaadin-card
   _t=""
-  aria-labelledby="card-title-vaadin-card-1"
+  aria-labelledby="card-title-vaadin-card-0"
   role="region"
 >
   <div
-    id="card-title-vaadin-card-1"
+    id="card-title-vaadin-card-0"
     slot="title"
   >
     Title
@@ -78,11 +78,11 @@ snapshots["vaadin-card host subtitle"] =
 snapshots["vaadin-card host title and header"] = 
 `<vaadin-card
   _h=""
-  aria-labelledby="card-title-vaadin-card-1"
+  aria-labelledby="card-title-vaadin-card-0"
   role="region"
 >
   <div
-    id="card-title-vaadin-card-1"
+    id="card-title-vaadin-card-0"
     slot="title"
   >
     Title
