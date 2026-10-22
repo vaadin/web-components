@@ -28,6 +28,31 @@ describe('accessibility', () => {
       expect(valueButton.getAttribute('aria-expanded')).to.equal('false');
     });
 
+    it('should toggle aria-controls attribute on the value button on open', async () => {
+      const listBox = select.querySelector('vaadin-select-list-box');
+
+      select.opened = true;
+      await nextUpdate(select);
+      expect(listBox.id).to.be.ok;
+      expect(valueButton.getAttribute('aria-controls')).to.equal(listBox.id);
+
+      select.opened = false;
+      await nextUpdate(select);
+      expect(valueButton.hasAttribute('aria-controls')).to.be.false;
+    });
+
+    it('should toggle aria-readonly attribute on the value button on readonly change', async () => {
+      expect(valueButton.hasAttribute('aria-readonly')).to.be.false;
+
+      select.readonly = true;
+      await nextUpdate(select);
+      expect(valueButton.getAttribute('aria-readonly')).to.equal('true');
+
+      select.readonly = false;
+      await nextUpdate(select);
+      expect(valueButton.hasAttribute('aria-readonly')).to.be.false;
+    });
+
     it('should add aria-live attribute on first-letter shortcut selection', async () => {
       select.focus();
       await sendKeys({ press: 'o' });
@@ -43,18 +68,23 @@ describe('accessibility', () => {
       expect(valueButton.hasAttribute('aria-live')).to.be.false;
     });
 
-    it('should append item id to `aria-labelledby` when an item is selected', async () => {
+    it('should set `aria-labelledby` to the label id', () => {
+      const labelId = select.querySelector('[slot=label]').id;
+      expect(valueButton.getAttribute('aria-labelledby')).to.equal(labelId);
+    });
+
+    it('should not add the selected item to `aria-labelledby` when an item is selected', async () => {
       select.value = 'Option 1';
       await nextUpdate(select);
       const labelId = select.querySelector('[slot=label]').id;
-      expect(valueButton.getAttribute('aria-labelledby').split(' ')).to.have.members([select._itemId, labelId]);
+      expect(valueButton.getAttribute('aria-labelledby')).to.equal(labelId);
     });
 
-    it('should append item id to `aria-labelledby` when placeholder is set', async () => {
+    it('should not add the placeholder to `aria-labelledby` when placeholder is set', async () => {
       select.placeholder = 'placeholder';
       await nextUpdate(select);
       const labelId = select.querySelector('[slot=label]').id;
-      expect(valueButton.getAttribute('aria-labelledby').split(' ')).to.have.members([select._itemId, labelId]);
+      expect(valueButton.getAttribute('aria-labelledby')).to.equal(labelId);
     });
   });
 
@@ -112,40 +142,22 @@ describe('accessibility', () => {
       expect(valueButton.getAttribute('aria-labelledby')).to.contain(srLabel.id);
     });
 
-    it('should add item id to `aria-labelledby` when placeholder is defined', async () => {
+    it('should not add the placeholder to `aria-labelledby` when placeholder is defined', async () => {
       select.accessibleName = 'accessible name';
       await nextUpdate(select);
       select.placeholder = 'placeholder';
       await nextUpdate(select);
-      expect(valueButton.getAttribute('aria-labelledby')).to.contain(select._itemId);
+      const srLabel = select.querySelector('[slot=sr-label]');
+      expect(valueButton.getAttribute('aria-labelledby')).to.equal(srLabel.id);
     });
 
-    it('should remove item id from `aria-labelledby` when placeholder is removed', async () => {
-      select.accessibleName = 'accessible name';
-      await nextUpdate(select);
-      select.placeholder = 'placeholder';
-      await nextUpdate(select);
-      select.placeholder = null;
-      await nextUpdate(select);
-      expect(valueButton.getAttribute('aria-labelledby')).to.not.contain(select._itemId);
-    });
-
-    it('should add item id to `aria-labelledby` when selected item is set', async () => {
+    it('should not add the selected item to `aria-labelledby` when selected item is set', async () => {
       select.accessibleName = 'accessible name';
       await nextUpdate(select);
       select.value = 'Option 1';
       await nextUpdate(select);
-      expect(valueButton.getAttribute('aria-labelledby')).to.contain(select._itemId);
-    });
-
-    it('should remove item id from `aria-labelledby` when selected item is removed', async () => {
-      select.accessibleName = 'accessible name';
-      await nextUpdate(select);
-      select.value = 'Option 1';
-      await nextUpdate(select);
-      select.value = null;
-      await nextUpdate(select);
-      expect(valueButton.getAttribute('aria-labelledby')).to.not.contain(select._itemId);
+      const srLabel = select.querySelector('[slot=sr-label]');
+      expect(valueButton.getAttribute('aria-labelledby')).to.equal(srLabel.id);
     });
 
     describe('accessible-name is set initially', () => {
@@ -232,40 +244,20 @@ describe('accessibility', () => {
       expect(valueButton.getAttribute('aria-labelledby')).to.contain('accessible-name-ref');
     });
 
-    it('should add item id to `aria-labelledby` when placeholder is defined', async () => {
+    it('should not add the placeholder to `aria-labelledby` when placeholder is defined', async () => {
       select.accessibleNameRef = 'accessible-name-ref';
       await nextUpdate(select);
       select.placeholder = 'placeholder';
       await nextUpdate(select);
-      expect(valueButton.getAttribute('aria-labelledby')).to.contain(select._itemId);
+      expect(valueButton.getAttribute('aria-labelledby')).to.equal('accessible-name-ref');
     });
 
-    it('should remove item id from `aria-labelledby` when placeholder is removed', async () => {
-      select.accessibleNameRef = 'accessible-name-ref';
-      await nextUpdate(select);
-      select.placeholder = 'placeholder';
-      await nextUpdate(select);
-      select.placeholder = null;
-      await nextUpdate(select);
-      expect(valueButton.getAttribute('aria-labelledby')).to.not.contain(select._itemId);
-    });
-
-    it('should add item id to `aria-labelledby` when selected item is set', async () => {
+    it('should not add the selected item to `aria-labelledby` when selected item is set', async () => {
       select.accessibleNameRef = 'accessible-name-ref';
       await nextUpdate(select);
       select.value = 'Option 1';
       await nextUpdate(select);
-      expect(valueButton.getAttribute('aria-labelledby')).to.contain(select._itemId);
-    });
-
-    it('should remove item id from `aria-labelledby` when selected item is removed', async () => {
-      select.accessibleNameRef = 'accessible-name-ref';
-      await nextUpdate(select);
-      select.value = 'Option 1';
-      await nextUpdate(select);
-      select.value = null;
-      await nextUpdate(select);
-      expect(valueButton.getAttribute('aria-labelledby')).to.not.contain(select._itemId);
+      expect(valueButton.getAttribute('aria-labelledby')).to.equal('accessible-name-ref');
     });
 
     describe('accessible-name-ref is set initially', () => {
@@ -304,6 +296,22 @@ describe('accessibility', () => {
           expect(valueButton.getAttribute('aria-labelledby')).to.equal('accessible-name-ref');
         });
       });
+    });
+  });
+
+  describe('slotted list box', () => {
+    it('should use the existing slotted list box id for `aria-controls`', async () => {
+      select = fixtureSync(`
+        <vaadin-select label="Label">
+          <vaadin-select-list-box slot="overlay" id="custom-id">
+            <vaadin-select-item value="foo">Foo</vaadin-select-item>
+          </vaadin-select-list-box>
+        </vaadin-select>
+      `);
+      await nextRender();
+      select.opened = true;
+      await nextUpdate(select);
+      expect(select.focusElement.getAttribute('aria-controls')).to.equal('custom-id');
     });
   });
 });
