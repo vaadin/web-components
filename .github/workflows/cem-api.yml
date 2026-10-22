@@ -21,7 +21,7 @@ concurrency:
 jobs:
   report:
     name: API report
-    runs-on: ubuntu-latest
+    runs-on: ubuntu-26.04
     timeout-minutes: 15
     env:
       HEAD_SHA: ${{ github.event.pull_request.head.sha }}
