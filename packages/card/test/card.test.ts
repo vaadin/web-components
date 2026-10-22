@@ -1,5 +1,5 @@
 import { expect } from '@vaadin/chai-plugins';
-import { fixtureSync, nextRender } from '@vaadin/testing-helpers';
+import { fixtureSync, nextRender, nextUpdate } from '@vaadin/testing-helpers';
 import '../vaadin-card.js';
 import type { Card } from '../vaadin-card.js';
 
@@ -139,10 +139,11 @@ describe('vaadin-card', () => {
     });
 
     it('should keep custom title element when string title is set in the same task', async () => {
+      await nextRender();
       const customTitleElement = fixtureSync('<span slot="title">Custom title element</span>');
       card.appendChild(customTitleElement);
-      card.setProperties({ cardTitle: 'Some title' });
-      await nextRender();
+      card.cardTitle = 'Some title';
+      await nextUpdate(card);
       expect(getCustomTitleElement()).to.equal(customTitleElement);
       expect(getStringTitleElement()).to.not.exist;
     });
