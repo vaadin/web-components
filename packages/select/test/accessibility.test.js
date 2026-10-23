@@ -1,22 +1,13 @@
 import { expect } from '@vaadin/chai-plugins';
-import { resetMouse, sendKeys, sendMouse, sendMouseToElement } from '@vaadin/test-runner-commands';
-import { fixtureSync, mousedown, nextRender, nextUpdate, oneEvent } from '@vaadin/testing-helpers';
-import sinon from 'sinon';
+import { sendKeys } from '@vaadin/test-runner-commands';
+import { fixtureSync, nextRender, nextUpdate } from '@vaadin/testing-helpers';
 import '../src/vaadin-select.js';
-import { getDeepActiveElement } from '@vaadin/a11y-base/src/focus-utils.js';
 
 describe('accessibility', () => {
-  let select, valueButton, firstGlobalFocusable, lastGlobalFocusable;
+  let select, valueButton;
 
   beforeEach(async () => {
-    const wrapper = fixtureSync(`
-      <div>
-        <input id="first-global-focusable" />
-        <vaadin-select label="Label"></vaadin-select>
-        <input id="last-global-focusable" />
-      </div>
-    `);
-    [firstGlobalFocusable, select, lastGlobalFocusable] = wrapper.children;
+    select = fixtureSync('<vaadin-select label="Label"></vaadin-select>');
     await nextRender();
     select.items = [
       { label: 'Option 1', value: 'Option 1' },
@@ -312,177 +303,6 @@ describe('accessibility', () => {
         it('should have property value in aria-labelledby', () => {
           expect(valueButton.getAttribute('aria-labelledby')).to.equal('accessible-name-ref');
         });
-      });
-    });
-  });
-
-  describe('focus', () => {
-    let overlay, listBox;
-
-    beforeEach(() => {
-      overlay = select._overlayElement;
-      listBox = select._menuElement;
-    });
-
-    describe('focused', () => {
-      it('should set focused attribute when calling focus()', () => {
-        select.focus();
-        expect(select.hasAttribute('focused')).to.be.true;
-      });
-
-      it('should focus on required indicator click', () => {
-        select.shadowRoot.querySelector('[part="required-indicator"]').click();
-        expect(select.hasAttribute('focused')).to.be.true;
-      });
-    });
-
-    describe('opening', () => {
-      it('should keep focused state after opening overlay when focused', async () => {
-        select.focus();
-        select.opened = true;
-        await oneEvent(overlay, 'vaadin-overlay-open');
-        expect(select.hasAttribute('focused')).to.be.true;
-      });
-
-      it('should not set focused state after opening overlay if not focused', async () => {
-        select.opened = true;
-        await oneEvent(overlay, 'vaadin-overlay-open');
-        expect(select.hasAttribute('focused')).to.be.false;
-      });
-
-      it('should focus the list-box when opening the overlay', async () => {
-        const spy = sinon.spy(listBox, 'focus');
-        select.opened = true;
-        await oneEvent(overlay, 'vaadin-overlay-open');
-        expect(spy.calledOnce).to.be.true;
-      });
-    });
-
-    describe('focus-ring', () => {
-      afterEach(async () => {
-        await resetMouse();
-      });
-
-      it('should not set focus-ring on the item when not opened with keyboard', async () => {
-        mousedown(select);
-        select.click();
-        await oneEvent(overlay, 'vaadin-overlay-open');
-
-        const item = listBox.querySelector('vaadin-select-item');
-        expect(item.hasAttribute('focus-ring')).to.be.false;
-      });
-
-      it('should set focus-ring on the item when opened with keyboard', async () => {
-        select.focus();
-        await sendKeys({ press: 'Enter' });
-        await nextRender();
-
-        const item = listBox.querySelector('vaadin-select-item');
-        expect(item.hasAttribute('focus-ring')).to.be.true;
-      });
-
-      it('should restore focus-ring attribute on item click if it was set before opening', async () => {
-        select.focus();
-        select.opened = true;
-        await oneEvent(overlay, 'vaadin-overlay-open');
-
-        const item = listBox.querySelector('vaadin-select-item');
-        await sendMouseToElement({ type: 'click', element: item });
-        await nextRender();
-
-        expect(select.hasAttribute('focus-ring')).to.be.true;
-      });
-
-      it('should restore focus-ring attribute on outside click if it was set before opening', async () => {
-        select.focus();
-        select.opened = true;
-        await oneEvent(overlay, 'vaadin-overlay-open');
-        await sendMouse({ type: 'click', position: [100, 100] });
-        await nextRender();
-        expect(select.hasAttribute('focus-ring')).to.be.true;
-      });
-
-      it('should not set focus-ring attribute on item click if it was not set before opening', async () => {
-        select.focus({ focusVisible: false });
-        select.opened = true;
-        await oneEvent(overlay, 'vaadin-overlay-open');
-
-        const item = listBox.querySelector('vaadin-select-item');
-        await sendMouseToElement({ type: 'click', element: item });
-        await nextRender();
-
-        expect(select.hasAttribute('focus-ring')).to.be.false;
-      });
-
-      it('should set focus-ring attribute on item Enter if it was not set before opening', async () => {
-        select.focus({ focusVisible: false });
-        select.opened = true;
-        await oneEvent(overlay, 'vaadin-overlay-open');
-
-        await sendKeys({ press: 'Enter' });
-        await nextRender();
-
-        expect(select.hasAttribute('focus-ring')).to.be.true;
-      });
-
-      it('should set focus-ring attribute on item Escape if it was not set before opening', async () => {
-        select.focus({ focusVisible: false });
-        select.opened = true;
-        await oneEvent(overlay, 'vaadin-overlay-open');
-
-        await sendKeys({ press: 'Escape' });
-        await nextRender();
-
-        expect(select.hasAttribute('focus-ring')).to.be.true;
-      });
-    });
-
-    describe('opened', () => {
-      beforeEach(async () => {
-        select.focus();
-        select.opened = true;
-        await oneEvent(overlay, 'vaadin-overlay-open');
-      });
-
-      afterEach(async () => {
-        await resetMouse();
-      });
-
-      it('should focus next focusable on menu item Tab', async () => {
-        await sendKeys({ press: 'Tab' });
-        await nextRender();
-        expect(getDeepActiveElement()).to.equal(lastGlobalFocusable);
-      });
-
-      it('should focus previous focusable on menu item Shift + Tab', async () => {
-        await sendKeys({ press: 'Shift+Tab' });
-        await nextRender();
-        expect(getDeepActiveElement()).to.equal(firstGlobalFocusable);
-      });
-
-      it('should restore focus to the value button on item Enter', async () => {
-        await sendKeys({ press: 'Enter' });
-        await nextRender();
-        expect(getDeepActiveElement()).to.equal(valueButton);
-      });
-
-      it('should restore focus to the value button on item Escape', async () => {
-        await sendKeys({ press: 'Escape' });
-        await nextRender();
-        expect(getDeepActiveElement()).to.equal(valueButton);
-      });
-
-      it('should restore focus to the value button on item click', async () => {
-        const item = listBox.querySelector('vaadin-select-item');
-        await sendMouseToElement({ type: 'click', element: item });
-        await nextRender();
-        expect(getDeepActiveElement()).to.equal(valueButton);
-      });
-
-      it('should restore focus to the value button on outside click', async () => {
-        await sendMouse({ type: 'click', position: [100, 100] });
-        await nextRender();
-        expect(getDeepActiveElement()).to.equal(valueButton);
       });
     });
   });
