@@ -142,7 +142,8 @@
 /* A standalone container has no part to hand the defaults to, so it reads them directly */
 :where(vaadin-input-container) {
   position: relative;
-  min-height: var(--_lumo-field-input-height, var(--lumo-size-m));
+  --_lumo-field-custom-height: var(--vaadin-input-field-height, 0px);
+  min-height: max(var(--_lumo-field-custom-height), var(--_lumo-field-input-height, var(--lumo-size-m)));
   --vaadin-input-field-padding: 0 calc(0.375em + var(--vaadin-radius-m) / 4 - 1px);
   /* Inherits the text color, as in legacy. Fields set it on the host instead. */
   color: var(--vaadin-input-field-value-color, inherit);
