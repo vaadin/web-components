@@ -188,9 +188,22 @@ export function getWeekDayCells(calendar) {
 }
 
 /**
+ * The button inside a date cell. It takes DOM focus and carries the date's accessible name and
+ * ARIA state, while the cell carries the `date` property and the part names.
+ *
+ * @param {HTMLElement} cell a date cell of a month calendar
+ * @return {HTMLElement | null}
+ */
+export function getDateButton(cell) {
+  return cell.querySelector('[part~="date-button"]');
+}
+
+/**
+ * The date button that is in the tab sequence, i.e. the one the calendar focuses.
+ *
  * @param {HTMLElement} root vaadin-date-picker or vaadin-date-picker-overlay-content
  */
-export function getFocusableCell(root) {
+export function getFocusableDateButton(root) {
   const focusableMonth = getCalendars(root).find((month) => {
     return !!month.shadowRoot.querySelector('[tabindex="0"]');
   });
@@ -201,12 +214,26 @@ export function getFocusableCell(root) {
 }
 
 /**
+ * The cell of the date button that is in the tab sequence.
+ *
+ * @param {HTMLElement} root vaadin-date-picker or vaadin-date-picker-overlay-content
+ */
+export function getFocusableCell(root) {
+  const button = getFocusableDateButton(root);
+  if (button) {
+    return button.closest('[part~="date"]');
+  }
+}
+
+/**
+ * The cell of the date button that currently has DOM focus.
+ *
  * @param {HTMLElement} root vaadin-date-picker or vaadin-date-picker-overlay-content
  */
 export function getFocusedCell(root) {
-  const focusableCell = getFocusableCell(root);
-  if (focusableCell && isElementFocused(focusableCell)) {
-    return focusableCell;
+  const button = getFocusableDateButton(root);
+  if (button && isElementFocused(button)) {
+    return button.closest('[part~="date"]');
   }
 }
 
