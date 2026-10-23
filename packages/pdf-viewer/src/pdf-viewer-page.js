@@ -8,6 +8,7 @@
  * See https://vaadin.com/commercial-license-and-service-terms for the full
  * license.
  */
+import { createStructTreeElement } from './pdf-viewer-structure-layer.js';
 
 /**
  * The maximum number of pixels of a page canvas. Larger canvases use too much
@@ -35,6 +36,9 @@ export class PdfViewerPage {
     this.unscaledWidth = size.width;
     this.unscaledHeight = size.height;
 
+    /** The size of user space units, see `PageViewport.userUnit`. */
+    this.userUnit = 1;
+
     this.element = document.createElement('div');
     this.element.setAttribute('part', 'page');
     this.element.setAttribute('role', 'group');
@@ -50,6 +54,21 @@ export class PdfViewerPage {
 
     /** Set when rendering failed, to not try again at the same scale. */
     this.renderFailed = false;
+
+    /** @type {import('pdfjs-dist').TextLayer | null} */
+    this.textLayer = null;
+
+    /** @type {HTMLElement | null} */
+    this.textLayerElement = null;
+
+    /** @type {HTMLElement | null} */
+    this.linkLayerElement = null;
+
+    /** @type {HTMLElement | null} */
+    this.structTreeElement = null;
+
+    /** Set when the page has no structure, i.e. it is not tagged. */
+    this.hasNoStructTree = false;
 
     /** The scale and output scale of the current canvas, to know when it is outdated. */
     this.renderedScale = 0;
@@ -83,7 +102,9 @@ export class PdfViewerPage {
    */
   setPdfPage(pdfPage) {
     this.pdfPage = pdfPage;
-    const { width, height } = pdfPage.getViewport({ scale: 1 });
+    const { width, height, userUnit } = pdfPage.getViewport({ scale: 1 });
+    this.userUnit = userUnit;
+    this.#updateTextScale();
     if (width === this.unscaledWidth && height === this.unscaledHeight) {
       return;
     }
@@ -105,6 +126,16 @@ export class PdfViewerPage {
     this.renderFailed = false;
     this.element.style.width = `${this.width}px`;
     this.element.style.height = `${this.height}px`;
+    this.#updateTextScale();
+  }
+
+  /**
+   * Sizes the text layer with the page, also before the page renders again
+   * at the new scale. The text layer of pdf.js reads this property.
+   * @private
+   */
+  #updateTextScale() {
+    this.element.style.setProperty('--total-scale-factor', String(this.scale * this.userUnit));
   }
 
   /**
@@ -160,6 +191,89 @@ export class PdfViewerPage {
     this.renderedOutputScale = devicePixelRatio;
   }
 
+  /**
+   * Renders the text layer: transparent text on top of the canvas, which makes
+   * the text selectable and readable by assistive technology. When the layer
+   * exists, it is only resized to the current scale.
+   *
+   * @param {typeof import('pdfjs-dist')} pdfjs
+   * @param {Promise<object>} textContent the text content of the page, with marked content
+   * @return {Promise<void>}
+   */
+  async renderTextLayer(pdfjs, textContent) {
+    if (this.textLayer) {
+      this.textLayer.update({ viewport: this.pdfPage.getViewport({ scale: this.scale }) });
+      return;
+    }
+
+    const canvas = this.canvas;
+    const textContentSource = await textContent;
+    // The page may have been released or rendered again meanwhile.
+    if (this.canvas !== canvas || this.textLayer) {
+      return;
+    }
+
+    const container = document.createElement('div');
+    container.className = 'text-layer';
+    // While selecting, the end-of-content element covers the page, so that
+    // dragging over empty space does not lose the selection.
+    container.addEventListener('pointerdown', () => {
+      container.classList.add('selecting');
+      const controller = new AbortController();
+      const stop = () => {
+        container.classList.remove('selecting');
+        controller.abort();
+      };
+      window.addEventListener('pointerup', stop, { signal: controller.signal });
+      window.addEventListener('pointercancel', stop, { signal: controller.signal });
+    });
+    this.element.append(container);
+
+    const textLayer = new pdfjs.TextLayer({
+      textContentSource,
+      container,
+      viewport: this.pdfPage.getViewport({ scale: this.scale }),
+    });
+    this.textLayer = textLayer;
+    this.textLayerElement = container;
+    await textLayer.render();
+
+    if (this.textLayer === textLayer) {
+      // Extends the selection to the end of the page while selecting, see the styles.
+      const endOfContent = document.createElement('div');
+      endOfContent.className = 'end-of-content';
+      container.append(endOfContent);
+    }
+  }
+
+  /**
+   * Adds the structure of a tagged PDF page, which exposes headings, lists,
+   * tables and figures to assistive technology. Does nothing for untagged
+   * pages, or when the structure was already added.
+   *
+   * @return {Promise<void>}
+   */
+  async renderStructTree() {
+    if (this.structTreeElement || this.hasNoStructTree || !this.textLayerElement) {
+      return;
+    }
+    const textLayerElement = this.textLayerElement;
+    let tree = null;
+    try {
+      tree = await this.pdfPage.getStructTree();
+    } catch {
+      // The structure is optional. A page with a broken one is shown as untagged.
+    }
+    // Remembered, so that rendering the page again does not ask the worker again.
+    this.hasNoStructTree = !tree;
+    const element = createStructTreeElement(tree);
+    // The text layer may have been released meanwhile.
+    if (element && this.textLayerElement === textLayerElement && !this.structTreeElement) {
+      this.structTreeElement = element;
+      textLayerElement.before(element);
+    }
+  }
+
   /** Cancels a pending render. */
   cancel() {
     if (this.renderTask) {
@@ -168,9 +282,17 @@ export class PdfViewerPage {
     }
   }
 
-  /** Cancels a pending render and frees the canvas memory. */
+  /** Cancels a pending render and frees the canvas memory and the text and link layers. */
   release() {
     this.cancel();
+    this.textLayer?.cancel();
+    this.textLayer = null;
+    this.textLayerElement?.remove();
+    this.textLayerElement = null;
+    this.linkLayerElement?.remove();
+    this.linkLayerElement = null;
+    this.structTreeElement?.remove();
+    this.structTreeElement = null;
     if (this.canvas) {
       this.#freeCanvas(this.canvas);
       this.canvas = null;

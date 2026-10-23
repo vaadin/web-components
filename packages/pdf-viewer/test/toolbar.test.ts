@@ -248,6 +248,42 @@ describe('toolbar', () => {
         });
       });
 
+      describe('announcements', () => {
+        let clock: sinon.SinonFakeTimers;
+
+        beforeEach(() => {
+          clock = sinon.useFakeTimers({ shouldClearNativeTimers: true });
+        });
+
+        afterEach(() => {
+          clock.restore();
+        });
+
+        it('should announce the page when navigating with the toolbar', async () => {
+          getButton('next-page').click();
+          await clock.tickAsync(200);
+          expect(getAnnouncement()).to.equal('Page 2 of 6');
+        });
+
+        it('should announce the page when going to the page entered in the page field', async () => {
+          const field = getPageField();
+          field.focus();
+          (field.inputElement as HTMLInputElement).select();
+          await sendKeys({ type: '4' });
+          await sendKeys({ press: 'Enter' });
+          await clock.tickAsync(200);
+          expect(getAnnouncement()).to.equal('Page 4 of 6');
+        });
+
+        it('should use i18n for the page announcement', async () => {
+          viewer.i18n = { pageAnnouncement: 'Sida {page} av {pageCount}' };
+          await clock.tickAsync(20);
+          getButton('next-page').click();
+          await clock.tickAsync(200);
+          expect(getAnnouncement()).to.equal('Sida 2 av 6');
+        });
+      });
+
       it('should move focus to the page field when the focused next page button gets disabled', async () => {
         viewer.page = 5;
         await nextRenderIdle(viewer);

@@ -9,12 +9,22 @@
  * license.
  */
 import { announce } from '@vaadin/a11y-base/src/announce.js';
+import { isKeyboardActive } from '@vaadin/a11y-base/src/focus-utils.js';
 import { isSafari } from '@vaadin/component-base/src/browser-utils.js';
 import { ResizeMixin } from '@vaadin/component-base/src/resize-mixin.js';
 import { issueWarning } from '@vaadin/component-base/src/warnings.js';
 import { PdfViewerDocumentController } from './pdf-viewer-document-controller.js';
+import {
+  createLink,
+  getLinkLabel,
+  getTextInside,
+  placeLinks,
+  renderLinks,
+  resolveDestination,
+} from './pdf-viewer-links.js';
 import { PdfViewerPage } from './pdf-viewer-page.js';
 import { PdfViewerRenderQueue } from './pdf-viewer-render-queue.js';
+import { PdfViewerTextContent } from './pdf-viewer-text-content.js';
 import { formatZoom, getZoomInLevel, getZoomOutLevel, isValidZoom } from './pdf-viewer-zoom.js';
 
 /** PDF units are points (1/72 inch), CSS pixels are 1/96 inch. */
@@ -157,8 +167,20 @@ export const PdfViewerMixin = (superClass) =>
       };
     }
 
+    /** @type {typeof import('pdfjs-dist') | null} */
+    #pdfjs = null;
+
     /** @type {import('pdfjs-dist').PDFDocumentProxy | null} */
     #pdfDocument = null;
+
+    /** @type {PdfViewerTextContent | null} */
+    #textContent = null;
+
+    /**
+     * What the accessible name of each link is made of, to update it when the localization changes.
+     * @type {WeakMap<HTMLElement, { text: string, url?: string, targetPage: number | null }>}
+     */
+    #linkLabels = new WeakMap();
 
     /** The title of the loaded document, or an empty string. */
     #documentTitle = '';
@@ -300,6 +322,7 @@ export const PdfViewerMixin = (superClass) =>
 
       if (props.has('__effectiveI18n')) {
         this.#updatePageLabels();
+        this.#updateLinkLabels();
       }
 
       if (props.has('__effectiveI18n') || props.has('fileName')) {
@@ -355,13 +378,30 @@ export const PdfViewerMixin = (superClass) =>
     }
 
     /**
-     * Goes to the given page, for page changes caused by the user through
-     * the viewer's own controls.
+     * Goes to the given page and announces it, for page changes caused by
+     * the user through the viewer's own controls.
      * @param {number} page
      * @protected
      */
     _goToPage(page) {
       this.page = page;
+      const i18n = this.__effectiveI18n;
+      announce(i18n.pageAnnouncement.replace('{page}', page).replace('{pageCount}', this.pageCount));
+    }
+
+    /**
+     * Goes to the destination of an internal link or an outline item, and
+     * announces the page. Does nothing when the destination cannot be resolved.
+     * @param {{ dest?: string | Array, action?: string }} destination
+     * @return {Promise<void>}
+     * @protected
+     */
+    async _goToDestination(destination) {
+      const loadId = this.#loadId;
+      const target = await this.#resolveDestination(destination);
+      if (loadId === this.#loadId && target) {
+        this.#goToTarget(target);
+      }
     }
 
     /**
@@ -385,6 +425,17 @@ export const PdfViewerMixin = (superClass) =>
      */
     _getPageView(pageNumber) {
       return this.#pages[pageNumber - 1];
+    }
+
+    /**
+     * Returns the text content of a page of the loaded document, loading it
+     * once per page. It includes the marked content of tagged pages.
+     * @param {number} pageNumber
+     * @return {Promise<object>}
+     * @protected
+     */
+    _getTextContent(pageNumber) {
+      return this.#textContent.get(pageNumber);
     }
 
     /**
@@ -497,7 +548,7 @@ export const PdfViewerMixin = (superClass) =>
     }
 
     /**
-     * Called when a page has been rendered.
+     * Called when a page has been rendered, including its text layer.
      * @param {PdfViewerPage} _page
      * @protected
      */
@@ -510,11 +561,16 @@ export const PdfViewerMixin = (superClass) =>
     _documentUnloaded() {}
 
     /** @private */
-    #onLoad(pdfDocument, { title, displayDocTitle, firstPage }) {
+    #onLoad(pdfDocument, { title, displayDocTitle, language, firstPage, pdfjs }) {
       // All pages start with the size of the first page, and get their own
       // size as they load in the background. This shows the document without
       // waiting for every page of a long document.
+      this.#pdfjs = pdfjs;
       this.#pdfDocument = pdfDocument;
+      this.#textContent = new PdfViewerTextContent(pdfDocument);
+      if (language) {
+        this.$.pages.lang = language;
+      }
       const size = firstPage.getViewport({ scale: 1 });
       this.#pages = Array.from({ length: pdfDocument.numPages }, (_, index) => new PdfViewerPage(index + 1, size));
       this.#updatePageLabels();
@@ -566,7 +622,9 @@ export const PdfViewerMixin = (superClass) =>
       }
       this.#pages.forEach((page) => page.release());
       this.#pages = [];
+      this.#pdfjs = null;
       this.#pdfDocument = null;
+      this.#textContent = null;
       this.#documentTitle = '';
       this.#displayDocTitle = false;
       this._setPageCount(0);
@@ -581,6 +639,7 @@ export const PdfViewerMixin = (superClass) =>
       cancelAnimationFrame(this.#relayoutFrame);
       this.#relayoutFrame = 0;
       this.$.pages.replaceChildren();
+      this.$.pages.removeAttribute('lang');
       this.$.content.scrollTop = 0;
       this.#savedScroll = { top: 0, left: 0 };
       this._updateAccessibleName();
@@ -1027,6 +1086,21 @@ export const PdfViewerMixin = (superClass) =>
         if (loadId !== this.#loadId || !page.isRendered(outputScale)) {
           return;
         }
+        await page.renderTextLayer(this.#pdfjs, this._getTextContent(page.pageNumber));
+        await page.renderStructTree();
+        if (!page.linkLayerElement) {
+          const annotations = await page.pdfPage.getAnnotations({ intent: 'display' });
+          if (loadId !== this.#loadId || !page.canvas || page.linkLayerElement) {
+            return;
+          }
+          const links = renderLinks(
+            this.#pdfjs,
+            page,
+            annotations.filter((annotation) => annotation.annotationType === this.#pdfjs.AnnotationType.LINK),
+            (annotation) => createLink(annotation, (target) => this.#followLink(target)),
+          );
+          await this.#placeLinks(page, links);
+        }
         this._pageRendered(page);
       } catch (error) {
         const isCancelled = error && (error.name === 'RenderingCancelledException' || error.name === 'AbortException');
@@ -1034,6 +1108,101 @@ export const PdfViewerMixin = (superClass) =>
           page.renderFailed = true;
           issueWarning(`Failed to render page ${page.pageNumber} of the PDF document: ${error.message}`);
         }
+      }
+    }
+
+    /**
+     * Gives the links of a page their accessible name, and moves them into
+     * the text layer next to the text they cover, so that assistive technology
+     * reads each link once, in reading order, instead of the text and then the link.
+     * @private
+     */
+    async #placeLinks(page, links) {
+      const loadId = this.#loadId;
+      const { textLayer, textLayerElement } = page;
+      const textDivs = textLayer ? textLayer.textDivs : [];
+      const linksWithText = links.map(({ link }) => ({ link, parts: getTextInside(textDivs, link) }));
+
+      await Promise.all(
+        links.map(async ({ link, annotation }, index) => {
+          const text = linksWithText[index].parts
+            .map(({ element, start, end }) => element.textContent.slice(start, end).trim())
+            .join(' ');
+          let targetPage = null;
+          if (!text && !annotation.url) {
+            const target = await this.#resolveDestination(annotation);
+            targetPage = target ? target.page : null;
+          }
+          this.#linkLabels.set(link, { text, url: annotation.url, targetPage });
+          this.#updateLinkLabel(link);
+        }),
+      );
+
+      // The page may have been released meanwhile.
+      if (loadId === this.#loadId && textLayerElement && page.textLayerElement === textLayerElement) {
+        placeLinks(
+          textDivs,
+          linksWithText.filter(({ parts }) => parts.length),
+        );
+      }
+    }
+
+    /** @private */
+    #updateLinkLabel(link) {
+      link.setAttribute('aria-label', getLinkLabel(this.#linkLabels.get(link), this.__effectiveI18n));
+    }
+
+    /**
+     * Updates the accessible names of the links of the rendered pages, e.g.
+     * when the localization changes.
+     * @private
+     */
+    #updateLinkLabels() {
+      this.#pages.forEach((page) => {
+        page.element.querySelectorAll('a.link').forEach((link) => {
+          if (this.#linkLabels.has(link)) {
+            this.#updateLinkLabel(link);
+          }
+        });
+      });
+    }
+
+    /**
+     * Returns the page and the position on the page that an internal link
+     * points to, or null when it cannot be resolved.
+     * @return {Promise<{ page: number, top?: number } | null>}
+     * @private
+     */
+    #resolveDestination(destination) {
+      return resolveDestination(this.#pdfDocument, destination, { page: this.page, pageCount: this.#pages.length });
+    }
+
+    /**
+     * Goes to the destination of an internal link, and moves focus to the
+     * pages, as the page with the link may not stay rendered.
+     * @private
+     */
+    #followLink(annotation) {
+      const loadId = this.#loadId;
+      this.#resolveDestination(annotation)
+        .then((target) => {
+          if (loadId === this.#loadId && target) {
+            this.#goToTarget(target);
+            this.$.content.focus({ preventScroll: true, focusVisible: isKeyboardActive() });
+          }
+        })
+        .catch((error) => issueWarning(`Failed to follow a link of the PDF document: ${error.message}`));
+    }
+
+    /**
+     * Goes to a page, or a position on it, and announces the page.
+     * @param {{ page: number, top?: number }} target
+     * @private
+     */
+    #goToTarget(target) {
+      this._goToPage(target.page);
+      if (target.top !== undefined) {
+        this.#scrollToPage(target.page, target.top);
       }
     }
 
@@ -1047,7 +1216,7 @@ export const PdfViewerMixin = (superClass) =>
         // WebKit scrolls the focused scroll container despite preventScroll.
         const { content } = this.$;
         const { scrollTop, scrollLeft } = content;
-        content.focus({ preventScroll: true });
+        content.focus({ preventScroll: true, focusVisible: isKeyboardActive() });
         content.scrollTop = scrollTop;
         content.scrollLeft = scrollLeft;
       }

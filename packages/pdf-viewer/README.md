@@ -34,6 +34,21 @@ Once installed, import the component in your application:
 import '@vaadin/pdf-viewer';
 ```
 
+## Known limitations
+
+- To keep memory use low, only the pages near the visible area are rendered and have
+  selectable text. Screen readers in browse mode therefore only reach the text near the view.
+- Untagged PDFs are read in content order. This may not be the reading order of multi-column
+  layouts. They have no headings, lists or tables for assistive technology.
+- Tagged PDFs expose headings, lists, tables, languages and figure alternative text. Not
+  supported: MathML formulas, references from table cells to their headers (`/Headers`), and
+  the positions of figures. The structure uses `aria-owns`, which Safari supports only partly
+  in shadow DOM.
+- The viewer passes no runtime assets to pdf.js yet. Documents with JBIG2 or CCITT scans, JPX
+  images or non-embedded CJK, Symbol and ZapfDingbats fonts therefore show degraded content. A
+  later version adds an `assetsUrl` property for these assets.
+- Scanned PDFs without text cannot be read by screen readers (no OCR).
+
 ## Contributing
 
 Read the [contributing guide](https://vaadin.com/docs/latest/contributing) to learn about our development process, how to propose bugfixes and improvements, and how to test your changes to Vaadin components.

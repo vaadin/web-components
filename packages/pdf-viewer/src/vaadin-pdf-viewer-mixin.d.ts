@@ -9,8 +9,9 @@
  * license.
  */
 import type { Constructor } from '@open-wc/dedupe-mixin';
-import type { PDFDocumentProxy } from 'pdfjs-dist';
+import type { PDFDocumentProxy, PDFPageProxy } from 'pdfjs-dist';
 import type { ResizeMixinClass } from '@vaadin/component-base/src/resize-mixin.js';
+import type { PdfViewerDestination } from './pdf-viewer-links.js';
 import type { PdfViewerPage } from './pdf-viewer-page.js';
 
 export type PdfViewerZoom = 'page-fit' | 'page-width' | number;
@@ -78,10 +79,16 @@ export declare class PdfViewerMixinClass {
   protected readonly _pdfDocument: PDFDocumentProxy | null;
 
   /**
-   * Goes to the given page, for page changes caused by the user through
-   * the viewer's own controls.
+   * Goes to the given page and announces it, for page changes caused by
+   * the user through the viewer's own controls.
    */
   protected _goToPage(page: number): void;
+
+  /**
+   * Goes to the destination of an internal link or an outline item, and
+   * announces the page. Does nothing when the destination cannot be resolved.
+   */
+  protected _goToDestination(destination: PdfViewerDestination): Promise<void>;
 
   /**
    * Zooms in or out to the next zoom level, and announces the new zoom.
@@ -92,6 +99,12 @@ export declare class PdfViewerMixinClass {
    * Returns the view of a page of the loaded document.
    */
   protected _getPageView(pageNumber: number): PdfViewerPage | undefined;
+
+  /**
+   * Returns the text content of a page of the loaded document, loading it
+   * once per page. It includes the marked content of tagged pages.
+   */
+  protected _getTextContent(pageNumber: number): Promise<Awaited<ReturnType<PDFPageProxy['getTextContent']>>>;
 
   /**
    * Finds the visible pages again and renders the ones that are not
@@ -141,7 +154,7 @@ export declare class PdfViewerMixinClass {
   protected _updateAccessibleName(): void;
 
   /**
-   * Called when a page has been rendered.
+   * Called when a page has been rendered, including its text layer.
    */
   protected _pageRendered(page: PdfViewerPage): void;
 

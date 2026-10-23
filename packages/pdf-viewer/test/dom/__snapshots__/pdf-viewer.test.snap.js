@@ -1375,6 +1375,52 @@ snapshots["vaadin-pdf-viewer shadow document"] =
       >
         <canvas aria-hidden="true">
         </canvas>
+        <div
+          class="text-layer"
+          data-main-rotation="0"
+        >
+          <span
+            dir="ltr"
+            role="presentation"
+          >
+            Page 1
+          </span>
+          <br role="presentation">
+          <span
+            dir="ltr"
+            role="presentation"
+          >
+            The quick brown fox jumps over the lazy dog. Pack my box with five dozen
+          </span>
+          <br role="presentation">
+          <span
+            dir="ltr"
+            role="presentation"
+          >
+            liquor jugs. How vexingly quick daft zebras jump. Sphinx of black quartz,
+          </span>
+          <br role="presentation">
+          <span
+            dir="ltr"
+            role="presentation"
+          >
+            judge my vow.
+          </span>
+          <br role="presentation">
+          <span
+            dir="ltr"
+            role="presentation"
+          >
+            Unique word on this page: marker1.
+          </span>
+          <div class="end-of-content">
+          </div>
+        </div>
+        <div
+          class="link-layer"
+          data-main-rotation="0"
+        >
+        </div>
       </div>
       <div
         aria-label="Page 2"
@@ -1383,6 +1429,52 @@ snapshots["vaadin-pdf-viewer shadow document"] =
       >
         <canvas aria-hidden="true">
         </canvas>
+        <div
+          class="text-layer"
+          data-main-rotation="0"
+        >
+          <span
+            dir="ltr"
+            role="presentation"
+          >
+            Page 2
+          </span>
+          <br role="presentation">
+          <span
+            dir="ltr"
+            role="presentation"
+          >
+            The quick brown fox jumps over the lazy dog. Pack my box with five dozen
+          </span>
+          <br role="presentation">
+          <span
+            dir="ltr"
+            role="presentation"
+          >
+            liquor jugs. How vexingly quick daft zebras jump. Sphinx of black quartz,
+          </span>
+          <br role="presentation">
+          <span
+            dir="ltr"
+            role="presentation"
+          >
+            judge my vow.
+          </span>
+          <br role="presentation">
+          <span
+            dir="ltr"
+            role="presentation"
+          >
+            Unique word on this page: marker2.
+          </span>
+          <div class="end-of-content">
+          </div>
+        </div>
+        <div
+          class="link-layer"
+          data-main-rotation="0"
+        >
+        </div>
       </div>
       <div
         aria-label="Page 3"
@@ -2068,6 +2160,52 @@ snapshots["vaadin-pdf-viewer shadow header"] =
       >
         <canvas aria-hidden="true">
         </canvas>
+        <div
+          class="text-layer"
+          data-main-rotation="0"
+        >
+          <span
+            dir="ltr"
+            role="presentation"
+          >
+            Page 1
+          </span>
+          <br role="presentation">
+          <span
+            dir="ltr"
+            role="presentation"
+          >
+            The quick brown fox jumps over the lazy dog. Pack my box with five dozen
+          </span>
+          <br role="presentation">
+          <span
+            dir="ltr"
+            role="presentation"
+          >
+            liquor jugs. How vexingly quick daft zebras jump. Sphinx of black quartz,
+          </span>
+          <br role="presentation">
+          <span
+            dir="ltr"
+            role="presentation"
+          >
+            judge my vow.
+          </span>
+          <br role="presentation">
+          <span
+            dir="ltr"
+            role="presentation"
+          >
+            Unique word on this page: marker1.
+          </span>
+          <div class="end-of-content">
+          </div>
+        </div>
+        <div
+          class="link-layer"
+          data-main-rotation="0"
+        >
+        </div>
       </div>
       <div
         aria-label="Page 2"
@@ -2076,6 +2214,52 @@ snapshots["vaadin-pdf-viewer shadow header"] =
       >
         <canvas aria-hidden="true">
         </canvas>
+        <div
+          class="text-layer"
+          data-main-rotation="0"
+        >
+          <span
+            dir="ltr"
+            role="presentation"
+          >
+            Page 2
+          </span>
+          <br role="presentation">
+          <span
+            dir="ltr"
+            role="presentation"
+          >
+            The quick brown fox jumps over the lazy dog. Pack my box with five dozen
+          </span>
+          <br role="presentation">
+          <span
+            dir="ltr"
+            role="presentation"
+          >
+            liquor jugs. How vexingly quick daft zebras jump. Sphinx of black quartz,
+          </span>
+          <br role="presentation">
+          <span
+            dir="ltr"
+            role="presentation"
+          >
+            judge my vow.
+          </span>
+          <br role="presentation">
+          <span
+            dir="ltr"
+            role="presentation"
+          >
+            Unique word on this page: marker2.
+          </span>
+          <div class="end-of-content">
+          </div>
+        </div>
+        <div
+          class="link-layer"
+          data-main-rotation="0"
+        >
+        </div>
       </div>
       <div
         aria-label="Page 3"
@@ -2182,6 +2366,52 @@ snapshots["vaadin-pdf-viewer shadow toolbar collapsed"] =
       >
         <canvas aria-hidden="true">
         </canvas>
+        <div
+          class="text-layer"
+          data-main-rotation="0"
+        >
+          <span
+            dir="ltr"
+            role="presentation"
+          >
+            Page 1
+          </span>
+          <br role="presentation">
+          <span
+            dir="ltr"
+            role="presentation"
+          >
+            The quick brown fox jumps over the lazy dog. Pack my box with five dozen
+          </span>
+          <br role="presentation">
+          <span
+            dir="ltr"
+            role="presentation"
+          >
+            liquor jugs. How vexingly quick daft zebras jump. Sphinx of black quartz,
+          </span>
+          <br role="presentation">
+          <span
+            dir="ltr"
+            role="presentation"
+          >
+            judge my vow.
+          </span>
+          <br role="presentation">
+          <span
+            dir="ltr"
+            role="presentation"
+          >
+            Unique word on this page: marker1.
+          </span>
+          <div class="end-of-content">
+          </div>
+        </div>
+        <div
+          class="link-layer"
+          data-main-rotation="0"
+        >
+        </div>
       </div>
       <div
         aria-label="Page 2"
@@ -2190,6 +2420,52 @@ snapshots["vaadin-pdf-viewer shadow toolbar collapsed"] =
       >
         <canvas aria-hidden="true">
         </canvas>
+        <div
+          class="text-layer"
+          data-main-rotation="0"
+        >
+          <span
+            dir="ltr"
+            role="presentation"
+          >
+            Page 2
+          </span>
+          <br role="presentation">
+          <span
+            dir="ltr"
+            role="presentation"
+          >
+            The quick brown fox jumps over the lazy dog. Pack my box with five dozen
+          </span>
+          <br role="presentation">
+          <span
+            dir="ltr"
+            role="presentation"
+          >
+            liquor jugs. How vexingly quick daft zebras jump. Sphinx of black quartz,
+          </span>
+          <br role="presentation">
+          <span
+            dir="ltr"
+            role="presentation"
+          >
+            judge my vow.
+          </span>
+          <br role="presentation">
+          <span
+            dir="ltr"
+            role="presentation"
+          >
+            Unique word on this page: marker2.
+          </span>
+          <div class="end-of-content">
+          </div>
+        </div>
+        <div
+          class="link-layer"
+          data-main-rotation="0"
+        >
+        </div>
       </div>
       <div
         aria-label="Page 3"
@@ -2228,4 +2504,402 @@ snapshots["vaadin-pdf-viewer shadow toolbar collapsed"] =
 </div>
 `;
 /* end snapshot vaadin-pdf-viewer shadow toolbar collapsed */
+
+snapshots["vaadin-pdf-viewer page tagged"] = 
+`<div
+  aria-label="Page 1"
+  part="page"
+  role="group"
+>
+  <canvas aria-hidden="true">
+  </canvas>
+  <span class="struct-tree">
+    <span lang="en">
+      <span
+        aria-level="1"
+        role="heading"
+      >
+        <span role="none">
+          <span aria-owns="p2R_mc1">
+          </span>
+        </span>
+      </span>
+      <span role="paragraph">
+        <span role="none">
+          <span aria-owns="p2R_mc2">
+          </span>
+        </span>
+        <span>
+          <span role="none">
+            <span aria-owns="p2R_mc3">
+            </span>
+          </span>
+          <span>
+          </span>
+        </span>
+        <span role="none">
+          <span aria-owns="p2R_mc4">
+          </span>
+        </span>
+      </span>
+      <span
+        lang="sv"
+        role="paragraph"
+      >
+        <span role="none">
+          <span aria-owns="p2R_mc5">
+          </span>
+        </span>
+      </span>
+      <span
+        aria-level="2"
+        role="heading"
+      >
+        <span role="none">
+          <span aria-owns="p2R_mc6">
+          </span>
+        </span>
+      </span>
+      <span role="list">
+        <span role="listitem">
+          <span aria-owns="p2R_mc7">
+          </span>
+          <span role="none">
+            <span aria-owns="p2R_mc8">
+            </span>
+          </span>
+        </span>
+        <span role="listitem">
+          <span aria-owns="p2R_mc9">
+          </span>
+          <span role="none">
+            <span aria-owns="p2R_mc10">
+            </span>
+          </span>
+        </span>
+      </span>
+      <span
+        aria-level="2"
+        role="heading"
+      >
+        <span role="none">
+          <span aria-owns="p2R_mc11">
+          </span>
+        </span>
+      </span>
+      <span role="table">
+        <span role="row">
+          <span role="columnheader">
+            <span role="none">
+              <span aria-owns="p2R_mc12">
+              </span>
+            </span>
+          </span>
+          <span role="columnheader">
+            <span role="none">
+              <span aria-owns="p2R_mc13">
+              </span>
+            </span>
+          </span>
+        </span>
+        <span role="row">
+          <span role="cell">
+            <span role="none">
+              <span aria-owns="p2R_mc14">
+              </span>
+            </span>
+          </span>
+          <span role="cell">
+            <span role="none">
+              <span aria-owns="p2R_mc15">
+              </span>
+            </span>
+          </span>
+        </span>
+        <span role="row">
+          <span role="cell">
+            <span role="none">
+              <span aria-owns="p2R_mc16">
+              </span>
+            </span>
+          </span>
+          <span role="cell">
+            <span role="none">
+              <span aria-owns="p2R_mc17">
+              </span>
+            </span>
+          </span>
+        </span>
+      </span>
+      <span
+        aria-level="2"
+        role="heading"
+      >
+        <span role="none">
+          <span aria-owns="p2R_mc18">
+          </span>
+        </span>
+      </span>
+      <span
+        aria-owns="p2R_mc19"
+        role="figure"
+      >
+        <span
+          aria-label="A blue square"
+          role="img"
+        >
+        </span>
+      </span>
+    </span>
+  </span>
+  <div
+    class="text-layer"
+    data-main-rotation="0"
+  >
+    <span
+      class="markedContent"
+      id="p2R_mc0"
+    >
+    </span>
+    <span
+      class="markedContent"
+      id="p2R_mc1"
+    >
+      <span
+        dir="ltr"
+        role="presentation"
+      >
+        Tagged document
+      </span>
+    </span>
+    <span
+      class="markedContent"
+      id="p2R_mc2"
+    >
+      <br role="presentation">
+      <span
+        dir="ltr"
+        role="presentation"
+      >
+        Visit the
+      </span>
+    </span>
+    <span
+      class="markedContent"
+      id="p2R_mc3"
+    >
+      <span
+        dir="ltr"
+        role="presentation"
+      >
+      </span>
+      <span
+        aria-hidden="true"
+        dir="ltr"
+        role="presentation"
+      >
+        Vaadin website
+      </span>
+      <a
+        aria-label="Vaadin website (opens in a new tab)"
+        class="link"
+        href="https://vaadin.com/"
+        rel="noopener noreferrer"
+        target="_blank"
+      >
+      </a>
+    </span>
+    <span
+      class="markedContent"
+      id="p2R_mc4"
+    >
+      <span
+        dir="ltr"
+        role="presentation"
+      >
+        .
+      </span>
+    </span>
+    <span
+      class="markedContent"
+      id="p2R_mc5"
+    >
+      <br role="presentation">
+      <span
+        dir="ltr"
+        role="presentation"
+      >
+        Hej världen
+      </span>
+    </span>
+    <span
+      class="markedContent"
+      id="p2R_mc6"
+    >
+      <br role="presentation">
+      <span
+        dir="ltr"
+        role="presentation"
+      >
+        A list
+      </span>
+    </span>
+    <span
+      class="markedContent"
+      id="p2R_mc7"
+    >
+    </span>
+    <span
+      class="markedContent"
+      id="p2R_mc8"
+    >
+      <br role="presentation">
+      <span
+        dir="ltr"
+        role="presentation"
+      >
+        First item
+      </span>
+    </span>
+    <span
+      class="markedContent"
+      id="p2R_mc9"
+    >
+    </span>
+    <span
+      class="markedContent"
+      id="p2R_mc10"
+    >
+      <br role="presentation">
+      <span
+        dir="ltr"
+        role="presentation"
+      >
+        Second item
+      </span>
+    </span>
+    <span
+      class="markedContent"
+      id="p2R_mc11"
+    >
+      <br role="presentation">
+      <span
+        dir="ltr"
+        role="presentation"
+      >
+        A table
+      </span>
+    </span>
+    <span
+      class="markedContent"
+      id="p2R_mc12"
+    >
+      <br role="presentation">
+      <span
+        dir="ltr"
+        role="presentation"
+      >
+        Name
+      </span>
+    </span>
+    <span
+      class="markedContent"
+      id="p2R_mc13"
+    >
+      <span
+        dir="ltr"
+        role="presentation"
+      >
+      </span>
+      <span
+        dir="ltr"
+        role="presentation"
+      >
+        Value
+      </span>
+    </span>
+    <span
+      class="markedContent"
+      id="p2R_mc14"
+    >
+      <br role="presentation">
+      <span
+        dir="ltr"
+        role="presentation"
+      >
+        Alpha
+      </span>
+    </span>
+    <span
+      class="markedContent"
+      id="p2R_mc15"
+    >
+      <span
+        dir="ltr"
+        role="presentation"
+      >
+      </span>
+      <span
+        dir="ltr"
+        role="presentation"
+      >
+        1
+      </span>
+    </span>
+    <span
+      class="markedContent"
+      id="p2R_mc16"
+    >
+      <br role="presentation">
+      <span
+        dir="ltr"
+        role="presentation"
+      >
+        Beta
+      </span>
+    </span>
+    <span
+      class="markedContent"
+      id="p2R_mc17"
+    >
+      <span
+        dir="ltr"
+        role="presentation"
+      >
+      </span>
+      <span
+        dir="ltr"
+        role="presentation"
+      >
+        2
+      </span>
+    </span>
+    <span
+      class="markedContent"
+      id="p2R_mc18"
+    >
+      <br role="presentation">
+      <span
+        dir="ltr"
+        role="presentation"
+      >
+        A figure
+      </span>
+    </span>
+    <span
+      class="markedContent"
+      id="p2R_mc19"
+    >
+    </span>
+    <div class="end-of-content">
+    </div>
+  </div>
+  <div
+    class="link-layer"
+    data-main-rotation="0"
+  >
+  </div>
+</div>
+`;
+/* end snapshot vaadin-pdf-viewer page tagged */
 

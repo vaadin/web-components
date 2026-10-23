@@ -8,7 +8,8 @@
  * See https://vaadin.com/commercial-license-and-service-terms for the full
  * license.
  */
-import type { PDFPageProxy, RenderTask } from 'pdfjs-dist';
+import type * as pdfjs from 'pdfjs-dist';
+import type { PDFPageProxy, RenderTask, TextLayer } from 'pdfjs-dist';
 
 /**
  * The maximum number of pixels of a page canvas. Larger canvases use too much
@@ -27,11 +28,17 @@ export declare class PdfViewerPage {
   pdfPage: PDFPageProxy | null;
   unscaledWidth: number;
   unscaledHeight: number;
+  userUnit: number;
   element: HTMLElement;
   scale: number;
   canvas: HTMLCanvasElement | null;
   renderTask: RenderTask | null;
   renderFailed: boolean;
+  textLayer: TextLayer | null;
+  textLayerElement: HTMLElement | null;
+  linkLayerElement: HTMLElement | null;
+  structTreeElement: HTMLElement | null;
+  hasNoStructTree: boolean;
   renderedScale: number;
   renderedOutputScale: number;
 
@@ -51,6 +58,13 @@ export declare class PdfViewerPage {
   setScale(scale: number): void;
 
   render(devicePixelRatio: number): Promise<void>;
+
+  renderTextLayer(
+    pdfjsModule: typeof pdfjs,
+    textContent: Promise<Awaited<ReturnType<PDFPageProxy['getTextContent']>>>,
+  ): Promise<void>;
+
+  renderStructTree(): Promise<void>;
 
   cancel(): void;
 

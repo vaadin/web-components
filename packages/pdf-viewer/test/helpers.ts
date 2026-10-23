@@ -64,11 +64,12 @@ export type PdfPage = {
 /**
  * Creates a PDF with the given pages in memory, and returns an object URL for it.
  * `dests` is the content of the dictionary of named destinations, e.g. `/name [0 /Fit]`.
+ * `lang` is the language of the document, e.g. `sv`.
  */
-export function createPdf(pages: PdfPage[], { dests = '' } = {}): string {
+export function createPdf(pages: PdfPage[], { dests = '', lang = '' } = {}): string {
   // Object 1 is the catalog, 2 the page tree, 3 and 4 the fonts, then the page, its content and its annotations.
   const objects = [
-    `<< /Type /Catalog /Pages 2 0 R${dests ? ` /Dests << ${dests} >>` : ''} >>`,
+    `<< /Type /Catalog /Pages 2 0 R${dests ? ` /Dests << ${dests} >>` : ''}${lang ? ` /Lang (${lang})` : ''} >>`,
     '',
     '<< /Type /Font /Subtype /Type1 /BaseFont /Helvetica >>',
     '<< /Type /Font /Subtype /Type1 /BaseFont /Courier >>',

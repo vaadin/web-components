@@ -31,6 +31,7 @@ const DEFAULT_I18N = {
   page: 'Page',
   pageOf: 'Page of {pageCount}',
   pageError: 'Enter 1–{pageCount}',
+  pageAnnouncement: 'Page {page} of {pageCount}',
   zoom: 'Zoom',
   zoomIn: 'Zoom in',
   zoomOut: 'Zoom out',
@@ -39,6 +40,9 @@ const DEFAULT_I18N = {
   document: 'PDF document',
   pages: 'Pages',
   pageLabel: 'Page {page}',
+  link: 'Link',
+  goToPage: 'Go to page {page}',
+  externalLink: '{text} (opens in a new tab)',
 };
 
 /**
@@ -103,6 +107,7 @@ const DEFAULT_I18N = {
  * | `--vaadin-pdf-viewer-page-field-width`      |
  * | `--vaadin-pdf-viewer-page-gap`              |
  * | `--vaadin-pdf-viewer-page-shadow`           |
+ * | `--vaadin-pdf-viewer-selection-background`  |
  * | `--vaadin-pdf-viewer-text-color`            |
  * | `--vaadin-pdf-viewer-toolbar-background`    |
  * | `--vaadin-pdf-viewer-toolbar-gap`           |
@@ -178,6 +183,9 @@ class PdfViewer extends PdfViewerToolbarMixin(
    *   // Error message of the page number field for a page that does not exist.
    *   // {pageCount} is replaced with the number of pages.
    *   pageError: 'Enter 1–{pageCount}',
+   *   // Announced when the viewer's own controls, keyboard shortcuts or links change the page.
+   *   // {page} and {pageCount} are replaced with the page number and the number of pages.
+   *   pageAnnouncement: 'Page {page} of {pageCount}',
    *   // Accessible label of the zoom select.
    *   zoom: 'Zoom',
    *   // Accessible labels and tooltips of the zoom buttons.
@@ -193,7 +201,14 @@ class PdfViewer extends PdfViewerToolbarMixin(
    *   // Accessible name of the scrollable area that contains the pages.
    *   pages: 'Pages',
    *   // Accessible name of each page. {page} is replaced with the page number.
-   *   pageLabel: 'Page {page}'
+   *   pageLabel: 'Page {page}',
+   *   // Accessible names of links to another place in the document that have no text.
+   *   // {page} is replaced with the number of the page the link goes to.
+   *   goToPage: 'Go to page {page}',
+   *   link: 'Link',
+   *   // Accessible name of links that open in a new tab.
+   *   // {text} is replaced with the text of the link, or its URL.
+   *   externalLink: '{text} (opens in a new tab)'
    * }
    * ```
    *

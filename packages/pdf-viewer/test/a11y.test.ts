@@ -321,6 +321,31 @@ describe('accessibility', () => {
         await clock.tickAsync(200);
         expect(getAnnouncement()).to.equal('Page width');
       });
+
+      it('should announce the page when going to the last page with the keyboard', async () => {
+        await sendKeys({ press: 'Control+End' });
+        await clock.tickAsync(200);
+        expect(getAnnouncement()).to.equal('Page 6 of 6');
+      });
+
+      it('should announce the page when going to the first page with the keyboard', async () => {
+        await sendKeys({ press: 'Control+End' });
+        await clock.tickAsync(200);
+        await sendKeys({ press: 'Control+Home' });
+        await clock.tickAsync(200);
+        expect(getAnnouncement()).to.equal('Page 1 of 6');
+      });
+
+      it('should not announce the page when scrolling', async () => {
+        const region = [...document.body.children].find((element) => element.hasAttribute('aria-live'))!;
+        region.textContent = '';
+        const scrolled = oneEvent(getContent(), 'scroll');
+        getContent().scrollTop = getContent().scrollHeight;
+        await scrolled;
+        await clock.tickAsync(200);
+        expect(viewer.page).to.equal(6);
+        expect(getAnnouncement()).to.equal('');
+      });
     });
   });
 });

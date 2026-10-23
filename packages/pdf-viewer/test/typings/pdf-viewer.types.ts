@@ -46,6 +46,7 @@ assertType<PdfViewerI18n>({
   page: 'Page',
   pageOf: 'Page of {pageCount}',
   pageError: 'Enter 1–{pageCount}',
+  pageAnnouncement: 'Page {page} of {pageCount}',
   zoom: 'Zoom',
   zoomIn: 'Zoom in',
   zoomOut: 'Zoom out',
@@ -54,6 +55,9 @@ assertType<PdfViewerI18n>({
   document: 'Document',
   pages: 'Pages',
   pageLabel: 'Page {page}',
+  link: 'Link',
+  goToPage: 'Go to page {page}',
+  externalLink: '{text} (opens in a new tab)',
 });
 
 // Mixins

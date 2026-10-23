@@ -32,7 +32,9 @@ function getErrorReason(error) {
  * @typedef {Object} PdfViewerDocumentDetails
  * @property {string} title The title from the metadata of the document, or an empty string.
  * @property {boolean} displayDocTitle Whether the document asks viewers to show its title.
+ * @property {string} language The language from the metadata of the document, or an empty string.
  * @property {import('pdfjs-dist').PDFPageProxy} firstPage The first page of the document.
+ * @property {typeof import('pdfjs-dist')} pdfjs The pdf.js library that loaded the document.
  */
 
 /**
@@ -158,7 +160,9 @@ export class PdfViewerDocumentController {
     this.#callbacks.onLoad(pdfDocument, {
       title: (info && info.Title) || '',
       displayDocTitle: !!viewerPreferences && viewerPreferences.get('DisplayDocTitle') === true,
+      language: (info && info.Language) || '',
       firstPage,
+      pdfjs,
     });
   }
 
