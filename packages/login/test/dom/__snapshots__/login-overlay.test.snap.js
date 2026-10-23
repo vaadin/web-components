@@ -54,6 +54,7 @@ snapshots["vaadin-login-overlay host default"] =
         id="error-message-vaadin-text-field-2"
         slot="error-message"
       >
+        Username is required
       </div>
     </vaadin-text-field>
     <vaadin-password-field
@@ -87,6 +88,7 @@ snapshots["vaadin-login-overlay host default"] =
         id="error-message-vaadin-password-field-5"
         slot="error-message"
       >
+        Password is required
       </div>
       <vaadin-password-field-button
         aria-label="Show password"
@@ -179,6 +181,7 @@ snapshots["vaadin-login-overlay host i18n"] =
         id="error-message-vaadin-text-field-2"
         slot="error-message"
       >
+        Username is required
       </div>
     </vaadin-text-field>
     <vaadin-password-field
@@ -212,6 +215,7 @@ snapshots["vaadin-login-overlay host i18n"] =
         id="error-message-vaadin-password-field-5"
         slot="error-message"
       >
+        Password is required
       </div>
       <vaadin-password-field-button
         aria-label="Show password"
@@ -304,6 +308,7 @@ snapshots["vaadin-login-overlay host i18n-partial"] =
         id="error-message-vaadin-text-field-2"
         slot="error-message"
       >
+        Username is required
       </div>
     </vaadin-text-field>
     <vaadin-password-field
@@ -337,6 +342,7 @@ snapshots["vaadin-login-overlay host i18n-partial"] =
         id="error-message-vaadin-password-field-5"
         slot="error-message"
       >
+        Password is required
       </div>
       <vaadin-password-field-button
         aria-label="Show password"

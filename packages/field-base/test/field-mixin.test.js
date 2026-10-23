@@ -96,13 +96,14 @@ describe('FieldMixin', () => {
         expect(error.textContent).to.equal('This field is required');
       });
 
-      it('should clear error message content when field is valid', async () => {
+      it('should hide error message without clearing content when field is valid', async () => {
         element.errorMessage = 'This field is required';
         await nextUpdate(element);
 
         element.invalid = false;
         await nextUpdate(element);
-        expect(error.textContent).to.equal('');
+        expect(error.hidden).to.be.true;
+        expect(error.textContent).to.equal('This field is required');
       });
 
       it('should not set has-error-message attribute with no error', () => {

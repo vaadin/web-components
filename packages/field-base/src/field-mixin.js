@@ -198,7 +198,8 @@ export const FieldMixin = (superclass) =>
     }
 
     #onErrorSlotContentChange(event) {
-      this.toggleAttribute('has-error-message', event.detail.hasContent);
+      const { hasContent, node } = event.detail;
+      this.toggleAttribute('has-error-message', hasContent && !node.hidden);
 
       // This timeout is needed to prevent NVDA from announcing the error message twice:
       // 1. Once adding the `[role=alert]` attribute when updating `has-error-message` (OK).

@@ -106,7 +106,7 @@ export class ErrorController extends SlotChildObserveController {
     const hasError = Boolean(invalid && errorMessage && errorMessage.trim() !== '');
 
     if (errorNode) {
-      errorNode.textContent = hasError ? errorMessage : '';
+      errorNode.textContent = errorMessage || '';
       errorNode.hidden = !hasError;
 
       if (hasError) {
