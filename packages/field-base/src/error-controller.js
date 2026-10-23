@@ -26,7 +26,7 @@ export class ErrorController extends SlotChildObserveController {
    */
   setErrorMessage(errorMessage) {
     this.errorMessage = errorMessage;
-    this.#announce();
+    this.#updateErrorNode(this.node);
     this.update();
   }
 
@@ -37,12 +37,13 @@ export class ErrorController extends SlotChildObserveController {
    */
   setInvalid(invalid) {
     this.invalid = invalid;
-    this.#announce();
+    this.#updateErrorNode(this.node);
     this.update();
   }
 
   /**
-   * Override to save the custom error message content on the host.
+   * Override to save the custom error message content on the host,
+   * and to initialize the default error message.
    *
    * @param {Node} errorNode
    * @protected
@@ -54,29 +55,29 @@ export class ErrorController extends SlotChildObserveController {
     }
 
     super.initNode(errorNode);
+
+    if (errorNode === this.defaultNode) {
+      this.#updateErrorNode(errorNode);
+    }
   }
 
   /**
-   * Override method inherited from `SlotChildObserveController`
-   * to update the error message text and hidden state.
+   * Update the error message text and hidden state. Unlike with
+   * other controllers, this is done for both default and custom
+   * error message.
    *
-   * Note: unlike with other controllers, this method is
-   * called for both default and custom error message.
-   *
-   * @param {Node} errorNode
-   * @protected
-   * @override
+   * @param {Node | null} errorNode
    */
-  updateNode(errorNode) {
-    super.updateNode(errorNode);
+  #updateErrorNode(errorNode) {
+    if (!errorNode) {
+      return;
+    }
 
     const hasError = this.#hasError;
     errorNode.textContent = hasError ? this.errorMessage : '';
     errorNode.hidden = !hasError;
-  }
 
-  #announce() {
-    if (this.#hasError && this.node) {
+    if (hasError) {
       // Assertive mode ensures VoiceOver reads
       // the error message on commit with Enter.
       announce(this.errorMessage, { mode: 'assertive' });

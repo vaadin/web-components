@@ -247,6 +247,12 @@ describe('FieldMixin', () => {
         await nextUpdate(element);
         expect(error.textContent).to.equal('This field is required');
       });
+
+      it('should not overwrite slotted error message content changed directly', async () => {
+        error.textContent = 'Custom';
+        await nextRender();
+        expect(error.textContent).to.equal('Custom');
+      });
     });
   });
 
