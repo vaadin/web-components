@@ -16,6 +16,13 @@ import { ElementMixin } from '@vaadin/component-base/src/element-mixin.js';
  * ```html
  * <vaadin-pdf-viewer></vaadin-pdf-viewer>
  * ```
+ *
+ * The component is experimental and its API may change. To use it, enable
+ * the following feature flag:
+ *
+ * ```js
+ * window.Vaadin.featureFlags.pdfViewerComponent = true;
+ * ```
  */
 declare class PdfViewer extends ElementMixin(HTMLElement) {}
 

@@ -22,6 +22,13 @@ import { pdfViewerStyles } from './styles/vaadin-pdf-viewer-base-styles.js';
  * <vaadin-pdf-viewer></vaadin-pdf-viewer>
  * ```
  *
+ * The component is experimental and its API may change. To use it, enable
+ * the following feature flag:
+ *
+ * ```js
+ * window.Vaadin.featureFlags.pdfViewerComponent = true;
+ * ```
+ *
  * @customElement vaadin-pdf-viewer
  * @extends HTMLElement
  */
