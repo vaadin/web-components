@@ -378,6 +378,26 @@ describe('side-nav-item', () => {
       expect(anchor.getAttribute('href')).to.be.ok;
     });
 
+    it('should click the anchor on content click when path is empty string', async () => {
+      item.path = '';
+      await nextRender();
+      const spy = sinon.spy();
+      // prevent navigating away from the test page
+      anchor.addEventListener('click', (e) => {
+        e.preventDefault();
+        spy();
+      });
+      item.shadowRoot.querySelector('[part="content"]').click();
+      expect(spy).to.be.calledOnce;
+    });
+
+    it('should not click the anchor on content click when no path is set', () => {
+      const spy = sinon.spy();
+      anchor.addEventListener('click', spy);
+      item.shadowRoot.querySelector('[part="content"]').click();
+      expect(spy).to.be.not.called;
+    });
+
     it('should not trigger navigation when toggle button is clicked', () => {
       const spy = sinon.spy();
       anchor.addEventListener('click', spy);
