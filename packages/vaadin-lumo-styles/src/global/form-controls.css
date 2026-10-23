@@ -1,0 +1,185 @@
+/**
+ * @license
+ * Copyright (c) 2017 - 2026 Vaadin Ltd.
+ * This program is available under Apache License Version 2.0, available at https://vaadin.com/license/
+ */
+
+:where(
+  .vaadin-themed-html :is(button, input, meter, progress, select, textarea):not(.vaadin-unthemed-html),
+  :is(button, input, meter, progress, select, textarea).vaadin-themed-html
+):where(:not([slot='input'], [slot='textarea'])) {
+  --_focus-ring: 0 0 0 var(--vaadin-focus-ring-width, 2px)
+    var(--vaadin-focus-ring-color, var(--lumo-primary-color-50pct));
+  /* The UA stylesheet gives form controls a system font of their own. */
+  font-family: var(--lumo-font-family);
+  accent-color: var(--lumo-primary-color);
+
+  /* Text inputs, text areas and selects look like the input field of a Vaadin text field. */
+  &:where(
+    input:not([type]),
+    input:is(
+      [type='date'],
+      [type='datetime-local'],
+      [type='email'],
+      [type='month'],
+      [type='number'],
+      [type='password'],
+      [type='search'],
+      [type='tel'],
+      [type='text'],
+      [type='time'],
+      [type='url'],
+      [type='week']
+    ),
+    select,
+    textarea
+  ) {
+    box-sizing: border-box;
+    min-height: var(--lumo-size-m);
+    padding: var(--lumo-space-xs) calc(0.625em + var(--lumo-border-radius-m) / 4 - 1px);
+    border: 0;
+    border-radius: var(--lumo-border-radius-m);
+    background-color: var(--lumo-contrast-10pct);
+    color: var(--lumo-body-text-color);
+    font-size: var(--lumo-font-size-m);
+    font-weight: 500;
+    line-height: var(--lumo-line-height-s);
+
+    &::placeholder {
+      color: var(--lumo-secondary-text-color);
+      opacity: 1;
+    }
+
+    &:focus-visible {
+      outline: none;
+      box-shadow: var(--_focus-ring);
+    }
+
+    &:user-invalid {
+      background-color: var(--lumo-error-color-10pct);
+    }
+
+    /* Not :read-only, which also matches a <select> */
+    &[readonly] {
+      outline: 1px dashed var(--lumo-contrast-30pct);
+      outline-offset: -1px;
+      background-color: transparent;
+      color: var(--lumo-secondary-text-color);
+    }
+
+    &:disabled {
+      background-color: var(--lumo-contrast-5pct);
+      color: var(--lumo-disabled-text-color);
+      -webkit-text-fill-color: var(--lumo-disabled-text-color);
+    }
+
+    @media (any-hover: hover) {
+      &:hover:not(:disabled, :focus, [readonly]) {
+        background-image: linear-gradient(var(--lumo-contrast-5pct) 0 0);
+      }
+    }
+
+    /* Without a border of its own, the field would be invisible. */
+    @media (forced-colors: active) {
+      border: 1px solid;
+
+      &:focus-visible {
+        outline: 2px solid Highlight;
+      }
+    }
+  }
+
+  /* Buttons look like a Vaadin button. */
+  &:where(button, input:is([type='button'], [type='reset'], [type='submit'])),
+  &[type='file']::file-selector-button {
+    box-sizing: border-box;
+    min-width: calc(var(--lumo-size-m) * 2);
+    height: var(--lumo-size-m);
+    padding: 0 calc(var(--lumo-size-m) / 3 + var(--lumo-border-radius-m) / 2);
+    border: 0;
+    border-radius: var(--lumo-border-radius-m);
+    background-color: var(--lumo-contrast-5pct);
+    color: var(--lumo-primary-text-color);
+    font-family: var(--lumo-font-family);
+    font-size: var(--lumo-font-size-m);
+    font-weight: 500;
+    cursor: var(--lumo-clickable-cursor);
+
+    @media (forced-colors: active) {
+      border: 1px solid;
+    }
+  }
+
+  &:where(button, input:is([type='button'], [type='reset'], [type='submit'])) {
+    &:focus-visible {
+      outline: none;
+      box-shadow: var(--_focus-ring);
+    }
+
+    &:active:not(:disabled) {
+      background-image: linear-gradient(color-mix(in srgb, currentColor 5%, transparent) 0 0);
+    }
+
+    &:disabled {
+      color: var(--lumo-disabled-text-color);
+    }
+
+    @media (forced-colors: active) {
+      &:focus-visible {
+        outline: 2px solid Highlight;
+      }
+    }
+  }
+
+  @media (any-hover: hover) {
+    &:where(button, input:is([type='button'], [type='reset'], [type='submit'])):hover:not(:disabled, :active),
+    &[type='file']:hover:not(:disabled)::file-selector-button {
+      background-image: linear-gradient(color-mix(in srgb, currentColor 2%, transparent) 0 0);
+    }
+  }
+
+  &[type='file'] {
+    color: var(--lumo-secondary-text-color);
+    font-size: var(--lumo-font-size-m);
+
+    &::file-selector-button {
+      margin-inline-end: var(--lumo-space-s);
+    }
+
+    &:focus-visible {
+      outline: none;
+      border-radius: var(--lumo-border-radius-m);
+      box-shadow: var(--_focus-ring);
+    }
+
+    &:disabled {
+      color: var(--lumo-disabled-text-color);
+
+      &::file-selector-button {
+        color: var(--lumo-disabled-text-color);
+        cursor: default;
+      }
+    }
+  }
+
+  /* Checkboxes, radio buttons and sliders keep the native look, in the primary color and at
+     the size of a Vaadin checkbox. */
+  &:where([type='checkbox'], [type='radio']) {
+    width: calc(var(--lumo-size-m) / 2);
+    height: calc(var(--lumo-size-m) / 2);
+  }
+
+  /* A solid outline is square around a native radio button, an auto outline follows its round shape. */
+  &[type='radio']:focus-visible {
+    outline: var(--vaadin-focus-ring-width, 2px) auto var(--vaadin-focus-ring-color, var(--lumo-primary-color-50pct));
+  }
+
+  &:where([type='checkbox'], [type='radio'], [type='range']) {
+    cursor: var(--lumo-clickable-cursor);
+
+    &:focus-visible {
+      outline: var(--vaadin-focus-ring-width, 2px) solid var(--vaadin-focus-ring-color, var(--lumo-primary-color-50pct));
+      outline-offset: 1px;
+    }
+  }
+}
