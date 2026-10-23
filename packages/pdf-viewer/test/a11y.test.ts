@@ -123,6 +123,31 @@ describe('accessibility', () => {
       expect(pages[2].getAttribute('aria-label')).to.equal('Seite 3');
     });
 
+    it('should use headerTitle as accessible name while the header is hidden', async () => {
+      viewer.fileName = 'report.pdf';
+      viewer.headerTitle = 'Annual report';
+      await loadDocument(viewer, 'multi-page.pdf');
+      expect(viewer.getAttribute('aria-label')).to.equal('Annual report');
+    });
+
+    it('should update its own accessible name when headerTitle changes', async () => {
+      await loadDocument(viewer, 'multi-page.pdf');
+      viewer.headerTitle = 'Annual report';
+      await nextUpdate(viewer);
+      expect(viewer.getAttribute('aria-label')).to.equal('Annual report');
+      viewer.headerTitle = '';
+      await nextUpdate(viewer);
+      expect(viewer.getAttribute('aria-label')).to.equal('Multi-page fixture');
+    });
+
+    it('should keep an accessible name set by the application when headerTitle changes', async () => {
+      viewer.setAttribute('aria-label', 'Invoice');
+      await loadDocument(viewer, 'multi-page.pdf');
+      viewer.headerTitle = 'Annual report';
+      await nextUpdate(viewer);
+      expect(viewer.getAttribute('aria-label')).to.equal('Invoice');
+    });
+
     it('should not set an accessible name when aria-labelledby is set', async () => {
       viewer.setAttribute('aria-labelledby', 'heading');
       await loadDocument(viewer, 'multi-page.pdf');
@@ -140,11 +165,18 @@ describe('accessibility', () => {
 
   describe('keyboard', () => {
     beforeEach(async () => {
-      viewer = fixtureSync('<vaadin-pdf-viewer style="width: 400px; height: 400px"></vaadin-pdf-viewer>');
+      // The language sets the format of the announced zoom.
+      viewer = fixtureSync('<vaadin-pdf-viewer lang="en" style="width: 400px; height: 400px"></vaadin-pdf-viewer>');
       await nextRender();
       const idle = nextRenderIdle(viewer);
       await loadDocument(viewer, 'multi-page.pdf');
       await idle;
+    });
+
+    it('should make the pages focusable after the toolbar controls', async () => {
+      viewer.querySelector<HTMLElement>('vaadin-pdf-viewer-button[icon="zoom-in"]')!.focus();
+      await sendKeys({ press: 'Tab' });
+      expect(viewer.shadowRoot!.activeElement).to.equal(getContent());
     });
 
     it('should scroll the pages with the arrow keys', async () => {
@@ -197,6 +229,98 @@ describe('accessibility', () => {
       await sendKeys({ press: 'Control+Home' });
       await nextFrame();
       expect(viewer.page).to.equal(1);
+    });
+
+    it('should zoom in with Ctrl+=', async () => {
+      viewer.zoom = 1;
+      await nextRenderIdle(viewer);
+      getContent().focus();
+      const zoomChanged = oneEvent(viewer, 'zoom-changed');
+      await sendKeys({ press: 'Control+Equal' });
+      await zoomChanged;
+      expect(viewer.zoom).to.equal(1.25);
+    });
+
+    it('should zoom out with Ctrl+-', async () => {
+      viewer.zoom = 1;
+      await nextRenderIdle(viewer);
+      getContent().focus();
+      const zoomChanged = oneEvent(viewer, 'zoom-changed');
+      await sendKeys({ press: 'Control+Minus' });
+      await zoomChanged;
+      expect(viewer.zoom).to.equal(0.75);
+    });
+
+    it('should reset the zoom to page-width with Ctrl+0', async () => {
+      viewer.zoom = 2;
+      await nextRenderIdle(viewer);
+      getContent().focus();
+      const zoomChanged = oneEvent(viewer, 'zoom-changed');
+      await sendKeys({ press: 'Control+Digit0' });
+      await zoomChanged;
+      expect(viewer.zoom).to.equal('page-width');
+    });
+
+    it('should zoom with Ctrl+= from a toolbar button', async () => {
+      viewer.zoom = 1;
+      await nextRenderIdle(viewer);
+      viewer.querySelector<HTMLElement>('vaadin-pdf-viewer-button[icon="next-page"]')!.focus();
+      const zoomChanged = oneEvent(viewer, 'zoom-changed');
+      await sendKeys({ press: 'Control+Equal' });
+      await zoomChanged;
+      expect(viewer.zoom).to.equal(1.25);
+    });
+
+    it('should not zoom with Ctrl+= in the page field', async () => {
+      const spy = sinon.spy();
+      viewer.addEventListener('zoom-changed', spy);
+      viewer.querySelector<HTMLElement>('vaadin-integer-field')!.focus();
+      await sendKeys({ press: 'Control+Equal' });
+      await nextFrame();
+      expect(spy).to.be.not.called;
+    });
+
+    it('should not zoom with Ctrl+= in a text area of the application', async () => {
+      const textArea = document.createElement('textarea');
+      textArea.slot = 'toolbar-actions';
+      viewer.appendChild(textArea);
+      const spy = sinon.spy();
+      viewer.addEventListener('zoom-changed', spy);
+      textArea.focus();
+      await sendKeys({ press: 'Control+Equal' });
+      await nextFrame();
+      expect(spy).to.be.not.called;
+    });
+
+    describe('announcements', () => {
+      let clock: sinon.SinonFakeTimers;
+
+      function getAnnouncement() {
+        return [...document.body.children].find((element) => element.hasAttribute('aria-live'))!.textContent;
+      }
+
+      beforeEach(async () => {
+        viewer.zoom = 1;
+        await nextRenderIdle(viewer);
+        getContent().focus();
+        clock = sinon.useFakeTimers({ shouldClearNativeTimers: true });
+      });
+
+      afterEach(() => {
+        clock.restore();
+      });
+
+      it('should announce the zoom when zooming with the keyboard', async () => {
+        await sendKeys({ press: 'Control+Equal' });
+        await clock.tickAsync(200);
+        expect(getAnnouncement()).to.equal('125%');
+      });
+
+      it('should announce page width when resetting the zoom with the keyboard', async () => {
+        await sendKeys({ press: 'Control+Digit0' });
+        await clock.tickAsync(200);
+        expect(getAnnouncement()).to.equal('Page width');
+      });
     });
   });
 });

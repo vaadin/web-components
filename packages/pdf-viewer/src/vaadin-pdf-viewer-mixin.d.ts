@@ -13,6 +13,8 @@ import type { PDFDocumentProxy } from 'pdfjs-dist';
 import type { ResizeMixinClass } from '@vaadin/component-base/src/resize-mixin.js';
 import type { PdfViewerPage } from './pdf-viewer-page.js';
 
+export type PdfViewerZoom = 'page-fit' | 'page-width' | number;
+
 export declare function PdfViewerMixin<T extends Constructor<HTMLElement>>(
   base: T,
 ): Constructor<PdfViewerMixinClass> & Constructor<ResizeMixinClass> & T;
@@ -29,6 +31,14 @@ export declare class PdfViewerMixinClass {
    * Setting it scrolls to the start of that page.
    */
   page: number;
+
+  /**
+   * The zoom level of the pages:
+   * - `page-width` (default) fits the width of the first page to the viewer.
+   * - `page-fit` fits the whole first page into the viewer.
+   * - A number scales the pages relative to their actual size, e.g. `1` for 100%.
+   */
+  zoom: PdfViewerZoom;
 
   /**
    * The number of pages in the loaded document, or 0 when no document
@@ -57,6 +67,12 @@ export declare class PdfViewerMixinClass {
   protected _loading: boolean;
 
   /**
+   * The zoom level the pages are shown at, as a factor of their actual
+   * size, or 0 while no pages are laid out.
+   */
+  protected _zoomFactor: number;
+
+  /**
    * The loaded document, or null.
    */
   protected readonly _pdfDocument: PDFDocumentProxy | null;
@@ -66,6 +82,11 @@ export declare class PdfViewerMixinClass {
    * the viewer's own controls.
    */
   protected _goToPage(page: number): void;
+
+  /**
+   * Zooms in or out to the next zoom level, and announces the new zoom.
+   */
+  protected _stepZoom(direction: -1 | 1): void;
 
   /**
    * Returns the view of a page of the loaded document.

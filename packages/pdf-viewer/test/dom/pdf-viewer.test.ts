@@ -40,6 +40,23 @@ describe('vaadin-pdf-viewer', () => {
       await nextFrame();
       await expect(viewer).dom.to.equalSnapshot();
     });
+
+    it('header', async () => {
+      viewer.headerVisible = true;
+      viewer.src = fixtureUrl('multi-page.pdf');
+      await oneEvent(viewer, 'document-load');
+      await nextUpdate(viewer);
+      await expect(viewer).dom.to.equalSnapshot();
+    });
+
+    it('toolbar collapsed', async () => {
+      viewer.headerVisible = true;
+      viewer.toolbarCollapsed = true;
+      viewer.src = fixtureUrl('multi-page.pdf');
+      await oneEvent(viewer, 'document-load');
+      await nextUpdate(viewer);
+      await expect(viewer).dom.to.equalSnapshot();
+    });
   });
 
   describe('shadow', () => {
@@ -59,6 +76,22 @@ describe('vaadin-pdf-viewer', () => {
       await oneEvent(viewer, 'document-error');
       await nextFrame();
       await expect(viewer).shadowDom.to.equalSnapshot();
+    });
+
+    it('header', async () => {
+      viewer.headerVisible = true;
+      viewer.headerTitle = 'Annual report';
+      viewer.src = fixtureUrl('multi-page.pdf');
+      await nextRenderIdle(viewer);
+      await expect(viewer).shadowDom.to.equalSnapshot({ ignoreAttributes: ['style', 'width', 'height'] });
+    });
+
+    it('toolbar collapsed', async () => {
+      viewer.headerVisible = true;
+      viewer.toolbarCollapsed = true;
+      viewer.src = fixtureUrl('multi-page.pdf');
+      await nextRenderIdle(viewer);
+      await expect(viewer).shadowDom.to.equalSnapshot({ ignoreAttributes: ['style', 'width', 'height'] });
     });
 
     it('password error', async () => {

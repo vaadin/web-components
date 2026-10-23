@@ -33,9 +33,10 @@ const pdfViewerBaseStyles = css`
   .content-area {
     position: relative;
     display: flex;
-    flex: 1 1 auto;
+    /* Takes the height left by the toolbar, see .top-area */
+    flex: 1 1 0;
     min-width: 0;
-    min-height: 0;
+    min-height: 40%;
   }
 
   [part='content'] {

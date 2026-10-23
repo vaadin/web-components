@@ -11,11 +11,16 @@
       window.Vaadin.featureFlags.pdfViewerComponent = true;
     </script>
     <script type="module">
+      import '@vaadin/button';
       import '@vaadin/pdf-viewer';
+      import '@vaadin/tooltip';
 
       const viewer = document.querySelector('vaadin-pdf-viewer');
       const select = document.querySelector('#src');
       const pageInput = document.querySelector('#page');
+      const headerVisible = document.querySelector('#header-visible');
+      const headerTitle = document.querySelector('#header-title');
+      const collapsed = document.querySelector('#collapsed');
       const log = document.querySelector('#log');
 
       const update = () => {
@@ -31,6 +36,26 @@
       });
       viewer.addEventListener('page-count-changed', (e) => {
         pageInput.max = e.detail.value;
+      });
+
+      headerVisible.addEventListener('change', () => {
+        viewer.headerVisible = headerVisible.checked;
+      });
+      headerTitle.addEventListener('change', () => {
+        viewer.headerTitle = headerTitle.value;
+      });
+      collapsed.addEventListener('change', () => {
+        viewer.toolbarCollapsed = collapsed.checked;
+      });
+      viewer.addEventListener('toolbar-collapsed-changed', (e) => {
+        collapsed.checked = e.detail.value;
+      });
+      viewer.addEventListener('zoom-changed', (e) => {
+        log.textContent = `zoom-changed: ${e.detail.value}`;
+      });
+
+      document.querySelector('#approve').addEventListener('click', () => {
+        log.textContent = 'Approve clicked';
       });
 
       viewer.addEventListener('document-load', (e) => {
@@ -68,8 +93,25 @@
         Page
         <input type="number" id="page" min="1" value="1" />
       </label>
+      <label>
+        <input type="checkbox" id="header-visible" />
+        Show header
+      </label>
+      <label>
+        Header title
+        <input type="text" id="header-title" />
+      </label>
+      <label>
+        <input type="checkbox" id="collapsed" />
+        Collapse toolbar
+      </label>
       <output id="log"></output>
     </p>
-    <vaadin-pdf-viewer></vaadin-pdf-viewer>
+    <vaadin-pdf-viewer>
+      <vaadin-button slot="toolbar-actions" id="approve" theme="tertiary">
+        Approve
+        <vaadin-tooltip slot="tooltip" text="Approve the document"></vaadin-tooltip>
+      </vaadin-button>
+    </vaadin-pdf-viewer>
   </body>
 </html>

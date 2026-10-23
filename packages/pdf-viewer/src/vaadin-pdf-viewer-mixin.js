@@ -15,6 +15,10 @@ import { issueWarning } from '@vaadin/component-base/src/warnings.js';
 import { PdfViewerDocumentController } from './pdf-viewer-document-controller.js';
 import { PdfViewerPage } from './pdf-viewer-page.js';
 import { PdfViewerRenderQueue } from './pdf-viewer-render-queue.js';
+import { formatZoom, getZoomInLevel, getZoomOutLevel, isValidZoom } from './pdf-viewer-zoom.js';
+
+/** PDF units are points (1/72 inch), CSS pixels are 1/96 inch. */
+const PDF_TO_CSS_UNITS = 96 / 72;
 
 /** The number of pages whose size is requested at a time after loading. */
 const PAGE_SIZE_BATCH = 10;
@@ -67,6 +71,35 @@ export const PdfViewerMixin = (superClass) =>
           type: Number,
           value: 1,
           notify: true,
+        },
+
+        /**
+         * The zoom level of the pages:
+         * - `page-width` (default) fits the width of the first page to the viewer.
+         * - `page-fit` fits the whole first page into the viewer.
+         * - A number scales the pages relative to their actual size, e.g. `1` for 100%.
+         *
+         * @type {string | number}
+         */
+        zoom: {
+          value: 'page-width',
+          notify: true,
+          // Numbers set as attribute, e.g. zoom="1.5", become numbers.
+          converter: {
+            fromAttribute: (value) =>
+              value !== null && value.trim() !== '' && !Number.isNaN(Number(value)) ? Number(value) : value,
+          },
+        },
+
+        /**
+         * The zoom level the pages are shown at, as a factor of their actual
+         * size, or 0 while no pages are laid out.
+         * @protected
+         */
+        _zoomFactor: {
+          type: Number,
+          value: 0,
+          attribute: false,
         },
 
         /**
@@ -258,7 +291,7 @@ export const PdfViewerMixin = (superClass) =>
 
     /**
      * Override method from `LitElement` to load the document, and to apply
-     * changes to the page, the name and the localization.
+     * changes to the page, the zoom, the name and the localization.
      * @protected
      * @override
      */
@@ -280,6 +313,11 @@ export const PdfViewerMixin = (superClass) =>
 
       if (props.has('src')) {
         this.#documentController.load();
+      }
+
+      if (props.has('zoom') && this.#pages.length) {
+        this.#idle = false;
+        this.#refresh();
       }
 
       if (props.has('page') && this.page !== this.#scrolledPage && this.#pages.length) {
@@ -324,6 +362,19 @@ export const PdfViewerMixin = (superClass) =>
      */
     _goToPage(page) {
       this.page = page;
+    }
+
+    /**
+     * Zooms in or out to the next zoom level, and announces the new zoom.
+     * @param {1 | -1} direction
+     * @protected
+     */
+    _stepZoom(direction) {
+      const zoom = direction > 0 ? getZoomInLevel(this._zoomFactor) : getZoomOutLevel(this._zoomFactor);
+      if (zoom) {
+        this.zoom = zoom;
+        announce(formatZoom(zoom, this));
+      }
     }
 
     /**
@@ -526,6 +577,7 @@ export const PdfViewerMixin = (superClass) =>
       this.#pinnedPage = 0;
       this.#pendingPage = 0;
       this.#pageSizesLoaded = true;
+      this._zoomFactor = 0;
       cancelAnimationFrame(this.#relayoutFrame);
       this.#relayoutFrame = 0;
       this.$.pages.replaceChildren();
@@ -614,8 +666,8 @@ export const PdfViewerMixin = (superClass) =>
     }
 
     /**
-     * Applies changes to the size, and scrolls to a page that was set while
-     * the pages could not be laid out.
+     * Applies changes to the zoom or size, and scrolls to a page that was set
+     * while the pages could not be laid out.
      * @private
      */
     #refresh() {
@@ -666,8 +718,7 @@ export const PdfViewerMixin = (superClass) =>
     }
 
     /**
-     * Returns the scale that fits the width of the first page to the viewer,
-     * or 0 when the viewer has no layout.
+     * Returns the scale for the current `zoom`, or 0 when the viewer has no layout.
      * @private
      */
     #computeScale() {
@@ -676,9 +727,23 @@ export const PdfViewerMixin = (superClass) =>
         return 0;
       }
 
-      // Fit the first page, so that the scale does not depend on which page is
-      // current. In most documents all pages have the size of the first one.
-      return width / this.#pages[0].unscaledWidth;
+      let zoom = this.zoom;
+      if (!isValidZoom(zoom)) {
+        // Only show strings and numbers, as converting other values to a string can throw.
+        const value = typeof zoom === 'string' || typeof zoom === 'number' ? zoom : typeof zoom;
+        issueWarning(`Invalid zoom value "${value}" for <vaadin-pdf-viewer>, using "page-width" instead.`);
+        zoom = 'page-width';
+      }
+
+      if (zoom === 'page-width' || zoom === 'page-fit') {
+        // Fit the first page, so that the scale does not depend on which page is
+        // current. In most documents all pages have the size of the first one.
+        const page = this.#pages[0];
+        const widthScale = width / page.unscaledWidth;
+        return zoom === 'page-width' ? widthScale : Math.min(widthScale, height / page.unscaledHeight);
+      }
+
+      return Number(zoom) * PDF_TO_CSS_UNITS;
     }
 
     /**
@@ -703,6 +768,7 @@ export const PdfViewerMixin = (superClass) =>
       const anchor = isFirstLayout ? null : this.#captureAnchor(null);
 
       this.#scale = scale;
+      this._zoomFactor = scale / PDF_TO_CSS_UNITS;
       this.#renderQueue.cancel();
       this.#pages.forEach((page) => page.setScale(scale));
       this.#idle = false;
@@ -1013,12 +1079,31 @@ export const PdfViewerMixin = (superClass) =>
      */
     #onKeyDown(event) {
       const isShortcut = (event.ctrlKey || event.metaKey) && !event.altKey;
-      if (!isShortcut || !this.#pages.length) {
+      // Text fields keep the browser zoom, which low vision users may rely on.
+      const isInField = event
+        .composedPath()
+        .some((element) => ['input', 'textarea'].includes(element.localName) || element.isContentEditable);
+      if (!isShortcut || isInField || !this.#pages.length) {
         return;
       }
 
-      if ((event.key === 'Home' || event.key === 'End') && event.composedPath().includes(this.$.content)) {
+      // Check the key code too, for keyboard layouts that need Shift for these keys.
+      const { key, code } = event;
+      let handled = true;
+      if (key === '+' || key === '=' || code === 'NumpadAdd') {
+        this._stepZoom(1);
+      } else if (key === '-' || code === 'NumpadSubtract') {
+        this._stepZoom(-1);
+      } else if (key === '0' || code === 'Digit0' || code === 'Numpad0') {
+        this.zoom = 'page-width';
+        announce(this.__effectiveI18n.pageWidth);
+      } else if ((event.key === 'Home' || event.key === 'End') && event.composedPath().includes(this.$.content)) {
         this._goToPage(event.key === 'Home' ? 1 : this.#pages.length);
+      } else {
+        handled = false;
+      }
+
+      if (handled) {
         event.preventDefault();
       }
     }
