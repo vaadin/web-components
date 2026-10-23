@@ -261,10 +261,7 @@ snapshots["vaadin-pdf-viewer host default"] =
       slot="value"
       tabindex="-1"
     >
-      <vaadin-select-item
-        id="value-vaadin-select-7"
-        selected=""
-      >
+      <vaadin-select-item id="value-vaadin-select-7">
         Page width
       </vaadin-select-item>
     </vaadin-select-value-button>
@@ -639,10 +636,7 @@ snapshots["vaadin-pdf-viewer host error"] =
       slot="value"
       tabindex="-1"
     >
-      <vaadin-select-item
-        id="value-vaadin-select-7"
-        selected=""
-      >
+      <vaadin-select-item id="value-vaadin-select-7">
         Page width
       </vaadin-select-item>
     </vaadin-select-value-button>
@@ -1007,10 +1001,7 @@ snapshots["vaadin-pdf-viewer find bar host"] =
       slot="value"
       tabindex="0"
     >
-      <vaadin-select-item
-        id="value-vaadin-select-7"
-        selected=""
-      >
+      <vaadin-select-item id="value-vaadin-select-7">
         Page width
       </vaadin-select-item>
     </vaadin-select-value-button>

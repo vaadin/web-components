@@ -37,7 +37,6 @@
     "@vaadin/integer-field": "25.4.0-alpha4",
     "@vaadin/list-box": "25.4.0-alpha4",
     "@vaadin/map": "25.4.0-alpha4",
-    "@vaadin/pdf-viewer": "25.4.0-alpha4",
     "@vaadin/menu-bar": "25.4.0-alpha4",
     "@vaadin/message-input": "25.4.0-alpha4",
     "@vaadin/message-list": "25.4.0-alpha4",
