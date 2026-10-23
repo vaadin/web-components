@@ -290,6 +290,51 @@ describe('SlotController', () => {
       expect(controller.node).to.equal(custom);
     });
 
+    it('should not run initializer again when default node is restored', async () => {
+      const initializer = sinon.spy();
+      element = fixtureSync(`<${tag}></${tag}>`);
+      controller = new SlotController(element, 'foo', 'div', { initializer });
+      element.addController(controller);
+
+      const custom = document.createElement('div');
+      custom.setAttribute('slot', 'foo');
+      element.appendChild(custom);
+      await nextFrame();
+
+      custom.remove();
+      await nextFrame();
+      expect(controller.node).to.equal(controller.defaultNode);
+      expect(initializer).to.be.calledTwice;
+      expect(initializer.firstCall.args[0]).to.equal(controller.defaultNode);
+      expect(initializer.secondCall.args[0]).to.equal(custom);
+    });
+
+    it('should not run initializer again when a custom node set as default node is added back', async () => {
+      const initializer = sinon.spy((node) => {
+        if (node._isDefault) {
+          controller.defaultNode = node;
+        }
+      });
+      element = fixtureSync(`<${tag}></${tag}>`);
+      const flowDefault = document.createElement('div');
+      flowDefault.setAttribute('slot', 'foo');
+      flowDefault._isDefault = true;
+      element.appendChild(flowDefault);
+      controller = new SlotController(element, 'foo', 'div', { initializer });
+      element.addController(controller);
+
+      const custom = document.createElement('div');
+      custom.setAttribute('slot', 'foo');
+      element.appendChild(custom);
+      await nextFrame();
+
+      custom.remove();
+      element.appendChild(flowDefault);
+      await nextFrame();
+      expect(controller.node).to.equal(flowDefault);
+      expect(initializer).to.be.calledTwice;
+    });
+
     it('should keep reference to the new node when custom slot child is replaced', async () => {
       const custom = document.createElement('div');
       custom.setAttribute('slot', 'foo');

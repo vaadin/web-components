@@ -31,6 +31,9 @@ export class SlotController extends EventTarget {
   /** @type {Node[]} */
   nodes = [];
 
+  /** @type {WeakSet<Node>} */
+  #initializedNodes = new WeakSet();
+
   constructor(host, slotName, tagName, config = {}) {
     super();
 
@@ -83,18 +86,22 @@ export class SlotController extends EventTarget {
 
   /**
    * Set up a node once it starts being managed by the controller,
-   * either a default or a custom one. Runs `slotInitializer` by default.
+   * either a default or a custom one. Runs `slotInitializer` by default,
+   * only once for the default node.
    *
    * @param {Node} node
    * @protected
    */
   initNode(node) {
     const { slotInitializer } = this;
+    if (!slotInitializer || (node === this.defaultNode && this.#initializedNodes.has(node))) {
+      return;
+    }
+
+    this.#initializedNodes.add(node);
     // Don't try to bind `this` to initializer (normally it's arrow function).
     // Instead, pass the host as a first argument to access component's state.
-    if (slotInitializer) {
-      slotInitializer(node, this.host);
-    }
+    slotInitializer(node, this.host);
   }
 
   /**
@@ -118,22 +125,30 @@ export class SlotController extends EventTarget {
       return;
     }
 
-    const nodes = this.#getCustomNodes();
+    const prevNodes = this.nodes;
+    const nextNodes = [];
 
-    if (nodes.length > 0) {
-      if (this.defaultNode?.parentNode === this.host) {
-        this.defaultNode.remove();
+    const customNodes = this.#getCustomNodes();
+    if (customNodes.length > 0) {
+      this.defaultNode?.remove();
+
+      nextNodes.push(...customNodes);
+    } else {
+      if (this.tagName && this.defaultNode?.parentNode !== this.host) {
+        this.defaultNode ??= this.#createDefaultNode();
+        this.host.appendChild(this.defaultNode);
       }
-    } else if (this.#attachDefaultNode()) {
-      nodes.push(this.defaultNode);
+
+      if (this.defaultNode?.parentNode === this.host) {
+        nextNodes.push(this.defaultNode);
+      }
     }
 
-    const prevNodes = this.nodes;
-    this.nodes = nodes;
-    this.node = nodes[0] ?? null;
+    this.nodes = nextNodes;
+    this.node = nextNodes[0] ?? null;
 
-    prevNodes.filter((node) => !nodes.includes(node)).forEach((node) => this.teardownNode(node));
-    nodes.filter((node) => !prevNodes.includes(node)).forEach((node) => this.initNode(node));
+    prevNodes.filter((node) => !nextNodes.includes(node)).forEach((node) => this.teardownNode(node));
+    nextNodes.filter((node) => !prevNodes.includes(node)).forEach((node) => this.initNode(node));
   }
 
   #getCustomNodes() {
@@ -148,23 +163,11 @@ export class SlotController extends EventTarget {
     return [node];
   }
 
-  #attachDefaultNode() {
-    if (this.defaultNode?.parentNode === this.host) {
-      return true;
+  #createDefaultNode() {
+    const node = document.createElement(this.tagName);
+    if (this.slotName !== '') {
+      node.slot = this.slotName;
     }
-
-    if (!this.tagName) {
-      return false;
-    }
-
-    if (!this.defaultNode) {
-      this.defaultNode = document.createElement(this.tagName);
-      if (this.slotName !== '') {
-        this.defaultNode.setAttribute('slot', this.slotName);
-      }
-    }
-
-    this.host.appendChild(this.defaultNode);
-    return true;
+    return node;
   }
 }

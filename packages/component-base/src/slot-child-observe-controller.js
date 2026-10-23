@@ -26,9 +26,7 @@ export class SlotChildObserveController extends SlotController {
    * @protected
    */
   updateNode(node) {
-    if (!node.id) {
-      node.id = this.defaultId;
-    }
+    node.id ||= this.defaultId;
   }
 
   /**
