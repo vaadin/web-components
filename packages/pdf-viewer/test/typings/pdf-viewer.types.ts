@@ -6,6 +6,7 @@ import type {
   PdfViewer,
   PdfViewerDocumentErrorEvent,
   PdfViewerDocumentLoadEvent,
+  PdfViewerFindResultEvent,
   PdfViewerI18n,
   PdfViewerPageChangedEvent,
   PdfViewerPageCountChangedEvent,
@@ -13,6 +14,7 @@ import type {
   PdfViewerZoom,
   PdfViewerZoomChangedEvent,
 } from '../../src/vaadin-pdf-viewer.js';
+import type { PdfViewerFindMixinClass } from '../../src/vaadin-pdf-viewer-find-mixin.js';
 import type { PdfViewerMixinClass } from '../../src/vaadin-pdf-viewer-mixin.js';
 import type { PdfViewerPrintMixinClass } from '../../src/vaadin-pdf-viewer-print-mixin.js';
 import type { PdfViewerToolbarMixinClass } from '../../src/vaadin-pdf-viewer-toolbar-mixin.js';
@@ -34,6 +36,7 @@ assertType<boolean>(viewer.headerVisible);
 assertType<string | null | undefined>(viewer.headerTitle);
 assertType<boolean>(viewer.toolbarCollapsed);
 assertType<boolean>(viewer.downloadButtonHidden);
+assertType<boolean>(viewer.findButtonHidden);
 assertType<PdfViewerI18n | undefined>(viewer.i18n);
 
 // I18n
@@ -61,16 +64,26 @@ assertType<PdfViewerI18n>({
   goToPage: 'Go to page {page}',
   externalLink: '{text} (opens in a new tab)',
   download: 'Download',
+  find: 'Find',
+  previousMatch: 'Previous match',
+  nextMatch: 'Next match',
+  closeFind: 'Close',
+  findResult: '{current} of {total}',
+  findResultAnnouncement: '{current} of {total}, page {page}',
+  findNoMatches: 'No matches',
 });
 
 // Methods
 assertType<() => void>(viewer.download);
+assertType<(text: string) => void>(viewer.find);
+assertType<(page: number, text: string) => void>(viewer.highlight);
 
 // Mixins
 assertType<ElementMixinClass>(viewer);
 assertType<I18nMixinClass<PdfViewerI18n>>(viewer);
 assertType<PdfViewerMixinClass>(viewer);
 assertType<PdfViewerToolbarMixinClass>(viewer);
+assertType<PdfViewerFindMixinClass>(viewer);
 assertType<PdfViewerPrintMixinClass>(viewer);
 assertType<ResizeMixinClass>(viewer);
 
@@ -105,4 +118,10 @@ viewer.addEventListener('zoom-changed', (event) => {
 viewer.addEventListener('toolbar-collapsed-changed', (event) => {
   assertType<PdfViewerToolbarCollapsedChangedEvent>(event);
   assertType<boolean>(event.detail.value);
+});
+
+viewer.addEventListener('find-result', (event) => {
+  assertType<PdfViewerFindResultEvent>(event);
+  assertType<string>(event.detail.query);
+  assertType<number>(event.detail.matchCount);
 });

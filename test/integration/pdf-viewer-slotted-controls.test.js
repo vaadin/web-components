@@ -41,15 +41,17 @@ describe('pdf-viewer with slotted controls', () => {
     await resetMouse();
   });
 
-  it('should show the slotted buttons in DOM order at the end of the toolbar, before the download button', () => {
+  it('should show the slotted buttons in DOM order at the end of the toolbar, before the built-in buttons', () => {
     const toolbar = viewer.shadowRoot.querySelector('[part="toolbar"]').getBoundingClientRect();
     const zoomIn = viewer.querySelector('vaadin-pdf-viewer-button[icon="zoom-in"]').getBoundingClientRect();
+    const find = viewer.querySelector('vaadin-pdf-viewer-button[icon="find"]').getBoundingClientRect();
     const download = viewer.querySelector('vaadin-pdf-viewer-button[icon="download"]').getBoundingClientRect();
     const approveRect = approve.getBoundingClientRect();
     const rejectRect = reject.getBoundingClientRect();
     expect(approveRect.left).to.be.greaterThan(zoomIn.right);
     expect(approveRect.right).to.be.at.most(rejectRect.left);
-    expect(rejectRect.right).to.be.at.most(download.left);
+    expect(rejectRect.right).to.be.at.most(find.left);
+    expect(find.right).to.be.at.most(download.left);
     expect(toolbar.right - download.right).to.be.lessThan(20);
   });
 
@@ -67,7 +69,7 @@ describe('pdf-viewer with slotted controls', () => {
     await sendKeys({ press: 'Tab' });
     expect(document.activeElement).to.equal(reject);
     await sendKeys({ press: 'Tab' });
-    expect(document.activeElement).to.equal(viewer.querySelector('vaadin-pdf-viewer-button[icon="download"]'));
+    expect(document.activeElement).to.equal(viewer.querySelector('vaadin-pdf-viewer-button[icon="find"]'));
   });
 
   it('should keep the slotted buttons when the toolbar renders again', async () => {

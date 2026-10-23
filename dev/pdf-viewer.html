@@ -22,6 +22,9 @@
       const headerTitle = document.querySelector('#header-title');
       const collapsed = document.querySelector('#collapsed');
       const downloadHidden = document.querySelector('#download-hidden');
+      const findHidden = document.querySelector('#find-hidden');
+      const findText = document.querySelector('#find-text');
+      const highlightPage = document.querySelector('#highlight-page');
       const log = document.querySelector('#log');
 
       const update = () => {
@@ -56,6 +59,18 @@
       });
       document.querySelector('#download').addEventListener('click', () => {
         viewer.download();
+      });
+      findHidden.addEventListener('change', () => {
+        viewer.findButtonHidden = findHidden.checked;
+      });
+      document.querySelector('#find').addEventListener('click', () => {
+        viewer.find(findText.value);
+      });
+      document.querySelector('#highlight').addEventListener('click', () => {
+        viewer.highlight(highlightPage.valueAsNumber, findText.value);
+      });
+      viewer.addEventListener('find-result', (e) => {
+        log.textContent = `find-result: ${JSON.stringify(e.detail)}`;
       });
       viewer.addEventListener('zoom-changed', (e) => {
         log.textContent = `zoom-changed: ${e.detail.value}`;
@@ -117,6 +132,20 @@
         Hide download button
       </label>
       <button id="download">download()</button>
+      <label>
+        <input type="checkbox" id="find-hidden" />
+        Hide find button
+      </label>
+      <label>
+        Text
+        <input type="text" id="find-text" value="table" />
+      </label>
+      <button id="find">find(text)</button>
+      <label>
+        Page
+        <input type="number" id="highlight-page" min="1" value="2" />
+      </label>
+      <button id="highlight">highlight(page, text)</button>
       <output id="log"></output>
     </p>
     <vaadin-pdf-viewer>

@@ -424,11 +424,13 @@ describe('toolbar', () => {
     });
   });
 
-  it('should show the toolbar without scrolling on a narrow viewer', async () => {
+  it('should show the toolbar and the find bar without scrolling on a narrow viewer', async () => {
     viewer.style.cssText = 'width: 320px; height: 400px';
     const idle = nextRenderIdle(viewer);
     await loadDocument(viewer, 'multi-page.pdf');
     await idle;
+    getButton('find').click();
+    await nextRender();
     const area = getToolbar().parentElement!;
     expect(area.scrollHeight).to.be.at.most(area.clientHeight);
   });
@@ -456,7 +458,13 @@ describe('toolbar', () => {
     it('should group the controls into navigation, viewing options and actions', () => {
       expect(getGroupIcons('navigation')).to.deep.equal(['previous-page', 'next-page']);
       expect(getGroupIcons('viewing')).to.deep.equal(['zoom-out', 'zoom-in']);
-      expect(getGroupIcons('actions')).to.deep.equal(['download']);
+      expect(getGroupIcons('actions')).to.deep.equal(['find', 'download']);
+    });
+
+    it('should show the find button before the download button', () => {
+      expect(getButton('find').getBoundingClientRect().right).to.be.at.most(
+        getButton('download').getBoundingClientRect().left,
+      );
     });
 
     it('should place the groups at the start, middle and end of a wide toolbar', () => {
@@ -713,12 +721,31 @@ describe('toolbar', () => {
         expect(document.activeElement).to.equal(getToggle());
       });
 
+      it('should keep focus outside the toolbar when it collapses', async () => {
+        getButton('find').click();
+        await nextRender();
+        const findField = viewer.querySelector('vaadin-text-field')!;
+        expect(findField.contains(document.activeElement)).to.be.true;
+        viewer.toolbarCollapsed = true;
+        await nextFrame();
+        expect(findField.contains(document.activeElement)).to.be.true;
+      });
+
       it('should move focus to the pages when the toggle button is removed with focus', async () => {
         getToggle()!.focus();
         viewer.src = undefined as any;
         await nextFrame();
         expect(getToggle()).to.be.null;
         expect(viewer.shadowRoot!.activeElement).to.equal(viewer.shadowRoot!.querySelector('[part="content"]'));
+      });
+
+      it('should keep the find bar open when the toolbar collapses', async () => {
+        getButton('find').click();
+        await nextRender();
+        viewer.toolbarCollapsed = true;
+        await nextFrame();
+        const findBar = viewer.shadowRoot!.querySelector<HTMLElement>('[part="find-bar"]')!;
+        expect(findBar.checkVisibility()).to.be.true;
       });
     });
   });
@@ -746,11 +773,11 @@ describe('toolbar', () => {
       expect(approve.getBoundingClientRect().right).to.be.at.most(reject.getBoundingClientRect().left);
     });
 
-    it('should show slotted controls before the download button', async () => {
+    it('should show slotted controls before the built-in buttons', async () => {
       const approve = createButton('Approve');
       viewer.appendChild(approve);
       await nextFrame();
-      expect(approve.getBoundingClientRect().right).to.be.at.most(getButton('download').getBoundingClientRect().left);
+      expect(approve.getBoundingClientRect().right).to.be.at.most(getButton('find').getBoundingClientRect().left);
     });
 
     it('should hide slotted controls with the collapsed toolbar', async () => {
@@ -819,40 +846,39 @@ describe('toolbar', () => {
   });
 
   describe('large text', () => {
-    beforeEach(async () => {
+    beforeEach(() => {
       // The header and the toolbar need more than 60% of the height
       viewer.style.cssText = 'width: 320px; height: 300px; font-size: 32px';
       viewer.headerVisible = true;
+    });
+
+    async function load() {
       const idle = nextRenderIdle(viewer);
       await loadDocument(viewer, 'multi-page.pdf');
       await idle;
-    });
+    }
 
     function getControls() {
       return [
-        ...viewer.querySelectorAll<HTMLElement>('vaadin-pdf-viewer-button, vaadin-integer-field, vaadin-select'),
+        ...viewer.querySelectorAll<HTMLElement>(
+          'vaadin-pdf-viewer-button, vaadin-integer-field, vaadin-select, vaadin-text-field',
+        ),
       ].filter((control) => control.checkVisibility());
     }
 
-    it('should keep the controls inside the viewer', () => {
+    function expectControlsInside() {
       const host = viewer.getBoundingClientRect();
       getControls().forEach((control) => {
         const rect = control.getBoundingClientRect();
         expect(rect.left, control.getAttribute('aria-label')!).to.be.at.least(host.left);
         expect(rect.right, control.getAttribute('aria-label')!).to.be.at.most(host.right);
       });
-    });
+    }
 
-    it('should keep at least 40% of the viewer for the pages', () => {
-      const content = viewer.shadowRoot!.querySelector<HTMLElement>('[part="content"]')!;
-      expect(content.getBoundingClientRect().height).to.be.at.least(viewer.getBoundingClientRect().height * 0.4 - 2);
-    });
-
-    it('should scroll each control into view when focused with the keyboard', async () => {
+    /** Goes backwards from the focused element through the controls, and returns the visited controls. */
+    async function expectControlsScrolledIntoView() {
       const area = getToolbar().parentElement!;
-      // Go backwards from the pages through all toolbar controls.
-      viewer.shadowRoot!.querySelector<HTMLElement>('[part="content"]')!.focus();
-      await sendKeys({ press: 'Shift+Tab' });
+      const findBar = viewer.shadowRoot!.querySelector<HTMLElement>('[part="find-bar"]')!;
       const visited = new Set<Element>();
       for (let i = 0; i < 20; i++) {
         const active = document.activeElement!;
@@ -863,8 +889,8 @@ describe('toolbar', () => {
         visited.add(control);
         // The focused element, i.e. the input of a field, which the browser scrolls into view
         const rect = active.getBoundingClientRect();
-        // Visible in the header and the toolbar, which are inside the viewer
-        const areaRect = area.getBoundingClientRect();
+        // Visible in the header and the toolbar, or in the find bar, which are inside the viewer
+        const areaRect = (findBar.contains(control.assignedSlot) ? findBar : area).getBoundingClientRect();
         const viewerRect = viewer.getBoundingClientRect();
         const top = Math.max(areaRect.top, viewerRect.top);
         const bottom = Math.min(areaRect.bottom, viewerRect.bottom);
@@ -875,8 +901,60 @@ describe('toolbar', () => {
         expect(viewer.scrollTop, control.getAttribute('aria-label')!).to.equal(0);
         await sendKeys({ press: 'Shift+Tab' });
       }
+      return visited;
+    }
+
+    it('should keep the controls inside the viewer', async () => {
+      await load();
+      expectControlsInside();
+    });
+
+    it('should keep at least 40% of the viewer for the pages', async () => {
+      await load();
+      const content = viewer.shadowRoot!.querySelector<HTMLElement>('[part="content"]')!;
+      expect(content.getBoundingClientRect().height).to.be.at.least(viewer.getBoundingClientRect().height * 0.4 - 2);
+    });
+
+    it('should scroll each control into view when focused with the keyboard', async () => {
+      await load();
+      // Go backwards from the pages through all toolbar controls.
+      viewer.shadowRoot!.querySelector<HTMLElement>('[part="content"]')!.focus();
+      await sendKeys({ press: 'Shift+Tab' });
+      const visited = await expectControlsScrolledIntoView();
       expect(visited).to.include(getButton('zoom-in'));
       expect(visited).to.include(viewer.querySelector('vaadin-pdf-viewer-button[slot="toolbar-toggle"]'));
+    });
+
+    describe('find bar', () => {
+      beforeEach(async () => {
+        // High enough for the find bar below the toolbar
+        viewer.style.height = '400px';
+        viewer.headerVisible = false;
+        await load();
+        getButton('find').click();
+        await nextRender();
+        // Show the result in the find field
+        await sendKeys({ type: 'quick' });
+        const result = viewer.querySelector('vaadin-text-field[slot="find"] > span[slot="suffix"]')!;
+        for (let i = 0; i < 50 && !result.textContent!.trim(); i++) {
+          await nextFrame();
+        }
+      });
+
+      it('should keep the controls of the find bar inside the viewer', () => {
+        expectControlsInside();
+      });
+
+      it('should scroll each control into view when focused with the keyboard', async () => {
+        // Go forwards to the last control of the find bar, then backwards from it through all controls.
+        for (let i = 0; i < 3; i++) {
+          await sendKeys({ press: 'Tab' });
+        }
+        expect(document.activeElement).to.equal(getButton('close'));
+        const visited = await expectControlsScrolledIntoView();
+        expect(visited).to.include(viewer.querySelector('vaadin-text-field'));
+        expect(visited).to.include(getButton('next-page'));
+      });
     });
   });
 });

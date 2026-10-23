@@ -35,6 +35,16 @@
     color: var(--lumo-contrast-60pct);
   }
 
+  /* Like Lumo overlays */
+  [part='find-bar'] {
+    border-color: transparent;
+    border-radius: var(--lumo-border-radius-m);
+    background: var(--lumo-base-color) linear-gradient(var(--lumo-tint-5pct), var(--lumo-tint-5pct));
+    box-shadow:
+      0 0 0 1px var(--lumo-shade-5pct),
+      var(--lumo-box-shadow-m);
+  }
+
   ::slotted([slot='page-error']) {
     color: var(--lumo-error-text-color);
     font-size: var(--lumo-font-size-xs);
@@ -56,12 +66,19 @@
     --vaadin-pdf-viewer-toolbar-background: var(--lumo-base-color);
     --vaadin-pdf-viewer-toolbar-padding: var(--lumo-space-xs);
     --vaadin-pdf-viewer-selection-background: color-mix(in srgb, var(--lumo-primary-color) 30%, transparent);
+    --vaadin-pdf-viewer-match-background: color-mix(in srgb, var(--lumo-warning-color) 50%, transparent);
+    --vaadin-pdf-viewer-current-match-background: color-mix(in srgb, var(--lumo-primary-color) 50%, transparent);
+    --vaadin-pdf-viewer-current-match-outline-color: var(--lumo-primary-color);
     --vaadin-pdf-viewer-icon-previous-page: var(--lumo-icons-angle-up);
+    --vaadin-pdf-viewer-icon-previous-match: var(--lumo-icons-angle-left);
+    --vaadin-pdf-viewer-icon-next-match: var(--lumo-icons-angle-right);
     --vaadin-pdf-viewer-icon-next-page: var(--lumo-icons-angle-down);
     --vaadin-pdf-viewer-icon-collapse-toolbar: var(--lumo-icons-angle-up);
     --vaadin-pdf-viewer-icon-expand-toolbar: var(--lumo-icons-angle-down);
     --vaadin-pdf-viewer-icon-zoom-out: var(--lumo-icons-minus);
     --vaadin-pdf-viewer-icon-zoom-in: var(--lumo-icons-plus);
+    --vaadin-pdf-viewer-icon-find: var(--lumo-icons-search);
     --vaadin-pdf-viewer-icon-download: var(--lumo-icons-download);
+    --vaadin-pdf-viewer-icon-close: var(--lumo-icons-cross);
   }
 }

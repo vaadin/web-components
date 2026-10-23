@@ -38,6 +38,7 @@ export declare class PdfViewerPage {
   textLayerElement: HTMLElement | null;
   linkLayerElement: HTMLElement | null;
   structTreeElement: HTMLElement | null;
+  findLayerElement: HTMLElement | null;
   hasNoStructTree: boolean;
   renderedScale: number;
   renderedOutputScale: number;
@@ -65,6 +66,10 @@ export declare class PdfViewerPage {
   ): Promise<void>;
 
   renderStructTree(): Promise<void>;
+
+  renderFindLayer(parts: Array<{ itemIndex: number; start: number; end: number; current: boolean }>): void;
+
+  clearFindLayer(): void;
 
   cancel(): void;
 

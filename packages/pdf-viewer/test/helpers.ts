@@ -48,6 +48,16 @@ export async function scrollSettled(element: HTMLElement): Promise<void> {
 }
 
 /**
+ * Waits until the current match of a search is highlighted and scrolled to.
+ */
+export async function currentMatchShown(viewer: PdfViewer): Promise<void> {
+  for (let i = 0; i < 50 && !viewer.shadowRoot!.querySelector('.find-match.current'); i++) {
+    await nextFrame();
+  }
+  await scrollSettled(viewer.shadowRoot!.querySelector<HTMLElement>('[part="content"]')!);
+}
+
+/**
  * A page of a PDF created with `createPdf()`.
  */
 export type PdfPage = {

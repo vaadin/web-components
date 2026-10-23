@@ -35,6 +35,7 @@ vaadin-tabs,
 vaadin-upload,
 vaadin-upload-file,
 vaadin-pdf-viewer::part(zoom-controls),
+vaadin-pdf-viewer::part(find-bar),
 ::part(input-field),
 :where(
   vaadin-avatar-group,

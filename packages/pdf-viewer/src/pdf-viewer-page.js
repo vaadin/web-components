@@ -67,6 +67,9 @@ export class PdfViewerPage {
     /** @type {HTMLElement | null} */
     this.structTreeElement = null;
 
+    /** @type {HTMLElement | null} */
+    this.findLayerElement = null;
+
     /** Set when the page has no structure, i.e. it is not tagged. */
     this.hasNoStructTree = false;
 
@@ -274,6 +277,54 @@ export class PdfViewerPage {
     }
   }
 
+  /**
+   * Highlights parts of the text of the text layer, e.g. the matches of a
+   * search, replacing the previous highlights. Does nothing without a text layer.
+   *
+   * @param {Array<{ itemIndex: number, start: number, end: number, current: boolean }>} parts
+   *   the text item, by its index in the text layer, and the offsets of the text to highlight in it
+   */
+  renderFindLayer(parts) {
+    this.clearFindLayer();
+    if (!this.textLayer || !parts.length) {
+      return;
+    }
+
+    const { textDivs } = this.textLayer;
+    const layer = document.createElement('div');
+    layer.className = 'find-layer';
+    // Positioned in % of the page, so that they stay in place when zooming.
+    const pageRect = this.element.getBoundingClientRect();
+    parts.forEach(({ itemIndex, start, end, current }) => {
+      const textNode = textDivs[itemIndex].firstChild;
+      if (!textNode || end > textNode.length) {
+        return;
+      }
+      const range = document.createRange();
+      range.setStart(textNode, start);
+      range.setEnd(textNode, end);
+      [...range.getClientRects()].forEach((rect) => {
+        const highlight = document.createElement('div');
+        highlight.className = current ? 'find-match current' : 'find-match';
+        highlight.style.left = `${((rect.left - pageRect.left) / pageRect.width) * 100}%`;
+        highlight.style.top = `${((rect.top - pageRect.top) / pageRect.height) * 100}%`;
+        highlight.style.width = `${(rect.width / pageRect.width) * 100}%`;
+        highlight.style.height = `${(rect.height / pageRect.height) * 100}%`;
+        layer.append(highlight);
+      });
+    });
+
+    // Below the text layer, so that the text stays selectable.
+    this.textLayerElement.before(layer);
+    this.findLayerElement = layer;
+  }
+
+  /** Removes the highlights of `renderFindLayer()`. */
+  clearFindLayer() {
+    this.findLayerElement?.remove();
+    this.findLayerElement = null;
+  }
+
   /** Cancels a pending render. */
   cancel() {
     if (this.renderTask) {
@@ -282,9 +333,10 @@ export class PdfViewerPage {
     }
   }
 
-  /** Cancels a pending render and frees the canvas memory and the text and link layers. */
+  /** Cancels a pending render and frees the canvas memory and the text, link and find layers. */
   release() {
     this.cancel();
+    this.clearFindLayer();
     this.textLayer?.cancel();
     this.textLayer = null;
     this.textLayerElement?.remove();

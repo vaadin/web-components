@@ -6,7 +6,7 @@ import '@vaadin/vaadin-lumo-styles/components/pdf-viewer.css';
 import '../../enable-feature-flag.js';
 import '../../../vaadin-pdf-viewer.js';
 import type { PdfViewer } from '../../../vaadin-pdf-viewer.js';
-import { fixtureUrl, nextRenderIdle } from '../../helpers.js';
+import { currentMatchShown, fixtureUrl, nextRenderIdle } from '../../helpers.js';
 
 describe('pdf-viewer', () => {
   let div: HTMLElement;
@@ -122,9 +122,47 @@ describe('pdf-viewer', () => {
   it('download-button', async () => {
     element.src = fixtureUrl('multi-page.pdf');
     await nextRenderIdle(element);
-    element.querySelector<HTMLElement>('vaadin-pdf-viewer-button[icon="zoom-in"]')!.focus();
+    element.querySelector<HTMLElement>('vaadin-pdf-viewer-button[icon="find"]')!.focus();
     await sendKeys({ press: 'Tab' });
     await visualDiff(div, 'download-button');
+  });
+
+  it('find', async () => {
+    element.src = fixtureUrl('multi-page.pdf');
+    await nextRenderIdle(element);
+    element.querySelector<HTMLElement>('vaadin-pdf-viewer-button[icon="find"]')!.click();
+    await nextRender();
+    // Entered at once, as a search for each typed key can stop the scroll to the match short
+    const input = element.querySelector<HTMLInputElement>('vaadin-text-field[slot="find"] > input')!;
+    input.value = 'quick';
+    input.dispatchEvent(new Event('input', { bubbles: true }));
+    await currentMatchShown(element);
+    await visualDiff(div, 'find');
+  });
+
+  describe('large text', () => {
+    beforeEach(() => {
+      // Like a larger default font size in the browser settings
+      document.documentElement.style.fontSize = '32px';
+      div.style.width = '320px';
+    });
+
+    afterEach(() => {
+      document.documentElement.style.fontSize = '';
+    });
+
+    it('large-text-find', async () => {
+      element.src = fixtureUrl('multi-page.pdf');
+      await nextRenderIdle(element);
+      element.querySelector<HTMLElement>('vaadin-pdf-viewer-button[icon="find"]')!.click();
+      await nextRender();
+      // Entered at once, as a search for each typed key can stop the scroll to the match short
+      const input = element.querySelector<HTMLInputElement>('vaadin-text-field[slot="find"] > input')!;
+      input.value = 'quick';
+      input.dispatchEvent(new Event('input', { bubbles: true }));
+      await currentMatchShown(element);
+      await visualDiff(div, 'large-text-find');
+    });
   });
 
   it('wide', async () => {

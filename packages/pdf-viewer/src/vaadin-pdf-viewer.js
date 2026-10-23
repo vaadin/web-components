@@ -16,8 +16,10 @@ import { PolylitMixin } from '@vaadin/component-base/src/polylit-mixin.js';
 import { LumoInjectionMixin } from '@vaadin/vaadin-themable-mixin/lumo-injection-mixin.js';
 import { icons } from './styles/vaadin-pdf-viewer-base-icons.js';
 import { pdfViewerStyles } from './styles/vaadin-pdf-viewer-base-styles.js';
+import { pdfViewerFindStyles } from './styles/vaadin-pdf-viewer-find-base-styles.js';
 import { pdfViewerPageStyles } from './styles/vaadin-pdf-viewer-page-base-styles.js';
 import { pdfViewerToolbarStyles } from './styles/vaadin-pdf-viewer-toolbar-base-styles.js';
+import { PdfViewerFindMixin } from './vaadin-pdf-viewer-find-mixin.js';
 import { PdfViewerMixin } from './vaadin-pdf-viewer-mixin.js';
 import { PdfViewerPrintMixin } from './vaadin-pdf-viewer-print-mixin.js';
 import { PdfViewerToolbarMixin } from './vaadin-pdf-viewer-toolbar-mixin.js';
@@ -45,6 +47,13 @@ const DEFAULT_I18N = {
   goToPage: 'Go to page {page}',
   externalLink: '{text} (opens in a new tab)',
   download: 'Download',
+  find: 'Find in document',
+  previousMatch: 'Previous match',
+  nextMatch: 'Next match',
+  closeFind: 'Close find',
+  findResult: '{current} of {total}',
+  findResultAnnouncement: '{current} of {total}, page {page}',
+  findNoMatches: 'No matches',
 };
 
 /**
@@ -78,6 +87,7 @@ const DEFAULT_I18N = {
  * `toolbar`       | The toolbar above the pages.
  * `toolbar-group` | A group of related controls in the toolbar: navigation, viewing options and actions.
  * `zoom-controls` | The zoom select with the zoom out and zoom in buttons. Also has the `disabled` part name without a document.
+ * `find-bar`      | The panel with the controls for finding text, shown over the top end of the pages.
  * `content`       | The scrollable area that contains the pages.
  * `page`          | A page of the document.
  * `error-message` | The message shown when the document could not be loaded.
@@ -92,30 +102,38 @@ const DEFAULT_I18N = {
  *
  * The following custom CSS properties are available for styling:
  *
- * Custom CSS property                          |
- * :---------------------------------------------|
- * | `--vaadin-pdf-viewer-background`            |
- * | `--vaadin-pdf-viewer-border-color`          |
- * | `--vaadin-pdf-viewer-border-radius`         |
- * | `--vaadin-pdf-viewer-error-color`           |
- * | `--vaadin-pdf-viewer-icon-collapse-toolbar` |
- * | `--vaadin-pdf-viewer-icon-download`         |
- * | `--vaadin-pdf-viewer-icon-expand-toolbar`   |
- * | `--vaadin-pdf-viewer-icon-next-page`        |
- * | `--vaadin-pdf-viewer-icon-previous-page`    |
- * | `--vaadin-pdf-viewer-icon-zoom-in`          |
- * | `--vaadin-pdf-viewer-icon-zoom-out`         |
- * | `--vaadin-pdf-viewer-padding`               |
- * | `--vaadin-pdf-viewer-page-background`       |
- * | `--vaadin-pdf-viewer-page-field-width`      |
- * | `--vaadin-pdf-viewer-page-gap`              |
- * | `--vaadin-pdf-viewer-page-shadow`           |
- * | `--vaadin-pdf-viewer-selection-background`  |
- * | `--vaadin-pdf-viewer-text-color`            |
- * | `--vaadin-pdf-viewer-toolbar-background`    |
- * | `--vaadin-pdf-viewer-toolbar-gap`           |
- * | `--vaadin-pdf-viewer-toolbar-padding`       |
- * | `--vaadin-pdf-viewer-zoom-select-width`     |
+ * Custom CSS property                                |
+ * :---------------------------------------------------|
+ * | `--vaadin-pdf-viewer-background`                  |
+ * | `--vaadin-pdf-viewer-border-color`                |
+ * | `--vaadin-pdf-viewer-border-radius`               |
+ * | `--vaadin-pdf-viewer-current-match-background`    |
+ * | `--vaadin-pdf-viewer-current-match-outline-color` |
+ * | `--vaadin-pdf-viewer-error-color`                 |
+ * | `--vaadin-pdf-viewer-find-field-width`            |
+ * | `--vaadin-pdf-viewer-icon-close`                  |
+ * | `--vaadin-pdf-viewer-icon-collapse-toolbar`       |
+ * | `--vaadin-pdf-viewer-icon-download`               |
+ * | `--vaadin-pdf-viewer-icon-expand-toolbar`         |
+ * | `--vaadin-pdf-viewer-icon-find`                   |
+ * | `--vaadin-pdf-viewer-icon-next-match`             |
+ * | `--vaadin-pdf-viewer-icon-next-page`              |
+ * | `--vaadin-pdf-viewer-icon-previous-match`         |
+ * | `--vaadin-pdf-viewer-icon-previous-page`          |
+ * | `--vaadin-pdf-viewer-icon-zoom-in`                |
+ * | `--vaadin-pdf-viewer-icon-zoom-out`               |
+ * | `--vaadin-pdf-viewer-match-background`            |
+ * | `--vaadin-pdf-viewer-padding`                     |
+ * | `--vaadin-pdf-viewer-page-background`             |
+ * | `--vaadin-pdf-viewer-page-field-width`            |
+ * | `--vaadin-pdf-viewer-page-gap`                    |
+ * | `--vaadin-pdf-viewer-page-shadow`                 |
+ * | `--vaadin-pdf-viewer-selection-background`        |
+ * | `--vaadin-pdf-viewer-text-color`                  |
+ * | `--vaadin-pdf-viewer-toolbar-background`          |
+ * | `--vaadin-pdf-viewer-toolbar-gap`                 |
+ * | `--vaadin-pdf-viewer-toolbar-padding`             |
+ * | `--vaadin-pdf-viewer-zoom-select-width`           |
  *
  * The `--vaadin-pdf-viewer-icon-*` properties take an image (e.g. an SVG data URL) used as a mask.
  * In the Lumo theme, they take a glyph of the `lumo-icons` font instead, like the icons of `<vaadin-map>`.
@@ -124,6 +142,7 @@ const DEFAULT_I18N = {
  *
  * @fires {CustomEvent} document-error - Fired when the document could not be loaded.
  * @fires {CustomEvent} document-load - Fired when the document has loaded.
+ * @fires {CustomEvent} find-result - Fired when finding text, with `find()` or in the find bar, has gone through the document.
  * @fires {CustomEvent} page-changed - Fired when the `page` property changes.
  * @fires {CustomEvent} page-count-changed - Fired when the `pageCount` property changes.
  * @fires {CustomEvent} toolbar-collapsed-changed - Fired when the `toolbarCollapsed` property changes.
@@ -133,7 +152,9 @@ const DEFAULT_I18N = {
  * @extends HTMLElement
  */
 class PdfViewer extends PdfViewerPrintMixin(
-  PdfViewerToolbarMixin(PdfViewerMixin(I18nMixin(ElementMixin(PolylitMixin(LumoInjectionMixin(LitElement)))))),
+  PdfViewerFindMixin(
+    PdfViewerToolbarMixin(PdfViewerMixin(I18nMixin(ElementMixin(PolylitMixin(LumoInjectionMixin(LitElement)))))),
+  ),
 ) {
   static get is() {
     return 'vaadin-pdf-viewer';
@@ -148,7 +169,7 @@ class PdfViewer extends PdfViewerPrintMixin(
   }
 
   static get styles() {
-    return [icons, pdfViewerStyles, pdfViewerToolbarStyles, pdfViewerPageStyles];
+    return [icons, pdfViewerStyles, pdfViewerToolbarStyles, pdfViewerFindStyles, pdfViewerPageStyles];
   }
 
   static get lumoInjector() {
@@ -214,7 +235,21 @@ class PdfViewer extends PdfViewerPrintMixin(
    *   // {text} is replaced with the text of the link, or its URL.
    *   externalLink: '{text} (opens in a new tab)',
    *   // Accessible label and tooltip of the download button.
-   *   download: 'Download'
+   *   download: 'Download',
+   *   // Accessible label of the find button, the find bar and the find field,
+   *   // tooltip of the find button and placeholder of the find field.
+   *   find: 'Find in document',
+   *   // Accessible labels and tooltips of the find bar buttons.
+   *   previousMatch: 'Previous match',
+   *   nextMatch: 'Next match',
+   *   closeFind: 'Close find',
+   *   // Shown in the find field when finding text.
+   *   // {current} and {total} are replaced with the number of the current match and the number of matches.
+   *   findResult: '{current} of {total}',
+   *   // Announced when moving to a match. {page} is replaced with the page of the match.
+   *   findResultAnnouncement: '{current} of {total}, page {page}',
+   *   // Shown in the find field and announced when the text is not found.
+   *   findNoMatches: 'No matches'
    * }
    * ```
    *
@@ -238,6 +273,7 @@ class PdfViewer extends PdfViewerPrintMixin(
       ${this._renderToolbar()}
       <div part="loader"></div>
       <div class="content-area">
+        ${this._renderFindBar()}
         <div
           id="content"
           part="content"
@@ -273,7 +309,7 @@ class PdfViewer extends PdfViewerPrintMixin(
       this.#controlsMarker = document.createComment('');
       this.appendChild(this.#controlsMarker);
     }
-    render(html`${this._renderToolbarControls()}${this._renderPrintControls()}`, this, {
+    render(html`${this._renderToolbarControls()}${this._renderFindControls()}${this._renderPrintControls()}`, this, {
       host: this,
       renderBefore: this.#controlsMarker,
     });
