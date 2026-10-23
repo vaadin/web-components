@@ -1,5 +1,14 @@
 /* Shared label, helper, error and required-indicator styles. Widen the list as fields are
    ported. */
+
+/* The page height as a length, so `auto` falls back to the Lumo size */
+@property --_lumo-field-custom-height {
+  syntax: '<length>';
+  inherits: false;
+  /* stylelint-disable-next-line length-zero-no-unit */
+  initial-value: 0px;
+}
+
 :where(:root),
 :where(:host) {
   --vaadin-input-field-label-color: var(--lumo-secondary-text-color);
@@ -36,7 +45,8 @@
   vaadin-date-time-picker
 ) {
   /* Baseline guide, as in legacy Lumo: one input tall with centered text over the input */
-  --_lumo-field-input-height: var(--vaadin-input-field-height, var(--lumo-size-m));
+  --_lumo-field-custom-height: var(--vaadin-input-field-height, 0px);
+  --_lumo-field-input-height: max(var(--_lumo-field-custom-height), var(--lumo-size-m));
   --vaadin-field-baseline-input-height: var(--_lumo-field-input-height);
 
   &:where(vaadin-slider, vaadin-range-slider, vaadin-checkbox-group, vaadin-radio-group) {
@@ -131,7 +141,7 @@
   vaadin-date-time-picker,
   vaadin-input-container
 )[theme~='small'] {
-  --_lumo-field-input-height: var(--vaadin-input-field-height, var(--lumo-size-s));
+  --_lumo-field-input-height: max(var(--_lumo-field-custom-height), var(--lumo-size-s));
   font-size: var(--lumo-font-size-s);
   --vaadin-input-field-label-font-size: var(--lumo-font-size-xs);
   --vaadin-input-field-error-font-size: var(--lumo-font-size-xxs);
