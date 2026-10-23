@@ -1,0 +1,186 @@
+<!doctype html>
+<html lang="en">
+  <head>
+    <meta charset="UTF-8" />
+    <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+    <title>PDF Viewer performance</title>
+    <script type="module" src="./common.js"></script>
+    <script>
+      window.Vaadin = window.Vaadin || {};
+      window.Vaadin.featureFlags = window.Vaadin.featureFlags || {};
+      window.Vaadin.featureFlags.pdfViewerComponent = true;
+
+      // Count the workers that exist, before the viewer creates one
+      window.workerCount = 0;
+      const NativeWorker = window.Worker;
+      window.Worker = class extends NativeWorker {
+        constructor(...args) {
+          super(...args);
+          window.workerCount += 1;
+        }
+
+        terminate() {
+          window.workerCount -= 1;
+          super.terminate();
+        }
+      };
+
+      window.longTasks = [];
+      if (PerformanceObserver.supportedEntryTypes.includes('longtask')) {
+        new PerformanceObserver((list) => window.longTasks.push(...list.getEntries())).observe({ type: 'longtask' });
+      }
+    </script>
+    <script type="module">
+      import '@vaadin/pdf-viewer';
+
+      const viewer = document.querySelector('vaadin-pdf-viewer');
+      const select = document.querySelector('#src');
+      const run = document.querySelector('#run');
+      const results = document.querySelector('#results');
+
+      // A document with the given number of US Letter pages, each with its page number
+      function createPdfUrl(pageCount) {
+        const catalog = '<< /Type /Catalog /Pages 2 0 R >>';
+        const font = '<< /Type /Font /Subtype /Type1 /BaseFont /Helvetica >>';
+        const objects = [catalog, '', font];
+        const pageIds = [];
+        for (let index = 0; index < pageCount; index++) {
+          const id = objects.length + 1;
+          const content = `BT /F1 48 Tf 72 700 Td (Page ${index + 1}) Tj ET`;
+          pageIds.push(id);
+          objects.push(
+            `<< /Type /Page /Parent 2 0 R /MediaBox [0 0 612 792] /Resources << /Font << /F1 3 0 R >> >> /Contents ${id + 1} 0 R >>`,
+            `<< /Length ${content.length} >>\nstream\n${content}\nendstream`,
+          );
+        }
+        objects[1] = `<< /Type /Pages /Kids [${pageIds.map((id) => `${id} 0 R`).join(' ')}] /Count ${pageCount} >>`;
+        let pdf = '%PDF-1.4\n';
+        const offsets = [];
+        objects.forEach((object, index) => {
+          offsets.push(pdf.length);
+          pdf += `${index + 1} 0 obj\n${object}\nendobj\n`;
+        });
+        const xref = pdf.length;
+        pdf += `xref\n0 ${objects.length + 1}\n0000000000 65535 f \n`;
+        offsets.forEach((offset) => {
+          pdf += `${String(offset).padStart(10, '0')} 00000 n \n`;
+        });
+        pdf += `trailer\n<< /Size ${objects.length + 1} /Root 1 0 R >>\nstartxref\n${xref}\n%%EOF\n`;
+        return URL.createObjectURL(new Blob([pdf], { type: 'application/pdf' }));
+      }
+
+      function countNodes(root) {
+        let count = 0;
+        const walker = document.createTreeWalker(root, NodeFilter.SHOW_ELEMENT);
+        while (walker.nextNode()) {
+          count += 1;
+          if (walker.currentNode.shadowRoot) {
+            count += countNodes(walker.currentNode.shadowRoot);
+          }
+        }
+        return count;
+      }
+
+      function getCanvasPixels() {
+        return [...viewer.shadowRoot.querySelectorAll('canvas')].reduce(
+          (sum, canvas) => sum + canvas.width * canvas.height,
+          0,
+        );
+      }
+
+      async function measure(src) {
+        viewer.src = null;
+        await new Promise((resolve) => {
+          setTimeout(resolve, 100);
+        });
+        window.longTasks.length = 0;
+
+        let firstPaint = 0;
+        const start = performance.now();
+        const observer = new MutationObserver(() => {
+          if (!firstPaint && viewer.shadowRoot.querySelector('canvas')) {
+            firstPaint = performance.now() - start;
+          }
+        });
+        observer.observe(viewer.shadowRoot, { childList: true, subtree: true });
+        const idle = new Promise((resolve) => {
+          viewer.addEventListener('render-idle', resolve, { once: true });
+        });
+        viewer.src = src;
+        await idle;
+        const idleTime = performance.now() - start;
+        observer.disconnect();
+
+        return {
+          pageCount: viewer.pageCount,
+          firstPaint: Math.round(firstPaint),
+          idle: Math.round(idleTime),
+          canvasPixels: getCanvasPixels(),
+          nodes: countNodes(document.body),
+          heapMB: performance.memory ? Math.round(performance.memory.usedJSHeapSize / 2 ** 20) : 'n/a',
+          longTasks: PerformanceObserver.supportedEntryTypes.includes('longtask') ? window.longTasks.length : 'n/a',
+          workers: window.workerCount,
+        };
+      }
+
+      run.addEventListener('click', async () => {
+        run.disabled = true;
+        const src = select.value === 'generated' ? createPdfUrl(1000) : select.value;
+        const result = await measure(src);
+        const row = document.createElement('tr');
+        [select.selectedOptions[0].textContent, ...Object.values(result)].forEach((value) => {
+          const cell = document.createElement('td');
+          cell.textContent = value;
+          row.append(cell);
+        });
+        results.append(row);
+        run.disabled = false;
+      });
+    </script>
+    <style>
+      vaadin-pdf-viewer {
+        height: 600px;
+      }
+
+      td,
+      th {
+        padding: 0.25em 0.75em;
+        text-align: end;
+      }
+    </style>
+  </head>
+
+  <body>
+    <p>
+      <label>
+        Document
+        <select id="src">
+          <option value="/dev/assets/pdf/01_fonts.pdf">01_fonts.pdf</option>
+          <option value="/dev/assets/pdf/02_images_and_vector_graphics.pdf">02_images_and_vector_graphics.pdf</option>
+          <option value="/dev/assets/pdf/03_form_with_signatures.pdf">03_form_with_signatures.pdf</option>
+          <option value="/dev/assets/pdf/04_optional_content_help_layer.pdf">04_optional_content_help_layer.pdf</option>
+          <option value="/dev/assets/pdf/05_tagged_accessible_pdf_ua.pdf">05_tagged_accessible_pdf_ua.pdf</option>
+          <option value="generated">1,000 generated pages</option>
+        </select>
+      </label>
+      <button id="run">Measure</button>
+    </p>
+    <table>
+      <thead>
+        <tr>
+          <th>Document</th>
+          <th>Pages</th>
+          <th>First paint (ms)</th>
+          <th>Render idle (ms)</th>
+          <th>Canvas pixels</th>
+          <th>DOM nodes</th>
+          <th>JS heap (MB)</th>
+          <th>Long tasks</th>
+          <th>Workers</th>
+        </tr>
+      </thead>
+      <tbody id="results"></tbody>
+    </table>
+    <vaadin-pdf-viewer></vaadin-pdf-viewer>
+  </body>
+</html>

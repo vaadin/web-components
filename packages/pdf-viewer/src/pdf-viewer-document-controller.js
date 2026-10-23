@@ -29,10 +29,17 @@ function getErrorReason(error) {
 }
 
 /**
+ * @typedef {Object} PdfViewerDocumentDetails
+ * @property {string} title The title from the metadata of the document, or an empty string.
+ * @property {boolean} displayDocTitle Whether the document asks viewers to show its title.
+ * @property {import('pdfjs-dist').PDFPageProxy} firstPage The first page of the document.
+ */
+
+/**
  * @typedef {Object} PdfViewerDocumentCallbacks
  * @property {() => void} onLoadStart Called when loading starts.
- * @property {(pdfDocument: import('pdfjs-dist').PDFDocumentProxy, title: string) => void} onLoad
- *   Called when the document has loaded, with the title from its metadata.
+ * @property {(pdfDocument: import('pdfjs-dist').PDFDocumentProxy, details: PdfViewerDocumentDetails) => void} onLoad
+ *   Called when the document has loaded.
  * @property {(error: unknown, reason: 'invalid' | 'network' | 'password') => void} onError
  *   Called when the document could not be loaded.
  * @property {() => void} onUnload Called when the document or the load in progress is dropped.
@@ -140,11 +147,19 @@ export class PdfViewerDocumentController {
       return;
     }
 
-    const { info } = await pdfDocument.getMetadata();
+    const [{ info }, viewerPreferences, firstPage] = await Promise.all([
+      pdfDocument.getMetadata(),
+      pdfDocument.getViewerPreferences(),
+      pdfDocument.getPage(1),
+    ]);
     if (loadId !== this.#loadId) {
       return;
     }
-    this.#callbacks.onLoad(pdfDocument, (info && info.Title) || '');
+    this.#callbacks.onLoad(pdfDocument, {
+      title: (info && info.Title) || '',
+      displayDocTitle: !!viewerPreferences && viewerPreferences.get('DisplayDocTitle') === true,
+      firstPage,
+    });
   }
 
   /** @private */

@@ -1,11 +1,13 @@
 import '../../vaadin-pdf-viewer.js';
 import type { ElementMixinClass } from '@vaadin/component-base/src/element-mixin.js';
 import type { I18nMixinClass } from '@vaadin/component-base/src/i18n-mixin.js';
+import type { ResizeMixinClass } from '@vaadin/component-base/src/resize-mixin.js';
 import type {
   PdfViewer,
   PdfViewerDocumentErrorEvent,
   PdfViewerDocumentLoadEvent,
   PdfViewerI18n,
+  PdfViewerPageChangedEvent,
   PdfViewerPageCountChangedEvent,
 } from '../../src/vaadin-pdf-viewer.js';
 import type { PdfViewerMixinClass } from '../../src/vaadin-pdf-viewer-mixin.js';
@@ -18,17 +20,26 @@ assertType<PdfViewer>(viewer);
 
 // Properties
 assertType<string | null | undefined>(viewer.src);
+assertType<number>(viewer.page);
 assertType<number>(viewer.pageCount);
+assertType<string | null | undefined>(viewer.fileName);
 assertType<PdfViewerI18n | undefined>(viewer.i18n);
 
 // I18n
 assertType<PdfViewerI18n>({});
-assertType<PdfViewerI18n>({ loadError: 'Error', passwordError: 'Password' });
+assertType<PdfViewerI18n>({
+  loadError: 'Error',
+  passwordError: 'Password',
+  document: 'Document',
+  pages: 'Pages',
+  pageLabel: 'Page {page}',
+});
 
 // Mixins
 assertType<ElementMixinClass>(viewer);
 assertType<I18nMixinClass<PdfViewerI18n>>(viewer);
 assertType<PdfViewerMixinClass>(viewer);
+assertType<ResizeMixinClass>(viewer);
 
 // Events
 viewer.addEventListener('document-load', (event) => {
@@ -41,6 +52,11 @@ viewer.addEventListener('document-error', (event) => {
   assertType<PdfViewerDocumentErrorEvent>(event);
   assertType<'invalid' | 'network' | 'password'>(event.detail.reason);
   assertType<unknown>(event.detail.error);
+});
+
+viewer.addEventListener('page-changed', (event) => {
+  assertType<PdfViewerPageChangedEvent>(event);
+  assertType<number>(event.detail.value);
 });
 
 viewer.addEventListener('page-count-changed', (event) => {

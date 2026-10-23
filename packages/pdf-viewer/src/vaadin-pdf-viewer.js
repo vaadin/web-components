@@ -15,11 +15,15 @@ import { I18nMixin } from '@vaadin/component-base/src/i18n-mixin.js';
 import { PolylitMixin } from '@vaadin/component-base/src/polylit-mixin.js';
 import { LumoInjectionMixin } from '@vaadin/vaadin-themable-mixin/lumo-injection-mixin.js';
 import { pdfViewerStyles } from './styles/vaadin-pdf-viewer-base-styles.js';
+import { pdfViewerPageStyles } from './styles/vaadin-pdf-viewer-page-base-styles.js';
 import { PdfViewerMixin } from './vaadin-pdf-viewer-mixin.js';
 
 const DEFAULT_I18N = {
   loadError: 'The document could not be loaded.',
   passwordError: 'Password-protected documents are not supported.',
+  document: 'PDF document',
+  pages: 'Pages',
+  pageLabel: 'Page {page}',
 };
 
 /**
@@ -42,6 +46,8 @@ const DEFAULT_I18N = {
  *
  * Part name       | Description
  * ----------------|------------
+ * `content`       | The scrollable area that contains the pages.
+ * `page`          | A page of the document.
  * `error-message` | The message shown when the document could not be loaded.
  * `loader`        | The loading indicator shown while the document loads.
  *
@@ -54,18 +60,23 @@ const DEFAULT_I18N = {
  *
  * The following custom CSS properties are available for styling:
  *
- * Custom CSS property                  |
- * :-------------------------------------|
- * | `--vaadin-pdf-viewer-background`    |
- * | `--vaadin-pdf-viewer-border-color`  |
- * | `--vaadin-pdf-viewer-border-radius` |
- * | `--vaadin-pdf-viewer-error-color`   |
- * | `--vaadin-pdf-viewer-text-color`    |
+ * Custom CSS property                    |
+ * :---------------------------------------|
+ * | `--vaadin-pdf-viewer-background`      |
+ * | `--vaadin-pdf-viewer-border-color`    |
+ * | `--vaadin-pdf-viewer-border-radius`   |
+ * | `--vaadin-pdf-viewer-error-color`     |
+ * | `--vaadin-pdf-viewer-padding`         |
+ * | `--vaadin-pdf-viewer-page-background` |
+ * | `--vaadin-pdf-viewer-page-gap`        |
+ * | `--vaadin-pdf-viewer-page-shadow`     |
+ * | `--vaadin-pdf-viewer-text-color`      |
  *
  * See [Styling Components](https://vaadin.com/docs/latest/styling/styling-components) documentation.
  *
  * @fires {CustomEvent} document-error - Fired when the document could not be loaded.
  * @fires {CustomEvent} document-load - Fired when the document has loaded.
+ * @fires {CustomEvent} page-changed - Fired when the `page` property changes.
  * @fires {CustomEvent} page-count-changed - Fired when the `pageCount` property changes.
  *
  * @customElement vaadin-pdf-viewer
@@ -85,7 +96,11 @@ class PdfViewer extends PdfViewerMixin(I18nMixin(ElementMixin(PolylitMixin(LumoI
   }
 
   static get styles() {
-    return pdfViewerStyles;
+    return [pdfViewerStyles, pdfViewerPageStyles];
+  }
+
+  static get lumoInjector() {
+    return { ...super.lumoInjector, includeBaseStyles: true };
   }
 
   static get defaultI18n() {
@@ -104,7 +119,14 @@ class PdfViewer extends PdfViewerMixin(I18nMixin(ElementMixin(PolylitMixin(LumoI
    *   // Message shown when the document could not be loaded.
    *   loadError: 'The document could not be loaded.',
    *   // Message shown when the document is password-protected.
-   *   passwordError: 'Password-protected documents are not supported.'
+   *   passwordError: 'Password-protected documents are not supported.',
+   *   // Accessible name of the viewer when the document has no name
+   *   // and the application has not set aria-label or aria-labelledby.
+   *   document: 'PDF document',
+   *   // Accessible name of the scrollable area that contains the pages.
+   *   pages: 'Pages',
+   *   // Accessible name of each page. {page} is replaced with the page number.
+   *   pageLabel: 'Page {page}'
    * }
    * ```
    *
@@ -123,6 +145,19 @@ class PdfViewer extends PdfViewerMixin(I18nMixin(ElementMixin(PolylitMixin(LumoI
     const i18n = this.__effectiveI18n;
     return html`
       <div part="loader"></div>
+      <div class="content-area">
+        <div
+          id="content"
+          part="content"
+          tabindex="${this.pageCount ? '0' : '-1'}"
+          aria-busy="${this._loading ? 'true' : 'false'}"
+          role="document"
+          aria-label="${i18n.pages}"
+        >
+          <div id="pages"></div>
+        </div>
+        <div class="content-focus-ring"></div>
+      </div>
       <div part="error-message" ?hidden="${!this._errorReason}">
         ${this._errorReason === 'password' ? i18n.passwordError : i18n.loadError}
       </div>

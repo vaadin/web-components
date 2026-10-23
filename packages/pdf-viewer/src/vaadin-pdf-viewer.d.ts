@@ -15,6 +15,9 @@ import { PdfViewerMixin } from './vaadin-pdf-viewer-mixin.js';
 export interface PdfViewerI18n {
   loadError?: string;
   passwordError?: string;
+  document?: string;
+  pages?: string;
+  pageLabel?: string;
 }
 
 /**
@@ -28,6 +31,11 @@ export type PdfViewerDocumentLoadEvent = CustomEvent<{ pageCount: number; title:
 export type PdfViewerDocumentErrorEvent = CustomEvent<{ reason: 'invalid' | 'network' | 'password'; error: unknown }>;
 
 /**
+ * Fired when the `page` property changes.
+ */
+export type PdfViewerPageChangedEvent = CustomEvent<{ value: number }>;
+
+/**
  * Fired when the `pageCount` property changes.
  */
 export type PdfViewerPageCountChangedEvent = CustomEvent<{ value: number }>;
@@ -36,6 +44,8 @@ export interface PdfViewerCustomEventMap {
   'document-error': PdfViewerDocumentErrorEvent;
 
   'document-load': PdfViewerDocumentLoadEvent;
+
+  'page-changed': PdfViewerPageChangedEvent;
 
   'page-count-changed': PdfViewerPageCountChangedEvent;
 }
@@ -62,6 +72,8 @@ export interface PdfViewerEventMap extends HTMLElementEventMap, PdfViewerCustomE
  *
  * Part name       | Description
  * ----------------|------------
+ * `content`       | The scrollable area that contains the pages.
+ * `page`          | A page of the document.
  * `error-message` | The message shown when the document could not be loaded.
  * `loader`        | The loading indicator shown while the document loads.
  *
@@ -74,18 +86,23 @@ export interface PdfViewerEventMap extends HTMLElementEventMap, PdfViewerCustomE
  *
  * The following custom CSS properties are available for styling:
  *
- * Custom CSS property                  |
- * :-------------------------------------|
- * | `--vaadin-pdf-viewer-background`    |
- * | `--vaadin-pdf-viewer-border-color`  |
- * | `--vaadin-pdf-viewer-border-radius` |
- * | `--vaadin-pdf-viewer-error-color`   |
- * | `--vaadin-pdf-viewer-text-color`    |
+ * Custom CSS property                    |
+ * :---------------------------------------|
+ * | `--vaadin-pdf-viewer-background`      |
+ * | `--vaadin-pdf-viewer-border-color`    |
+ * | `--vaadin-pdf-viewer-border-radius`   |
+ * | `--vaadin-pdf-viewer-error-color`     |
+ * | `--vaadin-pdf-viewer-padding`         |
+ * | `--vaadin-pdf-viewer-page-background` |
+ * | `--vaadin-pdf-viewer-page-gap`        |
+ * | `--vaadin-pdf-viewer-page-shadow`     |
+ * | `--vaadin-pdf-viewer-text-color`      |
  *
  * See [Styling Components](https://vaadin.com/docs/latest/styling/styling-components) documentation.
  *
  * @fires {CustomEvent} document-error - Fired when the document could not be loaded.
  * @fires {CustomEvent} document-load - Fired when the document has loaded.
+ * @fires {CustomEvent} page-changed - Fired when the `page` property changes.
  * @fires {CustomEvent} page-count-changed - Fired when the `pageCount` property changes.
  */
 declare class PdfViewer extends PdfViewerMixin(
@@ -103,7 +120,14 @@ declare class PdfViewer extends PdfViewerMixin(
    *   // Message shown when the document could not be loaded.
    *   loadError: 'The document could not be loaded.',
    *   // Message shown when the document is password-protected.
-   *   passwordError: 'Password-protected documents are not supported.'
+   *   passwordError: 'Password-protected documents are not supported.',
+   *   // Accessible name of the viewer when the document has no name
+   *   // and the application has not set aria-label or aria-labelledby.
+   *   document: 'PDF document',
+   *   // Accessible name of the scrollable area that contains the pages.
+   *   pages: 'Pages',
+   *   // Accessible name of each page. {page} is replaced with the page number.
+   *   pageLabel: 'Page {page}'
    * }
    * ```
    */

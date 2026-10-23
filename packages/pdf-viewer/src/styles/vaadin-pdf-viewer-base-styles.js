@@ -30,6 +30,38 @@ const pdfViewerBaseStyles = css`
     display: none !important;
   }
 
+  .content-area {
+    position: relative;
+    display: flex;
+    flex: 1 1 auto;
+    min-width: 0;
+    min-height: 0;
+  }
+
+  [part='content'] {
+    position: relative;
+    outline: none;
+    flex: 1 1 auto;
+    min-width: 0;
+    min-height: 0;
+    overflow: auto;
+    scrollbar-gutter: stable;
+    padding: var(--vaadin-pdf-viewer-padding, var(--vaadin-padding-m));
+  }
+
+  /* Drawn over the pages, which would cover an outline of the scroll container itself */
+  .content-focus-ring {
+    position: absolute;
+    inset: 0;
+    z-index: 1;
+    pointer-events: none;
+  }
+
+  [part='content']:focus-visible + .content-focus-ring {
+    outline: var(--vaadin-focus-ring-width) solid var(--vaadin-focus-ring-color);
+    outline-offset: calc(var(--vaadin-focus-ring-width) * -1);
+  }
+
   [part='loader'] {
     position: absolute;
     inset: 0;
