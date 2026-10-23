@@ -21,3 +21,4 @@
 # (binary is a macro for -text -diff)
 *.png   binary
 *.jpg   binary
+*.pdf   binary
