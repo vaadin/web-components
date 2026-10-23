@@ -21,6 +21,7 @@
       const headerVisible = document.querySelector('#header-visible');
       const headerTitle = document.querySelector('#header-title');
       const collapsed = document.querySelector('#collapsed');
+      const downloadHidden = document.querySelector('#download-hidden');
       const log = document.querySelector('#log');
 
       const update = () => {
@@ -49,6 +50,12 @@
       });
       viewer.addEventListener('toolbar-collapsed-changed', (e) => {
         collapsed.checked = e.detail.value;
+      });
+      downloadHidden.addEventListener('change', () => {
+        viewer.downloadButtonHidden = downloadHidden.checked;
+      });
+      document.querySelector('#download').addEventListener('click', () => {
+        viewer.download();
       });
       viewer.addEventListener('zoom-changed', (e) => {
         log.textContent = `zoom-changed: ${e.detail.value}`;
@@ -105,6 +112,11 @@
         <input type="checkbox" id="collapsed" />
         Collapse toolbar
       </label>
+      <label>
+        <input type="checkbox" id="download-hidden" />
+        Hide download button
+      </label>
+      <button id="download">download()</button>
       <output id="log"></output>
     </p>
     <vaadin-pdf-viewer>

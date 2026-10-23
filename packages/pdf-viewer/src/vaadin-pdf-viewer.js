@@ -19,6 +19,7 @@ import { pdfViewerStyles } from './styles/vaadin-pdf-viewer-base-styles.js';
 import { pdfViewerPageStyles } from './styles/vaadin-pdf-viewer-page-base-styles.js';
 import { pdfViewerToolbarStyles } from './styles/vaadin-pdf-viewer-toolbar-base-styles.js';
 import { PdfViewerMixin } from './vaadin-pdf-viewer-mixin.js';
+import { PdfViewerPrintMixin } from './vaadin-pdf-viewer-print-mixin.js';
 import { PdfViewerToolbarMixin } from './vaadin-pdf-viewer-toolbar-mixin.js';
 
 const DEFAULT_I18N = {
@@ -43,6 +44,7 @@ const DEFAULT_I18N = {
   link: 'Link',
   goToPage: 'Go to page {page}',
   externalLink: '{text} (opens in a new tab)',
+  download: 'Download',
 };
 
 /**
@@ -63,7 +65,7 @@ const DEFAULT_I18N = {
  *
  * Name              | Description
  * ------------------|-------------
- * `toolbar-actions` | Slot for application controls, e.g. buttons, at the end of the toolbar
+ * `toolbar-actions` | Slot for application controls, e.g. buttons, at the end of the toolbar, before the built-in buttons
  *
  * ### Styling
  *
@@ -97,6 +99,7 @@ const DEFAULT_I18N = {
  * | `--vaadin-pdf-viewer-border-radius`         |
  * | `--vaadin-pdf-viewer-error-color`           |
  * | `--vaadin-pdf-viewer-icon-collapse-toolbar` |
+ * | `--vaadin-pdf-viewer-icon-download`         |
  * | `--vaadin-pdf-viewer-icon-expand-toolbar`   |
  * | `--vaadin-pdf-viewer-icon-next-page`        |
  * | `--vaadin-pdf-viewer-icon-previous-page`    |
@@ -128,8 +131,8 @@ const DEFAULT_I18N = {
  * @customElement vaadin-pdf-viewer
  * @extends HTMLElement
  */
-class PdfViewer extends PdfViewerToolbarMixin(
-  PdfViewerMixin(I18nMixin(ElementMixin(PolylitMixin(LumoInjectionMixin(LitElement))))),
+class PdfViewer extends PdfViewerPrintMixin(
+  PdfViewerToolbarMixin(PdfViewerMixin(I18nMixin(ElementMixin(PolylitMixin(LumoInjectionMixin(LitElement)))))),
 ) {
   static get is() {
     return 'vaadin-pdf-viewer';
@@ -208,7 +211,9 @@ class PdfViewer extends PdfViewerToolbarMixin(
    *   link: 'Link',
    *   // Accessible name of links that open in a new tab.
    *   // {text} is replaced with the text of the link, or its URL.
-   *   externalLink: '{text} (opens in a new tab)'
+   *   externalLink: '{text} (opens in a new tab)',
+   *   // Accessible label and tooltip of the download button.
+   *   download: 'Download'
    * }
    * ```
    *
@@ -267,7 +272,10 @@ class PdfViewer extends PdfViewerToolbarMixin(
       this.#controlsMarker = document.createComment('');
       this.appendChild(this.#controlsMarker);
     }
-    render(this._renderToolbarControls(), this, { host: this, renderBefore: this.#controlsMarker });
+    render(html`${this._renderToolbarControls()}${this._renderPrintControls()}`, this, {
+      host: this,
+      renderBefore: this.#controlsMarker,
+    });
   }
 }
 

@@ -174,7 +174,7 @@ describe('accessibility', () => {
     });
 
     it('should make the pages focusable after the toolbar controls', async () => {
-      viewer.querySelector<HTMLElement>('vaadin-pdf-viewer-button[icon="zoom-in"]')!.focus();
+      viewer.querySelector<HTMLElement>('vaadin-pdf-viewer-button[icon="download"]')!.focus();
       await sendKeys({ press: 'Tab' });
       expect(viewer.shadowRoot!.activeElement).to.equal(getContent());
     });

@@ -41,14 +41,16 @@ describe('pdf-viewer with slotted controls', () => {
     await resetMouse();
   });
 
-  it('should show the slotted buttons in DOM order at the end of the toolbar', () => {
+  it('should show the slotted buttons in DOM order at the end of the toolbar, before the download button', () => {
     const toolbar = viewer.shadowRoot.querySelector('[part="toolbar"]').getBoundingClientRect();
     const zoomIn = viewer.querySelector('vaadin-pdf-viewer-button[icon="zoom-in"]').getBoundingClientRect();
+    const download = viewer.querySelector('vaadin-pdf-viewer-button[icon="download"]').getBoundingClientRect();
     const approveRect = approve.getBoundingClientRect();
     const rejectRect = reject.getBoundingClientRect();
     expect(approveRect.left).to.be.greaterThan(zoomIn.right);
     expect(approveRect.right).to.be.at.most(rejectRect.left);
-    expect(toolbar.right - rejectRect.right).to.be.lessThan(20);
+    expect(rejectRect.right).to.be.at.most(download.left);
+    expect(toolbar.right - download.right).to.be.lessThan(20);
   });
 
   it('should show the tooltip of a slotted button on hover', async () => {
@@ -64,6 +66,8 @@ describe('pdf-viewer with slotted controls', () => {
     expect(document.activeElement).to.equal(approve);
     await sendKeys({ press: 'Tab' });
     expect(document.activeElement).to.equal(reject);
+    await sendKeys({ press: 'Tab' });
+    expect(document.activeElement).to.equal(viewer.querySelector('vaadin-pdf-viewer-button[icon="download"]'));
   });
 
   it('should keep the slotted buttons when the toolbar renders again', async () => {

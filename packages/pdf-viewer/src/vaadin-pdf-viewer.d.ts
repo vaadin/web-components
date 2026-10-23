@@ -11,6 +11,7 @@
 import { ElementMixin } from '@vaadin/component-base/src/element-mixin.js';
 import { I18nMixin } from '@vaadin/component-base/src/i18n-mixin.js';
 import { PdfViewerMixin, type PdfViewerZoom } from './vaadin-pdf-viewer-mixin.js';
+import { PdfViewerPrintMixin } from './vaadin-pdf-viewer-print-mixin.js';
 import { PdfViewerToolbarMixin } from './vaadin-pdf-viewer-toolbar-mixin.js';
 
 export type { PdfViewerZoom } from './vaadin-pdf-viewer-mixin.js';
@@ -37,6 +38,7 @@ export interface PdfViewerI18n {
   link?: string;
   goToPage?: string;
   externalLink?: string;
+  download?: string;
 }
 
 /**
@@ -103,7 +105,7 @@ export interface PdfViewerEventMap extends HTMLElementEventMap, PdfViewerCustomE
  *
  * Name              | Description
  * ------------------|-------------
- * `toolbar-actions` | Slot for application controls, e.g. buttons, at the end of the toolbar
+ * `toolbar-actions` | Slot for application controls, e.g. buttons, at the end of the toolbar, before the built-in buttons
  *
  * ### Styling
  *
@@ -137,6 +139,7 @@ export interface PdfViewerEventMap extends HTMLElementEventMap, PdfViewerCustomE
  * | `--vaadin-pdf-viewer-border-radius`         |
  * | `--vaadin-pdf-viewer-error-color`           |
  * | `--vaadin-pdf-viewer-icon-collapse-toolbar` |
+ * | `--vaadin-pdf-viewer-icon-download`         |
  * | `--vaadin-pdf-viewer-icon-expand-toolbar`   |
  * | `--vaadin-pdf-viewer-icon-next-page`        |
  * | `--vaadin-pdf-viewer-icon-previous-page`    |
@@ -165,8 +168,8 @@ export interface PdfViewerEventMap extends HTMLElementEventMap, PdfViewerCustomE
  * @fires {CustomEvent} toolbar-collapsed-changed - Fired when the `toolbarCollapsed` property changes.
  * @fires {CustomEvent} zoom-changed - Fired when the `zoom` property changes.
  */
-declare class PdfViewer extends PdfViewerToolbarMixin(
-  PdfViewerMixin(ElementMixin(I18nMixin<typeof HTMLElement, PdfViewerI18n>(HTMLElement))),
+declare class PdfViewer extends PdfViewerPrintMixin(
+  PdfViewerToolbarMixin(PdfViewerMixin(ElementMixin(I18nMixin<typeof HTMLElement, PdfViewerI18n>(HTMLElement)))),
 ) {
   /**
    * The object used to localize this component. To change the default
@@ -221,7 +224,9 @@ declare class PdfViewer extends PdfViewerToolbarMixin(
    *   link: 'Link',
    *   // Accessible name of links that open in a new tab.
    *   // {text} is replaced with the text of the link, or its URL.
-   *   externalLink: '{text} (opens in a new tab)'
+   *   externalLink: '{text} (opens in a new tab)',
+   *   // Accessible label and tooltip of the download button.
+   *   download: 'Download'
    * }
    * ```
    */

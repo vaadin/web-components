@@ -52,7 +52,7 @@ export declare class PdfViewerMixinClass {
    * name of the document, e.g. as its accessible name. Otherwise the
    * viewer uses the title of the document when the document asks for
    * it, then the last part of the path of `src`, then the title of the
-   * document.
+   * document. It is also the name of the file that `download()` saves.
    *
    * @attr {string} file-name
    */

@@ -181,10 +181,11 @@ describe('vaadin-pdf-viewer', () => {
       expect(viewer.pageCount).to.equal(6);
     });
 
-    it('should reset the page count when detached', async () => {
+    it('should reset the page count and disable the download when detached', async () => {
       viewer.remove();
       await nextFrame();
       expect(viewer.pageCount).to.equal(0);
+      expect(viewer.querySelector<HTMLElement & { disabled: boolean }>('[icon="download"]')!.disabled).to.be.true;
     });
 
     it('should keep the page count when moved in the DOM in the same task', async () => {

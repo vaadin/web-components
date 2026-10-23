@@ -155,7 +155,10 @@ export const PdfViewerToolbarMixin = (superClass) =>
                 <slot name="toolbar-zoom"></slot>
               </div>
             </div>
-            <div part="toolbar-group" class="actions"><slot name="toolbar-actions"></slot></div>
+            <div part="toolbar-group" class="actions">
+              <slot name="toolbar-actions"></slot>
+              <slot name="download-button"></slot>
+            </div>
           </div>
         </div>
       `;

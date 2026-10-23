@@ -14,6 +14,7 @@ import type {
   PdfViewerZoomChangedEvent,
 } from '../../src/vaadin-pdf-viewer.js';
 import type { PdfViewerMixinClass } from '../../src/vaadin-pdf-viewer-mixin.js';
+import type { PdfViewerPrintMixinClass } from '../../src/vaadin-pdf-viewer-print-mixin.js';
 import type { PdfViewerToolbarMixinClass } from '../../src/vaadin-pdf-viewer-toolbar-mixin.js';
 
 const assertType = <TExpected>(actual: TExpected) => actual;
@@ -32,6 +33,7 @@ assertType<'page-fit' | 'page-width' | number>(viewer.zoom);
 assertType<boolean>(viewer.headerVisible);
 assertType<string | null | undefined>(viewer.headerTitle);
 assertType<boolean>(viewer.toolbarCollapsed);
+assertType<boolean>(viewer.downloadButtonHidden);
 assertType<PdfViewerI18n | undefined>(viewer.i18n);
 
 // I18n
@@ -58,13 +60,18 @@ assertType<PdfViewerI18n>({
   link: 'Link',
   goToPage: 'Go to page {page}',
   externalLink: '{text} (opens in a new tab)',
+  download: 'Download',
 });
+
+// Methods
+assertType<() => void>(viewer.download);
 
 // Mixins
 assertType<ElementMixinClass>(viewer);
 assertType<I18nMixinClass<PdfViewerI18n>>(viewer);
 assertType<PdfViewerMixinClass>(viewer);
 assertType<PdfViewerToolbarMixinClass>(viewer);
+assertType<PdfViewerPrintMixinClass>(viewer);
 assertType<ResizeMixinClass>(viewer);
 
 // Events

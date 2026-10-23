@@ -453,9 +453,10 @@ describe('toolbar', () => {
         .map((button) => button.getAttribute('icon'));
     }
 
-    it('should group the controls into navigation and viewing options', () => {
+    it('should group the controls into navigation, viewing options and actions', () => {
       expect(getGroupIcons('navigation')).to.deep.equal(['previous-page', 'next-page']);
       expect(getGroupIcons('viewing')).to.deep.equal(['zoom-out', 'zoom-in']);
+      expect(getGroupIcons('actions')).to.deep.equal(['download']);
     });
 
     it('should place the groups at the start, middle and end of a wide toolbar', () => {
@@ -743,6 +744,13 @@ describe('toolbar', () => {
       const actions = getGroup('actions');
       expect(actions.contains(approve.assignedSlot)).to.be.true;
       expect(approve.getBoundingClientRect().right).to.be.at.most(reject.getBoundingClientRect().left);
+    });
+
+    it('should show slotted controls before the download button', async () => {
+      const approve = createButton('Approve');
+      viewer.appendChild(approve);
+      await nextFrame();
+      expect(approve.getBoundingClientRect().right).to.be.at.most(getButton('download').getBoundingClientRect().left);
     });
 
     it('should hide slotted controls with the collapsed toolbar', async () => {
