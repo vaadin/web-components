@@ -1,0 +1,48 @@
+%PDF-1.4
+1 0 obj
+<< /Type /Catalog /Pages 2 0 R >>
+endobj
+2 0 obj
+<< /Type /Pages /Kids [3 0 R] /Count 1 >>
+endobj
+3 0 obj
+<< /Type /Page /Parent 2 0 R /MediaBox [0 0 612 792] /Resources << /Font << /F1 5 0 R >> >> /Contents 4 0 R /Annots [6 0 R 7 0 R 8 0 R 9 0 R] >>
+endobj
+4 0 obj
+<< /Length 193 >>
+stream
+BT /F1 14 Tf 72 720 Td (https://vaadin.com/) Tj ET BT /F1 14 Tf 72 680 Td (javascript:alert(1)) Tj ET BT /F1 14 Tf 72 640 Td (ftp://example.com/) Tj ET BT /F1 14 Tf 72 600 Td (tel:123456) Tj ET
+endstream
+endobj
+5 0 obj
+<< /Type /Font /Subtype /Type1 /BaseFont /Helvetica /Encoding /WinAnsiEncoding >>
+endobj
+6 0 obj
+<< /Type /Annot /Subtype /Link /Rect [72 715 300 735] /Border [0 0 0] /A << /S /URI /URI (https://vaadin.com/) >> >>
+endobj
+7 0 obj
+<< /Type /Annot /Subtype /Link /Rect [72 675 300 695] /Border [0 0 0] /A << /S /URI /URI (javascript:alert(1)) >> >>
+endobj
+8 0 obj
+<< /Type /Annot /Subtype /Link /Rect [72 635 300 655] /Border [0 0 0] /A << /S /URI /URI (ftp://example.com/) >> >>
+endobj
+9 0 obj
+<< /Type /Annot /Subtype /Link /Rect [72 595 300 615] /Border [0 0 0] /A << /S /URI /URI (tel:123456) >> >>
+endobj
+xref
+0 10
+0000000000 65535 f 
+0000000009 00000 n 
+0000000058 00000 n 
+0000000115 00000 n 
+0000000275 00000 n 
+0000000519 00000 n 
+0000000616 00000 n 
+0000000748 00000 n 
+0000000880 00000 n 
+0000001011 00000 n 
+trailer
+<< /Size 10 /Root 1 0 R  >>
+startxref
+1134
+%%EOF

@@ -217,6 +217,86 @@ const getScreenshotFileName = ({ name, testFile }, type, diff) => {
   return path.join(folder, type, diff ? `${name}-diff` : name);
 };
 
+/**
+ * A test runner command that returns the accessibility tree that Chromium
+ * computes for the page, as the nodes that are not ignored, in tree order.
+ * Returns false in other browsers.
+ *
+ * @return {import('@web/test-runner').TestRunnerPlugin}
+ */
+const accessibilityTreePlugin = () => ({
+  name: 'accessibility-tree-command',
+  async executeCommand({ command, session }) {
+    if (command !== 'accessibility-tree') {
+      return undefined;
+    }
+    const page = session.browser.getPage(session.id);
+    // The test runner treats null and undefined as a command that no plugin handles.
+    if (page.context().browser().browserType().name() !== 'chromium') {
+      return false;
+    }
+    const cdp = await page.context().newCDPSession(page);
+    try {
+      const { nodes } = await cdp.send('Accessibility.getFullAXTree');
+      const byId = new Map(nodes.map((node) => [node.nodeId, node]));
+      const result = [];
+      const visit = (node, depth) => {
+        if (!node.ignored) {
+          const properties = Object.fromEntries((node.properties || []).map(({ name, value }) => [name, value.value]));
+          result.push({ role: node.role?.value, name: node.name?.value ?? '', depth, properties });
+        }
+        (node.childIds || []).forEach((id) => {
+          const child = byId.get(id);
+          if (child) {
+            visit(child, node.ignored ? depth : depth + 1);
+          }
+        });
+      };
+      nodes.filter((node) => !node.parentId).forEach((root) => visit(root, 0));
+      return result;
+    } finally {
+      await cdp.detach();
+    }
+  },
+});
+
+/**
+ * Test runner commands for touch in Chromium: `emulate-touch` makes it emulate
+ * a touch device, so that e.g. the `(pointer: coarse)` media query matches
+ * (pass `{ enabled: false }` to stop), and `dispatch-touch` sends real touch
+ * input, see CDP `Input.dispatchTouchEvent`. Return false in other browsers.
+ *
+ * @return {import('@web/test-runner').TestRunnerPlugin}
+ */
+const touchEmulationPlugin = () => {
+  // Emulation only lasts while its CDP session is attached.
+  const sessions = new WeakMap();
+  return {
+    name: 'touch-emulation-command',
+    async executeCommand({ command, payload, session }) {
+      if (command !== 'emulate-touch' && command !== 'dispatch-touch') {
+        return undefined;
+      }
+      const page = session.browser.getPage(session.id);
+      if (page.context().browser().browserType().name() !== 'chromium') {
+        return false;
+      }
+      if (!sessions.has(page)) {
+        sessions.set(page, await page.context().newCDPSession(page));
+      }
+      const cdp = sessions.get(page);
+      if (command === 'dispatch-touch') {
+        // Real touch input, which the browser also uses for scrolling, unlike synthetic events.
+        await cdp.send('Input.dispatchTouchEvent', payload);
+        return true;
+      }
+      const enabled = !!(payload && payload.enabled);
+      await cdp.send('Emulation.setTouchEmulationEnabled', { enabled, maxTouchPoints: enabled ? 5 : 1 });
+      return true;
+    },
+  };
+};
+
 const createSnapshotTestsConfig = (config) => {
   const snapshotPackages = getAllSnapshotPackages();
   const packages = getTestPackages(snapshotPackages);
@@ -361,4 +441,11 @@ const createIntegrationTestsConfig = (config) => {
   };
 };
 
-export { createSnapshotTestsConfig, createUnitTestsConfig, createVisualTestsConfig, createIntegrationTestsConfig };
+export {
+  accessibilityTreePlugin,
+  touchEmulationPlugin,
+  createSnapshotTestsConfig,
+  createUnitTestsConfig,
+  createVisualTestsConfig,
+  createIntegrationTestsConfig,
+};
