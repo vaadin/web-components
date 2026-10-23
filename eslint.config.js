@@ -216,6 +216,7 @@ export default [
     files: [
       'scripts/**/*.js',
       '.github/claude/**/*.js',
+      '.claude/skills/**/*.mjs',
       '*.config.js',
       'wtr-utils.js',
       'custom-rules/**/*.js',
