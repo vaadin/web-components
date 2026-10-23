@@ -70,6 +70,17 @@ describe('renderers', () => {
       expect(getCell(grid, 1)._content.textContent).to.be.empty;
     });
 
+    it('should apply an update to hidden column cells', () => {
+      column.hidden = true;
+      column.renderer = (root) => {
+        root.textContent = 'updated';
+      };
+      column.hidden = false;
+      flushGrid(grid);
+
+      expect(getCell(grid, 0)._content.textContent).to.equal('updated');
+    });
+
     it('should initialize with instance properties', () => {
       column.renderer = function (_root, _owner, model) {
         expect(model.selected).to.be.false;
