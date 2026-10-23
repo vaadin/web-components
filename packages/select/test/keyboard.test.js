@@ -72,7 +72,7 @@ describe('keyboard', () => {
       expect(select.value).to.equal('option-1');
     });
 
-    it('should append clone of the selected item to the button', async () => {
+    it('should append clone of the selected item without state attributes to the button', async () => {
       await sendKeys({ press: 'Tab' });
 
       await sendKeys({ press: 'Enter' });
@@ -86,21 +86,8 @@ describe('keyboard', () => {
       expect(clone).not.to.be.equal(item);
       expect(clone.localName).to.be.equal(item.localName);
       expect(clone.textContent).to.be.equal(item.textContent);
-    });
-
-    ['active', 'focused', 'focus-ring', 'role', 'tabindex', 'aria-selected'].forEach((attr) => {
-      it(`should remove ${attr} attribute from the item clone`, async () => {
-        await sendKeys({ press: 'Tab' });
-
-        // Open overlay and wait
-        await sendKeys({ press: 'Enter' });
-        await nextRender();
-
-        await sendKeys({ press: 'Enter' });
-        await nextUpdate(select);
-
-        const clone = valueButton.firstChild;
-        expect(clone.hasAttribute(attr)).to.be.false;
+      ['active', 'focused', 'focus-ring', 'role', 'tabindex', 'aria-selected'].forEach((attr) => {
+        expect(clone.hasAttribute(attr), attr).to.be.false;
       });
     });
 
