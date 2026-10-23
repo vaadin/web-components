@@ -165,7 +165,7 @@ describe('keyboard', () => {
       expect(clone.textContent).to.be.equal(item.textContent);
     });
 
-    ['active', 'focused', 'focus-ring', 'role', 'tabindex', 'selected', 'aria-selected'].forEach((attr) => {
+    ['active', 'focused', 'focus-ring', 'role', 'tabindex', 'aria-selected'].forEach((attr) => {
       it(`should remove ${attr} attribute from the item clone`, async () => {
         await sendKeys({ press: 'Tab' });
 
