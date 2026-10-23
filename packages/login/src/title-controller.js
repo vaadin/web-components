@@ -42,13 +42,12 @@ export class TitleController extends SlotChildObserveController {
    * @override
    */
   updateNode(node) {
+    super.updateNode(node);
+
     if (node === this.defaultNode) {
       node.setAttribute('role', 'heading');
       node.setAttribute('aria-level', this.level);
-      const text = this.title ?? '';
-      if (node.textContent !== text) {
-        node.textContent = text;
-      }
+      node.textContent = this.title;
     }
 
     this.host.setAttribute('aria-labelledby', node.id);

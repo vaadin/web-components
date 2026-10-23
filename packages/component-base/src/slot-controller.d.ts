@@ -51,11 +51,6 @@ export class SlotController extends EventTarget implements ReactiveController {
   getSlotChildren(): Node[];
 
   /**
-   * Return a reference to the node managed by the controller.
-   */
-  getSlotChild(): Node;
-
-  /**
    * Set up a node once it starts being managed by the controller,
    * either a default or a custom one. Runs `slotInitializer` by default.
    */

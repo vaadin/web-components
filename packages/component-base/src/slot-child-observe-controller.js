@@ -19,25 +19,27 @@ export class SlotChildObserveController extends SlotController {
   }
 
   /**
-   * Override to apply host property values to the node. Called on every
-   * update, also when the node text changes, so only write values that differ.
+   * Set ID on the node. Override to also apply host property values to
+   * the node. Called on every update, also when the node text changes.
    *
-   * @param {Node} _node
+   * @param {Node} node
    * @protected
    */
-  updateNode(_node) {}
+  updateNode(node) {
+    if (!node.id) {
+      node.id = this.defaultId;
+    }
+  }
 
   /**
-   * Override method inherited from `SlotController` to set ID
-   * on the new node and observe its ID and text content.
+   * Override method inherited from `SlotController`
+   * to observe the new node ID and text content.
    *
    * @param {Node} node
    * @protected
    * @override
    */
   initNode(node) {
-    this.#setDefaultId(node);
-
     this.#nodeObserver.observe(node, {
       attributes: true,
       attributeFilter: ['id'],
@@ -62,8 +64,8 @@ export class SlotChildObserveController extends SlotController {
   }
 
   /**
-   * Override method inherited from `SlotController` to apply property values
-   * to the node and notify the host. Call it when a host property used by
+   * Override method inherited from `SlotController` to apply
+   * property values to the node and notify the host. Call it when a host property used by
    * `updateNode()` changes.
    *
    * @protected
@@ -78,30 +80,11 @@ export class SlotChildObserveController extends SlotController {
 
     const { node } = this;
     if (node) {
-      this.#setDefaultId(node);
       this.updateNode(node);
     }
 
-    this._notifyChange(node);
-  }
+    this.#nodeObserver.takeRecords();
 
-  /**
-   * Fire an event to notify the controller host about node changes.
-   *
-   * @param {Node | null} node
-   * @protected
-   */
-  _notifyChange(node) {
-    this.dispatchEvent(
-      new CustomEvent('slot-content-changed', {
-        detail: { hasContent: hasNodeContent(node), node },
-      }),
-    );
-  }
-
-  #setDefaultId(node) {
-    if (node.nodeType === Node.ELEMENT_NODE && !node.id) {
-      node.id = this.defaultId;
-    }
+    this.dispatchEvent(new CustomEvent('slot-content-changed', { detail: { hasContent: hasNodeContent(node), node } }));
   }
 }

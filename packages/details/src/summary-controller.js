@@ -32,11 +32,10 @@ export class SummaryController extends SlotChildObserveController {
    * @override
    */
   updateNode(node) {
+    super.updateNode(node);
+
     if (node === this.defaultNode) {
-      const text = this.summary ?? '';
-      if (node.textContent !== text) {
-        node.textContent = text;
-      }
+      node.textContent = this.summary;
     }
   }
 }

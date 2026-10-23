@@ -68,11 +68,10 @@ export class ErrorController extends SlotChildObserveController {
    * @override
    */
   updateNode(errorNode) {
+    super.updateNode(errorNode);
+
     const hasError = this.#hasError;
-    const text = hasError ? this.errorMessage : '';
-    if (errorNode.textContent !== text) {
-      errorNode.textContent = text;
-    }
+    errorNode.textContent = hasError ? this.errorMessage : '';
     errorNode.hidden = !hasError;
   }
 

@@ -38,11 +38,10 @@ export class HelperController extends SlotChildObserveController {
    * @override
    */
   updateNode(node) {
+    super.updateNode(node);
+
     if (node === this.defaultNode) {
-      const text = this.helperText ?? '';
-      if (node.textContent !== text) {
-        node.textContent = text;
-      }
+      node.textContent = this.helperText;
     }
   }
 }

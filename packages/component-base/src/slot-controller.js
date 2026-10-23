@@ -82,14 +82,6 @@ export class SlotController extends EventTarget {
   }
 
   /**
-   * Return a reference to the node managed by the controller.
-   * @return {Node}
-   */
-  getSlotChild() {
-    return this.getSlotChildren()[0];
-  }
-
-  /**
    * Set up a node once it starts being managed by the controller,
    * either a default or a custom one. Runs `slotInitializer` by default.
    *

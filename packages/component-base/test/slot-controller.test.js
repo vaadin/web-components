@@ -36,10 +36,6 @@ describe('SlotController', () => {
         expect(controller.node).to.equal(child);
       });
 
-      it('should return a reference to named slot child', () => {
-        expect(controller.getSlotChild()).to.equal(child);
-      });
-
       it('should run initializer for named slot child', () => {
         expect(initializeSpy.calledOnce).to.be.true;
         expect(initializeSpy.firstCall.args[0]).to.equal(child);
@@ -68,10 +64,6 @@ describe('SlotController', () => {
 
       it('should store a reference to the custom slot child', () => {
         expect(controller.node).to.equal(child);
-      });
-
-      it('should return a reference to custom named slot child', () => {
-        expect(controller.getSlotChild()).to.equal(child);
       });
 
       it('should run initializer for custom named slot child', () => {
@@ -103,10 +95,6 @@ describe('SlotController', () => {
 
       it('should store a reference to un-named slot child', () => {
         expect(controller.node).to.equal(child);
-      });
-
-      it('should return a reference to un-named slot child', () => {
-        expect(controller.getSlotChild()).to.equal(child);
       });
 
       it('should run initializer for un-named slot child', () => {
@@ -169,10 +157,6 @@ describe('SlotController', () => {
         expect(controller.node).to.equal(child);
       });
 
-      it('should return a reference to element passed to un-named slot', () => {
-        expect(controller.getSlotChild()).to.equal(child);
-      });
-
       it('should run initializer for un-named slot element', () => {
         expect(initializeSpy.calledOnce).to.be.true;
         expect(initializeSpy.firstCall.args[0]).to.equal(child);
@@ -201,10 +185,6 @@ describe('SlotController', () => {
         expect(controller.node).to.equal(child);
       });
 
-      it('should return a reference to the slotted text node', () => {
-        expect(controller.getSlotChild()).to.equal(child);
-      });
-
       it('should run initializer for the slotted text node', () => {
         expect(initializeSpy.calledOnce).to.be.true;
         expect(initializeSpy.firstCall.args[0]).to.equal(child);
@@ -225,7 +205,7 @@ describe('SlotController', () => {
           },
         });
         element.addController(controller);
-        expect(controller.getSlotChild().textContent).to.equal('bar');
+        expect(controller.node.textContent).to.equal('bar');
       });
     });
   });

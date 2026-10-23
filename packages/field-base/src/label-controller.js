@@ -32,11 +32,10 @@ export class LabelController extends SlotChildObserveController {
    * @override
    */
   updateNode(node) {
+    super.updateNode(node);
+
     if (node === this.defaultNode) {
-      const text = this.label ?? '';
-      if (node.textContent !== text) {
-        node.textContent = text;
-      }
+      node.textContent = this.label;
     }
   }
 }

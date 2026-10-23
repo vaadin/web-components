@@ -11,19 +11,8 @@ import { SlotController } from './slot-controller.js';
  */
 export class SlotChildObserveController extends SlotController {
   /**
-   * Override to apply host property values to the node. Called on every
-   * update, also when the node text changes, so only write values that differ.
+   * Set ID on the node. Override to also apply host property values to
+   * the node. Called on every update, also when the node text changes.
    */
   protected updateNode(node: Node): void;
-
-  /**
-   * Apply property values to the node and notify the host. Call it when
-   * a host property used by `updateNode()` changes.
-   */
-  protected update(): void;
-
-  /**
-   * Fire an event to notify the controller host about node changes.
-   */
-  protected _notifyChange(node: Node | null): void;
 }

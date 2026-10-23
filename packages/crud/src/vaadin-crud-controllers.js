@@ -31,11 +31,6 @@ export class ButtonSlotController extends SlotController {
    * @override
    */
   initNode(node) {
-    // Prevent errors when the `noDefaultNode` flag is set
-    if (!node) {
-      return;
-    }
-
     // Needed by Flow counterpart to apply i18n to custom button
     if (node._isDefault) {
       this.defaultNode = node;
