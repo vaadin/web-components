@@ -1,0 +1,40 @@
+%PDF-1.4
+1 0 obj
+<< /Type /Catalog /Pages 2 0 R >>
+endobj
+2 0 obj
+<< /Type /Pages /Kids [3 0 R] /Count 1 >>
+endobj
+3 0 obj
+<< /Type /Page /Parent 2 0 R /MediaBox [0 0 612 792] /Resources << /Font << /F1 5 0 R /F2 6 0 R /F3 7 0 R >> >> /Contents 4 0 R >>
+endobj
+4 0 obj
+<< /Length 185 >>
+stream
+BT /F1 28 Tf 72 720 Td (Standard font) Tj /F1 14 Tf 0 -40 Td (Helvetica, not embedded in the file.) Tj ET BT /F2 28 Tf 72 600 Td (abgdpqrs) Tj ET BT /F3 28 Tf 72 540 Td (3456nuvw) Tj ET
+endstream
+endobj
+5 0 obj
+<< /Type /Font /Subtype /Type1 /BaseFont /Helvetica /Encoding /WinAnsiEncoding >>
+endobj
+6 0 obj
+<< /Type /Font /Subtype /Type1 /BaseFont /Symbol >>
+endobj
+7 0 obj
+<< /Type /Font /Subtype /Type1 /BaseFont /ZapfDingbats >>
+endobj
+xref
+0 8
+0000000000 65535 f 
+0000000009 00000 n 
+0000000058 00000 n 
+0000000115 00000 n 
+0000000261 00000 n 
+0000000497 00000 n 
+0000000594 00000 n 
+0000000661 00000 n 
+trailer
+<< /Size 8 /Root 1 0 R  >>
+startxref
+734
+%%EOF

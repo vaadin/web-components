@@ -1,0 +1,140 @@
+/**
+ * @license
+ * Copyright (c) 2000 - 2026 Vaadin Ltd.
+ *
+ * This program is available under Vaadin Commercial License and Service Terms.
+ *
+ *
+ * See https://vaadin.com/commercial-license-and-service-terms for the full
+ * license.
+ */
+import { announce } from '@vaadin/a11y-base/src/announce.js';
+import { PdfViewerDocumentController } from './pdf-viewer-document-controller.js';
+
+/**
+ * @polymerMixin
+ */
+export const PdfViewerMixin = (superClass) =>
+  class PdfViewerMixinClass extends superClass {
+    static get properties() {
+      return {
+        /**
+         * The URL of the PDF document to show.
+         */
+        src: {
+          type: String,
+        },
+
+        /**
+         * The number of pages in the loaded document, or 0 when no document
+         * is loaded.
+         */
+        pageCount: {
+          type: Number,
+          value: 0,
+          readOnly: true,
+          notify: true,
+          attribute: false,
+        },
+
+        /**
+         * The reason why the document could not be loaded, or undefined.
+         * @type {'invalid' | 'network' | 'password' | undefined}
+         * @protected
+         */
+        _errorReason: {
+          type: String,
+          attribute: false,
+        },
+
+        /** @private */
+        __loading: {
+          type: Boolean,
+          value: false,
+          reflectToAttribute: true,
+          attribute: 'loading',
+        },
+
+        /** @private */
+        __hasError: {
+          type: Boolean,
+          value: false,
+          reflectToAttribute: true,
+          attribute: 'has-error',
+        },
+      };
+    }
+
+    /** @type {import('pdfjs-dist').PDFDocumentProxy | null} */
+    #pdfDocument = null;
+
+    #documentController = new PdfViewerDocumentController(this, {
+      onLoadStart: () => {
+        this.__loading = true;
+      },
+      onLoad: (pdfDocument, title) => this.#onLoad(pdfDocument, title),
+      onError: (error, reason) => this.#onError(error, reason),
+      onUnload: () => this.#onUnload(),
+    });
+
+    /**
+     * Override method from `LitElement` to add the controller that loads the document.
+     * @protected
+     * @override
+     */
+    firstUpdated() {
+      super.firstUpdated();
+
+      this.addController(this.#documentController);
+    }
+
+    /**
+     * Override method from `LitElement` to load the document.
+     * @protected
+     * @override
+     */
+    updated(props) {
+      super.updated(props);
+
+      if (props.has('src')) {
+        this.#documentController.load();
+      }
+    }
+
+    /**
+     * Called when the document is unloaded, e.g. before another one loads.
+     * @protected
+     */
+    _documentUnloaded() {}
+
+    /** @private */
+    #onLoad(pdfDocument, title) {
+      this.#pdfDocument = pdfDocument;
+      this._setPageCount(pdfDocument.numPages);
+      this.__loading = false;
+      this.dispatchEvent(new CustomEvent('document-load', { detail: { pageCount: pdfDocument.numPages, title } }));
+    }
+
+    /** @private */
+    #onError(error, reason) {
+      this.__hasError = true;
+      this._errorReason = reason;
+
+      const i18n = this.__effectiveI18n;
+      announce(reason === 'password' ? i18n.passwordError : i18n.loadError, { mode: 'alert' });
+
+      this.dispatchEvent(new CustomEvent('document-error', { detail: { reason, error } }));
+    }
+
+    /** @private */
+    #onUnload() {
+      this.__loading = false;
+      this.__hasError = false;
+      this._errorReason = undefined;
+      if (this.#pdfDocument) {
+        this.#pdfDocument = null;
+        this._setPageCount(0);
+        this._documentUnloaded();
+      }
+    }
+  };
