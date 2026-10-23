@@ -158,6 +158,7 @@ export interface PdfViewerEventMap extends HTMLElementEventMap, PdfViewerCustomE
  * | `--vaadin-pdf-viewer-zoom-select-width`     |
  *
  * The `--vaadin-pdf-viewer-icon-*` properties take an image (e.g. an SVG data URL) used as a mask.
+ * In the Lumo theme, they take a glyph of the `lumo-icons` font instead, like the icons of `<vaadin-map>`.
  *
  * See [Styling Components](https://vaadin.com/docs/latest/styling/styling-components) documentation.
  *
