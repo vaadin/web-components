@@ -16,12 +16,6 @@ export const valueButton = css`
     align-items: center;
   }
 
-  :host::before {
-    content: '\\2003' / '';
-    display: inline-block;
-    width: 0;
-  }
-
   ::slotted(*) {
     padding: 0;
     cursor: inherit;
