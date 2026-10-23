@@ -33,7 +33,7 @@ export declare class ContextMenuMixinClass {
   /**
    * The target element that's listened to for context menu opening events.
    * By default the vaadin-context-menu listens to the target's `vaadin-contextmenu`
-   * events.
+   * events. Defaults to the context menu element itself.
    */
   listenOn: HTMLElement;
 
