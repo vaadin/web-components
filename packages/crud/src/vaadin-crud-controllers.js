@@ -45,13 +45,6 @@ export class ButtonSlotController extends SlotController {
     const property = `_${type}Button`;
     const listener = `__${type}`;
 
-    // TODO: restore default button when a corresponding slotted button is removed.
-    // This would require us to detect where to insert a button after teleporting it,
-    // which happens after opening a dialog and closing it (default editor position).
-    if (host[property] && host[property] !== node) {
-      host[property].remove();
-    }
-
     node.addEventListener('click', host[listener]);
     host[property] = node;
   }

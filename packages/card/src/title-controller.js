@@ -50,7 +50,7 @@ export class TitleController extends SlotController {
 
   /**
    * Override method inherited from `SlotController` to label the card by
-   * the title node instead of the previous one. The title node gets a
+   * the title node. The title node gets a
    * generated ID if it has none. The generated title node is set up as
    * a heading. A custom title keeps its own role.
    *
@@ -67,24 +67,21 @@ export class TitleController extends SlotController {
       node.setAttribute('role', 'heading');
     }
 
-    removeValuesFromAttribute(this.host, 'aria-labelledby', this.#labelId);
     this.#labelId = node.id;
     addValuesToAttribute(this.host, 'aria-labelledby', this.#labelId);
   }
 
   /**
    * Override method inherited from `SlotController`
-   * to drop the labelling once the slot is empty.
+   * to drop the labelling by the removed title node.
    *
    * @param {Node} _node
    * @protected
    * @override
    */
   teardownNode(_node) {
-    if (!this.node) {
-      removeValuesFromAttribute(this.host, 'aria-labelledby', this.#labelId);
-      this.#labelId = undefined;
-    }
+    removeValuesFromAttribute(this.host, 'aria-labelledby', this.#labelId);
+    this.#labelId = undefined;
   }
 
   /**
@@ -98,7 +95,7 @@ export class TitleController extends SlotController {
     super.update();
 
     const { node } = this;
-    if (node && node === this.defaultNode) {
+    if (node === this.defaultNode) {
       node.textContent = this.title;
       node.setAttribute('aria-level', this.level || 2);
     }
