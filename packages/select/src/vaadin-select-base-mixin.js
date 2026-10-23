@@ -11,7 +11,6 @@ import { MediaQueryController } from '@vaadin/component-base/src/media-query-con
 import { TooltipController } from '@vaadin/component-base/src/tooltip-controller.js';
 import { generateUniqueId } from '@vaadin/component-base/src/unique-id-utils.js';
 import { FieldMixin } from '@vaadin/field-base/src/field-mixin.js';
-import { LabelController } from '@vaadin/field-base/src/label-controller.js';
 import { ButtonController } from './button-controller.js';
 
 export const SelectBaseMixin = (superClass) =>
@@ -165,13 +164,6 @@ export const SelectBaseMixin = (superClass) =>
       ];
     }
 
-    constructor() {
-      super();
-
-      this._srLabelController = new LabelController(this);
-      this._srLabelController.slotName = 'sr-label';
-    }
-
     /** @protected */
     disconnectedCallback() {
       super.disconnectedCallback();
@@ -189,8 +181,6 @@ export const SelectBaseMixin = (superClass) =>
 
       this._valueButtonController = new ButtonController(this);
       this.addController(this._valueButtonController);
-
-      this.addController(this._srLabelController);
 
       this.addController(
         new MediaQueryController(this._phoneMediaQuery, (matches) => {
@@ -233,10 +223,6 @@ export const SelectBaseMixin = (superClass) =>
           this._items = null;
           this.__lastMenuElement = null;
         }
-      }
-
-      if (props.has('accessibleName')) {
-        this._srLabelController.setLabel(this.accessibleName);
       }
 
       if (props.has('opened') || props.has('_menuElement')) {
@@ -662,24 +648,5 @@ export const SelectBaseMixin = (superClass) =>
       this._requestValidation();
       this.dispatchEvent(new CustomEvent('change', { bubbles: true }));
       this.__dispatchChangePending = false;
-    }
-
-    /** @override */
-    __updateFieldAriaControllerLabel() {
-      // NO-OP
-    }
-
-    /** @override */
-    __updateFieldAriaControllerLabelledBy() {
-      let labelId = null;
-      if (this.accessibleNameRef) {
-        labelId = this.accessibleNameRef;
-      } else if (this.accessibleName) {
-        labelId = this._srLabelController.defaultId;
-      } else if (this.hasAttribute('has-label')) {
-        labelId = this._labelNode?.id;
-      }
-
-      this._fieldAriaController.setLabelledBy(labelId);
     }
   };

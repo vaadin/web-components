@@ -104,23 +104,24 @@ describe('accessibility', () => {
       expect(select.accessibleName).to.not.exist;
     });
 
-    it('should create slotted element on value change', async () => {
+    it('should set `aria-label` when the property is set', async () => {
       select.accessibleName = 'accessible name';
       await nextUpdate(select);
-      expect(select.querySelector('[slot=sr-label]')).to.exist;
+      expect(valueButton.getAttribute('aria-label')).to.equal('accessible name');
     });
 
-    it('should set property value as text content to slotted element', async () => {
+    it('should remove `aria-labelledby` when the property is set', async () => {
       select.accessibleName = 'accessible name';
       await nextUpdate(select);
-      expect(select.querySelector('[slot=sr-label]').textContent).to.equal('accessible name');
+      expect(valueButton.hasAttribute('aria-labelledby')).to.be.false;
     });
 
-    it('should replace `aria-labelledby` with slotted element unique id', async () => {
+    it('should remove `aria-label` when the property is removed', async () => {
       select.accessibleName = 'accessible name';
       await nextUpdate(select);
-      const srLabel = select.querySelector('[slot=sr-label]');
-      expect(valueButton.getAttribute('aria-labelledby')).to.equal(srLabel.id);
+      select.accessibleName = null;
+      await nextUpdate(select);
+      expect(valueButton.hasAttribute('aria-label')).to.be.false;
     });
 
     it('should restore `aria-labelledby` when value is removed', async () => {
@@ -133,13 +134,12 @@ describe('accessibility', () => {
       expect(valueButton.getAttribute('aria-labelledby')).to.equal(initialLabelledByValue);
     });
 
-    it('should keep `aria-labelledby` if value is changed', async () => {
+    it('should keep `aria-label` if select value is changed', async () => {
       select.accessibleName = 'accessible name';
       await nextUpdate(select);
-      select.value = 'Option 0';
+      select.value = 'Option 1';
       await nextUpdate(select);
-      const srLabel = select.querySelector('[slot=sr-label]');
-      expect(valueButton.getAttribute('aria-labelledby')).to.contain(srLabel.id);
+      expect(valueButton.getAttribute('aria-label')).to.equal('accessible name');
     });
 
     it('should not add the placeholder to `aria-labelledby` when placeholder is defined', async () => {
@@ -147,8 +147,7 @@ describe('accessibility', () => {
       await nextUpdate(select);
       select.placeholder = 'placeholder';
       await nextUpdate(select);
-      const srLabel = select.querySelector('[slot=sr-label]');
-      expect(valueButton.getAttribute('aria-labelledby')).to.equal(srLabel.id);
+      expect(valueButton.hasAttribute('aria-labelledby')).to.be.false;
     });
 
     it('should not add the selected item to `aria-labelledby` when selected item is set', async () => {
@@ -156,8 +155,7 @@ describe('accessibility', () => {
       await nextUpdate(select);
       select.value = 'Option 1';
       await nextUpdate(select);
-      const srLabel = select.querySelector('[slot=sr-label]');
-      expect(valueButton.getAttribute('aria-labelledby')).to.equal(srLabel.id);
+      expect(valueButton.hasAttribute('aria-labelledby')).to.be.false;
     });
 
     describe('accessible-name is set initially', () => {
@@ -172,14 +170,12 @@ describe('accessibility', () => {
         valueButton = select.querySelector('vaadin-select-value-button');
       });
 
-      it('should have accessible-name value as slotted element text content', () => {
-        const srLabel = select.querySelector('[slot=sr-label]');
-        expect(srLabel.textContent).to.equal(select.accessibleName);
+      it('should have property value in aria-label', () => {
+        expect(valueButton.getAttribute('aria-label')).to.equal('accessible name');
       });
 
-      it('should have slotted element id value in aria-labelledby', () => {
-        const srLabel = select.querySelector('[slot=sr-label]');
-        expect(valueButton.getAttribute('aria-labelledby')).to.equal(srLabel.id);
+      it('should not set aria-labelledby', () => {
+        expect(valueButton.hasAttribute('aria-labelledby')).to.be.false;
       });
 
       it('should use the default label id as the `aria-labelledby` value when accessible-name is removed', async () => {
@@ -196,9 +192,8 @@ describe('accessibility', () => {
           valueButton = select.querySelector('vaadin-select-value-button');
         });
 
-        it('should have slotted element id value in aria-labelledby', () => {
-          const srLabel = select.querySelector('[slot=sr-label]');
-          expect(valueButton.getAttribute('aria-labelledby')).to.equal(srLabel.id);
+        it('should have property value in aria-label', () => {
+          expect(valueButton.getAttribute('aria-label')).to.equal('accessible name');
         });
       });
     });
