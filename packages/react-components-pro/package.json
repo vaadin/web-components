@@ -27,6 +27,7 @@
     "@vaadin/dashboard": "25.4.0-alpha4",
     "@vaadin/grid-pro": "25.4.0-alpha4",
     "@vaadin/map": "25.4.0-alpha4",
+    "@vaadin/pdf-viewer": "25.4.0-alpha4",
     "@vaadin/react-components": "25.4.0-alpha4",
     "@vaadin/rich-text-editor": "25.4.0-alpha4"
   },
@@ -126,6 +127,10 @@
       "types": "./Map.d.ts",
       "default": "./Map.js"
     },
+    "./PdfViewer.js": {
+      "types": "./PdfViewer.d.ts",
+      "default": "./PdfViewer.js"
+    },
     "./RichTextEditor.js": {
       "types": "./RichTextEditor.d.ts",
       "default": "./RichTextEditor.js"
@@ -144,6 +149,7 @@
     "./GridPro": "./GridPro.js",
     "./GridProEditColumn": "./GridProEditColumn.js",
     "./Map": "./Map.js",
+    "./PdfViewer": "./PdfViewer.js",
     "./RichTextEditor": "./RichTextEditor.js",
     "./utils/createComponent.d.ts": "./utils/createComponent.d.ts",
     "./utils/createComponent.d.ts.map": "./utils/createComponent.d.ts.map",
