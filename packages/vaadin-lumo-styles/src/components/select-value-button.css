@@ -32,7 +32,7 @@
   }
 
   /* placeholder styles */
-  ::slotted(*:not([selected])) {
+  :host([placeholder]) ::slotted(*) {
     line-height: 1;
   }
 
