@@ -4,6 +4,7 @@
  * This program is available under Apache License Version 2.0, available at https://vaadin.com/license/
  */
 import { announce } from '@vaadin/a11y-base/src/announce.js';
+import { hasNodeContent } from '@vaadin/component-base/src/dom-utils.js';
 import { SlotChildObserveController } from '@vaadin/component-base/src/slot-child-observe-controller.js';
 
 /**
@@ -22,6 +23,10 @@ export class ErrorController extends SlotChildObserveController {
   setErrorMessage(errorMessage) {
     this.errorMessage = errorMessage;
 
+    if (this.node) {
+      this.node.textContent = errorMessage || '';
+    }
+
     this.updateDefaultNode(this.node);
   }
 
@@ -37,22 +42,24 @@ export class ErrorController extends SlotChildObserveController {
   }
 
   /**
-   * Override method inherited from `SlotController` to not run
-   * initializer on the custom slotted node unnecessarily.
+   * Override to set the error message text on the default node.
    *
-   * @param {Node} node
+   * @return {Node}
    * @protected
    * @override
    */
-  initAddedNode(node) {
-    if (node !== this.defaultNode) {
-      // There is no need to run `initNode`.
-      this.initCustomNode(node);
+  attachDefaultNode() {
+    const node = super.attachDefaultNode();
+
+    if (node) {
+      node.textContent = this.errorMessage || '';
     }
+
+    return node;
   }
 
   /**
-   * Override to initialize the newly added default error message.
+   * Override to initialize the newly added error message.
    *
    * @param {Node} errorNode
    * @protected
@@ -60,23 +67,6 @@ export class ErrorController extends SlotChildObserveController {
    */
   initNode(errorNode) {
     this.updateDefaultNode(errorNode);
-  }
-
-  /**
-   * Override to initialize the newly added custom error message.
-   *
-   * @param {Node} errorNode
-   * @protected
-   * @override
-   */
-  initCustomNode(errorNode) {
-    // Save the custom error message content on the host.
-    if (errorNode.textContent && !this.errorMessage) {
-      this.errorMessage = errorNode.textContent.trim();
-    }
-
-    // Notify the host about custom node.
-    super.initCustomNode(errorNode);
   }
 
   /**
@@ -92,7 +82,7 @@ export class ErrorController extends SlotChildObserveController {
 
   /**
    * Override method inherited from `SlotChildObserveController`
-   * to update the error message text and hidden state.
+   * to update the error message hidden state.
    *
    * Note: unlike with other controllers, this method is
    * called for both default and custom error message.
@@ -102,17 +92,14 @@ export class ErrorController extends SlotChildObserveController {
    * @override
    */
   updateDefaultNode(errorNode) {
-    const { errorMessage, invalid } = this;
-    const hasError = Boolean(invalid && errorMessage && errorMessage.trim() !== '');
-
     if (errorNode) {
-      errorNode.textContent = errorMessage || '';
+      const hasError = Boolean(this.invalid && hasNodeContent(errorNode));
       errorNode.hidden = !hasError;
 
       if (hasError) {
         // Assertive mode ensures VoiceOver reads
         // the error message on commit with Enter.
-        announce(errorMessage, { mode: 'assertive' });
+        announce(errorNode.textContent.trim(), { mode: 'assertive' });
       }
     }
 
