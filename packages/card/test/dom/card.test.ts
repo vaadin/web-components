@@ -1,12 +1,14 @@
 import { expect } from '@vaadin/chai-plugins';
 import { fixtureSync, nextUpdate } from '@vaadin/testing-helpers';
 import '../../src/vaadin-card.js';
+import { resetUniqueId } from '@vaadin/component-base/src/unique-id-utils.js';
 import type { Card } from '../../src/vaadin-card.js';
 
 describe('vaadin-card', () => {
   let card: Card;
 
   beforeEach(async () => {
+    resetUniqueId();
     card = fixtureSync('<vaadin-card></vaadin-card>');
     await nextUpdate(card);
   });

@@ -313,10 +313,7 @@ snapshots["vaadin-select host value"] =
     slot="value"
     tabindex="0"
   >
-    <vaadin-select-item
-      id="value-vaadin-select-3"
-      selected=""
-    >
+    <vaadin-select-item id="value-vaadin-select-3">
       Option 1
     </vaadin-select-item>
   </vaadin-select-value-button>

@@ -229,14 +229,6 @@ describe('vaadin-select', () => {
         expect(select._overlayElement.opened).to.be.false;
       });
 
-      it('should preserve the selected attribute when selecting the disabled item', async () => {
-        menu.selected = 5;
-        await nextUpdate(select);
-        const valueElement = valueButton.firstChild;
-        expect(valueElement.selected).to.be.true;
-        expect(valueElement.disabled).to.be.true;
-      });
-
       it('should not update value if the selected item does not have a value', async () => {
         menu.selected = 2;
         await nextUpdate(select);
@@ -263,14 +255,30 @@ describe('vaadin-select', () => {
         expect(valueButton.textContent.trim()).to.be.equal('o2');
       });
 
-      it('should wrap the selected item `label` string in selected vaadin item', async () => {
+      it('should wrap the selected item `label` string in item element', async () => {
         menu.selected = 1;
         await nextUpdate(select);
         const item = valueButton.firstElementChild;
         expect(item.localName).to.equal('vaadin-select-item');
         expect(item.textContent).to.equal('o2');
-        expect(item.selected).to.be.true;
         expect(item.getAttribute('tabindex')).to.be.null;
+      });
+
+      it('should not set selected attributes on the selected item `label` wrapper', async () => {
+        menu.selected = 1;
+        await nextUpdate(select);
+        const item = valueButton.firstElementChild;
+        expect(item.hasAttribute('selected')).to.be.false;
+        expect(item.hasAttribute('aria-selected')).to.be.false;
+      });
+
+      it('should not set selected attributes on the selected disabled item clone', async () => {
+        menu.selected = 5;
+        await nextUpdate(select);
+        const item = valueButton.firstElementChild;
+        expect(item.disabled).to.be.true;
+        expect(item.hasAttribute('selected')).to.be.false;
+        expect(item.hasAttribute('aria-selected')).to.be.false;
       });
 
       it('should update selection slot when value is provided', async () => {
