@@ -20,7 +20,7 @@ describe('keyboard', () => {
   });
 
   describe('overlay', () => {
-    [('ArrowDown', 'ArrowUp', 'Enter', 'Space')].forEach((key) => {
+    ['ArrowDown', 'ArrowUp', 'Enter', 'Space'].forEach((key) => {
       it(`should open overlay on ${key} key`, async () => {
         await sendKeys({ press: 'Tab' });
 
