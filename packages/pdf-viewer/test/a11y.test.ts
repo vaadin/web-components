@@ -5,7 +5,14 @@ import sinon from 'sinon';
 import './enable-feature-flag.js';
 import '../vaadin-pdf-viewer.js';
 import type { PdfViewer } from '../vaadin-pdf-viewer.js';
-import { createPdfUrl, fixtureUrl, loadDocument, nextRenderIdle, scrollSettled } from './helpers.js';
+import {
+  createPdfUrl,
+  fixtureUrl,
+  getPdfDocumentPrototype,
+  loadDocument,
+  nextRenderIdle,
+  scrollSettled,
+} from './helpers.js';
 
 describe('accessibility', () => {
   let viewer: PdfViewer;
@@ -174,7 +181,7 @@ describe('accessibility', () => {
     });
 
     it('should make the pages focusable after the toolbar controls', async () => {
-      viewer.querySelector<HTMLElement>('vaadin-pdf-viewer-button[icon="download"]')!.focus();
+      viewer.querySelector<HTMLElement>('vaadin-pdf-viewer-button[icon="print"]')!.focus();
       await sendKeys({ press: 'Tab' });
       expect(viewer.shadowRoot!.activeElement).to.equal(getContent());
     });
@@ -405,6 +412,55 @@ describe('accessibility', () => {
       await pageChanged;
       await clock.tickAsync(200);
       expect(getLiveRegion().textContent).to.equal('Page 3 of 3');
+    });
+  });
+
+  describe('print', () => {
+    let clock: sinon.SinonFakeTimers;
+    let getPage: sinon.SinonStub;
+    let prototype: any;
+    let region: HTMLElement;
+
+    before(async () => {
+      prototype = await getPdfDocumentPrototype();
+    });
+
+    beforeEach(async () => {
+      viewer = fixtureSync('<vaadin-pdf-viewer style="width: 600px; height: 400px"></vaadin-pdf-viewer>');
+      await nextRender();
+      await loadDocument(viewer, 'multi-page.pdf');
+      await nextUpdate(viewer);
+      // The region of an alert has no aria-live attribute.
+      region = [...document.body.children].find(
+        (element) => element.hasAttribute('aria-live') || element.getAttribute('role') === 'alert',
+      ) as HTMLElement;
+      // No announcement of a previous test
+      region.textContent = '';
+      clock = sinon.useFakeTimers({ shouldClearNativeTimers: true });
+    });
+
+    afterEach(() => {
+      clock.restore();
+      getPage.restore();
+    });
+
+    it('should announce that the document is prepared for printing', async () => {
+      // The pages never load, so that printing stays in progress.
+      getPage = sinon.stub(prototype, 'getPage').returns(new Promise(() => {}));
+      viewer.print();
+      await clock.tickAsync(200);
+      expect(region.getAttribute('aria-live')).to.equal('polite');
+      expect(region.textContent).to.equal('Preparing to print…');
+    });
+
+    it('should announce that the document could not be printed', async () => {
+      getPage = sinon.stub(prototype, 'getPage').rejects(new Error('Broken page'));
+      const warnStub = sinon.stub(console, 'warn');
+      await viewer.print();
+      warnStub.restore();
+      await clock.tickAsync(200);
+      expect(region.getAttribute('role')).to.equal('alert');
+      expect(region.textContent).to.equal('The document could not be printed.');
     });
   });
 });

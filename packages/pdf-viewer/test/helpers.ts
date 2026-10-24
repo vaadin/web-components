@@ -1,4 +1,4 @@
-import { nextFrame, oneEvent } from '@vaadin/testing-helpers';
+import { nextFrame, nextUpdate, oneEvent } from '@vaadin/testing-helpers';
 import { acquireWorker, loadPdfjs, releaseWorker } from '../src/pdfjs-loader.js';
 import type { PdfViewer } from '../vaadin-pdf-viewer.js';
 
@@ -33,6 +33,55 @@ export async function getPdfDocumentPrototype(): Promise<any> {
     await task.destroy();
     releaseWorker(handle);
   }
+}
+
+/**
+ * Holds the pages of all documents from the given page number on until
+ * released, e.g. to stop printing before them. Returns the function that
+ * releases them.
+ */
+export async function holdPages(fromPage: number): Promise<() => void> {
+  const prototype = await getPdfDocumentPrototype();
+  const { getPage } = prototype;
+  let release!: () => void;
+  const released = new Promise<void>((resolve) => {
+    release = resolve;
+  });
+  prototype.getPage = async function (this: unknown, pageNumber: number) {
+    if (pageNumber >= fromPage) {
+      await released;
+    }
+    return getPage.call(this, pageNumber);
+  };
+  return () => {
+    prototype.getPage = getPage;
+    release();
+  };
+}
+
+/**
+ * Starts printing and waits until the given number of pages is prepared and
+ * the progress bar shows it. Printing stays in progress until the returned
+ * function releases the pages.
+ */
+export async function startPrint(viewer: PdfViewer, preparedPages = 0): Promise<() => void> {
+  const release = await holdPages(preparedPages + 1);
+  viewer.print();
+  // The progress counts the prepared pages.
+  const progress = preparedPages / viewer.pageCount;
+  let progressBar: (HTMLElement & { value: number }) | null = null;
+  for (let i = 0; progressBar?.value !== progress; i++) {
+    if (i === 200) {
+      release();
+      throw new Error(`Printing did not prepare ${preparedPages} pages`);
+    }
+    await nextFrame();
+    progressBar = viewer.querySelector<HTMLElement & { value: number }>('vaadin-progress-bar');
+  }
+  // The bar animates its width to the value.
+  await nextUpdate(progressBar);
+  await Promise.all(progressBar.shadowRoot!.getAnimations().map((animation) => animation.finished));
+  return release;
 }
 
 /**

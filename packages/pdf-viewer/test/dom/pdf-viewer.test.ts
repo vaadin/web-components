@@ -4,10 +4,11 @@ import '../enable-feature-flag.js';
 import '../../vaadin-pdf-viewer.js';
 import { resetUniqueId } from '@vaadin/component-base/src/unique-id-utils.js';
 import type { PdfViewer } from '../../vaadin-pdf-viewer.js';
-import { fixtureUrl, nextRenderIdle } from '../helpers.js';
+import { fixtureUrl, nextRenderIdle, startPrint } from '../helpers.js';
 
 describe('vaadin-pdf-viewer', () => {
   let viewer: PdfViewer;
+  let release: (() => void) | undefined;
 
   /** Waits for the outline, which shows the buttons that switch the view of the sidebar. */
   async function waitForOutline() {
@@ -20,6 +21,11 @@ describe('vaadin-pdf-viewer', () => {
     resetUniqueId();
     viewer = fixtureSync('<vaadin-pdf-viewer></vaadin-pdf-viewer>');
     await nextRender();
+  });
+
+  afterEach(() => {
+    release?.();
+    release = undefined;
   });
 
   describe('host', () => {
@@ -81,6 +87,14 @@ describe('vaadin-pdf-viewer', () => {
       await waitForOutline();
       await expect(viewer).dom.to.equalSnapshot();
     });
+
+    it('print progress', async () => {
+      viewer.src = fixtureUrl('multi-page.pdf');
+      await oneEvent(viewer, 'document-load');
+      await nextUpdate(viewer);
+      release = await startPrint(viewer);
+      await expect(viewer).dom.to.equalSnapshot();
+    });
   });
 
   describe('shadow', () => {
@@ -123,6 +137,13 @@ describe('vaadin-pdf-viewer', () => {
       await nextRenderIdle(viewer);
       viewer.querySelector<HTMLElement>('vaadin-pdf-viewer-button[icon="find"]')!.click();
       await nextRender();
+      await expect(viewer).shadowDom.to.equalSnapshot({ ignoreAttributes: ['style', 'width', 'height'] });
+    });
+
+    it('print progress', async () => {
+      viewer.src = fixtureUrl('multi-page.pdf');
+      await nextRenderIdle(viewer);
+      release = await startPrint(viewer);
       await expect(viewer).shadowDom.to.equalSnapshot({ ignoreAttributes: ['style', 'width', 'height'] });
     });
 

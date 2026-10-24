@@ -41,6 +41,10 @@ export interface PdfViewerI18n {
   goToPage?: string;
   externalLink?: string;
   download?: string;
+  print?: string;
+  printing?: string;
+  cancelPrint?: string;
+  printError?: string;
   find?: string;
   previousMatch?: string;
   nextMatch?: string;
@@ -158,6 +162,7 @@ export interface PdfViewerEventMap extends HTMLElementEventMap, PdfViewerCustomE
  * `outline-item-title`   | The title of an outline item.
  * `content`              | The scrollable area that contains the pages.
  * `page`                 | A page of the document.
+ * `print-progress`       | The progress shown while the document is prepared for printing.
  * `error-message`        | The message shown when the document could not be loaded.
  * `loader`               | The loading indicator shown while the document loads.
  *
@@ -190,6 +195,7 @@ export interface PdfViewerEventMap extends HTMLElementEventMap, PdfViewerCustomE
  * | `--vaadin-pdf-viewer-icon-outline`                 |
  * | `--vaadin-pdf-viewer-icon-previous-match`          |
  * | `--vaadin-pdf-viewer-icon-previous-page`           |
+ * | `--vaadin-pdf-viewer-icon-print`                   |
  * | `--vaadin-pdf-viewer-icon-sidebar`                 |
  * | `--vaadin-pdf-viewer-icon-thumbnails`              |
  * | `--vaadin-pdf-viewer-icon-zoom-in`                 |
@@ -290,8 +296,14 @@ declare class PdfViewer extends PdfViewerPrintMixin(
    *   // Accessible name of links that open in a new tab.
    *   // {text} is replaced with the text of the link, or its URL.
    *   externalLink: '{text} (opens in a new tab)',
-   *   // Accessible label and tooltip of the download button.
+   *   // Accessible labels and tooltips of the download and print buttons.
    *   download: 'Download',
+   *   print: 'Print',
+   *   // Shown while the pages are prepared for printing, and the button that cancels it.
+   *   printing: 'Preparing to print…',
+   *   cancelPrint: 'Cancel',
+   *   // Announced when printing fails.
+   *   printError: 'The document could not be printed.',
    *   // Accessible label of the find button, the find bar and the find field,
    *   // tooltip of the find button and placeholder of the find field.
    *   find: 'Find in document',

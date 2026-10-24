@@ -63,6 +63,10 @@
   }
 
   /* Lumo has no icons for these, so the mask icons of the base styles are used */
+  :host([icon='print']) {
+    --_mask-icon: var(--vaadin-pdf-viewer-icon-print, var(--_vaadin-icon-print));
+  }
+
   :host([icon='thumbnails']) {
     --_mask-icon: var(--vaadin-pdf-viewer-icon-thumbnails, var(--_vaadin-icon-layout-grid));
   }
@@ -71,13 +75,13 @@
     --_mask-icon: var(--vaadin-pdf-viewer-icon-outline, var(--_vaadin-icon-list-tree));
   }
 
-  :host(:is([icon='thumbnails'], [icon='outline'])) [part='icon'] {
+  :host(:is([icon='print'], [icon='thumbnails'], [icon='outline'])) [part='icon'] {
     background: currentColor;
     /* Scaled to match the visual size of the Lumo icon font */
     mask: var(--_mask-icon) 50% / 75% no-repeat;
   }
 
-  :host(:is([icon='thumbnails'], [icon='outline'])) [part='icon']::before {
+  :host(:is([icon='print'], [icon='thumbnails'], [icon='outline'])) [part='icon']::before {
     content: none;
   }
 
@@ -98,11 +102,11 @@
   }
 
   @media (forced-colors: active) {
-    :host(:is([icon='thumbnails'], [icon='outline'])) [part='icon'] {
+    :host(:is([icon='print'], [icon='thumbnails'], [icon='outline'])) [part='icon'] {
       background: CanvasText;
     }
 
-    :host([disabled]:is([icon='thumbnails'], [icon='outline'])) [part='icon'] {
+    :host([disabled]:is([icon='print'], [icon='thumbnails'], [icon='outline'])) [part='icon'] {
       background: GrayText;
     }
 
@@ -119,7 +123,7 @@
       background: none;
     }
 
-    :host([aria-pressed='true']:is([icon='thumbnails'], [icon='outline'])) [part='icon'] {
+    :host([aria-pressed='true']:is([icon='print'], [icon='thumbnails'], [icon='outline'])) [part='icon'] {
       background: HighlightText;
     }
   }

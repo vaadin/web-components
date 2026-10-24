@@ -12,8 +12,8 @@ import type { Constructor } from '@open-wc/dedupe-mixin';
 import type { TemplateResult } from 'lit';
 
 /**
- * Adds downloading the document to the PDF viewer, with a button in the
- * toolbar.
+ * Adds downloading and printing the document to the PDF viewer, with buttons
+ * in the toolbar.
  */
 export declare function PdfViewerPrintMixin<T extends Constructor<HTMLElement>>(
   base: T,
@@ -29,6 +29,14 @@ export declare class PdfViewerPrintMixinClass {
   downloadButtonHidden: boolean;
 
   /**
+   * Whether the button that prints the document is hidden from the
+   * toolbar. The `print()` method works also while it is hidden.
+   *
+   * @attr {boolean} print-button-hidden
+   */
+  printButtonHidden: boolean;
+
+  /**
    * Downloads the document. The file has the original bytes of the
    * document, so the viewer does not request it again, and signatures stay
    * intact. The file name is `fileName`, else the last part of the path of
@@ -39,8 +47,26 @@ export declare class PdfViewerPrintMixinClass {
   download(): void;
 
   /**
-   * Returns the template of the download button, which is rendered into
-   * the light DOM.
+   * Prints the document with the print dialog of the browser. The viewer
+   * prepares the pages for printing first, which can take a while for long
+   * documents. Meanwhile, it shows the progress with a button that cancels
+   * printing, and Escape cancels it too. Each page prints on paper of its
+   * own size. While the document loads, it is printed once loaded. Does
+   * nothing without a document, when the viewer is not attached, or while
+   * a print is prepared already. The returned promise resolves when
+   * printing ends or is cancelled.
+   */
+  print(): Promise<void>;
+
+  /**
+   * Returns the template of the progress of printing, which shows the
+   * controls of `_renderPrintControls()` in its slot.
+   */
+  protected _renderPrintProgress(): TemplateResult;
+
+  /**
+   * Returns the template of the download and print buttons and of the
+   * controls of the print progress, which are rendered into the light DOM.
    */
   protected _renderPrintControls(): TemplateResult;
 }

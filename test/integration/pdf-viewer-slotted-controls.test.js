@@ -46,13 +46,15 @@ describe('pdf-viewer with slotted controls', () => {
     const zoomIn = viewer.querySelector('vaadin-pdf-viewer-button[icon="zoom-in"]').getBoundingClientRect();
     const find = viewer.querySelector('vaadin-pdf-viewer-button[icon="find"]').getBoundingClientRect();
     const download = viewer.querySelector('vaadin-pdf-viewer-button[icon="download"]').getBoundingClientRect();
+    const print = viewer.querySelector('vaadin-pdf-viewer-button[icon="print"]').getBoundingClientRect();
     const approveRect = approve.getBoundingClientRect();
     const rejectRect = reject.getBoundingClientRect();
     expect(approveRect.left).to.be.greaterThan(zoomIn.right);
     expect(approveRect.right).to.be.at.most(rejectRect.left);
     expect(rejectRect.right).to.be.at.most(find.left);
     expect(find.right).to.be.at.most(download.left);
-    expect(toolbar.right - download.right).to.be.lessThan(20);
+    expect(download.right).to.be.at.most(print.left);
+    expect(toolbar.right - print.right).to.be.lessThan(20);
   });
 
   it('should show the tooltip of a slotted button on hover', async () => {

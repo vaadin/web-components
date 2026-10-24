@@ -460,7 +460,7 @@ describe('toolbar', () => {
     it('should group the controls into navigation, viewing options and actions', () => {
       expect(getGroupIcons('navigation')).to.deep.equal(['sidebar', 'previous-page', 'next-page']);
       expect(getGroupIcons('viewing')).to.deep.equal(['zoom-out', 'zoom-in']);
-      expect(getGroupIcons('actions')).to.deep.equal(['find', 'download']);
+      expect(getGroupIcons('actions')).to.deep.equal(['find', 'download', 'print']);
     });
 
     it('should show the find button before the download button', () => {

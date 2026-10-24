@@ -5,6 +5,7 @@ import sinon from 'sinon';
 import '@vaadin/dialog/src/vaadin-dialog.js';
 import '@vaadin/pdf-viewer/test/enable-feature-flag.js';
 import '@vaadin/pdf-viewer/src/vaadin-pdf-viewer.js';
+import { holdPages } from '@vaadin/pdf-viewer/test/helpers.ts';
 
 describe('pdf-viewer in dialog', () => {
   let dialog, viewer;
@@ -87,6 +88,29 @@ describe('pdf-viewer in dialog', () => {
     await sendKeys({ press: 'Escape' });
     await nextFrame();
     expect(dialog.opened).to.be.false;
+  });
+
+  it('should cancel printing first and close the dialog second with Escape', async () => {
+    // The pages do not load until released, so that printing stays in progress.
+    const release = await holdPages(1);
+    try {
+      getContent().focus();
+      viewer.print();
+      await nextRender();
+      const progress = viewer.shadowRoot.querySelector('[part="print-progress"]');
+      expect(progress.hidden).to.be.false;
+      await sendKeys({ press: 'Escape' });
+      await nextFrame();
+      expect(progress.hidden).to.be.true;
+      expect(dialog.opened).to.be.true;
+      expect(viewer.shadowRoot.activeElement).to.equal(getContent());
+
+      await sendKeys({ press: 'Escape' });
+      await nextFrame();
+      expect(dialog.opened).to.be.false;
+    } finally {
+      release();
+    }
   });
 
   it('should close the find bar and keep the dialog open with Escape on a find bar button', async () => {

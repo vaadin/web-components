@@ -22,6 +22,7 @@
       const headerTitle = document.querySelector('#header-title');
       const collapsed = document.querySelector('#collapsed');
       const downloadHidden = document.querySelector('#download-hidden');
+      const printHidden = document.querySelector('#print-hidden');
       const findHidden = document.querySelector('#find-hidden');
       const sidebarOpened = document.querySelector('#sidebar-opened');
       const findText = document.querySelector('#find-text');
@@ -60,6 +61,14 @@
       });
       document.querySelector('#download').addEventListener('click', () => {
         viewer.download();
+      });
+      printHidden.addEventListener('change', () => {
+        viewer.printButtonHidden = printHidden.checked;
+      });
+      document.querySelector('#print').addEventListener('click', async () => {
+        log.textContent = 'print() called';
+        await viewer.print();
+        log.textContent = 'print() resolved';
       });
       findHidden.addEventListener('change', () => {
         viewer.findButtonHidden = findHidden.checked;
@@ -140,6 +149,11 @@
         Hide download button
       </label>
       <button id="download">download()</button>
+      <label>
+        <input type="checkbox" id="print-hidden" />
+        Hide print button
+      </label>
+      <button id="print">print()</button>
       <label>
         <input type="checkbox" id="find-hidden" />
         Hide find button

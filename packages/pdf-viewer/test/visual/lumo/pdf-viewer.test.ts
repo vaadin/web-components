@@ -6,7 +6,7 @@ import '@vaadin/vaadin-lumo-styles/components/pdf-viewer.css';
 import '../../enable-feature-flag.js';
 import '../../../vaadin-pdf-viewer.js';
 import type { PdfViewer } from '../../../vaadin-pdf-viewer.js';
-import { currentMatchShown, fixtureUrl, nextRenderIdle } from '../../helpers.js';
+import { currentMatchShown, fixtureUrl, nextRenderIdle, startPrint } from '../../helpers.js';
 
 describe('pdf-viewer', () => {
   let div: HTMLElement;
@@ -114,7 +114,7 @@ describe('pdf-viewer', () => {
   it('content-focus', async () => {
     element.src = fixtureUrl('multi-page.pdf');
     await nextRenderIdle(element);
-    element.querySelector<HTMLElement>('vaadin-pdf-viewer-button[icon="download"]')!.focus();
+    element.querySelector<HTMLElement>('vaadin-pdf-viewer-button[icon="print"]')!.focus();
     await sendKeys({ press: 'Tab' });
     await visualDiff(div, 'content-focus');
   });
@@ -187,6 +187,17 @@ describe('pdf-viewer', () => {
     await visualDiff(div, 'outline');
   });
 
+  it('print-progress', async () => {
+    element.src = fixtureUrl('multi-page.pdf');
+    await nextRenderIdle(element);
+    const release = await startPrint(element, 2);
+    try {
+      await visualDiff(div, 'print-progress');
+    } finally {
+      release();
+    }
+  });
+
   describe('large text', () => {
     beforeEach(() => {
       // Like a larger default font size in the browser settings
@@ -209,6 +220,17 @@ describe('pdf-viewer', () => {
       input.dispatchEvent(new Event('input', { bubbles: true }));
       await currentMatchShown(element);
       await visualDiff(div, 'large-text-find');
+    });
+
+    it('large-text-print-progress', async () => {
+      element.src = fixtureUrl('multi-page.pdf');
+      await nextRenderIdle(element);
+      const release = await startPrint(element, 2);
+      try {
+        await visualDiff(div, 'large-text-print-progress');
+      } finally {
+        release();
+      }
     });
   });
 

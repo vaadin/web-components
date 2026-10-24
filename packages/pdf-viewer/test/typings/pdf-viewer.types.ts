@@ -38,6 +38,7 @@ assertType<boolean>(viewer.headerVisible);
 assertType<string | null | undefined>(viewer.headerTitle);
 assertType<boolean>(viewer.toolbarCollapsed);
 assertType<boolean>(viewer.downloadButtonHidden);
+assertType<boolean>(viewer.printButtonHidden);
 assertType<boolean>(viewer.findButtonHidden);
 assertType<boolean>(viewer.sidebarOpened);
 assertType<PdfViewerI18n | undefined>(viewer.i18n);
@@ -67,6 +68,10 @@ assertType<PdfViewerI18n>({
   goToPage: 'Go to page {page}',
   externalLink: '{text} (opens in a new tab)',
   download: 'Download',
+  print: 'Print',
+  printing: 'Preparing to print…',
+  cancelPrint: 'Cancel',
+  printError: 'The document could not be printed.',
   find: 'Find',
   previousMatch: 'Previous match',
   nextMatch: 'Next match',
@@ -83,6 +88,7 @@ assertType<PdfViewerI18n>({
 
 // Methods
 assertType<() => void>(viewer.download);
+assertType<() => Promise<void>>(viewer.print);
 assertType<(text: string) => void>(viewer.find);
 assertType<(page: number, text: string) => void>(viewer.highlight);
 
