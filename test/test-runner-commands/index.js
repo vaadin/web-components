@@ -29,3 +29,29 @@ export async function sendMouseToElement(payload) {
   const y = Math.floor(rect.y + rect.height / 2);
   await executeServerCommand('send-mouse', { type, position: [x, y] });
 }
+
+/**
+ * Makes the browser emulate a touch device, so that e.g. the `(pointer: coarse)`
+ * media query matches. Remember to turn it off again after the test. Returns
+ * false in browsers that don't support it, which is currently all but Chromium.
+ *
+ * @param {boolean} enabled
+ * @return {Promise<boolean>}
+ */
+export function setTouchEmulation(enabled) {
+  return executeServerCommand('emulate-touch', { enabled });
+}
+
+/**
+ * Sends real touch input to the browser, which the browser also uses for
+ * scrolling and zooming, unlike synthetic events. The points are in CSS
+ * pixels of the page. Returns false in browsers that don't support it, which
+ * is currently all but Chromium.
+ *
+ * @param {'touchStart' | 'touchMove' | 'touchEnd' | 'touchCancel'} type
+ * @param {Array<{ x: number, y: number, id: number }>} touchPoints all touches that are down after the event
+ * @return {Promise<boolean>}
+ */
+export function dispatchTouch(type, touchPoints) {
+  return executeServerCommand('dispatch-touch', { type, touchPoints });
+}
