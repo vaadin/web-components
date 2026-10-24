@@ -1,6 +1,6 @@
 import { expect } from '@vaadin/chai-plugins';
-import { sendKeys } from '@vaadin/test-runner-commands';
-import { fixtureSync, nextFrame, nextRender, oneEvent } from '@vaadin/testing-helpers';
+import { sendKeys, setTouchEmulation } from '@vaadin/test-runner-commands';
+import { fixtureSync, isChrome, nextFrame, nextRender, oneEvent } from '@vaadin/testing-helpers';
 import sinon from 'sinon';
 import './enable-feature-flag.js';
 import '../vaadin-pdf-viewer.js';
@@ -553,6 +553,69 @@ describe('toolbar', () => {
           expect(offset).to.be.lessThan(20);
         });
       });
+    });
+  });
+
+  // Only Chromium can emulate a touch device in the tests.
+  (isChrome ? describe : describe.skip)('touch device', () => {
+    beforeEach(async () => {
+      await setTouchEmulation(true);
+      viewer.style.width = '900px';
+      const idle = nextRenderIdle(viewer);
+      await loadDocument(viewer, 'multi-page.pdf');
+      await idle;
+    });
+
+    afterEach(async () => {
+      await setTouchEmulation(false);
+    });
+
+    it('should not collapse the toolbar by default', async () => {
+      const touchViewer = fixtureSync<PdfViewer>('<vaadin-pdf-viewer header-visible></vaadin-pdf-viewer>');
+      await loadDocument(touchViewer, 'multi-page.pdf');
+      await nextFrame();
+      expect(touchViewer.toolbarCollapsed).to.be.false;
+      const toolbar = touchViewer.shadowRoot!.querySelector<HTMLElement>('[part="toolbar"]')!;
+      expect(toolbar.checkVisibility()).to.be.true;
+    });
+
+    it('should hide the zoom select and the page controls', () => {
+      expect(getZoomSelect().checkVisibility()).to.be.false;
+      expect(getPageField().checkVisibility()).to.be.false;
+      expect(getButton('previous-page').checkVisibility()).to.be.false;
+      expect(getButton('next-page').checkVisibility()).to.be.false;
+    });
+
+    it('should keep the zoom buttons, for zooming without two fingers', () => {
+      expect(getButton('zoom-in').checkVisibility()).to.be.true;
+      expect(getButton('zoom-out').checkVisibility()).to.be.true;
+    });
+
+    it('should keep the sidebar button and the actions', () => {
+      ['sidebar', 'find', 'download', 'print'].forEach((icon) => {
+        expect(getButton(icon).checkVisibility(), icon).to.be.true;
+      });
+    });
+
+    [900, 360].forEach((width) => {
+      it(`should place the sidebar button at the start and the actions at the end at ${width}px`, async () => {
+        viewer.style.width = `${width}px`;
+        await nextFrame();
+        const toolbar = getToolbar().getBoundingClientRect();
+        expect(getButton('sidebar').getBoundingClientRect().left - toolbar.left).to.be.lessThan(20);
+        expect(toolbar.right - getButton('print').getBoundingClientRect().right).to.be.lessThan(20);
+        // On one line
+        expect(getButton('print').getBoundingClientRect().top).to.equal(
+          getButton('sidebar').getBoundingClientRect().top,
+        );
+      });
+    });
+
+    it('should show the page controls again when touch emulation ends', async () => {
+      await setTouchEmulation(false);
+      await nextFrame();
+      expect(getPageField().checkVisibility()).to.be.true;
+      expect(getZoomSelect().checkVisibility()).to.be.true;
     });
   });
 

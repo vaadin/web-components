@@ -169,4 +169,20 @@ export const pdfViewerToolbarStyles = css`
     width: var(--vaadin-pdf-viewer-zoom-select-width, 10em);
     max-width: 100%;
   }
+
+  /* On touch devices, pages are zoomed by pinching and changed by scrolling, like in other PDF viewers
+     on phones. The zoom buttons stay for zooming without two fingers. */
+  @media (pointer: coarse) {
+    ::slotted(
+      :is(vaadin-select[slot='toolbar-zoom'], [slot='toolbar-page'], [slot='page-field'], [slot='page-error'])
+    ) {
+      display: none;
+    }
+
+    /* The remaining controls fit on one line: navigation at the start, zoom in the middle, actions at the end. */
+    [part='toolbar'] {
+      display: flex;
+      justify-content: space-between;
+    }
+  }
 `;

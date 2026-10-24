@@ -50,6 +50,8 @@ const pdfViewerBaseStyles = css`
   [part='content'] {
     position: relative;
     outline: none;
+    /* Pinching zooms the pages instead of the page of the application */
+    touch-action: pan-x pan-y;
     flex: 1 1 auto;
     min-width: 0;
     min-height: 0;

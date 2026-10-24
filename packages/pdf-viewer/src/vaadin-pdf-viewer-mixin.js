@@ -23,6 +23,7 @@ import {
   resolveDestination,
 } from './pdf-viewer-links.js';
 import { PdfViewerPage } from './pdf-viewer-page.js';
+import { PdfViewerPinchController } from './pdf-viewer-pinch-controller.js';
 import { PdfViewerRenderQueue } from './pdf-viewer-render-queue.js';
 import { PdfViewerTextContent } from './pdf-viewer-text-content.js';
 import { formatZoom, getZoomInLevel, getZoomOutLevel, isValidZoom } from './pdf-viewer-zoom.js';
@@ -215,6 +216,9 @@ export const PdfViewerMixin = (superClass) =>
     /** A page to scroll to once the pages can be laid out. */
     #pendingPage = 0;
 
+    /** The point of the pages and where it goes in the view when the zoom changes next, e.g. after pinching. */
+    #zoomAnchor = null;
+
     #scrollFrame = 0;
 
     #smoothScrollFrame = 0;
@@ -255,6 +259,9 @@ export const PdfViewerMixin = (superClass) =>
       onUnload: () => this.#onUnload(),
     });
 
+    /** @type {PdfViewerPinchController | null} */
+    #pinchController = null;
+
     /**
      * Override method from `HTMLElement` to observe the size of the pages area
      * and the device pixel ratio.
@@ -290,8 +297,8 @@ export const PdfViewerMixin = (superClass) =>
 
     /**
      * Override method from `LitElement` to set the default role, to add the
-     * controller that loads the document, and to add the listeners of the
-     * pages area.
+     * controllers that load the document and zoom it with two fingers, and
+     * to add the listeners of the pages area.
      * @protected
      * @override
      */
@@ -303,6 +310,15 @@ export const PdfViewerMixin = (superClass) =>
       }
 
       this.addController(this.#documentController);
+      this.#pinchController = new PdfViewerPinchController(this.$.content, this.$.pages, {
+        getZoomFactor: () => (this.#pages.length && this.#hasLayout() ? this._zoomFactor : 0),
+        captureAnchor: (point) => this.#captureAnchor(point),
+        onZoom: (zoom, anchor) => {
+          this.#zoomAnchor = anchor;
+          this.zoom = zoom;
+        },
+      });
+      this.addController(this.#pinchController);
 
       this.$.content.addEventListener('scroll', () => this.#onScroll(), { passive: true });
       this.#contentObserver = new ResizeObserver(() => this.#onContentResize());
@@ -341,6 +357,11 @@ export const PdfViewerMixin = (superClass) =>
       if (props.has('zoom') && this.#pages.length) {
         this.#idle = false;
         this.#refresh();
+      }
+
+      if (props.has('zoom')) {
+        this.#zoomAnchor = null;
+        this.#pinchController.cancel();
       }
 
       if (props.has('page') && this.page !== this.#scrolledPage && this.#pages.length) {
@@ -823,8 +844,11 @@ export const PdfViewerMixin = (superClass) =>
         return;
       }
 
+      // The pages are laid out again, e.g. when their sizes arrive after loading. A pinch in
+      // progress ends, as its preview no longer fits. The preview must not be measured either.
+      this.#pinchController.cancel();
       const isFirstLayout = this.#scale === 0;
-      const anchor = isFirstLayout ? null : this.#captureAnchor(null);
+      const anchor = isFirstLayout ? null : this.#zoomAnchor || this.#captureAnchor(null);
 
       this.#scale = scale;
       this._zoomFactor = scale / PDF_TO_CSS_UNITS;
