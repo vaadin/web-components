@@ -36,6 +36,7 @@ export default defineConfig(({ mode }) => ({
       'lit/directive-helpers.js',
       'dompurify',
       'marked',
+      'pdfjs-dist/legacy/build/pdf.worker.mjs',
       'vitest-browser-react',
       'chai-dom',
       'chai-as-promised',
