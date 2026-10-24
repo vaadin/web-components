@@ -11,7 +11,6 @@ import './vaadin-select-value-button.js';
 import { html, LitElement } from 'lit';
 import { ifDefined } from 'lit/directives/if-defined.js';
 import { isKeyboardActive } from '@vaadin/a11y-base/src/focus-utils.js';
-import { screenReaderOnly } from '@vaadin/a11y-base/src/styles/sr-only-styles.js';
 import { defineCustomElement } from '@vaadin/component-base/src/define.js';
 import { ElementMixin } from '@vaadin/component-base/src/element-mixin.js';
 import { PolylitMixin } from '@vaadin/component-base/src/polylit-mixin.js';
@@ -198,7 +197,7 @@ class Select extends SelectBaseMixin(ElementMixin(ThemableMixin(PolylitMixin(Lum
   }
 
   static get styles() {
-    return [inputFieldShared, screenReaderOnly, selectStyles];
+    return [inputFieldShared, selectStyles];
   }
 
   /** @protected */
@@ -255,9 +254,6 @@ class Select extends SelectBaseMixin(ElementMixin(ThemableMixin(PolylitMixin(Lum
       </vaadin-select-overlay>
 
       <slot name="tooltip"></slot>
-      <div class="sr-only">
-        <slot name="sr-label"></slot>
-      </div>
     `;
   }
 
