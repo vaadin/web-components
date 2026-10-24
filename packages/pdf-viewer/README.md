@@ -61,7 +61,7 @@ import '@vaadin/pdf-viewer';
 - `find(text)`: opens the find bar, finds the text in the whole document and fires `find-result`
   (`detail: { query, matchCount }`).
 - `highlight(page, text)`: highlights a passage that the application has located, and scrolls to it.
-- `download()`: saves the document. `print()`: prints it, see [Printing](#printing).
+- `download()`: saves the document. `print()`: prints it, see [Printing](ARCHITECTURE.md#printing).
 - `document-load` (`detail: { pageCount, title }`) and `document-error` (`detail: { reason, error }`):
   fired when the document has loaded or has failed to load. The reason is `network`, `invalid`
   or `password`.
@@ -77,19 +77,8 @@ built-in buttons, in DOM order:
 
 The viewer has a default height of 400px. Set its `height` to fit your layout.
 
-## Worker and bundlers
-
-- The component loads [pdf.js](https://mozilla.github.io/pdf.js/) (legacy build) when the first
-  `src` is set. Importing the component therefore costs little.
-- pdf.js runs in a module worker. The component creates it from a file of this package with
-  `new Worker(new URL('./pdf-viewer-worker.js', import.meta.url), { type: 'module' })`.
-- Vite supports this pattern in the dev server and in production builds without configuration.
-  Other bundlers must support module workers created with `new URL(..., import.meta.url)`.
-- All viewers on a page share one worker. The worker stops when no viewer has a document.
-- The viewer does not change the global worker options of pdf.js (`GlobalWorkerOptions`). Other
-  pdf.js users on the page keep their own settings.
-- The viewer has no fallback to the main thread. When the worker cannot load, the viewer fires
-  `document-error` with the reason `network` and logs a warning about `worker-src`.
+[ARCHITECTURE.md](ARCHITECTURE.md) covers the internals: the worker and bundlers, requests,
+printing, touch devices and install size. It also maps the API of the VCF PDF Viewer add-on.
 
 ## pdf.js assets
 
@@ -162,33 +151,6 @@ default-src 'self'; script-src 'self'; worker-src 'self'; img-src 'self' blob: d
 - **Trusted Types**: `require-trusted-types-for 'script'` blocks `new Worker(url)`, so the viewer
   cannot start its worker. Add a default policy that allows the URL of the worker script.
 
-## Requests
-
-- The viewer requests a document with one GET request. It does not use range requests, even
-  when the server supports them.
-- `download()` and `print()` use the loaded bytes and send no new request. A URL that serves
-  the file only once therefore works.
-- The first document also loads the pdf.js library and its worker script.
-- With `assetsUrl`, pdf.js also loads the asset files that a document needs, see
-  [pdf.js assets](#pdfjs-assets).
-
-## Printing
-
-- `print()` and the print button wait until the document has loaded. They print the loaded bytes.
-- The viewer draws each page as an image at 150 DPI before it opens the print dialog of the
-  browser. Meanwhile, it shows the progress with a cancel button. Escape also cancels printing.
-- Long documents take a few seconds to prepare. 200 pages took 2.5 to 6.7 seconds in tests.
-- Each page prints on paper of its own size, without margins.
-- The printed pages are images. Printing to a PDF file therefore gives a file without selectable text.
-- The promise of `print()` resolves when the print dialog closes. A browser that returns from
-  the dialog early, possibly iOS Safari, resolves it before printing ends.
-
-## Touch devices
-
-- Pinch the pages to zoom between 25% and 400%. The viewer fires one `zoom-changed` per pinch.
-- With a coarse pointer, the toolbar hides the page controls and the zoom select. The zoom
-  buttons stay. The toolbar does not collapse, so `toolbarCollapsed` stays `false`.
-
 ## What view-only can and cannot prevent
 
 Hiding the download and print buttons only removes the actions of the viewer. It cannot stop
@@ -204,15 +166,6 @@ users from keeping a copy of the document:
 PDF Viewer requires Safari and iOS Safari 18 or newer while it is experimental. This is one
 version above the general Vaadin minimum, because pdf.js does not support older Safari
 versions. Other browsers are supported as for all Vaadin components (latest Chrome, Edge and Firefox).
-
-## Install size
-
-- The package depends on `pdfjs-dist`, which takes about 35 MB unpacked. Only the parts that the
-  viewer imports go into the browser bundle.
-- `pdfjs-dist` has an optional dependency, `@napi-rs/canvas`, with native binaries of about
-  30 MB. pdf.js uses it only in Node.js, and it is not part of the browser bundle. To skip it,
-  install with `npm i --omit=optional`.
-- `pdfjs-dist` declares Node.js 22.13 or newer.
 
 ## Known limitations
 
@@ -245,34 +198,6 @@ versions. Other browsers are supported as for all Vaadin components (latest Chro
   page in a portrait document, scroll horizontally.
 - With the header shown and large text, a viewer below about 400px high cuts off the buttons
   of the find bar.
-
-## Migration from the VCF PDF Viewer add-on
-
-`<vaadin-pdf-viewer>` is not API compatible with `<vcf-pdf-viewer>`. This table maps the add-on
-API to the new one.
-
-| VCF PDF Viewer                                                     | PDF Viewer                                                         |
-| ------------------------------------------------------------------ | ------------------------------------------------------------------ |
-| `src`                                                              | `src`, a URL string                                                |
-| `zoom`: `"auto"`, `"page-fit"` or a number as a string             | `zoom`: `"page-width"` (default), `"page-fit"` or a number         |
-| `currentPage` (string), `setCurrentPage(page)`                     | `page` (number)                                                    |
-| `currentPage-changed` event                                        | `page-changed` event, `detail.value`                               |
-| `document-loaded` event, `detail.document` (pdf.js document)       | `document-load` event, `detail.pageCount` and `detail.title`       |
-| No error event                                                     | `document-error` event, `detail.reason` and `detail.error`         |
-| `thumbnail-clicked` event                                          | `page-changed` event                                               |
-| `customTitle`                                                      | `headerTitle`, shown with `headerVisible`                          |
-| `toolbarOnlyFilename`                                              | No equivalent. Set `headerTitle` or `fileName` to the file name.   |
-| `autoZoomOptionLabel`, `fitZoomOptionLabel`                        | `i18n.pageWidth`, `i18n.pageFit`                                   |
-| `sidebarToggleTooltip`, `previousPageTooltip`, `nextPageTooltip`   | `i18n.sidebar`, `i18n.previousPage`, `i18n.nextPage`               |
-| Private `__openSidebar()`, `__closeSidebar()`                      | `sidebarOpened` and the `sidebar-opened-changed` event             |
-| `hideZoom`                                                         | No equivalent                                                      |
-| `renderInteractiveForms`                                           | No equivalent. Form fields show their appearance, read only.       |
-| `rotateCw()`, `rotateCcw()`                                        | No equivalent                                                      |
-| Default slot of the toolbar                                        | `toolbar-actions` slot                                             |
-| Download button of the Flow add-on                                 | Built-in download button, `downloadButtonHidden`, `download()`     |
-| Print button of the Flow add-on, off by default                    | Built-in print button, `printButtonHidden`, `print()`              |
-| `--pdf-viewer-*` CSS custom properties                             | `--vaadin-pdf-viewer-*` CSS custom properties                      |
-| Parts `toolbar`, `sidebar-container`, `thumbnail-view`, `viewer-container` | Parts `toolbar`, `sidebar`, `thumbnails`, `content`        |
 
 ## Contributing
 
