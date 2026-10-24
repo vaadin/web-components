@@ -3,12 +3,14 @@
  * Copyright (c) 2021 - 2026 Vaadin Ltd.
  * This program is available under Apache License Version 2.0, available at https://vaadin.com/license/
  */
-import { isEmptyTextNode } from './dom-utils.js';
-import { SlotObserver } from './slot-observer.js';
 import { generateUniqueId } from './unique-id-utils.js';
 
 /**
  * A controller for providing content to slot element and observing changes.
+ *
+ * The slot is filled with the custom nodes passed by the user, if any.
+ * Otherwise, the controller creates a default node using the tag name.
+ * In single mode, a newly slotted custom node replaces the current one.
  */
 export class SlotController extends EventTarget {
   /**
@@ -23,6 +25,15 @@ export class SlotController extends EventTarget {
     return `${prefix}-${host.localName}-${generateUniqueId()}`;
   }
 
+  /** @type {Node | null} */
+  node = null;
+
+  /** @type {Node[]} */
+  nodes = [];
+
+  /** @type {WeakSet<Node>} */
+  #initializedNodes = new WeakSet();
+
   constructor(host, slotName, tagName, config = {}) {
     super();
 
@@ -35,10 +46,6 @@ export class SlotController extends EventTarget {
     this.multiple = typeof multiple === 'boolean' ? multiple : false;
     this.slotInitializer = initializer;
 
-    if (multiple) {
-      this.nodes = [];
-    }
-
     // Only generate the default ID if requested by the controller.
     if (useUniqueId) {
       this.defaultId = this.constructor.generateId(host, uniqueIdPrefix || slotName);
@@ -47,84 +54,20 @@ export class SlotController extends EventTarget {
 
   hostConnected() {
     if (!this.initialized) {
-      if (this.multiple) {
-        this.initMultiple();
-      } else {
-        this.initSingle();
-      }
+      this.initialized = true;
 
       if (this.observe) {
-        this.observeSlot();
+        const selector = this.slotName === '' ? 'slot:not([name])' : `slot[name=${this.slotName}]`;
+        this.host.shadowRoot.querySelector(selector).addEventListener('slotchange', () => this.update());
       }
 
-      this.initialized = true;
+      this.update();
     }
-  }
-
-  /** @protected */
-  initSingle() {
-    let node = this.getSlotChild();
-
-    if (!node) {
-      node = this.attachDefaultNode();
-      this.initNode(node);
-    } else {
-      this.node = node;
-      this.initAddedNode(node);
-    }
-  }
-
-  /** @protected */
-  initMultiple() {
-    const children = this.getSlotChildren();
-
-    if (children.length === 0) {
-      const defaultNode = this.attachDefaultNode();
-      if (defaultNode) {
-        this.nodes = [defaultNode];
-        this.initNode(defaultNode);
-      }
-    } else {
-      this.nodes = children;
-      children.forEach((node) => {
-        this.initAddedNode(node);
-      });
-    }
-  }
-
-  /**
-   * Create and attach default node using the provided tag name, if any.
-   * @return {Node | undefined}
-   * @protected
-   */
-  attachDefaultNode() {
-    const { host, slotName, tagName } = this;
-
-    // Check if the node was created previously and if so, reuse it.
-    let node = this.defaultNode;
-
-    // Tag name is optional, sometimes we don't init default content.
-    if (!node && tagName) {
-      node = document.createElement(tagName);
-      if (node instanceof Element) {
-        if (slotName !== '') {
-          node.setAttribute('slot', slotName);
-        }
-        this.defaultNode = node;
-      }
-    }
-
-    if (node) {
-      this.node = node;
-      host.appendChild(node);
-    }
-
-    return node;
   }
 
   /**
    * Return the list of nodes matching the slot managed by the controller.
-   * @return {Node}
+   * @return {Node[]}
    */
   getSlotChildren() {
     const { slotName } = this;
@@ -142,38 +85,27 @@ export class SlotController extends EventTarget {
   }
 
   /**
-   * Return a reference to the node managed by the controller.
-   * @return {Node}
-   */
-  getSlotChild() {
-    return this.getSlotChildren()[0];
-  }
-
-  /**
-   * Run `slotInitializer` for the node managed by the controller.
+   * Set up a node once it starts being managed by the controller,
+   * either a default or a custom one. Runs `slotInitializer` by default,
+   * only once for the default node.
    *
    * @param {Node} node
    * @protected
    */
   initNode(node) {
     const { slotInitializer } = this;
+    if (!slotInitializer || (node === this.defaultNode && this.#initializedNodes.has(node))) {
+      return;
+    }
+
+    this.#initializedNodes.add(node);
     // Don't try to bind `this` to initializer (normally it's arrow function).
     // Instead, pass the host as a first argument to access component's state.
-    if (slotInitializer) {
-      slotInitializer(node, this.host);
-    }
+    slotInitializer(node, this.host);
   }
 
   /**
-   * Override to initialize the newly added custom node.
-   *
-   * @param {Node} _node
-   * @protected
-   */
-  initCustomNode(_node) {}
-
-  /**
-   * Override to teardown slotted node when it's removed.
+   * Override to clean up a node once it is no longer managed by the controller.
    *
    * @param {Node} _node
    * @protected
@@ -181,72 +113,61 @@ export class SlotController extends EventTarget {
   teardownNode(_node) {}
 
   /**
-   * Run both `initCustomNode` and `initNode` for a custom slotted node.
+   * Update the managed nodes to match the slot children, and attach the
+   * default node when there are no custom ones. Calls `teardownNode()`
+   * for the nodes that left the slot and `initNode()` for the new ones.
+   * Does nothing until the controller is connected to the host.
    *
-   * @param {Node} node
    * @protected
    */
-  initAddedNode(node) {
-    if (node !== this.defaultNode) {
-      this.initCustomNode(node);
-      this.initNode(node);
+  update() {
+    if (!this.initialized) {
+      return;
     }
+
+    const prevNodes = this.nodes;
+    const nextNodes = [];
+
+    const customNodes = this.#getCustomNodes();
+    if (customNodes.length > 0) {
+      this.defaultNode?.remove();
+
+      nextNodes.push(...customNodes);
+    } else {
+      if (this.tagName && this.defaultNode?.parentNode !== this.host) {
+        this.defaultNode ??= this.#createDefaultNode();
+        this.host.appendChild(this.defaultNode);
+      }
+
+      if (this.defaultNode?.parentNode === this.host) {
+        nextNodes.push(this.defaultNode);
+      }
+    }
+
+    this.nodes = nextNodes;
+    this.node = nextNodes[0] ?? null;
+
+    prevNodes.filter((node) => !nextNodes.includes(node)).forEach((node) => this.teardownNode(node));
+    nextNodes.filter((node) => !prevNodes.includes(node)).forEach((node) => this.initNode(node));
   }
 
-  /**
-   * Setup the observer to manage slot content changes.
-   * @protected
-   */
-  observeSlot() {
-    const { slotName } = this;
-    const selector = slotName === '' ? 'slot:not([name])' : `slot[name=${slotName}]`;
-    const slot = this.host.shadowRoot.querySelector(selector);
+  #getCustomNodes() {
+    const nodes = this.getSlotChildren().filter((node) => node !== this.defaultNode);
+    if (this.multiple || nodes.length <= 1) {
+      return nodes;
+    }
 
-    // eslint-disable-next-line no-new
-    new SlotObserver(slot, ({ addedNodes, removedNodes }) => {
-      const current = this.multiple ? this.nodes : [this.node];
+    // A newly slotted node replaces the current one.
+    const node = nodes.findLast((n) => n !== this.node);
+    nodes.filter((n) => n !== node).forEach((n) => n.remove());
+    return [node];
+  }
 
-      // Calling `slot.assignedNodes()` includes whitespace text nodes in case of default slot:
-      // unlike comment nodes, they are not filtered out. So we need to manually ignore them.
-      // Also ignore nodes with data-slot-ignore attribute.
-      const newNodes = addedNodes.filter(
-        (node) =>
-          !isEmptyTextNode(node) &&
-          !current.includes(node) &&
-          !(node.nodeType === Node.ELEMENT_NODE && node.hasAttribute('data-slot-ignore')),
-      );
-
-      if (removedNodes.length) {
-        if (this.multiple) {
-          this.nodes = current.filter((node) => !removedNodes.includes(node));
-        } else if (removedNodes.includes(this.node)) {
-          this.node = null;
-        }
-
-        removedNodes.forEach((node) => {
-          this.teardownNode(node);
-        });
-      }
-
-      if (newNodes?.length > 0) {
-        if (this.multiple) {
-          // Remove default node if exists
-          if (this.defaultNode) {
-            this.defaultNode.remove();
-          }
-          this.nodes = [...current, ...newNodes].filter((node) => node !== this.defaultNode);
-          newNodes.forEach((node) => {
-            this.initAddedNode(node);
-          });
-        } else {
-          // Remove previous node if exists
-          if (this.node) {
-            this.node.remove();
-          }
-          this.node = newNodes[0];
-          this.initAddedNode(this.node);
-        }
-      }
-    });
+  #createDefaultNode() {
+    const node = document.createElement(this.tagName);
+    if (this.slotName !== '') {
+      node.slot = this.slotName;
+    }
+    return node;
   }
 }

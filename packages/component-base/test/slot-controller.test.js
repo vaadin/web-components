@@ -36,10 +36,6 @@ describe('SlotController', () => {
         expect(controller.node).to.equal(child);
       });
 
-      it('should return a reference to named slot child', () => {
-        expect(controller.getSlotChild()).to.equal(child);
-      });
-
       it('should run initializer for named slot child', () => {
         expect(initializeSpy.calledOnce).to.be.true;
         expect(initializeSpy.firstCall.args[0]).to.equal(child);
@@ -68,10 +64,6 @@ describe('SlotController', () => {
 
       it('should store a reference to the custom slot child', () => {
         expect(controller.node).to.equal(child);
-      });
-
-      it('should return a reference to custom named slot child', () => {
-        expect(controller.getSlotChild()).to.equal(child);
       });
 
       it('should run initializer for custom named slot child', () => {
@@ -103,10 +95,6 @@ describe('SlotController', () => {
 
       it('should store a reference to un-named slot child', () => {
         expect(controller.node).to.equal(child);
-      });
-
-      it('should return a reference to un-named slot child', () => {
-        expect(controller.getSlotChild()).to.equal(child);
       });
 
       it('should run initializer for un-named slot child', () => {
@@ -169,10 +157,6 @@ describe('SlotController', () => {
         expect(controller.node).to.equal(child);
       });
 
-      it('should return a reference to element passed to un-named slot', () => {
-        expect(controller.getSlotChild()).to.equal(child);
-      });
-
       it('should run initializer for un-named slot element', () => {
         expect(initializeSpy.calledOnce).to.be.true;
         expect(initializeSpy.firstCall.args[0]).to.equal(child);
@@ -201,10 +185,6 @@ describe('SlotController', () => {
         expect(controller.node).to.equal(child);
       });
 
-      it('should return a reference to the slotted text node', () => {
-        expect(controller.getSlotChild()).to.equal(child);
-      });
-
       it('should run initializer for the slotted text node', () => {
         expect(initializeSpy.calledOnce).to.be.true;
         expect(initializeSpy.firstCall.args[0]).to.equal(child);
@@ -225,7 +205,7 @@ describe('SlotController', () => {
           },
         });
         element.addController(controller);
-        expect(controller.getSlotChild().textContent).to.equal('bar');
+        expect(controller.node.textContent).to.equal('bar');
       });
     });
   });
@@ -256,8 +236,8 @@ describe('SlotController', () => {
       expect(defaultNode.isConnected).to.be.false;
     });
 
-    it('should call initCustomNode for custom slot child when it is added', async () => {
-      const initSpy = sinon.spy(controller, 'initCustomNode');
+    it('should call initNode for custom slot child when it is added', async () => {
+      const initSpy = sinon.spy(controller, 'initNode');
 
       const custom = document.createElement('div');
       custom.textContent = 'bar';
@@ -282,7 +262,7 @@ describe('SlotController', () => {
       expect(teardownSpy.firstCall.args[0]).to.equal(defaultNode);
     });
 
-    it('should reset node reference when custom slot child is removed', async () => {
+    it('should restore default node when custom slot child is removed', async () => {
       const custom = document.createElement('div');
       custom.setAttribute('slot', 'foo');
       element.appendChild(custom);
@@ -290,11 +270,11 @@ describe('SlotController', () => {
 
       custom.remove();
       await nextFrame();
-      expect(controller.node).to.be.null;
-      expect(controller.nodes).to.be.undefined;
+      expect(defaultNode.isConnected).to.be.true;
+      expect(controller.node).to.equal(defaultNode);
     });
 
-    it('should call initCustomNode again when the same custom child is added back', async () => {
+    it('should call initNode again when the same custom child is added back', async () => {
       const custom = document.createElement('div');
       custom.setAttribute('slot', 'foo');
       element.appendChild(custom);
@@ -303,11 +283,56 @@ describe('SlotController', () => {
       custom.remove();
       await nextFrame();
 
-      const initSpy = sinon.spy(controller, 'initCustomNode');
+      const initSpy = sinon.spy(controller, 'initNode');
       element.appendChild(custom);
       await nextFrame();
       expect(initSpy).to.be.calledOnceWith(custom);
       expect(controller.node).to.equal(custom);
+    });
+
+    it('should not run initializer again when default node is restored', async () => {
+      const initializer = sinon.spy();
+      element = fixtureSync(`<${tag}></${tag}>`);
+      controller = new SlotController(element, 'foo', 'div', { initializer });
+      element.addController(controller);
+
+      const custom = document.createElement('div');
+      custom.setAttribute('slot', 'foo');
+      element.appendChild(custom);
+      await nextFrame();
+
+      custom.remove();
+      await nextFrame();
+      expect(controller.node).to.equal(controller.defaultNode);
+      expect(initializer).to.be.calledTwice;
+      expect(initializer.firstCall.args[0]).to.equal(controller.defaultNode);
+      expect(initializer.secondCall.args[0]).to.equal(custom);
+    });
+
+    it('should not run initializer again when a custom node set as default node is added back', async () => {
+      const initializer = sinon.spy((node) => {
+        if (node._isDefault) {
+          controller.defaultNode = node;
+        }
+      });
+      element = fixtureSync(`<${tag}></${tag}>`);
+      const flowDefault = document.createElement('div');
+      flowDefault.setAttribute('slot', 'foo');
+      flowDefault._isDefault = true;
+      element.appendChild(flowDefault);
+      controller = new SlotController(element, 'foo', 'div', { initializer });
+      element.addController(controller);
+
+      const custom = document.createElement('div');
+      custom.setAttribute('slot', 'foo');
+      element.appendChild(custom);
+      await nextFrame();
+
+      custom.remove();
+      element.appendChild(flowDefault);
+      await nextFrame();
+      expect(controller.node).to.equal(flowDefault);
+      expect(initializer).to.be.calledTwice;
     });
 
     it('should keep reference to the new node when custom slot child is replaced', async () => {
@@ -352,8 +377,8 @@ describe('SlotController', () => {
       expect(defaultNode.isConnected).to.be.true;
     });
 
-    it('should not call initCustomNode for custom slot child when it is added', async () => {
-      const initSpy = sinon.spy(controller, 'initCustomNode');
+    it('should not call initNode for custom slot child when it is added', async () => {
+      const initSpy = sinon.spy(controller, 'initNode');
 
       const custom = document.createElement('div');
       custom.textContent = 'bar';
@@ -438,8 +463,8 @@ describe('SlotController', () => {
         expect(controller.node).to.equal(custom);
       });
 
-      it('should not call initCustomNode for element with data-slot-ignore', async () => {
-        const initSpy = sinon.spy(controller, 'initCustomNode');
+      it('should not call initNode for element with data-slot-ignore', async () => {
+        const initSpy = sinon.spy(controller, 'initNode');
 
         const ignored = document.createElement('div');
         ignored.setAttribute('slot', 'foo');

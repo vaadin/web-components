@@ -14,6 +14,11 @@ export class ErrorController extends SlotChildObserveController {
     super(host, 'error-message', 'div');
   }
 
+  get #hasError() {
+    const { errorMessage, invalid } = this;
+    return Boolean(invalid && errorMessage && errorMessage.trim() !== '');
+  }
+
   /**
    * Set the error message element text content.
    *
@@ -21,8 +26,8 @@ export class ErrorController extends SlotChildObserveController {
    */
   setErrorMessage(errorMessage) {
     this.errorMessage = errorMessage;
-
-    this.updateDefaultNode(this.node);
+    this.#updateErrorNode(this.node);
+    this.update();
   }
 
   /**
@@ -32,91 +37,50 @@ export class ErrorController extends SlotChildObserveController {
    */
   setInvalid(invalid) {
     this.invalid = invalid;
-
-    this.updateDefaultNode(this.node);
+    this.#updateErrorNode(this.node);
+    this.update();
   }
 
   /**
-   * Override method inherited from `SlotController` to not run
-   * initializer on the custom slotted node unnecessarily.
-   *
-   * @param {Node} node
-   * @protected
-   * @override
-   */
-  initAddedNode(node) {
-    if (node !== this.defaultNode) {
-      // There is no need to run `initNode`.
-      this.initCustomNode(node);
-    }
-  }
-
-  /**
-   * Override to initialize the newly added default error message.
+   * Override to save the custom error message content on the host,
+   * and to initialize the default error message.
    *
    * @param {Node} errorNode
    * @protected
    * @override
    */
   initNode(errorNode) {
-    this.updateDefaultNode(errorNode);
-  }
-
-  /**
-   * Override to initialize the newly added custom error message.
-   *
-   * @param {Node} errorNode
-   * @protected
-   * @override
-   */
-  initCustomNode(errorNode) {
-    // Save the custom error message content on the host.
-    if (errorNode.textContent && !this.errorMessage) {
+    if (errorNode !== this.defaultNode && errorNode.textContent && !this.errorMessage) {
       this.errorMessage = errorNode.textContent.trim();
     }
 
-    // Notify the host about custom node.
-    super.initCustomNode(errorNode);
+    super.initNode(errorNode);
+
+    if (errorNode === this.defaultNode) {
+      this.#updateErrorNode(errorNode);
+    }
   }
 
   /**
-   * Override method inherited from `SlotChildObserveController`
-   * to restore the default error message element.
+   * Update the error message text and hidden state. Unlike with
+   * other controllers, this is done for both default and custom
+   * error message.
    *
-   * @protected
-   * @override
+   * @param {Node | null} errorNode
    */
-  restoreDefaultNode() {
-    this.attachDefaultNode();
-  }
-
-  /**
-   * Override method inherited from `SlotChildObserveController`
-   * to update the error message text and hidden state.
-   *
-   * Note: unlike with other controllers, this method is
-   * called for both default and custom error message.
-   *
-   * @param {Node | undefined} errorNode
-   * @protected
-   * @override
-   */
-  updateDefaultNode(errorNode) {
-    const { errorMessage, invalid } = this;
-    const hasError = Boolean(invalid && errorMessage && errorMessage.trim() !== '');
-
-    if (errorNode) {
-      errorNode.textContent = hasError ? errorMessage : '';
-      errorNode.hidden = !hasError;
-
-      if (hasError) {
-        // Assertive mode ensures VoiceOver reads
-        // the error message on commit with Enter.
-        announce(errorMessage, { mode: 'assertive' });
-      }
+  #updateErrorNode(errorNode) {
+    if (!errorNode) {
+      return;
     }
 
-    // Notify the host after update.
-    super.updateDefaultNode(errorNode);
+    const hasError = this.#hasError;
+    errorNode.textContent = hasError ? this.errorMessage : '';
+    errorNode.hidden = !hasError;
+
+    if (hasError) {
+      // Assertive mode ensures VoiceOver reads
+      // the error message on commit with Enter.
+      announce(this.errorMessage, { mode: 'assertive' });
+    }
   }
 }

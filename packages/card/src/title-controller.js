@@ -20,6 +20,7 @@ export class TitleController extends SlotController {
 
   /**
    * Set title based on the corresponding host property.
+   * A custom slotted title takes precedence over the string title.
    *
    * @param {string} title
    */
@@ -27,17 +28,14 @@ export class TitleController extends SlotController {
     this.title = title;
 
     if (title && title.trim() !== '') {
-      // A custom slotted title takes precedence over the string title.
-      const child = this.getSlotChild();
-      if (!child) {
-        this.restoreDefaultNode();
-      } else if (child === this.defaultNode) {
-        this.updateDefaultNode(child);
-      }
-    } else if (this.node && this.node === this.defaultNode) {
+      this.tagName = 'div';
+    } else {
       // Clearing the string title removes the generated node.
-      this.node.remove();
+      this.tagName = null;
+      this.defaultNode?.remove();
     }
+
+    this.update();
   }
 
   /**
@@ -47,96 +45,59 @@ export class TitleController extends SlotController {
    */
   setLevel(level) {
     this.level = level;
-
-    // When the default title is used, update it.
-    if (this.node && this.node === this.defaultNode) {
-      this.updateDefaultNode(this.node);
-    }
+    this.update();
   }
 
   /**
    * Override method inherited from `SlotController` to label the card by
-   * the title node instead of the previous one, and to set up the generated
-   * title node as a heading. A custom title keeps its own role.
+   * the title node. The title node gets a
+   * generated ID if it has none. The generated title node is set up as
+   * a heading. A custom title keeps its own role.
    *
    * @param {Node} node
    * @protected
    * @override
    */
   initNode(node) {
-    if (!node) {
-      return;
+    if (!node.id) {
+      node.id = this.defaultId;
     }
 
     if (node === this.defaultNode) {
       node.setAttribute('role', 'heading');
     }
 
-    removeValuesFromAttribute(this.host, 'aria-labelledby', this.#labelId);
     this.#labelId = node.id;
     addValuesToAttribute(this.host, 'aria-labelledby', this.#labelId);
   }
 
   /**
-   * Override method inherited from `SlotController` to set a generated ID
-   * on a custom title without one.
-   *
-   * @param {Node} node
-   * @protected
-   * @override
-   */
-  initCustomNode(node) {
-    if (!node.id) {
-      node.id = this.defaultId;
-    }
-  }
-
-  /**
-   * Override method inherited from `SlotController` to drop the labelling
-   * once the slot is empty, and to restore the generated title once a custom
-   * title leaves an empty slot. A title that replaces another one is
-   * initialized before the old one is torn down.
+   * Override method inherited from `SlotController`
+   * to drop the labelling by the removed title node.
    *
    * @param {Node} _node
    * @protected
    * @override
    */
   teardownNode(_node) {
-    if (!this.getSlotChild()) {
-      removeValuesFromAttribute(this.host, 'aria-labelledby', this.#labelId);
-      this.#labelId = undefined;
-
-      this.restoreDefaultNode();
-    }
+    removeValuesFromAttribute(this.host, 'aria-labelledby', this.#labelId);
+    this.#labelId = undefined;
   }
 
   /**
-   * Create and update the default title element lazily as needed.
+   * Override method inherited from `SlotController`
+   * to update the default title element.
    *
    * @protected
+   * @override
    */
-  restoreDefaultNode() {
-    const { title } = this;
+  update() {
+    super.update();
 
-    // No title yet, create one.
-    if (title && title.trim() !== '') {
-      this.tagName = 'div';
-
-      const node = this.attachDefaultNode();
-      node.id = this.defaultId;
-      this.initNode(node);
-      this.updateDefaultNode(node);
+    const { node } = this;
+    if (node === this.defaultNode) {
+      node.textContent = this.title;
+      node.setAttribute('aria-level', this.level || 2);
     }
-  }
-
-  /**
-   * Update the default title element.
-   *
-   * @param {Node} node
-   * @protected
-   */
-  updateDefaultNode(node) {
-    node.textContent = this.title;
-    node.setAttribute('aria-level', this.level || 2);
   }
 }

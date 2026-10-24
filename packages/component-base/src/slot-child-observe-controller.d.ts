@@ -11,23 +11,8 @@ import { SlotController } from './slot-controller.js';
  */
 export class SlotChildObserveController extends SlotController {
   /**
-   * Setup the mutation observer on the node to update ID and notify host.
-   * Node doesn't get observed automatically until this method is called.
+   * Set ID on the node. Override to also apply host property values to
+   * the node. Called on every update, also when the node text changes.
    */
-  protected observeNode(node: Node): void;
-
-  /**
-   * Override to restore default node when a custom one is removed.
-   */
-  protected restoreDefaultNode(): void;
-
-  /**
-   * Override to update default node text on property change.
-   */
-  protected updateDefaultNode(node: Node): void;
-
-  /**
-   * Fire an event to notify the controller host about node changes.
-   */
-  protected _notifyChange(node: Node): void;
+  protected updateNode(node: Node): void;
 }

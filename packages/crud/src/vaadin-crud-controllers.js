@@ -31,11 +31,6 @@ export class ButtonSlotController extends SlotController {
    * @override
    */
   initNode(node) {
-    // Prevent errors when the `noDefaultNode` flag is set
-    if (!node) {
-      return;
-    }
-
     // Needed by Flow counterpart to apply i18n to custom button
     if (node._isDefault) {
       this.defaultNode = node;
@@ -49,13 +44,6 @@ export class ButtonSlotController extends SlotController {
     const { host, type } = this;
     const property = `_${type}Button`;
     const listener = `__${type}`;
-
-    // TODO: restore default button when a corresponding slotted button is removed.
-    // This would require us to detect where to insert a button after teleporting it,
-    // which happens after opening a dialog and closing it (default editor position).
-    if (host[property] && host[property] !== node) {
-      host[property].remove();
-    }
 
     node.addEventListener('click', host[listener]);
     host[property] = node;

@@ -22,7 +22,7 @@ class ChildrenController extends SlotController {
    * @protected
    * @override
    */
-  initAddedNode() {
+  initNode() {
     this.host.requestUpdate();
   }
 

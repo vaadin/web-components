@@ -14,70 +14,28 @@ export class SummaryController extends SlotChildObserveController {
   }
 
   /**
-   * Override method inherited from `SlotController` to notify the host about
-   * the default empty summary element created during initialization.
-   *
-   * @protected
-   * @override
-   */
-  initSingle() {
-    super.initSingle();
-
-    if (this.node && this.node === this.defaultNode) {
-      this._notifyChange(this.node);
-    }
-  }
-
-  /**
    * Set summary based on corresponding host property.
    *
    * @param {string} summary
    */
   setSummary(summary) {
     this.summary = summary;
-
-    // Restore the default summary, if needed.
-    const summaryNode = this.getSlotChild();
-    if (!summaryNode) {
-      this.restoreDefaultNode();
-    }
-
-    // When default summary is used, update it.
-    if (this.node === this.defaultNode) {
-      this.updateDefaultNode(this.node);
-    }
-  }
-
-  /**
-   * Override method inherited from `SlotChildObserveController`
-   * to restore and observe the default summary element.
-   *
-   * @protected
-   * @override
-   */
-  restoreDefaultNode() {
-    const { summary } = this;
-
-    // Restore the default summary.
-    if (summary && summary.trim() !== '') {
-      this.attachDefaultNode();
-    }
+    this.update();
   }
 
   /**
    * Override method inherited from `SlotChildObserveController`
    * to update the default summary element text content.
    *
-   * @param {Node | undefined} node
+   * @param {Node} node
    * @protected
    * @override
    */
-  updateDefaultNode(node) {
-    if (node) {
+  updateNode(node) {
+    super.updateNode(node);
+
+    if (node === this.defaultNode) {
       node.textContent = this.summary;
     }
-
-    // Notify the host after update.
-    super.updateDefaultNode(node);
   }
 }

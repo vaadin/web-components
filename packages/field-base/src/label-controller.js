@@ -20,66 +20,22 @@ export class LabelController extends SlotChildObserveController {
    */
   setLabel(label) {
     this.label = label;
-
-    // Restore the default label, if needed.
-    const labelNode = this.getSlotChild();
-    if (!labelNode) {
-      this.restoreDefaultNode();
-    }
-
-    // When default label is used, update it.
-    if (this.node === this.defaultNode) {
-      this.updateDefaultNode(this.node);
-    }
-  }
-
-  /**
-   * Override method inherited from `SlotChildObserveController`
-   * to restore and observe the default label element.
-   *
-   * @protected
-   * @override
-   */
-  restoreDefaultNode() {
-    const { label } = this;
-
-    // Restore the default label.
-    if (label && label.trim() !== '') {
-      const labelNode = this.attachDefaultNode();
-
-      // Observe the default label.
-      this.observeNode(labelNode);
-    }
+    this.update();
   }
 
   /**
    * Override method inherited from `SlotChildObserveController`
    * to update the default label element text content.
    *
-   * @param {Node | undefined} node
-   * @protected
-   * @override
-   */
-  updateDefaultNode(node) {
-    if (node) {
-      node.textContent = this.label;
-    }
-
-    // Notify the host after update.
-    super.updateDefaultNode(node);
-  }
-
-  /**
-   * Override to observe the newly added custom node.
-   *
    * @param {Node} node
    * @protected
    * @override
    */
-  initCustomNode(node) {
-    // Notify the host about adding a custom node.
-    super.initCustomNode(node);
+  updateNode(node) {
+    super.updateNode(node);
 
-    this.observeNode(node);
+    if (node === this.defaultNode) {
+      node.textContent = this.label;
+    }
   }
 }

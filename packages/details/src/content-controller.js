@@ -3,26 +3,39 @@
  * Copyright (c) 2019 - 2026 Vaadin Ltd.
  * This program is available under Apache License Version 2.0, available at https://vaadin.com/license/
  */
-import { SlotChildObserveController } from '@vaadin/component-base/src/slot-child-observe-controller.js';
+import { SlotController } from '@vaadin/component-base/src/slot-controller.js';
 
 /**
  * A controller to manage the default content slot.
  */
-export class ContentController extends SlotChildObserveController {
+export class ContentController extends SlotController {
+  constructor(host) {
+    super(host, '', null, { multiple: true, useUniqueId: true, uniqueIdPrefix: 'content' });
+  }
+
   /**
-   * Override method from `SlotController` to change
-   * the ID prefix for the default slot content.
+   * Override method inherited from `SlotController`
+   * to set ID on the first content element.
    *
-   * @param {HTMLElement} host
-   * @return {string}
+   * @param {Node} node
    * @protected
    * @override
    */
-  static generateId(host) {
-    return super.generateId(host, 'content');
+  initNode(node) {
+    if (node === this.nodes[0] && node.nodeType === Node.ELEMENT_NODE && !node.id) {
+      node.id = this.defaultId;
+    }
   }
 
-  constructor(host) {
-    super(host, '', null, { multiple: true });
+  /**
+   * Override method inherited from `SlotController`
+   * to notify the host about content changes.
+   *
+   * @protected
+   * @override
+   */
+  update() {
+    super.update();
+    this.dispatchEvent(new CustomEvent('slot-content-changed'));
   }
 }
