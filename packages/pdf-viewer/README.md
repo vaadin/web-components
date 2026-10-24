@@ -53,6 +53,8 @@ import '@vaadin/pdf-viewer';
 - `sidebarOpened`: shows the sidebar with page thumbnails and, when the document has one, its
   outline. Fires `sidebar-opened-changed`.
 - `fileName`: the name of the document, also used for downloaded files.
+- `assetsUrl`: the URL of a folder with the fonts, character maps and decoders of pdf.js, see
+  [pdf.js assets](#pdfjs-assets).
 - `findButtonHidden`, `downloadButtonHidden` and `printButtonHidden`: hide the built-in buttons.
   The methods keep working.
 - `i18n`: the texts of the component, for localization.
@@ -89,6 +91,47 @@ The viewer has a default height of 400px. Set its `height` to fit your layout.
 - The viewer has no fallback to the main thread. When the worker cannot load, the viewer fires
   `document-error` with the reason `network` and logs a warning about `worker-src`.
 
+## pdf.js assets
+
+Some documents need extra files of pdf.js: fonts, character maps and image decoders. The viewer
+does not serve these files. Serve them in your application and set `assetsUrl` to their folder:
+
+```html
+<vaadin-pdf-viewer src="/files/report.pdf" assets-url="/pdfjs-dist/"></vaadin-pdf-viewer>
+```
+
+- Copy these folders of `node_modules/pdfjs-dist/` into the folder of `assetsUrl`:
+  - `cmaps/`: character maps for CJK text with predefined encodings.
+  - `standard_fonts/`: the Symbol and ZapfDingbats fonts, and replacements for other standard
+    fonts that a document does not embed.
+  - `wasm/`: decoders for JPEG 2000, JBIG2 and CCITT images and for ICC color profiles.
+  - `iccs/`: the ICC profile for CMYK colors.
+- Copy the folders again after each update of the viewer. They must match the version of
+  `pdfjs-dist` that the viewer depends on.
+- With Vite, copy the folders into `public/pdfjs-dist/` and set `assetsUrl` to `/pdfjs-dist/`.
+  Vite serves the `public/` folder at the root of the application:
+
+  ```sh
+  mkdir -p public/pdfjs-dist
+  cp -R node_modules/pdfjs-dist/{cmaps,standard_fonts,wasm,iccs} public/pdfjs-dist/
+  ```
+
+- `assetsUrl` is the base URL of the four folders. The viewer resolves a relative URL against
+  the base URL of the page, and adds a missing trailing slash.
+- A folder on another origin must send CORS headers, as pdf.js loads the files with CORS requests.
+- A change of `assetsUrl` reloads the document.
+- pdf.js runs the decoders of `wasm/` as code with the origin of the application. Set `assetsUrl`
+  in the application code only. Never set it from user input, such as a URL parameter.
+
+Without `assetsUrl`, the viewer passes no asset folders to pdf.js. Documents that need the
+assets then show degraded content:
+
+- Text in Symbol and ZapfDingbats fonts that the document does not embed uses system fonts, or
+  wrong glyphs without them.
+- CJK text that needs a predefined character map shows wrong or no characters.
+- JPEG 2000, JBIG2 and CCITT images do not show. Scanned documents often use them.
+- ICC-based and CMYK colors convert without ICC profiles and may look different.
+
 ## Content Security Policy
 
 The viewer works under this policy. The build check in `test/build-check/` verifies it in
@@ -99,11 +142,18 @@ default-src 'self'; script-src 'self'; worker-src 'self'; img-src 'self' blob: d
 ```
 
 - **`worker-src`**: allow the origin of the worker script, a file of the application bundle.
-- **`connect-src`**: allow the origins of the PDF documents.
+- **`connect-src`**: allow the origins of the PDF documents and of `assetsUrl`. The worker
+  fetches the assets.
 - **`img-src blob:`**: printing shows the pages as `blob:` images.
 - **`img-src data:` and `font-src data:`**: the icons of the viewer and the Lumo icon font use `data:` URLs.
-- **`script-src`**: the viewer needs no `'unsafe-eval'` and no `'unsafe-inline'`. It also needs no
-  `'wasm-unsafe-eval'`, as it loads no WebAssembly decoders yet, see [Known limitations](#known-limitations).
+- **`font-src`**: allow the origin of `assetsUrl`. pdf.js loads fonts of `standard_fonts/` in the
+  page when the system has no replacement for a font that the document does not embed.
+- **`script-src`**: the viewer needs no `'unsafe-eval'` and no `'unsafe-inline'`. Allow the origin
+  of `assetsUrl`. pdf.js loads JavaScript decoders from `wasm/` when it cannot use WebAssembly.
+- **`'wasm-unsafe-eval'`**: optional. Add it to `script-src` so that pdf.js can use the
+  WebAssembly decoders of `assetsUrl`. Without it, pdf.js uses slower JavaScript decoders for
+  images and converts colors without ICC profiles. Chromium and Firefox then report a
+  `wasm-eval` violation.
 - **`style-src`**: needs `'unsafe-inline'`, the platform-wide requirement for Vaadin components today.
   See https://github.com/vaadin/web-components/issues/8031 and https://github.com/vaadin/platform/issues/9488.
 - **Worker**: the worker takes its policy from the response headers of its own script, not from
@@ -119,6 +169,8 @@ default-src 'self'; script-src 'self'; worker-src 'self'; img-src 'self' blob: d
 - `download()` and `print()` use the loaded bytes and send no new request. A URL that serves
   the file only once therefore works.
 - The first document also loads the pdf.js library and its worker script.
+- With `assetsUrl`, pdf.js also loads the asset files that a document needs, see
+  [pdf.js assets](#pdfjs-assets).
 
 ## Printing
 
@@ -164,9 +216,6 @@ versions. Other browsers are supported as for all Vaadin components (latest Chro
 
 ## Known limitations
 
-- The viewer passes no runtime assets to pdf.js yet. Documents with JBIG2 or CCITT scans, JPX
-  images or non-embedded CJK, Symbol and ZapfDingbats fonts therefore show degraded content. A
-  later version adds an `assetsUrl` property for these assets.
 - Password-protected documents, form filling, annotations and PDF JavaScript are not supported.
   Documents that need a password to open fire `document-error` with the reason `password`.
   Encrypted documents without a password to open work.

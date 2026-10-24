@@ -17,6 +17,7 @@
 
       const viewer = document.querySelector('vaadin-pdf-viewer');
       const select = document.querySelector('#src');
+      const assets = document.querySelector('#assets');
       const pageInput = document.querySelector('#page');
       const headerVisible = document.querySelector('#header-visible');
       const headerTitle = document.querySelector('#header-title');
@@ -30,9 +31,11 @@
       const log = document.querySelector('#log');
 
       const update = () => {
+        viewer.assetsUrl = assets.checked ? '/node_modules/pdfjs-dist/' : null;
         viewer.src = select.value;
       };
       select.addEventListener('change', update);
+      assets.addEventListener('change', update);
       pageInput.addEventListener('change', () => {
         viewer.page = pageInput.valueAsNumber;
       });
@@ -127,6 +130,10 @@
           <option value="/packages/pdf-viewer/test/fixtures/invalid.pdf">Invalid file</option>
           <option value="/does-not-exist.pdf">Missing file</option>
         </select>
+      </label>
+      <label>
+        <input type="checkbox" id="assets" checked />
+        Set assetsUrl
       </label>
       <label>
         Page

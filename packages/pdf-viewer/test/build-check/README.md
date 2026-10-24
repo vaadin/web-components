@@ -23,18 +23,22 @@ The script exits with code 1 when a run fails. It needs the Playwright browsers:
 The script does these steps:
 
 1. Build `index.html` and `main.js` with Vite into `dist/`. The app imports `@vaadin/pdf-viewer`
-   and shows file 05 of `dev/assets/pdf/`. The build uses the Vite defaults, except that it is
-   not minified.
-2. Serve `dist/` with the policy of the package README. The server answers Range requests, and
+   and shows file 05 of `dev/assets/pdf/`. With `?assets`, it shows file 01 and sets `assetsUrl`
+   to `/pdfjs-dist/`. The build uses the Vite defaults, except that it is not minified.
+2. Copy the folders `cmaps/`, `standard_fonts/`, `wasm/` and `iccs/` of `pdfjs-dist` into
+   `dist/pdfjs-dist/`.
+3. Serve `dist/` with the policy of the package README. The server answers Range requests, and
    it sends no-store caching headers.
-3. Open the app in Chromium, Firefox and WebKit, once for each policy:
+4. Open the app in Chromium, Firefox and WebKit, once for each policy:
    - **README**: the policy of the package README.
    - **README + `'wasm-unsafe-eval'`**: the optional directive for WebAssembly.
+   - **README, `assetsUrl`** and **README + `'wasm-unsafe-eval'`, `assetsUrl`**: the same
+     policies, with `?assets`.
    - **control: `worker-src 'none'`**: proves that the check sees violations. The viewer must fire
      `document-error` with the reason `network` and must not hang.
-4. In each run, open the sidebar and the find bar, then call `download()` and `print()`. The
+5. In each run, open the sidebar and the find bar, then call `download()` and `print()`. The
    script replaces the print dialog, so that it can count the page images that loaded.
-5. Print a Markdown report.
+6. Print a Markdown report.
 
 The report has one row for each engine and policy:
 
@@ -45,9 +49,11 @@ The report has one row for each engine and policy:
 | Fake worker       | `no`: pdf.js never logged `Setting up fake worker.`                |
 | PDF GETs          | `1`                                                                |
 | Range             | `0`                                                                |
+| Asset GETs        | more than `0` in the `assetsUrl` runs                              |
+| WebAssembly       | `used` in the `assetsUrl` run with `'wasm-unsafe-eval'`            |
 | Download          | `yes`                                                              |
 | Print images      | all page images loaded, for example `3/3`                          |
-| Viewer violations | `0`, or only the worker in the control run                         |
+| Viewer violations | `0`, optional `wasm-eval`, or the worker in the control run        |
 | Other violations  | any number, see below                                              |
 
 The script collects violations from `securitypolicyviolation` events and from `report-uri`
@@ -57,6 +63,10 @@ reports, which also cover the worker. For this, the server adds `report-uri` and
 The script assigns each violation to the viewer or to the rest of the app. It uses the blocked
 URL, the element of a blocked `style` attribute, or the module of the built code that caused
 the violation. The build is not minified, so each module has a `//#region` comment.
+
+In the `assetsUrl` runs, pdf.js must log no warning about a missing asset option. WebKit
+reports no violation when the policy blocks WebAssembly. The script therefore reads the
+WebAssembly column from the warnings of pdf.js.
 
 Violations outside the viewer do not fail the check. Expect one: `script-src` from
 `vaadin-development-mode-detector`. Usage statistics run only on `localhost` and `127.0.0.1`.

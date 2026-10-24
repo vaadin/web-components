@@ -137,6 +137,29 @@ export const PdfViewerMixin = (superClass) =>
         fileName: {
           type: String,
         },
+
+        /**
+         * The URL of a folder with the runtime assets of pdf.js: the folders
+         * `cmaps/`, `standard_fonts/`, `wasm/` and `iccs/` of the `pdfjs-dist`
+         * package that the viewer depends on. The viewer does not serve them,
+         * so copy them from `node_modules/pdfjs-dist/` to a folder that the
+         * application serves. A missing trailing slash is added.
+         *
+         * When not set, some documents show degraded content: text in the Symbol
+         * and ZapfDingbats fonts when the document does not embed them, text that
+         * uses predefined CJK character maps, and JPEG 2000, JBIG2 and CCITT images.
+         * CMYK colors are converted without an ICC profile.
+         *
+         * pdf.js runs the decoders of `wasm/` as code with the origin of the
+         * application. Set the URL in the application code only, never from user
+         * input such as a URL parameter.
+         *
+         * @attr {string} assets-url
+         */
+        assetsUrl: {
+          type: String,
+        },
+
         /**
          * The reason why the document could not be loaded, or undefined.
          * @type {'invalid' | 'network' | 'password' | undefined}
@@ -350,7 +373,7 @@ export const PdfViewerMixin = (superClass) =>
         this.#setPageFromViewer(1);
       }
 
-      if (props.has('src')) {
+      if (props.has('src') || props.has('assetsUrl')) {
         this.#documentController.load();
       }
 

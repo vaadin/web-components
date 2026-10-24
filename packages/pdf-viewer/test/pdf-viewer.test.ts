@@ -119,6 +119,14 @@ describe('vaadin-pdf-viewer', () => {
       expect(viewer.shadowRoot!.querySelector('canvas')).to.be.null;
       expect(errorSpy).to.be.not.called;
     });
+
+    it('should reload the document when assetsUrl changes', async () => {
+      await loadDocument(viewer, 'standard-font.pdf');
+      const loaded = oneEvent(viewer, 'document-load');
+      viewer.assetsUrl = '/node_modules/pdfjs-dist/';
+      await loaded;
+      expect(viewer.pageCount).to.equal(1);
+    });
   });
 
   describe('src set before attach', () => {
@@ -264,6 +272,79 @@ describe('vaadin-pdf-viewer', () => {
       await loadDocument(viewer, 'links.pdf');
       await nextFrame();
       expect(getErrorMessage().hidden).to.be.true;
+    });
+  });
+
+  describe('assets', () => {
+    // The lines of standard-font.pdf, as parts of the page height
+    const HELVETICA_ROWS = [40 / 792, 125 / 792];
+    const SYMBOL_ROWS = [160 / 792, 200 / 792];
+    const ZAPF_DINGBATS_ROWS = [220 / 792, 260 / 792];
+
+    async function renderWithAssets(assetsUrl: string | null) {
+      const idle = nextRenderIdle(viewer);
+      viewer.assetsUrl = assetsUrl;
+      viewer.src = fixtureUrl('standard-font.pdf');
+      await idle;
+      const canvas = getPages()[0].querySelector('canvas')!;
+      return canvas.getContext('2d')!.getImageData(0, 0, canvas.width, canvas.height);
+    }
+
+    function countDarkPixels(image: ImageData, [start, end]: number[]) {
+      const { data, width, height } = image;
+      let count = 0;
+      for (let i = Math.floor(start * height) * width * 4; i < Math.ceil(end * height) * width * 4; i += 4) {
+        if (data[i] + data[i + 1] + data[i + 2] < 384) {
+          count += 1;
+        }
+      }
+      return count;
+    }
+
+    async function loadWithAssets(assetsUrl: string | null) {
+      const postMessageSpy = sinon.spy(Worker.prototype, 'postMessage');
+      try {
+        viewer.assetsUrl = assetsUrl;
+        await loadDocument(viewer, 'standard-font.pdf');
+      } finally {
+        postMessageSpy.restore();
+      }
+      // The options of the document, as pdf.js sends them to its worker
+      const request = postMessageSpy.args.find(([message]) => message && message.action === 'GetDocRequest')!;
+      const { cMapUrl, cMapPacked, standardFontDataUrl, wasmUrl, iccUrl } = request[0].data.evaluatorOptions;
+      return { cMapUrl, cMapPacked, standardFontDataUrl, wasmUrl, iccUrl };
+    }
+
+    it('should pass the asset folders to pdf.js as absolute URLs', async () => {
+      const options = await loadWithAssets('/node_modules/pdfjs-dist');
+      expect(options).to.deep.equal({
+        cMapUrl: `${location.origin}/node_modules/pdfjs-dist/cmaps/`,
+        cMapPacked: true,
+        standardFontDataUrl: `${location.origin}/node_modules/pdfjs-dist/standard_fonts/`,
+        wasmUrl: `${location.origin}/node_modules/pdfjs-dist/wasm/`,
+        iccUrl: `${location.origin}/node_modules/pdfjs-dist/iccs/`,
+      });
+    });
+
+    it('should not pass asset folders to pdf.js without assetsUrl', async () => {
+      const options = await loadWithAssets(null);
+      expect(options).to.include({ cMapUrl: null, standardFontDataUrl: null, wasmUrl: null, iccUrl: null });
+    });
+
+    it('should render the fonts of the assets that the document does not embed', async () => {
+      const withoutAssets = await renderWithAssets(null);
+      const withAssets = await renderWithAssets('/node_modules/pdfjs-dist/');
+      expect(countDarkPixels(withAssets, HELVETICA_ROWS)).to.equal(countDarkPixels(withoutAssets, HELVETICA_ROWS));
+      expect(countDarkPixels(withAssets, SYMBOL_ROWS)).to.not.equal(countDarkPixels(withoutAssets, SYMBOL_ROWS));
+      expect(countDarkPixels(withAssets, ZAPF_DINGBATS_ROWS)).to.not.equal(
+        countDarkPixels(withoutAssets, ZAPF_DINGBATS_ROWS),
+      );
+    });
+
+    it('should render the same page for an assetsUrl without a trailing slash', async () => {
+      const withSlash = await renderWithAssets('/node_modules/pdfjs-dist/');
+      const withoutSlash = await renderWithAssets('/node_modules/pdfjs-dist');
+      expect(withoutSlash.data.every((value, index) => value === withSlash.data[index])).to.be.true;
     });
   });
 

@@ -1,6 +1,7 @@
 /**
- * Builds the app in this folder with Vite, serves it with the Content
- * Security Policy of the README, and checks the viewer in Chromium, Firefox and WebKit.
+ * Builds the app in this folder with Vite, copies the pdf.js assets next to it,
+ * serves it with the Content Security Policy of the README, and checks the
+ * viewer in Chromium, Firefox and WebKit.
  * Prints a Markdown report. Run from the repository root:
  *
  *   node packages/pdf-viewer/test/build-check/check.js
@@ -8,7 +9,7 @@
  * With `--serve`, it builds the app and serves it with the policy until
  * stopped, for checks by hand. See README.md.
  */
-import { readdir, readFile, stat } from 'node:fs/promises';
+import { cp, readdir, readFile, stat } from 'node:fs/promises';
 import { createServer } from 'node:http';
 import { createRequire } from 'node:module';
 import { dirname, extname, join, normalize } from 'node:path';
@@ -20,6 +21,10 @@ import { build, version as viteVersion } from 'vite';
 const root = dirname(fileURLToPath(import.meta.url));
 const dist = join(root, 'dist');
 const viewerSources = join(root, '../../src');
+
+/** The path that serves the asset folders of pdf.js, the `assetsUrl` of the app with `?assets`. */
+const ASSETS_PATH = '/pdfjs-dist/';
+const ASSET_FOLDERS = ['cmaps', 'standard_fonts', 'wasm', 'iccs'];
 
 /**
  * The policy of the README. The server adds the reporting, see `withReporting()`.
@@ -40,6 +45,13 @@ const POLICIES = [
     policy: POLICY.replace("script-src 'self'", "script-src 'self' 'wasm-unsafe-eval'"),
     expectLoad: true,
   },
+  { name: 'README, assetsUrl', policy: POLICY, expectLoad: true, assets: true },
+  {
+    name: "README + 'wasm-unsafe-eval', assetsUrl",
+    policy: POLICY.replace("script-src 'self'", "script-src 'self' 'wasm-unsafe-eval'"),
+    expectLoad: true,
+    assets: true,
+  },
   {
     // Checks that the harness sees a violation, and that a blocked worker fails the load instead of hanging.
     name: "control: worker-src 'none'",
@@ -57,6 +69,11 @@ const MIME_TYPES = {
   '.js': 'text/javascript',
   '.css': 'text/css',
   '.pdf': 'application/pdf',
+  '.wasm': 'application/wasm',
+  '.bcmap': 'application/octet-stream',
+  '.pfb': 'application/x-font-type1',
+  '.ttf': 'font/ttf',
+  '.icc': 'application/vnd.iccprofile',
 };
 
 /**
@@ -259,6 +276,9 @@ async function attribute(violation) {
   if (url.endsWith('.pdf')) {
     return { owner: 'viewer', what: 'document request' };
   }
+  if (url.startsWith(ASSETS_PATH)) {
+    return { owner: 'viewer', what: 'pdf.js asset' };
+  }
   if (directive === 'style-src-attr' && element) {
     return { owner: inViewer ? 'viewer' : 'outside', what: `\`style\` attribute of \`${element}\`` };
   }
@@ -300,7 +320,7 @@ async function collectViolations(pageViolations, reports) {
   return [...unique.values()];
 }
 
-async function runCase(browser, baseUrl, state, { policy, expectLoad }) {
+async function runCase(browser, baseUrl, state, { policy, expectLoad, assets }) {
   state.policy = policy;
   state.requests = [];
   state.reports = [];
@@ -321,7 +341,7 @@ async function runCase(browser, baseUrl, state, { policy, expectLoad }) {
 
   const result = { errors };
   try {
-    await page.goto(baseUrl);
+    await page.goto(assets ? `${baseUrl}?assets` : baseUrl);
     await page.waitForFunction(() => document.querySelector('#status').dataset.state !== 'loading', null, {
       timeout: TIMEOUT,
     });
@@ -359,6 +379,17 @@ async function runCase(browser, baseUrl, state, { policy, expectLoad }) {
   await context.close();
 
   const pdfRequests = state.requests.filter((request) => request.path.endsWith('.pdf'));
+  result.assetRequests = state.requests
+    .filter((request) => request.path.startsWith(ASSETS_PATH))
+    .map((request) => request.path.slice(ASSETS_PATH.length));
+  // pdf.js warns about each asset option that it needs and does not have.
+  result.assetWarnings = [...logs].filter((text) => /API (option|parameter)/u.test(text));
+  // pdf.js logs a warning when the policy blocks a WebAssembly decoder. WebKit reports no violation for it.
+  if (result.assetRequests.some((path) => path.endsWith('.wasm'))) {
+    result.wasm = [...logs].some((text) => text.includes('WebAssembly')) ? 'blocked' : 'used';
+  } else {
+    result.wasm = '-';
+  }
   result.violations = await collectViolations(pageState.violations, state.reports);
   result.workers = pageState.workers;
   result.threads = threads;
@@ -367,6 +398,10 @@ async function runCase(browser, baseUrl, state, { policy, expectLoad }) {
   result.rangeRequests = pdfRequests.filter((request) => request.range).length;
 
   const viewerViolations = result.violations.filter((violation) => violation.owner === 'viewer');
+  const assetsOk =
+    result.assetRequests.length > 0 &&
+    result.assetWarnings.length === 0 &&
+    (result.wasm !== 'blocked' || !policy.includes("'wasm-unsafe-eval'"));
   const workerOk = result.threads.length > 0 && result.workers.every((worker) => worker.type === 'module');
   result.passed = expectLoad
     ? result.state === 'loaded' &&
@@ -381,6 +416,7 @@ async function runCase(browser, baseUrl, state, { policy, expectLoad }) {
       result.print?.images > 0 &&
       result.print.loaded === result.print.images &&
       viewerViolations.every((violation) => violation.optional) &&
+      (!assets || assetsOk) &&
       errors.length === 0
     : result.state === 'error (network)' &&
       !result.fakeWorker &&
@@ -393,12 +429,13 @@ function formatReport(results, versions) {
     `Viewer build check, ${new Date().toISOString()}`,
     '',
     `Vite ${versions.vite}, default worker format (\`iife\`), not minified. Playwright ${versions.playwright}.`,
-    'The app loads file 05 and opens the sidebar and the find bar, then downloads and prints.',
+    'The app loads file 05, or file 01 with `assetsUrl` in the `assetsUrl` runs.',
+    'It opens the sidebar and the find bar, then downloads and prints.',
     '',
     `Policy: \`${POLICY}\``,
     '',
-    '| Engine | Policy | Load | Worker type, threads | Fake worker | PDF GETs | Range | Download | Print images | Viewer violations | Other violations | Pass |',
-    '| ------ | ------ | ---- | -------------------- | ----------- | -------- | ----- | -------- | ------------ | ----------------- | ---------------- | ---- |',
+    '| Engine | Policy | Load | Worker type, threads | Fake worker | PDF GETs | Range | Asset GETs | WebAssembly | Download | Print images | Viewer violations | Other violations | Pass |',
+    '| ------ | ------ | ---- | -------------------- | ----------- | -------- | ----- | ---------- | ----------- | -------- | ------------ | ----------------- | ---------------- | ---- |',
   ];
   results.forEach(({ engine, version, name, result }) => {
     const workerTypes = [...new Set(result.workers.map((worker) => worker.type))].join(', ') || 'none created';
@@ -408,19 +445,31 @@ function formatReport(results, versions) {
     lines.push(
       `| ${engine} ${version} | ${name} | ${result.state || 'timeout'} | ${workerTypes}, ${result.threads.length} running | ` +
         `${result.fakeWorker ? 'yes' : 'no'} | ${result.pdfRequests} | ${result.rangeRequests} | ` +
+        `${result.assetRequests.length} | ${result.wasm} | ` +
         `${result.download ? 'yes' : '-'} | ${print} | ${viewer} | ${other} | ${result.passed ? 'yes' : 'NO'} |`,
     );
   });
 
-  const details = results.filter(({ result }) => result.violations.length > 0 || result.errors.length > 0);
+  const details = results.filter(
+    ({ result }) => result.violations.length > 0 || result.errors.length > 0 || result.assetWarnings.length > 0,
+  );
   if (details.length > 0) {
-    lines.push('', 'Violations and errors:', '');
+    lines.push('', 'Violations, errors and asset warnings:', '');
     details.forEach(({ engine, name, result }) => {
       result.violations.forEach(({ directive, blockedURL, owner, what }) => {
         const blocked = blockedURL.startsWith('http') ? new URL(blockedURL).pathname : blockedURL;
         lines.push(`- ${engine}, ${name}: ${owner}, \`${directive}\` blocked \`${blocked}\`, ${what}`);
       });
       result.errors.forEach((error) => lines.push(`- ${engine}, ${name}: error \`${error}\``));
+      result.assetWarnings.forEach((warning) => lines.push(`- ${engine}, ${name}: warning \`${warning}\``));
+    });
+  }
+
+  const assetRuns = results.filter(({ result }) => result.assetRequests.length > 0);
+  if (assetRuns.length > 0) {
+    lines.push('', 'Asset requests:', '');
+    assetRuns.forEach(({ engine, name, result }) => {
+      lines.push(`- ${engine}, ${name}: ${result.assetRequests.map((path) => `\`${path}\``).join(', ')}`);
     });
   }
   return lines.join('\n');
@@ -428,6 +477,10 @@ function formatReport(results, versions) {
 
 async function main() {
   await build({ root, configFile: false, logLevel: 'warn', build: { outDir: dist, emptyOutDir: true, minify: false } });
+  const pdfjsDist = dirname(createRequire(import.meta.url).resolve('pdfjs-dist/package.json'));
+  await Promise.all(
+    ASSET_FOLDERS.map((folder) => cp(join(pdfjsDist, folder), join(dist, ASSETS_PATH, folder), { recursive: true })),
+  );
 
   const state = { policy: POLICY, requests: [], reports: [] };
   const server = await startServer(state);

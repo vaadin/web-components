@@ -29,6 +29,27 @@ function getErrorReason(error) {
 }
 
 /**
+ * Returns the `getDocument()` options that point pdf.js to its runtime assets
+ * in the given folder. pdf.js needs absolute URLs that end with a slash, as
+ * the worker resolves relative URLs against its own script.
+ * @param {string | null | undefined} assetsUrl
+ * @return {object}
+ */
+function getAssetOptions(assetsUrl) {
+  if (!assetsUrl) {
+    return {};
+  }
+  const base = new URL(assetsUrl.endsWith('/') ? assetsUrl : `${assetsUrl}/`, document.baseURI);
+  return {
+    cMapUrl: new URL('cmaps/', base).href,
+    cMapPacked: true,
+    standardFontDataUrl: new URL('standard_fonts/', base).href,
+    wasmUrl: new URL('wasm/', base).href,
+    iccUrl: new URL('iccs/', base).href,
+  };
+}
+
+/**
  * @typedef {Object} PdfViewerDocumentDetails
  * @property {string} title The title from the metadata of the document, or an empty string.
  * @property {boolean} displayDocTitle Whether the document asks viewers to show its title.
@@ -52,7 +73,7 @@ function getErrorReason(error) {
  * releases it while the host is detached.
  */
 export class PdfViewerDocumentController {
-  /** @type {HTMLElement & { src: string | null | undefined }} */
+  /** @type {HTMLElement & { src: string | null | undefined, assetsUrl: string | null | undefined }} */
   #host;
 
   /** @type {PdfViewerDocumentCallbacks} */
@@ -71,7 +92,7 @@ export class PdfViewerDocumentController {
   #released = false;
 
   /**
-   * @param {HTMLElement & { src: string | null | undefined }} host
+   * @param {HTMLElement & { src: string | null | undefined, assetsUrl: string | null | undefined }} host
    * @param {PdfViewerDocumentCallbacks} callbacks
    */
   constructor(host, callbacks) {
@@ -106,14 +127,14 @@ export class PdfViewerDocumentController {
     const loadId = this.#loadId;
     this.#unload();
 
-    const { src } = this.#host;
+    const { src, assetsUrl } = this.#host;
     this.#released = !!src && !this.#host.isConnected;
     if (!src || this.#released) {
       return;
     }
 
     this.#callbacks.onLoadStart();
-    this.#open(loadId, src).catch((error) => {
+    this.#open(loadId, src, assetsUrl).catch((error) => {
       if (loadId === this.#loadId) {
         this.#unload();
         this.#callbacks.onError(error, getErrorReason(error));
@@ -122,7 +143,7 @@ export class PdfViewerDocumentController {
   }
 
   /** @private */
-  async #open(loadId, src) {
+  async #open(loadId, src, assetsUrl) {
     const pdfjs = await loadPdfjs();
     if (loadId !== this.#loadId) {
       return;
@@ -136,6 +157,7 @@ export class PdfViewerDocumentController {
       disableRange: true,
       // Security: no XFA forms. Scripting (pdf.sandbox) is never loaded either.
       enableXfa: false,
+      ...getAssetOptions(assetsUrl),
     });
 
     const workerFailed = this.#workerHandle.failed.catch((error) => {

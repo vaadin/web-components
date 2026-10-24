@@ -32,6 +32,7 @@ assertType<string | null | undefined>(viewer.src);
 assertType<number>(viewer.page);
 assertType<number>(viewer.pageCount);
 assertType<string | null | undefined>(viewer.fileName);
+assertType<string | null | undefined>(viewer.assetsUrl);
 assertType<PdfViewerZoom>(viewer.zoom);
 assertType<'page-fit' | 'page-width' | number>(viewer.zoom);
 assertType<boolean>(viewer.headerVisible);
