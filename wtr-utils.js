@@ -237,7 +237,11 @@ const createSnapshotTestsConfig = (config) => {
 const createUnitTestsConfig = (config) => {
   const allPackages = getAllUnitPackages();
   const testPackages = getTestPackages(allPackages);
-  const groups = getUnitTestGroups(testPackages);
+  const groups = [
+    ...getUnitTestGroups(testPackages),
+    // The commands that the tests of all packages use
+    { name: 'test-runner-commands', files: 'test/test-runner-commands/test/*.test.{js,ts}' },
+  ];
 
   return {
     ...config,
