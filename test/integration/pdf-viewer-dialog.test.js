@@ -64,6 +64,31 @@ describe('pdf-viewer in dialog', () => {
     expect(dialog.opened).to.be.false;
   });
 
+  it('should close the sidebar of a narrow viewer first and the dialog second with Escape', async () => {
+    viewer.style.width = '360px';
+    viewer.sidebarOpened = true;
+    await nextRender();
+    viewer.shadowRoot.querySelector('[part~="thumbnail"]').focus();
+    await sendKeys({ press: 'Escape' });
+    await nextFrame();
+    expect(viewer.sidebarOpened).to.be.false;
+    expect(dialog.opened).to.be.true;
+    expect(document.activeElement).to.equal(viewer.querySelector('vaadin-pdf-viewer-button[icon="sidebar"]'));
+
+    await sendKeys({ press: 'Escape' });
+    await nextFrame();
+    expect(dialog.opened).to.be.false;
+  });
+
+  it('should close the dialog with Escape in the sidebar of a wide viewer', async () => {
+    viewer.sidebarOpened = true;
+    await nextRender();
+    viewer.shadowRoot.querySelector('[part~="thumbnail"]').focus();
+    await sendKeys({ press: 'Escape' });
+    await nextFrame();
+    expect(dialog.opened).to.be.false;
+  });
+
   it('should close the find bar and keep the dialog open with Escape on a find bar button', async () => {
     getContent().focus();
     await sendKeys({ press: 'Control+KeyF' });

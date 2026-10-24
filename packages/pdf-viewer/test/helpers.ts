@@ -1,4 +1,5 @@
 import { nextFrame, oneEvent } from '@vaadin/testing-helpers';
+import { acquireWorker, loadPdfjs, releaseWorker } from '../src/pdfjs-loader.js';
 import type { PdfViewer } from '../vaadin-pdf-viewer.js';
 
 export type Fixture =
@@ -16,6 +17,22 @@ export type Fixture =
 
 export function fixtureUrl(name: Fixture): string {
   return new URL(`./fixtures/${name}`, import.meta.url).href;
+}
+
+/**
+ * Returns the prototype of the documents of pdf.js, which pdf.js does not export,
+ * for stubbing the methods that the viewer calls.
+ */
+export async function getPdfDocumentPrototype(): Promise<any> {
+  const pdfjs = await loadPdfjs();
+  const handle = acquireWorker(pdfjs);
+  const task = pdfjs.getDocument({ url: fixtureUrl('multi-page.pdf'), worker: handle.worker! });
+  try {
+    return Object.getPrototypeOf(await task.promise);
+  } finally {
+    await task.destroy();
+    releaseWorker(handle);
+  }
 }
 
 /**
@@ -72,14 +89,28 @@ export type PdfPage = {
 };
 
 /**
+ * An item of the outline of a PDF created with `createPdf()`.
+ */
+export type PdfOutlineItem = {
+  title: string;
+  /** The action dictionary of the item, e.g. `<< /S /URI /URI (https://vaadin.com/) >>`. */
+  action: string;
+};
+
+/**
  * Creates a PDF with the given pages in memory, and returns an object URL for it.
  * `dests` is the content of the dictionary of named destinations, e.g. `/name [0 /Fit]`.
  * `lang` is the language of the document, e.g. `sv`.
+ * `outline` is the list of the top-level outline items.
  */
-export function createPdf(pages: PdfPage[], { dests = '', lang = '' } = {}): string {
-  // Object 1 is the catalog, 2 the page tree, 3 and 4 the fonts, then the page, its content and its annotations.
+export function createPdf(
+  pages: PdfPage[],
+  { dests = '', lang = '', outline = [] }: { dests?: string; lang?: string; outline?: PdfOutlineItem[] } = {},
+): string {
+  // Object 1 is the catalog, 2 the page tree, 3 and 4 the fonts, then the page, its content and its annotations,
+  // then the outline.
   const objects = [
-    `<< /Type /Catalog /Pages 2 0 R${dests ? ` /Dests << ${dests} >>` : ''}${lang ? ` /Lang (${lang})` : ''} >>`,
+    '',
     '',
     '<< /Type /Font /Subtype /Type1 /BaseFont /Helvetica >>',
     '<< /Type /Font /Subtype /Type1 /BaseFont /Courier >>',
@@ -97,6 +128,22 @@ export function createPdf(pages: PdfPage[], { dests = '', lang = '' } = {}): str
     );
   });
   objects[1] = `<< /Type /Pages /Kids [${pageIds.map((id) => `${id} 0 R`).join(' ')}] /Count ${pages.length} >>`;
+
+  let outlines = '';
+  if (outline.length) {
+    const outlinesId = objects.length + 1;
+    const itemIds = outline.map((_, index) => outlinesId + 1 + index);
+    objects.push(
+      `<< /Type /Outlines /First ${itemIds[0]} 0 R /Last ${itemIds[itemIds.length - 1]} 0 R /Count ${outline.length} >>`,
+    );
+    outline.forEach(({ title, action }, index) => {
+      const prev = index > 0 ? ` /Prev ${itemIds[index - 1]} 0 R` : '';
+      const next = index < outline.length - 1 ? ` /Next ${itemIds[index + 1]} 0 R` : '';
+      objects.push(`<< /Title (${title}) /Parent ${outlinesId} 0 R${prev}${next} /A ${action} >>`);
+    });
+    outlines = ` /Outlines ${outlinesId} 0 R`;
+  }
+  objects[0] = `<< /Type /Catalog /Pages 2 0 R${dests ? ` /Dests << ${dests} >>` : ''}${lang ? ` /Lang (${lang})` : ''}${outlines} >>`;
 
   let pdf = '%PDF-1.4\n';
   const offsets: number[] = [];

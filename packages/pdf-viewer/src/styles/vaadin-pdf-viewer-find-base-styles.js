@@ -12,7 +12,8 @@ import '@vaadin/component-base/src/styles/style-props.js';
 import { css } from 'lit';
 
 export const pdfViewerFindStyles = css`
-  /* Over the top end of the pages, next to the scrollbar, like the find of browsers */
+  /* Over the top end of the pages, next to the scrollbar, like the find of browsers.
+     Below the sidebar that is shown over the pages in a narrow viewer. */
   [part='find-bar'] {
     --_inset: var(--vaadin-gap-s);
     position: absolute;

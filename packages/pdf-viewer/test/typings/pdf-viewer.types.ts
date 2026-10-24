@@ -10,6 +10,7 @@ import type {
   PdfViewerI18n,
   PdfViewerPageChangedEvent,
   PdfViewerPageCountChangedEvent,
+  PdfViewerSidebarOpenedChangedEvent,
   PdfViewerToolbarCollapsedChangedEvent,
   PdfViewerZoom,
   PdfViewerZoomChangedEvent,
@@ -17,6 +18,7 @@ import type {
 import type { PdfViewerFindMixinClass } from '../../src/vaadin-pdf-viewer-find-mixin.js';
 import type { PdfViewerMixinClass } from '../../src/vaadin-pdf-viewer-mixin.js';
 import type { PdfViewerPrintMixinClass } from '../../src/vaadin-pdf-viewer-print-mixin.js';
+import type { PdfViewerSidebarMixinClass } from '../../src/vaadin-pdf-viewer-sidebar-mixin.js';
 import type { PdfViewerToolbarMixinClass } from '../../src/vaadin-pdf-viewer-toolbar-mixin.js';
 
 const assertType = <TExpected>(actual: TExpected) => actual;
@@ -37,6 +39,7 @@ assertType<string | null | undefined>(viewer.headerTitle);
 assertType<boolean>(viewer.toolbarCollapsed);
 assertType<boolean>(viewer.downloadButtonHidden);
 assertType<boolean>(viewer.findButtonHidden);
+assertType<boolean>(viewer.sidebarOpened);
 assertType<PdfViewerI18n | undefined>(viewer.i18n);
 
 // I18n
@@ -71,6 +74,11 @@ assertType<PdfViewerI18n>({
   findResult: '{current} of {total}',
   findResultAnnouncement: '{current} of {total}, page {page}',
   findNoMatches: 'No matches',
+  sidebar: 'Sidebar',
+  sidebarView: 'Sidebar view',
+  thumbnails: 'Page thumbnails',
+  thumbnailsView: 'Thumbnails',
+  outline: 'Outline',
 });
 
 // Methods
@@ -84,6 +92,7 @@ assertType<I18nMixinClass<PdfViewerI18n>>(viewer);
 assertType<PdfViewerMixinClass>(viewer);
 assertType<PdfViewerToolbarMixinClass>(viewer);
 assertType<PdfViewerFindMixinClass>(viewer);
+assertType<PdfViewerSidebarMixinClass>(viewer);
 assertType<PdfViewerPrintMixinClass>(viewer);
 assertType<ResizeMixinClass>(viewer);
 
@@ -124,4 +133,9 @@ viewer.addEventListener('find-result', (event) => {
   assertType<PdfViewerFindResultEvent>(event);
   assertType<string>(event.detail.query);
   assertType<number>(event.detail.matchCount);
+});
+
+viewer.addEventListener('sidebar-opened-changed', (event) => {
+  assertType<PdfViewerSidebarOpenedChangedEvent>(event);
+  assertType<boolean>(event.detail.value);
 });

@@ -139,6 +139,53 @@ describe('pdf-viewer', () => {
     await visualDiff(div, 'find');
   });
 
+  it('sidebar', async () => {
+    element.src = fixtureUrl('multi-page.pdf');
+    await nextRenderIdle(element);
+    // Opened after loading, so that the pages fit the smaller width
+    element.sidebarOpened = true;
+    await nextRenderIdle(element);
+    element.page = 2;
+    await nextRenderIdle(element);
+    // Wait for the visible thumbnails
+    for (let i = 0; i < 100 && element.shadowRoot!.querySelectorAll('.thumbnail-image canvas').length < 3; i++) {
+      await nextFrame();
+    }
+    await visualDiff(div, 'sidebar');
+  });
+
+  it('sidebar-narrow', async () => {
+    div.style.width = '375px';
+    element.src = fixtureUrl('multi-page.pdf');
+    element.sidebarOpened = true;
+    await nextRenderIdle(element);
+    for (let i = 0; i < 100 && element.shadowRoot!.querySelectorAll('.thumbnail-image canvas').length < 2; i++) {
+      await nextFrame();
+    }
+    await visualDiff(div, 'sidebar-narrow');
+  });
+
+  it('outline', async () => {
+    element.src = fixtureUrl('outline.pdf');
+    element.sidebarOpened = true;
+    await nextRenderIdle(element);
+    for (let i = 0; i < 50 && !element.querySelector('vaadin-pdf-viewer-button[slot="sidebar-header"]'); i++) {
+      await nextFrame();
+    }
+    element.querySelectorAll<HTMLElement>('vaadin-pdf-viewer-button[slot="sidebar-header"]')[1].click();
+    await nextRender();
+    element.shadowRoot!.querySelector<HTMLElement>('[part~="outline-toggle"]')!.click();
+    await nextRender();
+    // The item of the current page is marked once the pages of the items are known.
+    for (let i = 0; i < 50 && !element.shadowRoot!.querySelector('[part~="outline-item"][aria-current]'); i++) {
+      await nextFrame();
+    }
+    element.shadowRoot!.querySelector<HTMLElement>('[role="treeitem"]')!.focus();
+    await sendKeys({ press: 'ArrowDown' });
+    await nextRender();
+    await visualDiff(div, 'outline');
+  });
+
   describe('large text', () => {
     beforeEach(() => {
       // Like a larger default font size in the browser settings

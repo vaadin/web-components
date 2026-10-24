@@ -23,6 +23,7 @@
       const collapsed = document.querySelector('#collapsed');
       const downloadHidden = document.querySelector('#download-hidden');
       const findHidden = document.querySelector('#find-hidden');
+      const sidebarOpened = document.querySelector('#sidebar-opened');
       const findText = document.querySelector('#find-text');
       const highlightPage = document.querySelector('#highlight-page');
       const log = document.querySelector('#log');
@@ -68,6 +69,13 @@
       });
       document.querySelector('#highlight').addEventListener('click', () => {
         viewer.highlight(highlightPage.valueAsNumber, findText.value);
+      });
+      sidebarOpened.addEventListener('change', () => {
+        viewer.sidebarOpened = sidebarOpened.checked;
+      });
+      viewer.addEventListener('sidebar-opened-changed', (e) => {
+        sidebarOpened.checked = e.detail.value;
+        log.textContent = `sidebar-opened-changed: ${e.detail.value}`;
       });
       viewer.addEventListener('find-result', (e) => {
         log.textContent = `find-result: ${JSON.stringify(e.detail)}`;
@@ -146,6 +154,10 @@
         <input type="number" id="highlight-page" min="1" value="2" />
       </label>
       <button id="highlight">highlight(page, text)</button>
+      <label>
+        <input type="checkbox" id="sidebar-opened" />
+        Open sidebar
+      </label>
       <output id="log"></output>
     </p>
     <vaadin-pdf-viewer>

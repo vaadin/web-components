@@ -18,10 +18,12 @@ import { icons } from './styles/vaadin-pdf-viewer-base-icons.js';
 import { pdfViewerStyles } from './styles/vaadin-pdf-viewer-base-styles.js';
 import { pdfViewerFindStyles } from './styles/vaadin-pdf-viewer-find-base-styles.js';
 import { pdfViewerPageStyles } from './styles/vaadin-pdf-viewer-page-base-styles.js';
+import { pdfViewerSidebarStyles } from './styles/vaadin-pdf-viewer-sidebar-base-styles.js';
 import { pdfViewerToolbarStyles } from './styles/vaadin-pdf-viewer-toolbar-base-styles.js';
 import { PdfViewerFindMixin } from './vaadin-pdf-viewer-find-mixin.js';
 import { PdfViewerMixin } from './vaadin-pdf-viewer-mixin.js';
 import { PdfViewerPrintMixin } from './vaadin-pdf-viewer-print-mixin.js';
+import { PdfViewerSidebarMixin } from './vaadin-pdf-viewer-sidebar-mixin.js';
 import { PdfViewerToolbarMixin } from './vaadin-pdf-viewer-toolbar-mixin.js';
 
 const DEFAULT_I18N = {
@@ -54,6 +56,11 @@ const DEFAULT_I18N = {
   findResult: '{current} of {total}',
   findResultAnnouncement: '{current} of {total}, page {page}',
   findNoMatches: 'No matches',
+  sidebar: 'Sidebar',
+  sidebarView: 'Sidebar view',
+  thumbnails: 'Page thumbnails',
+  thumbnailsView: 'Thumbnails',
+  outline: 'Outline',
 };
 
 /**
@@ -80,60 +87,81 @@ const DEFAULT_I18N = {
  *
  * The following shadow DOM parts are available for styling:
  *
- * Part name       | Description
- * ----------------|------------
- * `header`        | The header above the toolbar, with the title and the button that collapses the toolbar, see `headerVisible`.
- * `title`         | The title in the header.
- * `toolbar`       | The toolbar above the pages.
- * `toolbar-group` | A group of related controls in the toolbar: navigation, viewing options and actions.
- * `zoom-controls` | The zoom select with the zoom out and zoom in buttons. Also has the `disabled` part name without a document.
- * `find-bar`      | The panel with the controls for finding text, shown over the top end of the pages.
- * `content`       | The scrollable area that contains the pages.
- * `page`          | A page of the document.
- * `error-message` | The message shown when the document could not be loaded.
- * `loader`        | The loading indicator shown while the document loads.
+ * Part name              | Description
+ * -----------------------|------------
+ * `header`               | The header above the toolbar, with the title and the button that collapses the toolbar, see `headerVisible`.
+ * `title`                | The title in the header.
+ * `toolbar`              | The toolbar above the pages.
+ * `toolbar-group`        | A group of related controls in the toolbar: navigation, viewing options and actions.
+ * `zoom-controls`        | The zoom select with the zoom out and zoom in buttons. Also has the `disabled` part name without a document.
+ * `find-bar`             | The panel with the controls for finding text, shown over the top end of the pages.
+ * `sidebar`              | The sidebar next to the pages, see `sidebarOpened`.
+ * `thumbnails`           | The scrollable list of page thumbnails in the sidebar.
+ * `thumbnail`            | A page thumbnail. Also has the `current` part name for the current page.
+ * `sidebar-header`       | The header of the sidebar with the buttons that switch between thumbnails and outline.
+ * `outline`              | The outline (bookmarks) of the document in the sidebar.
+ * `outline-item`         | An item of the outline. Also has the `current` part name for the item of the current page.
+ * `outline-item-content` | The row of an outline item, with its toggle and title.
+ * `outline-toggle`       | The button that expands or collapses an outline item. Also has the `expanded` part name when expanded.
+ * `outline-item-title`   | The title of an outline item.
+ * `content`              | The scrollable area that contains the pages.
+ * `page`                 | A page of the document.
+ * `error-message`        | The message shown when the document could not be loaded.
+ * `loader`               | The loading indicator shown while the document loads.
  *
  * The following state attributes are available for styling:
  *
- * Attribute   | Description
- * ------------|------------
- * `loading`   | Set while the document is loading.
- * `has-error` | Set when the document could not be loaded.
+ * Attribute        | Description
+ * -----------------|------------
+ * `loading`        | Set while the document is loading.
+ * `has-error`      | Set when the document could not be loaded.
+ * `sidebar-opened` | Set when the sidebar is shown.
  *
  * The following custom CSS properties are available for styling:
  *
- * Custom CSS property                                |
- * :---------------------------------------------------|
- * | `--vaadin-pdf-viewer-background`                  |
- * | `--vaadin-pdf-viewer-border-color`                |
- * | `--vaadin-pdf-viewer-border-radius`               |
- * | `--vaadin-pdf-viewer-current-match-background`    |
- * | `--vaadin-pdf-viewer-current-match-outline-color` |
- * | `--vaadin-pdf-viewer-error-color`                 |
- * | `--vaadin-pdf-viewer-find-field-width`            |
- * | `--vaadin-pdf-viewer-icon-close`                  |
- * | `--vaadin-pdf-viewer-icon-collapse-toolbar`       |
- * | `--vaadin-pdf-viewer-icon-download`               |
- * | `--vaadin-pdf-viewer-icon-expand-toolbar`         |
- * | `--vaadin-pdf-viewer-icon-find`                   |
- * | `--vaadin-pdf-viewer-icon-next-match`             |
- * | `--vaadin-pdf-viewer-icon-next-page`              |
- * | `--vaadin-pdf-viewer-icon-previous-match`         |
- * | `--vaadin-pdf-viewer-icon-previous-page`          |
- * | `--vaadin-pdf-viewer-icon-zoom-in`                |
- * | `--vaadin-pdf-viewer-icon-zoom-out`               |
- * | `--vaadin-pdf-viewer-match-background`            |
- * | `--vaadin-pdf-viewer-padding`                     |
- * | `--vaadin-pdf-viewer-page-background`             |
- * | `--vaadin-pdf-viewer-page-field-width`            |
- * | `--vaadin-pdf-viewer-page-gap`                    |
- * | `--vaadin-pdf-viewer-page-shadow`                 |
- * | `--vaadin-pdf-viewer-selection-background`        |
- * | `--vaadin-pdf-viewer-text-color`                  |
- * | `--vaadin-pdf-viewer-toolbar-background`          |
- * | `--vaadin-pdf-viewer-toolbar-gap`                 |
- * | `--vaadin-pdf-viewer-toolbar-padding`             |
- * | `--vaadin-pdf-viewer-zoom-select-width`           |
+ * Custom CSS property                                  |
+ * :-----------------------------------------------------|
+ * | `--vaadin-pdf-viewer-background`                   |
+ * | `--vaadin-pdf-viewer-border-color`                 |
+ * | `--vaadin-pdf-viewer-border-radius`                |
+ * | `--vaadin-pdf-viewer-current-match-background`     |
+ * | `--vaadin-pdf-viewer-current-match-outline-color`  |
+ * | `--vaadin-pdf-viewer-error-color`                  |
+ * | `--vaadin-pdf-viewer-find-field-width`             |
+ * | `--vaadin-pdf-viewer-icon-close`                   |
+ * | `--vaadin-pdf-viewer-icon-collapse-toolbar`        |
+ * | `--vaadin-pdf-viewer-icon-download`                |
+ * | `--vaadin-pdf-viewer-icon-expand-toolbar`          |
+ * | `--vaadin-pdf-viewer-icon-find`                    |
+ * | `--vaadin-pdf-viewer-icon-next-match`              |
+ * | `--vaadin-pdf-viewer-icon-next-page`               |
+ * | `--vaadin-pdf-viewer-icon-outline`                 |
+ * | `--vaadin-pdf-viewer-icon-previous-match`          |
+ * | `--vaadin-pdf-viewer-icon-previous-page`           |
+ * | `--vaadin-pdf-viewer-icon-sidebar`                 |
+ * | `--vaadin-pdf-viewer-icon-thumbnails`              |
+ * | `--vaadin-pdf-viewer-icon-zoom-in`                 |
+ * | `--vaadin-pdf-viewer-icon-zoom-out`                |
+ * | `--vaadin-pdf-viewer-match-background`             |
+ * | `--vaadin-pdf-viewer-outline-font-size`            |
+ * | `--vaadin-pdf-viewer-outline-indent`               |
+ * | `--vaadin-pdf-viewer-padding`                      |
+ * | `--vaadin-pdf-viewer-page-background`              |
+ * | `--vaadin-pdf-viewer-page-field-width`             |
+ * | `--vaadin-pdf-viewer-page-gap`                     |
+ * | `--vaadin-pdf-viewer-page-shadow`                  |
+ * | `--vaadin-pdf-viewer-selection-background`         |
+ * | `--vaadin-pdf-viewer-sidebar-background`           |
+ * | `--vaadin-pdf-viewer-sidebar-shadow`               |
+ * | `--vaadin-pdf-viewer-sidebar-width`                |
+ * | `--vaadin-pdf-viewer-text-color`                   |
+ * | `--vaadin-pdf-viewer-thumbnail-current-background` |
+ * | `--vaadin-pdf-viewer-thumbnail-current-color`      |
+ * | `--vaadin-pdf-viewer-thumbnail-font-size`          |
+ * | `--vaadin-pdf-viewer-toolbar-background`           |
+ * | `--vaadin-pdf-viewer-toolbar-gap`                  |
+ * | `--vaadin-pdf-viewer-toolbar-padding`              |
+ * | `--vaadin-pdf-viewer-zoom-select-width`            |
  *
  * The `--vaadin-pdf-viewer-icon-*` properties take an image (e.g. an SVG data URL) used as a mask.
  * In the Lumo theme, they take a glyph of the `lumo-icons` font instead, like the icons of `<vaadin-map>`.
@@ -145,6 +173,7 @@ const DEFAULT_I18N = {
  * @fires {CustomEvent} find-result - Fired when finding text, with `find()` or in the find bar, has gone through the document.
  * @fires {CustomEvent} page-changed - Fired when the `page` property changes.
  * @fires {CustomEvent} page-count-changed - Fired when the `pageCount` property changes.
+ * @fires {CustomEvent} sidebar-opened-changed - Fired when the `sidebarOpened` property changes.
  * @fires {CustomEvent} toolbar-collapsed-changed - Fired when the `toolbarCollapsed` property changes.
  * @fires {CustomEvent} zoom-changed - Fired when the `zoom` property changes.
  *
@@ -152,8 +181,10 @@ const DEFAULT_I18N = {
  * @extends HTMLElement
  */
 class PdfViewer extends PdfViewerPrintMixin(
-  PdfViewerFindMixin(
-    PdfViewerToolbarMixin(PdfViewerMixin(I18nMixin(ElementMixin(PolylitMixin(LumoInjectionMixin(LitElement)))))),
+  PdfViewerSidebarMixin(
+    PdfViewerFindMixin(
+      PdfViewerToolbarMixin(PdfViewerMixin(I18nMixin(ElementMixin(PolylitMixin(LumoInjectionMixin(LitElement)))))),
+    ),
   ),
 ) {
   static get is() {
@@ -169,7 +200,14 @@ class PdfViewer extends PdfViewerPrintMixin(
   }
 
   static get styles() {
-    return [icons, pdfViewerStyles, pdfViewerToolbarStyles, pdfViewerFindStyles, pdfViewerPageStyles];
+    return [
+      icons,
+      pdfViewerStyles,
+      pdfViewerToolbarStyles,
+      pdfViewerSidebarStyles,
+      pdfViewerFindStyles,
+      pdfViewerPageStyles,
+    ];
   }
 
   static get lumoInjector() {
@@ -225,7 +263,7 @@ class PdfViewer extends PdfViewerPrintMixin(
    *   document: 'PDF document',
    *   // Accessible name of the scrollable area that contains the pages.
    *   pages: 'Pages',
-   *   // Accessible name of each page. {page} is replaced with the page number.
+   *   // Accessible name of each page and of its thumbnail. {page} is replaced with the page number.
    *   pageLabel: 'Page {page}',
    *   // Accessible names of links to another place in the document that have no text.
    *   // {page} is replaced with the number of the page the link goes to.
@@ -249,7 +287,17 @@ class PdfViewer extends PdfViewerPrintMixin(
    *   // Announced when moving to a match. {page} is replaced with the page of the match.
    *   findResultAnnouncement: '{current} of {total}, page {page}',
    *   // Shown in the find field and announced when the text is not found.
-   *   findNoMatches: 'No matches'
+   *   findNoMatches: 'No matches',
+   *   // Accessible label and tooltip of the sidebar button.
+   *   sidebar: 'Sidebar',
+   *   // Accessible label of the group of buttons that switch the sidebar view.
+   *   sidebarView: 'Sidebar view',
+   *   // Accessible label of the thumbnail list.
+   *   thumbnails: 'Page thumbnails',
+   *   // Labels and tooltips of the buttons that switch the sidebar between the
+   *   // thumbnails and the outline, and accessible label of the outline.
+   *   thumbnailsView: 'Thumbnails',
+   *   outline: 'Outline'
    * }
    * ```
    *
@@ -272,19 +320,22 @@ class PdfViewer extends PdfViewerPrintMixin(
     return html`
       ${this._renderToolbar()}
       <div part="loader"></div>
-      <div class="content-area">
-        ${this._renderFindBar()}
-        <div
-          id="content"
-          part="content"
-          tabindex="${this.pageCount ? '0' : '-1'}"
-          aria-busy="${this._loading ? 'true' : 'false'}"
-          role="document"
-          aria-label="${i18n.pages}"
-        >
-          <div id="pages"></div>
+      <div class="main">
+        ${this._renderSidebar()}
+        <div class="content-area">
+          ${this._renderFindBar()}
+          <div
+            id="content"
+            part="content"
+            tabindex="${this.pageCount ? '0' : '-1'}"
+            aria-busy="${this._loading ? 'true' : 'false'}"
+            role="document"
+            aria-label="${i18n.pages}"
+          >
+            <div id="pages"></div>
+          </div>
+          <div class="content-focus-ring"></div>
         </div>
-        <div class="content-focus-ring"></div>
       </div>
       <div part="error-message" ?hidden="${!this._errorReason}">
         ${this._errorReason === 'password' ? i18n.passwordError : i18n.loadError}
@@ -309,10 +360,11 @@ class PdfViewer extends PdfViewerPrintMixin(
       this.#controlsMarker = document.createComment('');
       this.appendChild(this.#controlsMarker);
     }
-    render(html`${this._renderToolbarControls()}${this._renderFindControls()}${this._renderPrintControls()}`, this, {
-      host: this,
-      renderBefore: this.#controlsMarker,
-    });
+    render(
+      html`${this._renderToolbarControls()}${this._renderFindControls()}${this._renderSidebarControls()}${this._renderPrintControls()}`,
+      this,
+      { host: this, renderBefore: this.#controlsMarker },
+    );
   }
 }
 

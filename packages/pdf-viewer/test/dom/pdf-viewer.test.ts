@@ -9,6 +9,13 @@ import { fixtureUrl, nextRenderIdle } from '../helpers.js';
 describe('vaadin-pdf-viewer', () => {
   let viewer: PdfViewer;
 
+  /** Waits for the outline, which shows the buttons that switch the view of the sidebar. */
+  async function waitForOutline() {
+    for (let i = 0; i < 50 && !viewer.querySelector('[slot="sidebar-header"]'); i++) {
+      await nextFrame();
+    }
+  }
+
   beforeEach(async () => {
     resetUniqueId();
     viewer = fixtureSync('<vaadin-pdf-viewer></vaadin-pdf-viewer>');
@@ -66,6 +73,14 @@ describe('vaadin-pdf-viewer', () => {
       await nextRender();
       await expect(viewer).dom.to.equalSnapshot();
     });
+
+    it('sidebar', async () => {
+      viewer.sidebarOpened = true;
+      viewer.src = fixtureUrl('outline.pdf');
+      await oneEvent(viewer, 'document-load');
+      await waitForOutline();
+      await expect(viewer).dom.to.equalSnapshot();
+    });
   });
 
   describe('shadow', () => {
@@ -116,6 +131,33 @@ describe('vaadin-pdf-viewer', () => {
       await oneEvent(viewer, 'document-error');
       await nextFrame();
       await expect(viewer).shadowDom.to.equalSnapshot();
+    });
+  });
+
+  describe('sidebar', () => {
+    it('thumbnails', async () => {
+      viewer.sidebarOpened = true;
+      viewer.src = fixtureUrl('multi-page.pdf');
+      await nextRenderIdle(viewer);
+      const sidebar = viewer.shadowRoot!.querySelector('[part="sidebar"]')!;
+      // The thumbnails near the visible part of the list render one at a time.
+      await expect(sidebar).dom.to.equalSnapshot({ ignoreTags: ['canvas'], ignoreAttributes: ['style'] });
+    });
+
+    it('outline', async () => {
+      viewer.sidebarOpened = true;
+      viewer.src = fixtureUrl('outline.pdf');
+      await nextRenderIdle(viewer);
+      await waitForOutline();
+      viewer.querySelector<HTMLElement>('[slot="sidebar-header"][icon="outline"]')!.click();
+      await nextRender();
+      viewer.shadowRoot!.querySelector<HTMLElement>('[part~="outline-toggle"]')!.click();
+      await nextRender();
+      // The item of the current page is marked once the pages of the items are known.
+      for (let i = 0; i < 50 && !viewer.shadowRoot!.querySelector('[part~="outline-item"][aria-current]'); i++) {
+        await nextFrame();
+      }
+      await expect(viewer.shadowRoot!.querySelector('[part="outline"]')).dom.to.equalSnapshot();
     });
   });
 

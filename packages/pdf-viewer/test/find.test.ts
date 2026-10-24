@@ -1012,6 +1012,19 @@ describe('find', () => {
         expect(getDeepActiveElement()).to.equal(getContent());
       });
 
+      it('should focus the pages when the thumbnail focused before is hidden meanwhile', async () => {
+        viewer.sidebarOpened = true;
+        await nextRender();
+        viewer.shadowRoot!.querySelector<HTMLElement>('[part~="thumbnail"]')!.focus();
+        await sendKeys({ press: 'Control+KeyF' });
+        await nextRender();
+        viewer.sidebarOpened = false;
+        await nextRender();
+        await sendKeys({ press: 'Escape' });
+        await nextRender();
+        expect(getDeepActiveElement()).to.equal(getContent());
+      });
+
       it('should focus the pages when the link focused before is released meanwhile', async () => {
         const idle = nextRenderIdle(viewer);
         await loadDocument(viewer, 'links.pdf');

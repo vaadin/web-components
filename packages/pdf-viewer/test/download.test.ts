@@ -3,9 +3,8 @@ import { fixtureSync, nextFrame, nextRender, nextUpdate, oneEvent } from '@vaadi
 import sinon from 'sinon';
 import './enable-feature-flag.js';
 import '../vaadin-pdf-viewer.js';
-import { acquireWorker, loadPdfjs, releaseWorker } from '../src/pdfjs-loader.js';
 import type { PdfViewer } from '../vaadin-pdf-viewer.js';
-import { createPdfUrl, fixtureUrl, loadDocument } from './helpers.js';
+import { createPdfUrl, fixtureUrl, getPdfDocumentPrototype, loadDocument } from './helpers.js';
 
 describe('download', () => {
   let viewer: PdfViewer;
@@ -26,22 +25,6 @@ describe('download', () => {
         resolve({ link: this, blob: createObjectUrlSpy.lastCall.args[0] });
       });
     });
-  }
-
-  /**
-   * Returns the prototype of the documents of pdf.js, which pdf.js does not export,
-   * for stubbing the methods that the viewer calls.
-   */
-  async function getPdfDocumentPrototype(): Promise<any> {
-    const pdfjs = await loadPdfjs();
-    const handle = acquireWorker(pdfjs);
-    const task = pdfjs.getDocument({ url: fixtureUrl('multi-page.pdf'), worker: handle.worker! });
-    try {
-      return Object.getPrototypeOf(await task.promise);
-    } finally {
-      await task.destroy();
-      releaseWorker(handle);
-    }
   }
 
   async function getOriginal(): Promise<Uint8Array> {

@@ -348,4 +348,63 @@ describe('accessibility', () => {
       });
     });
   });
+
+  describe('sidebar', () => {
+    let clock: sinon.SinonFakeTimers;
+
+    function getLiveRegion() {
+      return [...document.body.children].find((element) => element.hasAttribute('aria-live'))!;
+    }
+
+    function getThumbnails() {
+      return [...viewer.shadowRoot!.querySelectorAll<HTMLElement>('[part~="thumbnail"]')];
+    }
+
+    beforeEach(async () => {
+      viewer = fixtureSync(
+        '<vaadin-pdf-viewer style="width: 700px; height: 400px" sidebar-opened></vaadin-pdf-viewer>',
+      );
+      await nextRender();
+      const idle = nextRenderIdle(viewer);
+      await loadDocument(viewer, 'outline.pdf');
+      await idle;
+      // Wait for the outline, which shows the buttons that switch the view.
+      for (let i = 0; i < 50 && !viewer.querySelector('[slot="sidebar-header"]'); i++) {
+        await nextFrame();
+      }
+      // No announcement of a previous test
+      getLiveRegion().textContent = '';
+      clock = sinon.useFakeTimers({ shouldClearNativeTimers: true });
+    });
+
+    afterEach(() => {
+      clock.restore();
+    });
+
+    it('should announce the page when going to a clicked thumbnail', async () => {
+      getThumbnails()[2].click();
+      await clock.tickAsync(200);
+      expect(getLiveRegion().textContent).to.equal('Page 3 of 3');
+    });
+
+    it('should announce the page when going to a thumbnail with Enter', async () => {
+      getThumbnails()[0].focus();
+      await sendKeys({ press: 'ArrowDown' });
+      await sendKeys({ press: 'Enter' });
+      await clock.tickAsync(200);
+      expect(getLiveRegion().textContent).to.equal('Page 2 of 3');
+    });
+
+    it('should announce the page when going to an outline item', async () => {
+      viewer.querySelector<HTMLElement>('[slot="sidebar-header"][icon="outline"]')!.click();
+      await clock.tickAsync(0);
+      const items = [...viewer.shadowRoot!.querySelectorAll<HTMLElement>('[role="treeitem"]')];
+      // The destination of the item is resolved by the worker of pdf.js.
+      const pageChanged = oneEvent(viewer, 'page-changed');
+      items[2].click();
+      await pageChanged;
+      await clock.tickAsync(200);
+      expect(getLiveRegion().textContent).to.equal('Page 3 of 3');
+    });
+  });
 });

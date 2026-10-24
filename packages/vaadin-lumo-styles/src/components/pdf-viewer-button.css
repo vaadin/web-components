@@ -54,8 +54,31 @@
     --_icon: var(--vaadin-pdf-viewer-icon-next-match);
   }
 
+  :host([icon='sidebar']) {
+    --_icon: var(--vaadin-pdf-viewer-icon-sidebar);
+  }
+
   :host([icon='download']) {
     --_icon: var(--vaadin-pdf-viewer-icon-download);
+  }
+
+  /* Lumo has no icons for these, so the mask icons of the base styles are used */
+  :host([icon='thumbnails']) {
+    --_mask-icon: var(--vaadin-pdf-viewer-icon-thumbnails, var(--_vaadin-icon-layout-grid));
+  }
+
+  :host([icon='outline']) {
+    --_mask-icon: var(--vaadin-pdf-viewer-icon-outline, var(--_vaadin-icon-list-tree));
+  }
+
+  :host(:is([icon='thumbnails'], [icon='outline'])) [part='icon'] {
+    background: currentColor;
+    /* Scaled to match the visual size of the Lumo icon font */
+    mask: var(--_mask-icon) 50% / 75% no-repeat;
+  }
+
+  :host(:is([icon='thumbnails'], [icon='outline'])) [part='icon']::before {
+    content: none;
   }
 
   :host([icon='find']) {
@@ -70,13 +93,21 @@
     --_icon: var(--vaadin-pdf-viewer-icon-close);
   }
 
-  :host([aria-pressed='true']) {
+  :host(:is([aria-pressed='true'], [icon='sidebar'][aria-expanded='true'])) {
     --vaadin-button-tertiary-background: var(--lumo-contrast-10pct);
   }
 
   @media (forced-colors: active) {
+    :host(:is([icon='thumbnails'], [icon='outline'])) [part='icon'] {
+      background: CanvasText;
+    }
+
+    :host([disabled]:is([icon='thumbnails'], [icon='outline'])) [part='icon'] {
+      background: GrayText;
+    }
+
     /* Font icons are colored by the text color, not by a background */
-    :host([aria-pressed='true']) {
+    :host(:is([aria-pressed='true'], [icon='sidebar'][aria-expanded='true'])) {
       color: HighlightText;
       /* Lumo sets the background of tertiary buttons with !important */
       --vaadin-button-tertiary-background: Highlight;
@@ -84,8 +115,12 @@
       forced-color-adjust: none;
     }
 
-    :host([aria-pressed='true']) [part='icon'] {
+    :host(:is([aria-pressed='true'], [icon='sidebar'][aria-expanded='true'])) [part='icon'] {
       background: none;
+    }
+
+    :host([aria-pressed='true']:is([icon='thumbnails'], [icon='outline'])) [part='icon'] {
+      background: HighlightText;
     }
   }
 }

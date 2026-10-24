@@ -146,6 +146,7 @@ export const PdfViewerToolbarMixin = (superClass) =>
           </div>
           <div part="toolbar" role="toolbar" aria-label="${i18n.toolbar}" ?hidden="${this.#isToolbarCollapsed()}">
             <div part="toolbar-group" class="navigation">
+              <slot name="toolbar-navigation"></slot>
               <slot name="toolbar-page"></slot>
               <slot name="page-field"></slot>
               <slot name="page-error"></slot>

@@ -89,16 +89,17 @@ export const pdfViewerButtonStyles = css`
     --_icon: var(--vaadin-pdf-viewer-icon-close, var(--_vaadin-icon-cross));
   }
 
-  :host([aria-pressed='true']) {
+  /* The sidebar button is a disclosure button, which looks pressed while the sidebar is shown */
+  :host(:is([aria-pressed='true'], [icon='sidebar'][aria-expanded='true'])) {
     background: var(--vaadin-background-container-strong);
   }
 
   @media (forced-colors: active) {
-    :host([aria-pressed='true']) {
+    :host(:is([aria-pressed='true'], [icon='sidebar'][aria-expanded='true'])) {
       background: Highlight;
     }
 
-    :host([aria-pressed='true']) [part='icon'] {
+    :host(:is([aria-pressed='true'], [icon='sidebar'][aria-expanded='true'])) [part='icon'] {
       background: HighlightText;
     }
 

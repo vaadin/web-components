@@ -448,15 +448,17 @@ describe('toolbar', () => {
       await idle;
     });
 
+    /** Returns the icons of the buttons in a group, in the order they are shown. */
     function getGroupIcons(group: string) {
       const element = getGroup(group);
       return [...viewer.querySelectorAll<HTMLElement>('vaadin-pdf-viewer-button')]
         .filter((button) => element.contains(button.assignedSlot))
+        .sort((a, b) => a.getBoundingClientRect().left - b.getBoundingClientRect().left)
         .map((button) => button.getAttribute('icon'));
     }
 
     it('should group the controls into navigation, viewing options and actions', () => {
-      expect(getGroupIcons('navigation')).to.deep.equal(['previous-page', 'next-page']);
+      expect(getGroupIcons('navigation')).to.deep.equal(['sidebar', 'previous-page', 'next-page']);
       expect(getGroupIcons('viewing')).to.deep.equal(['zoom-out', 'zoom-in']);
       expect(getGroupIcons('actions')).to.deep.equal(['find', 'download']);
     });
@@ -953,7 +955,7 @@ describe('toolbar', () => {
         expect(document.activeElement).to.equal(getButton('close'));
         const visited = await expectControlsScrolledIntoView();
         expect(visited).to.include(viewer.querySelector('vaadin-text-field'));
-        expect(visited).to.include(getButton('next-page'));
+        expect(visited).to.include(getButton('sidebar'));
       });
     });
   });
