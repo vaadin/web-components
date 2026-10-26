@@ -15,7 +15,7 @@ jobs:
   # The Playwright image must have the same version as the `playwright` package
   playwright:
     name: Playwright version
-    runs-on: ubuntu-latest
+    runs-on: ubuntu-26.04
     outputs:
       version: ${{ steps.version.outputs.version }}
 
@@ -33,7 +33,7 @@ jobs:
   base:
     name: Base
     needs: playwright
-    runs-on: ubuntu-latest
+    runs-on: ubuntu-26.04
     container:
       image: mcr.microsoft.com/playwright:v${{ needs.playwright.outputs.version }}-noble
       options: --ipc=host
@@ -71,7 +71,7 @@ jobs:
   lumo:
     name: Lumo
     needs: playwright
-    runs-on: ubuntu-latest
+    runs-on: ubuntu-26.04
     container:
       image: mcr.microsoft.com/playwright:v${{ needs.playwright.outputs.version }}-noble
       options: --ipc=host
@@ -110,7 +110,7 @@ jobs:
   aura:
     name: Aura
     needs: playwright
-    runs-on: ubuntu-latest
+    runs-on: ubuntu-26.04
     container:
       image: mcr.microsoft.com/playwright:v${{ needs.playwright.outputs.version }}-noble
       options: --ipc=host
