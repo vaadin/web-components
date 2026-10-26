@@ -9,6 +9,7 @@
  * license.
  */
 import type { Constructor } from '@open-wc/dedupe-mixin';
+import type { KeyboardMixinClass } from '@vaadin/a11y-base/src/keyboard-mixin.js';
 import type { ResizeMixinClass } from '@vaadin/component-base/src/resize-mixin.js';
 import type { PdfViewerDocumentMixinClass } from './vaadin-pdf-viewer-document-mixin.js';
 import type { PdfViewerKeyboardMixinClass } from './vaadin-pdf-viewer-keyboard-mixin.js';
@@ -21,6 +22,7 @@ import type { PdfViewerScrollMixinClass } from './vaadin-pdf-viewer-scroll-mixin
 export declare function PdfViewerMixin<T extends Constructor<HTMLElement>>(
   base: T,
 ): Constructor<PdfViewerKeyboardMixinClass> &
+  Constructor<KeyboardMixinClass> &
   Constructor<PdfViewerScrollMixinClass> &
   Constructor<ResizeMixinClass> &
   Constructor<PdfViewerRenderMixinClass> &

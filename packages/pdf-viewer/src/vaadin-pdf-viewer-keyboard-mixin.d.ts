@@ -9,12 +9,13 @@
  * license.
  */
 import type { Constructor } from '@open-wc/dedupe-mixin';
+import type { KeyboardMixinClass } from '@vaadin/a11y-base/src/keyboard-mixin.js';
 
 /**
  * A mixin that handles the keyboard shortcuts of the viewer.
  */
 export declare function PdfViewerKeyboardMixin<T extends Constructor<HTMLElement>>(
   base: T,
-): Constructor<PdfViewerKeyboardMixinClass> & T;
+): Constructor<PdfViewerKeyboardMixinClass> & Constructor<KeyboardMixinClass> & T;
 
 export declare class PdfViewerKeyboardMixinClass {}

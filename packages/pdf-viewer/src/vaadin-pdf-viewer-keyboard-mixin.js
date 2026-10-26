@@ -8,24 +8,22 @@
  * See https://vaadin.com/commercial-license-and-service-terms for the full
  * license.
  */
+import { KeyboardMixin } from '@vaadin/a11y-base/src/keyboard-mixin.js';
 
 /**
  * A mixin that handles the keyboard shortcuts of the viewer.
  */
 export const PdfViewerKeyboardMixin = (superClass) =>
-  class PdfViewerKeyboardMixinClass extends superClass {
-    /** @protected */
-    firstUpdated() {
-      super.firstUpdated();
-
-      this.addEventListener('keydown', (event) => this.#onKeyDown(event));
-    }
-
+  class PdfViewerKeyboardMixinClass extends KeyboardMixin(superClass) {
     /**
-     * Handles the keyboard shortcuts of the viewer.
-     * @private
+     * Override method from `KeyboardMixin` to handle the keyboard shortcuts of the viewer.
+     * @param {KeyboardEvent} event
+     * @protected
+     * @override
      */
-    #onKeyDown(event) {
+    _onKeyDown(event) {
+      super._onKeyDown(event);
+
       const isShortcut = (event.ctrlKey || event.metaKey) && !event.altKey;
       if (!isShortcut || !this.pageCount) {
         return;
