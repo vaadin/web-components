@@ -10,7 +10,14 @@
  */
 import { FocusMixin } from '@vaadin/a11y-base/src/focus-mixin.js';
 import { ElementMixin } from '@vaadin/component-base/src/element-mixin.js';
+import { I18nMixin } from '@vaadin/component-base/src/i18n-mixin.js';
 import { PdfViewerMixin } from './vaadin-pdf-viewer-mixin.js';
+
+export interface PdfViewerI18n {
+  previousPage?: string;
+  nextPage?: string;
+  pageError?: string;
+}
 
 /**
  * Fired when the document has loaded.
@@ -58,15 +65,23 @@ export interface PdfViewerEventMap extends HTMLElementEventMap, PdfViewerCustomE
  * window.Vaadin.featureFlags.pdfViewerComponent = true;
  * ```
  *
+ * ### Slots
+ *
+ * Name              | Description
+ * ------------------|-------------
+ * `toolbar-actions` | Slot for application controls, e.g. buttons, at the end of the toolbar
+ *
  * ### Styling
  *
  * The following shadow DOM parts are available for styling:
  *
- * Part name | Description
- * ----------|------------
- * `content` | The scrollable area that contains the pages.
- * `page`    | A page of the document.
- * `loader`  | The loading indicator shown while the document loads.
+ * Part name       | Description
+ * ----------------|------------
+ * `toolbar`       | The toolbar above the pages.
+ * `toolbar-group` | A group of related controls in the toolbar: navigation and actions.
+ * `content`       | The scrollable area that contains the pages.
+ * `page`          | A page of the document.
+ * `loader`        | The loading indicator shown while the document loads.
  *
  * The following state attributes are available for styling:
  *
@@ -79,16 +94,23 @@ export interface PdfViewerEventMap extends HTMLElementEventMap, PdfViewerCustomE
  *
  * The following custom CSS properties are available for styling:
  *
- * Custom CSS property                    |
- * :---------------------------------------|
- * | `--vaadin-pdf-viewer-background`      |
- * | `--vaadin-pdf-viewer-border-color`    |
- * | `--vaadin-pdf-viewer-border-radius`   |
- * | `--vaadin-pdf-viewer-padding`         |
- * | `--vaadin-pdf-viewer-page-background` |
- * | `--vaadin-pdf-viewer-page-gap`        |
- * | `--vaadin-pdf-viewer-page-shadow`     |
- * | `--vaadin-pdf-viewer-text-color`      |
+ * Custom CSS property                        |
+ * :-------------------------------------------|
+ * | `--vaadin-pdf-viewer-background`          |
+ * | `--vaadin-pdf-viewer-border-color`        |
+ * | `--vaadin-pdf-viewer-border-radius`       |
+ * | `--vaadin-pdf-viewer-icon-next-page`      |
+ * | `--vaadin-pdf-viewer-icon-previous-page`  |
+ * | `--vaadin-pdf-viewer-padding`             |
+ * | `--vaadin-pdf-viewer-page-background`     |
+ * | `--vaadin-pdf-viewer-page-gap`            |
+ * | `--vaadin-pdf-viewer-page-shadow`         |
+ * | `--vaadin-pdf-viewer-text-color`          |
+ * | `--vaadin-pdf-viewer-toolbar-background`  |
+ * | `--vaadin-pdf-viewer-toolbar-gap`         |
+ * | `--vaadin-pdf-viewer-toolbar-padding`     |
+ *
+ * The `--vaadin-pdf-viewer-icon-*` properties take an image (e.g. an SVG data URL) used as a mask.
  *
  * See [Styling Components](https://vaadin.com/docs/latest/styling/styling-components) documentation.
  *
@@ -97,7 +119,31 @@ export interface PdfViewerEventMap extends HTMLElementEventMap, PdfViewerCustomE
  * @fires {CustomEvent} page-changed - Fired when the `page` property changes.
  * @fires {CustomEvent} page-count-changed - Fired when the `pageCount` property changes.
  */
-declare class PdfViewer extends PdfViewerMixin(FocusMixin(ElementMixin(HTMLElement))) {
+declare class PdfViewer extends PdfViewerMixin(
+  FocusMixin(ElementMixin(I18nMixin<typeof HTMLElement, PdfViewerI18n>(HTMLElement))),
+) {
+  /**
+   * The object used to localize this component. To change the default
+   * localization, set this to an object that provides all properties, or
+   * just the individual properties you want to change.
+   *
+   * When not set, defaults to `undefined`.
+   *
+   * The object has the following JSON structure and default values:
+   *
+   * ```
+   * {
+   *   // Tooltip of the previous page button.
+   *   previousPage: 'Previous page',
+   *   // Tooltip of the next page button.
+   *   nextPage: 'Next page',
+   *   // Error shown for a page that does not exist. {pageCount} is replaced with the page count.
+   *   pageError: 'Enter 1–{pageCount}'
+   * }
+   * ```
+   */
+  i18n: PdfViewerI18n | undefined;
+
   addEventListener<K extends keyof PdfViewerEventMap>(
     type: K,
     listener: (this: PdfViewer, ev: PdfViewerEventMap[K]) => void,

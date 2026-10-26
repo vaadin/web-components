@@ -34,6 +34,13 @@ describe('vaadin-pdf-viewer', () => {
       await nextFrame();
       await expect(viewer).dom.to.equalSnapshot();
     });
+
+    it('document', async () => {
+      viewer.src = fixtureUrl('multi-page.pdf');
+      await oneEvent(viewer, 'document-load');
+      await nextUpdate(viewer);
+      await expect(viewer).dom.to.equalSnapshot();
+    });
   });
 
   describe('shadow', () => {
