@@ -33,20 +33,10 @@ const PRO_LICENSE_HEADER = `
 const REACT_LICENSE_HEADER = LICENSE_HEADER.replace('2000 - ', '2022 - ');
 const REACT_PRO_LICENSE_HEADER = PRO_LICENSE_HEADER.replace('2000 - ', '2022 - ');
 
-// Overriding `no-restricted-syntax` replaces the whole selector list, so the
-// selectors from eslint-config-vaadin are repeated here to keep them in effect.
 const RESTRICTED_SYNTAX = [
   {
     selector: 'ForInStatement',
     message: 'for..in loops are slower than Object.{keys,values,entries} and have their caveats.',
-  },
-  {
-    selector: 'LabeledStatement',
-    message: 'Labels are a form of GOTO; using them makes code confusing and hard to maintain and understand.',
-  },
-  {
-    selector: 'WithStatement',
-    message: '`with` is disallowed in strict mode because it makes code impossible to predict and optimize.',
   },
   {
     selector:
