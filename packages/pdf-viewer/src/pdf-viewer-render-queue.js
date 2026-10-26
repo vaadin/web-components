@@ -96,7 +96,7 @@ export class PdfViewerRenderQueue {
   update(visible) {
     const pages = this.#pages;
     const first = visible[0].index;
-    const last = visible[visible.length - 1].index;
+    const last = visible.at(-1).index;
     const byVisibility = [...visible].sort((a, b) => b.height - a.height).map(({ index }) => pages[index]);
     const ahead = [];
     for (let distance = 1; distance <= this.#options.renderAhead; distance++) {
