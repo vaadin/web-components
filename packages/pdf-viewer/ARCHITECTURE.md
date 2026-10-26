@@ -25,6 +25,27 @@ how to generate them.
   when the server supports them.
 - The first document also loads the pdf.js library and its worker script.
 
+## Rendering
+
+- After load, each page gets a placeholder with the size of the first page. The other page sizes load in
+  batches of 10, and the layout updates once per frame. The pages fit the width of the first page to
+  the viewer.
+- The viewer renders the visible pages, the most visible first. Then it renders one page after and one
+  page before them.
+- Only one page renders at a time. A new canvas replaces the old one only when it is complete.
+- A page canvas has at most 2^24 pixels (about 16.8 million). Large pages render at a lower resolution.
+- All canvases together may use three times that (about 50.3 million pixels). Pages ahead of the view
+  render only while one more full canvas fits.
+- A page more than one page away from the view loses its canvas. A page outside the view also loses it
+  while the canvases use more than the total budget.
+- When the device pixel ratio changes, the viewer renders the visible pages again at the new ratio.
+- A new `src` resets `page` to 1, unless the application sets `page` in the same update.
+- `page` follows the page that takes up most of the view. A page set by the application stays current
+  until the user scrolls.
+- On resize, the viewer keeps the same point of the current page at the top of the view.
+- The viewer fires an internal `render-idle` event when an action has finished rendering. Tests wait for
+  it, and it is not part of the public API.
+
 ## Install size
 
 - The package depends on `pdfjs-dist`, which takes about 35 MB unpacked. Only the parts that the

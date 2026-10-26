@@ -22,6 +22,60 @@ snapshots["vaadin-pdf-viewer host error"] =
 snapshots["vaadin-pdf-viewer shadow default"] = 
 `<div part="loader">
 </div>
+<div
+  id="content"
+  part="content"
+>
+  <div id="pages">
+  </div>
+</div>
 `;
 /* end snapshot vaadin-pdf-viewer shadow default */
+
+snapshots["vaadin-pdf-viewer shadow document"] = 
+`<div part="loader">
+</div>
+<div
+  id="content"
+  part="content"
+>
+  <div id="pages">
+    <div
+      part="page"
+      role="group"
+    >
+      <canvas aria-hidden="true">
+      </canvas>
+    </div>
+    <div
+      part="page"
+      role="group"
+    >
+      <canvas aria-hidden="true">
+      </canvas>
+    </div>
+    <div
+      part="page"
+      role="group"
+    >
+    </div>
+    <div
+      part="page"
+      role="group"
+    >
+    </div>
+    <div
+      part="page"
+      role="group"
+    >
+    </div>
+    <div
+      part="page"
+      role="group"
+    >
+    </div>
+  </div>
+</div>
+`;
+/* end snapshot vaadin-pdf-viewer shadow document */
 

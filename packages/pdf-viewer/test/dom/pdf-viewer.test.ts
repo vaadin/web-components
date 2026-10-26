@@ -4,7 +4,7 @@ import '../enable-feature-flag.js';
 import '../../vaadin-pdf-viewer.js';
 import { resetUniqueId } from '@vaadin/component-base/src/unique-id-utils.js';
 import type { PdfViewer } from '../../vaadin-pdf-viewer.js';
-import { fixtureUrl } from '../helpers.js';
+import { fixtureUrl, nextRenderIdle } from '../helpers.js';
 
 describe('vaadin-pdf-viewer', () => {
   let viewer: PdfViewer;
@@ -39,6 +39,13 @@ describe('vaadin-pdf-viewer', () => {
   describe('shadow', () => {
     it('default', async () => {
       await expect(viewer).shadowDom.to.equalSnapshot();
+    });
+
+    it('document', async () => {
+      viewer.src = fixtureUrl('multi-page.pdf');
+      await nextRenderIdle(viewer);
+      // Sizes depend on the browser and the device pixel ratio
+      await expect(viewer).shadowDom.to.equalSnapshot({ ignoreAttributes: ['style', 'width', 'height'] });
     });
   });
 });

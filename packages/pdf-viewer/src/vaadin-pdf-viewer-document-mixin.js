@@ -61,7 +61,7 @@ export const PdfViewerDocumentMixin = (superClass) =>
       onLoadStart: () => {
         this.__loading = true;
       },
-      onLoad: (pdfDocument, title) => this.#onLoad(pdfDocument, title),
+      onLoad: (pdfDocument, details) => this.#onLoad(pdfDocument, details),
       onError: (error, reason) => this.#onError(error, reason),
       onUnload: () => this.#onUnload(),
     });
@@ -82,9 +82,32 @@ export const PdfViewerDocumentMixin = (superClass) =>
       }
     }
 
+    /**
+     * The loaded document, or null.
+     * @return {import('pdfjs-dist').PDFDocumentProxy | null}
+     * @protected
+     */
+    get _pdfDocument() {
+      return this.#pdfDocument;
+    }
+
+    /**
+     * Called when a document has loaded, before `document-load` is fired.
+     * @param {import('pdfjs-dist').PDFPageProxy} _firstPage
+     * @protected
+     */
+    _documentLoaded(_firstPage) {}
+
+    /**
+     * Called when the document is unloaded, e.g. before another one loads.
+     * @protected
+     */
+    _documentUnloaded() {}
+
     /** @private */
-    #onLoad(pdfDocument, title) {
+    #onLoad(pdfDocument, { title, firstPage }) {
       this.#pdfDocument = pdfDocument;
+      this._documentLoaded(firstPage);
       this._setPageCount(pdfDocument.numPages);
       this.__loading = false;
       this.dispatchEvent(new CustomEvent('document-load', { detail: { pageCount: pdfDocument.numPages, title } }));
@@ -103,6 +126,7 @@ export const PdfViewerDocumentMixin = (superClass) =>
       if (this.#pdfDocument) {
         this.#pdfDocument = null;
         this._setPageCount(0);
+        this._documentUnloaded();
       }
     }
   };

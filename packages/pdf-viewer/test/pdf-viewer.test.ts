@@ -4,10 +4,14 @@ import sinon from 'sinon';
 import './enable-feature-flag.js';
 import '../vaadin-pdf-viewer.js';
 import type { PdfViewer } from '../vaadin-pdf-viewer.js';
-import { fixtureUrl, loadDocument } from './helpers.js';
+import { fixtureUrl, loadDocument, nextRenderIdle } from './helpers.js';
 
 describe('vaadin-pdf-viewer', () => {
   let viewer: PdfViewer;
+
+  function getPages() {
+    return [...viewer.shadowRoot!.querySelectorAll<HTMLElement>('[part~="page"]')];
+  }
 
   beforeEach(async () => {
     viewer = fixtureSync('<vaadin-pdf-viewer></vaadin-pdf-viewer>');
@@ -59,7 +63,9 @@ describe('vaadin-pdf-viewer', () => {
 
     it('should toggle loading attribute while the document loads', async () => {
       viewer.src = fixtureUrl('multi-page.pdf');
-      await nextFrame();
+      // The first update starts loading, the second one reflects the state.
+      await nextUpdate(viewer);
+      await nextUpdate(viewer);
       expect(viewer.hasAttribute('loading')).to.be.true;
       await oneEvent(viewer, 'document-load');
       expect(viewer.hasAttribute('loading')).to.be.false;
@@ -70,16 +76,24 @@ describe('vaadin-pdf-viewer', () => {
       viewer.src = null;
       await nextFrame();
       expect(viewer.pageCount).to.equal(0);
+      expect(getPages()).to.be.empty;
     });
 
-    it('should only load the last document when src changes during loading', async () => {
+    it('should only show the last document when src changes during loading', async () => {
       const spy = sinon.spy();
       viewer.addEventListener('document-load', spy);
       viewer.src = fixtureUrl('multi-page.pdf');
-      await nextFrame();
-      await loadDocument(viewer, 'standard-font.pdf');
+      // Change src right after the update that starts loading
+      await nextUpdate(viewer);
+      viewer.src = fixtureUrl('standard-font.pdf');
+      await nextRenderIdle(viewer);
       expect(spy).to.be.calledOnce;
       expect(viewer.pageCount).to.equal(1);
+      const pages = getPages();
+      expect(pages).to.have.lengthOf(1);
+      // US Letter (standard-font.pdf), not A4 (multi-page.pdf)
+      const { width, height } = pages[0].getBoundingClientRect();
+      expect(height / width).to.be.closeTo(792 / 612, 0.01);
     });
   });
 
