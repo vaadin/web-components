@@ -9,4 +9,7 @@
  */
 export declare function issueWarning(warning: string): void;
 
+/**
+ * Clears all issued warnings. Only intended for testing purposes.
+ */
 export declare function clearWarnings(): void;
