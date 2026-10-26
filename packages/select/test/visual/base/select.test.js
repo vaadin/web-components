@@ -115,22 +115,18 @@ describe('select', () => {
     });
 
     it('rich content', async () => {
-      // Replaced elements such as images have no baseline
-      const icon = '<svg width="16" height="16"><circle cx="8" cy="8" r="8" /></svg>';
       element.renderer = (root) => {
+        // Replaced elements such as images have no baseline
         root.innerHTML = `
           <vaadin-list-box>
-            <vaadin-item value="icon">${icon}</vaadin-item>
-            <vaadin-item value="icon-text">${icon} Icon and text</vaadin-item>
+            <vaadin-item value="rich">
+              <svg width="16" height="16"><circle cx="8" cy="8" r="8" /></svg>
+              Icon and text
+            </vaadin-item>
           </vaadin-list-box>
         `;
       };
-      const select = document.createElement('vaadin-select');
-      select.renderer = element.renderer;
-      select.style.marginInlineStart = '10px';
-      div.appendChild(select);
-      element.value = 'icon';
-      select.value = 'icon-text';
+      element.value = 'rich';
       await visualDiff(div, 'value-rich-content');
     });
 
