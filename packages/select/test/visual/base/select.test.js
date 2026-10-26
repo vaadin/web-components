@@ -114,6 +114,26 @@ describe('select', () => {
       await visualDiff(div, 'value-multiline');
     });
 
+    it('rich content', async () => {
+      // Replaced elements such as images have no baseline
+      const icon = '<svg width="16" height="16"><circle cx="8" cy="8" r="8" /></svg>';
+      element.renderer = (root) => {
+        root.innerHTML = `
+          <vaadin-list-box>
+            <vaadin-item value="icon">${icon}</vaadin-item>
+            <vaadin-item value="icon-text">${icon} Icon and text</vaadin-item>
+          </vaadin-list-box>
+        `;
+      };
+      const select = document.createElement('vaadin-select');
+      select.renderer = element.renderer;
+      select.style.marginInlineStart = '10px';
+      div.appendChild(select);
+      element.value = 'icon';
+      select.value = 'icon-text';
+      await visualDiff(div, 'value-rich-content');
+    });
+
     it('label aside', async () => {
       element.setAttribute('theme', 'label-aside');
       element.label = 'Label';
