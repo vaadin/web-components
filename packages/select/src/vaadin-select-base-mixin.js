@@ -515,6 +515,7 @@ export const SelectBaseMixin = (superClass) =>
      */
     __appendValueItemElement(itemElement, parent) {
       parent.appendChild(itemElement);
+      itemElement.removeAttribute('id');
       itemElement.removeAttribute('tabindex');
       itemElement.removeAttribute('selected');
       itemElement.removeAttribute('aria-selected');
