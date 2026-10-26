@@ -82,12 +82,6 @@ export const PdfViewerDocumentMixin = (superClass) =>
       }
     }
 
-    /**
-     * Called when the document is unloaded, e.g. before another one loads.
-     * @protected
-     */
-    _documentUnloaded() {}
-
     /** @private */
     #onLoad(pdfDocument, title) {
       this.#pdfDocument = pdfDocument;
@@ -109,7 +103,6 @@ export const PdfViewerDocumentMixin = (superClass) =>
       if (this.#pdfDocument) {
         this.#pdfDocument = null;
         this._setPageCount(0);
-        this._documentUnloaded();
       }
     }
   };

@@ -25,9 +25,4 @@ export declare class PdfViewerDocumentMixinClass {
    * is loaded.
    */
   readonly pageCount: number;
-
-  /**
-   * Called when the document is unloaded, e.g. before another one loads.
-   */
-  protected _documentUnloaded(): void;
 }
