@@ -255,6 +255,18 @@ export const GridProEditColumnMixin = (superClass) =>
     }
 
     /** @private */
+    __setEditorAccessibleName(editor) {
+      if (this.editorType === 'custom') {
+        return;
+      }
+
+      const name = this._headerCell?._content.textContent.trim();
+      if (name) {
+        editor.accessibleName = name;
+      }
+    }
+
+    /** @private */
     _setEditorValue(editor, value) {
       const path = this.editorType === 'checkbox' ? 'checked' : this.editorValuePath;
       // FIXME(yuriy): Required for the flow counterpart as it is passing the string value to webcomponent
@@ -278,6 +290,7 @@ export const GridProEditColumnMixin = (superClass) =>
       editor.addEventListener('focusin', this._grid.__boundEditorFocusIn);
       this._setEditorOptions(editor);
       this._setEditorValue(editor, get(this.path, model.item));
+      this.__setEditorAccessibleName(editor);
       editor._grid = this._grid;
 
       if (editor.updateComplete) {
