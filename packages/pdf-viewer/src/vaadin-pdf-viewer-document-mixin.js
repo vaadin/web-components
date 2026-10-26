@@ -96,13 +96,17 @@ export const PdfViewerDocumentMixin = (superClass) =>
      * @param {import('pdfjs-dist').PDFPageProxy} _firstPage
      * @protected
      */
-    _documentLoaded(_firstPage) {}
+    _documentLoaded(_firstPage) {
+      // To be implemented.
+    }
 
     /**
      * Called when the document is unloaded, e.g. before another one loads.
      * @protected
      */
-    _documentUnloaded() {}
+    _documentUnloaded() {
+      // To be implemented.
+    }
 
     /** @private */
     #onLoad(pdfDocument, { title, firstPage }) {
