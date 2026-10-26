@@ -1,6 +1,6 @@
 import { expect } from '@vaadin/chai-plugins';
 import { sendKeys } from '@vaadin/test-runner-commands';
-import { fixtureSync, nextFrame, nextRender, nextUpdate, oneEvent } from '@vaadin/testing-helpers';
+import { aTimeout, fixtureSync, nextFrame, nextRender, nextUpdate, oneEvent } from '@vaadin/testing-helpers';
 import sinon from 'sinon';
 import './enable-feature-flag.js';
 import '../vaadin-pdf-viewer.js';
@@ -39,7 +39,10 @@ describe('keyboard', () => {
     it('should scroll the pages with the arrow keys', async () => {
       getContent().focus();
       const scrolled = oneEvent(getContent(), 'scroll');
-      await sendKeys({ press: 'ArrowDown' });
+      // WebKit stops the scroll animation on keyup, so hold the key
+      await sendKeys({ down: 'ArrowDown' });
+      await aTimeout(50);
+      await sendKeys({ up: 'ArrowDown' });
       await scrolled;
       expect(getContent().scrollTop).to.be.greaterThan(0);
     });
@@ -48,7 +51,6 @@ describe('keyboard', () => {
       getContent().focus();
       await sendKeys({ press: 'PageDown' });
       await scrollSettled(getContent());
-      // Browsers scroll by about a page; the viewer does the same in Safari
       expect(getContent().scrollTop).to.be.greaterThan(getContent().clientHeight * 0.5);
     });
 
@@ -58,17 +60,6 @@ describe('keyboard', () => {
       await scrollSettled(getContent());
       const content = getContent();
       expect(content.scrollTop).to.be.closeTo(content.scrollHeight - content.clientHeight, 2);
-    });
-
-    it('should leave Shift+ArrowDown, which extends a text selection, to the browser', async () => {
-      const spy = sinon.spy();
-      document.addEventListener('keydown', spy);
-      getContent().focus();
-      await sendKeys({ press: 'Shift+ArrowDown' });
-      document.removeEventListener('keydown', spy);
-      // WebKit scrolls the pages itself when there is no selection to extend
-      const event = spy.args.map(([e]) => e).find((e) => e.key === 'ArrowDown');
-      expect(event.defaultPrevented).to.be.false;
     });
 
     it('should go to the last page with Ctrl+End', async () => {

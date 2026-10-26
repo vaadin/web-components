@@ -11,8 +11,7 @@
 import type { Constructor } from '@open-wc/dedupe-mixin';
 
 /**
- * A mixin that handles the keyboard shortcuts of the viewer, and scrolls
- * the pages with the keyboard in Safari.
+ * A mixin that handles the keyboard shortcuts of the viewer.
  */
 export declare function PdfViewerKeyboardMixin<T extends Constructor<HTMLElement>>(
   base: T,
