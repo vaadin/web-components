@@ -21,7 +21,6 @@ export class HeaderController extends SlotChildObserveController {
    */
   setHeader(header) {
     this.header = header;
-
     this.updateDefaultNode(this.defaultNode);
   }
 
@@ -32,7 +31,6 @@ export class HeaderController extends SlotChildObserveController {
    */
   setLevel(level) {
     this.level = level;
-
     this.updateDefaultNode(this.defaultNode);
   }
 
@@ -75,20 +73,14 @@ export class HeaderController extends SlotChildObserveController {
    */
   _notifyChange(node) {
     super._notifyChange(node);
-
-    this.#updateHostLabel();
+    this.#updateAriaLabel();
   }
 
-  /**
-   * Label the host by the header node, if any. Fall back to
-   * a generic accessible name when there is no header.
-   */
-  #updateHostLabel() {
-    const { host } = this;
+  #updateAriaLabel() {
     const headerNode = this.getSlotChild();
     const hasHeader = hasNodeContent(headerNode);
 
-    setOrRemoveAttribute(host, 'aria-labelledby', hasHeader ? headerNode.id : null);
-    setOrRemoveAttribute(host, 'aria-label', hasHeader ? null : 'confirmation');
+    setOrRemoveAttribute(this.host, 'aria-labelledby', hasHeader ? headerNode.id : null);
+    setOrRemoveAttribute(this.host, 'aria-label', hasHeader ? null : 'confirmation');
   }
 }
