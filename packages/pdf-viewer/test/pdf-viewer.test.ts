@@ -240,4 +240,18 @@ describe('vaadin-pdf-viewer', () => {
       expect(getErrorMessage().textContent!.trim()).to.equal('Kunde inte ladda dokumentet.');
     });
   });
+
+  describe('security', () => {
+    afterEach(() => {
+      sinon.restore();
+    });
+
+    it('should not run the JavaScript of a document', async () => {
+      const alert = sinon.stub(window, 'alert');
+      viewer.src = fixtureUrl('javascript.pdf');
+      await nextRenderIdle(viewer);
+      expect(getPages()[0].querySelector('canvas')).to.be.ok;
+      expect(alert).to.be.not.called;
+    });
+  });
 });
