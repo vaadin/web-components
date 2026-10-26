@@ -1,0 +1,44 @@
+import { expect } from '@vaadin/chai-plugins';
+import { fixtureSync, nextFrame, nextRender, nextUpdate, oneEvent } from '@vaadin/testing-helpers';
+import '../enable-feature-flag.js';
+import '../../vaadin-pdf-viewer.js';
+import { resetUniqueId } from '@vaadin/component-base/src/unique-id-utils.js';
+import type { PdfViewer } from '../../vaadin-pdf-viewer.js';
+import { fixtureUrl } from '../helpers.js';
+
+describe('vaadin-pdf-viewer', () => {
+  let viewer: PdfViewer;
+
+  beforeEach(async () => {
+    resetUniqueId();
+    viewer = fixtureSync('<vaadin-pdf-viewer></vaadin-pdf-viewer>');
+    await nextRender();
+  });
+
+  describe('host', () => {
+    it('default', async () => {
+      await expect(viewer).dom.to.equalSnapshot();
+    });
+
+    it('loading', async () => {
+      viewer.src = fixtureUrl('multi-page.pdf');
+      // The first update starts loading, the second one reflects the state.
+      await nextUpdate(viewer);
+      await nextUpdate(viewer);
+      await expect(viewer).dom.to.equalSnapshot();
+    });
+
+    it('error', async () => {
+      viewer.src = fixtureUrl('invalid.pdf');
+      await oneEvent(viewer, 'document-error');
+      await nextFrame();
+      await expect(viewer).dom.to.equalSnapshot();
+    });
+  });
+
+  describe('shadow', () => {
+    it('default', async () => {
+      await expect(viewer).shadowDom.to.equalSnapshot();
+    });
+  });
+});
