@@ -3,7 +3,7 @@
  * Copyright (c) 2018 - 2026 Vaadin Ltd.
  * This program is available under Apache License Version 2.0, available at https://vaadin.com/license/
  */
-import { setOrRemoveAttribute } from '@vaadin/component-base/src/dom-utils.js';
+import { hasNodeContent, setOrRemoveAttribute } from '@vaadin/component-base/src/dom-utils.js';
 import { SlotChildObserveController } from '@vaadin/component-base/src/slot-child-observe-controller.js';
 
 /**
@@ -86,7 +86,7 @@ export class HeaderController extends SlotChildObserveController {
   #updateHostLabel() {
     const { host } = this;
     const headerNode = this.getSlotChild();
-    const hasHeader = !!headerNode && (headerNode !== this.defaultNode || !!this.header);
+    const hasHeader = hasNodeContent(headerNode);
 
     setOrRemoveAttribute(host, 'aria-labelledby', hasHeader ? headerNode.id : null);
     setOrRemoveAttribute(host, 'aria-label', hasHeader ? null : 'confirmation');

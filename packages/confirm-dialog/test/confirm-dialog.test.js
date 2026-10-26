@@ -140,6 +140,15 @@ describe('vaadin-confirm-dialog', () => {
         expect(confirm.hasAttribute('aria-labelledby')).to.be.false;
         expect(confirm.ariaLabel).to.equal('confirmation');
       });
+
+      it('should restore aria-label fallback when header is whitespace only', async () => {
+        confirm.header = 'Warning';
+        await nextFrame();
+        confirm.header = '  ';
+        await nextFrame();
+        expect(confirm.hasAttribute('aria-labelledby')).to.be.false;
+        expect(confirm.ariaLabel).to.equal('confirmation');
+      });
     });
 
     describe('property', () => {
