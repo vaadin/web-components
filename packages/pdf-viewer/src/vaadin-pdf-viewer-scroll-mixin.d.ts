@@ -24,8 +24,10 @@ export declare class PdfViewerScrollMixinClass {
    * The current page, starting from 1. The viewer updates it while the
    * user scrolls, to the page that takes up most of the visible area.
    * Setting it to another page scrolls to the start of that page.
-   * Setting it to the current page does not scroll. A new `src` resets
-   * it to 1, unless `page` is set in the same update.
+   * Setting it to the current page does not scroll. A value that is not
+   * a page of the document logs a warning and does not scroll. A set
+   * value stays as it is until the user scrolls. A new `src` resets it
+   * to 1, unless `page` is set in the same update.
    */
   page: number;
 }

@@ -137,6 +137,7 @@ export class PdfViewerPage {
     try {
       await renderTask.promise;
     } catch (error) {
+      this.#freeCanvas(canvas);
       if (this.renderTask === renderTask) {
         this.renderTask = null;
       }
@@ -145,8 +146,7 @@ export class PdfViewerPage {
 
     // The page was released or rendered again meanwhile, drop this result.
     if (this.renderTask !== renderTask) {
-      canvas.width = 0;
-      canvas.height = 0;
+      this.#freeCanvas(canvas);
       return;
     }
     this.renderTask = null;

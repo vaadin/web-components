@@ -465,6 +465,14 @@ describe('pages', () => {
       expect(warnStub.firstCall.args[0]).to.include('Failed to render page 1');
       expect(getRenderedPageNumbers()).to.be.empty;
     });
+
+    it('should free the canvas of a page that fails to render', async () => {
+      await loadAndRender(createPdfUrl(1));
+      const index = getContextStub.returnValues.indexOf(null);
+      const canvas: HTMLCanvasElement = getContextStub.thisValues[index];
+      expect(canvas.width).to.equal(0);
+      expect(canvas.height).to.equal(0);
+    });
   });
 
   describe('page set before loading', () => {
