@@ -619,5 +619,27 @@ describe('pages', () => {
       expect(viewer.page).to.equal(3);
       expect(getPageTop(3)).to.be.closeTo(getPaddingTop(), 1);
     });
+
+    it('should size a page that gets its own size while the viewer is moved in the DOM', async () => {
+      await createViewer();
+      const requestAnimationFrame = window.requestAnimationFrame.bind(window);
+      // Move the viewer after each frame request, before the frame runs
+      const stub = sinon.stub(window, 'requestAnimationFrame').callsFake((callback) => {
+        queueMicrotask(() => viewer.parentElement!.appendChild(viewer));
+        return requestAnimationFrame(callback);
+      });
+      try {
+        await loadAndRender(
+          createPdf([
+            { content: '', mediaBox: [0, 0, 612, 792] },
+            { content: '', mediaBox: [0, 0, 792, 612] },
+          ]),
+        );
+      } finally {
+        stub.restore();
+      }
+      const landscape = getPages()[1].getBoundingClientRect();
+      expect(landscape.width / landscape.height).to.be.closeTo(792 / 612, 0.01);
+    });
   });
 });

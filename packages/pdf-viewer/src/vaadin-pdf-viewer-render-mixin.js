@@ -62,8 +62,6 @@ export const PdfViewerRenderMixin = (superClass) =>
       super.disconnectedCallback();
 
       this.#unwatchPixelRatio();
-      cancelAnimationFrame(this.#pageSizesFrame);
-      this.#pageSizesFrame = 0;
     }
 
     /**
