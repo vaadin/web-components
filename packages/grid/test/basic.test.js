@@ -49,7 +49,7 @@ describe('basic features', () => {
 
     const rows = getPhysicalItems(grid);
     expect(rows.length).to.be.greaterThan(initialRowCount);
-    const newRowCell = rows[rows.length - 1].firstElementChild;
+    const newRowCell = rows.at(-1).firstElementChild;
     expect(newRowCell.getAttribute('part')).to.contain('first-column-cell');
     expect(newRowCell.getAttribute('part')).to.contain('last-column-cell');
   });

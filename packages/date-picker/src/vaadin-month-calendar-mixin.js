@@ -289,7 +289,7 @@ export const MonthCalendarMixin = (superClass) =>
         if (i % 7 === 0) {
           acc.push([]);
         }
-        acc[acc.length - 1].push(day);
+        acc.at(-1).push(day);
         return acc;
       }, []);
     }

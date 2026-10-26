@@ -433,7 +433,7 @@ class Dashboard extends DashboardLayoutMixin(
     wrapper.editable = this.editable;
     wrapper.dragging = this.__widgetReorderController.draggedItem === item;
     wrapper['first-child'] = item === getItemsArrayOfItem(item, this.items)[0];
-    wrapper['last-child'] = item === getItemsArrayOfItem(item, this.items).slice(-1)[0];
+    wrapper['last-child'] = item === getItemsArrayOfItem(item, this.items).at(-1);
     wrapper.i18n = this.__effectiveI18n;
   }
 

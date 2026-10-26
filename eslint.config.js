@@ -5,6 +5,7 @@ import typescript from 'eslint-config-vaadin/typescript';
 import html from 'eslint-plugin-html';
 import noOnlyTests from 'eslint-plugin-no-only-tests';
 import simpleImportSort from 'eslint-plugin-simple-import-sort';
+import unicorn from 'eslint-plugin-unicorn';
 import globals from 'globals';
 import licenseHeader from './custom-rules/eslint/license-header.js';
 
@@ -98,6 +99,7 @@ export default [
     plugins: {
       'no-only-tests': noOnlyTests,
       'simple-import-sort': simpleImportSort,
+      unicorn,
       'custom-rules': {
         rules: {
           'license-header': licenseHeader,
@@ -139,6 +141,7 @@ export default [
           ],
         },
       ],
+      'unicorn/prefer-at': 'error',
       'arrow-body-style': 'off',
       'consistent-return': 'off',
       'func-names': 'off',

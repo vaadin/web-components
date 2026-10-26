@@ -702,7 +702,7 @@ async function selectAndHoverPoints(chart) {
  */
 async function hideSeriesAndPageLegend(chart) {
   const { series, legend } = chart.configuration;
-  series[series.length - 1].setVisible(false, true);
+  series.at(-1).setVisible(false, true);
   legend.scroll(1, false);
   await nextFrame();
 }
