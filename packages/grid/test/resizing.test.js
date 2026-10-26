@@ -69,10 +69,7 @@ describe('resizing', () => {
     scrollToEnd(grid);
 
     const bodyRows = getRows(grid.$.items);
-    expect(bodyRows[bodyRows.length - 1].getBoundingClientRect().bottom).to.be.closeTo(
-      grid.$.footer.getBoundingClientRect().top,
-      1,
-    );
+    expect(bodyRows.at(-1).getBoundingClientRect().bottom).to.be.closeTo(grid.$.footer.getBoundingClientRect().top, 1);
   });
 
   it('should update details row height', () => {

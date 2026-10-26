@@ -447,7 +447,7 @@ export const ScrollMixin = (superClass) =>
         return;
       }
 
-      const columnsRow = this._columnTree[this._columnTree.length - 1].slice(0);
+      const columnsRow = this._columnTree.at(-1).slice(0);
       columnsRow.sort((a, b) => {
         return a._order - b._order;
       });

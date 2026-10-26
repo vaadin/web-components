@@ -115,7 +115,7 @@ export class FieldHighlighterController {
       this.redraw();
 
       // Make user active
-      this.user = users[users.length - 1] || null;
+      this.user = users.at(-1) || null;
     }
   }
 
@@ -134,7 +134,7 @@ export class FieldHighlighterController {
 
         // Change or remove active user
         if (this.users.length > 0) {
-          this.user = this.users[this.users.length - 1];
+          this.user = this.users.at(-1);
         } else {
           this.user = null;
         }

@@ -303,7 +303,7 @@ describe('items interactions', () => {
       await openSubMenu(rootMenu);
       const items = getMenuItems(subMenu);
       await sendKeys({ press: 'ArrowUp' });
-      expect(getDeepActiveElement()).to.equal(items[items.length - 1]);
+      expect(getDeepActiveElement()).to.equal(items.at(-1));
     });
 
     it('should focus first item after re-opening when using components', async () => {

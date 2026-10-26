@@ -659,8 +659,8 @@ describe('edit column', () => {
         const cells = getRowCells(getRows(grid.$.items)[0]);
 
         // Verify we are testing correct cells
-        expect(getCellContent(cells[cells.length - 2]).textContent).to.equal('a6');
-        expect(getCellContent(cells[cells.length - 1]).textContent).to.equal('a7');
+        expect(getCellContent(cells.at(-2)).textContent).to.equal('a6');
+        expect(getCellContent(cells.at(-1)).textContent).to.equal('a7');
 
         expect(hasEditablePart(0, cells.length - 2)).to.be.false;
         expect(hasEditablePart(0, cells.length - 1)).to.be.true;

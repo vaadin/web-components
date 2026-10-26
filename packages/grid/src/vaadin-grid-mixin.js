@@ -332,13 +332,13 @@ export const GridMixin = (superClass) =>
       for (let i = 0; i < count; i++) {
         const row = this.__createBodyRow();
         if (this._columnTree) {
-          this.__initRow(row, this._columnTree[this._columnTree.length - 1], 'body', true);
+          this.__initRow(row, this._columnTree.at(-1), 'body', true);
         }
         rows.push(row);
       }
 
       if (this._columnTree) {
-        this._columnTree[this._columnTree.length - 1].forEach((c) => {
+        this._columnTree.at(-1).forEach((c) => {
           if (c.isConnected && c._cells) {
             c._cells = [...c._cells];
           }
@@ -570,14 +570,14 @@ export const GridMixin = (superClass) =>
       this._debouncerHiddenChanged?.cancel();
 
       iterateChildren(this.$.items, (row) => {
-        this.__initRow(row, columnTree[columnTree.length - 1], 'body', true);
+        this.__initRow(row, columnTree.at(-1), 'body', true);
         this.__updateRow(row);
       });
 
       this.__renderHeaderFooter();
 
       // Sizer rows
-      this.__initRow(this.$.sizer, columnTree[columnTree.length - 1]);
+      this.__initRow(this.$.sizer, columnTree.at(-1));
 
       this.__updateHorizontalScrollPosition();
       this.__a11yUpdateHeaderRows();

@@ -228,13 +228,13 @@ describe('menu-bar with tooltip', () => {
       });
 
       it('should not show tooltip on overflow button mouseover', () => {
-        mouseover(buttons[buttons.length - 1]);
+        mouseover(buttons.at(-1));
         expect(tooltip.opened).to.be.false;
       });
 
       it('should close tooltip on overflow button mouseover', () => {
         mouseover(buttons[0]);
-        mouseover(buttons[buttons.length - 1]);
+        mouseover(buttons.at(-1));
         expect(tooltip.opened).to.be.false;
       });
 

@@ -748,7 +748,7 @@ describe('message-list', () => {
       await nextRender();
 
       // Navigating past the last message wraps around to the first one
-      const lastMessage = messageList._messages[messageList._messages.length - 1];
+      const lastMessage = messageList._messages.at(-1);
       lastMessage.focus();
       arrowDown(lastMessage);
       expect(messageList._messages[0].hasAttribute('focused')).to.be.true;
@@ -867,7 +867,7 @@ describe('message-list', () => {
       const button = fixtureSync('<button>Send</button>');
       messageList._usersTyping = users;
       await nextRender();
-      const lastMessage = messageList._messages[messageList._messages.length - 1];
+      const lastMessage = messageList._messages.at(-1);
       lastMessage.focus();
       await sendKeys({ press: 'Tab' });
       expect(document.activeElement).to.equal(button);

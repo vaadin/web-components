@@ -319,7 +319,7 @@ describe('manageFocus', () => {
     it('should wrap focus to the first element on Tab from the last element', async () => {
       await open();
       const tabbables = getTabbableElements(overlay.$.overlay);
-      const last = tabbables[tabbables.length - 1];
+      const last = tabbables.at(-1);
       last.focus();
       tabKeyDown(last);
       expect(isElementFocused(tabbables[0])).to.be.true;
@@ -347,7 +347,7 @@ describe('manageFocus', () => {
     it('should not wrap focus to the first element on Tab from the last element', async () => {
       await open();
       const tabbables = getTabbableElements(overlay.$.overlay);
-      const last = tabbables[tabbables.length - 1];
+      const last = tabbables.at(-1);
       last.focus();
       tabKeyDown(last);
       expect(isElementFocused(tabbables[0])).to.be.false;
