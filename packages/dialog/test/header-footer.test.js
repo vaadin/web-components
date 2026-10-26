@@ -65,6 +65,24 @@ describe('header/footer feature', () => {
       expect(dialog.querySelector('[slot=title]')).to.not.exist;
     });
 
+    it('should restore title element if custom title element is removed', async () => {
+      dialog.headerTitle = HEADER_TITLE;
+      dialog.opened = true;
+      await nextRender();
+
+      const title = document.createElement('h2');
+      title.slot = 'title';
+      dialog.appendChild(title);
+      await nextRender();
+
+      title.remove();
+      await nextRender();
+
+      const restored = dialog.querySelector('[slot=title]');
+      expect(restored.textContent).to.equal(HEADER_TITLE);
+      expect(dialog.getAttribute('aria-labelledby')).to.equal(restored.id);
+    });
+
     it('should not have [has-title] attribute on overlay element if header-title is not set', async () => {
       dialog.opened = true;
       await nextRender();
@@ -109,25 +127,62 @@ describe('header/footer feature', () => {
     });
 
     describe('accessibility', () => {
-      it('should set aria-label to dialog if header-title is set', async () => {
-        expect(dialog.hasAttribute('aria-label')).to.be.false;
+      it('should set aria-labelledby to the title element if header-title is set', async () => {
+        expect(dialog.hasAttribute('aria-labelledby')).to.be.false;
 
         dialog.headerTitle = HEADER_TITLE;
         dialog.opened = true;
         await nextRender();
 
-        expect(dialog.hasAttribute('aria-label')).to.be.true;
-        expect(dialog.getAttribute('aria-label')).to.equal(HEADER_TITLE);
+        const title = dialog.querySelector('[slot=title]');
+        expect(title.id).to.be.ok;
+        expect(dialog.getAttribute('aria-labelledby')).to.equal(title.id);
+        expect(dialog.hasAttribute('aria-label')).to.be.false;
       });
 
-      it('should remove aria-label if header-title is unset', async () => {
+      it('should remove aria-labelledby if header-title is unset', async () => {
         dialog.headerTitle = HEADER_TITLE;
         dialog.opened = true;
         await nextRender();
 
         dialog.headerTitle = null;
-        await nextUpdate(dialog);
-        expect(dialog.hasAttribute('aria-label')).to.be.false;
+        await nextRender();
+        expect(dialog.hasAttribute('aria-labelledby')).to.be.false;
+      });
+
+      it('should set aria-labelledby to a custom slotted title element', async () => {
+        const title = document.createElement('h2');
+        title.slot = 'title';
+        dialog.appendChild(title);
+        await nextRender();
+
+        expect(title.id).to.be.ok;
+        expect(dialog.getAttribute('aria-labelledby')).to.equal(title.id);
+      });
+
+      it('should set aria-labelledby to a custom title element that replaces header-title', async () => {
+        dialog.headerTitle = HEADER_TITLE;
+        dialog.opened = true;
+        await nextRender();
+
+        const title = document.createElement('h2');
+        title.slot = 'title';
+        dialog.appendChild(title);
+        await nextRender();
+
+        expect(dialog.querySelectorAll('[slot=title]').length).to.equal(1);
+        expect(dialog.getAttribute('aria-labelledby')).to.equal(title.id);
+      });
+
+      it('should not override the id of a custom slotted title element', async () => {
+        const title = document.createElement('h2');
+        title.slot = 'title';
+        title.id = 'custom-title';
+        dialog.appendChild(title);
+        await nextRender();
+
+        expect(title.id).to.equal('custom-title');
+        expect(dialog.getAttribute('aria-labelledby')).to.equal('custom-title');
       });
 
       it('should update aria-level when headingLevel changes', async () => {
@@ -548,6 +603,52 @@ describe('renderer set before attach', () => {
     document.body.appendChild(dialog);
     await nextRender();
     expect(spy.calledOnce).to.be.true;
+  });
+});
+
+describe('slotted title', () => {
+  let dialog, overlay;
+
+  beforeEach(async () => {
+    dialog = fixtureSync('<vaadin-dialog></vaadin-dialog>');
+    await nextRender();
+    overlay = dialog.$.overlay;
+  });
+
+  afterEach(async () => {
+    dialog.opened = false;
+    await nextRender();
+  });
+
+  it('should toggle [has-title] attribute when title element is slotted and removed', async () => {
+    const title = document.createElement('h2');
+    title.setAttribute('slot', 'title');
+    title.textContent = 'Title';
+    dialog.appendChild(title);
+
+    dialog.opened = true;
+    await nextRender();
+
+    expect(dialog.hasAttribute('has-title')).to.be.true;
+    expect(overlay.hasAttribute('has-title')).to.be.true;
+
+    title.remove();
+    await nextRender();
+
+    expect(dialog.hasAttribute('has-title')).to.be.false;
+    expect(overlay.hasAttribute('has-title')).to.be.false;
+  });
+
+  it('[part=header] should be displayed if title element is slotted', async () => {
+    const title = document.createElement('h2');
+    title.setAttribute('slot', 'title');
+    title.textContent = 'Title';
+    dialog.appendChild(title);
+
+    dialog.opened = true;
+    await nextRender();
+
+    expect(getComputedStyle(overlay.shadowRoot.querySelector('[part=header]')).display).to.not.be.equal('none');
   });
 });
 
