@@ -66,22 +66,14 @@ export const PdfViewerDocumentMixin = (superClass) =>
       onUnload: () => this.#onUnload(),
     });
 
-    /**
-     * Override method from `LitElement` to add the controller that loads the document.
-     * @protected
-     * @override
-     */
+    /** @protected */
     firstUpdated() {
       super.firstUpdated();
 
       this.addController(this.#documentController);
     }
 
-    /**
-     * Override method from `LitElement` to load the document.
-     * @protected
-     * @override
-     */
+    /** @protected */
     updated(props) {
       super.updated(props);
 
