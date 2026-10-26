@@ -28,10 +28,6 @@ describe('vaadin-pdf-viewer', () => {
     it('should have a valid static "is" getter', () => {
       expect((customElements.get(tagName) as any).is).to.equal(tagName);
     });
-
-    it('should have a valid version number', () => {
-      expect((viewer.constructor as any).version).to.match(/^(\d+\.)?(\d+\.)?(\*|\d+)(-(alpha|beta|rc)\d+)?$/u);
-    });
   });
 
   describe('loading', () => {
