@@ -381,12 +381,9 @@ describe('side-nav-item', () => {
     it('should click the anchor on content click when non-empty path is set', async () => {
       item.path = '/foo';
       await nextRender();
-      const spy = sinon.spy();
       // prevent navigating away from the test page
-      anchor.addEventListener('click', (e) => {
-        e.preventDefault();
-        spy();
-      });
+      const spy = sinon.stub().callsFake((e) => e.preventDefault());
+      anchor.addEventListener('click', spy);
       item.shadowRoot.querySelector('[part="content"]').click();
       expect(spy).to.be.calledOnce;
     });
@@ -394,12 +391,9 @@ describe('side-nav-item', () => {
     it('should click the anchor on content click when path is empty string', async () => {
       item.path = '';
       await nextRender();
-      const spy = sinon.spy();
       // prevent navigating away from the test page
-      anchor.addEventListener('click', (e) => {
-        e.preventDefault();
-        spy();
-      });
+      const spy = sinon.stub().callsFake((e) => e.preventDefault());
+      anchor.addEventListener('click', spy);
       item.shadowRoot.querySelector('[part="content"]').click();
       expect(spy).to.be.calledOnce;
     });
