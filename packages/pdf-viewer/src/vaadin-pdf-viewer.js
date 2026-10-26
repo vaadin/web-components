@@ -92,8 +92,10 @@ class PdfViewer extends PdfViewerMixin(ElementMixin(PolylitMixin(LumoInjectionMi
   render() {
     return html`
       <div part="loader"></div>
-      <div id="content" part="content">
-        <div id="pages"></div>
+      <div class="content-area">
+        <div id="content" part="content" tabindex="${this.pageCount ? '0' : '-1'}">
+          <div id="pages"></div>
+        </div>
       </div>
     `;
   }

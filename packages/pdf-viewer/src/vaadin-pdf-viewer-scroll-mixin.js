@@ -120,6 +120,21 @@ export const PdfViewerScrollMixin = (superClass) =>
     }
 
     /**
+     * Goes to the given page, for page changes caused by the user through
+     * the viewer's own controls. Scrolls to the start of the page also when
+     * it is the current page, which setting `page` does not do.
+     * @param {number} page
+     * @protected
+     */
+    _goToPage(page) {
+      if (page === this.page) {
+        this.#scrollToPage(page);
+      } else {
+        this.page = page;
+      }
+    }
+
+    /**
      * Override method from `PdfViewerDocumentMixin` to lay out the pages.
      * @protected
      * @override

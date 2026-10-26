@@ -22,11 +22,14 @@ snapshots["vaadin-pdf-viewer host error"] =
 snapshots["vaadin-pdf-viewer shadow default"] = 
 `<div part="loader">
 </div>
-<div
-  id="content"
-  part="content"
->
-  <div id="pages">
+<div class="content-area">
+  <div
+    id="content"
+    part="content"
+    tabindex="-1"
+  >
+    <div id="pages">
+    </div>
   </div>
 </div>
 `;
@@ -35,26 +38,29 @@ snapshots["vaadin-pdf-viewer shadow default"] =
 snapshots["vaadin-pdf-viewer shadow document"] = 
 `<div part="loader">
 </div>
-<div
-  id="content"
-  part="content"
->
-  <div id="pages">
-    <div part="page">
-      <canvas aria-hidden="true">
-      </canvas>
-    </div>
-    <div part="page">
-      <canvas aria-hidden="true">
-      </canvas>
-    </div>
-    <div part="page">
-    </div>
-    <div part="page">
-    </div>
-    <div part="page">
-    </div>
-    <div part="page">
+<div class="content-area">
+  <div
+    id="content"
+    part="content"
+    tabindex="0"
+  >
+    <div id="pages">
+      <div part="page">
+        <canvas aria-hidden="true">
+        </canvas>
+      </div>
+      <div part="page">
+        <canvas aria-hidden="true">
+        </canvas>
+      </div>
+      <div part="page">
+      </div>
+      <div part="page">
+      </div>
+      <div part="page">
+      </div>
+      <div part="page">
+      </div>
     </div>
   </div>
 </div>

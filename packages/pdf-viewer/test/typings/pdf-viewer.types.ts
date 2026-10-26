@@ -9,6 +9,7 @@ import type {
   PdfViewerPageCountChangedEvent,
 } from '../../src/vaadin-pdf-viewer.js';
 import type { PdfViewerDocumentMixinClass } from '../../src/vaadin-pdf-viewer-document-mixin.js';
+import type { PdfViewerKeyboardMixinClass } from '../../src/vaadin-pdf-viewer-keyboard-mixin.js';
 import type { PdfViewerRenderMixinClass } from '../../src/vaadin-pdf-viewer-render-mixin.js';
 import type { PdfViewerScrollMixinClass } from '../../src/vaadin-pdf-viewer-scroll-mixin.js';
 
@@ -28,6 +29,7 @@ assertType<ElementMixinClass>(viewer);
 assertType<PdfViewerDocumentMixinClass>(viewer);
 assertType<PdfViewerRenderMixinClass>(viewer);
 assertType<PdfViewerScrollMixinClass>(viewer);
+assertType<PdfViewerKeyboardMixinClass>(viewer);
 assertType<ResizeMixinClass>(viewer);
 
 // Events
