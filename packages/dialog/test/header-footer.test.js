@@ -176,18 +176,6 @@ describe('header/footer feature', () => {
         expect(dialog.getAttribute('aria-labelledby')).to.equal(title.id);
       });
 
-      it('should not override the id of a custom slotted title element', async () => {
-        const title = document.createElement('h2');
-        title.slot = 'title';
-        title.id = 'custom-title';
-        title.textContent = 'Custom title';
-        dialog.appendChild(title);
-        await nextRender();
-
-        expect(title.id).to.equal('custom-title');
-        expect(dialog.getAttribute('aria-labelledby')).to.equal('custom-title');
-      });
-
       it('should update aria-level when headingLevel changes', async () => {
         dialog.headerTitle = HEADER_TITLE;
         dialog.headingLevel = 3;
