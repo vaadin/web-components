@@ -606,7 +606,13 @@ export const PdfViewerMixin = (superClass) =>
           enableXfa: false,
         });
 
-        pdfDocument = await Promise.race([this.#loadingTask.promise, this.#workerHandle.failed]);
+        const workerFailed = this.#workerHandle.failed.catch((error) => {
+          issueWarning(
+            'The pdf.js worker of <vaadin-pdf-viewer> failed to load. If the page has a Content Security Policy, check that its worker-src directive allows the worker script.',
+          );
+          throw error;
+        });
+        pdfDocument = await Promise.race([this.#loadingTask.promise, workerFailed]);
         if (loadId !== this.#loadId) {
           return;
         }
