@@ -8,3 +8,5 @@
  * Issues a warning in the browser console if it has not been issued before.
  */
 export declare function issueWarning(warning: string): void;
+
+export declare function clearWarnings(): void;
