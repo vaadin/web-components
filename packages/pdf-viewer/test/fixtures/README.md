@@ -14,15 +14,3 @@ Chromium version changes the `Producer` entry of these files, for example
 IDs with fixed values. The fixtures do not depend on the system fonts. With the
 same Chromium version, the script therefore recreates every file byte for byte.
 
-| File                | Contents                                                                    | How it is made                                  |
-| ------------------- | --------------------------------------------------------------------------- | ----------------------------------------------- |
-| `multi-page.pdf`    | 6 pages of plain text, pages 1 to 5 A4 portrait, page 6 A4 landscape        | HTML printed with Chromium                      |
-| `links.pdf`         | 4 pages. Page 1 has an internal link to page 2 and an external link         | HTML printed with Chromium                      |
-| `outline.pdf`       | 3 pages with a nested outline (bookmarks)                                   | HTML printed with Chromium, tagged with outline |
-| `tagged.pdf`        | Tagged PDF with headings, a list, a table and a figure with alt text        | HTML printed with Chromium, tagged              |
-| `standard-font.pdf` | Text in the Helvetica, Symbol and ZapfDingbats fonts, none of them embedded | Written by hand in the script                   |
-| `inline-links.pdf`  | Links inside lines, two links in a line, and one link split over two lines  | Written by hand in the script                   |
-| `unsafe-links.pdf`  | A blocked `javascript:` link, and `https:`, `ftp:` and `tel:` links         | Written by hand in the script                   |
-| `javascript.pdf`    | An `OpenAction` that calls `app.alert()` when the document opens            | Written by hand in the script                   |
-| `rotated.pdf`       | An A4 portrait page with `/Rotate 90`, so it shows in landscape             | Written by hand in the script                   |
-| `encrypted.pdf`     | Encrypted with a user password, so pdf.js asks for a password               | Written by hand in the script                   |
