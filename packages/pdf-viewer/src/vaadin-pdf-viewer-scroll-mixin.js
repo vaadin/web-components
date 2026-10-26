@@ -108,6 +108,7 @@ export const PdfViewerScrollMixin = (superClass) =>
      */
     _onResize() {
       // Hiding the viewer (e.g. in an inactive tab) resets its scroll position.
+      // A page set while hidden wins over it, see #refresh().
       const hasLayout = this.#hasLayout();
       if (hasLayout && !this.#hadLayout) {
         this.$.content.scrollTop = this.#savedScroll.top;
