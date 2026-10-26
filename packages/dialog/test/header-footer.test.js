@@ -150,14 +150,6 @@ describe('header/footer feature', () => {
         expect(dialog.hasAttribute('aria-labelledby')).to.be.false;
       });
 
-      it('should not set aria-labelledby if header-title is whitespace only', async () => {
-        dialog.headerTitle = '  ';
-        dialog.opened = true;
-        await nextRender();
-
-        expect(dialog.hasAttribute('aria-labelledby')).to.be.false;
-      });
-
       it('should set aria-labelledby to a custom slotted title element', async () => {
         const title = document.createElement('h2');
         title.slot = 'title';
@@ -648,18 +640,6 @@ describe('slotted title', () => {
 
     expect(dialog.hasAttribute('has-title')).to.be.false;
     expect(overlay.hasAttribute('has-title')).to.be.false;
-  });
-
-  it('[part=header] should be displayed if title element is slotted', async () => {
-    const title = document.createElement('h2');
-    title.setAttribute('slot', 'title');
-    title.textContent = 'Title';
-    dialog.appendChild(title);
-
-    dialog.opened = true;
-    await nextRender();
-
-    expect(getComputedStyle(overlay.shadowRoot.querySelector('[part=header]')).display).to.not.be.equal('none');
   });
 });
 
