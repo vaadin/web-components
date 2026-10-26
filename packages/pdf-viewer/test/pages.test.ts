@@ -1,5 +1,5 @@
 import { expect } from '@vaadin/chai-plugins';
-import { aTimeout, fixtureSync, nextFrame, nextRender, nextResize, oneEvent } from '@vaadin/testing-helpers';
+import { fixtureSync, nextFrame, nextRender, nextResize, oneEvent } from '@vaadin/testing-helpers';
 import sinon from 'sinon';
 import './enable-feature-flag.js';
 import '../vaadin-pdf-viewer.js';
@@ -622,34 +622,17 @@ describe('pages', () => {
 
     it('should size a page that gets its own size while the viewer is moved in the DOM', async () => {
       await createViewer();
-      // Hold the frames, to move the viewer while the new page size waits for its frame
-      const frames = new Map<number, FrameRequestCallback>();
-      let lastId = 0;
-      const requestStub = sinon.stub(window, 'requestAnimationFrame').callsFake((callback) => {
-        lastId += 1;
-        frames.set(lastId, callback);
-        return lastId;
-      });
-      const cancelStub = sinon.stub(window, 'cancelAnimationFrame').callsFake((id) => {
-        frames.delete(id);
-      });
-      try {
-        viewer.src = createPdf([
-          { content: '', mediaBox: [0, 0, 612, 792] },
-          { content: '', mediaBox: [0, 0, 792, 612] },
-        ]);
-        for (let i = 0; i < 100 && !frames.size; i++) {
-          await aTimeout(10);
-        }
-        expect(frames.size).to.be.greaterThan(0);
-        viewer.parentElement!.appendChild(viewer);
-      } finally {
-        requestStub.restore();
-        cancelStub.restore();
-      }
-      frames.forEach((callback) => requestAnimationFrame(callback));
-      await nextFrame();
-      await nextFrame();
+      const idle = nextRenderIdle(viewer);
+      const loaded = oneEvent(viewer, 'document-load');
+      viewer.src = createPdf([
+        { content: '', mediaBox: [0, 0, 612, 792] },
+        { content: '', mediaBox: [0, 0, 792, 612] },
+      ]);
+      await loaded;
+      // Resolves after the viewer got the page and requested a frame to apply its size
+      await viewer['_pdfDocument']!.getPage(2);
+      viewer.parentElement!.appendChild(viewer);
+      await idle;
       const landscape = getPages()[1].getBoundingClientRect();
       expect(landscape.width / landscape.height).to.be.closeTo(792 / 612, 0.01);
     });
