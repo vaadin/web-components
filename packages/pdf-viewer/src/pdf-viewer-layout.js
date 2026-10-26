@@ -24,15 +24,15 @@
  */
 
 /**
- * Returns the scale that fits a page width to the available size, or 0
+ * Returns the scale that fits a page width to the available width, or 0
  * when there is no space.
  *
- * @param {{ width: number, height: number }} availableSize
+ * @param {number} availableWidth
  * @param {number} pageWidth the width of the page at scale 1
  * @return {number}
  */
-export function getFitScale({ width, height }, pageWidth) {
-  return width > 0 && height > 0 ? width / pageWidth : 0;
+export function getFitScale(availableWidth, pageWidth) {
+  return availableWidth > 0 ? availableWidth / pageWidth : 0;
 }
 
 /**

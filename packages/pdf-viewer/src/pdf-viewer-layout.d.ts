@@ -28,10 +28,10 @@ export type PdfViewerPageBox = {
 };
 
 /**
- * Returns the scale that fits a page width to the available size, or 0
+ * Returns the scale that fits a page width to the available width, or 0
  * when there is no space.
  */
-export declare function getFitScale(availableSize: { width: number; height: number }, pageWidth: number): number;
+export declare function getFitScale(availableWidth: number, pageWidth: number): number;
 
 /**
  * Returns the pages that intersect the view, in document order. When no page

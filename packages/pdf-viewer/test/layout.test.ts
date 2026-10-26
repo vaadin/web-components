@@ -12,15 +12,11 @@ import {
 describe('layout', () => {
   describe('fit scale', () => {
     it('should fit the page width to the available width', () => {
-      expect(getFitScale({ width: 300, height: 400 }, 600)).to.equal(0.5);
+      expect(getFitScale(300, 600)).to.equal(0.5);
     });
 
     it('should return 0 without available width', () => {
-      expect(getFitScale({ width: 0, height: 400 }, 600)).to.equal(0);
-    });
-
-    it('should return 0 without available height', () => {
-      expect(getFitScale({ width: 300, height: 0 }, 600)).to.equal(0);
+      expect(getFitScale(0, 600)).to.equal(0);
     });
   });
 

@@ -200,18 +200,15 @@ export const PdfViewerScrollMixin = (superClass) =>
     }
 
     /**
-     * Returns the size that pages can use inside the scrollable content area.
+     * Returns the width that pages can use inside the scrollable content area.
      * @private
      */
-    #getAvailableSize() {
+    #getAvailableWidth() {
       const { content } = this.$;
       const style = getComputedStyle(content);
-      return {
-        width:
-          content.clientWidth - Number.parseFloat(style.paddingInlineStart) - Number.parseFloat(style.paddingInlineEnd),
-        height:
-          content.clientHeight - Number.parseFloat(style.paddingBlockStart) - Number.parseFloat(style.paddingBlockEnd),
-      };
+      return (
+        content.clientWidth - Number.parseFloat(style.paddingInlineStart) - Number.parseFloat(style.paddingInlineEnd)
+      );
     }
 
     /**
@@ -226,7 +223,7 @@ export const PdfViewerScrollMixin = (superClass) =>
 
       // Fit the first page, so that the scale does not depend on which page is
       // current. In most documents all pages have the size of the first one.
-      return getFitScale(this.#getAvailableSize(), this.__pages[0].unscaledWidth);
+      return getFitScale(this.#getAvailableWidth(), this.__pages[0].unscaledWidth);
     }
 
     /**
