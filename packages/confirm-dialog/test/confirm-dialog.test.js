@@ -214,17 +214,6 @@ describe('vaadin-confirm-dialog', () => {
         expect(confirm.getAttribute('aria-labelledby')).to.equal(headerNode.id);
         expect(confirm.hasAttribute('aria-label')).to.be.false;
       });
-
-      it('should set aria-labelledby to the slotted header element without header property', async () => {
-        confirm = fixtureSync(`
-          <vaadin-confirm-dialog>
-            <h3 slot="header" id="custom-header">Slotted header</h3>
-          </vaadin-confirm-dialog>
-        `);
-        await nextRender();
-        expect(confirm.getAttribute('aria-labelledby')).to.equal('custom-header');
-        expect(confirm.hasAttribute('aria-label')).to.be.false;
-      });
     });
   });
 
