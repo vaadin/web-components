@@ -136,8 +136,8 @@ describe('sub-menu', () => {
     buttons[0].click();
     await oneEvent(subMenuOverlay, 'vaadin-overlay-open');
     const overlay = subMenuOverlay.$.overlay;
-    const items = subMenuOverlay._contentRoot.querySelectorAll('vaadin-menu-bar-item');
-    const last = items[items.length - 1];
+    const items = [...subMenuOverlay._contentRoot.querySelectorAll('vaadin-menu-bar-item')];
+    const last = items.at(-1);
     const spy = sinon.spy(last, 'focus');
     arrowUp(overlay);
     expect(spy.calledOnce).to.be.true;
@@ -178,8 +178,8 @@ describe('sub-menu', () => {
   it('should open sub-menu and focus last item on arrow up', async () => {
     arrowUp(buttons[0]);
     await nextUpdate(subMenu);
-    const items = subMenuOverlay._contentRoot.querySelectorAll('vaadin-menu-bar-item');
-    const last = items[items.length - 1];
+    const items = [...subMenuOverlay._contentRoot.querySelectorAll('vaadin-menu-bar-item')];
+    const last = items.at(-1);
     const spy = sinon.spy(last, 'focus');
     await oneEvent(subMenuOverlay, 'vaadin-overlay-open');
     expect(spy.calledOnce).to.be.true;
@@ -251,8 +251,8 @@ describe('sub-menu', () => {
     await nextRender();
     arrowLeft(item);
     await nextRender();
-    const items = subMenuOverlay._contentRoot.querySelectorAll('vaadin-menu-bar-item');
-    const last = items[items.length - 1];
+    const items = [...subMenuOverlay._contentRoot.querySelectorAll('vaadin-menu-bar-item')];
+    const last = items.at(-1);
     const spy = sinon.spy(last, 'focus');
     arrowUp(buttons[2]);
     expect(spy.calledOnce).to.be.true;
@@ -344,8 +344,8 @@ describe('sub-menu', () => {
   it('should not close on parent item click', async () => {
     arrowUp(buttons[0]);
     await oneEvent(subMenuOverlay, 'vaadin-overlay-open');
-    const items = subMenuOverlay._contentRoot.querySelectorAll('vaadin-menu-bar-item');
-    const last = items[items.length - 1];
+    const items = [...subMenuOverlay._contentRoot.querySelectorAll('vaadin-menu-bar-item')];
+    const last = items.at(-1);
     await nextRender();
     last.click();
     await nextRender();
