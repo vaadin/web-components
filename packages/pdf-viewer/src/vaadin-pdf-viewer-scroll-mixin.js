@@ -116,7 +116,6 @@ export const PdfViewerScrollMixin = (superClass) =>
       }
       this.#hadLayout = hasLayout;
 
-      this._beginRenderAction();
       this.#refresh();
     }
 
@@ -249,7 +248,6 @@ export const PdfViewerScrollMixin = (superClass) =>
       this.#scale = scale;
       this._cancelRender();
       this.__pages.forEach((page) => page.setScale(scale));
-      this._beginRenderAction();
 
       if (anchor) {
         this.#restoreAnchor(anchor);
@@ -313,7 +311,6 @@ export const PdfViewerScrollMixin = (superClass) =>
         return;
       }
       this.#pendingPage = 0;
-      this._beginRenderAction();
 
       const { content } = this.$;
       if (!Number.isInteger(page) || page < 1 || page > this.__pages.length) {

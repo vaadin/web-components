@@ -28,9 +28,6 @@ export const PdfViewerRenderMixin = (superClass) =>
      */
     __pages = [];
 
-    /** Whether the viewer has rendered everything that an action (load, resize, page change) asked for. */
-    #idle = true;
-
     /** Whether all pages have their own size. The layout is not final before. */
     #pageSizesLoaded = true;
 
@@ -84,7 +81,6 @@ export const PdfViewerRenderMixin = (superClass) =>
       this.__pages[0].setPdfPage(firstPage);
       this.$.pages.replaceChildren(...this.__pages.map((page) => page.element));
       this.#renderQueue.setPages(this.__pages);
-      this.#idle = false;
       // `render-idle` waits for the page sizes, see #notifyIdle().
       this.#pageSizesLoaded = this.__pages.length === 1;
       if (!this.#pageSizesLoaded) {
@@ -111,7 +107,6 @@ export const PdfViewerRenderMixin = (superClass) =>
       this.__pages.forEach((page) => page.release());
       this.__pages = [];
       this.#renderQueue.setPages([]);
-      this.#idle = true;
       this.#pageSizesLoaded = true;
       cancelAnimationFrame(this.#pageSizesFrame);
       this.#pageSizesFrame = 0;
@@ -125,17 +120,6 @@ export const PdfViewerRenderMixin = (superClass) =>
      */
     _pageSizesChanged() {
       // To be implemented.
-    }
-
-    /**
-     * Marks the start of an action, e.g. a resize. `render-idle` fires once
-     * the pages for it are rendered, also when no page needs to render.
-     * @protected
-     */
-    _beginRenderAction() {
-      if (this.__pages.length) {
-        this.#idle = false;
-      }
     }
 
     /**
@@ -219,7 +203,6 @@ export const PdfViewerRenderMixin = (superClass) =>
     /** @private */
     async #renderPage(page, pixelRatio) {
       const pdfDocument = this._pdfDocument;
-      this.#idle = false;
       try {
         if (!page.pdfPage) {
           const pdfPage = await pdfDocument.getPage(page.pageNumber);
@@ -238,11 +221,14 @@ export const PdfViewerRenderMixin = (superClass) =>
       }
     }
 
-    /** @private */
+    /**
+     * Fires `render-idle` when no page is left to render. Only intended for
+     * testing purposes, tests wait for it.
+     * @private
+     */
     #notifyIdle() {
       // The layout is not final while pages get their own sizes.
-      if (!this.#idle && this.#pageSizesLoaded) {
-        this.#idle = true;
+      if (this.__pages.length && this.#pageSizesLoaded) {
         /** @internal to not document it in CEM */
         this.dispatchEvent(new CustomEvent('render-idle'));
       }
@@ -268,7 +254,6 @@ export const PdfViewerRenderMixin = (superClass) =>
       // The query only matches the previous ratio, so watch the new one.
       this.#watchPixelRatio();
       // Render the visible pages again at the new ratio.
-      this._beginRenderAction();
       this.#renderQueue.renderNext();
     };
   };

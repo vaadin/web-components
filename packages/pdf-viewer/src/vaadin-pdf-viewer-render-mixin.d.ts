@@ -26,12 +26,6 @@ export declare class PdfViewerRenderMixinClass {
   protected _pageSizesChanged(): void;
 
   /**
-   * Marks the start of an action, e.g. a resize. `render-idle` fires once
-   * the pages for it are rendered, also when no page needs to render.
-   */
-  protected _beginRenderAction(): void;
-
-  /**
    * Renders the visible pages, the most visible first, then the pages next
    * to them, and frees the canvases of pages far from the view. Stops
    * rendering when no page is visible.
