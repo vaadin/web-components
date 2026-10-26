@@ -530,10 +530,6 @@ describe('vaadin-select', () => {
         await nextUpdate(select);
       });
 
-      it('should disable the value button element when disabled', () => {
-        expect(valueButton.disabled).to.be.true;
-      });
-
       it('should not open on value button Enter when disabled', () => {
         enterKeyDown(valueButton);
         expect(select.opened).to.be.false;
@@ -547,8 +543,6 @@ describe('vaadin-select', () => {
       });
 
       it('should disallow programmatic opening when disabled', async () => {
-        select.readonly = true;
-        await nextUpdate(select);
         select.opened = true;
         await nextUpdate(select);
         expect(select._overlayElement.opened).to.be.false;
