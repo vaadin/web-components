@@ -54,15 +54,14 @@ export class TitleController extends SlotChildObserveController {
   restoreDefaultNode() {
     if (this.title) {
       this.tagName = 'h2';
-
-      const node = this.attachDefaultNode();
-      node.classList.add('draggable');
+      this.attachDefaultNode();
     }
   }
 
   /**
    * Override method inherited from `SlotChildObserveController`
-   * to update the default title element text content and heading level.
+   * to update the default title element text content and heading level,
+   * and to mark it as a drag handle.
    *
    * @param {Node | undefined} node
    * @protected
@@ -72,6 +71,7 @@ export class TitleController extends SlotChildObserveController {
     if (node) {
       node.textContent = this.title;
       node.setAttribute('aria-level', this.level);
+      node.classList.add('draggable');
     }
 
     // Notify the host after update.
