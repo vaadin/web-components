@@ -14,11 +14,11 @@ describe('focus', () => {
   beforeEach(async () => {
     const wrapper = fixtureSync(`
       <div>
-        <input>
         <vaadin-pdf-viewer style="width: 400px; height: 400px"></vaadin-pdf-viewer>
+        <input>
       </div>
     `);
-    input = wrapper.querySelector('input')!;
+    input = wrapper.querySelector(':scope > input')!;
     viewer = wrapper.querySelector('vaadin-pdf-viewer')!;
     await nextRender();
     content = viewer.shadowRoot!.querySelector<HTMLElement>('[part="content"]')!;
@@ -60,7 +60,7 @@ describe('focus', () => {
 
     it('should set focus-ring attribute when the page area is focused using keyboard', async () => {
       input.focus();
-      await sendKeys({ press: 'Tab' });
+      await sendKeys({ press: 'Shift+Tab' });
       expect(viewer.shadowRoot!.activeElement).to.equal(content);
       expect(viewer.hasAttribute('focus-ring')).to.be.true;
     });

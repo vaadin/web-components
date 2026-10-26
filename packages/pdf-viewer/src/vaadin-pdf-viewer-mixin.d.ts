@@ -15,13 +15,15 @@ import type { PdfViewerDocumentMixinClass } from './vaadin-pdf-viewer-document-m
 import type { PdfViewerKeyboardMixinClass } from './vaadin-pdf-viewer-keyboard-mixin.js';
 import type { PdfViewerRenderMixinClass } from './vaadin-pdf-viewer-render-mixin.js';
 import type { PdfViewerScrollMixinClass } from './vaadin-pdf-viewer-scroll-mixin.js';
+import type { PdfViewerToolbarMixinClass } from './vaadin-pdf-viewer-toolbar-mixin.js';
 
 /**
  * A mixin providing common PDF viewer functionality.
  */
 export declare function PdfViewerMixin<T extends Constructor<HTMLElement>>(
   base: T,
-): Constructor<PdfViewerKeyboardMixinClass> &
+): Constructor<PdfViewerToolbarMixinClass> &
+  Constructor<PdfViewerKeyboardMixinClass> &
   Constructor<KeyboardMixinClass> &
   Constructor<PdfViewerScrollMixinClass> &
   Constructor<ResizeMixinClass> &
