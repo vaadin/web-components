@@ -6,15 +6,19 @@
  * Most fixtures are printed from HTML with Playwright's Chromium, which embeds
  * the fonts and can write tagged PDFs with an outline. See README.md.
  */
-import { writeFileSync } from 'node:fs';
+import { readFileSync, writeFileSync } from 'node:fs';
 import { dirname, join } from 'node:path';
 import { fileURLToPath } from 'node:url';
 import { chromium } from 'playwright';
 
 const dir = dirname(fileURLToPath(import.meta.url));
 
+// The open-licensed Aura font, so that the output does not depend on the system fonts.
+const font = readFileSync(join(dir, '../../../aura/src/fonts/InstrumentSans/InstrumentSans.woff2')).toString('base64');
+
 const baseStyles = `
-  body { font-family: Arial, Helvetica, sans-serif; font-size: 14pt; line-height: 1.4; margin: 0; }
+  @font-face { font-family: 'Instrument Sans'; src: url(data:font/woff2;base64,${font}) format('woff2'); font-weight: 400 700; }
+  body { font-family: 'Instrument Sans'; font-size: 14pt; line-height: 1.4; margin: 0; }
   h1 { font-size: 28pt; }
   .page { break-after: page; }
   .page:last-child { break-after: auto; }
@@ -197,11 +201,11 @@ function createRotatedPdf() {
 }
 
 /**
- * Builds a PDF with link annotations to URLs that the viewer must not open,
- * next to one safe link.
+ * Builds a PDF with a link annotation to a URL that the viewer must not open,
+ * next to links to other protocols that it allows.
  */
 function createUnsafeLinksPdf() {
-  // The viewer must not create links for these URLs, except the first one.
+  // pdf.js blocks only the `javascript:` URL. It allows `https:`, `ftp:` and `tel:` by default.
   // eslint-disable-next-line no-script-url
   const urls = ['https://vaadin.com/', 'javascript:alert(1)', 'ftp://example.com/', 'tel:123456'];
   const content = urls.map((url, index) => `BT /F1 14 Tf 72 ${720 - index * 40} Td (${url}) Tj ET`).join(' ');
@@ -232,15 +236,17 @@ function createInlineLinksPdf() {
     [720, 72, 'Read the Vaadin documentation for details.'],
     [690, 72, 'Links to vaadin.com and to github.com in one line.'],
     [660, 72, 'A link that continues'],
-    [644, 172.8, 'next line, then plain text.'],
+    [644, 72, 'on the next line, then plain text.'],
   ];
   const content = lines.map(([y, x, text]) => `BT /F1 14 Tf ${x} ${y} Td (${text}) Tj ET`).join(' ');
-  // [left, bottom, right, top, URL]: "Vaadin", "vaadin.com", "github.com", and "continues" + "next line"
+  // [left, bottom, right, top, URL]: "Vaadin", "vaadin.com", "github.com", then "continues" and
+  // "on the next line" as two annotations with one URL, as PDF producers write wrapped links.
   const areas = [
     [147.6, 715, 198, 733, 'https://vaadin.com/'],
     [147.6, 685, 231.6, 703, 'https://vaadin.com/'],
     [298.8, 685, 382.8, 703, 'https://github.com/'],
-    [172.8, 639, 248.4, 673, 'https://vaadin.com/docs'],
+    [172.8, 657, 248.4, 673, 'https://vaadin.com/docs'],
+    [72, 639, 206.4, 657, 'https://vaadin.com/docs'],
   ];
   const links = areas.map(
     ([left, bottom, right, top, url]) =>
@@ -275,10 +281,24 @@ function createEncryptedPdf() {
   );
 }
 
+/**
+ * Replaces the parts of a Chromium PDF that change between runs: the time of
+ * printing, and the DOM node IDs of tagged table headers. The replacements keep
+ * the length and the sort order, so the cross-reference table and the ID tree
+ * stay valid.
+ */
+function normalizePdf(pdf) {
+  const nodeIds = [...new Set(pdf.match(/node\d{8}/gu))].sort();
+  return pdf
+    .replace(/D:\d{14}\+00'00'/gu, "D:20260101000000+00'00'")
+    .replace(/node\d{8}/gu, (id) => `node${String(nodeIds.indexOf(id) + 1).padStart(8, '0')}`);
+}
+
 const browser = await chromium.launch();
 const page = await browser.newPage();
 for (const [name, { html, tagged = false, outline = false }] of Object.entries(fixtures)) {
   await page.setContent(`<!doctype html><html lang="en">${html}</html>`);
+  await page.evaluate(() => document.fonts.ready);
   const pdf = await page.pdf({
     format: 'A4',
     printBackground: true,
@@ -286,12 +306,7 @@ for (const [name, { html, tagged = false, outline = false }] of Object.entries(f
     tagged,
     outline,
   });
-  // Chromium writes the time of printing. A fixed date of the same length keeps the file the same between runs.
-  writeFileSync(
-    join(dir, name),
-    pdf.toString('latin1').replace(/D:\d{14}\+00'00'/gu, "D:20260101000000+00'00'"),
-    'latin1',
-  );
+  writeFileSync(join(dir, name), normalizePdf(pdf.toString('latin1')), 'latin1');
 }
 await browser.close();
 
