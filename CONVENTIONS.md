@@ -88,6 +88,8 @@ When a CSS custom property only affects one dimension, name it after that dimens
 
 When a selector matches the `theme` attribute, do not match with exact equality so the rule still applies when multiple variants are combined (good: `[theme~='primary']`, bad: `[theme='primary']`).
 
+When a selector matches the `part` attribute, do not match with exact equality so the rule still applies when the element carries additional state parts (good: `[part~='date']`, bad: `[part='date']`, which no longer matches `part="date selected"`).
+
 When implementing RTL support, prefer logical properties (inset-inline/inset-inline-start/end, margin-inline, padding-inline, border-inline) over physical properties (left/right, margin-left/right, padding-left/right, border-left/right), so that RTL works without a separate style rule.
 
 Styles that govern behavior rather than appearance (e.g. `pointer-events: none`), belong in the component's base styles instead of individual themes.
