@@ -40,7 +40,6 @@ export class TitleController extends SlotChildObserveController {
    */
   setLevel(level) {
     this.level = level;
-
     this.updateDefaultNode(this.defaultNode);
   }
 
@@ -88,14 +87,10 @@ export class TitleController extends SlotChildObserveController {
    */
   _notifyChange(node) {
     super._notifyChange(node);
-
-    this.#updateHostLabel();
+    this.#updateAriaLabel();
   }
 
-  /**
-   * Label the host by the title node, if any.
-   */
-  #updateHostLabel() {
+  #updateAriaLabel() {
     const titleNode = this.getSlotChild();
 
     setOrRemoveAttribute(this.host, 'aria-labelledby', hasNodeContent(titleNode) ? titleNode.id : null);
