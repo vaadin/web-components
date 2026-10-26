@@ -13,4 +13,3 @@ Chromium version changes the `Producer` entry of these files, for example
 `Skia/PDF m156`. The script replaces the date of printing and the DOM node
 IDs with fixed values. The fixtures do not depend on the system fonts. With the
 same Chromium version, the script therefore recreates every file byte for byte.
-
