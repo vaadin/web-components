@@ -12,10 +12,49 @@
     </script>
     <script type="module">
       import '@vaadin/pdf-viewer';
+
+      const viewer = document.querySelector('vaadin-pdf-viewer');
+      const select = document.querySelector('#src');
+      const log = document.querySelector('#log');
+
+      const update = () => {
+        viewer.src = select.value;
+      };
+      select.addEventListener('change', update);
+
+      viewer.addEventListener('document-load', (e) => {
+        log.textContent = `document-load: ${JSON.stringify(e.detail)}`;
+      });
+      viewer.addEventListener('document-error', (e) => {
+        log.textContent = `document-error: ${e.detail.reason}`;
+      });
+
+      update();
     </script>
+    <style>
+      vaadin-pdf-viewer {
+        height: 600px;
+      }
+    </style>
   </head>
 
   <body>
+    <p>
+      <label>
+        Document
+        <select id="src">
+          <option value="/dev/assets/pdf/01_fonts.pdf">01_fonts.pdf</option>
+          <option value="/dev/assets/pdf/02_images_and_vector_graphics.pdf">02_images_and_vector_graphics.pdf</option>
+          <option value="/dev/assets/pdf/03_form_with_signatures.pdf">03_form_with_signatures.pdf</option>
+          <option value="/dev/assets/pdf/04_optional_content_help_layer.pdf">04_optional_content_help_layer.pdf</option>
+          <option value="/dev/assets/pdf/05_tagged_accessible_pdf_ua.pdf">05_tagged_accessible_pdf_ua.pdf</option>
+          <option value="/packages/pdf-viewer/test/fixtures/encrypted.pdf">Password-protected file</option>
+          <option value="/packages/pdf-viewer/test/fixtures/invalid.pdf">Invalid file</option>
+          <option value="/does-not-exist.pdf">Missing file</option>
+        </select>
+      </label>
+      <output id="log"></output>
+    </p>
     <vaadin-pdf-viewer></vaadin-pdf-viewer>
   </body>
 </html>
