@@ -47,8 +47,6 @@ export const UploadMixin = (superClass) =>
          * because mobile devices do not support drag events in general. Setting
          * it false means that drop is enabled even in touch-devices, and true
          * disables drop in all devices.
-         *
-         * @default true in touch-devices, false otherwise.
          */
         nodrop: {
           type: Boolean,
