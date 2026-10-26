@@ -9,11 +9,15 @@
  * license.
  */
 import { issueWarning } from '@vaadin/component-base/src/warnings.js';
-import { PdfViewerPage } from './pdf-viewer-page.js';
+import { MAX_CANVAS_PIXELS, PdfViewerPage } from './pdf-viewer-page.js';
 import { PdfViewerRenderQueue } from './pdf-viewer-render-queue.js';
 
+/** The number of pages whose size is requested at a time after loading. */
+const PAGE_SIZE_BATCH = 10;
+
 /**
- * A mixin that creates the page views of the document and renders them to canvas.
+ * A mixin that creates the page views of the document, loads their sizes and
+ * renders them to canvas.
  */
 export const PdfViewerRenderMixin = (superClass) =>
   class PdfViewerRenderMixinClass extends superClass {
@@ -24,27 +28,43 @@ export const PdfViewerRenderMixin = (superClass) =>
      */
     __pages = [];
 
-    /**
-     * Whether the viewer has rendered everything that an action (load, resize, page change) asked for.
-     * @private
-     */
-    __idle = true;
+    /** Whether the viewer has rendered everything that an action (load, resize, page change) asked for. */
+    #idle = true;
 
-    /**
-     * Whether all pages have their own size. The layout is not final before.
-     * @private
-     */
-    __pageSizesLoaded = true;
+    /** Whether all pages have their own size. The layout is not final before. */
+    #pageSizesLoaded = true;
 
-    /** @private */
-    __renderQueue = new PdfViewerRenderQueue({
-      renderPage: (page, outputScale) => this.#renderPage(page, outputScale),
-      releasePage: (page) => this.#releasePage(page),
+    #pageSizesFrame = 0;
+
+    /** @type {MediaQueryList | null} */
+    #pixelRatioQuery = null;
+
+    #renderQueue = new PdfViewerRenderQueue({
+      renderPage: (page, pixelRatio) => this.#renderPage(page, pixelRatio),
+      releasePage: (page) => page.release(),
       onIdle: () => this.#notifyIdle(),
+      renderAhead: 1,
+      keepRendered: 1,
+      maxPagePixels: MAX_CANVAS_PIXELS,
+      // Mobile Safari limits the total canvas memory of a page.
+      maxTotalPixels: 3 * MAX_CANVAS_PIXELS,
     });
 
-    /** Incremented on every unload, to detect results that belong to an outdated document. */
-    #loadId = 0;
+    /** @protected */
+    connectedCallback() {
+      super.connectedCallback();
+
+      this.#watchPixelRatio();
+    }
+
+    /** @protected */
+    disconnectedCallback() {
+      super.disconnectedCallback();
+
+      this.#unwatchPixelRatio();
+      cancelAnimationFrame(this.#pageSizesFrame);
+      this.#pageSizesFrame = 0;
+    }
 
     /**
      * Override method from `PdfViewerDocumentMixin` to create one page view
@@ -54,9 +74,10 @@ export const PdfViewerRenderMixin = (superClass) =>
      * @protected
      * @override
      */
-    _documentLoaded(firstPage) {
-      super._documentLoaded(firstPage);
+    _documentLoaded(details) {
+      super._documentLoaded(details);
 
+      const { firstPage } = details;
       const size = firstPage.getViewport({ scale: 1 });
       this.__pages = Array.from(
         { length: this._pdfDocument.numPages },
@@ -64,10 +85,21 @@ export const PdfViewerRenderMixin = (superClass) =>
       );
       this.__pages[0].setPdfPage(firstPage);
       this.$.pages.replaceChildren(...this.__pages.map((page) => page.element));
-      this.__renderQueue.setPages(this.__pages);
-      this.__idle = false;
+      this.#renderQueue.setPages(this.__pages);
+      this.#idle = false;
       // `render-idle` waits for the page sizes, see #notifyIdle().
-      this.__pageSizesLoaded = false;
+      this.#pageSizesLoaded = this.__pages.length === 1;
+      if (!this.#pageSizesLoaded) {
+        const pdfDocument = this._pdfDocument;
+        // Start after the layout, so that the pages to render are requested first.
+        queueMicrotask(() => {
+          this.#loadPageSizes(pdfDocument).catch((error) => {
+            if (this._pdfDocument === pdfDocument) {
+              issueWarning(`Failed to load the page sizes of the PDF document: ${error.message}`);
+            }
+          });
+        });
+      }
     }
 
     /**
@@ -78,41 +110,130 @@ export const PdfViewerRenderMixin = (superClass) =>
     _documentUnloaded() {
       super._documentUnloaded();
 
-      this.#loadId += 1;
       this.__pages.forEach((page) => page.release());
       this.__pages = [];
-      this.__renderQueue.setPages([]);
-      this.__idle = true;
-      this.__pageSizesLoaded = true;
+      this.#renderQueue.setPages([]);
+      this.#idle = true;
+      this.#pageSizesLoaded = true;
+      cancelAnimationFrame(this.#pageSizesFrame);
+      this.#pageSizesFrame = 0;
       this.$.pages.replaceChildren();
     }
 
     /**
-     * Sets the loaded page of a page view.
-     * @param {PdfViewerPage} page
-     * @param {import('pdfjs-dist').PDFPageProxy} pdfPage
+     * Called at most once per frame when pages got their own size, which
+     * differs from the estimate.
+     * @protected
+     */
+    _pageSizesChanged() {
+      // To be implemented.
+    }
+
+    /**
+     * Marks the start of an action, e.g. a resize. `render-idle` fires once
+     * the pages for it are rendered, also when no page needs to render.
+     * @protected
+     */
+    _beginRenderAction() {
+      if (this.__pages.length) {
+        this.#idle = false;
+      }
+    }
+
+    /**
+     * Renders the visible pages, the most visible first, then the pages next
+     * to them, and frees the canvases of pages far from the view. Stops
+     * rendering when no page is visible.
+     * @param {Array<{ index: number, height: number }>} visible the indexes of
+     *   the visible pages in document order, with their visible height
+     * @protected
+     */
+    _renderVisible(visible) {
+      if (visible.length) {
+        this.#renderQueue.update(visible);
+      } else {
+        this.#renderQueue.clear();
+      }
+    }
+
+    /**
+     * Cancels rendering the page being rendered, e.g. before the pages get another size.
+     * @protected
+     */
+    _cancelRender() {
+      this.#renderQueue.cancel();
+    }
+
+    /**
+     * Loads the pages after the first one, and corrects their size.
      * @private
      */
-    __setPdfPage(page, pdfPage) {
-      page.setPdfPage(pdfPage);
+    async #loadPageSizes(pdfDocument) {
+      if (this._pdfDocument !== pdfDocument) {
+        return;
+      }
+      const pages = this.__pages.slice(1);
+      // Request a few pages at a time, so that requests for pages to
+      // render do not wait behind the requests for all page sizes.
+      for (let start = 0; start < pages.length; start += PAGE_SIZE_BATCH) {
+        const batch = pages.slice(start, start + PAGE_SIZE_BATCH);
+        // A page that fails to load reports the error when it is rendered.
+        await Promise.allSettled(
+          batch.map((page) =>
+            pdfDocument.getPage(page.pageNumber).then((pdfPage) => {
+              if (this._pdfDocument === pdfDocument && !page.pdfPage) {
+                this.#setPdfPage(page, pdfPage);
+              }
+            }),
+          ),
+        );
+        if (this._pdfDocument !== pdfDocument) {
+          return;
+        }
+      }
+      this.#pageSizesLoaded = true;
+      // Notify about being idle, unless a size change will render again.
+      if (!this.#pageSizesFrame) {
+        this.#renderQueue.renderNext();
+      }
     }
 
     /** @private */
-    async #renderPage(page, outputScale) {
-      const loadId = this.#loadId;
-      this.__idle = false;
+    #setPdfPage(page, pdfPage) {
+      if (page.setPdfPage(pdfPage)) {
+        this.#schedulePageSizesChanged();
+      }
+    }
+
+    /** @private */
+    #schedulePageSizesChanged() {
+      if (this.#pageSizesFrame) {
+        return;
+      }
+      this.#pageSizesFrame = requestAnimationFrame(() => {
+        this.#pageSizesFrame = 0;
+        this._pageSizesChanged();
+        // Notify about being idle when nothing renders after the change.
+        this.#renderQueue.renderNext();
+      });
+    }
+
+    /** @private */
+    async #renderPage(page, pixelRatio) {
+      const pdfDocument = this._pdfDocument;
+      this.#idle = false;
       try {
         if (!page.pdfPage) {
-          const pdfPage = await this._pdfDocument.getPage(page.pageNumber);
-          if (loadId !== this.#loadId) {
+          const pdfPage = await pdfDocument.getPage(page.pageNumber);
+          if (this._pdfDocument !== pdfDocument) {
             return;
           }
-          this.__setPdfPage(page, pdfPage);
+          this.#setPdfPage(page, pdfPage);
         }
-        await page.render(outputScale);
+        await page.render(pixelRatio);
       } catch (error) {
         const isCancelled = error && (error.name === 'RenderingCancelledException' || error.name === 'AbortException');
-        if (loadId === this.#loadId && !isCancelled) {
+        if (this._pdfDocument === pdfDocument && !isCancelled) {
           page.renderFailed = true;
           issueWarning(`Failed to render page ${page.pageNumber} of the PDF document: ${error.message}`);
         }
@@ -120,17 +241,36 @@ export const PdfViewerRenderMixin = (superClass) =>
     }
 
     /** @private */
-    #releasePage(page) {
-      page.release();
-    }
-
-    /** @private */
     #notifyIdle() {
       // The layout is not final while pages get their own sizes.
-      if (!this.__idle && this.__pageSizesLoaded) {
-        this.__idle = true;
+      if (!this.#idle && this.#pageSizesLoaded) {
+        this.#idle = true;
         /** @internal to not document it in CEM */
         this.dispatchEvent(new CustomEvent('render-idle'));
       }
     }
+
+    /** @private */
+    #watchPixelRatio() {
+      this.#unwatchPixelRatio();
+      const pixelRatio = window.devicePixelRatio || 1;
+      this.#renderQueue.setPixelRatio(pixelRatio);
+      this.#pixelRatioQuery = window.matchMedia(`(resolution: ${pixelRatio}dppx)`);
+      this.#pixelRatioQuery.addEventListener('change', this.#onPixelRatioChange);
+    }
+
+    /** @private */
+    #unwatchPixelRatio() {
+      this.#pixelRatioQuery?.removeEventListener('change', this.#onPixelRatioChange);
+      this.#pixelRatioQuery = null;
+    }
+
+    /** @private */
+    #onPixelRatioChange = () => {
+      // The query only matches the previous ratio, so watch the new one.
+      this.#watchPixelRatio();
+      // Render the visible pages again at the new ratio.
+      this._beginRenderAction();
+      this.#renderQueue.renderNext();
+    };
   };

@@ -35,7 +35,7 @@ export declare class PdfViewerDocumentMixinClass {
   /**
    * Called when a document has loaded, before `document-load` is fired.
    */
-  protected _documentLoaded(firstPage: PDFPageProxy): void;
+  protected _documentLoaded(details: { firstPage: PDFPageProxy }): void;
 
   /**
    * Called when the document is unloaded, e.g. before another one loads.

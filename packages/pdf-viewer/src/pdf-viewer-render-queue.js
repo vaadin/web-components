@@ -9,31 +9,32 @@
  * license.
  */
 import { issueWarning } from '@vaadin/component-base/src/warnings.js';
-import { MAX_CANVAS_PIXELS } from './pdf-viewer-page.js';
-
-/** The number of pages before and after the visible ones that are rendered in advance. */
-const RENDER_AHEAD = 1;
-
-/** The number of pages before and after the visible ones that keep their canvas. */
-const KEEP_RENDERED = 1;
 
 /**
- * The number of canvas pixels that all pages may use together before pages
- * outside the view are released, or not rendered ahead. Mobile Safari limits
- * the total canvas memory of a page.
- */
-const MAX_TOTAL_CANVAS_PIXELS = 3 * MAX_CANVAS_PIXELS;
-
-/**
- * @typedef {import('./pdf-viewer-page.js').PdfViewerPage} PdfViewerPage
+ * A page that the queue can render. `PdfViewerPage` implements it.
+ * @typedef {Object} PdfViewerRenderQueuePage
+ * @property {number} pageNumber The number of the page, starting from 1.
+ * @property {number} canvasPixels The number of canvas pixels the page uses.
+ * @property {boolean} renderFailed Whether the last render failed.
+ * @property {(pixelRatio: number) => boolean} isRendered Whether the page is
+ *   rendered at its current scale and the given device pixel ratio.
+ * @property {() => void} cancel Cancels a pending render.
  */
 
 /**
- * @typedef {Object} PdfViewerRenderCallbacks
- * @property {(page: PdfViewerPage, outputScale: number) => Promise<void>} renderPage
- *   Renders a page at the given output scale. The returned promise never rejects.
- * @property {(page: PdfViewerPage) => void} releasePage Frees the canvas of a page.
+ * @typedef {Object} PdfViewerRenderQueueOptions
+ * @property {(page: PdfViewerRenderQueuePage, pixelRatio: number) => Promise<void>} renderPage
+ *   Renders a page at the given device pixel ratio. The returned promise never rejects.
+ * @property {(page: PdfViewerRenderQueuePage) => void} releasePage Frees the canvas of a page.
  * @property {() => void} onIdle Called when no page is left to render.
+ * @property {number} renderAhead The number of pages before and after the
+ *   visible ones that are rendered in advance.
+ * @property {number} keepRendered The number of pages before and after the
+ *   visible ones that keep their canvas.
+ * @property {number} maxPagePixels The maximum number of canvas pixels of one page.
+ * @property {number} maxTotalPixels The number of canvas pixels that all pages
+ *   may use together before pages outside the view are released, or not
+ *   rendered ahead.
  */
 
 /**
@@ -41,10 +42,10 @@ const MAX_TOTAL_CANVAS_PIXELS = 3 * MAX_CANVAS_PIXELS;
  * them one at a time, and frees the canvases of pages far from the view.
  */
 export class PdfViewerRenderQueue {
-  /** @type {PdfViewerRenderCallbacks} */
-  #callbacks;
+  /** @type {PdfViewerRenderQueueOptions} */
+  #options;
 
-  /** @type {PdfViewerPage[]} */
+  /** @type {PdfViewerRenderQueuePage[]} */
   #pages = [];
 
   /** The pages to render, in order of priority. */
@@ -53,26 +54,37 @@ export class PdfViewerRenderQueue {
   /** The number of visible pages at the start of the queue. */
   #visibleLength = 0;
 
-  /** @type {PdfViewerPage | null} */
+  /** @type {PdfViewerRenderQueuePage | null} */
   #renderingPage = null;
 
+  #pixelRatio = 1;
+
   /**
-   * @param {PdfViewerRenderCallbacks} callbacks
+   * @param {PdfViewerRenderQueueOptions} options
    */
-  constructor(callbacks) {
-    this.#callbacks = callbacks;
+  constructor(options) {
+    this.#options = options;
   }
 
   /**
    * Sets the pages of the document, e.g. when another document loads, and
    * forgets the page being rendered.
-   * @param {PdfViewerPage[]} pages
+   * @param {PdfViewerRenderQueuePage[]} pages
    */
   setPages(pages) {
     this.#pages = pages;
     this.#queue = [];
     this.#visibleLength = 0;
     this.#renderingPage = null;
+  }
+
+  /**
+   * Sets the device pixel ratio to render at. Pages rendered at another
+   * ratio render again when they are next in the queue.
+   * @param {number} pixelRatio
+   */
+  setPixelRatio(pixelRatio) {
+    this.#pixelRatio = pixelRatio;
   }
 
   /**
@@ -87,7 +99,7 @@ export class PdfViewerRenderQueue {
     const last = visible[visible.length - 1].index;
     const byVisibility = [...visible].sort((a, b) => b.height - a.height).map(({ index }) => pages[index]);
     const ahead = [];
-    for (let distance = 1; distance <= RENDER_AHEAD; distance++) {
+    for (let distance = 1; distance <= this.#options.renderAhead; distance++) {
       ahead.push(pages[last + distance], pages[first - distance]);
     }
     this.#queue = [...byVisibility, ...ahead.filter(Boolean)];
@@ -121,19 +133,20 @@ export class PdfViewerRenderQueue {
       return;
     }
 
-    const outputScale = window.devicePixelRatio || 1;
-    const index = this.#queue.findIndex((item) => !item.isRendered(outputScale) && !item.renderFailed);
+    const pixelRatio = this.#pixelRatio;
+    const { maxPagePixels, maxTotalPixels } = this.#options;
+    const index = this.#queue.findIndex((item) => !item.isRendered(pixelRatio) && !item.renderFailed);
     const page = this.#queue[index];
     // Render pages ahead of the view only while memory allows it.
     const isAhead = index >= this.#visibleLength;
-    if (!page || (isAhead && this.#getTotalCanvasPixels() > MAX_TOTAL_CANVAS_PIXELS - MAX_CANVAS_PIXELS)) {
-      this.#callbacks.onIdle();
+    if (!page || (isAhead && this.#getTotalCanvasPixels() > maxTotalPixels - maxPagePixels)) {
+      this.#options.onIdle();
       return;
     }
 
     this.#renderingPage = page;
-    this.#callbacks
-      .renderPage(page, outputScale)
+    this.#options
+      .renderPage(page, pixelRatio)
       .finally(() => {
         if (this.#renderingPage === page) {
           this.#renderingPage = null;
@@ -149,16 +162,17 @@ export class PdfViewerRenderQueue {
    * @private
    */
   #releaseCanvases(first, last) {
+    const { keepRendered, maxTotalPixels } = this.#options;
     const distance = (index) => (index < first ? first - index : Math.max(0, index - last));
-    const rendered = this.#pages.filter((page) => page.canvas);
+    const rendered = this.#pages.filter((page) => page.canvasPixels > 0);
     rendered.sort((a, b) => distance(b.pageNumber - 1) - distance(a.pageNumber - 1));
 
     let totalPixels = this.#getTotalCanvasPixels();
     rendered.forEach((page) => {
       const pageDistance = distance(page.pageNumber - 1);
-      if (pageDistance > KEEP_RENDERED || (pageDistance > 0 && totalPixels > MAX_TOTAL_CANVAS_PIXELS)) {
+      if (pageDistance > keepRendered || (pageDistance > 0 && totalPixels > maxTotalPixels)) {
         totalPixels -= page.canvasPixels;
-        this.#callbacks.releasePage(page);
+        this.#options.releasePage(page);
       }
     });
   }

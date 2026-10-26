@@ -13,7 +13,7 @@ import type { ResizeMixinClass } from '@vaadin/component-base/src/resize-mixin.j
 
 /**
  * A mixin that lays out the pages, keeps `page` in sync with scrolling and
- * renders the visible pages.
+ * asks for the visible pages to render.
  */
 export declare function PdfViewerScrollMixin<T extends Constructor<HTMLElement>>(
   base: T,

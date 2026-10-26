@@ -40,39 +40,21 @@ snapshots["vaadin-pdf-viewer shadow document"] =
   part="content"
 >
   <div id="pages">
-    <div
-      part="page"
-      role="group"
-    >
+    <div part="page">
       <canvas aria-hidden="true">
       </canvas>
     </div>
-    <div
-      part="page"
-      role="group"
-    >
+    <div part="page">
       <canvas aria-hidden="true">
       </canvas>
     </div>
-    <div
-      part="page"
-      role="group"
-    >
+    <div part="page">
     </div>
-    <div
-      part="page"
-      role="group"
-    >
+    <div part="page">
     </div>
-    <div
-      part="page"
-      role="group"
-    >
+    <div part="page">
     </div>
-    <div
-      part="page"
-      role="group"
-    >
+    <div part="page">
     </div>
   </div>
 </div>

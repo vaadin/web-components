@@ -37,7 +37,6 @@ export class PdfViewerPage {
 
     this.element = document.createElement('div');
     this.element.setAttribute('part', 'page');
-    this.element.setAttribute('role', 'group');
 
     /** @type {number} */
     this.scale = 0;
@@ -51,9 +50,9 @@ export class PdfViewerPage {
     /** Set when rendering failed, to not try again at the same scale. */
     this.renderFailed = false;
 
-    /** The scale and output scale of the current canvas, to know when it is outdated. */
+    /** The scale and device pixel ratio of the current canvas, to know when it is outdated. */
     this.renderedScale = 0;
-    this.renderedOutputScale = 0;
+    this.renderedPixelRatio = 0;
   }
 
   /** The width of the page in CSS pixels at the current scale. */
@@ -71,27 +70,29 @@ export class PdfViewerPage {
     return this.canvas ? this.canvas.width * this.canvas.height : 0;
   }
 
-  /** Whether the canvas shows the page at the current scale and output scale. */
-  isRendered(outputScale) {
-    return !!this.canvas && this.renderedScale === this.scale && this.renderedOutputScale === outputScale;
+  /** Whether the canvas shows the page at the current scale and the given device pixel ratio. */
+  isRendered(pixelRatio) {
+    return !!this.canvas && this.renderedScale === this.scale && this.renderedPixelRatio === pixelRatio;
   }
 
   /**
    * Sets the loaded page, and its own size instead of the estimate.
    *
    * @param {import('pdfjs-dist').PDFPageProxy} pdfPage
+   * @return {boolean} whether the size differs from the estimate
    */
   setPdfPage(pdfPage) {
     this.pdfPage = pdfPage;
     const { width, height } = pdfPage.getViewport({ scale: 1 });
     if (width === this.unscaledWidth && height === this.unscaledHeight) {
-      return;
+      return false;
     }
     this.unscaledWidth = width;
     this.unscaledHeight = height;
     // The canvas has the wrong aspect ratio now, render it again.
     this.cancel();
     this.renderedScale = 0;
+    return true;
   }
 
   /**
@@ -112,15 +113,15 @@ export class PdfViewerPage {
    * only when rendering has finished, to avoid showing an empty page meanwhile.
    * Requires the page to be set with `setPdfPage()`.
    *
-   * @param {number} devicePixelRatio
+   * @param {number} pixelRatio the device pixel ratio
    * @return {Promise<void>}
    */
-  async render(devicePixelRatio) {
+  async render(pixelRatio) {
     this.cancel();
 
     const scale = this.scale;
     const viewport = this.pdfPage.getViewport({ scale });
-    const outputScale = Math.min(devicePixelRatio, Math.sqrt(MAX_CANVAS_PIXELS / (viewport.width * viewport.height)));
+    const outputScale = Math.min(pixelRatio, Math.sqrt(MAX_CANVAS_PIXELS / (viewport.width * viewport.height)));
 
     const canvas = document.createElement('canvas');
     canvas.setAttribute('aria-hidden', 'true');
@@ -157,7 +158,7 @@ export class PdfViewerPage {
     this.element.append(canvas);
     this.canvas = canvas;
     this.renderedScale = scale;
-    this.renderedOutputScale = devicePixelRatio;
+    this.renderedPixelRatio = pixelRatio;
   }
 
   /** Cancels a pending render. */
@@ -176,7 +177,7 @@ export class PdfViewerPage {
       this.canvas = null;
     }
     this.renderedScale = 0;
-    this.renderedOutputScale = 0;
+    this.renderedPixelRatio = 0;
   }
 
   /** @private */

@@ -46,6 +46,21 @@ how to generate them.
 - The viewer fires an internal `render-idle` event when an action has finished rendering. Tests wait for
   it, and it is not part of the public API.
 
+## Code structure
+
+`PdfViewerMixin` composes one mixin for each concern. Each part of the state has one owner.
+
+- `PdfViewerDocumentMixin` loads `src`. It calls `_documentLoaded({ firstPage })` and `_documentUnloaded()`.
+- `PdfViewerRenderMixin` owns the page views, their sizes, the render queue, the idle state and the
+  device pixel ratio. It calls `_pageSizesChanged()` at most once per frame when pages get their own size.
+- `PdfViewerScrollMixin` owns the scale, the anchor, the visible pages and `page`. It asks for rendering
+  only with `_renderVisible()`, `_cancelRender()` and `_beginRenderAction()`.
+- `PdfViewerRenderQueue` decides the render order, the memory budget and the release. It has no host
+  reference, and its limits are options.
+- `pdf-viewer-layout.js` has the layout math without DOM access: visible pages, anchor and fit scale.
+- To check whether a result belongs to the current document, a mixin compares `_pdfDocument` with the
+  document from the start of the call.
+
 ## Install size
 
 - The package depends on `pdfjs-dist`, which takes about 35 MB unpacked. Only the parts that the
