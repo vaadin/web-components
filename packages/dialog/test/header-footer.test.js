@@ -150,9 +150,18 @@ describe('header/footer feature', () => {
         expect(dialog.hasAttribute('aria-labelledby')).to.be.false;
       });
 
+      it('should not set aria-labelledby if header-title is whitespace only', async () => {
+        dialog.headerTitle = '  ';
+        dialog.opened = true;
+        await nextRender();
+
+        expect(dialog.hasAttribute('aria-labelledby')).to.be.false;
+      });
+
       it('should set aria-labelledby to a custom slotted title element', async () => {
         const title = document.createElement('h2');
         title.slot = 'title';
+        title.textContent = 'Custom title';
         dialog.appendChild(title);
         await nextRender();
 
@@ -167,6 +176,7 @@ describe('header/footer feature', () => {
 
         const title = document.createElement('h2');
         title.slot = 'title';
+        title.textContent = 'Custom title';
         dialog.appendChild(title);
         await nextRender();
 
@@ -178,6 +188,7 @@ describe('header/footer feature', () => {
         const title = document.createElement('h2');
         title.slot = 'title';
         title.id = 'custom-title';
+        title.textContent = 'Custom title';
         dialog.appendChild(title);
         await nextRender();
 
