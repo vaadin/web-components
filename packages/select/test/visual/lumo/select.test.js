@@ -143,6 +143,22 @@ describe('select', () => {
     await visualDiff(div, 'value-custom');
   });
 
+  it('value-rich-content', async () => {
+    element.renderer = (root) => {
+      // Replaced elements such as images have no baseline
+      root.innerHTML = `
+        <vaadin-list-box>
+          <vaadin-item value="rich">
+            <svg width="16" height="16"><circle cx="8" cy="8" r="8" /></svg>
+            Icon and text
+          </vaadin-item>
+        </vaadin-list-box>
+      `;
+    };
+    element.value = 'rich';
+    await visualDiff(div, 'value-rich-content');
+  });
+
   it('required', async () => {
     element.label = 'Label';
     element.required = true;
