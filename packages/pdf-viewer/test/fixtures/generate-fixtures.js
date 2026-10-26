@@ -6,15 +6,19 @@
  * Most fixtures are printed from HTML with Playwright's Chromium, which embeds
  * the fonts and can write tagged PDFs with an outline. See README.md.
  */
-import { writeFileSync } from 'node:fs';
+import { readFileSync, writeFileSync } from 'node:fs';
 import { dirname, join } from 'node:path';
 import { fileURLToPath } from 'node:url';
 import { chromium } from 'playwright';
 
 const dir = dirname(fileURLToPath(import.meta.url));
 
+// The open-licensed Aura font, so that the output does not depend on the system fonts.
+const font = readFileSync(join(dir, '../../../aura/src/fonts/InstrumentSans/InstrumentSans.woff2')).toString('base64');
+
 const baseStyles = `
-  body { font-family: Arial, Helvetica, sans-serif; font-size: 14pt; line-height: 1.4; margin: 0; }
+  @font-face { font-family: 'Instrument Sans'; src: url(data:font/woff2;base64,${font}) format('woff2'); font-weight: 400 700; }
+  body { font-family: 'Instrument Sans'; font-size: 14pt; line-height: 1.4; margin: 0; }
   h1 { font-size: 28pt; }
   .page { break-after: page; }
   .page:last-child { break-after: auto; }
@@ -135,15 +139,40 @@ function assemblePdf(objects, trailer) {
 }
 
 /**
- * Builds a PDF that uses the standard Helvetica font without embedding it,
- * as many report generators do.
+ * Builds a PDF that uses the standard Helvetica, Symbol and ZapfDingbats fonts
+ * without embedding them, as many report generators do. Browsers have no
+ * system font for Symbol and ZapfDingbats, so pdf.js needs its standard font
+ * data to draw their glyphs.
  */
 function createStandardFontPdf() {
-  const content =
-    'BT /F1 28 Tf 72 720 Td (Standard font) Tj /F1 14 Tf 0 -40 Td (Helvetica, not embedded in the file.) Tj ET';
+  const content = [
+    'BT /F1 28 Tf 72 720 Td (Standard font) Tj /F1 14 Tf 0 -40 Td (Helvetica, not embedded in the file.) Tj ET',
+    'BT /F2 28 Tf 72 600 Td (abgdpqrs) Tj ET',
+    'BT /F3 28 Tf 72 540 Td (3456nuvw) Tj ET',
+  ].join(' ');
   return assemblePdf(
     [
       '<< /Type /Catalog /Pages 2 0 R >>',
+      '<< /Type /Pages /Kids [3 0 R] /Count 1 >>',
+      '<< /Type /Page /Parent 2 0 R /MediaBox [0 0 612 792] /Resources << /Font << /F1 5 0 R /F2 6 0 R /F3 7 0 R >> >> /Contents 4 0 R >>',
+      `<< /Length ${content.length} >>\nstream\n${content}\nendstream`,
+      '<< /Type /Font /Subtype /Type1 /BaseFont /Helvetica /Encoding /WinAnsiEncoding >>',
+      '<< /Type /Font /Subtype /Type1 /BaseFont /Symbol >>',
+      '<< /Type /Font /Subtype /Type1 /BaseFont /ZapfDingbats >>',
+    ],
+    '',
+  );
+}
+
+/**
+ * Builds a PDF with a JavaScript action that runs when the document opens.
+ * The viewer must not run it.
+ */
+function createJavaScriptPdf() {
+  const content = 'BT /F1 14 Tf 72 720 Td (The document opens with a JavaScript action.) Tj ET';
+  return assemblePdf(
+    [
+      "<< /Type /Catalog /Pages 2 0 R /OpenAction << /S /JavaScript /JS (app.alert\\('JavaScript ran'\\);) >> >>",
       '<< /Type /Pages /Kids [3 0 R] /Count 1 >>',
       '<< /Type /Page /Parent 2 0 R /MediaBox [0 0 612 792] /Resources << /Font << /F1 5 0 R >> >> /Contents 4 0 R >>',
       `<< /Length ${content.length} >>\nstream\n${content}\nendstream`,
@@ -154,11 +183,29 @@ function createStandardFontPdf() {
 }
 
 /**
- * Builds a PDF with link annotations to URLs that the viewer must not open,
- * next to one safe link.
+ * Builds a PDF with a portrait A4 page that is rotated by 90 degrees, so that
+ * it is shown in landscape.
+ */
+function createRotatedPdf() {
+  const content = 'BT /F1 28 Tf 72 720 Td (Rotated page) Tj ET';
+  return assemblePdf(
+    [
+      '<< /Type /Catalog /Pages 2 0 R >>',
+      '<< /Type /Pages /Kids [3 0 R] /Count 1 >>',
+      '<< /Type /Page /Parent 2 0 R /MediaBox [0 0 595 842] /Rotate 90 /Resources << /Font << /F1 5 0 R >> >> /Contents 4 0 R >>',
+      `<< /Length ${content.length} >>\nstream\n${content}\nendstream`,
+      '<< /Type /Font /Subtype /Type1 /BaseFont /Helvetica /Encoding /WinAnsiEncoding >>',
+    ],
+    '',
+  );
+}
+
+/**
+ * Builds a PDF with a link annotation to a URL that the viewer must not open,
+ * next to links to other protocols that it allows.
  */
 function createUnsafeLinksPdf() {
-  // The viewer must not create links for these URLs, except the first one.
+  // pdf.js blocks only the `javascript:` URL. It allows `https:`, `ftp:` and `tel:` by default.
   // eslint-disable-next-line no-script-url
   const urls = ['https://vaadin.com/', 'javascript:alert(1)', 'ftp://example.com/', 'tel:123456'];
   const content = urls.map((url, index) => `BT /F1 14 Tf 72 ${720 - index * 40} Td (${url}) Tj ET`).join(' ');
@@ -189,15 +236,17 @@ function createInlineLinksPdf() {
     [720, 72, 'Read the Vaadin documentation for details.'],
     [690, 72, 'Links to vaadin.com and to github.com in one line.'],
     [660, 72, 'A link that continues'],
-    [644, 172.8, 'next line, then plain text.'],
+    [644, 72, 'on the next line, then plain text.'],
   ];
   const content = lines.map(([y, x, text]) => `BT /F1 14 Tf ${x} ${y} Td (${text}) Tj ET`).join(' ');
-  // [left, bottom, right, top, URL]: "Vaadin", "vaadin.com", "github.com", and "continues" + "next line"
+  // [left, bottom, right, top, URL]: "Vaadin", "vaadin.com", "github.com", then "continues" and
+  // "on the next line" as two annotations with one URL, as PDF producers write wrapped links.
   const areas = [
     [147.6, 715, 198, 733, 'https://vaadin.com/'],
     [147.6, 685, 231.6, 703, 'https://vaadin.com/'],
     [298.8, 685, 382.8, 703, 'https://github.com/'],
-    [172.8, 639, 248.4, 673, 'https://vaadin.com/docs'],
+    [172.8, 657, 248.4, 673, 'https://vaadin.com/docs'],
+    [72, 639, 206.4, 657, 'https://vaadin.com/docs'],
   ];
   const links = areas.map(
     ([left, bottom, right, top, url]) =>
@@ -232,18 +281,32 @@ function createEncryptedPdf() {
   );
 }
 
+/**
+ * Replaces the parts of a Chromium PDF that change between runs: the time of
+ * printing, and the DOM node IDs of tagged table headers. The replacements keep
+ * the length and the sort order, so the cross-reference table and the ID tree
+ * stay valid.
+ */
+function normalizePdf(pdf) {
+  const nodeIds = [...new Set(pdf.match(/node\d{8}/gu))].sort();
+  return pdf
+    .replace(/D:\d{14}\+00'00'/gu, "D:20260101000000+00'00'")
+    .replace(/node\d{8}/gu, (id) => `node${String(nodeIds.indexOf(id) + 1).padStart(8, '0')}`);
+}
+
 const browser = await chromium.launch();
 const page = await browser.newPage();
 for (const [name, { html, tagged = false, outline = false }] of Object.entries(fixtures)) {
   await page.setContent(`<!doctype html><html lang="en">${html}</html>`);
-  await page.pdf({
-    path: join(dir, name),
+  await page.evaluate(() => document.fonts.ready);
+  const pdf = await page.pdf({
     format: 'A4',
     printBackground: true,
     margin: { top: '20mm', bottom: '20mm', left: '20mm', right: '20mm' },
     tagged,
     outline,
   });
+  writeFileSync(join(dir, name), normalizePdf(pdf.toString('latin1')), 'latin1');
 }
 await browser.close();
 
@@ -251,4 +314,6 @@ writeFileSync(join(dir, 'encrypted.pdf'), createEncryptedPdf(), 'latin1');
 writeFileSync(join(dir, 'standard-font.pdf'), createStandardFontPdf(), 'latin1');
 writeFileSync(join(dir, 'unsafe-links.pdf'), createUnsafeLinksPdf(), 'latin1');
 writeFileSync(join(dir, 'inline-links.pdf'), createInlineLinksPdf(), 'latin1');
+writeFileSync(join(dir, 'javascript.pdf'), createJavaScriptPdf(), 'latin1');
+writeFileSync(join(dir, 'rotated.pdf'), createRotatedPdf(), 'latin1');
 writeFileSync(join(dir, 'invalid.pdf'), 'This file is not a PDF document.\n');

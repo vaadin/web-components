@@ -214,12 +214,13 @@ describe('text and links', () => {
 
     it('should read the links of the inline links fixture in place', async () => {
       await load('inline-links.pdf');
-      // pdf.js makes a text item of each word of this file.
+      // pdf.js makes a text item of each word of this file. The link over two lines is
+      // written as two annotations, so it is read as two links.
       expect(getReadContent().join(' ')).to.equal(
         [
           'Read the [Vaadin (opens in a new tab)] documentation for details.',
           'Links to [vaadin.com (opens in a new tab)] and to [github.com (opens in a new tab)] in one line.',
-          'A link that [continues next line (opens in a new tab)] , then plain text.',
+          'A link that [continues (opens in a new tab)] [on the next line (opens in a new tab)] , then plain text.',
         ].join(' '),
       );
     });

@@ -34,7 +34,7 @@ jobs:
     name: Update version
     # The pull request targets main, so the update must start from main too
     if: github.ref == 'refs/heads/main'
-    runs-on: ubuntu-latest
+    runs-on: ubuntu-26.04
     permissions:
       contents: read
       pull-requests: read
@@ -83,7 +83,7 @@ jobs:
     name: Screenshots (${{ matrix.name }})
     needs: update
     if: ${{ needs.update.outputs.version }}
-    runs-on: ubuntu-latest
+    runs-on: ubuntu-26.04
     container:
       image: mcr.microsoft.com/playwright:v${{ needs.update.outputs.version }}-noble
       options: --ipc=host
@@ -154,7 +154,7 @@ jobs:
     name: Open pull request
     needs: [update, screenshots]
     if: ${{ needs.update.outputs.version }}
-    runs-on: ubuntu-latest
+    runs-on: ubuntu-26.04
 
     steps:
       # Pushes with the bot token: branches and pull requests created with the
