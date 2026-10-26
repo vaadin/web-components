@@ -22,7 +22,6 @@
 
   ::slotted(*) {
     display: inline-flex;
-    vertical-align: top;
     padding: var(--_lumo-selected-item-padding) 0 var(--_lumo-selected-item-padding) 0;
     min-height: var(--_lumo-selected-item-height);
     font-size: inherit;
