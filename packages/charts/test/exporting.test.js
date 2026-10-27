@@ -175,6 +175,77 @@ describe('vaadin-chart exporting', () => {
     expect(document.body.hasAttribute(attributeName)).to.be.false;
   });
 
+  describe('failed export', () => {
+    let afterExportSpy, removeListener;
+
+    beforeEach(() => {
+      afterExportSpy = sinon.spy();
+      chart.addEventListener('chart-after-export', afterExportSpy);
+      removeListener = Highcharts.addEvent(chart.configuration, 'getSVG', () => {
+        throw new Error('Export failed');
+      });
+    });
+
+    afterEach(() => {
+      removeListener();
+    });
+
+    it('should remove the shadow styles from the body when a sync export throws', () => {
+      expect(() => chart.configuration.getSVG()).to.throw('Export failed');
+      expect(afterExportSpy).to.be.calledOnce;
+      expect(chart.tempBodyStyle).to.be.undefined;
+      expect(document.body.hasAttribute(attributeName)).to.be.false;
+    });
+
+    it('should remove the shadow styles from the body when an async export rejects', async () => {
+      let error;
+      await chart.configuration.exporting.getSVGForExport({}, {}).catch((e) => {
+        error = e;
+      });
+      expect(error.message).to.equal('Export failed');
+      expect(afterExportSpy).to.be.calledOnce;
+      expect(chart.tempBodyStyle).to.be.undefined;
+      expect(document.body.hasAttribute(attributeName)).to.be.false;
+    });
+  });
+
+  it('should keep the styled-mode attribute on the body until overlapping exports are done', async () => {
+    const otherChart = fixtureSync(`
+      <vaadin-chart>
+        <vaadin-chart-series values="[1, 2, 3]"></vaadin-chart-series>
+      </vaadin-chart>
+    `);
+    await oneEvent(otherChart, 'chart-add-series');
+
+    // The image makes the chart copy render asynchronously, so the export of the
+    // other chart finishes first.
+    const url = URL.createObjectURL(
+      new Blob(['<svg xmlns="http://www.w3.org/2000/svg" width="8" height="8"><rect width="8" height="8"/></svg>'], {
+        type: 'image/svg+xml',
+      }),
+    );
+    chart.updateConfiguration({ series: [{ data: [1, 2, 3], marker: { symbol: `url(${url})` } }] });
+    await nextRender();
+
+    const stylesPresent = [];
+    const removeListener = Highcharts.addEvent(chart.configuration, 'getSVG', () => {
+      stylesPresent.push(document.body.hasAttribute(attributeName));
+    });
+
+    try {
+      await Promise.all([
+        chart.configuration.exporting.getSVGForExport({}, {}),
+        otherChart.configuration.exporting.getSVGForExport({}, {}),
+      ]);
+    } finally {
+      removeListener();
+      URL.revokeObjectURL(url);
+    }
+
+    expect(stylesPresent).to.eql([true]);
+    expect(document.body.hasAttribute(attributeName)).to.be.false;
+  });
+
   it('should add styled-mode attribute to body before export and delete it afterwards', async () => {
     expect(document.body.hasAttribute(attributeName)).to.be.false;
 

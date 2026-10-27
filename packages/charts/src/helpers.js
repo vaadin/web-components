@@ -43,6 +43,10 @@ export function inflateFunctions(config) {
   });
 }
 
+// Charts in styled mode that are being exported. Exports can overlap, as an export waits for the
+// chart copy to render, so the body keeps the `styled-mode` attribute until the last one is done.
+const styledModeExports = new Set();
+
 export function prepareExport(chart) {
   // Guard against another print 'before print' event coming before
   // the 'after print' event.
@@ -74,6 +78,7 @@ export function prepareExport(chart) {
     chart.tempBodyStyle.textContent = effectiveCss;
     document.body.appendChild(chart.tempBodyStyle);
     if (chart.__styledMode) {
+      styledModeExports.add(chart);
       document.body.toggleAttribute('styled-mode', true);
     }
   }
@@ -83,7 +88,8 @@ export function cleanupExport(chart) {
   if (chart.tempBodyStyle) {
     document.body.removeChild(chart.tempBodyStyle);
     delete chart.tempBodyStyle;
-    if (chart.__styledMode) {
+    styledModeExports.delete(chart);
+    if (chart.__styledMode && styledModeExports.size === 0) {
       document.body.removeAttribute('styled-mode');
     }
   }
