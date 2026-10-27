@@ -149,8 +149,8 @@ Highcharts.wrap(Highcharts.Chart.prototype, 'getClipBox', function (proceed, ser
 // TODO: Remove once fixed upstream, see https://github.com/highcharts/highcharts/issues/24548
 Highcharts.wrap(Highcharts.Tooltip.prototype, 'getPosition', function (proceed, ...args) {
   const position = proceed.apply(this, args);
-  const { fixed, positioner } = this.options;
-  if (this.outside && !fixed && !positioner) {
+  // Annotation labels call this method with a stand-in object that has no `options`
+  if (this.outside && !this.options.fixed && !this.options.positioner) {
     const { scrollLeft = 0, scrollTop = 0 } = this.chart.scrollablePlotArea?.scrollingContainer || {};
     position.x -= scrollLeft;
     position.y -= scrollTop;

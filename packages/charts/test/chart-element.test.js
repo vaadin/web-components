@@ -679,4 +679,19 @@ describe('vaadin-chart', () => {
       });
     });
   });
+
+  it('should render an annotation label positioned by distance', async () => {
+    const chart = fixtureSync(`
+      <vaadin-chart
+        tooltip
+        additional-options='{
+          "annotations": [{ "labels": [{ "point": { "x": 1, "y": 2, "xAxis": 0, "yAxis": 0 }, "distance": 20, "text": "Label" }] }]
+        }'
+      >
+        <vaadin-chart-series values="[1, 2, 3]"></vaadin-chart-series>
+      </vaadin-chart>
+    `);
+    await oneEvent(chart, 'chart-load');
+    expect(chart.$.chart.querySelector('.highcharts-annotation-label text').textContent).to.equal('Label');
+  });
 });
