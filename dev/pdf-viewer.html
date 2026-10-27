@@ -15,13 +15,34 @@
 
       const viewer = document.querySelector('vaadin-pdf-viewer');
       const select = document.querySelector('#src');
+      const fileInput = document.querySelector('#file');
       const pageInput = document.querySelector('#page');
       const log = document.querySelector('#log');
 
+      let fileUrl = null;
+      const revokeFileUrl = () => {
+        if (fileUrl) {
+          URL.revokeObjectURL(fileUrl);
+          fileUrl = null;
+        }
+      };
+
       const update = () => {
+        revokeFileUrl();
+        fileInput.value = '';
         viewer.src = select.value;
       };
       select.addEventListener('change', update);
+
+      fileInput.addEventListener('change', () => {
+        const [file] = fileInput.files;
+        if (!file) {
+          return;
+        }
+        revokeFileUrl();
+        fileUrl = URL.createObjectURL(file);
+        viewer.src = fileUrl;
+      });
       pageInput.addEventListener('change', () => {
         viewer.page = pageInput.valueAsNumber;
       });
@@ -63,6 +84,10 @@
           <option value="/packages/pdf-viewer/test/fixtures/invalid.pdf">Invalid file</option>
           <option value="/does-not-exist.pdf">Missing file</option>
         </select>
+      </label>
+      <label>
+        Local file
+        <input type="file" id="file" accept="application/pdf,.pdf" />
       </label>
       <label>
         Page
