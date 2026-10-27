@@ -27,6 +27,8 @@ export const pdfViewerToolbarStyles = css`
     padding: var(--vaadin-pdf-viewer-toolbar-padding, var(--vaadin-padding-xs));
     border-block-end: 1px solid var(--vaadin-pdf-viewer-border-color, var(--vaadin-border-color-secondary));
     background: var(--vaadin-pdf-viewer-toolbar-background, var(--vaadin-background-color));
+    -webkit-user-select: none;
+    user-select: none;
   }
 
   [part~='toolbar-group'] {
