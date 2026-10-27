@@ -67,6 +67,42 @@ describe('edit column editor type', () => {
       editor = column._getEditorComponent(cell);
       expect(editor instanceof customElements.get('vaadin-checkbox')).to.equal(true);
     });
+
+    [
+      ['text', 0, 'Name'],
+      ['select', 1, 'Title'],
+      ['checkbox', 2, 'Married'],
+    ].forEach(([type, index, header]) => {
+      it(`should set the column header text as the ${type} editor accessible name`, () => {
+        column = grid.querySelectorAll('vaadin-grid-pro-edit-column')[index];
+        cell = getContainerCell(grid.$.items, 0, index);
+        dblclick(cell._content);
+        editor = column._getEditorComponent(cell);
+        expect(editor.accessibleName).to.equal(header);
+      });
+    });
+
+    it('should use the header renderer text as the editor accessible name', () => {
+      column = grid.querySelectorAll('vaadin-grid-pro-edit-column')[0];
+      column.headerRenderer = (root) => {
+        root.innerHTML = '<b>Full name</b>';
+      };
+      cell = getContainerCell(grid.$.items, 0, 0);
+      dblclick(cell._content);
+      editor = column._getEditorComponent(cell);
+      expect(editor.accessibleName).to.equal('Full name');
+    });
+
+    it('should not set accessible name on a custom editor', () => {
+      column = grid.querySelectorAll('vaadin-grid-pro-edit-column')[0];
+      column.editModeRenderer = (root) => {
+        root.innerHTML = '<vaadin-text-field></vaadin-text-field>';
+      };
+      cell = getContainerCell(grid.$.items, 0, 0);
+      dblclick(cell._content);
+      editor = column._getEditorComponent(cell);
+      expect(editor.accessibleName).to.be.undefined;
+    });
   });
 
   describe('checkbox', () => {
