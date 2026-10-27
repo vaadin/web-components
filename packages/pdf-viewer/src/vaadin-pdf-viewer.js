@@ -9,6 +9,7 @@
  * license.
  */
 import { html, LitElement } from 'lit';
+import { FocusMixin } from '@vaadin/a11y-base/src/focus-mixin.js';
 import { defineCustomElement } from '@vaadin/component-base/src/define.js';
 import { ElementMixin } from '@vaadin/component-base/src/element-mixin.js';
 import { PolylitMixin } from '@vaadin/component-base/src/polylit-mixin.js';
@@ -73,7 +74,7 @@ import { PdfViewerMixin } from './vaadin-pdf-viewer-mixin.js';
  * @customElement vaadin-pdf-viewer
  * @extends HTMLElement
  */
-class PdfViewer extends PdfViewerMixin(ElementMixin(PolylitMixin(LumoInjectionMixin(LitElement)))) {
+class PdfViewer extends PdfViewerMixin(FocusMixin(ElementMixin(PolylitMixin(LumoInjectionMixin(LitElement))))) {
   static get is() {
     return 'vaadin-pdf-viewer';
   }
@@ -99,13 +100,56 @@ class PdfViewer extends PdfViewerMixin(ElementMixin(PolylitMixin(LumoInjectionMi
           id="content"
           part="content"
           tabindex="${this.pageCount ? '0' : '-1'}"
-          @focusin="${this._onContentFocusIn}"
-          @focusout="${this._onContentFocusOut}"
+          @focusin="${this.#onContentFocusIn}"
+          @focusout="${this.#onContentFocusOut}"
         >
           <div id="pages"></div>
         </div>
       </div>
     `;
+  }
+
+  /**
+   * Override method from `FocusMixin` to focus the page area,
+   * which is only focusable once a document has loaded.
+   * @param {FocusOptions=} options
+   * @protected
+   * @override
+   */
+  focus(options) {
+    if (!this.pageCount) {
+      return;
+    }
+
+    this.$.content.focus(options);
+
+    super.focus(options);
+  }
+
+  /**
+   * Override method from `FocusMixin` to ignore focus events on the host.
+   * Focus moving inside the shadow root does not reach the host, e.g. from
+   * the page area to a link in a page, so the page area handles them.
+   * @param {FocusEvent} _event
+   * @return {boolean}
+   * @protected
+   * @override
+   */
+  _shouldSetFocus(_event) {
+    return false;
+  }
+
+  /** @private */
+  #onContentFocusIn(event) {
+    // Only the page area itself, not an element in a page
+    if (event.target === event.currentTarget) {
+      this._setFocused(true);
+    }
+  }
+
+  /** @private */
+  #onContentFocusOut() {
+    this._setFocused(false);
   }
 }
 

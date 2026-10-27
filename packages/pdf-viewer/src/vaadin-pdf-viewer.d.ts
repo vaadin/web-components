@@ -8,6 +8,7 @@
  * See https://vaadin.com/commercial-license-and-service-terms for the full
  * license.
  */
+import { FocusMixin } from '@vaadin/a11y-base/src/focus-mixin.js';
 import { ElementMixin } from '@vaadin/component-base/src/element-mixin.js';
 import { PdfViewerMixin } from './vaadin-pdf-viewer-mixin.js';
 
@@ -96,7 +97,7 @@ export interface PdfViewerEventMap extends HTMLElementEventMap, PdfViewerCustomE
  * @fires {CustomEvent} page-changed - Fired when the `page` property changes.
  * @fires {CustomEvent} page-count-changed - Fired when the `pageCount` property changes.
  */
-declare class PdfViewer extends PdfViewerMixin(ElementMixin(HTMLElement)) {
+declare class PdfViewer extends PdfViewerMixin(FocusMixin(ElementMixin(HTMLElement))) {
   addEventListener<K extends keyof PdfViewerEventMap>(
     type: K,
     listener: (this: PdfViewer, ev: PdfViewerEventMap[K]) => void,
