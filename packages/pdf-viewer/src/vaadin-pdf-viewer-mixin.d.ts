@@ -9,11 +9,18 @@
  * license.
  */
 import type { Constructor } from '@open-wc/dedupe-mixin';
+import type { ResizeMixinClass } from '@vaadin/component-base/src/resize-mixin.js';
 import type { PdfViewerDocumentMixinClass } from './vaadin-pdf-viewer-document-mixin.js';
+import type { PdfViewerRenderMixinClass } from './vaadin-pdf-viewer-render-mixin.js';
+import type { PdfViewerScrollMixinClass } from './vaadin-pdf-viewer-scroll-mixin.js';
 
 /**
  * A mixin providing common PDF viewer functionality.
  */
 export declare function PdfViewerMixin<T extends Constructor<HTMLElement>>(
   base: T,
-): Constructor<PdfViewerDocumentMixinClass> & T;
+): Constructor<PdfViewerScrollMixinClass> &
+  Constructor<ResizeMixinClass> &
+  Constructor<PdfViewerRenderMixinClass> &
+  Constructor<PdfViewerDocumentMixinClass> &
+  T;

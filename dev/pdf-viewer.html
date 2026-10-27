@@ -15,12 +15,23 @@
 
       const viewer = document.querySelector('vaadin-pdf-viewer');
       const select = document.querySelector('#src');
+      const pageInput = document.querySelector('#page');
       const log = document.querySelector('#log');
 
       const update = () => {
         viewer.src = select.value;
       };
       select.addEventListener('change', update);
+      pageInput.addEventListener('change', () => {
+        viewer.page = pageInput.valueAsNumber;
+      });
+
+      viewer.addEventListener('page-changed', (e) => {
+        pageInput.value = e.detail.value;
+      });
+      viewer.addEventListener('page-count-changed', (e) => {
+        pageInput.max = e.detail.value;
+      });
 
       viewer.addEventListener('document-load', (e) => {
         log.textContent = `document-load: ${JSON.stringify(e.detail)}`;
@@ -52,6 +63,10 @@
           <option value="/packages/pdf-viewer/test/fixtures/invalid.pdf">Invalid file</option>
           <option value="/does-not-exist.pdf">Missing file</option>
         </select>
+      </label>
+      <label>
+        Page
+        <input type="number" id="page" min="1" value="1" />
       </label>
       <output id="log"></output>
     </p>

@@ -30,7 +30,7 @@ export function loadPdfjs() {
  * The worker shared by all viewers on the page, with the number of documents
  * that use it.
  *
- * @typedef {{ worker: import('pdfjs-dist').PDFWorker | null, port: Worker, failed: Promise<never> | null, users: number, pdfjs: typeof import('pdfjs-dist') }} WorkerHandle
+ * @typedef {{ worker: import('pdfjs-dist').PDFWorker | null, port: Worker, failed: Promise<never> | null, users: number }} WorkerHandle
  * @type {WorkerHandle | null}
  */
 let sharedWorker = null;
@@ -49,7 +49,7 @@ export function acquireWorker(pdfjs) {
   if (!sharedWorker) {
     const port = new Worker(new URL('./pdf-viewer-worker.js', import.meta.url), { type: 'module' });
     /** @type {WorkerHandle} */
-    const handle = { worker: null, port, failed: null, users: 0, pdfjs };
+    const handle = { worker: null, port, failed: null, users: 0 };
     // pdf.js does not notice when a worker passed as a port fails to load,
     // so loading would wait forever. Expose the failure to the caller instead,
     // and make sure that the next document gets a new worker.
@@ -84,8 +84,6 @@ export function releaseWorker(handle) {
   if (handle.users === 0) {
     handle.worker.destroy();
     handle.port.terminate();
-    // Removes the elements that the text layer adds to the document for measuring text.
-    handle.pdfjs.TextLayer.cleanup();
     if (sharedWorker === handle) {
       sharedWorker = null;
     }

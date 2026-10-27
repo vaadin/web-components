@@ -9,6 +9,7 @@
  * license.
  */
 import type { Constructor } from '@open-wc/dedupe-mixin';
+import type { PDFDocumentProxy, PDFPageProxy } from 'pdfjs-dist';
 
 export declare function PdfViewerDocumentMixin<T extends Constructor<HTMLElement>>(
   base: T,
@@ -25,4 +26,19 @@ export declare class PdfViewerDocumentMixinClass {
    * is loaded.
    */
   readonly pageCount: number;
+
+  /**
+   * The loaded document, or null.
+   */
+  protected readonly _pdfDocument: PDFDocumentProxy | null;
+
+  /**
+   * Called when a document has loaded, before `document-load` is fired.
+   */
+  protected _documentLoaded(details: { firstPage: PDFPageProxy }): void;
+
+  /**
+   * Called when the document is unloaded, e.g. before another one loads.
+   */
+  protected _documentUnloaded(): void;
 }

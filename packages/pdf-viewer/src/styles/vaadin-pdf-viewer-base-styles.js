@@ -30,6 +30,16 @@ const pdfViewerBaseStyles = css`
     display: none !important;
   }
 
+  [part='content'] {
+    position: relative;
+    flex: 1 1 auto;
+    min-width: 0;
+    min-height: 0;
+    overflow: auto;
+    scrollbar-gutter: stable;
+    padding: var(--vaadin-pdf-viewer-padding, var(--vaadin-padding-m));
+  }
+
   [part='loader'] {
     position: absolute;
     inset: 0;
