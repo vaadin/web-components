@@ -8,7 +8,7 @@ import type { IntegerField } from '@vaadin/integer-field';
 import type { Tooltip } from '@vaadin/tooltip';
 import type { PdfViewerButton } from '../src/vaadin-pdf-viewer-button.js';
 import type { PdfViewer } from '../vaadin-pdf-viewer.js';
-import { fixtureUrl, loadDocument, nextRenderIdle } from './helpers.js';
+import { fixtureUrl, loadAndRender, loadDocument, nextRenderIdle } from './helpers.js';
 
 describe('toolbar', () => {
   let viewer: PdfViewer;
@@ -73,9 +73,7 @@ describe('toolbar', () => {
 
   describe('page navigation', () => {
     beforeEach(async () => {
-      const idle = nextRenderIdle(viewer);
-      await loadDocument(viewer, 'multi-page.pdf');
-      await idle;
+      await loadAndRender(viewer, fixtureUrl('multi-page.pdf'));
     });
 
     it('should show the current page in the page field', () => {
@@ -240,9 +238,7 @@ describe('toolbar', () => {
 
   it('should show the toolbar without scrolling on a narrow viewer', async () => {
     viewer.style.maxWidth = '320px';
-    const idle = nextRenderIdle(viewer);
-    await loadDocument(viewer, 'multi-page.pdf');
-    await idle;
+    await loadAndRender(viewer, fixtureUrl('multi-page.pdf'));
     expect(header.scrollHeight).to.be.at.most(header.clientHeight);
   });
 
@@ -298,9 +294,7 @@ describe('toolbar', () => {
       viewer.style.maxWidth = '200px';
       viewer.style.maxHeight = '200px';
       viewer.style.fontSize = '32px';
-      const idle = nextRenderIdle(viewer);
-      await loadDocument(viewer, 'multi-page.pdf');
-      await idle;
+      await loadAndRender(viewer, fixtureUrl('multi-page.pdf'));
     });
 
     function getControls() {

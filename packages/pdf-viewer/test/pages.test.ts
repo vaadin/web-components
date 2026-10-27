@@ -5,7 +5,7 @@ import './enable-feature-flag.js';
 import '../vaadin-pdf-viewer.js';
 import { clearWarnings } from '@vaadin/component-base/src/warnings.js';
 import type { PdfViewer } from '../vaadin-pdf-viewer.js';
-import { createPdf, createPdfUrl, fixtureUrl, loadDocument, nextRenderIdle } from './helpers.js';
+import { createPdf, createPdfUrl, fixtureUrl, loadAndRender, loadDocument, nextRenderIdle } from './helpers.js';
 
 const A4_RATIO = 842.88 / 595.92;
 
@@ -53,18 +53,10 @@ describe('pages', () => {
     await nextRender();
   }
 
-  async function loadAndRender(src = fixtureUrl('multi-page.pdf')) {
-    const idle = nextRenderIdle(viewer);
-    const loaded = oneEvent(viewer, 'document-load');
-    viewer.src = src;
-    await loaded;
-    await idle;
-  }
-
   describe('loaded', () => {
     beforeEach(async () => {
       await createViewer();
-      await loadAndRender();
+      await loadAndRender(viewer, fixtureUrl('multi-page.pdf'));
     });
 
     describe('layout', () => {
@@ -320,7 +312,7 @@ describe('pages', () => {
 
     beforeEach(async () => {
       await createViewer();
-      await loadAndRender(createPdfUrl(20));
+      await loadAndRender(viewer, createPdfUrl(20));
       rendered = [];
       observer = new MutationObserver((records) => {
         records.forEach((record) => {
@@ -348,7 +340,7 @@ describe('pages', () => {
   describe('rotation', () => {
     beforeEach(async () => {
       await createViewer();
-      await loadAndRender(fixtureUrl('rotated.pdf'));
+      await loadAndRender(viewer, fixtureUrl('rotated.pdf'));
     });
 
     it('should show a page with rotation in landscape', () => {
@@ -362,7 +354,7 @@ describe('pages', () => {
       // Pages so wide that each canvas has the most pixels a canvas may have
       viewer = fixtureSync('<vaadin-pdf-viewer style="width: 4000px; height: 400px"></vaadin-pdf-viewer>');
       await nextRender();
-      await loadAndRender(createPdfUrl(200));
+      await loadAndRender(viewer, createPdfUrl(200));
     });
 
     it('should keep the canvas pixels within the budget while scrolling', async () => {
@@ -401,7 +393,7 @@ describe('pages', () => {
           media.startsWith('(resolution') ? (query as MediaQueryList) : matchMedia(media),
         );
       await createViewer();
-      await loadAndRender();
+      await loadAndRender(viewer, fixtureUrl('multi-page.pdf'));
     });
 
     afterEach(() => {
@@ -460,14 +452,14 @@ describe('pages', () => {
     });
 
     it('should log a warning for a page that fails to render', async () => {
-      await loadAndRender(createPdfUrl(1));
+      await loadAndRender(viewer, createPdfUrl(1));
       expect(warnStub).to.be.calledOnce;
       expect(warnStub.firstCall.args[0]).to.include('Failed to render page 1');
       expect(getRenderedPageNumbers()).to.be.empty;
     });
 
     it('should free the canvas of a page that fails to render', async () => {
-      await loadAndRender(createPdfUrl(1));
+      await loadAndRender(viewer, createPdfUrl(1));
       const index = getContextStub.returnValues.indexOf(null);
       const canvas: HTMLCanvasElement = getContextStub.thisValues[index];
       expect(canvas.width).to.equal(0);
@@ -553,7 +545,7 @@ describe('pages', () => {
   describe('rtl', () => {
     beforeEach(async () => {
       await createViewer('dir="rtl"');
-      await loadAndRender();
+      await loadAndRender(viewer, fixtureUrl('multi-page.pdf'));
     });
 
     it('should keep the pages left to right', () => {
@@ -591,6 +583,7 @@ describe('pages', () => {
     beforeEach(async () => {
       await createViewer();
       await loadAndRender(
+        viewer,
         createPdf([
           { content: '', mediaBox: [0, 0, 612, 792] },
           { content: '', mediaBox: [0, 0, 792, 612] },
@@ -610,6 +603,7 @@ describe('pages', () => {
       await createViewer();
       viewer.page = 3;
       await loadAndRender(
+        viewer,
         createPdf([
           { content: '', mediaBox: [0, 0, 612, 792] },
           { content: '', mediaBox: [0, 0, 792, 612] },
