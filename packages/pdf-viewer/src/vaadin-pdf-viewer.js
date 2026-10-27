@@ -141,8 +141,7 @@ class PdfViewer extends PdfViewerMixin(FocusMixin(ElementMixin(PolylitMixin(Lumo
 
   /** @private */
   #onContentFocusIn(event) {
-    // Only the page area itself, not an element in a page
-    if (event.target === event.currentTarget) {
+    if (event.target === this.$.content) {
       this._setFocused(true);
     }
   }
