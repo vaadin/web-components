@@ -34,14 +34,36 @@ export const PdfViewerKeyboardMixin = (superClass) =>
     }
 
     /**
-     * Override method from `FocusMixin` to only handle events from the page area.
-     * @param {FocusEvent} event
+     * Override method from `FocusMixin` to ignore focus events on the host.
+     * Focus moving inside the shadow root does not reach the host, e.g. from
+     * the page area to a link in a page, so the page area handles them, see
+     * `_onContentFocusIn()` and `_onContentFocusOut()`.
+     * @param {FocusEvent} _event
      * @return {boolean}
      * @protected
      * @override
      */
-    _shouldSetFocus(event) {
-      return event.composedPath()[0] === this.$.content;
+    _shouldSetFocus(_event) {
+      return false;
+    }
+
+    /**
+     * Marks the viewer as focused when the page area itself gets focus.
+     * @param {FocusEvent} event
+     * @protected
+     */
+    _onContentFocusIn(event) {
+      if (event.target === event.currentTarget) {
+        this._setFocused(true);
+      }
+    }
+
+    /**
+     * Marks the viewer as not focused when the page area or an element in it loses focus.
+     * @protected
+     */
+    _onContentFocusOut() {
+      this._setFocused(false);
     }
 
     /**

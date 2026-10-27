@@ -47,6 +47,17 @@ describe('focus', () => {
       expect(viewer.hasAttribute('focused')).to.be.false;
     });
 
+    it('should toggle focused attribute when focus moves between the page area and an element in a page', () => {
+      // E.g. a link in a page
+      const button = document.createElement('button');
+      content.querySelector('[part~="page"]')!.append(button);
+      content.focus();
+      button.focus();
+      expect(viewer.hasAttribute('focused')).to.be.false;
+      content.focus();
+      expect(viewer.hasAttribute('focused')).to.be.true;
+    });
+
     it('should set focus-ring attribute when the page area is focused using keyboard', async () => {
       input.focus();
       await sendKeys({ press: 'Tab' });

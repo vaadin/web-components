@@ -19,4 +19,14 @@ export declare function PdfViewerKeyboardMixin<T extends Constructor<HTMLElement
   base: T,
 ): Constructor<PdfViewerKeyboardMixinClass> & Constructor<FocusMixinClass> & Constructor<KeyboardMixinClass> & T;
 
-export declare class PdfViewerKeyboardMixinClass {}
+export declare class PdfViewerKeyboardMixinClass {
+  /**
+   * Marks the viewer as focused when the page area itself gets focus.
+   */
+  protected _onContentFocusIn(event: FocusEvent): void;
+
+  /**
+   * Marks the viewer as not focused when the page area or an element in it loses focus.
+   */
+  protected _onContentFocusOut(): void;
+}
