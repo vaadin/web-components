@@ -427,7 +427,7 @@ describe('keyboard', () => {
     });
 
     it('should parse short year against today for non-parsable reference date', async () => {
-      datePicker.i18n = { ...datePicker.i18n, referenceDate: '2026-02-30' };
+      datePicker.i18n = { ...datePicker.i18n, referenceDate: '1910-02-30' };
 
       await sendKeys({ type: '1/15/24' });
       await untilOverlayRendered(datePicker);
