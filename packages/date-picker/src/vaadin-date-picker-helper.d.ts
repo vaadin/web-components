@@ -54,8 +54,10 @@ declare function getAdjustedYear(referenceDate: Date, year: number, month?: numb
  * Parse date string of one of the following date formats:
  * - ISO 8601 `"YYYY-MM-DD"`
  * - 6-digit extended ISO 8601 `"+YYYYYY-MM-DD"`, `"-YYYYYY-MM-DD"`
+ *
+ * A date that does not exist, such as `"2026-02-30"`, is not parsed.
  */
-declare function parseDate(str: string): Date;
+declare function parseDate(str: string): Date | undefined;
 
 export {
   getISOWeekNumber,
