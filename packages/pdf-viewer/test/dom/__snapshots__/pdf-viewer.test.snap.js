@@ -11,7 +11,8 @@ snapshots["vaadin-pdf-viewer host default"] =
     icon="previous-page"
     role="button"
     slot="toolbar-page"
-    tabindex="-1"
+    style="--_vaadin-button-disabled-pointer-events: auto;"
+    tabindex="0"
     theme="tertiary icon"
   >
     <vaadin-tooltip
@@ -35,7 +36,8 @@ snapshots["vaadin-pdf-viewer host default"] =
     icon="next-page"
     role="button"
     slot="toolbar-page"
-    tabindex="-1"
+    style="--_vaadin-button-disabled-pointer-events: auto;"
+    tabindex="0"
     theme="tertiary icon"
   >
     <vaadin-tooltip
@@ -104,7 +106,8 @@ snapshots["vaadin-pdf-viewer host loading"] =
     icon="previous-page"
     role="button"
     slot="toolbar-page"
-    tabindex="-1"
+    style="--_vaadin-button-disabled-pointer-events: auto;"
+    tabindex="0"
     theme="tertiary icon"
   >
     <vaadin-tooltip
@@ -128,7 +131,8 @@ snapshots["vaadin-pdf-viewer host loading"] =
     icon="next-page"
     role="button"
     slot="toolbar-page"
-    tabindex="-1"
+    style="--_vaadin-button-disabled-pointer-events: auto;"
+    tabindex="0"
     theme="tertiary icon"
   >
     <vaadin-tooltip
@@ -197,7 +201,8 @@ snapshots["vaadin-pdf-viewer host error"] =
     icon="previous-page"
     role="button"
     slot="toolbar-page"
-    tabindex="-1"
+    style="--_vaadin-button-disabled-pointer-events: auto;"
+    tabindex="0"
     theme="tertiary icon"
   >
     <vaadin-tooltip
@@ -221,7 +226,8 @@ snapshots["vaadin-pdf-viewer host error"] =
     icon="next-page"
     role="button"
     slot="toolbar-page"
-    tabindex="-1"
+    style="--_vaadin-button-disabled-pointer-events: auto;"
+    tabindex="0"
     theme="tertiary icon"
   >
     <vaadin-tooltip
@@ -290,7 +296,8 @@ snapshots["vaadin-pdf-viewer host document"] =
     icon="previous-page"
     role="button"
     slot="toolbar-page"
-    tabindex="-1"
+    style="--_vaadin-button-disabled-pointer-events: auto;"
+    tabindex="0"
     theme="tertiary icon"
   >
     <vaadin-tooltip
@@ -312,6 +319,7 @@ snapshots["vaadin-pdf-viewer host document"] =
     icon="next-page"
     role="button"
     slot="toolbar-page"
+    style="--_vaadin-button-disabled-pointer-events: auto;"
     tabindex="0"
     theme="tertiary icon"
   >

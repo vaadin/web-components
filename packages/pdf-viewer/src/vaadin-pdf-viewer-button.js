@@ -57,6 +57,11 @@ class PdfViewerButton extends ButtonMixin(DirMixin(PolylitMixin(LumoInjectionMix
     this._tooltipController = new TooltipController(this);
     this.addController(this._tooltipController);
   }
+
+  /** @override */
+  __shouldAllowFocusWhenDisabled() {
+    return true;
+  }
 }
 
 defineCustomElement(PdfViewerButton);
