@@ -171,7 +171,7 @@ export function getAdjustedYear(referenceDate, year, month = 0, day = 1) {
   return adjustedYear;
 }
 
-const ISO_DATE = /^([-+]\d{1}|\d{2,4}|[-+]\d{6})-(\d{1,2})-(\d{1,2})$/u;
+const ISO_DATE = /^([-+]\d|\d{2,4}|[-+]\d{6})-(\d{1,2})-(\d{1,2})$/u;
 
 // The parts of a date string in a format the parsers accept, as written.
 function parseParts(str) {
