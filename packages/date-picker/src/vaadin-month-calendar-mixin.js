@@ -162,7 +162,7 @@ export const MonthCalendarMixin = (superClass) =>
      */
     get focusableDateButton() {
       const cell = this.focusableDateElement;
-      return cell ? cell.querySelector('[part~=date-button]') : undefined;
+      return cell ? cell.querySelector('.date-button') : undefined;
     }
 
     /** @protected */

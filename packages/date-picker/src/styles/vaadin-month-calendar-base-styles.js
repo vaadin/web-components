@@ -70,7 +70,7 @@ export const monthCalendarStyles = css`
   [part~='weekday'],
   [part~='week-number'],
   [part~='date'],
-  [part~='date-button'] {
+  .date-button {
     align-items: center;
     display: flex;
     justify-content: center;
@@ -97,7 +97,7 @@ export const monthCalendarStyles = css`
     aspect-ratio: 1;
   }
 
-  [part~='date-button'] {
+  .date-button {
     flex: 1;
     align-self: stretch;
     outline: none;

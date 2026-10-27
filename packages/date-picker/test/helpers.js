@@ -195,7 +195,7 @@ export function getWeekDayCells(calendar) {
  * @return {HTMLElement | null}
  */
 export function getDateButton(cell) {
-  return cell.querySelector('[part~="date-button"]');
+  return cell.querySelector('.date-button');
 }
 
 /**

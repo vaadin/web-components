@@ -84,7 +84,7 @@ class MonthCalendar extends MonthCalendarMixin(ThemableMixin(PolylitMixin(LumoIn
                       >${
                         date
                           ? html`<div
-                              part="date-button"
+                              class="date-button"
                               role="button"
                               tabindex="${this.__computeDayTabIndex(date, this.focusedDate)}"
                               aria-label="${this.__computeDayAriaLabel(date)}"

@@ -122,7 +122,7 @@ snapshots["vaadin-month-calendar shadow default"] =
         <div
           aria-disabled="false"
           aria-label="1 February 2016, Monday"
-          part="date-button"
+          class="date-button"
           role="button"
           tabindex="-1"
         >
@@ -137,7 +137,7 @@ snapshots["vaadin-month-calendar shadow default"] =
         <div
           aria-disabled="false"
           aria-label="2 February 2016, Tuesday"
-          part="date-button"
+          class="date-button"
           role="button"
           tabindex="-1"
         >
@@ -152,7 +152,7 @@ snapshots["vaadin-month-calendar shadow default"] =
         <div
           aria-disabled="false"
           aria-label="3 February 2016, Wednesday"
-          part="date-button"
+          class="date-button"
           role="button"
           tabindex="-1"
         >
@@ -167,7 +167,7 @@ snapshots["vaadin-month-calendar shadow default"] =
         <div
           aria-disabled="false"
           aria-label="4 February 2016, Thursday"
-          part="date-button"
+          class="date-button"
           role="button"
           tabindex="-1"
         >
@@ -182,7 +182,7 @@ snapshots["vaadin-month-calendar shadow default"] =
         <div
           aria-disabled="false"
           aria-label="5 February 2016, Friday, Today"
-          part="date-button"
+          class="date-button"
           role="button"
           tabindex="-1"
         >
@@ -197,7 +197,7 @@ snapshots["vaadin-month-calendar shadow default"] =
         <div
           aria-disabled="false"
           aria-label="6 February 2016, Saturday"
-          part="date-button"
+          class="date-button"
           role="button"
           tabindex="-1"
         >
@@ -221,7 +221,7 @@ snapshots["vaadin-month-calendar shadow default"] =
         <div
           aria-disabled="false"
           aria-label="7 February 2016, Sunday"
-          part="date-button"
+          class="date-button"
           role="button"
           tabindex="-1"
         >
@@ -236,7 +236,7 @@ snapshots["vaadin-month-calendar shadow default"] =
         <div
           aria-disabled="false"
           aria-label="8 February 2016, Monday"
-          part="date-button"
+          class="date-button"
           role="button"
           tabindex="-1"
         >
@@ -251,7 +251,7 @@ snapshots["vaadin-month-calendar shadow default"] =
         <div
           aria-disabled="false"
           aria-label="9 February 2016, Tuesday"
-          part="date-button"
+          class="date-button"
           role="button"
           tabindex="-1"
         >
@@ -266,7 +266,7 @@ snapshots["vaadin-month-calendar shadow default"] =
         <div
           aria-disabled="false"
           aria-label="10 February 2016, Wednesday"
-          part="date-button"
+          class="date-button"
           role="button"
           tabindex="-1"
         >
@@ -281,7 +281,7 @@ snapshots["vaadin-month-calendar shadow default"] =
         <div
           aria-disabled="false"
           aria-label="11 February 2016, Thursday"
-          part="date-button"
+          class="date-button"
           role="button"
           tabindex="-1"
         >
@@ -296,7 +296,7 @@ snapshots["vaadin-month-calendar shadow default"] =
         <div
           aria-disabled="false"
           aria-label="12 February 2016, Friday"
-          part="date-button"
+          class="date-button"
           role="button"
           tabindex="-1"
         >
@@ -311,7 +311,7 @@ snapshots["vaadin-month-calendar shadow default"] =
         <div
           aria-disabled="false"
           aria-label="13 February 2016, Saturday"
-          part="date-button"
+          class="date-button"
           role="button"
           tabindex="-1"
         >
@@ -335,7 +335,7 @@ snapshots["vaadin-month-calendar shadow default"] =
         <div
           aria-disabled="false"
           aria-label="14 February 2016, Sunday"
-          part="date-button"
+          class="date-button"
           role="button"
           tabindex="-1"
         >
@@ -350,7 +350,7 @@ snapshots["vaadin-month-calendar shadow default"] =
         <div
           aria-disabled="false"
           aria-label="15 February 2016, Monday"
-          part="date-button"
+          class="date-button"
           role="button"
           tabindex="-1"
         >
@@ -365,7 +365,7 @@ snapshots["vaadin-month-calendar shadow default"] =
         <div
           aria-disabled="false"
           aria-label="16 February 2016, Tuesday"
-          part="date-button"
+          class="date-button"
           role="button"
           tabindex="-1"
         >
@@ -380,7 +380,7 @@ snapshots["vaadin-month-calendar shadow default"] =
         <div
           aria-disabled="false"
           aria-label="17 February 2016, Wednesday"
-          part="date-button"
+          class="date-button"
           role="button"
           tabindex="-1"
         >
@@ -395,7 +395,7 @@ snapshots["vaadin-month-calendar shadow default"] =
         <div
           aria-disabled="false"
           aria-label="18 February 2016, Thursday"
-          part="date-button"
+          class="date-button"
           role="button"
           tabindex="-1"
         >
@@ -410,7 +410,7 @@ snapshots["vaadin-month-calendar shadow default"] =
         <div
           aria-disabled="false"
           aria-label="19 February 2016, Friday"
-          part="date-button"
+          class="date-button"
           role="button"
           tabindex="-1"
         >
@@ -425,7 +425,7 @@ snapshots["vaadin-month-calendar shadow default"] =
         <div
           aria-disabled="false"
           aria-label="20 February 2016, Saturday"
-          part="date-button"
+          class="date-button"
           role="button"
           tabindex="-1"
         >
@@ -449,7 +449,7 @@ snapshots["vaadin-month-calendar shadow default"] =
         <div
           aria-disabled="false"
           aria-label="21 February 2016, Sunday"
-          part="date-button"
+          class="date-button"
           role="button"
           tabindex="-1"
         >
@@ -464,7 +464,7 @@ snapshots["vaadin-month-calendar shadow default"] =
         <div
           aria-disabled="false"
           aria-label="22 February 2016, Monday"
-          part="date-button"
+          class="date-button"
           role="button"
           tabindex="-1"
         >
@@ -479,7 +479,7 @@ snapshots["vaadin-month-calendar shadow default"] =
         <div
           aria-disabled="false"
           aria-label="23 February 2016, Tuesday"
-          part="date-button"
+          class="date-button"
           role="button"
           tabindex="-1"
         >
@@ -494,7 +494,7 @@ snapshots["vaadin-month-calendar shadow default"] =
         <div
           aria-disabled="false"
           aria-label="24 February 2016, Wednesday"
-          part="date-button"
+          class="date-button"
           role="button"
           tabindex="-1"
         >
@@ -509,7 +509,7 @@ snapshots["vaadin-month-calendar shadow default"] =
         <div
           aria-disabled="false"
           aria-label="25 February 2016, Thursday"
-          part="date-button"
+          class="date-button"
           role="button"
           tabindex="-1"
         >
@@ -524,7 +524,7 @@ snapshots["vaadin-month-calendar shadow default"] =
         <div
           aria-disabled="false"
           aria-label="26 February 2016, Friday"
-          part="date-button"
+          class="date-button"
           role="button"
           tabindex="-1"
         >
@@ -539,7 +539,7 @@ snapshots["vaadin-month-calendar shadow default"] =
         <div
           aria-disabled="false"
           aria-label="27 February 2016, Saturday"
-          part="date-button"
+          class="date-button"
           role="button"
           tabindex="-1"
         >
@@ -563,7 +563,7 @@ snapshots["vaadin-month-calendar shadow default"] =
         <div
           aria-disabled="false"
           aria-label="28 February 2016, Sunday"
-          part="date-button"
+          class="date-button"
           role="button"
           tabindex="-1"
         >
@@ -578,7 +578,7 @@ snapshots["vaadin-month-calendar shadow default"] =
         <div
           aria-disabled="false"
           aria-label="29 February 2016, Monday"
-          part="date-button"
+          class="date-button"
           role="button"
           tabindex="-1"
         >
@@ -703,7 +703,7 @@ snapshots["vaadin-month-calendar shadow max date"] =
         <div
           aria-disabled="false"
           aria-label="1 February 2016, Monday"
-          part="date-button"
+          class="date-button"
           role="button"
           tabindex="-1"
         >
@@ -718,7 +718,7 @@ snapshots["vaadin-month-calendar shadow max date"] =
         <div
           aria-disabled="false"
           aria-label="2 February 2016, Tuesday"
-          part="date-button"
+          class="date-button"
           role="button"
           tabindex="-1"
         >
@@ -733,7 +733,7 @@ snapshots["vaadin-month-calendar shadow max date"] =
         <div
           aria-disabled="false"
           aria-label="3 February 2016, Wednesday"
-          part="date-button"
+          class="date-button"
           role="button"
           tabindex="-1"
         >
@@ -748,7 +748,7 @@ snapshots["vaadin-month-calendar shadow max date"] =
         <div
           aria-disabled="false"
           aria-label="4 February 2016, Thursday"
-          part="date-button"
+          class="date-button"
           role="button"
           tabindex="-1"
         >
@@ -763,7 +763,7 @@ snapshots["vaadin-month-calendar shadow max date"] =
         <div
           aria-disabled="false"
           aria-label="5 February 2016, Friday, Today"
-          part="date-button"
+          class="date-button"
           role="button"
           tabindex="-1"
         >
@@ -778,7 +778,7 @@ snapshots["vaadin-month-calendar shadow max date"] =
         <div
           aria-disabled="false"
           aria-label="6 February 2016, Saturday"
-          part="date-button"
+          class="date-button"
           role="button"
           tabindex="-1"
         >
@@ -802,7 +802,7 @@ snapshots["vaadin-month-calendar shadow max date"] =
         <div
           aria-disabled="false"
           aria-label="7 February 2016, Sunday"
-          part="date-button"
+          class="date-button"
           role="button"
           tabindex="-1"
         >
@@ -817,7 +817,7 @@ snapshots["vaadin-month-calendar shadow max date"] =
         <div
           aria-disabled="false"
           aria-label="8 February 2016, Monday"
-          part="date-button"
+          class="date-button"
           role="button"
           tabindex="-1"
         >
@@ -832,7 +832,7 @@ snapshots["vaadin-month-calendar shadow max date"] =
         <div
           aria-disabled="false"
           aria-label="9 February 2016, Tuesday"
-          part="date-button"
+          class="date-button"
           role="button"
           tabindex="-1"
         >
@@ -847,7 +847,7 @@ snapshots["vaadin-month-calendar shadow max date"] =
         <div
           aria-disabled="false"
           aria-label="10 February 2016, Wednesday"
-          part="date-button"
+          class="date-button"
           role="button"
           tabindex="-1"
         >
@@ -863,7 +863,7 @@ snapshots["vaadin-month-calendar shadow max date"] =
         <div
           aria-disabled="true"
           aria-label="11 February 2016, Thursday"
-          part="date-button"
+          class="date-button"
           role="button"
           tabindex="-1"
         >
@@ -879,7 +879,7 @@ snapshots["vaadin-month-calendar shadow max date"] =
         <div
           aria-disabled="true"
           aria-label="12 February 2016, Friday"
-          part="date-button"
+          class="date-button"
           role="button"
           tabindex="-1"
         >
@@ -895,7 +895,7 @@ snapshots["vaadin-month-calendar shadow max date"] =
         <div
           aria-disabled="true"
           aria-label="13 February 2016, Saturday"
-          part="date-button"
+          class="date-button"
           role="button"
           tabindex="-1"
         >
@@ -920,7 +920,7 @@ snapshots["vaadin-month-calendar shadow max date"] =
         <div
           aria-disabled="true"
           aria-label="14 February 2016, Sunday"
-          part="date-button"
+          class="date-button"
           role="button"
           tabindex="-1"
         >
@@ -936,7 +936,7 @@ snapshots["vaadin-month-calendar shadow max date"] =
         <div
           aria-disabled="true"
           aria-label="15 February 2016, Monday"
-          part="date-button"
+          class="date-button"
           role="button"
           tabindex="-1"
         >
@@ -952,7 +952,7 @@ snapshots["vaadin-month-calendar shadow max date"] =
         <div
           aria-disabled="true"
           aria-label="16 February 2016, Tuesday"
-          part="date-button"
+          class="date-button"
           role="button"
           tabindex="-1"
         >
@@ -968,7 +968,7 @@ snapshots["vaadin-month-calendar shadow max date"] =
         <div
           aria-disabled="true"
           aria-label="17 February 2016, Wednesday"
-          part="date-button"
+          class="date-button"
           role="button"
           tabindex="-1"
         >
@@ -984,7 +984,7 @@ snapshots["vaadin-month-calendar shadow max date"] =
         <div
           aria-disabled="true"
           aria-label="18 February 2016, Thursday"
-          part="date-button"
+          class="date-button"
           role="button"
           tabindex="-1"
         >
@@ -1000,7 +1000,7 @@ snapshots["vaadin-month-calendar shadow max date"] =
         <div
           aria-disabled="true"
           aria-label="19 February 2016, Friday"
-          part="date-button"
+          class="date-button"
           role="button"
           tabindex="-1"
         >
@@ -1016,7 +1016,7 @@ snapshots["vaadin-month-calendar shadow max date"] =
         <div
           aria-disabled="true"
           aria-label="20 February 2016, Saturday"
-          part="date-button"
+          class="date-button"
           role="button"
           tabindex="-1"
         >
@@ -1041,7 +1041,7 @@ snapshots["vaadin-month-calendar shadow max date"] =
         <div
           aria-disabled="true"
           aria-label="21 February 2016, Sunday"
-          part="date-button"
+          class="date-button"
           role="button"
           tabindex="-1"
         >
@@ -1057,7 +1057,7 @@ snapshots["vaadin-month-calendar shadow max date"] =
         <div
           aria-disabled="true"
           aria-label="22 February 2016, Monday"
-          part="date-button"
+          class="date-button"
           role="button"
           tabindex="-1"
         >
@@ -1073,7 +1073,7 @@ snapshots["vaadin-month-calendar shadow max date"] =
         <div
           aria-disabled="true"
           aria-label="23 February 2016, Tuesday"
-          part="date-button"
+          class="date-button"
           role="button"
           tabindex="-1"
         >
@@ -1089,7 +1089,7 @@ snapshots["vaadin-month-calendar shadow max date"] =
         <div
           aria-disabled="true"
           aria-label="24 February 2016, Wednesday"
-          part="date-button"
+          class="date-button"
           role="button"
           tabindex="-1"
         >
@@ -1105,7 +1105,7 @@ snapshots["vaadin-month-calendar shadow max date"] =
         <div
           aria-disabled="true"
           aria-label="25 February 2016, Thursday"
-          part="date-button"
+          class="date-button"
           role="button"
           tabindex="-1"
         >
@@ -1121,7 +1121,7 @@ snapshots["vaadin-month-calendar shadow max date"] =
         <div
           aria-disabled="true"
           aria-label="26 February 2016, Friday"
-          part="date-button"
+          class="date-button"
           role="button"
           tabindex="-1"
         >
@@ -1137,7 +1137,7 @@ snapshots["vaadin-month-calendar shadow max date"] =
         <div
           aria-disabled="true"
           aria-label="27 February 2016, Saturday"
-          part="date-button"
+          class="date-button"
           role="button"
           tabindex="-1"
         >
@@ -1162,7 +1162,7 @@ snapshots["vaadin-month-calendar shadow max date"] =
         <div
           aria-disabled="true"
           aria-label="28 February 2016, Sunday"
-          part="date-button"
+          class="date-button"
           role="button"
           tabindex="-1"
         >
@@ -1178,7 +1178,7 @@ snapshots["vaadin-month-calendar shadow max date"] =
         <div
           aria-disabled="true"
           aria-label="29 February 2016, Monday"
-          part="date-button"
+          class="date-button"
           role="button"
           tabindex="-1"
         >
@@ -1295,7 +1295,7 @@ snapshots["vaadin-month-calendar shadow week numbers"] =
         <div
           aria-disabled="false"
           aria-label="1 February 2016, Monday"
-          part="date-button"
+          class="date-button"
           role="button"
           tabindex="-1"
         >
@@ -1310,7 +1310,7 @@ snapshots["vaadin-month-calendar shadow week numbers"] =
         <div
           aria-disabled="false"
           aria-label="2 February 2016, Tuesday"
-          part="date-button"
+          class="date-button"
           role="button"
           tabindex="-1"
         >
@@ -1325,7 +1325,7 @@ snapshots["vaadin-month-calendar shadow week numbers"] =
         <div
           aria-disabled="false"
           aria-label="3 February 2016, Wednesday"
-          part="date-button"
+          class="date-button"
           role="button"
           tabindex="-1"
         >
@@ -1340,7 +1340,7 @@ snapshots["vaadin-month-calendar shadow week numbers"] =
         <div
           aria-disabled="false"
           aria-label="4 February 2016, Thursday"
-          part="date-button"
+          class="date-button"
           role="button"
           tabindex="-1"
         >
@@ -1355,7 +1355,7 @@ snapshots["vaadin-month-calendar shadow week numbers"] =
         <div
           aria-disabled="false"
           aria-label="5 February 2016, Friday, Today"
-          part="date-button"
+          class="date-button"
           role="button"
           tabindex="-1"
         >
@@ -1370,7 +1370,7 @@ snapshots["vaadin-month-calendar shadow week numbers"] =
         <div
           aria-disabled="false"
           aria-label="6 February 2016, Saturday"
-          part="date-button"
+          class="date-button"
           role="button"
           tabindex="-1"
         >
@@ -1385,7 +1385,7 @@ snapshots["vaadin-month-calendar shadow week numbers"] =
         <div
           aria-disabled="false"
           aria-label="7 February 2016, Sunday"
-          part="date-button"
+          class="date-button"
           role="button"
           tabindex="-1"
         >
@@ -1408,7 +1408,7 @@ snapshots["vaadin-month-calendar shadow week numbers"] =
         <div
           aria-disabled="false"
           aria-label="8 February 2016, Monday"
-          part="date-button"
+          class="date-button"
           role="button"
           tabindex="-1"
         >
@@ -1423,7 +1423,7 @@ snapshots["vaadin-month-calendar shadow week numbers"] =
         <div
           aria-disabled="false"
           aria-label="9 February 2016, Tuesday"
-          part="date-button"
+          class="date-button"
           role="button"
           tabindex="-1"
         >
@@ -1438,7 +1438,7 @@ snapshots["vaadin-month-calendar shadow week numbers"] =
         <div
           aria-disabled="false"
           aria-label="10 February 2016, Wednesday"
-          part="date-button"
+          class="date-button"
           role="button"
           tabindex="-1"
         >
@@ -1453,7 +1453,7 @@ snapshots["vaadin-month-calendar shadow week numbers"] =
         <div
           aria-disabled="false"
           aria-label="11 February 2016, Thursday"
-          part="date-button"
+          class="date-button"
           role="button"
           tabindex="-1"
         >
@@ -1468,7 +1468,7 @@ snapshots["vaadin-month-calendar shadow week numbers"] =
         <div
           aria-disabled="false"
           aria-label="12 February 2016, Friday"
-          part="date-button"
+          class="date-button"
           role="button"
           tabindex="-1"
         >
@@ -1483,7 +1483,7 @@ snapshots["vaadin-month-calendar shadow week numbers"] =
         <div
           aria-disabled="false"
           aria-label="13 February 2016, Saturday"
-          part="date-button"
+          class="date-button"
           role="button"
           tabindex="-1"
         >
@@ -1498,7 +1498,7 @@ snapshots["vaadin-month-calendar shadow week numbers"] =
         <div
           aria-disabled="false"
           aria-label="14 February 2016, Sunday"
-          part="date-button"
+          class="date-button"
           role="button"
           tabindex="-1"
         >
@@ -1521,7 +1521,7 @@ snapshots["vaadin-month-calendar shadow week numbers"] =
         <div
           aria-disabled="false"
           aria-label="15 February 2016, Monday"
-          part="date-button"
+          class="date-button"
           role="button"
           tabindex="-1"
         >
@@ -1536,7 +1536,7 @@ snapshots["vaadin-month-calendar shadow week numbers"] =
         <div
           aria-disabled="false"
           aria-label="16 February 2016, Tuesday"
-          part="date-button"
+          class="date-button"
           role="button"
           tabindex="-1"
         >
@@ -1551,7 +1551,7 @@ snapshots["vaadin-month-calendar shadow week numbers"] =
         <div
           aria-disabled="false"
           aria-label="17 February 2016, Wednesday"
-          part="date-button"
+          class="date-button"
           role="button"
           tabindex="-1"
         >
@@ -1566,7 +1566,7 @@ snapshots["vaadin-month-calendar shadow week numbers"] =
         <div
           aria-disabled="false"
           aria-label="18 February 2016, Thursday"
-          part="date-button"
+          class="date-button"
           role="button"
           tabindex="-1"
         >
@@ -1581,7 +1581,7 @@ snapshots["vaadin-month-calendar shadow week numbers"] =
         <div
           aria-disabled="false"
           aria-label="19 February 2016, Friday"
-          part="date-button"
+          class="date-button"
           role="button"
           tabindex="-1"
         >
@@ -1596,7 +1596,7 @@ snapshots["vaadin-month-calendar shadow week numbers"] =
         <div
           aria-disabled="false"
           aria-label="20 February 2016, Saturday"
-          part="date-button"
+          class="date-button"
           role="button"
           tabindex="-1"
         >
@@ -1611,7 +1611,7 @@ snapshots["vaadin-month-calendar shadow week numbers"] =
         <div
           aria-disabled="false"
           aria-label="21 February 2016, Sunday"
-          part="date-button"
+          class="date-button"
           role="button"
           tabindex="-1"
         >
@@ -1634,7 +1634,7 @@ snapshots["vaadin-month-calendar shadow week numbers"] =
         <div
           aria-disabled="false"
           aria-label="22 February 2016, Monday"
-          part="date-button"
+          class="date-button"
           role="button"
           tabindex="-1"
         >
@@ -1649,7 +1649,7 @@ snapshots["vaadin-month-calendar shadow week numbers"] =
         <div
           aria-disabled="false"
           aria-label="23 February 2016, Tuesday"
-          part="date-button"
+          class="date-button"
           role="button"
           tabindex="-1"
         >
@@ -1664,7 +1664,7 @@ snapshots["vaadin-month-calendar shadow week numbers"] =
         <div
           aria-disabled="false"
           aria-label="24 February 2016, Wednesday"
-          part="date-button"
+          class="date-button"
           role="button"
           tabindex="-1"
         >
@@ -1679,7 +1679,7 @@ snapshots["vaadin-month-calendar shadow week numbers"] =
         <div
           aria-disabled="false"
           aria-label="25 February 2016, Thursday"
-          part="date-button"
+          class="date-button"
           role="button"
           tabindex="-1"
         >
@@ -1694,7 +1694,7 @@ snapshots["vaadin-month-calendar shadow week numbers"] =
         <div
           aria-disabled="false"
           aria-label="26 February 2016, Friday"
-          part="date-button"
+          class="date-button"
           role="button"
           tabindex="-1"
         >
@@ -1709,7 +1709,7 @@ snapshots["vaadin-month-calendar shadow week numbers"] =
         <div
           aria-disabled="false"
           aria-label="27 February 2016, Saturday"
-          part="date-button"
+          class="date-button"
           role="button"
           tabindex="-1"
         >
@@ -1724,7 +1724,7 @@ snapshots["vaadin-month-calendar shadow week numbers"] =
         <div
           aria-disabled="false"
           aria-label="28 February 2016, Sunday"
-          part="date-button"
+          class="date-button"
           role="button"
           tabindex="-1"
         >
@@ -1747,7 +1747,7 @@ snapshots["vaadin-month-calendar shadow week numbers"] =
         <div
           aria-disabled="false"
           aria-label="29 February 2016, Monday"
-          part="date-button"
+          class="date-button"
           role="button"
           tabindex="-1"
         >
@@ -1873,7 +1873,7 @@ snapshots["vaadin-month-calendar shadow disabled dates"] =
         <div
           aria-disabled="true"
           aria-label="1 February 2016, Monday"
-          part="date-button"
+          class="date-button"
           role="button"
           tabindex="-1"
         >
@@ -1888,7 +1888,7 @@ snapshots["vaadin-month-calendar shadow disabled dates"] =
         <div
           aria-disabled="false"
           aria-label="2 February 2016, Tuesday"
-          part="date-button"
+          class="date-button"
           role="button"
           tabindex="-1"
         >
@@ -1904,7 +1904,7 @@ snapshots["vaadin-month-calendar shadow disabled dates"] =
         <div
           aria-disabled="true"
           aria-label="3 February 2016, Wednesday"
-          part="date-button"
+          class="date-button"
           role="button"
           tabindex="-1"
         >
@@ -1919,7 +1919,7 @@ snapshots["vaadin-month-calendar shadow disabled dates"] =
         <div
           aria-disabled="false"
           aria-label="4 February 2016, Thursday"
-          part="date-button"
+          class="date-button"
           role="button"
           tabindex="-1"
         >
@@ -1935,7 +1935,7 @@ snapshots["vaadin-month-calendar shadow disabled dates"] =
         <div
           aria-disabled="true"
           aria-label="5 February 2016, Friday, Today"
-          part="date-button"
+          class="date-button"
           role="button"
           tabindex="-1"
         >
@@ -1950,7 +1950,7 @@ snapshots["vaadin-month-calendar shadow disabled dates"] =
         <div
           aria-disabled="false"
           aria-label="6 February 2016, Saturday"
-          part="date-button"
+          class="date-button"
           role="button"
           tabindex="-1"
         >
@@ -1975,7 +1975,7 @@ snapshots["vaadin-month-calendar shadow disabled dates"] =
         <div
           aria-disabled="true"
           aria-label="7 February 2016, Sunday"
-          part="date-button"
+          class="date-button"
           role="button"
           tabindex="-1"
         >
@@ -1990,7 +1990,7 @@ snapshots["vaadin-month-calendar shadow disabled dates"] =
         <div
           aria-disabled="false"
           aria-label="8 February 2016, Monday"
-          part="date-button"
+          class="date-button"
           role="button"
           tabindex="-1"
         >
@@ -2006,7 +2006,7 @@ snapshots["vaadin-month-calendar shadow disabled dates"] =
         <div
           aria-disabled="true"
           aria-label="9 February 2016, Tuesday"
-          part="date-button"
+          class="date-button"
           role="button"
           tabindex="-1"
         >
@@ -2021,7 +2021,7 @@ snapshots["vaadin-month-calendar shadow disabled dates"] =
         <div
           aria-disabled="false"
           aria-label="10 February 2016, Wednesday"
-          part="date-button"
+          class="date-button"
           role="button"
           tabindex="-1"
         >
@@ -2037,7 +2037,7 @@ snapshots["vaadin-month-calendar shadow disabled dates"] =
         <div
           aria-disabled="true"
           aria-label="11 February 2016, Thursday"
-          part="date-button"
+          class="date-button"
           role="button"
           tabindex="-1"
         >
@@ -2052,7 +2052,7 @@ snapshots["vaadin-month-calendar shadow disabled dates"] =
         <div
           aria-disabled="false"
           aria-label="12 February 2016, Friday"
-          part="date-button"
+          class="date-button"
           role="button"
           tabindex="-1"
         >
@@ -2068,7 +2068,7 @@ snapshots["vaadin-month-calendar shadow disabled dates"] =
         <div
           aria-disabled="true"
           aria-label="13 February 2016, Saturday"
-          part="date-button"
+          class="date-button"
           role="button"
           tabindex="-1"
         >
@@ -2092,7 +2092,7 @@ snapshots["vaadin-month-calendar shadow disabled dates"] =
         <div
           aria-disabled="false"
           aria-label="14 February 2016, Sunday"
-          part="date-button"
+          class="date-button"
           role="button"
           tabindex="-1"
         >
@@ -2108,7 +2108,7 @@ snapshots["vaadin-month-calendar shadow disabled dates"] =
         <div
           aria-disabled="true"
           aria-label="15 February 2016, Monday"
-          part="date-button"
+          class="date-button"
           role="button"
           tabindex="-1"
         >
@@ -2123,7 +2123,7 @@ snapshots["vaadin-month-calendar shadow disabled dates"] =
         <div
           aria-disabled="false"
           aria-label="16 February 2016, Tuesday"
-          part="date-button"
+          class="date-button"
           role="button"
           tabindex="-1"
         >
@@ -2139,7 +2139,7 @@ snapshots["vaadin-month-calendar shadow disabled dates"] =
         <div
           aria-disabled="true"
           aria-label="17 February 2016, Wednesday"
-          part="date-button"
+          class="date-button"
           role="button"
           tabindex="-1"
         >
@@ -2154,7 +2154,7 @@ snapshots["vaadin-month-calendar shadow disabled dates"] =
         <div
           aria-disabled="false"
           aria-label="18 February 2016, Thursday"
-          part="date-button"
+          class="date-button"
           role="button"
           tabindex="-1"
         >
@@ -2170,7 +2170,7 @@ snapshots["vaadin-month-calendar shadow disabled dates"] =
         <div
           aria-disabled="true"
           aria-label="19 February 2016, Friday"
-          part="date-button"
+          class="date-button"
           role="button"
           tabindex="-1"
         >
@@ -2185,7 +2185,7 @@ snapshots["vaadin-month-calendar shadow disabled dates"] =
         <div
           aria-disabled="false"
           aria-label="20 February 2016, Saturday"
-          part="date-button"
+          class="date-button"
           role="button"
           tabindex="-1"
         >
@@ -2210,7 +2210,7 @@ snapshots["vaadin-month-calendar shadow disabled dates"] =
         <div
           aria-disabled="true"
           aria-label="21 February 2016, Sunday"
-          part="date-button"
+          class="date-button"
           role="button"
           tabindex="-1"
         >
@@ -2225,7 +2225,7 @@ snapshots["vaadin-month-calendar shadow disabled dates"] =
         <div
           aria-disabled="false"
           aria-label="22 February 2016, Monday"
-          part="date-button"
+          class="date-button"
           role="button"
           tabindex="-1"
         >
@@ -2241,7 +2241,7 @@ snapshots["vaadin-month-calendar shadow disabled dates"] =
         <div
           aria-disabled="true"
           aria-label="23 February 2016, Tuesday"
-          part="date-button"
+          class="date-button"
           role="button"
           tabindex="-1"
         >
@@ -2256,7 +2256,7 @@ snapshots["vaadin-month-calendar shadow disabled dates"] =
         <div
           aria-disabled="false"
           aria-label="24 February 2016, Wednesday"
-          part="date-button"
+          class="date-button"
           role="button"
           tabindex="-1"
         >
@@ -2272,7 +2272,7 @@ snapshots["vaadin-month-calendar shadow disabled dates"] =
         <div
           aria-disabled="true"
           aria-label="25 February 2016, Thursday"
-          part="date-button"
+          class="date-button"
           role="button"
           tabindex="-1"
         >
@@ -2287,7 +2287,7 @@ snapshots["vaadin-month-calendar shadow disabled dates"] =
         <div
           aria-disabled="false"
           aria-label="26 February 2016, Friday"
-          part="date-button"
+          class="date-button"
           role="button"
           tabindex="-1"
         >
@@ -2303,7 +2303,7 @@ snapshots["vaadin-month-calendar shadow disabled dates"] =
         <div
           aria-disabled="true"
           aria-label="27 February 2016, Saturday"
-          part="date-button"
+          class="date-button"
           role="button"
           tabindex="-1"
         >
@@ -2327,7 +2327,7 @@ snapshots["vaadin-month-calendar shadow disabled dates"] =
         <div
           aria-disabled="false"
           aria-label="28 February 2016, Sunday"
-          part="date-button"
+          class="date-button"
           role="button"
           tabindex="-1"
         >
@@ -2343,7 +2343,7 @@ snapshots["vaadin-month-calendar shadow disabled dates"] =
         <div
           aria-disabled="true"
           aria-label="29 February 2016, Monday"
-          part="date-button"
+          class="date-button"
           role="button"
           tabindex="-1"
         >
@@ -2468,7 +2468,7 @@ snapshots["vaadin-month-calendar shadow date metadata loading month"] =
         <div
           aria-disabled="false"
           aria-label="1 February 2016, Monday"
-          part="date-button"
+          class="date-button"
           role="button"
           tabindex="-1"
         >
@@ -2483,7 +2483,7 @@ snapshots["vaadin-month-calendar shadow date metadata loading month"] =
         <div
           aria-disabled="false"
           aria-label="2 February 2016, Tuesday"
-          part="date-button"
+          class="date-button"
           role="button"
           tabindex="-1"
         >
@@ -2498,7 +2498,7 @@ snapshots["vaadin-month-calendar shadow date metadata loading month"] =
         <div
           aria-disabled="false"
           aria-label="3 February 2016, Wednesday"
-          part="date-button"
+          class="date-button"
           role="button"
           tabindex="-1"
         >
@@ -2513,7 +2513,7 @@ snapshots["vaadin-month-calendar shadow date metadata loading month"] =
         <div
           aria-disabled="false"
           aria-label="4 February 2016, Thursday"
-          part="date-button"
+          class="date-button"
           role="button"
           tabindex="-1"
         >
@@ -2528,7 +2528,7 @@ snapshots["vaadin-month-calendar shadow date metadata loading month"] =
         <div
           aria-disabled="false"
           aria-label="5 February 2016, Friday, Today"
-          part="date-button"
+          class="date-button"
           role="button"
           tabindex="-1"
         >
@@ -2543,7 +2543,7 @@ snapshots["vaadin-month-calendar shadow date metadata loading month"] =
         <div
           aria-disabled="false"
           aria-label="6 February 2016, Saturday"
-          part="date-button"
+          class="date-button"
           role="button"
           tabindex="-1"
         >
@@ -2567,7 +2567,7 @@ snapshots["vaadin-month-calendar shadow date metadata loading month"] =
         <div
           aria-disabled="false"
           aria-label="7 February 2016, Sunday"
-          part="date-button"
+          class="date-button"
           role="button"
           tabindex="-1"
         >
@@ -2582,7 +2582,7 @@ snapshots["vaadin-month-calendar shadow date metadata loading month"] =
         <div
           aria-disabled="false"
           aria-label="8 February 2016, Monday"
-          part="date-button"
+          class="date-button"
           role="button"
           tabindex="-1"
         >
@@ -2597,7 +2597,7 @@ snapshots["vaadin-month-calendar shadow date metadata loading month"] =
         <div
           aria-disabled="false"
           aria-label="9 February 2016, Tuesday"
-          part="date-button"
+          class="date-button"
           role="button"
           tabindex="-1"
         >
@@ -2612,7 +2612,7 @@ snapshots["vaadin-month-calendar shadow date metadata loading month"] =
         <div
           aria-disabled="false"
           aria-label="10 February 2016, Wednesday"
-          part="date-button"
+          class="date-button"
           role="button"
           tabindex="-1"
         >
@@ -2627,7 +2627,7 @@ snapshots["vaadin-month-calendar shadow date metadata loading month"] =
         <div
           aria-disabled="false"
           aria-label="11 February 2016, Thursday"
-          part="date-button"
+          class="date-button"
           role="button"
           tabindex="-1"
         >
@@ -2642,7 +2642,7 @@ snapshots["vaadin-month-calendar shadow date metadata loading month"] =
         <div
           aria-disabled="false"
           aria-label="12 February 2016, Friday"
-          part="date-button"
+          class="date-button"
           role="button"
           tabindex="-1"
         >
@@ -2657,7 +2657,7 @@ snapshots["vaadin-month-calendar shadow date metadata loading month"] =
         <div
           aria-disabled="false"
           aria-label="13 February 2016, Saturday"
-          part="date-button"
+          class="date-button"
           role="button"
           tabindex="-1"
         >
@@ -2681,7 +2681,7 @@ snapshots["vaadin-month-calendar shadow date metadata loading month"] =
         <div
           aria-disabled="false"
           aria-label="14 February 2016, Sunday"
-          part="date-button"
+          class="date-button"
           role="button"
           tabindex="-1"
         >
@@ -2696,7 +2696,7 @@ snapshots["vaadin-month-calendar shadow date metadata loading month"] =
         <div
           aria-disabled="false"
           aria-label="15 February 2016, Monday"
-          part="date-button"
+          class="date-button"
           role="button"
           tabindex="-1"
         >
@@ -2711,7 +2711,7 @@ snapshots["vaadin-month-calendar shadow date metadata loading month"] =
         <div
           aria-disabled="false"
           aria-label="16 February 2016, Tuesday"
-          part="date-button"
+          class="date-button"
           role="button"
           tabindex="-1"
         >
@@ -2726,7 +2726,7 @@ snapshots["vaadin-month-calendar shadow date metadata loading month"] =
         <div
           aria-disabled="false"
           aria-label="17 February 2016, Wednesday"
-          part="date-button"
+          class="date-button"
           role="button"
           tabindex="-1"
         >
@@ -2741,7 +2741,7 @@ snapshots["vaadin-month-calendar shadow date metadata loading month"] =
         <div
           aria-disabled="false"
           aria-label="18 February 2016, Thursday"
-          part="date-button"
+          class="date-button"
           role="button"
           tabindex="-1"
         >
@@ -2756,7 +2756,7 @@ snapshots["vaadin-month-calendar shadow date metadata loading month"] =
         <div
           aria-disabled="false"
           aria-label="19 February 2016, Friday"
-          part="date-button"
+          class="date-button"
           role="button"
           tabindex="-1"
         >
@@ -2771,7 +2771,7 @@ snapshots["vaadin-month-calendar shadow date metadata loading month"] =
         <div
           aria-disabled="false"
           aria-label="20 February 2016, Saturday"
-          part="date-button"
+          class="date-button"
           role="button"
           tabindex="-1"
         >
@@ -2795,7 +2795,7 @@ snapshots["vaadin-month-calendar shadow date metadata loading month"] =
         <div
           aria-disabled="false"
           aria-label="21 February 2016, Sunday"
-          part="date-button"
+          class="date-button"
           role="button"
           tabindex="-1"
         >
@@ -2810,7 +2810,7 @@ snapshots["vaadin-month-calendar shadow date metadata loading month"] =
         <div
           aria-disabled="false"
           aria-label="22 February 2016, Monday"
-          part="date-button"
+          class="date-button"
           role="button"
           tabindex="-1"
         >
@@ -2825,7 +2825,7 @@ snapshots["vaadin-month-calendar shadow date metadata loading month"] =
         <div
           aria-disabled="false"
           aria-label="23 February 2016, Tuesday"
-          part="date-button"
+          class="date-button"
           role="button"
           tabindex="-1"
         >
@@ -2840,7 +2840,7 @@ snapshots["vaadin-month-calendar shadow date metadata loading month"] =
         <div
           aria-disabled="false"
           aria-label="24 February 2016, Wednesday"
-          part="date-button"
+          class="date-button"
           role="button"
           tabindex="-1"
         >
@@ -2855,7 +2855,7 @@ snapshots["vaadin-month-calendar shadow date metadata loading month"] =
         <div
           aria-disabled="false"
           aria-label="25 February 2016, Thursday"
-          part="date-button"
+          class="date-button"
           role="button"
           tabindex="-1"
         >
@@ -2870,7 +2870,7 @@ snapshots["vaadin-month-calendar shadow date metadata loading month"] =
         <div
           aria-disabled="false"
           aria-label="26 February 2016, Friday"
-          part="date-button"
+          class="date-button"
           role="button"
           tabindex="-1"
         >
@@ -2885,7 +2885,7 @@ snapshots["vaadin-month-calendar shadow date metadata loading month"] =
         <div
           aria-disabled="false"
           aria-label="27 February 2016, Saturday"
-          part="date-button"
+          class="date-button"
           role="button"
           tabindex="-1"
         >
@@ -2909,7 +2909,7 @@ snapshots["vaadin-month-calendar shadow date metadata loading month"] =
         <div
           aria-disabled="false"
           aria-label="28 February 2016, Sunday"
-          part="date-button"
+          class="date-button"
           role="button"
           tabindex="-1"
         >
@@ -2924,7 +2924,7 @@ snapshots["vaadin-month-calendar shadow date metadata loading month"] =
         <div
           aria-disabled="false"
           aria-label="29 February 2016, Monday"
-          part="date-button"
+          class="date-button"
           role="button"
           tabindex="-1"
         >
@@ -3050,7 +3050,7 @@ snapshots["vaadin-month-calendar shadow date metadata provider disabled dates"] 
         <div
           aria-disabled="true"
           aria-label="1 February 2016, Monday"
-          part="date-button"
+          class="date-button"
           role="button"
           tabindex="-1"
         >
@@ -3065,7 +3065,7 @@ snapshots["vaadin-month-calendar shadow date metadata provider disabled dates"] 
         <div
           aria-disabled="false"
           aria-label="2 February 2016, Tuesday"
-          part="date-button"
+          class="date-button"
           role="button"
           tabindex="-1"
         >
@@ -3081,7 +3081,7 @@ snapshots["vaadin-month-calendar shadow date metadata provider disabled dates"] 
         <div
           aria-disabled="true"
           aria-label="3 February 2016, Wednesday"
-          part="date-button"
+          class="date-button"
           role="button"
           tabindex="-1"
         >
@@ -3096,7 +3096,7 @@ snapshots["vaadin-month-calendar shadow date metadata provider disabled dates"] 
         <div
           aria-disabled="false"
           aria-label="4 February 2016, Thursday"
-          part="date-button"
+          class="date-button"
           role="button"
           tabindex="-1"
         >
@@ -3112,7 +3112,7 @@ snapshots["vaadin-month-calendar shadow date metadata provider disabled dates"] 
         <div
           aria-disabled="true"
           aria-label="5 February 2016, Friday, Today"
-          part="date-button"
+          class="date-button"
           role="button"
           tabindex="-1"
         >
@@ -3127,7 +3127,7 @@ snapshots["vaadin-month-calendar shadow date metadata provider disabled dates"] 
         <div
           aria-disabled="false"
           aria-label="6 February 2016, Saturday"
-          part="date-button"
+          class="date-button"
           role="button"
           tabindex="-1"
         >
@@ -3152,7 +3152,7 @@ snapshots["vaadin-month-calendar shadow date metadata provider disabled dates"] 
         <div
           aria-disabled="true"
           aria-label="7 February 2016, Sunday"
-          part="date-button"
+          class="date-button"
           role="button"
           tabindex="-1"
         >
@@ -3167,7 +3167,7 @@ snapshots["vaadin-month-calendar shadow date metadata provider disabled dates"] 
         <div
           aria-disabled="false"
           aria-label="8 February 2016, Monday"
-          part="date-button"
+          class="date-button"
           role="button"
           tabindex="-1"
         >
@@ -3183,7 +3183,7 @@ snapshots["vaadin-month-calendar shadow date metadata provider disabled dates"] 
         <div
           aria-disabled="true"
           aria-label="9 February 2016, Tuesday"
-          part="date-button"
+          class="date-button"
           role="button"
           tabindex="-1"
         >
@@ -3198,7 +3198,7 @@ snapshots["vaadin-month-calendar shadow date metadata provider disabled dates"] 
         <div
           aria-disabled="false"
           aria-label="10 February 2016, Wednesday"
-          part="date-button"
+          class="date-button"
           role="button"
           tabindex="-1"
         >
@@ -3214,7 +3214,7 @@ snapshots["vaadin-month-calendar shadow date metadata provider disabled dates"] 
         <div
           aria-disabled="true"
           aria-label="11 February 2016, Thursday"
-          part="date-button"
+          class="date-button"
           role="button"
           tabindex="-1"
         >
@@ -3229,7 +3229,7 @@ snapshots["vaadin-month-calendar shadow date metadata provider disabled dates"] 
         <div
           aria-disabled="false"
           aria-label="12 February 2016, Friday"
-          part="date-button"
+          class="date-button"
           role="button"
           tabindex="-1"
         >
@@ -3245,7 +3245,7 @@ snapshots["vaadin-month-calendar shadow date metadata provider disabled dates"] 
         <div
           aria-disabled="true"
           aria-label="13 February 2016, Saturday"
-          part="date-button"
+          class="date-button"
           role="button"
           tabindex="-1"
         >
@@ -3269,7 +3269,7 @@ snapshots["vaadin-month-calendar shadow date metadata provider disabled dates"] 
         <div
           aria-disabled="false"
           aria-label="14 February 2016, Sunday"
-          part="date-button"
+          class="date-button"
           role="button"
           tabindex="-1"
         >
@@ -3285,7 +3285,7 @@ snapshots["vaadin-month-calendar shadow date metadata provider disabled dates"] 
         <div
           aria-disabled="true"
           aria-label="15 February 2016, Monday"
-          part="date-button"
+          class="date-button"
           role="button"
           tabindex="-1"
         >
@@ -3300,7 +3300,7 @@ snapshots["vaadin-month-calendar shadow date metadata provider disabled dates"] 
         <div
           aria-disabled="false"
           aria-label="16 February 2016, Tuesday"
-          part="date-button"
+          class="date-button"
           role="button"
           tabindex="-1"
         >
@@ -3316,7 +3316,7 @@ snapshots["vaadin-month-calendar shadow date metadata provider disabled dates"] 
         <div
           aria-disabled="true"
           aria-label="17 February 2016, Wednesday"
-          part="date-button"
+          class="date-button"
           role="button"
           tabindex="-1"
         >
@@ -3331,7 +3331,7 @@ snapshots["vaadin-month-calendar shadow date metadata provider disabled dates"] 
         <div
           aria-disabled="false"
           aria-label="18 February 2016, Thursday"
-          part="date-button"
+          class="date-button"
           role="button"
           tabindex="-1"
         >
@@ -3347,7 +3347,7 @@ snapshots["vaadin-month-calendar shadow date metadata provider disabled dates"] 
         <div
           aria-disabled="true"
           aria-label="19 February 2016, Friday"
-          part="date-button"
+          class="date-button"
           role="button"
           tabindex="-1"
         >
@@ -3362,7 +3362,7 @@ snapshots["vaadin-month-calendar shadow date metadata provider disabled dates"] 
         <div
           aria-disabled="false"
           aria-label="20 February 2016, Saturday"
-          part="date-button"
+          class="date-button"
           role="button"
           tabindex="-1"
         >
@@ -3387,7 +3387,7 @@ snapshots["vaadin-month-calendar shadow date metadata provider disabled dates"] 
         <div
           aria-disabled="true"
           aria-label="21 February 2016, Sunday"
-          part="date-button"
+          class="date-button"
           role="button"
           tabindex="-1"
         >
@@ -3402,7 +3402,7 @@ snapshots["vaadin-month-calendar shadow date metadata provider disabled dates"] 
         <div
           aria-disabled="false"
           aria-label="22 February 2016, Monday"
-          part="date-button"
+          class="date-button"
           role="button"
           tabindex="-1"
         >
@@ -3418,7 +3418,7 @@ snapshots["vaadin-month-calendar shadow date metadata provider disabled dates"] 
         <div
           aria-disabled="true"
           aria-label="23 February 2016, Tuesday"
-          part="date-button"
+          class="date-button"
           role="button"
           tabindex="-1"
         >
@@ -3433,7 +3433,7 @@ snapshots["vaadin-month-calendar shadow date metadata provider disabled dates"] 
         <div
           aria-disabled="false"
           aria-label="24 February 2016, Wednesday"
-          part="date-button"
+          class="date-button"
           role="button"
           tabindex="-1"
         >
@@ -3449,7 +3449,7 @@ snapshots["vaadin-month-calendar shadow date metadata provider disabled dates"] 
         <div
           aria-disabled="true"
           aria-label="25 February 2016, Thursday"
-          part="date-button"
+          class="date-button"
           role="button"
           tabindex="-1"
         >
@@ -3464,7 +3464,7 @@ snapshots["vaadin-month-calendar shadow date metadata provider disabled dates"] 
         <div
           aria-disabled="false"
           aria-label="26 February 2016, Friday"
-          part="date-button"
+          class="date-button"
           role="button"
           tabindex="-1"
         >
@@ -3480,7 +3480,7 @@ snapshots["vaadin-month-calendar shadow date metadata provider disabled dates"] 
         <div
           aria-disabled="true"
           aria-label="27 February 2016, Saturday"
-          part="date-button"
+          class="date-button"
           role="button"
           tabindex="-1"
         >
@@ -3504,7 +3504,7 @@ snapshots["vaadin-month-calendar shadow date metadata provider disabled dates"] 
         <div
           aria-disabled="false"
           aria-label="28 February 2016, Sunday"
-          part="date-button"
+          class="date-button"
           role="button"
           tabindex="-1"
         >
@@ -3520,7 +3520,7 @@ snapshots["vaadin-month-calendar shadow date metadata provider disabled dates"] 
         <div
           aria-disabled="true"
           aria-label="29 February 2016, Monday"
-          part="date-button"
+          class="date-button"
           role="button"
           tabindex="-1"
         >
