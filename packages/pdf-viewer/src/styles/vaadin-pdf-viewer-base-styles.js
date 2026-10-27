@@ -50,7 +50,7 @@ const pdfViewerBaseStyles = css`
   }
 
   /* Drawn over the pages, which cover the content outline */
-  .content-area:has(> [part='content']:focus-visible)::after {
+  :host([focus-ring]) .content-area::after {
     content: '';
     position: absolute;
     inset: 0;

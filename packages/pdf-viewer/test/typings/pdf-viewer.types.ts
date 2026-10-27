@@ -1,4 +1,6 @@
 import '../../vaadin-pdf-viewer.js';
+import type { FocusMixinClass } from '@vaadin/a11y-base/src/focus-mixin.js';
+import type { KeyboardMixinClass } from '@vaadin/a11y-base/src/keyboard-mixin.js';
 import type { ElementMixinClass } from '@vaadin/component-base/src/element-mixin.js';
 import type { ResizeMixinClass } from '@vaadin/component-base/src/resize-mixin.js';
 import type {
@@ -31,6 +33,8 @@ assertType<PdfViewerRenderMixinClass>(viewer);
 assertType<PdfViewerScrollMixinClass>(viewer);
 assertType<PdfViewerKeyboardMixinClass>(viewer);
 assertType<ResizeMixinClass>(viewer);
+assertType<FocusMixinClass>(viewer);
+assertType<KeyboardMixinClass>(viewer);
 
 // Events
 viewer.addEventListener('document-load', (event) => {
