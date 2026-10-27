@@ -287,6 +287,13 @@ describe('toolbar', () => {
       expect(getItemLabel('1.1')).to.equal('110%');
     });
 
+    it('should keep the zoom items when the page changes', async () => {
+      const { items } = zoomSelect;
+      viewer.page = 3;
+      await nextRenderIdle(viewer);
+      expect(zoomSelect.items).to.equal(items);
+    });
+
     it('should zoom to the level selected in the zoom select', async () => {
       await selectZoomItem('2');
       expect(viewer.zoom).to.equal(2);

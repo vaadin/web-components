@@ -24,6 +24,18 @@ import { formatZoom, getZoomInLevel, getZoomOutLevel, isValidZoom, ZOOM_LEVELS }
  */
 export const PdfViewerToolbarMixin = (superClass) =>
   class PdfViewerToolbarMixinClass extends superClass {
+    /** The items of the zoom select, built again only when `zoom` or the texts change. */
+    #zoomItems = [];
+
+    /** @protected */
+    willUpdate(props) {
+      super.willUpdate(props);
+
+      if (props.has('zoom') || props.has('__effectiveI18n')) {
+        this.#zoomItems = this.#getZoomItems(this.__effectiveI18n);
+      }
+    }
+
     /**
      * Returns the template of the toolbar, which shows the controls of
      * `_renderToolbarControls()` in its slots.
@@ -96,7 +108,7 @@ export const PdfViewerToolbarMixin = (superClass) =>
         <vaadin-select
           slot="toolbar-zoom"
           theme="align-center"
-          .items="${this.#getZoomItems(i18n)}"
+          .items="${this.#zoomItems}"
           .value="${live(this.#getZoomValue())}"
           .disabled="${!hasDocument}"
           @change="${this.#onZoomSelectChange}"
