@@ -1,4 +1,5 @@
-import { click, fixtureSync, nextFrame, oneEvent } from '@vaadin/testing-helpers';
+import { aTimeout, click, fixtureSync, nextFrame, oneEvent } from '@vaadin/testing-helpers';
+import { emulateMedia } from '@web/test-runner-commands';
 import { visualDiff } from '@web/test-runner-visual-regression';
 import { temperatures } from './temperature-data.js';
 
@@ -23,8 +24,7 @@ async function whenRendered(charts) {
 }
 
 /** `outside` decides whether the tooltip renders in the shadow root or in `document.body`. */
-function buildTooltipFixture(outside, { styledMode = true } = {}) {
-  const chartOptions = styledMode ? '' : '"chart": { "styledMode": false }, ';
+function buildTooltipFixture(outside) {
   return `
     <vaadin-chart
       type="column"
@@ -32,7 +32,7 @@ function buildTooltipFixture(outside, { styledMode = true } = {}) {
       tooltip
       style="width: 600px; height: 400px"
       categories="${SOLAR_CATEGORIES}"
-      additional-options='{ ${chartOptions}"tooltip": { "outside": ${outside} } }'
+      additional-options='{ "tooltip": { "outside": ${outside} } }'
     >
       <vaadin-chart-series title="Installation" values="${SOLAR_INSTALLATION}"></vaadin-chart-series>
       <vaadin-chart-series title="Manufacturing" values="${SOLAR_MANUFACTURING}"></vaadin-chart-series>
@@ -671,10 +671,322 @@ const baseOnlyFixtures = {
     </vaadin-chart>
   `,
 
-  // Not a module: the global tooltip stylesheet must leave a non-styled outside
-  // tooltip as Highcharts draws it, also in a dark color scheme.
-  'tooltip-outside-non-styled': buildTooltipFixture(true, { styledMode: false }),
+  // Stack totals and per-point data labels, which both position relative to the stack.
+  'stacked-column': `
+    <vaadin-chart
+      type="column"
+      title="Stacked column"
+      stacking="normal"
+      style="width: 600px; height: 400px"
+      categories="${SOLAR_CATEGORIES}"
+      additional-options='{
+        "yAxis": { "stackLabels": { "enabled": true } },
+        "plotOptions": { "series": { "dataLabels": { "enabled": true } } }
+      }'
+    >
+      <vaadin-chart-series title="Installation" values="${SOLAR_INSTALLATION}"></vaadin-chart-series>
+      <vaadin-chart-series title="Manufacturing" values="${SOLAR_MANUFACTURING}"></vaadin-chart-series>
+    </vaadin-chart>
+  `,
+
+  'stacked-area': `
+    <vaadin-chart
+      type="area"
+      title="Percent stacked area"
+      stacking="percent"
+      style="width: 600px; height: 400px"
+      categories="${SOLAR_CATEGORIES}"
+    >
+      <vaadin-chart-series title="Installation" values="${SOLAR_INSTALLATION}"></vaadin-chart-series>
+      <vaadin-chart-series title="Manufacturing" values="${SOLAR_MANUFACTURING}"></vaadin-chart-series>
+      <vaadin-chart-series
+        type="areaspline"
+        title="Other"
+        values="[12908, 5948, 8105, 11248, 8989]"
+      ></vaadin-chart-series>
+    </vaadin-chart>
+  `,
+
+  // Range series from `highcharts-more`, with data labels on both ends of each range.
+  ranges: `
+    <vaadin-chart
+      title="Temperature ranges"
+      style="width: 600px; height: 400px"
+      categories='["Jan", "Feb", "Mar", "Apr", "May", "Jun"]'
+      additional-options='{ "plotOptions": { "columnrange": { "dataLabels": { "enabled": true } } } }'
+    >
+      <vaadin-chart-series
+        type="columnrange"
+        title="Monthly range"
+        values="[[-9, 3], [-8, 5], [-4, 10], [1, 16], [6, 21], [10, 25]]"
+      ></vaadin-chart-series>
+      <vaadin-chart-series
+        type="arearange"
+        title="Normal range"
+        values="[[-6, 1], [-5, 2], [-1, 7], [3, 13], [8, 18], [12, 22]]"
+      ></vaadin-chart-series>
+      <vaadin-chart-series type="line" title="Average" values="[-3, -2, 3, 8, 13, 17]"></vaadin-chart-series>
+    </vaadin-chart>
+  `,
+
+  waterfall: `
+    <vaadin-chart type="waterfall" title="Waterfall" style="width: 600px; height: 400px">
+      <vaadin-chart-series
+        title="Balance"
+        values='[
+          { "name": "Start", "y": 120 },
+          { "name": "Revenue", "y": 60 },
+          { "name": "Costs", "y": -45 },
+          { "name": "Subtotal", "isIntermediateSum": true },
+          { "name": "Tax", "y": -20 },
+          { "name": "Total", "isSum": true }
+        ]'
+        additional-options='{ "dataLabels": { "enabled": true } }'
+      ></vaadin-chart-series>
+    </vaadin-chart>
+  `,
+
+  // SVG data labels on an inverted chart with negative values, and on a line.
+  'data-labels': `
+    <div style="display: flex; width: 800px; height: 400px">
+      <vaadin-chart
+        type="bar"
+        title="Bar"
+        style="width: 400px; height: 400px"
+        categories='["A", "B", "C", "D"]'
+        additional-options='{ "plotOptions": { "series": { "dataLabels": { "enabled": true } } } }'
+      >
+        <vaadin-chart-series title="Change" values="[12, -7, 5, -3]"></vaadin-chart-series>
+      </vaadin-chart>
+      <vaadin-chart
+        type="line"
+        title="Line"
+        style="width: 400px; height: 400px"
+        categories='["A", "B", "C", "D"]'
+        additional-options='{ "plotOptions": { "series": { "dataLabels": { "enabled": true } } } }'
+      >
+        <vaadin-chart-series title="Value" values="[3, 9, 4, 7]"></vaadin-chart-series>
+      </vaadin-chart>
+    </div>
+  `,
+
+  // Covers the `highcharts-3d` module, which `chart3d` turns on.
+  chart3d: `
+    <div style="display: flex; width: 800px; height: 400px">
+      <vaadin-chart
+        type="column"
+        title="3D column"
+        chart3d
+        style="width: 400px; height: 400px"
+        categories="${SOLAR_CATEGORIES}"
+      >
+        <vaadin-chart-series title="Installation" values="${SOLAR_INSTALLATION}"></vaadin-chart-series>
+      </vaadin-chart>
+      <vaadin-chart
+        type="pie"
+        title="3D pie"
+        chart3d
+        style="width: 400px; height: 400px"
+        additional-options='{ "plotOptions": { "pie": { "depth": 35 } } }'
+      >
+        <vaadin-chart-series
+          title="Share"
+          values='[["Alpha", 45], ["Bravo", 25], ["Charlie", 20], ["Delta", 10]]'
+        ></vaadin-chart-series>
+      </vaadin-chart>
+    </div>
+  `,
+
+  annotations: `
+    <vaadin-chart
+      type="line"
+      title="Annotations"
+      style="width: 600px; height: 400px"
+      additional-options='{
+        "annotations": [
+          {
+            "labels": [
+              { "point": { "x": 2, "y": 8, "xAxis": 0, "yAxis": 0 }, "text": "Peak" },
+              { "point": { "x": 4, "y": 2, "xAxis": 0, "yAxis": 0 }, "text": "Dip" }
+            ]
+          }
+        ]
+      }'
+    >
+      <vaadin-chart-series title="Value" values="[3, 5, 8, 6, 2, 4]"></vaadin-chart-series>
+    </vaadin-chart>
+  `,
+
+  // Drilled down into the first point, so the breadcrumbs button renders.
+  drilldown: `
+    <vaadin-chart
+      type="column"
+      title="Drilldown"
+      style="width: 600px; height: 400px"
+      additional-options='{
+        "xAxis": { "type": "category" },
+        "drilldown": {
+          "animation": false,
+          "series": [
+            { "id": "fruit", "name": "Fruit", "data": [["Apples", 4], ["Pears", 2], ["Plums", 1]] }
+          ]
+        }
+      }'
+    >
+      <vaadin-chart-series
+        title="Food"
+        values='[
+          { "name": "Fruit", "y": 7, "drilldown": "fruit" },
+          { "name": "Vegetables", "y": 5 }
+        ]'
+      ></vaadin-chart-series>
+    </vaadin-chart>
+  `,
+
+  // Flags on a stock chart. The navigator and range selector are covered by `navigator`.
+  flags: `
+    <vaadin-chart
+      title="Flags"
+      timeline
+      style="width: 700px; height: 400px"
+      additional-options='{
+        "time": { "timezone": "UTC" },
+        "rangeSelector": { "enabled": false },
+        "navigator": { "enabled": false },
+        "scrollbar": { "enabled": false }
+      }'
+    >
+      <vaadin-chart-series
+        title="Price"
+        values='[
+          [${day(0)}, 10], [${day(1)}, 12], [${day(2)}, 11], [${day(3)}, 15],
+          [${day(4)}, 14], [${day(5)}, 17], [${day(6)}, 16], [${day(7)}, 19]
+        ]'
+        additional-options='{ "id": "price" }'
+      ></vaadin-chart-series>
+      <vaadin-chart-series
+        type="flags"
+        title="Events"
+        values='[
+          { "x": ${day(2)}, "title": "A", "text": "First event" },
+          { "x": ${day(5)}, "title": "B", "text": "Second event" }
+        ]'
+        additional-options='{ "onSeries": "price", "shape": "squarepin" }'
+      ></vaadin-chart-series>
+    </vaadin-chart>
+  `,
 };
+
+/** A solid gauge whose colour comes from `yAxis.stops`, or from the series when `stops` is null. */
+function buildStopsGauge(y, stops) {
+  return `
+    <vaadin-chart
+      title="${stops ? 'Stops' : 'No stops'}"
+      type="solidgauge"
+      style="width: 200px; height: 260px"
+      additional-options='{
+        "pane": {
+          "center": ["50%", "85%"],
+          "startAngle": -90,
+          "endAngle": 90,
+          "background": { "innerRadius": "60%", "outerRadius": "100%", "shape": "arc" }
+        },
+        "yAxis": {
+          "min": 0,
+          "max": 100,
+          "minorTickInterval": null,
+          "tickAmount": 2,
+          "labels": { "y": 16 }
+          ${stops ? `, "stops": ${JSON.stringify(stops)}` : ''}
+        }
+      }'
+    >
+      <vaadin-chart-series title="Value" values="[${y}]"></vaadin-chart-series>
+    </vaadin-chart>
+  `;
+}
+
+const GAUGE_STOPS = [
+  [0.1, '#55BF3B'],
+  [0.5, '#DDDF0D'],
+  [0.9, '#DF5353'],
+];
+
+/**
+ * Fixtures rendered only by `base/chart-non-styled.test.js`. They cover chart
+ * types and code paths that only differ outside styled mode.
+ */
+const nonStyledFixtures = {
+  // Basic cartesian types, which the shared fixtures leave to the styled-mode
+  // `pie` / `exporting` tests of each theme.
+  cartesian: `
+    <div style="display: flex; flex-wrap: wrap; width: 800px; height: 600px">
+      ${['line', 'area', 'bar', 'scatter']
+        .map(
+          (type) => `
+            <vaadin-chart type="${type}" title="${type}" style="width: 400px; height: 300px" categories="${SOLAR_CATEGORIES}">
+              <vaadin-chart-series title="Installation" values="${SOLAR_INSTALLATION}"></vaadin-chart-series>
+              <vaadin-chart-series title="Manufacturing" values="${SOLAR_MANUFACTURING}"></vaadin-chart-series>
+            </vaadin-chart>
+          `,
+        )
+        .join('')}
+    </div>
+  `,
+
+  pie: `
+    <vaadin-chart type="pie" title="Browser share" style="width: 500px; height: 400px">
+      <vaadin-chart-series
+        title="Brands"
+        values='[["Chrome", 70.7], ["Safari", 8.9], ["Firefox", 7.7], ["Edge", 5.8], ["Other", 6.9]]'
+        additional-options='{ "dataLabels": { "enabled": true } }'
+      ></vaadin-chart-series>
+    </vaadin-chart>
+  `,
+
+  // highcharts#23279: the gradient case. With `stops` the colour must follow the
+  // stops; without them it falls back to the series colour.
+  'solidgauge-stops': `
+    <div style="display: flex; width: 800px; height: 260px">
+      ${buildStopsGauge(5, GAUGE_STOPS)}
+      ${buildStopsGauge(50, GAUGE_STOPS)}
+      ${buildStopsGauge(95, GAUGE_STOPS)}
+      ${buildStopsGauge(50, null)}
+    </div>
+  `,
+
+  // The chart and the SVG `getSVG()` produces for it, side by side.
+  'export-svg': `
+    <div style="display: flex; width: 900px; height: 320px">
+      <vaadin-chart
+        type="column"
+        title="Exported chart"
+        style="width: 450px; height: 300px"
+        categories="${SOLAR_CATEGORIES}"
+        additional-options='{ "exporting": { "enabled": true } }'
+      >
+        <vaadin-chart-series title="Installation" values="${SOLAR_INSTALLATION}"></vaadin-chart-series>
+        <vaadin-chart-series title="Manufacturing" values="${SOLAR_MANUFACTURING}"></vaadin-chart-series>
+      </vaadin-chart>
+      <div class="export-output" style="width: 450px; height: 300px"></div>
+    </div>
+  `,
+};
+
+/** Renders the SVG export of the chart next to it. */
+async function renderExport(chart) {
+  chart.parentElement.querySelector('.export-output').innerHTML = chart.configuration.getSVG();
+  await nextFrame();
+}
+
+/**
+ * Turns styled mode off the way the Flow `Chart` does: Flow sends
+ * `chart.styledMode: false` through `updateConfiguration()` before the chart
+ * initializes. Highcharts reads `styledMode` at init only.
+ */
+function disableStyledMode(chart) {
+  chart.updateConfiguration({ chart: { ...chart.options.chart, styledMode: false } });
+}
 
 /** Hovers a point so that the tooltip is rendered. */
 async function showTooltip(chart) {
@@ -707,29 +1019,52 @@ async function hideSeriesAndPageLegend(chart) {
   await nextFrame();
 }
 
+/** Drills down into the first point. */
+async function drillDown(chart) {
+  chart.configuration.series[0].points[0].doDrilldown();
+  await nextFrame();
+}
+
 /** Extra work a fixture needs after rendering, applied to its first chart. */
 const interactions = {
+  drilldown: drillDown,
   tooltip: showTooltip,
   'tooltip-outside': showTooltip,
-  'tooltip-outside-non-styled': showTooltip,
   'use-html': showTooltip,
   'exporting-menu': openExportMenu,
   'point-states': selectAndHoverPoints,
   'legend-states': hideSeriesAndPageLegend,
+  'export-svg': renderExport,
 };
 
-const allFixtures = { ...fixtures, ...baseOnlyFixtures };
+const allFixtures = { ...fixtures, ...baseOnlyFixtures, ...nonStyledFixtures };
 
 /** Names of the fixtures `base/chart.test.js` renders on its own. */
 export const BASE_ONLY_FIXTURES = Object.keys(baseOnlyFixtures);
 
+/** Names of the shared fixtures every theme renders. */
+export const SHARED_FIXTURES = Object.keys(fixtures);
+
+/** Names of the fixtures only the non-styled-mode tests render. */
+export const NON_STYLED_FIXTURES = Object.keys(nonStyledFixtures);
+
 /** Renders the named fixture and returns the element to snapshot. */
-async function renderFixture(name) {
+async function renderFixture(name, { styledMode = true } = {}) {
   const root = fixtureSync(allFixtures[name]);
   const charts = root.localName === 'vaadin-chart' ? [root] : [...root.querySelectorAll('vaadin-chart')];
+  if (!styledMode) {
+    charts.forEach(disableStyledMode);
+  }
   await whenRendered(charts);
+  if (!styledMode && charts.some((chart) => chart.configuration.styledMode !== false)) {
+    throw new Error(`${name}: styled mode is still on`);
+  }
   if (interactions[name]) {
     await interactions[name](charts[0]);
+    if (!styledMode) {
+      // Outside styled mode, hover and inactive states fade in with JS animations.
+      await aTimeout(400);
+    }
   }
   return root;
 }
@@ -737,9 +1072,11 @@ async function renderFixture(name) {
 /**
  * Declares one screenshot test per fixture. Passing `dark` renders them with a
  * dark colour scheme and appends `-dark` to the screenshot names, so that the
- * scheme and the name it produces are declared in one place.
+ * scheme and the name it produces are declared in one place. `prefersDark`
+ * emulates `prefers-color-scheme: dark` instead and appends `-prefers-dark`.
+ * `styledMode: false` renders the charts the way the Flow `Chart` does by default.
  */
-export function defineScreenshotTests(names, { dark = false } = {}) {
+export function defineScreenshotTests(names, { dark = false, prefersDark = false, styledMode = true } = {}) {
   if (dark) {
     beforeEach(() => {
       document.documentElement.style.setProperty('color-scheme', 'dark');
@@ -750,10 +1087,25 @@ export function defineScreenshotTests(names, { dark = false } = {}) {
     });
   }
 
+  if (prefersDark) {
+    beforeEach(async () => {
+      await emulateMedia({ colorScheme: 'dark' });
+    });
+
+    afterEach(async () => {
+      await emulateMedia({ colorScheme: 'light' });
+    });
+  }
+
   names.forEach((name) => {
-    const screenshot = dark ? `${name}-dark` : name;
+    let screenshot = name;
+    if (dark) {
+      screenshot += '-dark';
+    } else if (prefersDark) {
+      screenshot += '-prefers-dark';
+    }
     it(screenshot, async () => {
-      await visualDiff(await renderFixture(name), screenshot);
+      await visualDiff(await renderFixture(name, { styledMode }), screenshot);
     });
   });
 }
