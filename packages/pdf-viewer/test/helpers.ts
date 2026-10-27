@@ -47,6 +47,26 @@ export async function loadAndRender(viewer: PdfViewer, src: string): Promise<voi
 }
 
 /**
+ * Returns the size of the content area of the viewer without its padding.
+ */
+export function getContentBoxSize(content: HTMLElement): { width: number; height: number } {
+  const style = getComputedStyle(content);
+  return {
+    width: content.clientWidth - parseFloat(style.paddingLeft) - parseFloat(style.paddingRight),
+    height: content.clientHeight - parseFloat(style.paddingTop) - parseFloat(style.paddingBottom),
+  };
+}
+
+/**
+ * Returns the horizontal middle of the visible content area in viewport
+ * coordinates. It leaves out a vertical scrollbar, which is on the left in
+ * RTL, where `clientLeft` includes it.
+ */
+export function getViewCenter(content: HTMLElement): number {
+  return content.getBoundingClientRect().left + content.clientLeft + content.clientWidth / 2;
+}
+
+/**
  * Waits until a scroll, which can be animated, has settled.
  */
 export async function scrollSettled(element: HTMLElement): Promise<void> {

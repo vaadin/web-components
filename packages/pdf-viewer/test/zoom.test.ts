@@ -4,7 +4,7 @@ import sinon from 'sinon';
 import './enable-feature-flag.js';
 import '../vaadin-pdf-viewer.js';
 import type { PdfViewer } from '../vaadin-pdf-viewer.js';
-import { fixtureUrl, loadAndRender, nextRenderIdle } from './helpers.js';
+import { fixtureUrl, getContentBoxSize, getViewCenter, loadAndRender, nextRenderIdle } from './helpers.js';
 
 /** The width of an A4 page at 100% in CSS pixels */
 const A4_WIDTH = (595.92 * 96) / 72;
@@ -12,14 +12,6 @@ const A4_WIDTH = (595.92 * 96) / 72;
 describe('zoom', () => {
   let viewer: PdfViewer;
   let content: HTMLElement;
-
-  function getAvailableSize() {
-    const style = getComputedStyle(content);
-    return {
-      width: content.clientWidth - parseFloat(style.paddingLeft) - parseFloat(style.paddingRight),
-      height: content.clientHeight - parseFloat(style.paddingTop) - parseFloat(style.paddingBottom),
-    };
-  }
 
   beforeEach(async () => {
     viewer = fixtureSync('<vaadin-pdf-viewer style="width: 400px; height: 400px"></vaadin-pdf-viewer>');
@@ -44,13 +36,13 @@ describe('zoom', () => {
 
     it('should fit the page width by default', () => {
       expect(viewer.zoom).to.equal('page-width');
-      expect(pages[0].offsetWidth).to.be.closeTo(getAvailableSize().width, 1);
+      expect(pages[0].offsetWidth).to.be.closeTo(getContentBoxSize(content).width, 1);
     });
 
     it('should fit the whole page with page-fit', async () => {
       viewer.zoom = 'page-fit';
       await nextRenderIdle(viewer);
-      expect(pages[0].offsetHeight).to.be.closeTo(getAvailableSize().height, 1);
+      expect(pages[0].offsetHeight).to.be.closeTo(getContentBoxSize(content).height, 1);
     });
 
     it('should show pages at their actual size with zoom 1', async () => {
@@ -108,8 +100,7 @@ describe('zoom', () => {
 
         function getHorizontalCenterOffset() {
           const page = pages[0].getBoundingClientRect();
-          const left = content.getBoundingClientRect().left + content.clientLeft;
-          return page.left + page.width / 2 - (left + content.clientWidth / 2);
+          return page.left + page.width / 2 - getViewCenter(content);
         }
 
         it('should keep the page centered when zooming in', async () => {
@@ -160,7 +151,7 @@ describe('zoom', () => {
           viewer.zoom = value as any;
           await nextRenderIdle(viewer);
           const page = pages[0];
-          expect(page.offsetWidth).to.be.closeTo(getAvailableSize().width, 1);
+          expect(page.offsetWidth).to.be.closeTo(getContentBoxSize(content).width, 1);
           expect(page.querySelector('canvas')!.width).to.be.greaterThan(0);
           expect(warnStub).to.be.calledOnce;
           // The property keeps the value as set
