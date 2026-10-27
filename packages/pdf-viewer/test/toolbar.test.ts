@@ -12,7 +12,7 @@ import { fixtureUrl, loadAndRender, loadDocument, nextRenderIdle } from './helpe
 
 describe('toolbar', () => {
   let viewer: PdfViewer;
-  let header: HTMLElement;
+  let topArea: HTMLElement;
   let content: HTMLElement;
   let previousButton: PdfViewerButton;
   let nextButton: PdfViewerButton;
@@ -45,7 +45,7 @@ describe('toolbar', () => {
   beforeEach(async () => {
     viewer = fixtureSync('<vaadin-pdf-viewer style="width: 600px; height: 400px"></vaadin-pdf-viewer>');
     await nextRender();
-    header = viewer.shadowRoot!.querySelector<HTMLElement>('.header')!;
+    topArea = viewer.shadowRoot!.querySelector<HTMLElement>('.top-area')!;
     content = viewer.shadowRoot!.querySelector<HTMLElement>('[part="content"]')!;
     previousButton = viewer.querySelector<PdfViewerButton>('vaadin-pdf-viewer-button[icon="previous-page"]')!;
     nextButton = viewer.querySelector<PdfViewerButton>('vaadin-pdf-viewer-button[icon="next-page"]')!;
@@ -239,7 +239,7 @@ describe('toolbar', () => {
   it('should show the toolbar without scrolling on a narrow viewer', async () => {
     viewer.style.maxWidth = '320px';
     await loadAndRender(viewer, fixtureUrl('multi-page.pdf'));
-    expect(header.scrollHeight).to.be.at.most(header.clientHeight);
+    expect(topArea.scrollHeight).to.be.at.most(topArea.clientHeight);
   });
 
   describe('toolbar-actions slot', () => {
@@ -307,7 +307,7 @@ describe('toolbar', () => {
 
     it('should scroll each control into view when focused with the keyboard', async () => {
       // The toolbar scrolls, so that some controls are out of view
-      expect(header.scrollHeight).to.be.greaterThan(header.clientHeight);
+      expect(topArea.scrollHeight).to.be.greaterThan(topArea.clientHeight);
       // Go backwards from the pages through all toolbar controls.
       content.focus();
       await sendKeys({ press: 'Shift+Tab' });
@@ -322,10 +322,10 @@ describe('toolbar', () => {
         const name = control.getAttribute('icon') ?? control.localName;
         const rect = control.getBoundingClientRect();
         // Visible in the toolbar, which is inside the viewer
-        const headerRect = header.getBoundingClientRect();
+        const areaRect = topArea.getBoundingClientRect();
         const viewerRect = viewer.getBoundingClientRect();
-        const top = Math.max(headerRect.top, viewerRect.top);
-        const bottom = Math.min(headerRect.bottom, viewerRect.bottom);
+        const top = Math.max(areaRect.top, viewerRect.top);
+        const bottom = Math.min(areaRect.bottom, viewerRect.bottom);
         // With room for the focus ring around the control
         expect(rect.top, name).to.be.at.least(top + 3);
         expect(rect.bottom, name).to.be.at.most(bottom - 3);

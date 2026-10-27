@@ -30,7 +30,7 @@ const pdfViewerBaseStyles = css`
     display: none !important;
   }
 
-  .header {
+  .top-area {
     flex: 0 1 auto;
     overflow-y: auto;
     scroll-padding: calc(var(--vaadin-focus-ring-width) * 2 + 2px);

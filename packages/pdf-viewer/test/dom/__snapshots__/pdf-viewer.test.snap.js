@@ -352,7 +352,7 @@ snapshots["vaadin-pdf-viewer host document"] =
 /* end snapshot vaadin-pdf-viewer host document */
 
 snapshots["vaadin-pdf-viewer shadow default"] = 
-`<div class="header">
+`<div class="top-area">
   <div part="toolbar">
     <div
       class="navigation"
@@ -388,7 +388,7 @@ snapshots["vaadin-pdf-viewer shadow default"] =
 /* end snapshot vaadin-pdf-viewer shadow default */
 
 snapshots["vaadin-pdf-viewer shadow document"] = 
-`<div class="header">
+`<div class="top-area">
   <div part="toolbar">
     <div
       class="navigation"

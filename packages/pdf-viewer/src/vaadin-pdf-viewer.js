@@ -153,7 +153,7 @@ class PdfViewer extends PdfViewerMixin(
   /** @protected */
   render() {
     return html`
-      <div class="header" @focusin="${this.#onHeaderFocusIn}">${this._renderToolbar()}</div>
+      <div class="top-area" @focusin="${this.#onTopAreaFocusIn}">${this._renderToolbar()}</div>
       <div part="loader"></div>
       <div class="content-area">
         <div
@@ -212,13 +212,13 @@ class PdfViewer extends PdfViewerMixin(
   }
 
   /**
-   * Scrolls the header so that a control focused with the keyboard is visible
-   * with its focus ring. Browsers scroll only the focused element into view,
-   * e.g. the input of a field, and WebKit does not scroll an element that is
-   * partly visible already.
+   * Scrolls the toolbar so that a control focused with the keyboard is
+   * visible with its focus ring. Browsers scroll only the focused element
+   * into view, e.g. the input of a field, and WebKit does not scroll an
+   * element that is partly visible already.
    * @private
    */
-  #onHeaderFocusIn(event) {
+  #onTopAreaFocusIn(event) {
     if (isKeyboardActive()) {
       const control = event.composedPath().find((node) => node.parentNode === this);
       control?.scrollIntoView({ block: 'nearest', inline: 'nearest' });
