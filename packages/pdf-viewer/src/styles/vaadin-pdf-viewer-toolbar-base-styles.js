@@ -20,6 +20,7 @@ export const pdfViewerToolbarStyles = css`
 
   [part~='toolbar'] {
     display: flex;
+    min-width: fit-content;
     flex-wrap: wrap;
     justify-content: space-between;
     align-items: center;
