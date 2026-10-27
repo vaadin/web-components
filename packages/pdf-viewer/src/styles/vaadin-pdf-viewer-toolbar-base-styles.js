@@ -40,12 +40,6 @@ export const pdfViewerToolbarStyles = css`
     gap: var(--vaadin-gap-xs);
   }
 
-  ::slotted([slot='page-error']) {
-    align-self: center;
-    font-size: var(--vaadin-input-field-error-font-size, 0.875em);
-    color: var(--vaadin-input-field-error-color, var(--vaadin-text-color));
-  }
-
   ::slotted(vaadin-integer-field) {
     --vaadin-field-default-width: calc(8ch + 1.5em);
   }
