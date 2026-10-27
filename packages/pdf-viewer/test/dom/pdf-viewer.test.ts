@@ -29,6 +29,23 @@ describe('vaadin-pdf-viewer', () => {
       await nextUpdate(viewer);
       await expect(viewer).dom.to.equalSnapshot(options);
     });
+
+    it('header', async () => {
+      viewer.headerVisible = true;
+      viewer.src = fixtureUrl('multi-page.pdf');
+      await oneEvent(viewer, 'document-load');
+      await nextUpdate(viewer);
+      await expect(viewer).dom.to.equalSnapshot();
+    });
+
+    it('toolbar collapsed', async () => {
+      viewer.headerVisible = true;
+      viewer.toolbarCollapsed = true;
+      viewer.src = fixtureUrl('multi-page.pdf');
+      await oneEvent(viewer, 'document-load');
+      await nextUpdate(viewer);
+      await expect(viewer).dom.to.equalSnapshot();
+    });
   });
 
   describe('shadow', () => {
@@ -40,6 +57,22 @@ describe('vaadin-pdf-viewer', () => {
       viewer.src = fixtureUrl('multi-page.pdf');
       await nextRenderIdle(viewer);
       // Sizes depend on the browser and the device pixel ratio
+      await expect(viewer).shadowDom.to.equalSnapshot({ ignoreAttributes: ['style', 'width', 'height'] });
+    });
+
+    it('header', async () => {
+      viewer.headerVisible = true;
+      viewer.headerTitle = 'Annual report';
+      viewer.src = fixtureUrl('multi-page.pdf');
+      await nextRenderIdle(viewer);
+      await expect(viewer).shadowDom.to.equalSnapshot({ ignoreAttributes: ['style', 'width', 'height'] });
+    });
+
+    it('toolbar collapsed', async () => {
+      viewer.headerVisible = true;
+      viewer.toolbarCollapsed = true;
+      viewer.src = fixtureUrl('multi-page.pdf');
+      await nextRenderIdle(viewer);
       await expect(viewer).shadowDom.to.equalSnapshot({ ignoreAttributes: ['style', 'width', 'height'] });
     });
   });

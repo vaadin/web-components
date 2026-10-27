@@ -24,6 +24,7 @@ export interface PdfViewerI18n {
   zoomOut?: string;
   pageWidth?: string;
   pageFit?: string;
+  document?: string;
 }
 
 /**
@@ -47,6 +48,11 @@ export type PdfViewerPageChangedEvent = CustomEvent<{ value: number }>;
 export type PdfViewerPageCountChangedEvent = CustomEvent<{ value: number }>;
 
 /**
+ * Fired when the `toolbarCollapsed` property changes.
+ */
+export type PdfViewerToolbarCollapsedChangedEvent = CustomEvent<{ value: boolean }>;
+
+/**
  * Fired when the `zoom` property changes.
  */
 export type PdfViewerZoomChangedEvent = CustomEvent<{ value: PdfViewerZoom }>;
@@ -59,6 +65,8 @@ export interface PdfViewerCustomEventMap {
   'page-changed': PdfViewerPageChangedEvent;
 
   'page-count-changed': PdfViewerPageCountChangedEvent;
+
+  'toolbar-collapsed-changed': PdfViewerToolbarCollapsedChangedEvent;
 
   'zoom-changed': PdfViewerZoomChangedEvent;
 }
@@ -91,6 +99,9 @@ export interface PdfViewerEventMap extends HTMLElementEventMap, PdfViewerCustomE
  *
  * Part name       | Description
  * ----------------|------------
+ * `header`        | The header above the toolbar, a button that collapses and expands it, see `headerVisible`.
+ * `title`         | The title in the header.
+ * `header-toggle` | The icon in the header that shows whether the toolbar is collapsed.
  * `toolbar`       | The toolbar above the pages.
  * `toolbar-group` | A group of related controls in the toolbar: navigation, zoom and actions.
  * `content`       | The scrollable area that contains the pages.
@@ -128,6 +139,7 @@ export interface PdfViewerEventMap extends HTMLElementEventMap, PdfViewerCustomE
  * @fires {CustomEvent} document-load - Fired when the document has loaded.
  * @fires {CustomEvent} page-changed - Fired when the `page` property changes.
  * @fires {CustomEvent} page-count-changed - Fired when the `pageCount` property changes.
+ * @fires {CustomEvent} toolbar-collapsed-changed - Fired when the `toolbarCollapsed` property changes.
  * @fires {CustomEvent} zoom-changed - Fired when the `zoom` property changes.
  */
 declare class PdfViewer extends PdfViewerMixin(
@@ -157,7 +169,9 @@ declare class PdfViewer extends PdfViewerMixin(
    *   // Zoom select item that fits the page width to the viewer.
    *   pageWidth: 'Page width',
    *   // Zoom select item that fits the whole page into the viewer.
-   *   pageFit: 'Page fit'
+   *   pageFit: 'Page fit',
+   *   // Title of the header when `src` has no file name, e.g. a blob URL.
+   *   document: 'PDF document'
    * }
    * ```
    */

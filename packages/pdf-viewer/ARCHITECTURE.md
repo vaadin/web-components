@@ -61,9 +61,11 @@ how to generate them.
   - It calls `_refreshLayout()` when `zoom` changes.
   - Its `_zoomFactor` getter reads `_scale`, in units of the actual page size.
 - `PdfViewerKeyboardMixin` handles the keyboard shortcuts.
-- `PdfViewerToolbarMixin` renders the toolbar. Its controls are in the light DOM, so a theme styles the page
-  field like any other `vaadin-integer-field`. The element renders them before a marker comment, so application
-  children added later keep their place.
+- `PdfViewerToolbarMixin` renders the header and the toolbar. Its controls are in the light DOM, so a theme
+  styles the page field like any other `vaadin-integer-field`. The element renders them before a marker comment,
+  so application children added later keep their place.
+  - The header is a button in the shadow DOM that collapses and expands the toolbar. It shows `headerTitle`,
+    else the file name of `src`.
 - The element applies `I18nMixin` and defines the default texts. The mixins read them from `__effectiveI18n`.
 - The element applies `FocusMixin` and owns the focus state. Listeners on the page area in its template set
   `focused` and `focus-ring`, as focus moving inside the shadow root does not reach listeners on the host.

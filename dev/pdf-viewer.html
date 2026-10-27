@@ -12,9 +12,12 @@
     </script>
     <script type="module">
       import '@vaadin/button';
+      import '@vaadin/checkbox';
+      import '@vaadin/checkbox-group';
       import '@vaadin/pdf-viewer';
       import '@vaadin/radio-group';
       import '@vaadin/select';
+      import '@vaadin/text-field';
       import '@vaadin/tooltip';
 
       const viewer = document.querySelector('vaadin-pdf-viewer');
@@ -59,6 +62,19 @@
         fileUrl = URL.createObjectURL(file);
         select.value = '';
         viewer.src = fileUrl;
+      });
+
+      ['headerVisible', 'toolbarCollapsed'].forEach((prop) => {
+        document.getElementById(prop).addEventListener('checked-changed', (e) => {
+          viewer[prop] = e.detail.value;
+        });
+      });
+      viewer.addEventListener('toolbar-collapsed-changed', (e) => {
+        document.getElementById('toolbarCollapsed').checked = e.detail.value;
+      });
+
+      document.getElementById('headerTitle').addEventListener('change', (e) => {
+        viewer.headerTitle = e.target.value;
       });
 
       document.querySelector('#direction').addEventListener('value-changed', (e) => {
@@ -117,6 +133,15 @@
           Local file
           <input type="file" id="file" accept="application/pdf,.pdf" />
         </label>
+      </div>
+      <div class="control-group">
+        <vaadin-checkbox-group label="Options">
+          <vaadin-checkbox id="headerVisible" value="headerVisible" label="Show header"></vaadin-checkbox>
+          <vaadin-checkbox id="toolbarCollapsed" value="toolbarCollapsed" label="Collapse toolbar"></vaadin-checkbox>
+        </vaadin-checkbox-group>
+      </div>
+      <div class="control-group">
+        <vaadin-text-field id="headerTitle" label="Header title"></vaadin-text-field>
       </div>
       <div class="control-group">
         <vaadin-radio-group id="direction" label="Direction">
