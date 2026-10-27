@@ -321,30 +321,40 @@ describe('vaadin-chart styling', () => {
       });
     });
 
-    it('should not clip an animated solid gauge', async () => {
-      chart = fixtureSync(`
-        <vaadin-chart
-          type="solidgauge"
-          style="width: 400px; height: 400px"
-          additional-options='{
-            "chart": { "animation": { "duration": 50 } },
-            "plotOptions": { "series": { "animation": { "duration": 50 } } },
-            "pane": { "startAngle": 0, "endAngle": 360 },
-            "yAxis": { "min": 0, "max": 100 }
-          }'
-        >
-          <vaadin-chart-series values='[{ "y": 80, "radius": "112%", "innerRadius": "88%" }]'></vaadin-chart-series>
-        </vaadin-chart>
-      `);
-      await oneEvent(chart, 'chart-load');
-      await aTimeout(100);
+    it('should not add color classes when minColor and maxColor are defined', async () => {
+      await createChart({ minColor: '#ff0000', maxColor: '#0000ff' });
+      points().forEach((point) => {
+        expect(point.getAttribute('class')).to.equal('highcharts-point');
+        expect(point.getAttribute('fill')).to.not.equal('none');
+      });
+    });
+    [true, false].forEach((styledMode) => {
+      it(`should not clip an animated solid gauge, styledMode: ${styledMode}`, async () => {
+        chart = fixtureSync(`
+          <vaadin-chart
+            type="solidgauge"
+            style="width: 400px; height: 400px"
+            additional-options='{
+              "chart": { "styledMode": ${styledMode}, "animation": { "duration": 50 } },
+              "plotOptions": { "series": { "animation": { "duration": 50 } } },
+              "pane": { "startAngle": 0, "endAngle": 360 },
+              "yAxis": { "min": 0, "max": 100 }
+            }'
+          >
+            <vaadin-chart-series values='[{ "y": 80, "radius": "112%", "innerRadius": "88%" }]'></vaadin-chart-series>
+          </vaadin-chart>
+        `);
+        await oneEvent(chart, 'chart-load');
+        await aTimeout(100);
 
-      const series = chart.configuration.series[0];
-      const clipId = series.group.element.getAttribute('clip-path').match(/#([^)]+)/u)[1];
-      const clip = chart.$.chart.querySelector(`[id="${clipId}"] rect`).getBBox();
-      const point = series.points[0].graphic.element.getBBox();
-      expect(clip.x).to.be.at.most(point.x);
-      expect(clip.y).to.be.at.most(point.y);
+        expect(chart.configuration.styledMode).to.equal(styledMode);
+        const series = chart.configuration.series[0];
+        const clipId = series.group.element.getAttribute('clip-path').match(/#([^)]+)/u)[1];
+        const clip = chart.$.chart.querySelector(`[id="${clipId}"] rect`).getBBox();
+        const point = series.points[0].graphic.element.getBBox();
+        expect(clip.x).to.be.at.most(point.x);
+        expect(clip.y).to.be.at.most(point.y);
+      });
     });
 
     describe('non-styled mode', () => {
@@ -368,41 +378,6 @@ describe('vaadin-chart styling', () => {
       it('should paint points with the series color when no stops are defined', async () => {
         await createNonStyledChart();
         expect(getComputedStyle(points()[0]).fill).to.equal('rgb(44, 175, 254)');
-      });
-    });
-
-    it('should not clip an animated solid gauge in non-styled mode', async () => {
-      chart = fixtureSync(`
-        <vaadin-chart
-          type="solidgauge"
-          style="width: 400px; height: 400px"
-          additional-options='{
-            "chart": { "styledMode": false, "animation": { "duration": 50 } },
-            "plotOptions": { "series": { "animation": { "duration": 50 } } },
-            "pane": { "startAngle": 0, "endAngle": 360 },
-            "yAxis": { "min": 0, "max": 100 }
-          }'
-        >
-          <vaadin-chart-series values='[{ "y": 80, "radius": "112%", "innerRadius": "88%" }]'></vaadin-chart-series>
-        </vaadin-chart>
-      `);
-      await oneEvent(chart, 'chart-load');
-      await aTimeout(100);
-
-      expect(chart.configuration.styledMode).to.be.false;
-      const series = chart.configuration.series[0];
-      const clipId = series.group.element.getAttribute('clip-path').match(/#([^)]+)/u)[1];
-      const clip = chart.$.chart.querySelector(`[id="${clipId}"] rect`).getBBox();
-      const point = series.points[0].graphic.element.getBBox();
-      expect(clip.x).to.be.at.most(point.x);
-      expect(clip.y).to.be.at.most(point.y);
-    });
-
-    it('should not add color classes when minColor and maxColor are defined', async () => {
-      await createChart({ minColor: '#ff0000', maxColor: '#0000ff' });
-      points().forEach((point) => {
-        expect(point.getAttribute('class')).to.equal('highcharts-point');
-        expect(point.getAttribute('fill')).to.not.equal('none');
       });
     });
   });
