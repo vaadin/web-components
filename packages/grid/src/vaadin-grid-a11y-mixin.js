@@ -56,7 +56,7 @@ export const A11yMixin = (superClass) =>
 
       this.$.table.setAttribute('aria-rowcount', rowsCount);
 
-      const bodyColumns = _columnTree[_columnTree.length - 1];
+      const bodyColumns = _columnTree.at(-1);
 
       // If no header and footer rows while the empty state is active, count as one column
       // Otherwise, use the number of body columns, if present

@@ -16,7 +16,7 @@ export const ZOOM_LEVELS = [0.25, 0.5, 0.75, 1, 1.25, 1.5, 2, 3, 4];
 export const MIN_ZOOM = ZOOM_LEVELS[0];
 
 /** The largest zoom of the zoom buttons and pinch-to-zoom. */
-export const MAX_ZOOM = ZOOM_LEVELS[ZOOM_LEVELS.length - 1];
+export const MAX_ZOOM = ZOOM_LEVELS.at(-1);
 
 /** Tolerance for comparing zoom factors, which come from computed scales. */
 const ZOOM_EPSILON = 0.001;

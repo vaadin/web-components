@@ -808,8 +808,8 @@ function trackFire(info, target, touch) {
   if (!target) {
     return;
   }
-  const secondlast = info.moves[info.moves.length - 2];
-  const lastmove = info.moves[info.moves.length - 1];
+  const secondlast = info.moves.at(-2);
+  const lastmove = info.moves.at(-1);
   const dx = lastmove.x - info.x;
   const dy = lastmove.y - info.y;
   let ddx,

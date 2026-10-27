@@ -33,6 +33,23 @@ const PRO_LICENSE_HEADER = `
 const REACT_LICENSE_HEADER = LICENSE_HEADER.replace('2000 - ', '2022 - ');
 const REACT_PRO_LICENSE_HEADER = PRO_LICENSE_HEADER.replace('2000 - ', '2022 - ');
 
+const RESTRICTED_SYNTAX = [
+  {
+    selector: 'ForInStatement',
+    message: 'for..in loops are slower than Object.{keys,values,entries} and have their caveats.',
+  },
+  {
+    selector:
+      "MemberExpression[computed=true][property.type='BinaryExpression'][property.operator='-'][property.left.property.name='length']",
+    message: 'Use .at(-n) instead of arr[arr.length - n].',
+  },
+  {
+    selector:
+      "MemberExpression[computed=true][property.value=0] > CallExpression.object[callee.property.name='slice'][arguments.0.operator='-']",
+    message: 'Use .at(-1) instead of .slice(-1)[0].',
+  },
+];
+
 const PRO_COMPONENTS = [
   'charts',
   'board',
@@ -139,6 +156,7 @@ export default [
           ],
         },
       ],
+      'no-restricted-syntax': ['error', ...RESTRICTED_SYNTAX],
       'arrow-body-style': 'off',
       'consistent-return': 'off',
       'func-names': 'off',
@@ -171,10 +189,7 @@ export default [
     rules: {
       'no-restricted-syntax': [
         'error',
-        {
-          selector: 'ForInStatement',
-          message: 'for..in loops are slower than Object.{keys,values,entries} and have their caveats.',
-        },
+        ...RESTRICTED_SYNTAX,
         {
           selector: "CallExpression[callee.property.name='validate']",
           message:

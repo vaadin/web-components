@@ -228,7 +228,7 @@ export const PdfViewerFindMixin = (superClass) =>
         return null;
       }
       const first = parts[0];
-      const last = parts[parts.length - 1];
+      const last = parts.at(-1);
       const startNode = textDivs[first.itemIndex].firstChild;
       const endNode = textDivs[last.itemIndex].firstChild;
       const isValid = startNode && endNode && first.start <= startNode.length && last.end <= endNode.length;

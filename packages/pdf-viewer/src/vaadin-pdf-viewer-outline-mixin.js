@@ -369,7 +369,7 @@ export const PdfViewerOutlineMixin = (superClass) =>
           focusTarget = visibleItems[0];
           break;
         case 'End':
-          focusTarget = visibleItems[visibleItems.length - 1];
+          focusTarget = visibleItems.at(-1);
           break;
         case 'ArrowRight':
           if (hasChildren && !expanded) {

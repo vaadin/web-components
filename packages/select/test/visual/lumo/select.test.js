@@ -143,6 +143,23 @@ describe('select', () => {
     await visualDiff(div, 'value-custom');
   });
 
+  it('value-rich-content', async () => {
+    element.renderer = (root) => {
+      root.innerHTML = `
+        <vaadin-list-box>
+          <vaadin-item value="rich">
+            <div style="display: flex; align-items: center; gap: 0.5em">
+              <svg width="16" height="16" fill="currentColor"><circle cx="8" cy="8" r="8" /></svg>
+              <span>Icon and text</span>
+            </div>
+          </vaadin-item>
+        </vaadin-list-box>
+      `;
+    };
+    element.value = 'rich';
+    await visualDiff(div, 'value-rich-content');
+  });
+
   it('required', async () => {
     element.label = 'Label';
     element.required = true;

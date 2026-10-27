@@ -938,7 +938,7 @@ export const PdfViewerMixin = (superClass) =>
      */
     #getPageAt(top) {
       const page = this.#pages.find(({ element }) => top < element.offsetTop + element.offsetHeight);
-      return page || this.#pages[this.#pages.length - 1];
+      return page || this.#pages.at(-1);
     }
 
     /**
@@ -1140,7 +1140,7 @@ export const PdfViewerMixin = (superClass) =>
       this.#updateCurrentPage(visible);
 
       const first = visible[0].index;
-      const last = visible[visible.length - 1].index;
+      const last = visible.at(-1).index;
       const byVisibility = [...visible].sort((a, b) => b.height - a.height).map(({ index }) => pages[index]);
       const ahead = [];
       for (let distance = 1; distance <= RENDER_AHEAD; distance++) {

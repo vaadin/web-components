@@ -692,7 +692,7 @@ export const MenuBarMixin = (superClass) =>
       } else if (!visibleButtons.some((btn) => btn.getAttribute('tabindex') === '0')) {
         // Ensure there is at least one button with tabindex set to 0
         // so that menu-bar is not skipped when navigating with Tab
-        this._setTabindex(visibleButtons[visibleButtons.length - 1], true);
+        this._setTabindex(visibleButtons.at(-1), true);
       }
 
       this.__updateVisibleAttributes(visibleButtons);
@@ -1124,7 +1124,7 @@ export const MenuBarMixin = (superClass) =>
     /** @private */
     _focusLastItem() {
       const list = this._subMenu._menuListBox;
-      const item = list.items[list.items.length - 1];
+      const item = list.items.at(-1);
       if (item) {
         item.focus();
       }
