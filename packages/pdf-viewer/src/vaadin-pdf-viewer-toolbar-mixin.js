@@ -12,6 +12,7 @@ import '@vaadin/integer-field/src/vaadin-integer-field.js';
 import '@vaadin/tooltip/src/vaadin-tooltip.js';
 import './vaadin-pdf-viewer-button.js';
 import { html } from 'lit';
+import { styleMap } from 'lit/directives/style-map.js';
 
 /**
  * A mixin that adds the toolbar with the page navigation. The controls of
@@ -69,6 +70,7 @@ export const PdfViewerToolbarMixin = (superClass) =>
         <vaadin-integer-field
           slot="page-field"
           theme="align-right"
+          style="${styleMap({ '--_page-digits': String(pageCount).length })}"
           min="1"
           max="${pageCount || 1}"
           .value="${this.#getPageFieldValue()}"

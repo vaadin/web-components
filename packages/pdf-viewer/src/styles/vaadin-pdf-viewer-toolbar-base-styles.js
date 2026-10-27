@@ -34,7 +34,8 @@ export const pdfViewerToolbarStyles = css`
     gap: var(--vaadin-gap-xs);
   }
 
+  /* Room for the page count, a page number of at least two digits, and 1.5em for the padding and gap */
   ::slotted(vaadin-integer-field) {
-    --vaadin-field-default-width: calc(8ch + 1.5em);
+    --vaadin-field-default-width: calc((max(var(--_page-digits), 2) + var(--_page-digits) + 2) * 1ch + 1.5em);
   }
 `;

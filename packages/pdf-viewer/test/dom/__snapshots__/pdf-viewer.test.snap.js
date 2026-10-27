@@ -59,6 +59,7 @@ snapshots["vaadin-pdf-viewer host default"] =
     max="1"
     min="1"
     slot="page-field"
+    style="--_page-digits:1;"
     theme="align-right"
   >
     <span slot="suffix">
@@ -147,6 +148,7 @@ snapshots["vaadin-pdf-viewer host loading"] =
     max="1"
     min="1"
     slot="page-field"
+    style="--_page-digits:1;"
     theme="align-right"
   >
     <span slot="suffix">
@@ -235,6 +237,7 @@ snapshots["vaadin-pdf-viewer host error"] =
     max="1"
     min="1"
     slot="page-field"
+    style="--_page-digits:1;"
     theme="align-right"
   >
     <span slot="suffix">
@@ -320,6 +323,7 @@ snapshots["vaadin-pdf-viewer host document"] =
     max="6"
     min="1"
     slot="page-field"
+    style="--_page-digits:1;"
     theme="align-right"
   >
     <span slot="suffix">
