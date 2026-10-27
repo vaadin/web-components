@@ -13,11 +13,10 @@ yarn clean:react     # remove the generated sources and the build output
 
 ## Test
 
-Specs live in `packages/react-components*/test/*.spec.tsx` and run in Chromium through Playwright.
+Specs live in `packages/react-components*/test/*.spec.tsx` and run in the locally installed Google Chrome through Playwright, like the web component unit tests.
 
 ```sh
-npx playwright install chromium   # once
-yarn build:react                  # once: the wrappers re-export the gitignored `src/generated`, and the bare `@vaadin/react-components` import uses the built `index.js`
+yarn build:react   # once: the wrappers re-export the gitignored `src/generated`, and the bare `@vaadin/react-components` import uses the built `index.js`
 yarn test:react
 ```
 
