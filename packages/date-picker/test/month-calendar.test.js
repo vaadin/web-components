@@ -2,7 +2,7 @@ import { expect } from '@vaadin/chai-plugins';
 import { aTimeout, fixtureSync, makeSoloTouchEvent, nextFrame, nextRender, tap } from '@vaadin/testing-helpers';
 import sinon from 'sinon';
 import '../src/vaadin-month-calendar.js';
-import { getDateCell, getDateCells, getDefaultI18n, getWeekDayCells } from './helpers.js';
+import { getDateButton, getDateCell, getDateCells, getDefaultI18n, getWeekDayCells } from './helpers.js';
 
 describe('vaadin-month-calendar', () => {
   let monthCalendar, valueChangedSpy;
@@ -91,9 +91,16 @@ describe('vaadin-month-calendar', () => {
     expect(valueChangedSpy.called).to.be.false;
   });
 
-  it('should update value on tap', () => {
+  it('should update value on tapping the date cell', () => {
     const date10 = getDateCell(monthCalendar, 10);
     tap(date10);
+    expect(monthCalendar.selectedDate.getFullYear()).to.equal(2016);
+    expect(monthCalendar.selectedDate.getMonth()).to.equal(1);
+    expect(monthCalendar.selectedDate.getDate()).to.equal(10);
+  });
+
+  it('should update value on tapping the date button', () => {
+    tap(getDateButton(getDateCell(monthCalendar, 10)));
     expect(monthCalendar.selectedDate.getFullYear()).to.equal(2016);
     expect(monthCalendar.selectedDate.getMonth()).to.equal(1);
     expect(monthCalendar.selectedDate.getDate()).to.equal(10);
@@ -102,10 +109,10 @@ describe('vaadin-month-calendar', () => {
   it('should not react if the tap takes more than 300ms', async () => {
     const tapSpy = sinon.spy();
     monthCalendar.addEventListener('date-tap', tapSpy);
-    const dateElement = getDateCells(monthCalendar)[10];
+    const dateButton = getDateButton(getDateCells(monthCalendar)[10]);
     monthCalendar._onMonthGridTouchStart();
     await aTimeout(350);
-    tap(dateElement);
+    tap(dateButton);
     expect(tapSpy.called).to.be.false;
   });
 
@@ -113,14 +120,14 @@ describe('vaadin-month-calendar', () => {
     const tapSpy = sinon.spy();
     monthCalendar.addEventListener('date-tap', tapSpy);
     monthCalendar.ignoreTaps = true;
-    const dateElement = getDateCells(monthCalendar)[10];
-    tap(dateElement);
+    const dateButton = getDateButton(getDateCells(monthCalendar)[10]);
+    tap(dateButton);
     expect(tapSpy.called).to.be.false;
   });
 
   it('should prevent default on touchend', () => {
-    const dateElement = getDateCells(monthCalendar)[0];
-    const event = makeSoloTouchEvent('touchend', null, dateElement);
+    const dateButton = getDateButton(getDateCells(monthCalendar)[0]);
+    const event = makeSoloTouchEvent('touchend', null, dateButton);
     expect(event.defaultPrevented).to.be.true;
   });
 
@@ -136,8 +143,7 @@ describe('vaadin-month-calendar', () => {
   it('should not update value on disabled-by-max date tap', async () => {
     monthCalendar.maxDate = new Date('2016-02-09');
     await nextRender();
-    const date10 = getDateCell(monthCalendar, 10);
-    tap(date10);
+    tap(getDateButton(getDateCell(monthCalendar, 10)));
     expect(monthCalendar.selectedDate).to.be.undefined;
   });
 
@@ -149,8 +155,7 @@ describe('vaadin-month-calendar', () => {
       return date.year === 2016 && date.month === 1 && date.day === 9;
     };
     await nextFrame();
-    const date9 = getDateCell(monthCalendar, 9);
-    tap(date9);
+    tap(getDateButton(getDateCell(monthCalendar, 9)));
     expect(monthCalendar.selectedDate).to.be.undefined;
   });
 
@@ -179,7 +184,7 @@ describe('vaadin-month-calendar', () => {
     it('should label dates in correct locale', () => {
       const dates = getDateCells(monthCalendar);
       dates.slice(0, 7).forEach((date, index) => {
-        const label = date.getAttribute('aria-label');
+        const label = getDateButton(date).getAttribute('aria-label');
         const day = ['maanantai', 'tiistai', 'keskiviikko', 'torstai', 'perjantai', 'lauantai', 'sunnuntai'][index];
         expect(label).to.equal(`${index + 1} helmikuu 2016, ${day}`);
       });
@@ -189,7 +194,7 @@ describe('vaadin-month-calendar', () => {
       monthCalendar.month = new Date();
       await nextRender();
       const today = getDateCells(monthCalendar).find((date) => date.getAttribute('part').includes('today'));
-      expect(today.getAttribute('aria-label').split(', ').pop()).to.equal('Tänään');
+      expect(getDateButton(today).getAttribute('aria-label').split(', ').pop()).to.equal('Tänään');
     });
 
     it('should render month name in correct locale', () => {
