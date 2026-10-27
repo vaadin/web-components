@@ -13,7 +13,6 @@ import '@vaadin/tooltip/src/vaadin-tooltip.js';
 import './vaadin-pdf-viewer-button.js';
 import { html } from 'lit';
 import { live } from 'lit/directives/live.js';
-import { isKeyboardActive } from '@vaadin/a11y-base/src/focus-utils.js';
 
 /**
  * A mixin that adds the toolbar with the page navigation. The controls of
@@ -39,15 +38,6 @@ export const PdfViewerToolbarMixin = (superClass) =>
       // Show the current page in the page field again when it changes.
       if (props.has('page') || props.has('pageCount')) {
         this.#invalidPageEntry = null;
-      }
-    }
-
-    /** @protected */
-    updated(props) {
-      super.updated(props);
-
-      if (props.has('page') || props.has('pageCount')) {
-        this.#keepFocus();
       }
     }
 
@@ -122,21 +112,6 @@ export const PdfViewerToolbarMixin = (superClass) =>
         </vaadin-integer-field>
         <span slot="page-error" ?hidden="${invalidPageEntry === null}">${pageError}</span>
       `;
-    }
-
-    /**
-     * Moves focus to the page field when a focused page button gets disabled,
-     * e.g. "next page" on the last page, as the button cannot be used anymore.
-     * Pointer users keep their focus where it is, so that touch devices don't
-     * open the on-screen keyboard.
-     * @private
-     */
-    #keepFocus() {
-      const focusedButton = this.querySelector(':scope > vaadin-pdf-viewer-button[disabled]:focus');
-      if (focusedButton && isKeyboardActive()) {
-        const field = this.querySelector(':scope > [slot="page-field"]:not([disabled])');
-        field?.focus({ focusVisible: true });
-      }
     }
 
     /**

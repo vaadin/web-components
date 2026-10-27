@@ -21,6 +21,13 @@ describe('vaadin-pdf-viewer-button', () => {
     expect(button.getAttribute('tabindex')).to.equal('0');
   });
 
+  it('should be focusable when disabled', () => {
+    button.disabled = true;
+    expect(button.getAttribute('tabindex')).to.equal('0');
+    button.focus();
+    expect(document.activeElement).to.equal(button);
+  });
+
   it('should hide the icon from assistive technology', () => {
     expect(getIcon().getAttribute('aria-hidden')).to.equal('true');
   });

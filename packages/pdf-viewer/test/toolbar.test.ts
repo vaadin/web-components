@@ -1,5 +1,5 @@
 import { expect } from '@vaadin/chai-plugins';
-import { resetMouse, sendKeys, sendMouseToElement } from '@vaadin/test-runner-commands';
+import { sendKeys } from '@vaadin/test-runner-commands';
 import { fixtureSync, nextFrame, nextRender, oneEvent } from '@vaadin/testing-helpers';
 import sinon from 'sinon';
 import './enable-feature-flag.js';
@@ -206,39 +206,15 @@ describe('toolbar', () => {
       });
     });
 
-    describe('focus', () => {
-      afterEach(async () => {
-        await resetMouse();
-      });
-
-      it('should move focus to the page field when the focused next page button gets disabled', async () => {
-        viewer.page = 5;
-        await nextRenderIdle(viewer);
-        nextButton.focus();
-        await sendKeys({ press: 'Enter' });
-        await nextFrame();
-        expect(viewer.page).to.equal(6);
-        expect(document.activeElement).to.equal(pageField.inputElement);
-      });
-
-      it('should move focus to the page field when the focused previous page button gets disabled', async () => {
-        viewer.page = 2;
-        await nextRenderIdle(viewer);
-        previousButton.focus();
-        await sendKeys({ press: 'Enter' });
-        await nextFrame();
-        expect(viewer.page).to.equal(1);
-        expect(document.activeElement).to.equal(pageField.inputElement);
-      });
-
-      it('should keep focus on the next page button clicked to the last page with the mouse', async () => {
-        viewer.page = 5;
-        await nextRenderIdle(viewer);
-        await sendMouseToElement({ type: 'click', element: nextButton });
-        await nextFrame();
-        expect(viewer.page).to.equal(6);
-        expect(document.activeElement).to.equal(nextButton);
-      });
+    it('should keep focus on the next page button when it gets disabled', async () => {
+      viewer.page = 5;
+      await nextRenderIdle(viewer);
+      nextButton.focus();
+      await sendKeys({ press: 'Enter' });
+      await nextFrame();
+      expect(viewer.page).to.equal(6);
+      expect(nextButton.disabled).to.be.true;
+      expect(document.activeElement).to.equal(nextButton);
     });
 
     describe('page out of range', () => {
