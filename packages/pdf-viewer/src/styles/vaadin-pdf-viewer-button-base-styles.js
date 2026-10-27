@@ -25,7 +25,7 @@ export const pdfViewerButtonStyles = css`
   }
 
   :host([icon='previous-page']) {
-    --_icon: var(--vaadin-pdf-viewer-icon-previous-page, var(--_vaadin-icon-chevron-down));
+    --_icon: var(--_vaadin-icon-chevron-down);
   }
 
   :host([icon='previous-page']) [part~='icon'] {
@@ -33,7 +33,7 @@ export const pdfViewerButtonStyles = css`
   }
 
   :host([icon='next-page']) {
-    --_icon: var(--vaadin-pdf-viewer-icon-next-page, var(--_vaadin-icon-chevron-down));
+    --_icon: var(--_vaadin-icon-chevron-down);
   }
 
   @media (forced-colors: active) {

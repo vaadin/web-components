@@ -99,8 +99,6 @@ export interface PdfViewerEventMap extends HTMLElementEventMap, PdfViewerCustomE
  * | `--vaadin-pdf-viewer-background`          |
  * | `--vaadin-pdf-viewer-border-color`        |
  * | `--vaadin-pdf-viewer-border-radius`       |
- * | `--vaadin-pdf-viewer-icon-next-page`      |
- * | `--vaadin-pdf-viewer-icon-previous-page`  |
  * | `--vaadin-pdf-viewer-padding`             |
  * | `--vaadin-pdf-viewer-page-background`     |
  * | `--vaadin-pdf-viewer-page-gap`            |
@@ -109,8 +107,6 @@ export interface PdfViewerEventMap extends HTMLElementEventMap, PdfViewerCustomE
  * | `--vaadin-pdf-viewer-toolbar-background`  |
  * | `--vaadin-pdf-viewer-toolbar-gap`         |
  * | `--vaadin-pdf-viewer-toolbar-padding`     |
- *
- * The `--vaadin-pdf-viewer-icon-*` properties take an image (e.g. an SVG data URL) used as a mask.
  *
  * See [Styling Components](https://vaadin.com/docs/latest/styling/styling-components) documentation.
  *
