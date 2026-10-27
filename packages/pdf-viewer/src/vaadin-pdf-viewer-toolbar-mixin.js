@@ -12,7 +12,6 @@ import '@vaadin/integer-field/src/vaadin-integer-field.js';
 import '@vaadin/tooltip/src/vaadin-tooltip.js';
 import './vaadin-pdf-viewer-button.js';
 import { html } from 'lit';
-import { live } from 'lit/directives/live.js';
 
 /**
  * A mixin that adds the toolbar with the page navigation. The controls of
@@ -21,24 +20,11 @@ import { live } from 'lit/directives/live.js';
  */
 export const PdfViewerToolbarMixin = (superClass) =>
   class PdfViewerToolbarMixinClass extends superClass {
-    /** A page number entered by the user that does not exist, kept in the field until the page changes, or null. */
-    #invalidPageEntry = null;
-
     /** @protected */
     firstUpdated() {
       super.firstUpdated();
 
       this.addEventListener('focusin', (event) => this.#onFocusIn(event));
-    }
-
-    /** @protected */
-    willUpdate(props) {
-      super.willUpdate(props);
-
-      // Show the current page in the page field again when it changes.
-      if (props.has('page') || props.has('pageCount')) {
-        this.#invalidPageEntry = null;
-      }
     }
 
     /**
@@ -53,7 +39,6 @@ export const PdfViewerToolbarMixin = (superClass) =>
             <div part="toolbar-group" class="navigation">
               <slot name="toolbar-page"></slot>
               <slot name="page-field"></slot>
-              <slot name="page-error"></slot>
             </div>
             <div part="toolbar-group" class="actions"><slot name="toolbar-actions"></slot></div>
           </div>
@@ -69,12 +54,7 @@ export const PdfViewerToolbarMixin = (superClass) =>
     _renderToolbarControls() {
       const { page, pageCount } = this;
       const hasDocument = pageCount > 0;
-      // The page field only shows a page that exists. A page out of range set by
-      // the application would make the field invalid.
-      const pageValue = hasDocument && Number.isInteger(page) && page >= 1 && page <= pageCount ? String(page) : '';
-      const invalidPageEntry = this.#invalidPageEntry;
       const i18n = this.__effectiveI18n;
-      const pageError = i18n.pageError.replace('{pageCount}', pageCount);
 
       return html`
         <vaadin-pdf-viewer-button
@@ -100,9 +80,8 @@ export const PdfViewerToolbarMixin = (superClass) =>
           theme="align-right"
           min="1"
           max="${pageCount || 1}"
-          manual-validation
-          .value="${live(invalidPageEntry ?? pageValue)}"
-          .invalid="${invalidPageEntry !== null}"
+          .value="${this.#getPageFieldValue()}"
+          .errorMessage="${i18n.pageError.replace('{pageCount}', pageCount)}"
           .disabled="${!hasDocument}"
           @change="${this.#onPageFieldChange}"
           @input="${this.#onPageFieldInput}"
@@ -110,7 +89,6 @@ export const PdfViewerToolbarMixin = (superClass) =>
         >
           <span slot="suffix">${hasDocument ? `/ ${pageCount}` : ''}</span>
         </vaadin-integer-field>
-        <span slot="page-error" ?hidden="${invalidPageEntry === null}">${pageError}</span>
       `;
     }
 
@@ -151,22 +129,31 @@ export const PdfViewerToolbarMixin = (superClass) =>
     }
 
     /**
-     * Goes to the entered page. A page that does not exist is kept in the
-     * field, which is marked invalid, and an empty field shows the current
-     * page again.
+     * Returns the value of the page field. A page out of range set by the
+     * application gives an empty field, as it would make the field invalid.
+     * @return {string}
+     * @private
+     */
+    #getPageFieldValue() {
+      const { page, pageCount } = this;
+      return Number.isInteger(page) && page >= 1 && page <= pageCount ? String(page) : '';
+    }
+
+    /**
+     * Goes to the entered page. The field validates the entry against `min`
+     * and `max` and keeps a page that does not exist with its error message.
+     * An empty field shows the current page again.
      * @private
      */
     #onPageFieldChange(event) {
       // The change is internal to the viewer. Applications listen to `page-changed`.
       event.stopPropagation();
-      const { value } = event.target;
-      const page = Number(value);
-      const isValid = Number.isInteger(page) && page >= 1 && page <= this.pageCount;
-      this.#invalidPageEntry = value === '' || isValid ? null : value;
-      if (value !== '' && isValid) {
-        this._scrollToPage(page);
+      const field = event.target;
+      if (field.value === '') {
+        field.value = this.#getPageFieldValue();
+      } else if (!field.invalid) {
+        this._scrollToPage(Number(field.value));
       }
-      this.requestUpdate();
     }
 
     /** @private */

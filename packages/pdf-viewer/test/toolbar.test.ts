@@ -17,7 +17,6 @@ describe('toolbar', () => {
   let previousButton: PdfViewerButton;
   let nextButton: PdfViewerButton;
   let pageField: IntegerField;
-  let pageError: HTMLElement;
 
   function getGroup(name: string) {
     return viewer.shadowRoot!.querySelector<HTMLElement>(`[part~="toolbar-group"].${name}`)!;
@@ -51,7 +50,6 @@ describe('toolbar', () => {
     previousButton = viewer.querySelector<PdfViewerButton>('vaadin-pdf-viewer-button[icon="previous-page"]')!;
     nextButton = viewer.querySelector<PdfViewerButton>('vaadin-pdf-viewer-button[icon="next-page"]')!;
     pageField = viewer.querySelector<IntegerField>('vaadin-integer-field')!;
-    pageError = viewer.querySelector<HTMLElement>('[slot="page-error"]')!;
   });
 
   describe('without document', () => {
@@ -119,7 +117,7 @@ describe('toolbar', () => {
       await nextFrame();
       expect(nextButton.querySelector<Tooltip>('vaadin-tooltip')!.text).to.equal('Next');
       expect(previousButton.querySelector<Tooltip>('vaadin-tooltip')!.text).to.equal('Previous page');
-      expect(pageError.textContent).to.equal('Max. 6');
+      expect(pageField.errorMessage).to.equal('Max. 6');
     });
 
     it('should toggle disabled on previous page button on the first page', async () => {
@@ -211,8 +209,7 @@ describe('toolbar', () => {
         expect(viewer.page).to.equal(1);
         expect(pageField.value).to.equal('999');
         expect(pageField.invalid).to.be.true;
-        expect(pageError.textContent).to.equal('Enter 1–6');
-        expect(pageError.checkVisibility()).to.be.true;
+        expect(pageField.errorMessage).to.equal('Enter 1–6');
       });
 
       it('should go to a page entered after it', async () => {
@@ -228,7 +225,6 @@ describe('toolbar', () => {
         await nextRenderIdle(viewer);
         expect(pageField.value).to.equal('3');
         expect(pageField.invalid).to.be.false;
-        expect(pageError.checkVisibility()).to.be.false;
       });
 
       it('should show the current page again when the field is cleared', async () => {

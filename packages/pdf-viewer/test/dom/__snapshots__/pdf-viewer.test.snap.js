@@ -56,7 +56,6 @@ snapshots["vaadin-pdf-viewer host default"] =
   <vaadin-integer-field
     aria-disabled="true"
     disabled=""
-    manual-validation=""
     max="1"
     min="1"
     slot="page-field"
@@ -86,12 +85,6 @@ snapshots["vaadin-pdf-viewer host default"] =
       type="number"
     >
   </vaadin-integer-field>
-  <span
-    hidden=""
-    slot="page-error"
-  >
-    Enter 1–0
-  </span>
 </vaadin-pdf-viewer>
 `;
 /* end snapshot vaadin-pdf-viewer host default */
@@ -151,7 +144,6 @@ snapshots["vaadin-pdf-viewer host loading"] =
   <vaadin-integer-field
     aria-disabled="true"
     disabled=""
-    manual-validation=""
     max="1"
     min="1"
     slot="page-field"
@@ -181,12 +173,6 @@ snapshots["vaadin-pdf-viewer host loading"] =
       type="number"
     >
   </vaadin-integer-field>
-  <span
-    hidden=""
-    slot="page-error"
-  >
-    Enter 1–0
-  </span>
 </vaadin-pdf-viewer>
 `;
 /* end snapshot vaadin-pdf-viewer host loading */
@@ -246,7 +232,6 @@ snapshots["vaadin-pdf-viewer host error"] =
   <vaadin-integer-field
     aria-disabled="true"
     disabled=""
-    manual-validation=""
     max="1"
     min="1"
     slot="page-field"
@@ -276,12 +261,6 @@ snapshots["vaadin-pdf-viewer host error"] =
       type="number"
     >
   </vaadin-integer-field>
-  <span
-    hidden=""
-    slot="page-error"
-  >
-    Enter 1–0
-  </span>
 </vaadin-pdf-viewer>
 `;
 /* end snapshot vaadin-pdf-viewer host error */
@@ -338,7 +317,6 @@ snapshots["vaadin-pdf-viewer host document"] =
   </vaadin-pdf-viewer-button>
   <vaadin-integer-field
     has-value=""
-    manual-validation=""
     max="6"
     min="1"
     slot="page-field"
@@ -369,12 +347,6 @@ snapshots["vaadin-pdf-viewer host document"] =
       type="number"
     >
   </vaadin-integer-field>
-  <span
-    hidden=""
-    slot="page-error"
-  >
-    Enter 1–6
-  </span>
 </vaadin-pdf-viewer>
 `;
 /* end snapshot vaadin-pdf-viewer host document */
@@ -389,8 +361,6 @@ snapshots["vaadin-pdf-viewer shadow default"] =
       <slot name="toolbar-page">
       </slot>
       <slot name="page-field">
-      </slot>
-      <slot name="page-error">
       </slot>
     </div>
     <div
@@ -427,8 +397,6 @@ snapshots["vaadin-pdf-viewer shadow document"] =
       <slot name="toolbar-page">
       </slot>
       <slot name="page-field">
-      </slot>
-      <slot name="page-error">
       </slot>
     </div>
     <div
