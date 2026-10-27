@@ -54,6 +54,9 @@ how to generate them.
 - `PdfViewerRenderMixin` owns the page views, their sizes, the render queue and the device pixel ratio. It calls `_pageSizesChanged()` at most once per frame when pages get their own size.
 - `PdfViewerScrollMixin` owns the scale, the anchor, the visible pages and `page`. It asks for rendering
   only with `_renderVisible()` and `_cancelRender()`.
+- `PdfViewerKeyboardMixin` handles the keyboard shortcuts.
+- The element applies `FocusMixin` and owns the focus state. Listeners on the page area in its template set
+  `focused` and `focus-ring`, as focus moving inside the shadow root does not reach listeners on the host.
 - `PdfViewerRenderQueue` decides the render order, the memory budget and the release. It has no host
   reference, and its limits are options.
 - `pdf-viewer-layout.js` has the layout math without DOM access: visible pages, anchor and fit scale.

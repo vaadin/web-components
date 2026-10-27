@@ -8,6 +8,7 @@
  * See https://vaadin.com/commercial-license-and-service-terms for the full
  * license.
  */
+import { FocusMixin } from '@vaadin/a11y-base/src/focus-mixin.js';
 import { ElementMixin } from '@vaadin/component-base/src/element-mixin.js';
 import { PdfViewerMixin } from './vaadin-pdf-viewer-mixin.js';
 
@@ -69,10 +70,12 @@ export interface PdfViewerEventMap extends HTMLElementEventMap, PdfViewerCustomE
  *
  * The following state attributes are available for styling:
  *
- * Attribute   | Description
- * ------------|------------
- * `loading`   | Set while the document is loading.
- * `has-error` | Set when the document could not be loaded.
+ * Attribute    | Description
+ * -------------|------------
+ * `loading`    | Set while the document is loading.
+ * `has-error`  | Set when the document could not be loaded.
+ * `focused`    | Set when the page area is focused.
+ * `focus-ring` | Set when the page area is focused using the keyboard.
  *
  * The following custom CSS properties are available for styling:
  *
@@ -94,7 +97,7 @@ export interface PdfViewerEventMap extends HTMLElementEventMap, PdfViewerCustomE
  * @fires {CustomEvent} page-changed - Fired when the `page` property changes.
  * @fires {CustomEvent} page-count-changed - Fired when the `pageCount` property changes.
  */
-declare class PdfViewer extends PdfViewerMixin(ElementMixin(HTMLElement)) {
+declare class PdfViewer extends PdfViewerMixin(FocusMixin(ElementMixin(HTMLElement))) {
   addEventListener<K extends keyof PdfViewerEventMap>(
     type: K,
     listener: (this: PdfViewer, ev: PdfViewerEventMap[K]) => void,
