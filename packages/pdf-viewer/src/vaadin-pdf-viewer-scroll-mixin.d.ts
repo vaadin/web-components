@@ -32,9 +32,8 @@ export declare class PdfViewerScrollMixinClass {
   page: number;
 
   /**
-   * Goes to the given page, for page changes caused by the user through
-   * the viewer's own controls. Scrolls to the start of the page also when
-   * it is the current page, which setting `page` does not do.
+   * Scrolls to the start of the given page and makes it the current page,
+   * also when it is the current page already.
    */
-  protected _goToPage(page: number): void;
+  protected _scrollToPage(page: number): void;
 }

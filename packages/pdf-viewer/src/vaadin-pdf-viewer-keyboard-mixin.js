@@ -30,7 +30,7 @@ export const PdfViewerKeyboardMixin = (superClass) =>
       }
 
       if ((event.key === 'Home' || event.key === 'End') && event.composedPath().includes(this.$.content)) {
-        this._goToPage(event.key === 'Home' ? 1 : this.pageCount);
+        this._scrollToPage(event.key === 'Home' ? 1 : this.pageCount);
         event.preventDefault();
       }
     }

@@ -97,7 +97,7 @@ export const PdfViewerScrollMixin = (superClass) =>
       }
 
       if (props.has('page') && this.page !== this.#scrolledPage && this.__pages.length) {
-        this.#scrollToPage(this.page);
+        this._scrollToPage(this.page);
       }
     }
 
@@ -120,18 +120,35 @@ export const PdfViewerScrollMixin = (superClass) =>
     }
 
     /**
-     * Goes to the given page, for page changes caused by the user through
-     * the viewer's own controls. Scrolls to the start of the page also when
-     * it is the current page, which setting `page` does not do.
+     * Scrolls to the start of the given page and makes it the current page,
+     * also when it is the current page already.
      * @param {number} page
      * @protected
      */
-    _goToPage(page) {
-      if (page === this.page) {
-        this.#scrollToPage(page);
-      } else {
-        this.page = page;
+    _scrollToPage(page) {
+      if (!this.#hasLayout() || this.#scale <= 0) {
+        // Scroll once the pages can be laid out.
+        this.#pendingPage = page;
+        this._renderVisible([]);
+        return;
       }
+      this.#pendingPage = 0;
+
+      const { content } = this.$;
+      if (!Number.isInteger(page) || page < 1 || page > this.__pages.length) {
+        issueWarning(
+          `The page ${page} is out of range for <vaadin-pdf-viewer>, the document has ${this.__pages.length} pages.`,
+        );
+      } else {
+        const pageView = this.__pages[page - 1];
+        content.scrollTop = pageView.element.offsetTop - Number.parseFloat(getComputedStyle(content).paddingBlockStart);
+        this.#setPageFromViewer(page);
+      }
+
+      // Keep the page as set until the user scrolls, also when it is out of range.
+      this.#pinnedPage = page;
+      this.#pinnedScrollTop = content.scrollTop;
+      this.#updateVisiblePages();
     }
 
     /**
@@ -188,7 +205,7 @@ export const PdfViewerScrollMixin = (superClass) =>
         return;
       }
       if (this.#pendingPage && this.#scale > 0) {
-        this.#scrollToPage(this.#pendingPage);
+        this._scrollToPage(this.#pendingPage);
       } else {
         this.#updateVisiblePages();
       }
@@ -272,7 +289,7 @@ export const PdfViewerScrollMixin = (superClass) =>
 
       if (this.#pendingPage) {
         // A page set before the pages could be laid out
-        this.#scrollToPage(this.#pendingPage);
+        this._scrollToPage(this.#pendingPage);
       } else {
         this.#updateVisiblePages();
       }
@@ -312,36 +329,6 @@ export const PdfViewerScrollMixin = (superClass) =>
     #getPageBox(page) {
       const { left, width } = page.element.getBoundingClientRect();
       return { top: page.element.offsetTop, height: page.height, left, width };
-    }
-
-    /**
-     * Scrolls to the start of a page.
-     * @private
-     */
-    #scrollToPage(page) {
-      if (!this.#hasLayout() || this.#scale <= 0) {
-        // Scroll once the pages can be laid out.
-        this.#pendingPage = page;
-        this._renderVisible([]);
-        return;
-      }
-      this.#pendingPage = 0;
-
-      const { content } = this.$;
-      if (!Number.isInteger(page) || page < 1 || page > this.__pages.length) {
-        issueWarning(
-          `The page ${page} is out of range for <vaadin-pdf-viewer>, the document has ${this.__pages.length} pages.`,
-        );
-      } else {
-        const pageView = this.__pages[page - 1];
-        content.scrollTop = pageView.element.offsetTop - Number.parseFloat(getComputedStyle(content).paddingBlockStart);
-        this.#scrolledPage = page;
-      }
-
-      // Keep the page as set until the user scrolls, also when it is out of range.
-      this.#pinnedPage = page;
-      this.#pinnedScrollTop = content.scrollTop;
-      this.#updateVisiblePages();
     }
 
     /** @private */
