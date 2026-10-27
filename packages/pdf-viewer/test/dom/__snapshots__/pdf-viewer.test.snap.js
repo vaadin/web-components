@@ -65,7 +65,7 @@ snapshots["vaadin-pdf-viewer host default"] =
     <span slot="suffix">
     </span>
     <label
-      for="input-vaadin-integer-field-5"
+      for="input-vaadin-integer-field-12"
       id="label-vaadin-integer-field-2"
       slot="label"
     >
@@ -78,7 +78,7 @@ snapshots["vaadin-pdf-viewer host default"] =
     </div>
     <input
       disabled=""
-      id="input-vaadin-integer-field-5"
+      id="input-vaadin-integer-field-12"
       max="1"
       min="1"
       slot="input"
@@ -86,6 +86,180 @@ snapshots["vaadin-pdf-viewer host default"] =
       type="number"
     >
   </vaadin-integer-field>
+  <vaadin-pdf-viewer-button
+    aria-describedby="vaadin-tooltip-5"
+    aria-disabled="true"
+    disabled=""
+    has-tooltip=""
+    icon="zoom-out"
+    role="button"
+    slot="toolbar-zoom"
+    style="--_vaadin-button-disabled-pointer-events: auto;"
+    tabindex="0"
+    theme="tertiary icon"
+  >
+    <vaadin-tooltip
+      modeless=""
+      slot="tooltip"
+    >
+      <div
+        id="vaadin-tooltip-5"
+        role="tooltip"
+        slot="overlay"
+      >
+        Zoom out
+      </div>
+    </vaadin-tooltip>
+  </vaadin-pdf-viewer-button>
+  <vaadin-select
+    aria-disabled="true"
+    disabled=""
+    has-value=""
+    slot="toolbar-zoom"
+    theme="align-center"
+  >
+    <div slot="overlay">
+      <vaadin-select-list-box
+        aria-orientation="vertical"
+        role="listbox"
+        selected="0"
+      >
+        <vaadin-select-item
+          aria-selected="true"
+          role="option"
+          selected=""
+          tabindex="0"
+        >
+          Page width
+        </vaadin-select-item>
+        <vaadin-select-item
+          aria-selected="false"
+          role="option"
+          tabindex="-1"
+        >
+          Page fit
+        </vaadin-select-item>
+        <vaadin-select-item
+          aria-selected="false"
+          role="option"
+          tabindex="-1"
+        >
+          25%
+        </vaadin-select-item>
+        <vaadin-select-item
+          aria-selected="false"
+          role="option"
+          tabindex="-1"
+        >
+          50%
+        </vaadin-select-item>
+        <vaadin-select-item
+          aria-selected="false"
+          role="option"
+          tabindex="-1"
+        >
+          75%
+        </vaadin-select-item>
+        <vaadin-select-item
+          aria-selected="false"
+          role="option"
+          tabindex="-1"
+        >
+          100%
+        </vaadin-select-item>
+        <vaadin-select-item
+          aria-selected="false"
+          role="option"
+          tabindex="-1"
+        >
+          125%
+        </vaadin-select-item>
+        <vaadin-select-item
+          aria-selected="false"
+          role="option"
+          tabindex="-1"
+        >
+          150%
+        </vaadin-select-item>
+        <vaadin-select-item
+          aria-selected="false"
+          role="option"
+          tabindex="-1"
+        >
+          200%
+        </vaadin-select-item>
+        <vaadin-select-item
+          aria-selected="false"
+          role="option"
+          tabindex="-1"
+        >
+          300%
+        </vaadin-select-item>
+        <vaadin-select-item
+          aria-selected="false"
+          role="option"
+          tabindex="-1"
+        >
+          400%
+        </vaadin-select-item>
+      </vaadin-select-list-box>
+    </div>
+    <label
+      id="label-vaadin-select-6"
+      slot="label"
+    >
+    </label>
+    <div
+      hidden=""
+      id="error-message-vaadin-select-8"
+      slot="error-message"
+    >
+    </div>
+    <vaadin-select-value-button
+      aria-disabled="true"
+      aria-expanded="false"
+      aria-haspopup="listbox"
+      aria-labelledby="value-vaadin-select-9"
+      disabled=""
+      role="button"
+      slot="value"
+      tabindex="-1"
+    >
+      <vaadin-select-item id="value-vaadin-select-9">
+        Page width
+      </vaadin-select-item>
+    </vaadin-select-value-button>
+    <label
+      id="label-vaadin-select-10"
+      slot="sr-label"
+    >
+    </label>
+  </vaadin-select>
+  <vaadin-pdf-viewer-button
+    aria-describedby="vaadin-tooltip-11"
+    aria-disabled="true"
+    disabled=""
+    has-tooltip=""
+    icon="zoom-in"
+    role="button"
+    slot="toolbar-zoom"
+    style="--_vaadin-button-disabled-pointer-events: auto;"
+    tabindex="0"
+    theme="tertiary icon"
+  >
+    <vaadin-tooltip
+      modeless=""
+      slot="tooltip"
+    >
+      <div
+        id="vaadin-tooltip-11"
+        role="tooltip"
+        slot="overlay"
+      >
+        Zoom in
+      </div>
+    </vaadin-tooltip>
+  </vaadin-pdf-viewer-button>
 </vaadin-pdf-viewer>
 `;
 /* end snapshot vaadin-pdf-viewer host default */
@@ -154,7 +328,7 @@ snapshots["vaadin-pdf-viewer host loading"] =
     <span slot="suffix">
     </span>
     <label
-      for="input-vaadin-integer-field-5"
+      for="input-vaadin-integer-field-12"
       id="label-vaadin-integer-field-2"
       slot="label"
     >
@@ -167,7 +341,7 @@ snapshots["vaadin-pdf-viewer host loading"] =
     </div>
     <input
       disabled=""
-      id="input-vaadin-integer-field-5"
+      id="input-vaadin-integer-field-12"
       max="1"
       min="1"
       slot="input"
@@ -175,6 +349,180 @@ snapshots["vaadin-pdf-viewer host loading"] =
       type="number"
     >
   </vaadin-integer-field>
+  <vaadin-pdf-viewer-button
+    aria-describedby="vaadin-tooltip-5"
+    aria-disabled="true"
+    disabled=""
+    has-tooltip=""
+    icon="zoom-out"
+    role="button"
+    slot="toolbar-zoom"
+    style="--_vaadin-button-disabled-pointer-events: auto;"
+    tabindex="0"
+    theme="tertiary icon"
+  >
+    <vaadin-tooltip
+      modeless=""
+      slot="tooltip"
+    >
+      <div
+        id="vaadin-tooltip-5"
+        role="tooltip"
+        slot="overlay"
+      >
+        Zoom out
+      </div>
+    </vaadin-tooltip>
+  </vaadin-pdf-viewer-button>
+  <vaadin-select
+    aria-disabled="true"
+    disabled=""
+    has-value=""
+    slot="toolbar-zoom"
+    theme="align-center"
+  >
+    <div slot="overlay">
+      <vaadin-select-list-box
+        aria-orientation="vertical"
+        role="listbox"
+        selected="0"
+      >
+        <vaadin-select-item
+          aria-selected="true"
+          role="option"
+          selected=""
+          tabindex="0"
+        >
+          Page width
+        </vaadin-select-item>
+        <vaadin-select-item
+          aria-selected="false"
+          role="option"
+          tabindex="-1"
+        >
+          Page fit
+        </vaadin-select-item>
+        <vaadin-select-item
+          aria-selected="false"
+          role="option"
+          tabindex="-1"
+        >
+          25%
+        </vaadin-select-item>
+        <vaadin-select-item
+          aria-selected="false"
+          role="option"
+          tabindex="-1"
+        >
+          50%
+        </vaadin-select-item>
+        <vaadin-select-item
+          aria-selected="false"
+          role="option"
+          tabindex="-1"
+        >
+          75%
+        </vaadin-select-item>
+        <vaadin-select-item
+          aria-selected="false"
+          role="option"
+          tabindex="-1"
+        >
+          100%
+        </vaadin-select-item>
+        <vaadin-select-item
+          aria-selected="false"
+          role="option"
+          tabindex="-1"
+        >
+          125%
+        </vaadin-select-item>
+        <vaadin-select-item
+          aria-selected="false"
+          role="option"
+          tabindex="-1"
+        >
+          150%
+        </vaadin-select-item>
+        <vaadin-select-item
+          aria-selected="false"
+          role="option"
+          tabindex="-1"
+        >
+          200%
+        </vaadin-select-item>
+        <vaadin-select-item
+          aria-selected="false"
+          role="option"
+          tabindex="-1"
+        >
+          300%
+        </vaadin-select-item>
+        <vaadin-select-item
+          aria-selected="false"
+          role="option"
+          tabindex="-1"
+        >
+          400%
+        </vaadin-select-item>
+      </vaadin-select-list-box>
+    </div>
+    <label
+      id="label-vaadin-select-6"
+      slot="label"
+    >
+    </label>
+    <div
+      hidden=""
+      id="error-message-vaadin-select-8"
+      slot="error-message"
+    >
+    </div>
+    <vaadin-select-value-button
+      aria-disabled="true"
+      aria-expanded="false"
+      aria-haspopup="listbox"
+      aria-labelledby="value-vaadin-select-9"
+      disabled=""
+      role="button"
+      slot="value"
+      tabindex="-1"
+    >
+      <vaadin-select-item id="value-vaadin-select-9">
+        Page width
+      </vaadin-select-item>
+    </vaadin-select-value-button>
+    <label
+      id="label-vaadin-select-10"
+      slot="sr-label"
+    >
+    </label>
+  </vaadin-select>
+  <vaadin-pdf-viewer-button
+    aria-describedby="vaadin-tooltip-11"
+    aria-disabled="true"
+    disabled=""
+    has-tooltip=""
+    icon="zoom-in"
+    role="button"
+    slot="toolbar-zoom"
+    style="--_vaadin-button-disabled-pointer-events: auto;"
+    tabindex="0"
+    theme="tertiary icon"
+  >
+    <vaadin-tooltip
+      modeless=""
+      slot="tooltip"
+    >
+      <div
+        id="vaadin-tooltip-11"
+        role="tooltip"
+        slot="overlay"
+      >
+        Zoom in
+      </div>
+    </vaadin-tooltip>
+  </vaadin-pdf-viewer-button>
 </vaadin-pdf-viewer>
 `;
 /* end snapshot vaadin-pdf-viewer host loading */
@@ -243,7 +591,7 @@ snapshots["vaadin-pdf-viewer host error"] =
     <span slot="suffix">
     </span>
     <label
-      for="input-vaadin-integer-field-5"
+      for="input-vaadin-integer-field-12"
       id="label-vaadin-integer-field-2"
       slot="label"
     >
@@ -256,7 +604,7 @@ snapshots["vaadin-pdf-viewer host error"] =
     </div>
     <input
       disabled=""
-      id="input-vaadin-integer-field-5"
+      id="input-vaadin-integer-field-12"
       max="1"
       min="1"
       slot="input"
@@ -264,6 +612,180 @@ snapshots["vaadin-pdf-viewer host error"] =
       type="number"
     >
   </vaadin-integer-field>
+  <vaadin-pdf-viewer-button
+    aria-describedby="vaadin-tooltip-5"
+    aria-disabled="true"
+    disabled=""
+    has-tooltip=""
+    icon="zoom-out"
+    role="button"
+    slot="toolbar-zoom"
+    style="--_vaadin-button-disabled-pointer-events: auto;"
+    tabindex="0"
+    theme="tertiary icon"
+  >
+    <vaadin-tooltip
+      modeless=""
+      slot="tooltip"
+    >
+      <div
+        id="vaadin-tooltip-5"
+        role="tooltip"
+        slot="overlay"
+      >
+        Zoom out
+      </div>
+    </vaadin-tooltip>
+  </vaadin-pdf-viewer-button>
+  <vaadin-select
+    aria-disabled="true"
+    disabled=""
+    has-value=""
+    slot="toolbar-zoom"
+    theme="align-center"
+  >
+    <div slot="overlay">
+      <vaadin-select-list-box
+        aria-orientation="vertical"
+        role="listbox"
+        selected="0"
+      >
+        <vaadin-select-item
+          aria-selected="true"
+          role="option"
+          selected=""
+          tabindex="0"
+        >
+          Page width
+        </vaadin-select-item>
+        <vaadin-select-item
+          aria-selected="false"
+          role="option"
+          tabindex="-1"
+        >
+          Page fit
+        </vaadin-select-item>
+        <vaadin-select-item
+          aria-selected="false"
+          role="option"
+          tabindex="-1"
+        >
+          25%
+        </vaadin-select-item>
+        <vaadin-select-item
+          aria-selected="false"
+          role="option"
+          tabindex="-1"
+        >
+          50%
+        </vaadin-select-item>
+        <vaadin-select-item
+          aria-selected="false"
+          role="option"
+          tabindex="-1"
+        >
+          75%
+        </vaadin-select-item>
+        <vaadin-select-item
+          aria-selected="false"
+          role="option"
+          tabindex="-1"
+        >
+          100%
+        </vaadin-select-item>
+        <vaadin-select-item
+          aria-selected="false"
+          role="option"
+          tabindex="-1"
+        >
+          125%
+        </vaadin-select-item>
+        <vaadin-select-item
+          aria-selected="false"
+          role="option"
+          tabindex="-1"
+        >
+          150%
+        </vaadin-select-item>
+        <vaadin-select-item
+          aria-selected="false"
+          role="option"
+          tabindex="-1"
+        >
+          200%
+        </vaadin-select-item>
+        <vaadin-select-item
+          aria-selected="false"
+          role="option"
+          tabindex="-1"
+        >
+          300%
+        </vaadin-select-item>
+        <vaadin-select-item
+          aria-selected="false"
+          role="option"
+          tabindex="-1"
+        >
+          400%
+        </vaadin-select-item>
+      </vaadin-select-list-box>
+    </div>
+    <label
+      id="label-vaadin-select-6"
+      slot="label"
+    >
+    </label>
+    <div
+      hidden=""
+      id="error-message-vaadin-select-8"
+      slot="error-message"
+    >
+    </div>
+    <vaadin-select-value-button
+      aria-disabled="true"
+      aria-expanded="false"
+      aria-haspopup="listbox"
+      aria-labelledby="value-vaadin-select-9"
+      disabled=""
+      role="button"
+      slot="value"
+      tabindex="-1"
+    >
+      <vaadin-select-item id="value-vaadin-select-9">
+        Page width
+      </vaadin-select-item>
+    </vaadin-select-value-button>
+    <label
+      id="label-vaadin-select-10"
+      slot="sr-label"
+    >
+    </label>
+  </vaadin-select>
+  <vaadin-pdf-viewer-button
+    aria-describedby="vaadin-tooltip-11"
+    aria-disabled="true"
+    disabled=""
+    has-tooltip=""
+    icon="zoom-in"
+    role="button"
+    slot="toolbar-zoom"
+    style="--_vaadin-button-disabled-pointer-events: auto;"
+    tabindex="0"
+    theme="tertiary icon"
+  >
+    <vaadin-tooltip
+      modeless=""
+      slot="tooltip"
+    >
+      <div
+        id="vaadin-tooltip-11"
+        role="tooltip"
+        slot="overlay"
+      >
+        Zoom in
+      </div>
+    </vaadin-tooltip>
+  </vaadin-pdf-viewer-button>
 </vaadin-pdf-viewer>
 `;
 /* end snapshot vaadin-pdf-viewer host error */
@@ -330,7 +852,7 @@ snapshots["vaadin-pdf-viewer host document"] =
       / 6
     </span>
     <label
-      for="input-vaadin-integer-field-5"
+      for="input-vaadin-integer-field-12"
       id="label-vaadin-integer-field-2"
       slot="label"
     >
@@ -342,7 +864,7 @@ snapshots["vaadin-pdf-viewer host document"] =
     >
     </div>
     <input
-      id="input-vaadin-integer-field-5"
+      id="input-vaadin-integer-field-12"
       max="6"
       min="1"
       slot="input"
@@ -351,6 +873,172 @@ snapshots["vaadin-pdf-viewer host document"] =
       type="number"
     >
   </vaadin-integer-field>
+  <vaadin-pdf-viewer-button
+    aria-describedby="vaadin-tooltip-5"
+    has-tooltip=""
+    icon="zoom-out"
+    role="button"
+    slot="toolbar-zoom"
+    style="--_vaadin-button-disabled-pointer-events: auto;"
+    tabindex="0"
+    theme="tertiary icon"
+  >
+    <vaadin-tooltip
+      modeless=""
+      slot="tooltip"
+    >
+      <div
+        id="vaadin-tooltip-5"
+        role="tooltip"
+        slot="overlay"
+      >
+        Zoom out
+      </div>
+    </vaadin-tooltip>
+  </vaadin-pdf-viewer-button>
+  <vaadin-select
+    has-value=""
+    slot="toolbar-zoom"
+    theme="align-center"
+  >
+    <div slot="overlay">
+      <vaadin-select-list-box
+        aria-orientation="vertical"
+        role="listbox"
+        selected="0"
+      >
+        <vaadin-select-item
+          aria-selected="true"
+          role="option"
+          selected=""
+          tabindex="0"
+        >
+          Page width
+        </vaadin-select-item>
+        <vaadin-select-item
+          aria-selected="false"
+          role="option"
+          tabindex="-1"
+        >
+          Page fit
+        </vaadin-select-item>
+        <vaadin-select-item
+          aria-selected="false"
+          role="option"
+          tabindex="-1"
+        >
+          25%
+        </vaadin-select-item>
+        <vaadin-select-item
+          aria-selected="false"
+          role="option"
+          tabindex="-1"
+        >
+          50%
+        </vaadin-select-item>
+        <vaadin-select-item
+          aria-selected="false"
+          role="option"
+          tabindex="-1"
+        >
+          75%
+        </vaadin-select-item>
+        <vaadin-select-item
+          aria-selected="false"
+          role="option"
+          tabindex="-1"
+        >
+          100%
+        </vaadin-select-item>
+        <vaadin-select-item
+          aria-selected="false"
+          role="option"
+          tabindex="-1"
+        >
+          125%
+        </vaadin-select-item>
+        <vaadin-select-item
+          aria-selected="false"
+          role="option"
+          tabindex="-1"
+        >
+          150%
+        </vaadin-select-item>
+        <vaadin-select-item
+          aria-selected="false"
+          role="option"
+          tabindex="-1"
+        >
+          200%
+        </vaadin-select-item>
+        <vaadin-select-item
+          aria-selected="false"
+          role="option"
+          tabindex="-1"
+        >
+          300%
+        </vaadin-select-item>
+        <vaadin-select-item
+          aria-selected="false"
+          role="option"
+          tabindex="-1"
+        >
+          400%
+        </vaadin-select-item>
+      </vaadin-select-list-box>
+    </div>
+    <label
+      id="label-vaadin-select-6"
+      slot="label"
+    >
+    </label>
+    <div
+      hidden=""
+      id="error-message-vaadin-select-8"
+      slot="error-message"
+    >
+    </div>
+    <vaadin-select-value-button
+      aria-expanded="false"
+      aria-haspopup="listbox"
+      aria-labelledby="value-vaadin-select-9"
+      role="button"
+      slot="value"
+      tabindex="0"
+    >
+      <vaadin-select-item id="value-vaadin-select-9">
+        Page width
+      </vaadin-select-item>
+    </vaadin-select-value-button>
+    <label
+      id="label-vaadin-select-10"
+      slot="sr-label"
+    >
+    </label>
+  </vaadin-select>
+  <vaadin-pdf-viewer-button
+    aria-describedby="vaadin-tooltip-11"
+    has-tooltip=""
+    icon="zoom-in"
+    role="button"
+    slot="toolbar-zoom"
+    style="--_vaadin-button-disabled-pointer-events: auto;"
+    tabindex="0"
+    theme="tertiary icon"
+  >
+    <vaadin-tooltip
+      modeless=""
+      slot="tooltip"
+    >
+      <div
+        id="vaadin-tooltip-11"
+        role="tooltip"
+        slot="overlay"
+      >
+        Zoom in
+      </div>
+    </vaadin-tooltip>
+  </vaadin-pdf-viewer-button>
 </vaadin-pdf-viewer>
 `;
 /* end snapshot vaadin-pdf-viewer host document */
@@ -363,6 +1051,13 @@ snapshots["vaadin-pdf-viewer shadow default"] =
       part="toolbar-group"
     >
       <slot name="toolbar-navigation">
+      </slot>
+    </div>
+    <div
+      class="viewing"
+      part="toolbar-group"
+    >
+      <slot name="toolbar-zoom">
       </slot>
     </div>
     <div
@@ -397,6 +1092,13 @@ snapshots["vaadin-pdf-viewer shadow document"] =
       part="toolbar-group"
     >
       <slot name="toolbar-navigation">
+      </slot>
+    </div>
+    <div
+      class="viewing"
+      part="toolbar-group"
+    >
+      <slot name="toolbar-zoom">
       </slot>
     </div>
     <div

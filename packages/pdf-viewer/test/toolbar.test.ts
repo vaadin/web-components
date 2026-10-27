@@ -5,6 +5,8 @@ import sinon from 'sinon';
 import './enable-feature-flag.js';
 import '../vaadin-pdf-viewer.js';
 import type { IntegerField } from '@vaadin/integer-field';
+import type { Select } from '@vaadin/select';
+import type { SelectItem } from '@vaadin/select/src/vaadin-select-item.js';
 import type { Tooltip } from '@vaadin/tooltip';
 import type { PdfViewerButton } from '../src/vaadin-pdf-viewer-button.js';
 import type { PdfViewer } from '../vaadin-pdf-viewer.js';
@@ -17,6 +19,9 @@ describe('toolbar', () => {
   let previousButton: PdfViewerButton;
   let nextButton: PdfViewerButton;
   let pageField: IntegerField;
+  let zoomOutButton: PdfViewerButton;
+  let zoomInButton: PdfViewerButton;
+  let zoomSelect: Select;
 
   function getGroup(name: string) {
     return viewer.shadowRoot!.querySelector<HTMLElement>(`[part~="toolbar-group"].${name}`)!;
@@ -33,6 +38,9 @@ describe('toolbar', () => {
     expect(previousButton.disabled).to.be.true;
     expect(nextButton.disabled).to.be.true;
     expect(pageField.disabled).to.be.true;
+    expect(zoomOutButton.disabled).to.be.true;
+    expect(zoomInButton.disabled).to.be.true;
+    expect(zoomSelect.disabled).to.be.true;
   }
 
   async function enterPage(value: string) {
@@ -50,6 +58,9 @@ describe('toolbar', () => {
     previousButton = viewer.querySelector<PdfViewerButton>('vaadin-pdf-viewer-button[icon="previous-page"]')!;
     nextButton = viewer.querySelector<PdfViewerButton>('vaadin-pdf-viewer-button[icon="next-page"]')!;
     pageField = viewer.querySelector<IntegerField>('vaadin-integer-field')!;
+    zoomOutButton = viewer.querySelector<PdfViewerButton>('vaadin-pdf-viewer-button[icon="zoom-out"]')!;
+    zoomInButton = viewer.querySelector<PdfViewerButton>('vaadin-pdf-viewer-button[icon="zoom-in"]')!;
+    zoomSelect = viewer.querySelector<Select>('vaadin-select')!;
   });
 
   describe('without document', () => {
@@ -236,6 +247,114 @@ describe('toolbar', () => {
     });
   });
 
+  describe('zoom', () => {
+    beforeEach(async () => {
+      await loadAndRender(viewer, fixtureUrl('multi-page.pdf'));
+    });
+
+    afterEach(() => {
+      sinon.restore();
+    });
+
+    function getItemLabel(value: string) {
+      return zoomSelect.items!.find((item) => item.value === value)!.label;
+    }
+
+    async function selectZoomItem(value: string) {
+      zoomSelect.opened = true;
+      await nextRender();
+      [...zoomSelect.querySelectorAll<SelectItem>('vaadin-select-item')].find((item) => item.value === value)!.click();
+      await nextRenderIdle(viewer);
+    }
+
+    it('should show the zoom in the zoom select', () => {
+      expect(zoomSelect.value).to.equal('page-width');
+    });
+
+    it('should show page width in the zoom select for an invalid zoom', async () => {
+      sinon.stub(console, 'warn');
+      viewer.zoom = 2;
+      await nextRenderIdle(viewer);
+      viewer.zoom = 0;
+      await nextRenderIdle(viewer);
+      expect(zoomSelect.value).to.equal('page-width');
+    });
+
+    it('should show a zoom that is not one of the levels', async () => {
+      viewer.zoom = 1.1;
+      await nextRenderIdle(viewer);
+      expect(zoomSelect.value).to.equal('1.1');
+      expect(getItemLabel('1.1')).to.equal('110%');
+    });
+
+    it('should zoom to the level selected in the zoom select', async () => {
+      await selectZoomItem('2');
+      expect(viewer.zoom).to.equal(2);
+    });
+
+    it('should not let the change event of the zoom select reach the application', async () => {
+      const spy = sinon.spy();
+      viewer.addEventListener('change', spy);
+      await selectZoomItem('2');
+      expect(spy).to.be.not.called;
+    });
+
+    it('should zoom in to the next level', async () => {
+      viewer.zoom = 1;
+      await nextRenderIdle(viewer);
+      zoomInButton.click();
+      await nextRenderIdle(viewer);
+      expect(viewer.zoom).to.equal(1.25);
+    });
+
+    it('should zoom out to the previous level', async () => {
+      viewer.zoom = 1;
+      await nextRenderIdle(viewer);
+      zoomOutButton.click();
+      await nextRenderIdle(viewer);
+      expect(viewer.zoom).to.equal(0.75);
+    });
+
+    it('should zoom in from a fit zoom to the next level above its scale', async () => {
+      // 600px wide, so page-width is between 50% and 75%
+      zoomInButton.click();
+      await nextRenderIdle(viewer);
+      expect(viewer.zoom).to.equal(0.75);
+    });
+
+    it('should toggle disabled on zoom in button at the largest zoom', async () => {
+      viewer.zoom = 4;
+      await nextRenderIdle(viewer);
+      expect(zoomInButton.disabled).to.be.true;
+      viewer.zoom = 3;
+      await nextRenderIdle(viewer);
+      expect(zoomInButton.disabled).to.be.false;
+    });
+
+    it('should toggle disabled on zoom out button at the smallest zoom', async () => {
+      viewer.zoom = 0.25;
+      await nextRenderIdle(viewer);
+      expect(zoomOutButton.disabled).to.be.true;
+      viewer.zoom = 0.5;
+      await nextRenderIdle(viewer);
+      expect(zoomOutButton.disabled).to.be.false;
+    });
+
+    it('should show the label of the zoom buttons in a tooltip', () => {
+      expect(zoomOutButton.querySelector<Tooltip>('vaadin-tooltip')!.text).to.equal('Zoom out');
+      expect(zoomInButton.querySelector<Tooltip>('vaadin-tooltip')!.text).to.equal('Zoom in');
+    });
+
+    it('should use the zoom texts set with i18n', async () => {
+      viewer.i18n = { zoomIn: 'Größer', pageWidth: 'Seitenbreite', pageFit: 'Ganze Seite' };
+      await nextFrame();
+      expect(zoomInButton.querySelector<Tooltip>('vaadin-tooltip')!.text).to.equal('Größer');
+      expect(zoomOutButton.querySelector<Tooltip>('vaadin-tooltip')!.text).to.equal('Zoom out');
+      expect(getItemLabel('page-width')).to.equal('Seitenbreite');
+      expect(getItemLabel('page-fit')).to.equal('Ganze Seite');
+    });
+  });
+
   it('should show the toolbar without scrolling on a narrow viewer', async () => {
     viewer.style.maxWidth = '320px';
     await loadAndRender(viewer, fixtureUrl('multi-page.pdf'));
@@ -298,7 +417,9 @@ describe('toolbar', () => {
     });
 
     function getControls() {
-      return [previousButton, nextButton, pageField].filter((control) => control.checkVisibility());
+      return [...viewer.querySelectorAll<HTMLElement>(':scope > [slot]')].filter((control) =>
+        control.checkVisibility(),
+      );
     }
 
     it('should keep at least 40% of the viewer for the pages', () => {
@@ -333,6 +454,7 @@ describe('toolbar', () => {
         expect(viewer.scrollTop, name).to.equal(0);
         await sendKeys({ press: 'Shift+Tab' });
       }
+      expect(visited).to.include(zoomSelect);
       expect(visited).to.include(pageField);
       expect(visited).to.include(nextButton);
     });

@@ -25,6 +25,10 @@ const DEFAULT_I18N = {
   previousPage: 'Previous page',
   nextPage: 'Next page',
   pageError: 'Enter 1–{pageCount}',
+  zoomIn: 'Zoom in',
+  zoomOut: 'Zoom out',
+  pageWidth: 'Page width',
+  pageFit: 'Page fit',
 };
 
 /**
@@ -54,7 +58,7 @@ const DEFAULT_I18N = {
  * Part name       | Description
  * ----------------|------------
  * `toolbar`       | The toolbar above the pages.
- * `toolbar-group` | A group of related controls in the toolbar: navigation and actions.
+ * `toolbar-group` | A group of related controls in the toolbar: navigation, zoom and actions.
  * `content`       | The scrollable area that contains the pages.
  * `page`          | A page of the document.
  * `loader`        | The loading indicator shown while the document loads.
@@ -90,6 +94,7 @@ const DEFAULT_I18N = {
  * @fires {CustomEvent} document-load - Fired when the document has loaded.
  * @fires {CustomEvent} page-changed - Fired when the `page` property changes.
  * @fires {CustomEvent} page-count-changed - Fired when the `pageCount` property changes.
+ * @fires {CustomEvent} zoom-changed - Fired when the `zoom` property changes.
  *
  * @customElement vaadin-pdf-viewer
  * @extends HTMLElement
@@ -133,7 +138,15 @@ class PdfViewer extends PdfViewerMixin(
    *   // Tooltip of the next page button.
    *   nextPage: 'Next page',
    *   // Error shown for a page that does not exist. {pageCount} is replaced with the page count.
-   *   pageError: 'Enter 1–{pageCount}'
+   *   pageError: 'Enter 1–{pageCount}',
+   *   // Tooltip of the zoom in button.
+   *   zoomIn: 'Zoom in',
+   *   // Tooltip of the zoom out button.
+   *   zoomOut: 'Zoom out',
+   *   // Zoom select item that fits the page width to the viewer.
+   *   pageWidth: 'Page width',
+   *   // Zoom select item that fits the whole page into the viewer.
+   *   pageFit: 'Page fit'
    * }
    * ```
    *

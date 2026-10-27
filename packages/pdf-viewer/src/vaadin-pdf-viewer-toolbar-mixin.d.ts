@@ -12,7 +12,7 @@ import type { Constructor } from '@open-wc/dedupe-mixin';
 import type { TemplateResult } from 'lit';
 
 /**
- * A mixin that adds the toolbar with the page navigation.
+ * A mixin that adds the toolbar with the page navigation and the zoom.
  */
 export declare function PdfViewerToolbarMixin<T extends Constructor<HTMLElement>>(
   base: T,

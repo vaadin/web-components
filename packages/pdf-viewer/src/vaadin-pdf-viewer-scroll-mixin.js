@@ -41,11 +41,19 @@ export const PdfViewerScrollMixin = (superClass) =>
           value: 1,
           notify: true,
         },
+
+        /**
+         * The scale of the pages in CSS pixels per PDF unit, or 0 before the
+         * pages are laid out.
+         * @protected
+         */
+        _scale: {
+          type: Number,
+          value: 0,
+          attribute: false,
+        },
       };
     }
-
-    /** The scale of the pages in CSS pixels per PDF unit, or 0 before the pages are laid out. */
-    #scale = 0;
 
     /** The index of the page that takes up most of the view, updated with the visible pages. */
     #currentIndex = 0;
@@ -108,7 +116,7 @@ export const PdfViewerScrollMixin = (superClass) =>
      */
     _onResize() {
       // Hiding the viewer (e.g. in an inactive tab) resets its scroll position.
-      // A page set while hidden wins over it, see #refresh().
+      // A page set while hidden wins over it, see _refreshLayout().
       const hasLayout = this.#hasLayout();
       if (hasLayout && !this.#hadLayout) {
         this.$.content.scrollTop = this.#savedScroll.top;
@@ -116,7 +124,7 @@ export const PdfViewerScrollMixin = (superClass) =>
       }
       this.#hadLayout = hasLayout;
 
-      this.#refresh();
+      this._refreshLayout();
     }
 
     /**
@@ -126,7 +134,7 @@ export const PdfViewerScrollMixin = (superClass) =>
      * @protected
      */
     _scrollToPage(page) {
-      if (!this.#hasLayout() || this.#scale <= 0) {
+      if (!this.#hasLayout() || this._scale <= 0) {
         // Scroll once the pages can be laid out.
         this.#pendingPage = page;
         this._renderVisible([]);
@@ -160,7 +168,7 @@ export const PdfViewerScrollMixin = (superClass) =>
       super._documentLoaded(details);
 
       this.#pendingPage = this.page;
-      this.#refresh();
+      this._refreshLayout();
     }
 
     /**
@@ -171,7 +179,7 @@ export const PdfViewerScrollMixin = (superClass) =>
     _documentUnloaded() {
       super._documentUnloaded();
 
-      this.#scale = 0;
+      this._scale = 0;
       this.#currentIndex = 0;
       this.#pinnedPage = null;
       this.#pendingPage = 0;
@@ -188,23 +196,42 @@ export const PdfViewerScrollMixin = (superClass) =>
     _pageSizesChanged() {
       super._pageSizesChanged();
 
-      if (this.#scale > 0) {
-        this.#applyScale(this.#scale);
+      if (this._scale > 0) {
+        this.#applyScale(this._scale);
       }
     }
 
     /**
-     * Applies changes to the size, and scrolls to a page that was set while
-     * the pages could not be laid out.
-     * @private
+     * Returns the scale of the pages in CSS pixels per PDF unit for the given
+     * available size: the scale that fits the width of the first page.
+     * @param {number} width
+     * @param {number} _height
+     * @return {number}
+     * @protected
      */
-    #refresh() {
-      const scale = this.__pages.length ? this.#computeScale() : 0;
-      if (scale > 0 && scale !== this.#scale) {
+    _getScaleForSize(width, _height) {
+      // Fit the first page, so that the scale does not depend on which page is
+      // current. In most documents all pages have the size of the first one.
+      return getFitScale(width, this.__pages[0].unscaledWidth);
+    }
+
+    /**
+     * Lays out the pages again, e.g. after a change of the size or of the
+     * scale, and scrolls to a page that was set while the pages could not be
+     * laid out.
+     * @protected
+     */
+    _refreshLayout() {
+      let scale = 0;
+      if (this.__pages.length && this.#hasLayout()) {
+        const { width, height } = this.#getAvailableSize();
+        scale = this._getScaleForSize(width, height);
+      }
+      if (scale > 0 && scale !== this._scale) {
         this.#applyScale(scale);
         return;
       }
-      if (this.#pendingPage && this.#scale > 0) {
+      if (this.#pendingPage && this._scale > 0) {
         this._scrollToPage(this.#pendingPage);
       } else {
         this.#updateVisiblePages();
@@ -231,30 +258,20 @@ export const PdfViewerScrollMixin = (superClass) =>
     }
 
     /**
-     * Returns the width that pages can use inside the scrollable content area.
+     * Returns the size that pages can use inside the scrollable content area.
+     * The height includes a horizontal scrollbar, which the current scale may
+     * cause, so that a scale that fits the page height does not depend on it.
      * @private
      */
-    #getAvailableWidth() {
+    #getAvailableSize() {
       const { content } = this.$;
       const style = getComputedStyle(content);
-      return (
-        content.clientWidth - Number.parseFloat(style.paddingInlineStart) - Number.parseFloat(style.paddingInlineEnd)
-      );
-    }
-
-    /**
-     * Returns the scale that fits the width of the first page to the viewer,
-     * or 0 when the viewer has no layout.
-     * @private
-     */
-    #computeScale() {
-      if (!this.#hasLayout()) {
-        return 0;
-      }
-
-      // Fit the first page, so that the scale does not depend on which page is
-      // current. In most documents all pages have the size of the first one.
-      return getFitScale(this.#getAvailableWidth(), this.__pages[0].unscaledWidth);
+      return {
+        width:
+          content.clientWidth - Number.parseFloat(style.paddingInlineStart) - Number.parseFloat(style.paddingInlineEnd),
+        height:
+          content.offsetHeight - Number.parseFloat(style.paddingBlockStart) - Number.parseFloat(style.paddingBlockEnd),
+      };
     }
 
     /**
@@ -268,16 +285,16 @@ export const PdfViewerScrollMixin = (superClass) =>
       if (!this.#hasLayout()) {
         // Page sizes arrived while the viewer is hidden. Positions cannot be
         // measured now, so go back to the current page once shown again.
-        this.#scale = scale;
+        this._scale = scale;
         this.__pages.forEach((page) => page.setScale(scale));
         this.#pendingPage ||= this.page;
         return;
       }
 
-      const isFirstLayout = this.#scale === 0;
+      const isFirstLayout = this._scale === 0;
       const anchor = isFirstLayout ? null : this.#captureAnchor();
 
-      this.#scale = scale;
+      this._scale = scale;
       this._cancelRender();
       this.__pages.forEach((page) => page.setScale(scale));
 
@@ -350,7 +367,7 @@ export const PdfViewerScrollMixin = (superClass) =>
     #updateVisiblePages() {
       const pages = this.__pages;
       // Without layout, all pages have no position, so nothing can be visible.
-      if (!pages.length || this.#scale <= 0 || !this.#hasLayout()) {
+      if (!pages.length || this._scale <= 0 || !this.#hasLayout()) {
         this._renderVisible([]);
         return;
       }

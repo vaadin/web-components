@@ -42,7 +42,7 @@ how to generate them.
 - A new `src` resets `page` to 1, unless the application sets `page` in the same update.
 - `page` follows the page that takes up most of the view. A page set by the application stays current
   until the user scrolls.
-- On resize, the viewer keeps the same point of the current page at the top of the view.
+- On resize and zoom, the viewer keeps the same point of the current page at the top of the view.
 - The viewer fires an internal `render-idle` event when no page is left to render, once the page sizes are
   loaded. It is only intended for testing purposes and is not part of the public API.
 
@@ -52,8 +52,13 @@ how to generate them.
 
 - `PdfViewerDocumentMixin` loads `src`. It calls `_documentLoaded({ firstPage })` and `_documentUnloaded()`.
 - `PdfViewerRenderMixin` owns the page views, their sizes, the render queue and the device pixel ratio. It calls `_pageSizesChanged()` at most once per frame when pages get their own size.
-- `PdfViewerScrollMixin` owns the scale, the anchor, the visible pages and `page`. It asks for rendering
-  only with `_renderVisible()` and `_cancelRender()`.
+- `PdfViewerScrollMixin` owns the scale `_scale`, the anchor, the visible pages and `page`. It asks for
+  rendering only with `_renderVisible()` and `_cancelRender()`. It gets the scale from `_getScaleForSize()`, which
+  fits the page width by default.
+- `PdfViewerZoomMixin` owns `zoom`. It writes no render or scroll state:
+  - It overrides `_getScaleForSize()` to return the scale for `zoom`.
+  - It calls `_refreshLayout()` when `zoom` changes.
+  - Its `_zoomFactor` getter reads `_scale`, in units of the actual page size.
 - `PdfViewerKeyboardMixin` handles the keyboard shortcuts.
 - `PdfViewerToolbarMixin` renders the toolbar. Its controls are in the light DOM, so a theme styles the page
   field like any other `vaadin-integer-field`. The element renders them before a marker comment, so application
@@ -64,6 +69,7 @@ how to generate them.
 - `PdfViewerRenderQueue` decides the render order, the memory budget and the release. It has no host
   reference, and its limits are options.
 - `pdf-viewer-layout.js` has the layout math without DOM access: visible pages, anchor and fit scale.
+- `pdf-viewer-zoom.js` has the zoom levels, their format and the check of a `zoom` value.
 - To check whether a result belongs to the current document, a mixin compares `_pdfDocument` with the
   document from the start of the call.
 

@@ -32,8 +32,27 @@ export declare class PdfViewerScrollMixinClass {
   page: number;
 
   /**
+   * The scale of the pages in CSS pixels per PDF unit, or 0 before the
+   * pages are laid out.
+   */
+  protected _scale: number;
+
+  /**
    * Scrolls to the start of the given page and makes it the current page,
    * also when it is the current page already.
    */
   protected _scrollToPage(page: number): void;
+
+  /**
+   * Returns the scale of the pages in CSS pixels per PDF unit for the given
+   * available size: the scale that fits the width of the first page.
+   */
+  protected _getScaleForSize(width: number, height: number): number;
+
+  /**
+   * Lays out the pages again, e.g. after a change of the size or of the
+   * scale, and scrolls to a page that was set while the pages could not be
+   * laid out.
+   */
+  protected _refreshLayout(): void;
 }
