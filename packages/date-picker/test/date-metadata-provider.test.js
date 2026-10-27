@@ -390,7 +390,7 @@ describe('dateMetadataProvider integration', () => {
     // Clicking does not go through `_selectDate`; only the rendered `disabled` attribute stops it, so
     // the mouse path needs covering on its own.
     it('should not commit a provider-disabled date on tap', async () => {
-      tap(getVisibleCell(15));
+      tap(getDateButton(getVisibleCell(15)));
       await nextRender();
 
       expect(datePicker.value).to.equal('');
@@ -398,7 +398,7 @@ describe('dateMetadataProvider integration', () => {
     });
 
     it('should commit an allowed date on tap', async () => {
-      tap(getVisibleCell(16));
+      tap(getDateButton(getVisibleCell(16)));
       await nextRender();
 
       expect(datePicker.value).to.equal(formatISODate(new Date(year, month, 16)));

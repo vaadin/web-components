@@ -4,7 +4,7 @@ import '@vaadin/context-menu/src/vaadin-context-menu.js';
 import '@vaadin/date-picker/src/vaadin-date-picker.js';
 import { isTouch } from '@vaadin/component-base/src/browser-utils';
 import { getMenuItems, openMenu } from '@vaadin/context-menu/test/helpers';
-import { getFocusableCell, open } from '@vaadin/date-picker/test/helpers';
+import { getFocusableDateButton, open } from '@vaadin/date-picker/test/helpers';
 
 describe('date picker in context menu', () => {
   let menu;
@@ -27,8 +27,8 @@ describe('date picker in context menu', () => {
     const datePicker = getMenuItems(menu)[0];
     await open(datePicker);
 
-    const date = getFocusableCell(datePicker);
-    date.click();
+    const button = getFocusableDateButton(datePicker);
+    button.click();
     await nextFrame();
 
     expect(datePicker.opened).to.be.false;

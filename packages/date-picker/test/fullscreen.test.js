@@ -3,7 +3,7 @@ import { resetMouse, sendKeys, sendMouse, setViewport } from '@vaadin/test-runne
 import { aTimeout, fixtureSync, nextRender, nextUpdate, outsideClick, tabKeyDown, tap } from '@vaadin/testing-helpers';
 import sinon from 'sinon';
 import '../src/vaadin-date-picker.js';
-import { getFocusableCell, getFocusableDateButton, open, touchTap, untilOverlayRendered } from './helpers.js';
+import { getFocusableDateButton, getFocusedCell, open, touchTap, untilOverlayRendered } from './helpers.js';
 
 describe('fullscreen mode', () => {
   let datePicker, input, overlay, width, height;
@@ -76,7 +76,7 @@ describe('fullscreen mode', () => {
       it('should focus date element when focusing the date picker', async () => {
         datePicker.focus();
         await untilOverlayRendered(datePicker);
-        const cell = getFocusableCell(datePicker);
+        const cell = getFocusedCell(datePicker);
         expect(cell).to.be.instanceOf(HTMLTableCellElement);
         expect(cell.getAttribute('part')).to.include('today');
       });
@@ -105,7 +105,7 @@ describe('fullscreen mode', () => {
 
       it('should focus date element when opening overlay', async () => {
         await open(datePicker);
-        const cell = getFocusableCell(datePicker);
+        const cell = getFocusedCell(datePicker);
         expect(cell).to.be.instanceOf(HTMLTableCellElement);
         expect(cell.getAttribute('part')).to.include('today');
       });
@@ -140,7 +140,7 @@ describe('fullscreen mode', () => {
         await open(datePicker);
         expect(datePicker.hasAttribute('focused')).to.be.true;
 
-        tap(getFocusableCell(datePicker));
+        tap(getFocusableDateButton(datePicker));
         await nextRender();
 
         expect(datePicker.hasAttribute('focused')).to.be.false;

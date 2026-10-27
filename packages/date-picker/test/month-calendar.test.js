@@ -91,7 +91,7 @@ describe('vaadin-month-calendar', () => {
     expect(valueChangedSpy.called).to.be.false;
   });
 
-  it('should update value on tap', () => {
+  it('should update value on tapping the date cell', () => {
     const date10 = getDateCell(monthCalendar, 10);
     tap(date10);
     expect(monthCalendar.selectedDate.getFullYear()).to.equal(2016);
@@ -109,10 +109,10 @@ describe('vaadin-month-calendar', () => {
   it('should not react if the tap takes more than 300ms', async () => {
     const tapSpy = sinon.spy();
     monthCalendar.addEventListener('date-tap', tapSpy);
-    const dateElement = getDateCells(monthCalendar)[10];
+    const dateButton = getDateButton(getDateCells(monthCalendar)[10]);
     monthCalendar._onMonthGridTouchStart();
     await aTimeout(350);
-    tap(dateElement);
+    tap(dateButton);
     expect(tapSpy.called).to.be.false;
   });
 
@@ -120,14 +120,14 @@ describe('vaadin-month-calendar', () => {
     const tapSpy = sinon.spy();
     monthCalendar.addEventListener('date-tap', tapSpy);
     monthCalendar.ignoreTaps = true;
-    const dateElement = getDateCells(monthCalendar)[10];
-    tap(dateElement);
+    const dateButton = getDateButton(getDateCells(monthCalendar)[10]);
+    tap(dateButton);
     expect(tapSpy.called).to.be.false;
   });
 
   it('should prevent default on touchend', () => {
-    const dateElement = getDateCells(monthCalendar)[0];
-    const event = makeSoloTouchEvent('touchend', null, dateElement);
+    const dateButton = getDateButton(getDateCells(monthCalendar)[0]);
+    const event = makeSoloTouchEvent('touchend', null, dateButton);
     expect(event.defaultPrevented).to.be.true;
   });
 
@@ -143,8 +143,7 @@ describe('vaadin-month-calendar', () => {
   it('should not update value on disabled-by-max date tap', async () => {
     monthCalendar.maxDate = new Date('2016-02-09');
     await nextRender();
-    const date10 = getDateCell(monthCalendar, 10);
-    tap(date10);
+    tap(getDateButton(getDateCell(monthCalendar, 10)));
     expect(monthCalendar.selectedDate).to.be.undefined;
   });
 
@@ -156,8 +155,7 @@ describe('vaadin-month-calendar', () => {
       return date.year === 2016 && date.month === 1 && date.day === 9;
     };
     await nextFrame();
-    const date9 = getDateCell(monthCalendar, 9);
-    tap(date9);
+    tap(getDateButton(getDateCell(monthCalendar, 9)));
     expect(monthCalendar.selectedDate).to.be.undefined;
   });
 
