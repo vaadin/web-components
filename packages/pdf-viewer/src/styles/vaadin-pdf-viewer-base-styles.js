@@ -49,13 +49,13 @@ const pdfViewerBaseStyles = css`
     padding: var(--vaadin-pdf-viewer-padding, var(--vaadin-padding-m));
   }
 
-  /* Drawn over the pages, which cover the content outline */
   :host([focus-ring]) .content-area::after {
     content: '';
     position: absolute;
     inset: 0;
     z-index: 1;
     pointer-events: none;
+    border-radius: max(0px, var(--vaadin-pdf-viewer-border-radius, var(--vaadin-radius-m)) - 1px);
     outline: var(--vaadin-focus-ring-width) solid var(--vaadin-focus-ring-color);
     outline-offset: calc(var(--vaadin-focus-ring-width) * -1);
   }
