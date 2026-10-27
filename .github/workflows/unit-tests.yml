@@ -42,6 +42,16 @@ jobs:
       - name: Install Dependencies
         run: yarn --frozen-lockfile --no-progress --non-interactive
 
+      # The runner's default azure.archive.ubuntu.com mirror sometimes serves packages very slowly
+      # without stalling, so apt never fails over to the next mirror. Remove it so that apt uses
+      # archive.ubuntu.com instead. See https://github.com/actions/runner-images/issues/14823
+      - name: Use upstream Ubuntu mirrors
+        run: |
+          if [[ -f /etc/apt/apt-mirrors.txt ]]; then
+            sudo sed -i '/azure\.archive\.ubuntu\.com/d' /etc/apt/apt-mirrors.txt
+            cat /etc/apt/apt-mirrors.txt
+          fi
+
       - name: Install Playwright
         run: npx playwright install firefox --with-deps
 
@@ -63,6 +73,16 @@ jobs:
 
       - name: Install Dependencies
         run: yarn --frozen-lockfile --no-progress --non-interactive
+
+      # The runner's default azure.archive.ubuntu.com mirror sometimes serves packages very slowly
+      # without stalling, so apt never fails over to the next mirror. Remove it so that apt uses
+      # archive.ubuntu.com instead. See https://github.com/actions/runner-images/issues/14823
+      - name: Use upstream Ubuntu mirrors
+        run: |
+          if [[ -f /etc/apt/apt-mirrors.txt ]]; then
+            sudo sed -i '/azure\.archive\.ubuntu\.com/d' /etc/apt/apt-mirrors.txt
+            cat /etc/apt/apt-mirrors.txt
+          fi
 
       - name: Install Playwright
         run: npx playwright install webkit --with-deps
