@@ -12,12 +12,6 @@ import '@vaadin/component-base/src/styles/style-props.js';
 import { css } from 'lit';
 
 export const pdfViewerToolbarStyles = css`
-  .header {
-    flex: 0 1 auto;
-    overflow-y: auto;
-    scroll-padding-block: calc(var(--vaadin-focus-ring-width) * 2 + 2px);
-  }
-
   [part~='toolbar'] {
     display: flex;
     min-width: fit-content;

@@ -20,13 +20,6 @@ import { html } from 'lit';
  */
 export const PdfViewerToolbarMixin = (superClass) =>
   class PdfViewerToolbarMixinClass extends superClass {
-    /** @protected */
-    firstUpdated() {
-      super.firstUpdated();
-
-      this.addEventListener('focusin', (event) => this.#onFocusIn(event));
-    }
-
     /**
      * Returns the template of the toolbar, which shows the controls of
      * `_renderToolbarControls()` in its slots.
@@ -34,14 +27,12 @@ export const PdfViewerToolbarMixin = (superClass) =>
      */
     _renderToolbar() {
       return html`
-        <div class="header">
-          <div part="toolbar">
-            <div part="toolbar-group" class="navigation">
-              <slot name="toolbar-page"></slot>
-              <slot name="page-field"></slot>
-            </div>
-            <div part="toolbar-group" class="actions"><slot name="toolbar-actions"></slot></div>
+        <div part="toolbar">
+          <div part="toolbar-group" class="navigation">
+            <slot name="toolbar-page"></slot>
+            <slot name="page-field"></slot>
           </div>
+          <div part="toolbar-group" class="actions"><slot name="toolbar-actions"></slot></div>
         </div>
       `;
     }
@@ -90,32 +81,6 @@ export const PdfViewerToolbarMixin = (superClass) =>
           <span slot="suffix">${hasDocument ? `/ ${pageCount}` : ''}</span>
         </vaadin-integer-field>
       `;
-    }
-
-    /**
-     * Scrolls the toolbar so that a focused control in it is visible with its
-     * focus ring. Not all browsers scroll a control into view that is partly
-     * visible already, which can leave its focus ring cut off.
-     * @private
-     */
-    #onFocusIn(event) {
-      const path = event.composedPath();
-      const target = path[0];
-      const control = [...this.children].find((child) => path.includes(child));
-      const header = this.shadowRoot.querySelector('.header');
-      if (!control || !control.assignedSlot || !header.contains(control.assignedSlot)) {
-        return;
-      }
-      const style = getComputedStyle(header);
-      const headerTop = header.getBoundingClientRect().top + header.clientTop;
-      const top = headerTop + Number.parseFloat(style.scrollPaddingBlockStart);
-      const bottom = headerTop + header.clientHeight - Number.parseFloat(style.scrollPaddingBlockEnd);
-      const rect = target.getBoundingClientRect();
-      if (rect.top < top) {
-        header.scrollTop -= top - rect.top;
-      } else if (rect.bottom > bottom) {
-        header.scrollTop += rect.bottom - bottom;
-      }
     }
 
     /** @private */

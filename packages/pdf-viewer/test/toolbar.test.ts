@@ -292,7 +292,7 @@ describe('toolbar', () => {
     beforeEach(async () => {
       // The toolbar needs more than 60% of the height
       viewer.style.maxWidth = '200px';
-      viewer.style.maxHeight = '200px';
+      viewer.style.maxHeight = '190px';
       viewer.style.fontSize = '32px';
       await loadAndRender(viewer, fixtureUrl('multi-page.pdf'));
     });
@@ -320,8 +320,7 @@ describe('toolbar', () => {
         }
         visited.add(control);
         const name = control.getAttribute('icon') ?? control.localName;
-        // The focused element, i.e. the input of a field, which the browser scrolls into view
-        const rect = active.getBoundingClientRect();
+        const rect = control.getBoundingClientRect();
         // Visible in the toolbar, which is inside the viewer
         const headerRect = header.getBoundingClientRect();
         const viewerRect = viewer.getBoundingClientRect();

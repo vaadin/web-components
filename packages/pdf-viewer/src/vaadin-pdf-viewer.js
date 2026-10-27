@@ -10,6 +10,7 @@
  */
 import { html, LitElement, render } from 'lit';
 import { FocusMixin } from '@vaadin/a11y-base/src/focus-mixin.js';
+import { isKeyboardActive } from '@vaadin/a11y-base/src/focus-utils.js';
 import { defineCustomElement } from '@vaadin/component-base/src/define.js';
 import { ElementMixin } from '@vaadin/component-base/src/element-mixin.js';
 import { I18nMixin } from '@vaadin/component-base/src/i18n-mixin.js';
@@ -156,7 +157,7 @@ class PdfViewer extends PdfViewerMixin(
   /** @protected */
   render() {
     return html`
-      ${this._renderToolbar()}
+      <div class="header" @focusin="${this.#onHeaderFocusIn}">${this._renderToolbar()}</div>
       <div part="loader"></div>
       <div class="content-area">
         <div
@@ -212,6 +213,20 @@ class PdfViewer extends PdfViewerMixin(
    */
   _shouldSetFocus(_event) {
     return false;
+  }
+
+  /**
+   * Scrolls the header so that a control focused with the keyboard is visible
+   * with its focus ring. Browsers scroll only the focused element into view,
+   * e.g. the input of a field, and WebKit does not scroll an element that is
+   * partly visible already.
+   * @private
+   */
+  #onHeaderFocusIn(event) {
+    if (isKeyboardActive()) {
+      const control = event.composedPath().find((node) => node.parentNode === this);
+      control?.scrollIntoView({ block: 'nearest', inline: 'nearest' });
+    }
   }
 
   /** @private */
