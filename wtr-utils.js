@@ -261,13 +261,18 @@ const createUnitTestsConfig = (config) => {
 
 const createVisualTestsConfig = (theme) => {
   // A theme package only has visual tests for its own theme
+  // pdf-viewer has no Lumo and Aura styles yet, so it only has base visual tests
   let visualPackages;
   if (theme === 'base') {
     visualPackages = getAllVisualPackages().filter((dir) => dir !== 'vaadin-lumo-styles' && dir !== 'aura');
   } else if (theme === 'aura') {
-    visualPackages = getAllVisualPackages().filter((dir) => dir !== 'vaadin-lumo-styles' && dir !== 'field-base');
+    visualPackages = getAllVisualPackages().filter(
+      (dir) => dir !== 'vaadin-lumo-styles' && dir !== 'field-base' && dir !== 'pdf-viewer',
+    );
   } else {
-    visualPackages = getAllVisualPackages().filter((dir) => dir !== 'field-base' && dir !== 'aura');
+    visualPackages = getAllVisualPackages().filter(
+      (dir) => dir !== 'field-base' && dir !== 'aura' && dir !== 'pdf-viewer',
+    );
   }
 
   const packages = getTestPackages(visualPackages);
