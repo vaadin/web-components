@@ -181,22 +181,6 @@ describe('toolbar', () => {
         expect(pageField.invalid).to.be.false;
       });
 
-      it('should go to the next page from a page that is not an integer', async () => {
-        viewer.page = 2.5;
-        await nextRenderIdle(viewer);
-        nextButton.click();
-        await nextRenderIdle(viewer);
-        expect(viewer.page).to.equal(3);
-      });
-
-      it('should go to the previous page from a page that is not an integer', async () => {
-        viewer.page = 2.5;
-        await nextRenderIdle(viewer);
-        previousButton.click();
-        await nextRenderIdle(viewer);
-        expect(viewer.page).to.equal(2);
-      });
-
       it('should go to the last page from a page above the page count', async () => {
         viewer.page = 10;
         await nextRenderIdle(viewer);

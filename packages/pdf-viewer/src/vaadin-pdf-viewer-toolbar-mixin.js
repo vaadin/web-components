@@ -142,12 +142,12 @@ export const PdfViewerToolbarMixin = (superClass) =>
 
     /** @private */
     #onPreviousPageClick() {
-      this._scrollToPage(Math.ceil(Math.min(this.page, this.pageCount + 1)) - 1);
+      this._scrollToPage(Math.min(this.page, this.pageCount + 1) - 1);
     }
 
     /** @private */
     #onNextPageClick() {
-      this._scrollToPage(Math.floor(Math.max(this.page, 0)) + 1);
+      this._scrollToPage(Math.max(this.page, 0) + 1);
     }
 
     /**
