@@ -8,10 +8,11 @@
  * See https://vaadin.com/commercial-license-and-service-terms for the full
  * license.
  */
-import { isAllowedLinkUrl } from './pdf-viewer-url.js';
-
 /** The named actions of internal links that the viewer supports. */
 const SUPPORTED_LINK_ACTIONS = ['FirstPage', 'LastPage', 'NextPage', 'PrevPage'];
+
+/** The protocols of external links that the viewer opens. Links with other URLs are left out. */
+const ALLOWED_LINK_PROTOCOLS = ['http:', 'https:', 'mailto:'];
 
 /**
  * The index of the top coordinate in the explicit destinations that have one,
@@ -27,6 +28,19 @@ const wordSegmenter = new Intl.Segmenter(undefined, { granularity: 'word' });
  * combining mark, e.g. "café" with a combining accent, as word-like.
  */
 const isWord = ({ isWordLike, segment }) => isWordLike || /[\p{L}\p{N}]/u.test(segment);
+
+/**
+ * Returns whether the URL of a link is safe to open.
+ * @param {string} url
+ * @return {boolean}
+ */
+function isAllowedLinkUrl(url) {
+  try {
+    return ALLOWED_LINK_PROTOCOLS.includes(new URL(url).protocol);
+  } catch {
+    return false;
+  }
+}
 
 /**
  * Creates the link element for a link annotation, or returns null for
