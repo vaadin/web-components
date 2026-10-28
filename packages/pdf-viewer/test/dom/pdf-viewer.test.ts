@@ -9,6 +9,9 @@ import { fixtureUrl, nextRenderIdle } from '../helpers.js';
 describe('vaadin-pdf-viewer', () => {
   let viewer: PdfViewer;
 
+  // Leaves out the tooltips of the buttons and the items of the select.
+  const hostOptions = { ignoreChildren: ['vaadin-pdf-viewer-button', 'vaadin-select'] };
+
   beforeEach(async () => {
     resetUniqueId();
     viewer = fixtureSync('<vaadin-pdf-viewer></vaadin-pdf-viewer>');
@@ -17,14 +20,14 @@ describe('vaadin-pdf-viewer', () => {
 
   describe('host', () => {
     it('default', async () => {
-      await expect(viewer).dom.to.equalSnapshot();
+      await expect(viewer).dom.to.equalSnapshot(hostOptions);
     });
 
     it('error', async () => {
       viewer.src = fixtureUrl('invalid.pdf');
       await oneEvent(viewer, 'document-error');
       await nextFrame();
-      await expect(viewer).dom.to.equalSnapshot();
+      await expect(viewer).dom.to.equalSnapshot(hostOptions);
     });
   });
 
@@ -37,7 +40,7 @@ describe('vaadin-pdf-viewer', () => {
     });
 
     it('host', async () => {
-      await expect(viewer).dom.to.equalSnapshot();
+      await expect(viewer).dom.to.equalSnapshot(hostOptions);
     });
   });
 

@@ -186,6 +186,18 @@ describe('pages', () => {
         expect(viewer.page).to.equal(2);
         expect(getPageTop(2)).to.be.closeTo(getPaddingTop(), 1);
       });
+
+      it('should keep the scroll position when moved in the DOM', async () => {
+        const { scrollTop } = getContent();
+        const container = document.createElement('div');
+        viewer.parentElement!.after(container);
+        container.appendChild(viewer);
+        await nextResize(getContent());
+        await nextFrame();
+        expect(getContent().scrollTop).to.be.closeTo(scrollTop, 1);
+        expect(viewer.page).to.equal(3);
+        container.remove();
+      });
     });
 
     describe('resize', () => {

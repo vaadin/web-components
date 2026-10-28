@@ -1,6 +1,6 @@
 import { expect } from '@vaadin/chai-plugins';
 import { dispatchTouch, setTouchEmulation } from '@vaadin/test-runner-commands';
-import { fixtureSync, isChrome, nextFrame, nextRender } from '@vaadin/testing-helpers';
+import { fixtureSync, isChrome, nextFrame, nextRender, nextResize } from '@vaadin/testing-helpers';
 import sinon from 'sinon';
 import './enable-feature-flag.js';
 import '../vaadin-pdf-viewer.js';
@@ -45,6 +45,18 @@ describe('zoom', () => {
 
   it('should fit the whole page with page-fit', async () => {
     viewer.zoom = 'page-fit';
+    await nextRenderIdle(viewer);
+    expect(getPages()[0].offsetHeight).to.be.closeTo(getAvailableSize().height, 1);
+  });
+
+  it('should fit the whole page again when the toolbar gets taller', async () => {
+    viewer.zoom = 'page-fit';
+    await nextRenderIdle(viewer);
+    const control = document.createElement('div');
+    control.slot = 'toolbar-actions';
+    control.style.height = '100px';
+    viewer.append(control);
+    await nextResize(getContent());
     await nextRenderIdle(viewer);
     expect(getPages()[0].offsetHeight).to.be.closeTo(getAvailableSize().height, 1);
   });

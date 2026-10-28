@@ -288,6 +288,8 @@ export const PdfViewerMixin = (superClass) =>
       cancelAnimationFrame(this.#resizeFrame);
       this.#resizeFrame = 0;
       this.#cancelSmoothScroll();
+      // Detaching resets the scroll position, which the next resize restores.
+      this.#hadLayout = false;
 
       // Wait a microtask so that moving the element in the DOM does not reload the document.
       queueMicrotask(() => {
