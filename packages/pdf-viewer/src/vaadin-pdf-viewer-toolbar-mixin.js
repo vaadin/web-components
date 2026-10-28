@@ -13,7 +13,6 @@ import '@vaadin/select/src/vaadin-select.js';
 import '@vaadin/tooltip/src/vaadin-tooltip.js';
 import './vaadin-pdf-viewer-button.js';
 import { html } from 'lit';
-import { live } from 'lit/directives/live.js';
 import { styleMap } from 'lit/directives/style-map.js';
 import { formatZoom, getZoomInLevel, getZoomOutLevel, ZOOM_LEVELS } from './pdf-viewer-zoom.js';
 
@@ -109,7 +108,7 @@ export const PdfViewerToolbarMixin = (superClass) =>
           slot="toolbar-zoom"
           theme="align-center"
           .items="${this.#zoomItems}"
-          .value="${live(String(this.zoom))}"
+          .value="${String(this.zoom)}"
           .disabled="${!hasDocument}"
           @change="${this.#onZoomSelectChange}"
         ></vaadin-select>
