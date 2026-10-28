@@ -8,7 +8,6 @@
  * See https://vaadin.com/commercial-license-and-service-terms for the full
  * license.
  */
-import { ResizeMixin } from '@vaadin/component-base/src/resize-mixin.js';
 import { issueWarning } from '@vaadin/component-base/src/warnings.js';
 import {
   getAnchor,
@@ -24,7 +23,7 @@ import {
  * asks for the visible pages to render.
  */
 export const PdfViewerScrollMixin = (superClass) =>
-  class PdfViewerScrollMixinClass extends ResizeMixin(superClass) {
+  class PdfViewerScrollMixinClass extends superClass {
     static get properties() {
       return {
         /**
@@ -80,6 +79,18 @@ export const PdfViewerScrollMixin = (superClass) =>
 
     #hadLayout = false;
 
+    /**
+     * Observes the page area, as the toolbar changes its size too. Reacts in
+     * a task of its own, as `ResizeMixin` does.
+     */
+    #resizeObserver = new ResizeObserver(() => {
+      setTimeout(() => {
+        if (this.isConnected) {
+          this.#onResize();
+        }
+      });
+    });
+
     /** @protected */
     disconnectedCallback() {
       super.disconnectedCallback();
@@ -93,6 +104,7 @@ export const PdfViewerScrollMixin = (superClass) =>
       super.firstUpdated();
 
       this.$.content.addEventListener('scroll', () => this.#onScroll(), { passive: true });
+      this.#resizeObserver.observe(this.$.content);
     }
 
     /** @protected */
@@ -110,11 +122,10 @@ export const PdfViewerScrollMixin = (superClass) =>
     }
 
     /**
-     * Override method from `ResizeMixin` to fit the pages to the new size.
-     * @protected
-     * @override
+     * Fits the pages to the new size of the page area.
+     * @private
      */
-    _onResize() {
+    #onResize() {
       // Hiding the viewer (e.g. in an inactive tab) resets its scroll position.
       // A page set while hidden wins over it, see _refreshLayout().
       const hasLayout = this.#hasLayout();
