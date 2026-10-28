@@ -9,18 +9,32 @@
  * license.
  */
 import '@vaadin/integer-field/src/vaadin-integer-field.js';
+import '@vaadin/select/src/vaadin-select.js';
 import '@vaadin/tooltip/src/vaadin-tooltip.js';
 import './vaadin-pdf-viewer-button.js';
 import { html } from 'lit';
 import { styleMap } from 'lit/directives/style-map.js';
+import { formatZoom, getZoomInLevel, getZoomOutLevel, ZOOM_LEVELS } from './pdf-viewer-zoom-utils.js';
 
 /**
- * A mixin that adds the toolbar with the page navigation. The controls of
- * the toolbar are Vaadin components, rendered into the light DOM so that
- * themes can style them like any other instance of these components.
+ * A mixin that adds the toolbar with the page navigation and the zoom. The
+ * controls of the toolbar are Vaadin components, rendered into the light DOM
+ * so that themes can style them like any other instance of these components.
  */
 export const PdfViewerToolbarMixin = (superClass) =>
   class PdfViewerToolbarMixinClass extends superClass {
+    /** The items of the zoom select, built again only when `zoom` or the texts change. */
+    #zoomItems = [];
+
+    /** @protected */
+    willUpdate(props) {
+      super.willUpdate(props);
+
+      if (props.has('zoom') || props.has('__effectiveI18n')) {
+        this.#zoomItems = this.#getZoomItems(this.__effectiveI18n);
+      }
+    }
+
     /**
      * Returns the template of the toolbar, which shows the controls of
      * `_renderToolbarControls()` in its slots.
@@ -30,6 +44,7 @@ export const PdfViewerToolbarMixin = (superClass) =>
       return html`
         <div part="toolbar">
           <div part="toolbar-group" class="navigation"><slot name="toolbar-navigation"></slot></div>
+          <div part="toolbar-group" class="viewing"><slot name="toolbar-zoom"></slot></div>
           <div part="toolbar-group" class="actions"><slot name="toolbar-actions"></slot></div>
         </div>
       `;
@@ -42,6 +57,7 @@ export const PdfViewerToolbarMixin = (superClass) =>
      */
     _renderToolbarControls() {
       const { page, pageCount } = this;
+      const zoomFactor = this._zoomFactor;
       const hasDocument = pageCount > 0;
       const i18n = this.__effectiveI18n;
 
@@ -79,6 +95,32 @@ export const PdfViewerToolbarMixin = (superClass) =>
         >
           <span slot="suffix">${hasDocument ? `/ ${pageCount}` : ''}</span>
         </vaadin-integer-field>
+        <vaadin-pdf-viewer-button
+          slot="toolbar-zoom"
+          icon="zoom-out"
+          theme="tertiary icon"
+          .disabled="${!hasDocument || !getZoomOutLevel(zoomFactor)}"
+          @click="${this.#onZoomOutClick}"
+        >
+          <vaadin-tooltip slot="tooltip" .text="${i18n.zoomOut}"></vaadin-tooltip>
+        </vaadin-pdf-viewer-button>
+        <vaadin-select
+          slot="toolbar-zoom"
+          theme="align-center"
+          .items="${this.#zoomItems}"
+          .value="${String(this.zoom)}"
+          .disabled="${!hasDocument}"
+          @change="${this.#onZoomSelectChange}"
+        ></vaadin-select>
+        <vaadin-pdf-viewer-button
+          slot="toolbar-zoom"
+          icon="zoom-in"
+          theme="tertiary icon"
+          .disabled="${!hasDocument || !getZoomInLevel(zoomFactor)}"
+          @click="${this.#onZoomInClick}"
+        >
+          <vaadin-tooltip slot="tooltip" .text="${i18n.zoomIn}"></vaadin-tooltip>
+        </vaadin-pdf-viewer-button>
       `;
     }
 
@@ -131,5 +173,41 @@ export const PdfViewerToolbarMixin = (superClass) =>
       if (event.key === 'Enter') {
         event.preventDefault();
       }
+    }
+
+    /**
+     * Returns the items of the zoom select: the fit zooms, the zoom levels,
+     * and a zoom set by the application that is not one of the levels.
+     * @private
+     */
+    #getZoomItems(i18n) {
+      const items = [
+        { label: i18n.pageWidth, value: 'page-width' },
+        { label: i18n.pageFit, value: 'page-fit' },
+        ...ZOOM_LEVELS.map((level) => ({ label: formatZoom(level), value: String(level) })),
+      ];
+      const value = String(this.zoom);
+      if (!items.some((item) => item.value === value)) {
+        items.push({ label: formatZoom(Number(value)), value });
+      }
+      return items;
+    }
+
+    /** @private */
+    #onZoomInClick() {
+      this._stepZoom(1);
+    }
+
+    /** @private */
+    #onZoomOutClick() {
+      this._stepZoom(-1);
+    }
+
+    /** @private */
+    #onZoomSelectChange(event) {
+      // The change is internal to the viewer. Applications listen to `zoom-changed`.
+      event.stopPropagation();
+      const { value } = event.target;
+      this.zoom = value === 'page-width' || value === 'page-fit' ? value : Number(value);
     }
   };

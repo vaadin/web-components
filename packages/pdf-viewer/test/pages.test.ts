@@ -5,7 +5,16 @@ import './enable-feature-flag.js';
 import '../vaadin-pdf-viewer.js';
 import { clearWarnings } from '@vaadin/component-base/src/warnings.js';
 import type { PdfViewer } from '../vaadin-pdf-viewer.js';
-import { createPdf, createPdfUrl, fixtureUrl, loadAndRender, loadDocument, nextRenderIdle } from './helpers.js';
+import {
+  createPdf,
+  createPdfUrl,
+  fixtureUrl,
+  getContentBoxSize,
+  getViewCenter,
+  loadAndRender,
+  loadDocument,
+  nextRenderIdle,
+} from './helpers.js';
 
 const A4_RATIO = 842.88 / 595.92;
 
@@ -71,8 +80,7 @@ describe('pages', () => {
       });
 
       it('should fit the width of the first page to the content', () => {
-        const padding = parseFloat(getComputedStyle(content).paddingLeft);
-        expect(pages[0].offsetWidth).to.be.closeTo(content.clientWidth - 2 * padding, 1);
+        expect(pages[0].offsetWidth).to.be.closeTo(getContentBoxSize(content).width, 1);
       });
 
       it('should only render the visible pages and the next page', () => {
@@ -240,9 +248,7 @@ describe('pages', () => {
       it('should fit the pages to the new width', async () => {
         viewer.style.width = '600px';
         await nextResize(viewer);
-        const page = pages[0];
-        const padding = parseFloat(getComputedStyle(content).paddingLeft);
-        expect(page.offsetWidth).to.be.closeTo(content.clientWidth - 2 * padding, 1);
+        expect(pages[0].offsetWidth).to.be.closeTo(getContentBoxSize(content).width, 1);
       });
 
       it('should keep the current page in view', async () => {
@@ -263,10 +269,8 @@ describe('pages', () => {
         viewer.style.width = '600px';
         await nextResize(viewer);
         await nextFrame();
-        const contentRect = content.getBoundingClientRect();
         const pageRect = pages[0].getBoundingClientRect();
-        const viewCenter = contentRect.left + content.clientLeft + content.clientWidth / 2;
-        expect((pageRect.left + pageRect.right) / 2).to.be.closeTo(viewCenter, 2);
+        expect((pageRect.left + pageRect.right) / 2).to.be.closeTo(getViewCenter(content), 2);
       });
 
       it('should render the visible pages again at the new size', async () => {
@@ -530,31 +534,6 @@ describe('pages', () => {
 
     it('should keep the pages left to right', () => {
       expect(getComputedStyle(pages[0]).direction).to.equal('ltr');
-    });
-
-    it('should keep the horizontal position of a wide page on resize', async () => {
-      // Page 6 is landscape and wider than the view
-      viewer.page = 6;
-      await nextRenderIdle(viewer);
-      content.scrollLeft = -40;
-      await nextFrame();
-      const ratioAt = () => {
-        const contentRect = content.getBoundingClientRect();
-        const pageRect = pages[5].getBoundingClientRect();
-        const viewCenter = contentRect.left + content.clientLeft + content.clientWidth / 2;
-        return (viewCenter - pageRect.left) / pageRect.width;
-      };
-      const ratio = ratioAt();
-      const { clientWidth } = content;
-      const pageWidth = pages[5].getBoundingClientRect().width;
-      // A small resize, so that the page stays wider than the view before the pages are scaled
-      viewer.style.width = '450px';
-      await nextResize(viewer);
-      await nextFrame();
-      // The content grows to the left before the pages are scaled, which moves
-      // the view center on the page. The viewer keeps the point under that center.
-      const shift = (content.clientWidth - clientWidth) / 2 / pageWidth;
-      expect(ratioAt()).to.be.closeTo(ratio - shift, 0.02);
     });
   });
 

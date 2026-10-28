@@ -99,6 +99,70 @@ describe('keyboard', () => {
       expect(content.scrollTop).to.be.closeTo(top, 1);
     });
 
+    describe('zoom keys', () => {
+      beforeEach(async () => {
+        viewer.zoom = 2;
+        await nextRenderIdle(viewer);
+      });
+
+      it('should zoom in with Ctrl+=', async () => {
+        content.focus();
+        await sendKeys({ press: 'Control+Equal' });
+        expect(viewer.zoom).to.equal(3);
+      });
+
+      it('should zoom out with Ctrl+-', async () => {
+        content.focus();
+        await sendKeys({ press: 'Control+Minus' });
+        expect(viewer.zoom).to.equal(1.5);
+      });
+
+      it('should reset the zoom to page-width with Ctrl+0', async () => {
+        content.focus();
+        await sendKeys({ press: 'Control+Digit0' });
+        expect(viewer.zoom).to.equal('page-width');
+      });
+
+      it('should zoom in with Ctrl and numpad +', async () => {
+        content.focus();
+        await sendKeys({ press: 'Control+NumpadAdd' });
+        expect(viewer.zoom).to.equal(3);
+      });
+
+      it('should zoom out with Ctrl and numpad -', async () => {
+        content.focus();
+        await sendKeys({ press: 'Control+NumpadSubtract' });
+        expect(viewer.zoom).to.equal(1.5);
+      });
+
+      it('should reset the zoom to page-width with Ctrl and numpad 0', async () => {
+        content.focus();
+        await sendKeys({ press: 'Control+Numpad0' });
+        expect(viewer.zoom).to.equal('page-width');
+      });
+
+      it('should zoom with Ctrl+= from a toolbar button', async () => {
+        viewer.querySelector<HTMLElement>('vaadin-pdf-viewer-button[icon="next-page"]')!.focus();
+        await sendKeys({ press: 'Control+Equal' });
+        expect(viewer.zoom).to.equal(3);
+      });
+
+      it('should not zoom with Ctrl+= in the page field', async () => {
+        viewer.querySelector<HTMLElement>('vaadin-integer-field')!.focus();
+        await sendKeys({ press: 'Control+Equal' });
+        expect(viewer.zoom).to.equal(2);
+      });
+
+      it('should not zoom with Ctrl+= in a text area of the application', async () => {
+        const textArea = document.createElement('textarea');
+        textArea.slot = 'toolbar-actions';
+        viewer.appendChild(textArea);
+        textArea.focus();
+        await sendKeys({ press: 'Control+Equal' });
+        expect(viewer.zoom).to.equal(2);
+      });
+    });
+
     it('should go to the first page with Ctrl+Home', async () => {
       viewer.page = 4;
       await nextRenderIdle(viewer);

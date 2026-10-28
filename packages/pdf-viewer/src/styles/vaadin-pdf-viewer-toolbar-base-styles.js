@@ -38,4 +38,8 @@ export const pdfViewerToolbarStyles = css`
   ::slotted(vaadin-integer-field) {
     --vaadin-field-default-width: calc((max(var(--_page-digits), 2) + var(--_page-digits) + 2) * 1ch + 1.5em);
   }
+
+  ::slotted(vaadin-select) {
+    --vaadin-field-default-width: 9em;
+  }
 `;
