@@ -41,7 +41,7 @@ snapshots["vaadin-pdf-viewer host default"] =
     <span slot="suffix">
     </span>
     <label
-      for="input-vaadin-integer-field-12"
+      for="input-vaadin-integer-field-13"
       id="label-vaadin-integer-field-2"
       slot="label"
     >
@@ -54,7 +54,7 @@ snapshots["vaadin-pdf-viewer host default"] =
     </div>
     <input
       disabled=""
-      id="input-vaadin-integer-field-12"
+      id="input-vaadin-integer-field-13"
       max="1"
       min="1"
       slot="input"
@@ -91,6 +91,19 @@ snapshots["vaadin-pdf-viewer host default"] =
     icon="zoom-in"
     role="button"
     slot="toolbar-zoom"
+    style="--_vaadin-button-disabled-pointer-events: auto;"
+    tabindex="0"
+    theme="tertiary icon"
+  >
+  </vaadin-pdf-viewer-button>
+  <vaadin-pdf-viewer-button
+    aria-describedby="vaadin-tooltip-12"
+    aria-disabled="true"
+    disabled=""
+    has-tooltip=""
+    icon="download"
+    role="button"
+    slot="toolbar-default-actions"
     style="--_vaadin-button-disabled-pointer-events: auto;"
     tabindex="0"
     theme="tertiary icon"
@@ -138,7 +151,7 @@ snapshots["vaadin-pdf-viewer host document"] =
       / 6
     </span>
     <label
-      for="input-vaadin-integer-field-12"
+      for="input-vaadin-integer-field-13"
       id="label-vaadin-integer-field-2"
       slot="label"
     >
@@ -150,7 +163,7 @@ snapshots["vaadin-pdf-viewer host document"] =
     >
     </div>
     <input
-      id="input-vaadin-integer-field-12"
+      id="input-vaadin-integer-field-13"
       max="6"
       min="1"
       slot="input"
@@ -182,6 +195,17 @@ snapshots["vaadin-pdf-viewer host document"] =
     icon="zoom-in"
     role="button"
     slot="toolbar-zoom"
+    style="--_vaadin-button-disabled-pointer-events: auto;"
+    tabindex="0"
+    theme="tertiary icon"
+  >
+  </vaadin-pdf-viewer-button>
+  <vaadin-pdf-viewer-button
+    aria-describedby="vaadin-tooltip-12"
+    has-tooltip=""
+    icon="download"
+    role="button"
+    slot="toolbar-default-actions"
     style="--_vaadin-button-disabled-pointer-events: auto;"
     tabindex="0"
     theme="tertiary icon"
@@ -222,6 +246,8 @@ snapshots["vaadin-pdf-viewer shadow default"] =
     </div>
     <div part="toolbar-group">
       <slot name="toolbar-actions">
+      </slot>
+      <slot name="toolbar-default-actions">
       </slot>
     </div>
   </div>
@@ -272,6 +298,8 @@ snapshots["vaadin-pdf-viewer shadow document"] =
     </div>
     <div part="toolbar-group">
       <slot name="toolbar-actions">
+      </slot>
+      <slot name="toolbar-default-actions">
       </slot>
     </div>
   </div>
@@ -338,6 +366,8 @@ snapshots["vaadin-pdf-viewer shadow header title"] =
     </div>
     <div part="toolbar-group">
       <slot name="toolbar-actions">
+      </slot>
+      <slot name="toolbar-default-actions">
       </slot>
     </div>
   </div>
@@ -406,6 +436,8 @@ snapshots["vaadin-pdf-viewer shadow header hidden"] =
     <div part="toolbar-group">
       <slot name="toolbar-actions">
       </slot>
+      <slot name="toolbar-default-actions">
+      </slot>
     </div>
   </div>
 </div>
@@ -472,6 +504,8 @@ snapshots["vaadin-pdf-viewer shadow toolbar collapsed"] =
     </div>
     <div part="toolbar-group">
       <slot name="toolbar-actions">
+      </slot>
+      <slot name="toolbar-default-actions">
       </slot>
     </div>
   </div>

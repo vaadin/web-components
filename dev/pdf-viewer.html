@@ -64,7 +64,7 @@
         viewer.src = fileUrl;
       });
 
-      ['headerHidden', 'toolbarCollapsed'].forEach((prop) => {
+      ['headerHidden', 'toolbarCollapsed', 'downloadButtonHidden'].forEach((prop) => {
         document.getElementById(prop).addEventListener('checked-changed', (e) => {
           viewer[prop] = e.detail.value;
         });
@@ -73,8 +73,14 @@
         document.getElementById('toolbarCollapsed').checked = e.detail.value;
       });
 
-      document.getElementById('headerTitle').addEventListener('change', (e) => {
-        viewer.headerTitle = e.target.value;
+      ['headerTitle', 'fileName'].forEach((prop) => {
+        document.getElementById(prop).addEventListener('change', (e) => {
+          viewer[prop] = e.target.value;
+        });
+      });
+
+      document.getElementById('download').addEventListener('click', () => {
+        viewer.download();
       });
 
       document.querySelector('#direction').addEventListener('value-changed', (e) => {
@@ -138,10 +144,20 @@
         <vaadin-checkbox-group label="Options">
           <vaadin-checkbox id="headerHidden" value="headerHidden" label="Hide header"></vaadin-checkbox>
           <vaadin-checkbox id="toolbarCollapsed" value="toolbarCollapsed" label="Collapse toolbar"></vaadin-checkbox>
+          <vaadin-checkbox
+            id="downloadButtonHidden"
+            value="downloadButtonHidden"
+            label="Hide download button"
+          ></vaadin-checkbox>
         </vaadin-checkbox-group>
       </div>
       <div class="control-group">
         <vaadin-text-field id="headerTitle" label="Header title"></vaadin-text-field>
+        <vaadin-text-field id="fileName" label="File name" placeholder="From the response or src"></vaadin-text-field>
+      </div>
+      <div class="control-group">
+        <span>Methods</span>
+        <vaadin-button id="download">download()</vaadin-button>
       </div>
       <div class="control-group">
         <vaadin-radio-group id="direction" label="Direction">

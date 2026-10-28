@@ -40,9 +40,9 @@ export const PdfViewerToolbarMixin = (superClass) =>
 
         /**
          * The title shown in the header, see `headerHidden`. When not set,
-         * the header shows the PDF file name from the `Content-Disposition`
-         * header of the response, else the PDF file name at the end of the
-         * path of `src`, else the `document` text of `i18n`.
+         * the header shows `fileName`, else the PDF file name from the
+         * `Content-Disposition` header of the response, else the PDF file name
+         * at the end of the path of `src`, else the `document` text of `i18n`.
          *
          * @attr {string} header-title
          */
@@ -100,7 +100,10 @@ export const PdfViewerToolbarMixin = (superClass) =>
         <div id="toolbar" part="toolbar" ?hidden="${collapsed}">
           <div part="toolbar-group"><slot name="toolbar-navigation"></slot></div>
           <div part="toolbar-group"><slot name="toolbar-zoom"></slot></div>
-          <div part="toolbar-group"><slot name="toolbar-actions"></slot></div>
+          <div part="toolbar-group">
+            <slot name="toolbar-actions"></slot>
+            <slot name="toolbar-default-actions"></slot>
+          </div>
         </div>
       `;
     }
