@@ -13,7 +13,7 @@ import type { TemplateResult } from 'lit';
 
 /**
  * A mixin that adds the header and the toolbar with the page navigation, the
- * zoom and the download button.
+ * zoom, and the download and print buttons.
  */
 export declare function PdfViewerToolbarMixin<T extends Constructor<HTMLElement>>(
   base: T,
@@ -57,6 +57,14 @@ export declare class PdfViewerToolbarMixinClass {
   downloadButtonHidden: boolean;
 
   /**
+   * Whether the button that prints the document is hidden from the
+   * toolbar. The `print()` method works also while it is hidden.
+   *
+   * @attr {boolean} print-button-hidden
+   */
+  printButtonHidden: boolean;
+
+  /**
    * Returns the template of the header and the toolbar.
    */
   protected _renderToolbar(): TemplateResult;
@@ -75,4 +83,9 @@ export declare class PdfViewerToolbarMixinClass {
    * Returns the template of the download button in the `toolbar-download` slot.
    */
   protected _renderDownloadButton(): TemplateResult;
+
+  /**
+   * Returns the template of the print button in the `toolbar-print` slot.
+   */
+  protected _renderPrintButton(): TemplateResult;
 }

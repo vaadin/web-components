@@ -4,15 +4,21 @@ import '../enable-feature-flag.js';
 import '../../vaadin-pdf-viewer.js';
 import { resetUniqueId } from '@vaadin/component-base/src/unique-id-utils.js';
 import type { PdfViewer } from '../../vaadin-pdf-viewer.js';
-import { fixtureUrl, nextRenderIdle } from '../helpers.js';
+import { fixtureUrl, nextRenderIdle, startPrint } from '../helpers.js';
 
 describe('vaadin-pdf-viewer', () => {
   let viewer: PdfViewer;
+  let release: (() => void) | undefined;
 
   beforeEach(async () => {
     resetUniqueId();
     viewer = fixtureSync('<vaadin-pdf-viewer></vaadin-pdf-viewer>');
     await nextRender();
+  });
+
+  afterEach(() => {
+    release?.();
+    release = undefined;
   });
 
   describe('host', () => {
@@ -27,6 +33,14 @@ describe('vaadin-pdf-viewer', () => {
       viewer.src = fixtureUrl('multi-page.pdf');
       await oneEvent(viewer, 'document-load');
       await nextUpdate(viewer);
+      await expect(viewer).dom.to.equalSnapshot(options);
+    });
+
+    it('print progress', async () => {
+      viewer.src = fixtureUrl('multi-page.pdf');
+      await oneEvent(viewer, 'document-load');
+      await nextUpdate(viewer);
+      release = await startPrint(viewer);
       await expect(viewer).dom.to.equalSnapshot(options);
     });
   });
@@ -61,6 +75,13 @@ describe('vaadin-pdf-viewer', () => {
       viewer.toolbarCollapsed = true;
       viewer.src = fixtureUrl('multi-page.pdf');
       await nextRenderIdle(viewer);
+      await expect(viewer).shadowDom.to.equalSnapshot({ ignoreAttributes: ['style', 'width', 'height'] });
+    });
+
+    it('print progress', async () => {
+      viewer.src = fixtureUrl('multi-page.pdf');
+      await nextRenderIdle(viewer);
+      release = await startPrint(viewer);
       await expect(viewer).shadowDom.to.equalSnapshot({ ignoreAttributes: ['style', 'width', 'height'] });
     });
   });

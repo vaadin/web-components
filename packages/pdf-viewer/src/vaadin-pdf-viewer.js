@@ -18,6 +18,7 @@ import { PolylitMixin } from '@vaadin/component-base/src/polylit-mixin.js';
 import { LumoInjectionMixin } from '@vaadin/vaadin-themable-mixin/lumo-injection-mixin.js';
 import { pdfViewerStyles } from './styles/vaadin-pdf-viewer-base-styles.js';
 import { pdfViewerPageStyles } from './styles/vaadin-pdf-viewer-page-base-styles.js';
+import { pdfViewerPrintStyles } from './styles/vaadin-pdf-viewer-print-base-styles.js';
 import { pdfViewerTextLayerStyles } from './styles/vaadin-pdf-viewer-text-layer-base-styles.js';
 import { pdfViewerToolbarStyles } from './styles/vaadin-pdf-viewer-toolbar-base-styles.js';
 import { PdfViewerMixin } from './vaadin-pdf-viewer-mixin.js';
@@ -35,6 +36,9 @@ const DEFAULT_I18N = {
   goToPage: 'Go to page {page}',
   externalLink: '{text} (opens in a new tab)',
   download: 'Download',
+  print: 'Print',
+  printing: 'Preparing to print…',
+  cancelPrint: 'Cancel',
 };
 
 /**
@@ -57,7 +61,7 @@ const DEFAULT_I18N = {
  *
  * Slot name         | Description
  * ------------------|-------------
- * `toolbar-actions` | Application controls, e.g. buttons, at the end of the toolbar, before the download button.
+ * `toolbar-actions` | Application controls, e.g. buttons, at the end of the toolbar, before the download and print buttons.
  *
  * #### Example
  *
@@ -80,16 +84,17 @@ const DEFAULT_I18N = {
  *
  * The following shadow DOM parts are available for styling:
  *
- * Part name       | Description
- * ----------------|------------
- * `header`        | The header above the toolbar, a button that collapses and expands it, see `headerHidden`.
- * `title`         | The title in the header.
- * `header-toggle` | The icon in the header that shows whether the toolbar is collapsed.
- * `toolbar`       | The toolbar above the pages.
- * `toolbar-group` | A group of related controls in the toolbar: navigation, zoom and actions.
- * `content`       | The scrollable area that contains the pages.
- * `page`          | A page of the document.
- * `loader`        | The loading indicator shown while the document loads.
+ * Part name        | Description
+ * -----------------|------------
+ * `header`         | The header above the toolbar, a button that collapses and expands it, see `headerHidden`.
+ * `title`          | The title in the header.
+ * `header-toggle`  | The icon in the header that shows whether the toolbar is collapsed.
+ * `toolbar`        | The toolbar above the pages.
+ * `toolbar-group`  | A group of related controls in the toolbar: navigation, zoom and actions.
+ * `content`        | The scrollable area that contains the pages.
+ * `page`           | A page of the document.
+ * `loader`         | The loading indicator shown while the document loads.
+ * `print-progress` | The progress shown while the document is prepared for printing.
  *
  * The following state attributes are available for styling:
  *
@@ -144,7 +149,13 @@ class PdfViewer extends PdfViewerMixin(
   }
 
   static get styles() {
-    return [pdfViewerStyles, pdfViewerToolbarStyles, pdfViewerPageStyles, pdfViewerTextLayerStyles];
+    return [
+      pdfViewerStyles,
+      pdfViewerToolbarStyles,
+      pdfViewerPageStyles,
+      pdfViewerTextLayerStyles,
+      pdfViewerPrintStyles,
+    ];
   }
 
   static get defaultI18n() {
@@ -185,7 +196,13 @@ class PdfViewer extends PdfViewerMixin(
    *   // Accessible name of a link that opens in a new tab. {text} is replaced with the text of the link, or its URL.
    *   externalLink: '{text} (opens in a new tab)',
    *   // Tooltip of the download button.
-   *   download: 'Download'
+   *   download: 'Download',
+   *   // Tooltip of the print button.
+   *   print: 'Print',
+   *   // Shown while the pages are prepared for printing, and accessible name of the progress bar.
+   *   printing: 'Preparing to print…',
+   *   // Button that cancels printing while the pages are prepared.
+   *   cancelPrint: 'Cancel'
    * }
    * ```
    *
@@ -214,6 +231,7 @@ class PdfViewer extends PdfViewerMixin(
         >
           <div id="pages"></div>
         </div>
+        ${this._renderPrintProgress()}
       </div>
     `;
   }
