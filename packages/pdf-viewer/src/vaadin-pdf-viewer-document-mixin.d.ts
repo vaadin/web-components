@@ -45,6 +45,13 @@ export declare class PdfViewerDocumentMixinClass {
   protected readonly _pdfDocument: PDFDocumentProxy | null;
 
   /**
+   * Whether the document of `src` is loading, or starts loading in the
+   * next update after a change of `src`. Methods that need the document,
+   * e.g. `download()`, wait for it while this is true.
+   */
+  protected readonly _documentPending: boolean;
+
+  /**
    * Returns the name of the document: the PDF file name from the
    * `Content-Disposition` header, else the PDF file name at the end of the
    * path of `src`, else an empty string.
