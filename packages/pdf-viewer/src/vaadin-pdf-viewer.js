@@ -152,7 +152,7 @@ class PdfViewer extends PdfViewerMixin(
    *   pageWidth: 'Page width',
    *   // Zoom select item that fits the whole page into the viewer.
    *   pageFit: 'Page fit',
-   *   // Title of the header when `src` has no file name, e.g. a blob URL.
+   *   // Title of the header for a document without a file name or title.
    *   document: 'PDF document'
    * }
    * ```

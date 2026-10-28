@@ -1,4 +1,5 @@
 import { nextFrame, oneEvent } from '@vaadin/testing-helpers';
+import sinon from 'sinon';
 import type { PdfViewer } from '../vaadin-pdf-viewer.js';
 
 export type Fixture =
@@ -44,6 +45,35 @@ export async function loadAndRender(viewer: PdfViewer, src: string): Promise<voi
   viewer.src = src;
   await loaded;
   await idle;
+}
+
+/**
+ * Sets the `src` of the viewer to a URL that serves `multi-page.pdf` with
+ * extra response headers, and waits until the document has loaded. Stubs
+ * `fetch` until then.
+ */
+export async function loadFixtureFrom(
+  viewer: PdfViewer,
+  url: string,
+  headers: Record<string, string> = {},
+): Promise<void> {
+  const fetch = window.fetch;
+  const stub = sinon.stub(window, 'fetch').callsFake(async (input, init) => {
+    if (String(input) !== url) {
+      return fetch(input, init);
+    }
+    const response = await fetch(fixtureUrl('multi-page.pdf'), init);
+    const responseHeaders = new Headers(response.headers);
+    Object.entries(headers).forEach(([name, value]) => responseHeaders.set(name, value));
+    return new Response(response.body, { status: response.status, headers: responseHeaders });
+  });
+  try {
+    const loaded = oneEvent(viewer, 'document-load');
+    viewer.src = url;
+    await loaded;
+  } finally {
+    stub.restore();
+  }
 }
 
 /**

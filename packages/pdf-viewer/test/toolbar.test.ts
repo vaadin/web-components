@@ -10,7 +10,15 @@ import type { SelectItem } from '@vaadin/select/src/vaadin-select-item.js';
 import type { Tooltip } from '@vaadin/tooltip';
 import type { PdfViewerButton } from '../src/vaadin-pdf-viewer-button.js';
 import type { PdfViewer } from '../vaadin-pdf-viewer.js';
-import { createPdfUrl, fixtureUrl, getContentBoxSize, loadAndRender, loadDocument, nextRenderIdle } from './helpers.js';
+import {
+  createPdfUrl,
+  fixtureUrl,
+  getContentBoxSize,
+  loadAndRender,
+  loadDocument,
+  loadFixtureFrom,
+  nextRenderIdle,
+} from './helpers.js';
 
 describe('toolbar', () => {
   let viewer: PdfViewer;
@@ -401,7 +409,32 @@ describe('toolbar', () => {
       expect(title.textContent).to.equal('Annual report');
     });
 
-    it('should show a fallback title for src without a file name', async () => {
+    it('should show the file name from the Content-Disposition header instead of the file name of src', async () => {
+      await loadFixtureFrom(viewer, new URL('/files/multi-page.pdf', location.href).href, {
+        'Content-Disposition': 'inline; filename="report.pdf"',
+      });
+      await nextFrame();
+      expect(title.textContent).to.equal('report.pdf');
+    });
+
+    it('should show the title of the document for src without a PDF file name', async () => {
+      await loadFixtureFrom(viewer, new URL('/files/123', location.href).href);
+      await nextFrame();
+      expect(title.textContent).to.equal('Multi-page fixture');
+    });
+
+    it('should show the title of the document for a blob URL', async () => {
+      const blob = await fetch(fixtureUrl('multi-page.pdf')).then((response) => response.blob());
+      const url = URL.createObjectURL(blob);
+      try {
+        await loadAndRender(viewer, url);
+        expect(title.textContent).to.equal('Multi-page fixture');
+      } finally {
+        URL.revokeObjectURL(url);
+      }
+    });
+
+    it('should show a fallback title for a document without a file name or title', async () => {
       await loadAndRender(viewer, createPdfUrl(1));
       expect(title.textContent).to.equal('PDF document');
     });
