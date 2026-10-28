@@ -47,7 +47,17 @@ export function inflateFunctions(config) {
 // chart copy to render, so the body keeps the `styled-mode` attribute until the last one is done.
 const styledModeExports = new Set();
 
-export function prepareExport(chart) {
+/**
+ * Copies the shadow styles of the chart to the body for a print or an export. Exports of the same
+ * chart can overlap, so they are counted, and the styles stay until the last one is cleaned up.
+ */
+export function prepareExport(chart, isExport = false) {
+  if (isExport) {
+    chart.__pendingExports = (chart.__pendingExports || 0) + 1;
+  } else {
+    chart.__printing = true;
+  }
+
   // Guard against another print 'before print' event coming before
   // the 'after print' event.
   if (!chart.tempBodyStyle) {
@@ -84,8 +94,14 @@ export function prepareExport(chart) {
   }
 }
 
-export function cleanupExport(chart) {
-  if (chart.tempBodyStyle) {
+export function cleanupExport(chart, isExport = false) {
+  if (isExport) {
+    chart.__pendingExports = Math.max((chart.__pendingExports || 0) - 1, 0);
+  } else {
+    chart.__printing = false;
+  }
+
+  if (chart.tempBodyStyle && !chart.__pendingExports && !chart.__printing) {
     document.body.removeChild(chart.tempBodyStyle);
     delete chart.tempBodyStyle;
     styledModeExports.delete(chart);

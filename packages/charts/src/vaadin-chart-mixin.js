@@ -1157,12 +1157,12 @@ export const ChartMixin = (superClass) =>
             // Workaround for https://github.com/vaadin/vaadin-charts/issues/389
             // Hook into beforePrint and beforeExport to ensure correct styling
             if (['beforePrint', 'beforeExport'].indexOf(event.type) >= 0) {
-              prepareExport(self);
+              prepareExport(self, event.type === 'beforeExport');
             }
 
             // Hook into afterPrint and afterExport to revert changes made before
             if (['afterPrint', 'afterExport'].indexOf(event.type) >= 0) {
-              cleanupExport(self);
+              cleanupExport(self, event.type === 'afterExport');
             }
 
             self.dispatchEvent(new CustomEvent(eventList[key], customEvent));
