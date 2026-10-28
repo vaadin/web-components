@@ -35,9 +35,6 @@ export const PdfViewerDownloadMixin = (superClass) =>
     /** Set when `download()` waits for the document to load. */
     #downloadPending = false;
 
-    /** The `src` of the last update. A different `src` starts loading in the next update. */
-    #updatedSrc;
-
     /**
      * Aborted when the viewer is detached, to stop the downloads in progress
      * and release their data.
@@ -57,11 +54,7 @@ export const PdfViewerDownloadMixin = (superClass) =>
     updated(props) {
       super.updated(props);
 
-      if (props.has('src')) {
-        this.#updatedSrc = this.src;
-      }
-
-      if (this.#downloadPending && !this.__loading) {
+      if (this.#downloadPending && !this._documentPending) {
         this.#downloadPending = false;
         this.#download();
       }
@@ -80,7 +73,7 @@ export const PdfViewerDownloadMixin = (superClass) =>
         return;
       }
 
-      if (this.__loading || this.src !== this.#updatedSrc) {
+      if (this._documentPending) {
         this.#downloadPending = true;
       } else {
         this.#download();
