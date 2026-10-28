@@ -119,7 +119,7 @@ export const PdfViewerDocumentMixin = (superClass) =>
 
     /**
      * Called when a document has loaded, before `document-load` is fired.
-     * @param {{ firstPage: import('pdfjs-dist').PDFPageProxy, language: string }} _details
+     * @param {import('./pdf-viewer-document-controller.js').PdfViewerDocumentDetails} _details
      * @protected
      */
     _documentLoaded(_details) {
@@ -149,7 +149,7 @@ export const PdfViewerDocumentMixin = (superClass) =>
     #onLoad(pdfDocument, details) {
       this.#pdfDocument = pdfDocument;
       this.#details = details;
-      this._documentLoaded({ firstPage: details.firstPage, language: details.language });
+      this._documentLoaded(details);
       this._setPageCount(pdfDocument.numPages);
       this.__loading = false;
       this.dispatchEvent(

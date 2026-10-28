@@ -8,6 +8,7 @@
  * See https://vaadin.com/commercial-license-and-service-terms for the full
  * license.
  */
+import { createLink } from './pdf-viewer-links.js';
 import { loadPdfjs } from './pdfjs-loader.js';
 
 /**
@@ -188,23 +189,39 @@ export class PdfViewerPage {
   }
 
   /**
+   * Returns the distance in CSS pixels from the top of the page to a position
+   * given in PDF units from the bottom of the page, as in link destinations.
+   *
+   * @param {number} y
+   * @return {number}
+   */
+  getOffsetTop(y) {
+    const offset = this.pdfPage
+      ? this.pdfPage.getViewport({ scale: this.scale }).convertToViewportPoint(0, y)[1]
+      : (this.unscaledHeight - y) * this.scale;
+    return Math.max(offset, 0);
+  }
+
+  /**
    * Renders the text layer: transparent text on top of the canvas, which makes
    * the text selectable and readable by assistive technology. When the layer
    * exists, it is only resized to the current scale.
    *
-   * @param {Promise<object>} textContent the text content of the page, with marked content
    * @return {Promise<void>}
    */
-  async renderTextLayer(textContent) {
+  async renderTextLayer() {
     if (this.textLayer) {
       this.textLayer.update({ viewport: this.pdfPage.getViewport({ scale: this.scale }) });
       return;
     }
 
     const canvas = this.canvas;
-    const [{ TextLayer }, textContentSource] = await Promise.all([loadPdfjs(), textContent]);
+    const [{ TextLayer }, textContentSource] = await Promise.all([
+      loadPdfjs(),
+      this.pdfPage.getTextContent({ includeMarkedContent: true }),
+    ]);
     // The page may have been released or rendered again meanwhile.
-    if (this.canvas !== canvas || this.textLayer) {
+    if (!canvas || this.canvas !== canvas || this.textLayer) {
       return;
     }
 
@@ -239,6 +256,56 @@ export class PdfViewerPage {
       endOfContent.className = 'end-of-content';
       container.append(endOfContent);
     }
+  }
+
+  /**
+   * Renders the link layer: the links of the page, positioned relative to the
+   * page size so that they need no update when the scale changes. Like the
+   * text layer, the layer has the size of the page without its rotation, and
+   * is rotated with the page. Returns the links with their annotations, or no
+   * links when the layer exists or the page was released meanwhile.
+   *
+   * @param {(annotation: object) => void} followLink called when an internal link is clicked
+   * @return {Promise<Array<{ link: HTMLAnchorElement, annotation: object }>>}
+   */
+  async renderLinkLayer(followLink) {
+    const canvas = this.canvas;
+    if (!canvas || this.linkLayerElement) {
+      return [];
+    }
+    const [{ setLayerDimensions }, annotations] = await Promise.all([
+      loadPdfjs(),
+      this.pdfPage.getAnnotations({ intent: 'display' }),
+    ]);
+    // The page may have been released or rendered again meanwhile.
+    if (this.canvas !== canvas || this.linkLayerElement) {
+      return [];
+    }
+
+    const links = [];
+    const viewport = this.pdfPage.getViewport({ scale: 1, rotation: 0 });
+    const layer = document.createElement('div');
+    layer.className = 'link-layer';
+    setLayerDimensions(layer, this.pdfPage.getViewport({ scale: 1 }));
+
+    annotations.forEach((annotation) => {
+      const link = annotation.subtype === 'Link' && createLink(annotation, followLink);
+      if (!link) {
+        return;
+      }
+      const [x1, y1] = viewport.convertToViewportPoint(annotation.rect[0], annotation.rect[1]);
+      const [x2, y2] = viewport.convertToViewportPoint(annotation.rect[2], annotation.rect[3]);
+      link.style.left = `${(Math.min(x1, x2) / viewport.width) * 100}%`;
+      link.style.top = `${(Math.min(y1, y2) / viewport.height) * 100}%`;
+      link.style.width = `${(Math.abs(x2 - x1) / viewport.width) * 100}%`;
+      link.style.height = `${(Math.abs(y2 - y1) / viewport.height) * 100}%`;
+      layer.append(link);
+      links.push({ link, annotation });
+    });
+
+    this.element.append(layer);
+    this.linkLayerElement = layer;
+    return links;
   }
 
   /** Cancels a pending render. */

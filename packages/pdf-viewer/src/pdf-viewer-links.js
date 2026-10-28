@@ -8,8 +8,6 @@
  * See https://vaadin.com/commercial-license-and-service-terms for the full
  * license.
  */
-import { loadPdfjs } from './pdfjs-loader.js';
-
 /** The named actions of internal links that the viewer supports. */
 const SUPPORTED_LINK_ACTIONS = ['FirstPage', 'LastPage', 'NextPage', 'PrevPage'];
 
@@ -69,6 +67,8 @@ export function createLink(annotation, followLink) {
     link.target = '_blank';
     link.rel = 'noopener noreferrer';
   } else if (annotation.dest || SUPPORTED_LINK_ACTIONS.includes(annotation.action)) {
+    // The href makes the link focusable and a link for assistive technology. Opening it in a new
+    // tab opens the application page, as the destination is only known to the viewer.
     link.href = '#';
     link.addEventListener('click', (event) => {
       event.preventDefault();
@@ -79,58 +79,6 @@ export function createLink(annotation, followLink) {
   }
   link.className = 'link';
   return link;
-}
-
-/**
- * Adds the links of a page to a layer over the page, positioned relative
- * to the page size so that they need no update when the scale changes.
- * Like the text layer, the layer has the size of the page without its
- * rotation, and is rotated with the page. Returns the links with their
- * annotations, or no links when the page was released meanwhile.
- *
- * @param {import('./pdf-viewer-page.js').PdfViewerPage} page
- * @param {(annotation: object) => HTMLAnchorElement | null} create
- * @return {Promise<Array<{ link: HTMLAnchorElement, annotation: object }>>}
- */
-export async function renderLinks(page, create) {
-  const [{ setLayerDimensions }, annotations] = await Promise.all([
-    loadPdfjs(),
-    page.pdfPage.getAnnotations({ intent: 'display' }),
-  ]);
-  // The page may have been released meanwhile, e.g. when the document was unloaded.
-  if (!page.canvas || page.linkLayerElement) {
-    return [];
-  }
-
-  const links = [];
-  const viewport = page.pdfPage.getViewport({ scale: 1, rotation: 0 });
-  const layer = document.createElement('div');
-  layer.className = 'link-layer';
-  setLayerDimensions(layer, page.pdfPage.getViewport({ scale: 1 }));
-
-  annotations.forEach((annotation) => {
-    if (annotation.subtype !== 'Link') {
-      return;
-    }
-    const link = create(annotation);
-    if (!link) {
-      return;
-    }
-    const [x1, y1] = viewport.convertToViewportPoint(annotation.rect[0], annotation.rect[1]);
-    const [x2, y2] = viewport.convertToViewportPoint(annotation.rect[2], annotation.rect[3]);
-    const left = Math.min(x1, x2);
-    const top = Math.min(y1, y2);
-    link.style.left = `${(left / viewport.width) * 100}%`;
-    link.style.top = `${(top / viewport.height) * 100}%`;
-    link.style.width = `${(Math.abs(x2 - x1) / viewport.width) * 100}%`;
-    link.style.height = `${(Math.abs(y2 - y1) / viewport.height) * 100}%`;
-    layer.append(link);
-    links.push({ link, annotation });
-  });
-
-  page.element.append(layer);
-  page.linkLayerElement = layer;
-  return links;
 }
 
 /**

@@ -9,7 +9,7 @@
  * license.
  */
 import { isKeyboardActive } from '@vaadin/a11y-base/src/focus-utils.js';
-import { createLink, getLinkLabel, getTextInside, renderLinks, resolveDestination } from './pdf-viewer-links.js';
+import { getLinkLabel, getTextInside, resolveDestination } from './pdf-viewer-links.js';
 
 /**
  * A mixin that adds the links of the rendered pages, and goes to the
@@ -35,18 +35,14 @@ export const PdfViewerLinksMixin = (superClass) =>
     /**
      * Override method from `PdfViewerRenderMixin` to add the links of the
      * page, after the text layer that their names are read from.
-     * @private
+     * @protected
      * @override
      */
-    async __renderPageLayers(page) {
-      await super.__renderPageLayers(page);
+    async _renderPageLayers(page) {
+      await super._renderPageLayers(page);
 
-      if (!page.linkLayerElement) {
-        const links = await renderLinks(page, (annotation) =>
-          createLink(annotation, (target) => this.#followLink(target)),
-        );
-        await this.#nameLinks(page, links);
-      }
+      const links = await page.renderLinkLayer((annotation) => this.#followLink(annotation));
+      await this.#nameLinks(page, links);
     }
 
     /**
@@ -110,7 +106,8 @@ export const PdfViewerLinksMixin = (superClass) =>
       const pdfDocument = this._pdfDocument;
       const target = await this.#resolveDestination(annotation);
       if (this._pdfDocument === pdfDocument && target) {
-        this._scrollToPage(target.page, target.top);
+        const offset = target.top === undefined ? undefined : this.__pages[target.page - 1].getOffsetTop(target.top);
+        this._scrollToPage(target.page, offset);
         this.$.content.focus({ preventScroll: true, focusVisible: isKeyboardActive() });
       }
     }

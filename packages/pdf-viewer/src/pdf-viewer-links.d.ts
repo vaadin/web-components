@@ -9,7 +9,6 @@
  * license.
  */
 import type { PDFDocumentProxy } from 'pdfjs-dist';
-import type { PdfViewerPage } from './pdf-viewer-page.js';
 
 /**
  * The destination of an internal link or an outline item.
@@ -45,18 +44,6 @@ export declare function createLink(
   annotation: PdfViewerDestination & { url?: string },
   followLink: (annotation: object) => void,
 ): HTMLAnchorElement | null;
-
-/**
- * Adds the links of a page to a layer over the page, positioned relative
- * to the page size so that they need no update when the scale changes.
- * Like the text layer, the layer has the size of the page without its
- * rotation, and is rotated with the page. Returns the links with their
- * annotations, or no links when the page was released meanwhile.
- */
-export declare function renderLinks(
-  page: PdfViewerPage,
-  create: (annotation: PdfViewerLinkAnnotation) => HTMLAnchorElement | null,
-): Promise<Array<{ link: HTMLAnchorElement; annotation: PdfViewerLinkAnnotation }>>;
 
 /**
  * Returns the text of a text layer that is inside the given element, e.g.

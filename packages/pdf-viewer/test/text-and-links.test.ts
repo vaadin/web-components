@@ -136,38 +136,6 @@ describe('text and links', () => {
     });
   });
 
-  describe('text content', () => {
-    let spy: sinon.SinonSpy;
-
-    beforeEach(async () => {
-      spy = sinon.spy(await getPdfPagePrototype(), 'getTextContent');
-    });
-
-    it('should load the text of a page once when the page is rendered again', async () => {
-      viewer.style.height = '300px';
-      await load('multi-page.pdf');
-      let idle = nextRenderIdle(viewer);
-      content.scrollTop = content.scrollHeight;
-      await idle;
-      expect(getTextLayer(1)).to.be.null;
-      idle = nextRenderIdle(viewer);
-      content.scrollTop = 0;
-      await idle;
-      await resizeViewer();
-      expect(getTextLayer(1)).to.be.ok;
-      const pageNumbers = spy.thisValues.map((pdfPage) => pdfPage.pageNumber);
-      expect(pageNumbers).to.include(1);
-      expect(pageNumbers).to.have.lengthOf(new Set(pageNumbers).size);
-    });
-
-    it('should load the text again for another document', async () => {
-      await load('multi-page.pdf');
-      await load('links.pdf');
-      await load('multi-page.pdf');
-      expect(spy.thisValues.filter((pdfPage) => pdfPage.pageNumber === 1)).to.have.lengthOf(3);
-    });
-  });
-
   it('should render the links of a page whose text fails to load, and load the text again later', async () => {
     const pdfPagePrototype = await getPdfPagePrototype();
     const getTextContent = pdfPagePrototype.getTextContent;

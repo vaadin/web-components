@@ -129,9 +129,9 @@ export const PdfViewerRenderMixin = (superClass) =>
      * render in the order of the mixins.
      * @param {PdfViewerPage} _page
      * @return {Promise<void>}
-     * @private
+     * @protected
      */
-    async __renderPageLayers(_page) {
+    async _renderPageLayers(_page) {
       // To be implemented.
     }
 
@@ -229,7 +229,7 @@ export const PdfViewerRenderMixin = (superClass) =>
         if (this._pdfDocument !== pdfDocument || !page.isRendered(pixelRatio)) {
           return;
         }
-        await this.__renderPageLayers(page);
+        await this._renderPageLayers(page);
       } catch (error) {
         const isCancelled = error?.name === 'RenderingCancelledException' || error?.name === 'AbortException';
         if (this._pdfDocument === pdfDocument && !isCancelled) {

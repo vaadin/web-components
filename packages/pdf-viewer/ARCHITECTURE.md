@@ -51,7 +51,8 @@ how to generate them.
 
 `PdfViewerMixin` composes one mixin for each concern. Each part of the state has one owner.
 
-- `PdfViewerDocumentMixin` loads `src`. It calls `_documentLoaded({ firstPage })` and `_documentUnloaded()`.
+- `PdfViewerDocumentMixin` loads `src`. It calls `_documentLoaded(details)` with the title, language and first
+  page, and `_documentUnloaded()`.
 - `PdfViewerRenderMixin` owns the page views, their sizes, the render queue and the device pixel ratio. It calls `_pageSizesChanged()` at most once per frame when pages get their own size.
 - `PdfViewerScrollMixin` owns the scale `_scale`, the anchor, the visible pages and `page`. It asks for
   rendering only with `_renderVisible()` and `_cancelRender()`. It gets the scale from `_getScaleForSize()`, which
@@ -60,11 +61,13 @@ how to generate them.
   - It overrides `_getScaleForSize()` to return the scale for `zoom`.
   - It calls `_refreshLayout()` when `zoom` changes.
   - Its `_zoomFactor` getter reads `_scale`, in units of the actual page size.
-- `PdfViewerTextLayerMixin` renders the text layer of each rendered page. It loads the text of a page once
-  per document and sets the document language on the pages.
+- `PdfViewerTextLayerMixin` renders the text layer of each rendered page and sets the document language on the
+  pages. A page loads its text each time it renders, as pdf.js' own viewer does.
 - `PdfViewerLinksMixin` adds the links of each rendered page and follows internal links with `_scrollToPage()`.
-- After a page canvas renders, `PdfViewerRenderMixin` awaits `__renderPageLayers(page)`. Each override awaits
+- After a page canvas renders, `PdfViewerRenderMixin` awaits `_renderPageLayers(page)`. Each override awaits
   `super` first, so the layers render in the order of the mixins: text, then links.
+- The page view owns the DOM of a page: the canvas, the text layer and the link layer. Its methods check after
+  each await that the page still has the same canvas, so a released page gets no layers.
 - `PdfViewerKeyboardMixin` handles the keyboard shortcuts.
 - `PdfViewerToolbarMixin` renders the header and the toolbar. Its controls are in the light DOM, so a theme
   styles the page field like any other `vaadin-integer-field`. The element renders them before a marker comment,

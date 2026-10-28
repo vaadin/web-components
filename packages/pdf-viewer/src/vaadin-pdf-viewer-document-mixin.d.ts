@@ -11,6 +11,18 @@
 import type { Constructor } from '@open-wc/dedupe-mixin';
 import type { PDFDocumentProxy, PDFPageProxy } from 'pdfjs-dist';
 
+/**
+ * The details of a loaded document.
+ */
+export interface PdfViewerDocumentDetails {
+  /** The title from the metadata of the document, or an empty string. */
+  title: string;
+  /** The language from the metadata of the document, or an empty string. */
+  language: string;
+  /** The first page of the document. */
+  firstPage: PDFPageProxy;
+}
+
 export declare function PdfViewerDocumentMixin<T extends Constructor<HTMLElement>>(
   base: T,
 ): Constructor<PdfViewerDocumentMixinClass> & T;
@@ -42,7 +54,7 @@ export declare class PdfViewerDocumentMixinClass {
   /**
    * Called when a document has loaded, before `document-load` is fired.
    */
-  protected _documentLoaded(details: { firstPage: PDFPageProxy; language: string }): void;
+  protected _documentLoaded(details: PdfViewerDocumentDetails): void;
 
   /**
    * Called when the document is unloaded, e.g. before another one loads.
