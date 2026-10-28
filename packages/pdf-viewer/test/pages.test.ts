@@ -535,29 +535,6 @@ describe('pages', () => {
     it('should keep the pages left to right', () => {
       expect(getComputedStyle(pages[0]).direction).to.equal('ltr');
     });
-
-    it('should keep the horizontal position of a wide page on resize', async () => {
-      // Page 6 is landscape and wider than the view
-      viewer.page = 6;
-      await nextRenderIdle(viewer);
-      content.scrollLeft = -40;
-      await nextFrame();
-      const ratioAt = () => {
-        const pageRect = pages[5].getBoundingClientRect();
-        return (getViewCenter(content) - pageRect.left) / pageRect.width;
-      };
-      const ratio = ratioAt();
-      const { clientWidth } = content;
-      const pageWidth = pages[5].getBoundingClientRect().width;
-      // A small resize, so that the page stays wider than the view before the pages are scaled
-      viewer.style.width = '450px';
-      await nextResize(viewer);
-      await nextFrame();
-      // The content grows to the left before the pages are scaled, which moves
-      // the view center on the page. The viewer keeps the point under that center.
-      const shift = (content.clientWidth - clientWidth) / 2 / pageWidth;
-      expect(ratioAt()).to.be.closeTo(ratio - shift, 0.02);
-    });
   });
 
   describe('mixed page sizes', () => {

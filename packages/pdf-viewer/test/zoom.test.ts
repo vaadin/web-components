@@ -173,6 +173,22 @@ describe('zoom', () => {
           expect(getHorizontalCenterOffset()).to.be.closeTo(0, 1);
         });
 
+        it('should keep the horizontal position of a wide page when zooming', async () => {
+          const getRatio = () => {
+            const page = pages[0].getBoundingClientRect();
+            return (getViewCenter(content) - page.left) / page.width;
+          };
+          viewer.zoom = 2;
+          await nextRenderIdle(viewer);
+          content.scrollLeft += dir === 'rtl' ? -40 : 40;
+          await nextFrame();
+          const ratio = getRatio();
+          viewer.zoom = 3;
+          await nextRenderIdle(viewer);
+          expect(ratio).to.not.be.closeTo(0.5, 0.01);
+          expect(getRatio()).to.be.closeTo(ratio, 0.01);
+        });
+
         it('should show the whole page when zooming back to page-width', async () => {
           viewer.zoom = 2;
           await nextRenderIdle(viewer);
