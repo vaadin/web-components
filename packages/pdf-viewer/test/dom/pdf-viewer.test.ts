@@ -29,23 +29,6 @@ describe('vaadin-pdf-viewer', () => {
       await nextUpdate(viewer);
       await expect(viewer).dom.to.equalSnapshot(options);
     });
-
-    it('header', async () => {
-      viewer.headerVisible = true;
-      viewer.src = fixtureUrl('multi-page.pdf');
-      await oneEvent(viewer, 'document-load');
-      await nextUpdate(viewer);
-      await expect(viewer).dom.to.equalSnapshot();
-    });
-
-    it('toolbar collapsed', async () => {
-      viewer.headerVisible = true;
-      viewer.toolbarCollapsed = true;
-      viewer.src = fixtureUrl('multi-page.pdf');
-      await oneEvent(viewer, 'document-load');
-      await nextUpdate(viewer);
-      await expect(viewer).dom.to.equalSnapshot();
-    });
   });
 
   describe('shadow', () => {

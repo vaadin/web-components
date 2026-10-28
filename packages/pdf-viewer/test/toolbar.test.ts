@@ -1,6 +1,6 @@
 import { expect } from '@vaadin/chai-plugins';
 import { sendKeys } from '@vaadin/test-runner-commands';
-import { fixtureSync, nextFrame, nextRender, oneEvent } from '@vaadin/testing-helpers';
+import { fixtureSync, nextFrame, nextRender, nextResize, oneEvent } from '@vaadin/testing-helpers';
 import sinon from 'sinon';
 import './enable-feature-flag.js';
 import '../vaadin-pdf-viewer.js';
@@ -10,7 +10,7 @@ import type { SelectItem } from '@vaadin/select/src/vaadin-select-item.js';
 import type { Tooltip } from '@vaadin/tooltip';
 import type { PdfViewerButton } from '../src/vaadin-pdf-viewer-button.js';
 import type { PdfViewer } from '../vaadin-pdf-viewer.js';
-import { createPdfUrl, fixtureUrl, loadAndRender, loadDocument, nextRenderIdle } from './helpers.js';
+import { createPdfUrl, fixtureUrl, getContentBoxSize, loadAndRender, loadDocument, nextRenderIdle } from './helpers.js';
 
 describe('toolbar', () => {
   let viewer: PdfViewer;
@@ -474,6 +474,16 @@ describe('toolbar', () => {
         expect(viewer.toolbarCollapsed).to.be.false;
         expect(toolbar.checkVisibility()).to.be.true;
         expect(header.getAttribute('aria-expanded')).to.equal('true');
+      });
+
+      it('should fit the whole page again when the toolbar collapses', async () => {
+        viewer.zoom = 'page-fit';
+        await nextRenderIdle(viewer);
+        viewer.toolbarCollapsed = true;
+        await nextResize(content);
+        await nextRenderIdle(viewer);
+        const page = viewer.shadowRoot!.querySelector<HTMLElement>('[part~="page"]')!;
+        expect(page.offsetHeight).to.be.closeTo(getContentBoxSize(content).height, 1);
       });
 
       it('should keep focus on the header when it is activated with the keyboard', async () => {
