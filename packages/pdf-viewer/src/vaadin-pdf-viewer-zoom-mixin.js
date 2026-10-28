@@ -10,7 +10,7 @@
  */
 import { issueWarning } from '@vaadin/component-base/src/warnings.js';
 import { getFitScale } from './pdf-viewer-layout.js';
-import { getZoomInLevel, getZoomOutLevel, isValidZoom, PDF_TO_CSS_UNITS } from './pdf-viewer-zoom.js';
+import { getZoomInLevel, getZoomOutLevel, isValidZoom, PDF_TO_CSS_UNITS } from './pdf-viewer-zoom-utils.js';
 
 /**
  * A mixin that scales the pages to the `zoom` level.

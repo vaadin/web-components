@@ -14,7 +14,7 @@ import '@vaadin/tooltip/src/vaadin-tooltip.js';
 import './vaadin-pdf-viewer-button.js';
 import { html } from 'lit';
 import { styleMap } from 'lit/directives/style-map.js';
-import { formatZoom, getZoomInLevel, getZoomOutLevel, ZOOM_LEVELS } from './pdf-viewer-zoom.js';
+import { formatZoom, getZoomInLevel, getZoomOutLevel, ZOOM_LEVELS } from './pdf-viewer-zoom-utils.js';
 
 /**
  * A mixin that adds the toolbar with the page navigation and the zoom. The

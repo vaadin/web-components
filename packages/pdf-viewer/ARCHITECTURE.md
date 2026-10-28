@@ -70,7 +70,7 @@ how to generate them.
 - `PdfViewerRenderQueue` decides the render order, the memory budget and the release. It has no host
   reference, and its limits are options.
 - `pdf-viewer-layout.js` has the layout math without DOM access: visible pages, anchor and fit scale.
-- `pdf-viewer-zoom.js` has the zoom levels, their format and the check of a `zoom` value.
+- `pdf-viewer-zoom-utils.js` has the zoom levels, their format and the check of a `zoom` value.
 - To check whether a result belongs to the current document, a mixin compares `_pdfDocument` with the
   document from the start of the call.
 
