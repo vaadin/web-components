@@ -45,9 +45,13 @@ export declare class PdfViewerScrollMixinClass {
 
   /**
    * Returns the scale of the pages in CSS pixels per PDF unit for the given
-   * available size: the scale that fits the width of the first page.
+   * available size: the scale that fits the width of the current page.
    */
-  protected _getScaleForSize(width: number, height: number): number;
+  protected _getScaleForSize(
+    width: number,
+    height: number,
+    page: { unscaledWidth: number; unscaledHeight: number },
+  ): number;
 
   /**
    * Lays out the pages again, e.g. after a change of the size or of the

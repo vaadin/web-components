@@ -1,10 +1,10 @@
 import { expect } from '@vaadin/chai-plugins';
-import { fixtureSync, nextFrame, nextRender } from '@vaadin/testing-helpers';
+import { fixtureSync, nextFrame, nextRender, nextResize } from '@vaadin/testing-helpers';
 import sinon from 'sinon';
 import './enable-feature-flag.js';
 import '../vaadin-pdf-viewer.js';
 import type { PdfViewer } from '../vaadin-pdf-viewer.js';
-import { fixtureUrl, getContentBoxSize, getViewCenter, loadAndRender, nextRenderIdle } from './helpers.js';
+import { createPdf, fixtureUrl, getContentBoxSize, getViewCenter, loadAndRender, nextRenderIdle } from './helpers.js';
 
 /** The width of an A4 page at 100% in CSS pixels */
 const A4_WIDTH = (595.92 * 96) / 72;
@@ -24,6 +24,62 @@ describe('zoom', () => {
     await loadAndRender(viewer, fixtureUrl('multi-page.pdf'));
     const page = viewer.shadowRoot!.querySelector<HTMLElement>('[part~="page"]')!;
     expect(page.offsetWidth).to.be.closeTo(A4_WIDTH / 2, 1);
+  });
+
+  describe('mixed page sizes', () => {
+    const portraitAndLandscape = () =>
+      createPdf([
+        { content: '', mediaBox: [0, 0, 612, 792] },
+        { content: '', mediaBox: [0, 0, 792, 612] },
+      ]);
+
+    function getPage(index: number) {
+      return viewer.shadowRoot!.querySelectorAll<HTMLElement>('[part~="page"]')[index];
+    }
+
+    it('should fit the whole current page with page-fit', async () => {
+      await loadAndRender(viewer, portraitAndLandscape());
+      viewer.page = 2;
+      await nextRenderIdle(viewer);
+      viewer.zoom = 'page-fit';
+      await nextRenderIdle(viewer);
+      const { width, height } = getContentBoxSize(content);
+      const landscape = getPage(1);
+      expect(landscape.offsetWidth).to.be.at.most(width + 1);
+      expect(landscape.offsetHeight).to.be.at.most(height + 1);
+      expect(Math.max(landscape.offsetWidth / width, landscape.offsetHeight / height)).to.be.closeTo(1, 0.01);
+    });
+
+    it('should fit the width of the current page with page-width', async () => {
+      await loadAndRender(viewer, portraitAndLandscape());
+      viewer.page = 2;
+      await nextRenderIdle(viewer);
+      viewer.style.width = '500px';
+      await nextResize(viewer);
+      expect(getPage(1).offsetWidth).to.be.closeTo(getContentBoxSize(content).width, 1);
+    });
+
+    it('should fit a page set before the document loads once it gets its own size', async () => {
+      viewer.zoom = 'page-fit';
+      viewer.page = 2;
+      await loadAndRender(viewer, portraitAndLandscape());
+      const { width, height } = getContentBoxSize(content);
+      const landscape = getPage(1);
+      expect(viewer.page).to.equal(2);
+      expect(landscape.offsetWidth).to.be.at.most(width + 1);
+      expect(Math.max(landscape.offsetWidth / width, landscape.offsetHeight / height)).to.be.closeTo(1, 0.01);
+    });
+
+    it('should keep the scale when scrolling to a page of another size', async () => {
+      await loadAndRender(viewer, portraitAndLandscape());
+      viewer.zoom = 'page-fit';
+      await nextRenderIdle(viewer);
+      const widthBefore = getPage(0).offsetWidth;
+      viewer.page = 2;
+      await nextRenderIdle(viewer);
+      expect(viewer.page).to.equal(2);
+      expect(getPage(0).offsetWidth).to.equal(widthBefore);
+    });
   });
 
   describe('with document', () => {

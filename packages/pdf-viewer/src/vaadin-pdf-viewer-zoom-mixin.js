@@ -21,8 +21,12 @@ export const PdfViewerZoomMixin = (superClass) =>
       return {
         /**
          * The zoom level of the pages:
-         * - `page-width` (default) fits the width of the first page to the viewer.
-         * - `page-fit` fits the whole first page into the viewer.
+         * - `page-width` (default) fits the width of the current page to the viewer.
+         * - `page-fit` fits the whole current page into the viewer.
+         *
+         * The fit follows the current page when the zoom is set, when the viewer
+         * resizes and when the page gets its own size. Scrolling to a page of
+         * another size keeps the scale.
          * - A number scales the pages relative to their actual size, e.g. `1` for 100%.
          *
          * An invalid value logs a warning and is replaced with `page-width`.
@@ -97,18 +101,19 @@ export const PdfViewerZoomMixin = (superClass) =>
      * Override method from `PdfViewerScrollMixin` to return the scale for `zoom`.
      * @param {number} width
      * @param {number} height
+     * @param {import('./pdf-viewer-page.js').PdfViewerPage} page the current page
      * @return {number}
      * @protected
      * @override
      */
-    _getScaleForSize(width, height) {
+    _getScaleForSize(width, height, page) {
       const { zoom } = this;
       if (zoom === 'page-width') {
-        return super._getScaleForSize(width, height);
+        return super._getScaleForSize(width, height, page);
       }
 
       if (zoom === 'page-fit') {
-        return Math.min(super._getScaleForSize(width, height), getFitScale(height, this.__pages[0].unscaledHeight));
+        return Math.min(super._getScaleForSize(width, height, page), getFitScale(height, page.unscaledHeight));
       }
 
       return Number(zoom) * PDF_TO_CSS_UNITS;

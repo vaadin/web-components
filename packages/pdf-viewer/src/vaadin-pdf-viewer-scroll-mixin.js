@@ -197,22 +197,35 @@ export const PdfViewerScrollMixin = (superClass) =>
       super._pageSizesChanged();
 
       if (this._scale > 0) {
-        this.#applyScale(this._scale);
+        // The current page may have got its own size, which the fit follows.
+        this.#applyScale(this.#computeScale() || this._scale);
       }
     }
 
     /**
      * Returns the scale of the pages in CSS pixels per PDF unit for the given
-     * available size: the scale that fits the width of the first page.
+     * available size: the scale that fits the width of the current page.
      * @param {number} width
      * @param {number} _height
+     * @param {PdfViewerPage} page the current page
      * @return {number}
      * @protected
      */
-    _getScaleForSize(width, _height) {
-      // Fit the first page, so that the scale does not depend on which page is
-      // current. In most documents all pages have the size of the first one.
-      return getFitScale(width, this.__pages[0].unscaledWidth);
+    _getScaleForSize(width, _height, page) {
+      return getFitScale(width, page.unscaledWidth);
+    }
+
+    /**
+     * Returns the scale for the current page and the available size, or 0
+     * when the pages cannot be laid out.
+     * @private
+     */
+    #computeScale() {
+      if (!this.__pages.length || !this.#hasLayout()) {
+        return 0;
+      }
+      const { width, height } = this.#getAvailableSize();
+      return this._getScaleForSize(width, height, this.__pages[this.#currentIndex]);
     }
 
     /**
@@ -222,11 +235,7 @@ export const PdfViewerScrollMixin = (superClass) =>
      * @protected
      */
     _refreshLayout() {
-      let scale = 0;
-      if (this.__pages.length && this.#hasLayout()) {
-        const { width, height } = this.#getAvailableSize();
-        scale = this._getScaleForSize(width, height);
-      }
+      const scale = this.#computeScale();
       if (scale > 0 && scale !== this._scale) {
         this.#applyScale(scale);
         return;
