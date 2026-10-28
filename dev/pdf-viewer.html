@@ -13,13 +13,27 @@
     <script type="module">
       import '@vaadin/button';
       import '@vaadin/pdf-viewer';
+      import '@vaadin/radio-group';
+      import '@vaadin/select';
       import '@vaadin/tooltip';
 
       const viewer = document.querySelector('vaadin-pdf-viewer');
       const select = document.querySelector('#src');
       const fileInput = document.querySelector('#file');
-      const pageInput = document.querySelector('#page');
       const log = document.querySelector('#log');
+
+      select.items = [
+        { label: '01_fonts.pdf', value: '/dev/assets/pdf/01_fonts.pdf' },
+        { label: '02_images_and_vector_graphics.pdf', value: '/dev/assets/pdf/02_images_and_vector_graphics.pdf' },
+        { label: '03_form_with_signatures.pdf', value: '/dev/assets/pdf/03_form_with_signatures.pdf' },
+        { label: '04_optional_content_help_layer.pdf', value: '/dev/assets/pdf/04_optional_content_help_layer.pdf' },
+        { label: '05_tagged_accessible_pdf_ua.pdf', value: '/dev/assets/pdf/05_tagged_accessible_pdf_ua.pdf' },
+        { label: '06_mixed_page_sizes.pdf', value: '/dev/assets/pdf/06_mixed_page_sizes.pdf' },
+        { label: 'Password-protected file', value: '/packages/pdf-viewer/test/fixtures/encrypted.pdf' },
+        { label: 'Invalid file', value: '/packages/pdf-viewer/test/fixtures/invalid.pdf' },
+        { label: 'Missing file', value: '/does-not-exist.pdf' },
+      ];
+      select.value = select.items[0].value;
 
       let fileUrl = null;
       const revokeFileUrl = () => {
@@ -43,17 +57,12 @@
         }
         revokeFileUrl();
         fileUrl = URL.createObjectURL(file);
+        select.value = '';
         viewer.src = fileUrl;
       });
-      pageInput.addEventListener('change', () => {
-        viewer.page = pageInput.valueAsNumber;
-      });
 
-      viewer.addEventListener('page-changed', (e) => {
-        pageInput.value = e.detail.value;
-      });
-      viewer.addEventListener('page-count-changed', (e) => {
-        pageInput.max = e.detail.value;
+      document.querySelector('#direction').addEventListener('value-changed', (e) => {
+        viewer.setAttribute('dir', e.detail.value);
       });
 
       document.querySelector('#approve').addEventListener('click', () => {
@@ -70,6 +79,30 @@
       update();
     </script>
     <style>
+      .controls {
+        display: grid;
+        grid-template-columns: repeat(auto-fill, minmax(200px, 1fr));
+        gap: 2rem;
+        margin-bottom: 2rem;
+        font-size: 0.875rem;
+      }
+
+      .control-group {
+        display: flex;
+        flex-direction: column;
+        align-items: start;
+        gap: 0.5em;
+      }
+
+      .control-group.document,
+      .control-group.log {
+        grid-column: span 2;
+      }
+
+      #src {
+        width: 100%;
+      }
+
       vaadin-pdf-viewer {
         height: 600px;
       }
@@ -77,31 +110,25 @@
   </head>
 
   <body>
-    <p>
-      <label>
-        Document
-        <select id="src">
-          <option value="/dev/assets/pdf/01_fonts.pdf">01_fonts.pdf</option>
-          <option value="/dev/assets/pdf/02_images_and_vector_graphics.pdf">02_images_and_vector_graphics.pdf</option>
-          <option value="/dev/assets/pdf/03_form_with_signatures.pdf">03_form_with_signatures.pdf</option>
-          <option value="/dev/assets/pdf/04_optional_content_help_layer.pdf">04_optional_content_help_layer.pdf</option>
-          <option value="/dev/assets/pdf/05_tagged_accessible_pdf_ua.pdf">05_tagged_accessible_pdf_ua.pdf</option>
-          <option value="/dev/assets/pdf/06_mixed_page_sizes.pdf">06_mixed_page_sizes.pdf</option>
-          <option value="/packages/pdf-viewer/test/fixtures/encrypted.pdf">Password-protected file</option>
-          <option value="/packages/pdf-viewer/test/fixtures/invalid.pdf">Invalid file</option>
-          <option value="/does-not-exist.pdf">Missing file</option>
-        </select>
-      </label>
-      <label>
-        Local file
-        <input type="file" id="file" accept="application/pdf,.pdf" />
-      </label>
-      <label>
-        Page
-        <input type="number" id="page" min="1" value="1" />
-      </label>
-      <output id="log"></output>
-    </p>
+    <div class="controls">
+      <div class="control-group document">
+        <vaadin-select id="src" label="Document" placeholder="Local file"></vaadin-select>
+        <label>
+          Local file
+          <input type="file" id="file" accept="application/pdf,.pdf" />
+        </label>
+      </div>
+      <div class="control-group">
+        <vaadin-radio-group id="direction" label="Direction">
+          <vaadin-radio-button label="LTR" value="ltr" checked></vaadin-radio-button>
+          <vaadin-radio-button label="RTL" value="rtl"></vaadin-radio-button>
+        </vaadin-radio-group>
+      </div>
+      <div class="control-group log">
+        <span>Last event</span>
+        <output id="log"></output>
+      </div>
+    </div>
     <vaadin-pdf-viewer>
       <vaadin-button slot="toolbar-actions" id="approve" theme="tertiary">
         Approve
