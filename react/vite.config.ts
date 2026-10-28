@@ -67,7 +67,11 @@ export default defineConfig(({ mode }) => ({
     hookTimeout: 2000,
     browser: {
       enabled: true,
-      provider: playwright(),
+      provider: playwright({
+        launchOptions: {
+          channel: 'chrome',
+        },
+      }),
       instances: [{ browser: 'chromium' }],
     },
   },

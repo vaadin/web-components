@@ -2,6 +2,7 @@ import { expect } from '@vaadin/chai-plugins';
 import { aTimeout, fixtureSync, nextRender, tap } from '@vaadin/testing-helpers';
 import sinon from 'sinon';
 import '../src/vaadin-date-time-picker.js';
+import { getDateButton } from '@vaadin/date-picker/test/helpers.js';
 
 describe('dateMetadataProvider', () => {
   let dateTimePicker, datePicker, timePicker;
@@ -65,7 +66,7 @@ describe('dateMetadataProvider', () => {
     });
 
     it('should not commit a provider-disabled date on tap', async () => {
-      tap(getDateCell(15));
+      tap(getDateButton(getDateCell(15)));
       await nextRender();
 
       expect(dateTimePicker.value).to.equal('');
@@ -73,7 +74,7 @@ describe('dateMetadataProvider', () => {
     });
 
     it('should commit a date the provider allows on tap', async () => {
-      tap(getDateCell(16));
+      tap(getDateButton(getDateCell(16)));
       await nextRender();
 
       expect(dateTimePicker.value).to.equal('2024-01-16T10:00');
