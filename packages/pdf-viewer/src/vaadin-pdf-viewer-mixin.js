@@ -12,11 +12,12 @@ import { PdfViewerDocumentMixin } from './vaadin-pdf-viewer-document-mixin.js';
 import { PdfViewerKeyboardMixin } from './vaadin-pdf-viewer-keyboard-mixin.js';
 import { PdfViewerRenderMixin } from './vaadin-pdf-viewer-render-mixin.js';
 import { PdfViewerScrollMixin } from './vaadin-pdf-viewer-scroll-mixin.js';
+import { PdfViewerToolbarMixin } from './vaadin-pdf-viewer-toolbar-mixin.js';
 
 /**
  * A mixin providing common PDF viewer functionality.
  */
 export const PdfViewerMixin = (superClass) =>
-  class PdfViewerMixinClass extends PdfViewerKeyboardMixin(
-    PdfViewerScrollMixin(PdfViewerRenderMixin(PdfViewerDocumentMixin(superClass))),
+  class PdfViewerMixinClass extends PdfViewerToolbarMixin(
+    PdfViewerKeyboardMixin(PdfViewerScrollMixin(PdfViewerRenderMixin(PdfViewerDocumentMixin(superClass)))),
   ) {};

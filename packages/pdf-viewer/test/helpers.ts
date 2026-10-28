@@ -35,6 +35,18 @@ export async function nextRenderIdle(viewer: PdfViewer): Promise<void> {
 }
 
 /**
+ * Sets the `src` of the viewer and waits until the document has loaded and
+ * the viewer has rendered the pages it shows.
+ */
+export async function loadAndRender(viewer: PdfViewer, src: string): Promise<void> {
+  const idle = nextRenderIdle(viewer);
+  const loaded = oneEvent(viewer, 'document-load');
+  viewer.src = src;
+  await loaded;
+  await idle;
+}
+
+/**
  * Waits until a scroll, which can be animated, has settled.
  */
 export async function scrollSettled(element: HTMLElement): Promise<void> {
