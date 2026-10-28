@@ -45,6 +45,14 @@ describe('zoom', () => {
       expect(pages[0].offsetHeight).to.be.closeTo(getContentBoxSize(content).height, 1);
     });
 
+    it('should fit the whole page with page-fit after a zoom with a horizontal scrollbar', async () => {
+      viewer.zoom = 2;
+      await nextRenderIdle(viewer);
+      viewer.zoom = 'page-fit';
+      await nextRenderIdle(viewer);
+      expect(pages[0].offsetHeight).to.be.closeTo(getContentBoxSize(content).height, 1);
+    });
+
     it('should show pages at their actual size with zoom 1', async () => {
       viewer.zoom = 1;
       await nextRenderIdle(viewer);
@@ -147,15 +155,14 @@ describe('zoom', () => {
           ['a symbol', Symbol('zoom')],
         ] as Array<[string, unknown]>
       ).forEach(([description, value]) => {
-        it(`should show the pages at page-width for ${description}`, async () => {
+        it(`should reset the zoom to page-width for ${description}`, async () => {
           viewer.zoom = value as any;
           await nextRenderIdle(viewer);
           const page = pages[0];
           expect(page.offsetWidth).to.be.closeTo(getContentBoxSize(content).width, 1);
           expect(page.querySelector('canvas')!.width).to.be.greaterThan(0);
           expect(warnStub).to.be.calledOnce;
-          // The property keeps the value as set
-          expect(Object.is(viewer.zoom, value)).to.be.true;
+          expect(viewer.zoom).to.equal('page-width');
         });
       });
     });

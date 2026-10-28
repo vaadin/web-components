@@ -15,7 +15,7 @@ import './vaadin-pdf-viewer-button.js';
 import { html } from 'lit';
 import { live } from 'lit/directives/live.js';
 import { styleMap } from 'lit/directives/style-map.js';
-import { formatZoom, getZoomInLevel, getZoomOutLevel, isValidZoom, ZOOM_LEVELS } from './pdf-viewer-zoom.js';
+import { formatZoom, getZoomInLevel, getZoomOutLevel, ZOOM_LEVELS } from './pdf-viewer-zoom.js';
 
 /**
  * A mixin that adds the toolbar with the page navigation and the zoom. The
@@ -109,7 +109,7 @@ export const PdfViewerToolbarMixin = (superClass) =>
           slot="toolbar-zoom"
           theme="align-center"
           .items="${this.#zoomItems}"
-          .value="${live(this.#getZoomValue())}"
+          .value="${live(String(this.zoom))}"
           .disabled="${!hasDocument}"
           @change="${this.#onZoomSelectChange}"
         ></vaadin-select>
@@ -177,17 +177,6 @@ export const PdfViewerToolbarMixin = (superClass) =>
     }
 
     /**
-     * Returns the value of the zoom select. An invalid zoom gives `page-width`,
-     * as the pages are then shown at page width.
-     * @return {string}
-     * @private
-     */
-    #getZoomValue() {
-      const { zoom } = this;
-      return isValidZoom(zoom) ? String(zoom) : 'page-width';
-    }
-
-    /**
      * Returns the items of the zoom select: the fit zooms, the zoom levels,
      * and a zoom set by the application that is not one of the levels.
      * @private
@@ -198,7 +187,7 @@ export const PdfViewerToolbarMixin = (superClass) =>
         { label: i18n.pageFit, value: 'page-fit' },
         ...ZOOM_LEVELS.map((level) => ({ label: formatZoom(level), value: String(level) })),
       ];
-      const value = this.#getZoomValue();
+      const value = String(this.zoom);
       if (!items.some((item) => item.value === value)) {
         items.push({ label: formatZoom(Number(value)), value });
       }

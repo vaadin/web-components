@@ -271,15 +271,6 @@ describe('toolbar', () => {
       expect(zoomSelect.value).to.equal('page-width');
     });
 
-    it('should show page width in the zoom select for an invalid zoom', async () => {
-      sinon.stub(console, 'warn');
-      viewer.zoom = 2;
-      await nextRenderIdle(viewer);
-      viewer.zoom = 0;
-      await nextRenderIdle(viewer);
-      expect(zoomSelect.value).to.equal('page-width');
-    });
-
     it('should show a zoom that is not one of the levels', async () => {
       viewer.zoom = 1.1;
       await nextRenderIdle(viewer);

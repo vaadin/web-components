@@ -25,7 +25,7 @@ export const PdfViewerZoomMixin = (superClass) =>
          * - `page-fit` fits the whole first page into the viewer.
          * - A number scales the pages relative to their actual size, e.g. `1` for 100%.
          *
-         * An invalid value logs a warning and shows the pages at `page-width`.
+         * An invalid value logs a warning and is replaced with `page-width`.
          *
          * @type {string | number}
          */
@@ -52,10 +52,23 @@ export const PdfViewerZoomMixin = (superClass) =>
     }
 
     /** @protected */
+    willUpdate(props) {
+      super.willUpdate(props);
+
+      const { zoom } = this;
+      if (props.has('zoom') && !isValidZoom(zoom)) {
+        // Only show strings and numbers, as converting other values to a string can throw.
+        const value = typeof zoom === 'string' || typeof zoom === 'number' ? zoom : typeof zoom;
+        issueWarning(`Invalid zoom value "${value}" for <vaadin-pdf-viewer>, using "page-width" instead.`);
+        this.zoom = 'page-width';
+      }
+    }
+
+    /** @protected */
     updated(props) {
       super.updated(props);
 
-      if (props.has('zoom') && this.__pages.length) {
+      if (props.has('zoom')) {
         this._refreshLayout();
       }
     }
@@ -89,14 +102,7 @@ export const PdfViewerZoomMixin = (superClass) =>
      * @override
      */
     _getScaleForSize(width, height) {
-      let zoom = this.zoom;
-      if (!isValidZoom(zoom)) {
-        // Only show strings and numbers, as converting other values to a string can throw.
-        const value = typeof zoom === 'string' || typeof zoom === 'number' ? zoom : typeof zoom;
-        issueWarning(`Invalid zoom value "${value}" for <vaadin-pdf-viewer>, using "page-width" instead.`);
-        zoom = 'page-width';
-      }
-
+      const { zoom } = this;
       if (zoom === 'page-width') {
         return super._getScaleForSize(width, height);
       }
