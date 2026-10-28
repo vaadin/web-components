@@ -10,7 +10,7 @@ snapshots["vaadin-pdf-viewer host default"] =
     has-tooltip=""
     icon="previous-page"
     role="button"
-    slot="toolbar-page"
+    slot="toolbar-navigation"
     style="--_vaadin-button-disabled-pointer-events: auto;"
     tabindex="0"
     theme="tertiary icon"
@@ -35,7 +35,7 @@ snapshots["vaadin-pdf-viewer host default"] =
     has-tooltip=""
     icon="next-page"
     role="button"
-    slot="toolbar-page"
+    slot="toolbar-navigation"
     style="--_vaadin-button-disabled-pointer-events: auto;"
     tabindex="0"
     theme="tertiary icon"
@@ -58,7 +58,7 @@ snapshots["vaadin-pdf-viewer host default"] =
     disabled=""
     max="1"
     min="1"
-    slot="page-field"
+    slot="toolbar-navigation"
     style="--_page-digits:1;"
     theme="align-right"
   >
@@ -99,7 +99,7 @@ snapshots["vaadin-pdf-viewer host loading"] =
     has-tooltip=""
     icon="previous-page"
     role="button"
-    slot="toolbar-page"
+    slot="toolbar-navigation"
     style="--_vaadin-button-disabled-pointer-events: auto;"
     tabindex="0"
     theme="tertiary icon"
@@ -124,7 +124,7 @@ snapshots["vaadin-pdf-viewer host loading"] =
     has-tooltip=""
     icon="next-page"
     role="button"
-    slot="toolbar-page"
+    slot="toolbar-navigation"
     style="--_vaadin-button-disabled-pointer-events: auto;"
     tabindex="0"
     theme="tertiary icon"
@@ -147,7 +147,7 @@ snapshots["vaadin-pdf-viewer host loading"] =
     disabled=""
     max="1"
     min="1"
-    slot="page-field"
+    slot="toolbar-navigation"
     style="--_page-digits:1;"
     theme="align-right"
   >
@@ -188,7 +188,7 @@ snapshots["vaadin-pdf-viewer host error"] =
     has-tooltip=""
     icon="previous-page"
     role="button"
-    slot="toolbar-page"
+    slot="toolbar-navigation"
     style="--_vaadin-button-disabled-pointer-events: auto;"
     tabindex="0"
     theme="tertiary icon"
@@ -213,7 +213,7 @@ snapshots["vaadin-pdf-viewer host error"] =
     has-tooltip=""
     icon="next-page"
     role="button"
-    slot="toolbar-page"
+    slot="toolbar-navigation"
     style="--_vaadin-button-disabled-pointer-events: auto;"
     tabindex="0"
     theme="tertiary icon"
@@ -236,7 +236,7 @@ snapshots["vaadin-pdf-viewer host error"] =
     disabled=""
     max="1"
     min="1"
-    slot="page-field"
+    slot="toolbar-navigation"
     style="--_page-digits:1;"
     theme="align-right"
   >
@@ -277,7 +277,7 @@ snapshots["vaadin-pdf-viewer host document"] =
     has-tooltip=""
     icon="previous-page"
     role="button"
-    slot="toolbar-page"
+    slot="toolbar-navigation"
     style="--_vaadin-button-disabled-pointer-events: auto;"
     tabindex="0"
     theme="tertiary icon"
@@ -300,7 +300,7 @@ snapshots["vaadin-pdf-viewer host document"] =
     has-tooltip=""
     icon="next-page"
     role="button"
-    slot="toolbar-page"
+    slot="toolbar-navigation"
     style="--_vaadin-button-disabled-pointer-events: auto;"
     tabindex="0"
     theme="tertiary icon"
@@ -322,7 +322,7 @@ snapshots["vaadin-pdf-viewer host document"] =
     has-value=""
     max="6"
     min="1"
-    slot="page-field"
+    slot="toolbar-navigation"
     style="--_page-digits:1;"
     theme="align-right"
   >
@@ -362,9 +362,7 @@ snapshots["vaadin-pdf-viewer shadow default"] =
       class="navigation"
       part="toolbar-group"
     >
-      <slot name="toolbar-page">
-      </slot>
-      <slot name="page-field">
+      <slot name="toolbar-navigation">
       </slot>
     </div>
     <div
@@ -398,9 +396,7 @@ snapshots["vaadin-pdf-viewer shadow document"] =
       class="navigation"
       part="toolbar-group"
     >
-      <slot name="toolbar-page">
-      </slot>
-      <slot name="page-field">
+      <slot name="toolbar-navigation">
       </slot>
     </div>
     <div

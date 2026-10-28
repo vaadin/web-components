@@ -29,10 +29,7 @@ export const PdfViewerToolbarMixin = (superClass) =>
     _renderToolbar() {
       return html`
         <div part="toolbar">
-          <div part="toolbar-group" class="navigation">
-            <slot name="toolbar-page"></slot>
-            <slot name="page-field"></slot>
-          </div>
+          <div part="toolbar-group" class="navigation"><slot name="toolbar-navigation"></slot></div>
           <div part="toolbar-group" class="actions"><slot name="toolbar-actions"></slot></div>
         </div>
       `;
@@ -50,7 +47,7 @@ export const PdfViewerToolbarMixin = (superClass) =>
 
       return html`
         <vaadin-pdf-viewer-button
-          slot="toolbar-page"
+          slot="toolbar-navigation"
           icon="previous-page"
           theme="tertiary icon"
           .disabled="${!hasDocument || page <= 1}"
@@ -59,7 +56,7 @@ export const PdfViewerToolbarMixin = (superClass) =>
           <vaadin-tooltip slot="tooltip" .text="${i18n.previousPage}"></vaadin-tooltip>
         </vaadin-pdf-viewer-button>
         <vaadin-pdf-viewer-button
-          slot="toolbar-page"
+          slot="toolbar-navigation"
           icon="next-page"
           theme="tertiary icon"
           .disabled="${!hasDocument || page >= pageCount}"
@@ -68,7 +65,7 @@ export const PdfViewerToolbarMixin = (superClass) =>
           <vaadin-tooltip slot="tooltip" .text="${i18n.nextPage}"></vaadin-tooltip>
         </vaadin-pdf-viewer-button>
         <vaadin-integer-field
-          slot="page-field"
+          slot="toolbar-navigation"
           theme="align-right"
           style="${styleMap({ '--_page-digits': String(pageCount).length })}"
           min="1"
