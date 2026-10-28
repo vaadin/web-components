@@ -72,17 +72,17 @@ describe('download', () => {
     it('should toggle the button on downloadButtonHidden change', async () => {
       viewer.downloadButtonHidden = true;
       await nextUpdate(viewer);
-      expect(getButton()).to.be.null;
+      expect(getButton()!.checkVisibility()).to.be.false;
       viewer.downloadButtonHidden = false;
       await nextUpdate(viewer);
-      expect(getButton()).to.be.ok;
+      expect(getButton()!.checkVisibility()).to.be.true;
     });
 
     it('should hide the button with the attribute', async () => {
       viewer.setAttribute('download-button-hidden', '');
       await nextUpdate(viewer);
       expect(viewer.downloadButtonHidden).to.be.true;
-      expect(getButton()).to.be.null;
+      expect(getButton()!.checkVisibility()).to.be.false;
     });
   });
 

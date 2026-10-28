@@ -8,7 +8,7 @@
  * See https://vaadin.com/commercial-license-and-service-terms for the full
  * license.
  */
-import { html, nothing } from 'lit';
+import { html } from 'lit';
 import { issueWarning } from '@vaadin/component-base/src/warnings.js';
 import { downloadDocument } from './pdf-viewer-download.js';
 
@@ -90,19 +90,14 @@ export const PdfViewerDownloadMixin = (superClass) =>
       return html`${super._renderToolbarControls()}${this.#renderDownloadButton()}`;
     }
 
-    /**
-     * Renders the download button, unless it is hidden.
-     * @private
-     */
+    /** @private */
     #renderDownloadButton() {
-      if (this.downloadButtonHidden) {
-        return nothing;
-      }
       return html`
         <vaadin-pdf-viewer-button
           slot="toolbar-default-actions"
           icon="download"
           theme="tertiary icon"
+          ?hidden="${this.downloadButtonHidden}"
           .disabled="${!this.pageCount}"
           @click="${this.#onDownloadClick}"
         >
