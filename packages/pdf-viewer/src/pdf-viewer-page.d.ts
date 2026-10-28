@@ -8,7 +8,6 @@
  * See https://vaadin.com/commercial-license-and-service-terms for the full
  * license.
  */
-import type * as pdfjs from 'pdfjs-dist';
 import type { PDFPageProxy, RenderTask, TextLayer } from 'pdfjs-dist';
 
 /**
@@ -58,10 +57,7 @@ export declare class PdfViewerPage {
 
   render(pixelRatio: number): Promise<void>;
 
-  renderTextLayer(
-    pdfjsModule: typeof pdfjs,
-    textContent: Promise<Awaited<ReturnType<PDFPageProxy['getTextContent']>>>,
-  ): Promise<void>;
+  renderTextLayer(textContent: Promise<Awaited<ReturnType<PDFPageProxy['getTextContent']>>>): Promise<void>;
 
   cancel(): void;
 

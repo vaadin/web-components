@@ -8,8 +8,6 @@
  * See https://vaadin.com/commercial-license-and-service-terms for the full
  * license.
  */
-import { loadPdfjs } from './pdfjs-loader.js';
-
 /**
  * A mixin that renders the text layer of the rendered pages, which makes the
  * text selectable and readable by assistive technology.
@@ -57,11 +55,9 @@ export const PdfViewerTextLayerMixin = (superClass) =>
     async __renderPageLayers(page) {
       await super.__renderPageLayers(page);
 
-      const pdfDocument = this._pdfDocument;
-      const pdfjs = await loadPdfjs();
-      // The document may have been unloaded meanwhile.
-      if (this._pdfDocument === pdfDocument) {
-        await page.renderTextLayer(pdfjs, this.#getTextContent(page.pageNumber));
+      // The page may have been released meanwhile, e.g. when the document was unloaded.
+      if (page.canvas) {
+        await page.renderTextLayer(this.#getTextContent(page.pageNumber));
       }
     }
 

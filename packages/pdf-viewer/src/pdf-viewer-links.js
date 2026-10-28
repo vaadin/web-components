@@ -8,6 +8,8 @@
  * See https://vaadin.com/commercial-license-and-service-terms for the full
  * license.
  */
+import { loadPdfjs } from './pdfjs-loader.js';
+
 /** The named actions of internal links that the viewer supports. */
 const SUPPORTED_LINK_ACTIONS = ['FirstPage', 'LastPage', 'NextPage', 'PrevPage'];
 
@@ -78,22 +80,32 @@ export function createLink(annotation, followLink) {
  * to the page size so that they need no update when the scale changes.
  * Like the text layer, the layer has the size of the page without its
  * rotation, and is rotated with the page. Returns the links with their
- * annotations.
+ * annotations, or no links when the page was released meanwhile.
  *
- * @param {typeof import('pdfjs-dist')} pdfjs
  * @param {import('./pdf-viewer-page.js').PdfViewerPage} page
- * @param {Array<{ rect: number[] }>} annotations the link annotations of the page
  * @param {(annotation: object) => HTMLAnchorElement | null} create
- * @return {Array<{ link: HTMLAnchorElement, annotation: object }>}
+ * @return {Promise<Array<{ link: HTMLAnchorElement, annotation: object }>>}
  */
-export function renderLinks(pdfjs, page, annotations, create) {
+export async function renderLinks(page, create) {
+  const [{ setLayerDimensions }, annotations] = await Promise.all([
+    loadPdfjs(),
+    page.pdfPage.getAnnotations({ intent: 'display' }),
+  ]);
+  // The page may have been released meanwhile, e.g. when the document was unloaded.
+  if (!page.canvas || page.linkLayerElement) {
+    return [];
+  }
+
   const links = [];
   const viewport = page.pdfPage.getViewport({ scale: 1, rotation: 0 });
   const layer = document.createElement('div');
   layer.className = 'link-layer';
-  pdfjs.setLayerDimensions(layer, page.pdfPage.getViewport({ scale: 1 }));
+  setLayerDimensions(layer, page.pdfPage.getViewport({ scale: 1 }));
 
   annotations.forEach((annotation) => {
+    if (annotation.subtype !== 'Link') {
+      return;
+    }
     const link = create(annotation);
     if (!link) {
       return;

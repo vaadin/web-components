@@ -10,7 +10,6 @@
  */
 import { isKeyboardActive } from '@vaadin/a11y-base/src/focus-utils.js';
 import { createLink, getLinkLabel, getTextInside, renderLinks, resolveDestination } from './pdf-viewer-links.js';
-import { loadPdfjs } from './pdfjs-loader.js';
 
 /**
  * A mixin that adds the links of the rendered pages, and goes to the
@@ -42,22 +41,12 @@ export const PdfViewerLinksMixin = (superClass) =>
     async __renderPageLayers(page) {
       await super.__renderPageLayers(page);
 
-      if (page.linkLayerElement) {
-        return;
+      if (!page.linkLayerElement) {
+        const links = await renderLinks(page, (annotation) =>
+          createLink(annotation, (target) => this.#followLink(target)),
+        );
+        await this.#nameLinks(page, links);
       }
-      const pdfDocument = this._pdfDocument;
-      const [pdfjs, annotations] = await Promise.all([loadPdfjs(), page.pdfPage.getAnnotations({ intent: 'display' })]);
-      // The page may have been released meanwhile.
-      if (this._pdfDocument !== pdfDocument || !page.canvas || page.linkLayerElement) {
-        return;
-      }
-      const links = renderLinks(
-        pdfjs,
-        page,
-        annotations.filter((annotation) => annotation.annotationType === pdfjs.AnnotationType.LINK),
-        (annotation) => createLink(annotation, (target) => this.#followLink(target)),
-      );
-      await this.#nameLinks(page, links);
     }
 
     /**

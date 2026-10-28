@@ -8,6 +8,7 @@
  * See https://vaadin.com/commercial-license-and-service-terms for the full
  * license.
  */
+import { loadPdfjs } from './pdfjs-loader.js';
 
 /**
  * The maximum number of pixels of a page canvas. Larger canvases use too much
@@ -191,18 +192,17 @@ export class PdfViewerPage {
    * the text selectable and readable by assistive technology. When the layer
    * exists, it is only resized to the current scale.
    *
-   * @param {typeof import('pdfjs-dist')} pdfjs
    * @param {Promise<object>} textContent the text content of the page, with marked content
    * @return {Promise<void>}
    */
-  async renderTextLayer(pdfjs, textContent) {
+  async renderTextLayer(textContent) {
     if (this.textLayer) {
       this.textLayer.update({ viewport: this.pdfPage.getViewport({ scale: this.scale }) });
       return;
     }
 
     const canvas = this.canvas;
-    const textContentSource = await textContent;
+    const [{ TextLayer }, textContentSource] = await Promise.all([loadPdfjs(), textContent]);
     // The page may have been released or rendered again meanwhile.
     if (this.canvas !== canvas || this.textLayer) {
       return;
@@ -224,7 +224,7 @@ export class PdfViewerPage {
     });
     this.element.append(container);
 
-    const textLayer = new pdfjs.TextLayer({
+    const textLayer = new TextLayer({
       textContentSource,
       container,
       viewport: this.pdfPage.getViewport({ scale: this.scale }),

@@ -8,7 +8,6 @@
  * See https://vaadin.com/commercial-license-and-service-terms for the full
  * license.
  */
-import type * as pdfjs from 'pdfjs-dist';
 import type { PDFDocumentProxy } from 'pdfjs-dist';
 import type { PdfViewerPage } from './pdf-viewer-page.js';
 
@@ -18,6 +17,14 @@ import type { PdfViewerPage } from './pdf-viewer-page.js';
 export interface PdfViewerDestination {
   dest?: string | unknown[];
   action?: string;
+}
+
+/**
+ * A link annotation of a page, as pdf.js returns it.
+ */
+export interface PdfViewerLinkAnnotation extends PdfViewerDestination {
+  rect: number[];
+  url?: string;
 }
 
 /**
@@ -44,14 +51,12 @@ export declare function createLink(
  * to the page size so that they need no update when the scale changes.
  * Like the text layer, the layer has the size of the page without its
  * rotation, and is rotated with the page. Returns the links with their
- * annotations.
+ * annotations, or no links when the page was released meanwhile.
  */
-export declare function renderLinks<T extends { rect: number[] }>(
-  pdfjsModule: typeof pdfjs,
+export declare function renderLinks(
   page: PdfViewerPage,
-  annotations: T[],
-  create: (annotation: T) => HTMLAnchorElement | null,
-): Array<{ link: HTMLAnchorElement; annotation: T }>;
+  create: (annotation: PdfViewerLinkAnnotation) => HTMLAnchorElement | null,
+): Promise<Array<{ link: HTMLAnchorElement; annotation: PdfViewerLinkAnnotation }>>;
 
 /**
  * Returns the text of a text layer that is inside the given element, e.g.
