@@ -1,4 +1,5 @@
 import '@vaadin/vaadin-lumo-styles/src/props/index.css';
+import '@vaadin/vaadin-lumo-styles/src/global/index.css';
 import '@vaadin/vaadin-lumo-styles/components/charts.css';
 import '../../chart-not-animated-styles.js';
 import '../../../vaadin-chart.js';
