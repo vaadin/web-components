@@ -1,6 +1,6 @@
 import '../../chart-not-animated-styles.js';
 import '../../../src/vaadin-chart.js';
-import { ALL_FIXTURES, defineScreenshotTests } from '../chart.common.js';
+import { defineScreenshotTests, NON_STYLED_FIXTURES } from '../chart.common.js';
 
 // Non-styled mode (`chart.styledMode: false`) is the default of the Flow `Chart`.
 // Highcharts then paints every colour as an SVG presentation attribute, and the
@@ -10,5 +10,5 @@ import { ALL_FIXTURES, defineScreenshotTests } from '../chart.common.js';
 // The theme suites (`*.base-ref.test.js`) render the same fixtures with a theme
 // loaded and compare against the baselines of this suite.
 describe('chart non-styled', () => {
-  defineScreenshotTests(ALL_FIXTURES, { styledMode: false });
+  defineScreenshotTests(NON_STYLED_FIXTURES, { styledMode: false });
 });

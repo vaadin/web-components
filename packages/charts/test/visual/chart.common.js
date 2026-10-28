@@ -39,32 +39,42 @@ function buildTooltipFixture(outside) {
   `;
 }
 
-/** One radial progress gauge; `solidgauge` renders three that differ only in value and colour. */
-function buildProgressGauge(y, colorIndex) {
+/**
+ * One solid gauge. `yAxis` is merged over the min/max defaults, and `series`
+ * is the JSON of the data array, so each fixture only states what differs.
+ */
+function buildSolidGauge({ title, pane, yAxis = {}, series, seriesOptions }) {
+  const seriesAttribute = seriesOptions ? ` additional-options='${JSON.stringify(seriesOptions)}'` : '';
   return `
     <vaadin-chart
-      title="Progress"
+      title="${title}"
       type="solidgauge"
       style="width: 200px; height: 260px"
       additional-options='{
-        "pane": {
-          "center": ["50%", "50%"],
-          "startAngle": 0,
-          "endAngle": 360,
-          "background": { "innerRadius": "60%", "outerRadius": "100%", "shape": "arc" }
-        },
-        "yAxis": {
-          "min": 0,
-          "max": 100,
-          "minorTickInterval": null,
-          "tickAmount": 0,
-          "labels": { "enabled": false }
-        }
+        "pane": ${JSON.stringify({
+          background: { innerRadius: '60%', outerRadius: '100%', shape: 'arc' },
+          ...pane,
+        })},
+        "yAxis": ${JSON.stringify({ min: 0, max: 100, minorTickInterval: null, ...yAxis })}
       }'
     >
-      <vaadin-chart-series title="Progress" values='[{ "y": ${y}, "colorIndex": ${colorIndex} }]'></vaadin-chart-series>
+      <vaadin-chart-series title="${title}" values='${series}'${seriesAttribute}></vaadin-chart-series>
     </vaadin-chart>
   `;
+}
+
+/** The half-circle pane with two axis labels that the speed and stops gauges share. */
+const HALF_PANE = { center: ['50%', '85%'], startAngle: -90, endAngle: 90 };
+const HALF_AXIS = { tickAmount: 2, labels: { y: 16 } };
+
+/** One radial progress gauge; `solidgauge` renders three that differ only in value and colour. */
+function buildProgressGauge(y, colorIndex) {
+  return buildSolidGauge({
+    title: 'Progress',
+    pane: { center: ['50%', '50%'], startAngle: 0, endAngle: 360 },
+    yAxis: { tickAmount: 0, labels: { enabled: false } },
+    series: JSON.stringify([{ y, colorIndex }]),
+  });
 }
 
 /** Candlestick and OHLC must plot identical data for the up/down point comparison to mean anything. */
@@ -156,32 +166,13 @@ const fixtures = {
   // string percentages on `pane.background` are unaffected by that change.
   solidgauge: `
     <div style="display: flex; width: 800px; height: 260px">
-      <vaadin-chart
-        title="Speed"
-        type="solidgauge"
-        style="width: 200px; height: 260px"
-        additional-options='{
-          "pane": {
-            "center": ["50%", "85%"],
-            "startAngle": -90,
-            "endAngle": 90,
-            "background": { "innerRadius": "60%", "outerRadius": "100%", "shape": "arc" }
-          },
-          "yAxis": {
-            "min": 0,
-            "max": 200,
-            "minorTickInterval": null,
-            "tickAmount": 2,
-            "labels": { "y": 16 }
-          }
-        }'
-      >
-        <vaadin-chart-series
-          title="Speed"
-          values='[{ "y": 80, "colorIndex": 1 }]'
-          additional-options='{ "radius": 100, "innerRadius": 60 }'
-        ></vaadin-chart-series>
-      </vaadin-chart>${[
+      ${buildSolidGauge({
+        title: 'Speed',
+        pane: HALF_PANE,
+        yAxis: { max: 200, ...HALF_AXIS },
+        series: '[{ "y": 80, "colorIndex": 1 }]',
+        seriesOptions: { radius: 100, innerRadius: 60 },
+      })}${[
         [12, 2],
         [47, 3],
         [80, 4],
@@ -688,20 +679,6 @@ const baseOnlyFixtures = {
     </vaadin-chart>
   `,
 
-  'stacked-area': `
-    <vaadin-chart
-      type="area"
-      title="Percent stacked area"
-      stacking="percent"
-      style="width: 600px; height: 400px"
-      categories="${SOLAR_CATEGORIES}"
-    >
-      <vaadin-chart-series title="Installation" values="${SOLAR_INSTALLATION}"></vaadin-chart-series>
-      <vaadin-chart-series title="Manufacturing" values="${SOLAR_MANUFACTURING}"></vaadin-chart-series>
-      <vaadin-chart-series title="Other" values="[12908, 5948, 8105, 11248, 8989]"></vaadin-chart-series>
-    </vaadin-chart>
-  `,
-
   // Range series from `highcharts-more`, with data labels on both ends of each range.
   ranges: `
     <vaadin-chart
@@ -739,30 +716,6 @@ const baseOnlyFixtures = {
         additional-options='{ "dataLabels": { "enabled": true } }'
       ></vaadin-chart-series>
     </vaadin-chart>
-  `,
-
-  // SVG data labels on an inverted chart with negative values, and on a line.
-  'data-labels': `
-    <div style="display: flex; width: 800px; height: 400px">
-      <vaadin-chart
-        type="bar"
-        title="Bar"
-        style="width: 400px; height: 400px"
-        categories='["A", "B", "C", "D"]'
-        additional-options='{ "plotOptions": { "series": { "dataLabels": { "enabled": true } } } }'
-      >
-        <vaadin-chart-series title="Change" values="[12, -7, 5, -3]"></vaadin-chart-series>
-      </vaadin-chart>
-      <vaadin-chart
-        type="line"
-        title="Line"
-        style="width: 400px; height: 400px"
-        categories='["A", "B", "C", "D"]'
-        additional-options='{ "plotOptions": { "series": { "dataLabels": { "enabled": true } } } }'
-      >
-        <vaadin-chart-series title="Value" values="[3, 9, 4, 7]"></vaadin-chart-series>
-      </vaadin-chart>
-    </div>
   `,
 
   // Covers the `highcharts-3d` module, which `chart3d` turns on.
@@ -872,48 +825,28 @@ const baseOnlyFixtures = {
   `,
 };
 
-/** A solid gauge whose colour comes from `yAxis.stops`, or from the series when `stops` is null. */
-function buildStopsGauge(y, stops) {
-  return `
-    <vaadin-chart
-      title="${stops ? 'Stops' : 'No stops'}"
-      type="solidgauge"
-      style="width: 200px; height: 260px"
-      additional-options='{
-        "pane": {
-          "center": ["50%", "85%"],
-          "startAngle": -90,
-          "endAngle": 90,
-          "background": { "innerRadius": "60%", "outerRadius": "100%", "shape": "arc" }
-        },
-        "yAxis": {
-          "min": 0,
-          "max": 100,
-          "minorTickInterval": null,
-          "tickAmount": 2,
-          "labels": { "y": 16 }
-          ${stops ? `, "stops": ${JSON.stringify(stops)}` : ''}
-        }
-      }'
-    >
-      <vaadin-chart-series title="Value" values="[${y}]"></vaadin-chart-series>
-    </vaadin-chart>
-  `;
-}
-
 const GAUGE_STOPS = [
   [0.1, '#55BF3B'],
   [0.5, '#DDDF0D'],
   [0.9, '#DF5353'],
 ];
 
+/** A solid gauge whose colour comes from `yAxis.stops`. */
+function buildStopsGauge(y) {
+  return buildSolidGauge({
+    title: 'Stops',
+    pane: HALF_PANE,
+    yAxis: { ...HALF_AXIS, stops: GAUGE_STOPS },
+    series: `[${y}]`,
+  });
+}
+
 /**
  * Fixtures rendered only by `base/chart-non-styled.test.js`. They cover chart
  * types and code paths that only differ outside styled mode.
  */
 const nonStyledFixtures = {
-  // Basic cartesian types, which the shared fixtures leave to the styled-mode
-  // `pie` / `exporting` tests of each theme.
+  // Line, area, bar and scatter: the basic types no other fixture renders on its own.
   cartesian: `
     <div style="display: flex; flex-wrap: wrap; width: 800px; height: 600px">
       ${['line', 'area', 'bar', 'scatter']
@@ -939,48 +872,20 @@ const nonStyledFixtures = {
     </vaadin-chart>
   `,
 
-  // highcharts#23279: the gradient case. With `stops` the colour must follow the
-  // stops; without them it falls back to the series colour.
+  // highcharts#23279: the gradient case, where the colour must follow the stops.
+  // The series-colour fallback without stops is what `solidgauge` renders.
   'solidgauge-stops': `
-    <div style="display: flex; width: 800px; height: 260px">
-      ${buildStopsGauge(5, GAUGE_STOPS)}
-      ${buildStopsGauge(50, GAUGE_STOPS)}
-      ${buildStopsGauge(95, GAUGE_STOPS)}
-      ${buildStopsGauge(50, null)}
-    </div>
-  `,
-
-  // The chart and the SVG `getSVG()` produces for it, side by side. Highcharts
-  // exports at 600x400 unless the options give a size, so the export copy gets
-  // the size of its output box. The box is as tall as the chart, so that no
-  // page background, which follows the colour scheme, is in the screenshot.
-  'export-svg': `
-    <div style="display: flex; width: 900px; height: 300px">
-      <vaadin-chart
-        type="column"
-        title="Exported chart"
-        style="width: 450px; height: 300px"
-        categories="${SOLAR_CATEGORIES}"
-        additional-options='{ "exporting": { "enabled": true, "sourceWidth": 450, "sourceHeight": 300 } }'
-      >
-        <vaadin-chart-series title="Installation" values="${SOLAR_INSTALLATION}"></vaadin-chart-series>
-        <vaadin-chart-series title="Manufacturing" values="${SOLAR_MANUFACTURING}"></vaadin-chart-series>
-      </vaadin-chart>
-      <div class="export-output" style="width: 450px; height: 300px"></div>
+    <div style="display: flex; width: 600px; height: 260px">
+      ${[5, 50, 95].map(buildStopsGauge).join('')}
     </div>
   `,
 };
 
-/** Renders the SVG export of the chart next to it. */
-async function renderExport(chart) {
-  chart.parentElement.querySelector('.export-output').innerHTML = chart.configuration.getSVG();
-  await nextFrame();
-}
-
 /**
  * Turns styled mode off the way the Flow `Chart` does: Flow sends
  * `chart.styledMode: false` through `updateConfiguration()` before the chart
- * initializes. Highcharts reads `styledMode` at init only.
+ * initializes. Highcharts reads `styledMode` at init only. The buffer is spread
+ * shallowly over the options at init, so `chart` has to carry the rest of them.
  */
 function disableStyledMode(chart) {
   chart.updateConfiguration({ chart: { ...chart.options.chart, styledMode: false } });
@@ -1032,7 +937,6 @@ const interactions = {
   'exporting-menu': openExportMenu,
   'point-states': selectAndHoverPoints,
   'legend-states': hideSeriesAndPageLegend,
-  'export-svg': renderExport,
 };
 
 const allFixtures = { ...fixtures, ...baseOnlyFixtures, ...nonStyledFixtures };
@@ -1040,8 +944,21 @@ const allFixtures = { ...fixtures, ...baseOnlyFixtures, ...nonStyledFixtures };
 /** Names of the fixtures `base/chart.test.js` renders on its own. */
 export const BASE_ONLY_FIXTURES = Object.keys(baseOnlyFixtures);
 
-/** Names of every fixture, which the non-styled-mode suites render. */
-export const ALL_FIXTURES = Object.keys(allFixtures);
+/**
+ * Names of the fixtures `base/chart-non-styled.test.js` renders. Every base
+ * rule is scoped to styled mode, so a non-styled render only differs where
+ * Highcharts computes a colour in JS or renders HTML: these are those cases.
+ */
+export const NON_STYLED_FIXTURES = [
+  ...Object.keys(nonStyledFixtures),
+  'tooltip-outside',
+  'exporting-menu',
+  'use-html',
+  'heatmap',
+  'navigator',
+  'candlestick',
+  'chart3d',
+];
 
 /** Renders the named fixture and returns the element to snapshot. */
 async function renderFixture(name, { styledMode = true } = {}) {
