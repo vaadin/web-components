@@ -31,9 +31,9 @@ export declare class PdfViewerToolbarMixinClass {
 
   /**
    * The title shown in the header, see `headerHidden`. When not set,
-   * the header shows the PDF file name from the `Content-Disposition`
-   * header of the response, else the PDF file name at the end of the
-   * path of `src`, else the `document` text of `i18n`.
+   * the header shows `fileName`, else the PDF file name from the
+   * `Content-Disposition` header of the response, else the PDF file name
+   * at the end of the path of `src`, else the `document` text of `i18n`.
    *
    * @attr {string} header-title
    */

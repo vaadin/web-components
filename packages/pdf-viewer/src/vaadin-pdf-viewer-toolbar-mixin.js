@@ -12,7 +12,7 @@ import '@vaadin/integer-field/src/vaadin-integer-field.js';
 import '@vaadin/select/src/vaadin-select.js';
 import '@vaadin/tooltip/src/vaadin-tooltip.js';
 import './vaadin-pdf-viewer-button.js';
-import { html } from 'lit';
+import { html, nothing } from 'lit';
 import { styleMap } from 'lit/directives/style-map.js';
 import { slotContent } from '@vaadin/component-base/src/directives/slot-content.js';
 import { formatZoom, getZoomInLevel, getZoomOutLevel, ZOOM_LEVELS } from './pdf-viewer-zoom-utils.js';
@@ -41,9 +41,9 @@ export const PdfViewerToolbarMixin = (superClass) =>
 
         /**
          * The title shown in the header, see `headerHidden`. When not set,
-         * the header shows the PDF file name from the `Content-Disposition`
-         * header of the response, else the PDF file name at the end of the
-         * path of `src`, else the `document` text of `i18n`.
+         * the header shows `fileName`, else the PDF file name from the
+         * `Content-Disposition` header of the response, else the PDF file name
+         * at the end of the path of `src`, else the `document` text of `i18n`.
          *
          * @attr {string} header-title
          */
@@ -106,9 +106,18 @@ export const PdfViewerToolbarMixin = (superClass) =>
           </div>
           <div part="toolbar-group">
             <slot name="toolbar-actions"></slot>
+            <slot name="toolbar-default-actions" ${slotContent(this._renderDefaultActions())}></slot>
           </div>
         </div>
       `;
+    }
+
+    /**
+     * Returns the template of the built-in buttons in the `toolbar-default-actions` slot.
+     * @protected
+     */
+    _renderDefaultActions() {
+      return nothing;
     }
 
     /**

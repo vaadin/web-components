@@ -28,6 +28,7 @@ export interface PdfViewerI18n {
   link?: string;
   goToPage?: string;
   externalLink?: string;
+  download?: string;
 }
 
 /**
@@ -94,7 +95,7 @@ export interface PdfViewerEventMap extends HTMLElementEventMap, PdfViewerCustomE
  *
  * Name              | Description
  * ------------------|-------------
- * `toolbar-actions` | Slot for application controls, e.g. buttons, at the end of the toolbar
+ * `toolbar-actions` | Slot for application controls, e.g. buttons, at the end of the toolbar, before the built-in buttons
  *
  * ### Styling
  *
@@ -180,7 +181,9 @@ declare class PdfViewer extends PdfViewerMixin(
    *   // Accessible name of a link without text to another page. {page} is replaced with the page number.
    *   goToPage: 'Go to page {page}',
    *   // Accessible name of a link that opens in a new tab. {text} is replaced with the text of the link, or its URL.
-   *   externalLink: '{text} (opens in a new tab)'
+   *   externalLink: '{text} (opens in a new tab)',
+   *   // Tooltip of the download button.
+   *   download: 'Download'
    * }
    * ```
    */
