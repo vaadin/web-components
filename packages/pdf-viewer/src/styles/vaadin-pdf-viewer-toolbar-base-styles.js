@@ -30,13 +30,11 @@ export const pdfViewerToolbarStyles = css`
     user-select: none;
   }
 
-  /* Inside the header, as the top area clips anything outside it */
   [part~='header']:focus-visible {
     outline: var(--vaadin-focus-ring-width) solid var(--vaadin-focus-ring-color);
     outline-offset: calc(var(--vaadin-focus-ring-width) * -1);
   }
 
-  /* The full title is in the title attribute, for titles that don't fit */
   [part~='title'] {
     flex: 1;
     min-width: 0;
