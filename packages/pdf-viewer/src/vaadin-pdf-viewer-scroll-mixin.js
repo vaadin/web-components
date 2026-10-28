@@ -92,11 +92,23 @@ export const PdfViewerScrollMixin = (superClass) =>
     });
 
     /** @protected */
+    connectedCallback() {
+      super.connectedCallback();
+
+      if (this.hasUpdated) {
+        this.#resizeObserver.observe(this.$.content);
+      }
+    }
+
+    /** @protected */
     disconnectedCallback() {
       super.disconnectedCallback();
 
       cancelAnimationFrame(this.#scrollFrame);
       this.#scrollFrame = 0;
+      // Detaching resets the scroll position, which the next resize restores.
+      this.#hadLayout = false;
+      this.#resizeObserver.unobserve(this.$.content);
     }
 
     /** @protected */
