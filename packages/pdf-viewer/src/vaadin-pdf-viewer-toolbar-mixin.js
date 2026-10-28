@@ -103,7 +103,8 @@ export const PdfViewerToolbarMixin = (superClass) =>
      */
     _renderToolbar() {
       const title = this.headerTitle || getFileNameFromUrl(this.src) || this.__effectiveI18n.document;
-      const collapsed = this.#isToolbarCollapsed();
+      // The toolbar collapses only while the header, which expands it, is shown.
+      const collapsed = this.toolbarCollapsed && this.headerVisible;
       return html`
         <button
           part="header"
@@ -195,16 +196,6 @@ export const PdfViewerToolbarMixin = (superClass) =>
           <vaadin-tooltip slot="tooltip" .text="${i18n.zoomIn}"></vaadin-tooltip>
         </vaadin-pdf-viewer-button>
       `;
-    }
-
-    /**
-     * Whether the toolbar is collapsed. It collapses only while the header,
-     * which expands it, is shown.
-     * @return {boolean}
-     * @private
-     */
-    #isToolbarCollapsed() {
-      return this.toolbarCollapsed && this.headerVisible;
     }
 
     /** @private */
