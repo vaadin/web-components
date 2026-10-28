@@ -26,6 +26,9 @@ export interface PdfViewerI18n {
   pageFit?: string;
   document?: string;
   download?: string;
+  print?: string;
+  printing?: string;
+  cancelPrint?: string;
 }
 
 /**
@@ -94,21 +97,23 @@ export interface PdfViewerEventMap extends HTMLElementEventMap, PdfViewerCustomE
  * ------------------|-------------
  * `toolbar-actions` | Slot for application controls, e.g. buttons, at the end of the toolbar, before the built-in buttons
  * `download-button` | Slot for a component that replaces the download button. Clicking it downloads the document
+ * `print-button`    | Slot for a component that replaces the print button. Clicking it prints the document
  *
  * ### Styling
  *
  * The following shadow DOM parts are available for styling:
  *
- * Part name       | Description
- * ----------------|------------
- * `header`        | The header above the toolbar, a button that collapses and expands it, see `headerHidden`.
- * `title`         | The title in the header.
- * `header-toggle` | The icon in the header that shows whether the toolbar is collapsed.
- * `toolbar`       | The toolbar above the pages.
- * `toolbar-group` | A group of related controls in the toolbar: navigation, zoom and actions.
- * `content`       | The scrollable area that contains the pages.
- * `page`          | A page of the document.
- * `loader`        | The loading indicator shown while the document loads.
+ * Part name        | Description
+ * -----------------|------------
+ * `header`         | The header above the toolbar, a button that collapses and expands it, see `headerHidden`.
+ * `title`          | The title in the header.
+ * `header-toggle`  | The icon in the header that shows whether the toolbar is collapsed.
+ * `toolbar`        | The toolbar above the pages.
+ * `toolbar-group`  | A group of related controls in the toolbar: navigation, zoom and actions.
+ * `content`        | The scrollable area that contains the pages.
+ * `page`           | A page of the document.
+ * `loader`         | The loading indicator shown while the document loads.
+ * `print-progress` | The progress shown while the document is prepared for printing.
  *
  * The following state attributes are available for styling:
  *
@@ -175,7 +180,13 @@ declare class PdfViewer extends PdfViewerMixin(
    *   // Title of the header for a document without a file name or title.
    *   document: 'PDF document',
    *   // Tooltip of the download button.
-   *   download: 'Download'
+   *   download: 'Download',
+   *   // Tooltip of the print button.
+   *   print: 'Print',
+   *   // Shown while the pages are prepared for printing, and accessible name of the progress bar.
+   *   printing: 'Preparing to print…',
+   *   // Button that cancels printing while the pages are prepared.
+   *   cancelPrint: 'Cancel'
    * }
    * ```
    */

@@ -79,6 +79,8 @@ how to generate them.
     only return a component that it created, so a replaceable button needs a slot.
 - A download keeps its data for a minute, also when the viewer is detached meanwhile. Some browsers fail a
   download whose URL is released right after the click.
+- `PdfViewerPrintMixin` adds `print()` and its button in the `print-button` slot after the download button. The
+  element shows its progress in the `print-progress` part over the pages.
 - The element applies `I18nMixin` and defines the default texts. The mixins read them from `__effectiveI18n`.
 - The element applies `FocusMixin` and owns the focus state. Listeners on the page area in its template set
   `focused` and `focus-ring`, as focus moving inside the shadow root does not reach listeners on the host.
@@ -88,6 +90,17 @@ how to generate them.
 - `pdf-viewer-zoom-utils.js` has the zoom levels, their format and the check of a `zoom` value.
 - To check whether a result belongs to the current document, a mixin compares `_pdfDocument` with the
   document from the start of the call.
+
+## Printing
+
+- `print()` renders each page as a PNG image into an off-screen frame, then opens the print dialog of
+  the browser for the frame. Downloading the PDF and printing it in another tab would leave the page.
+- Pages render one at a time at 150 DPI, with the print intent of pdf.js. The print intent selects
+  the annotations and the optional content that the document prints.
+- Large pages render at a lower resolution, as a canvas has at most 2^24 pixels.
+- Each image has a named `@page` rule with the size of its PDF page, so each page prints on paper of
+  its own size.
+- The frame and the images are released after printing, on cancel, on a new `src` and on detach.
 
 ## Install size
 
