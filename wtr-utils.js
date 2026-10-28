@@ -10,6 +10,8 @@ import { cssImportPlugin } from './web-dev-server.config.js';
 
 const argv = minimist(process.argv.slice(2));
 
+const isUpdate = process.env.TEST_ENV === 'update';
+
 const HIDDEN_WARNINGS = [
   '<vaadin-crud> Unable to autoconfigure form because the data structure is unknown. Either specify `include` or ensure at least one item is available beforehand.',
   'The <vaadin-grid> needs the total number of items in order to display rows, which you can specify either by setting the `size` property, or by providing it to the second argument of the `dataProvider` function `callback` call.',
@@ -166,6 +168,11 @@ const getVisualTestGroups = (packages, theme) => {
       files: [
         `packages/${pkg}/test/visual/${filesGlob}.test.{js,ts}`,
         `packages/${pkg}/test/visual/${theme}/${filesGlob}.test.{js,ts}`,
+        // A base-ref suite compares against the baselines of the base styles run,
+        // which loads no theme (see getScreenshotFileName). Updating would
+        // overwrite those with a render that has the theme loaded, so only the
+        // base styles run updates them.
+        ...(isUpdate ? [`!packages/${pkg}/test/visual/${theme}/*.base-ref.test.{js,ts}`] : []),
       ],
     };
   });
@@ -205,13 +212,21 @@ const getTestRunnerHtml = (theme) => (testFramework) =>
 
 const getScreenshotFileName = ({ name, testFile }, type, diff) => {
   let folder = path.join(path.dirname(testFile), 'screenshots');
+  let suite = path.basename(testFile).replace(/\.test\.(js|ts)$/u, '');
 
-  if (path.matchesGlob(testFile, '**/visual/aura/*')) {
+  // `<suite>.base-ref.test.js` in a theme folder asserts that the theme does
+  // not change what `<suite>` renders: its baselines are those of the base
+  // styles run, which loads no theme. Failed and diff images stay in the
+  // theme folder.
+  if (type === 'baseline' && suite.endsWith('.base-ref')) {
+    folder = path.join(path.dirname(testFile), '..', 'base', 'screenshots');
+    suite = suite.replace(/\.base-ref$/u, '');
+  } else if (path.matchesGlob(testFile, '**/visual/aura/*')) {
     folder = path.join(folder, `${argv.dark ? 'dark' : 'default'}`);
   }
 
   if (path.matchesGlob(testFile, '**/packages/!(vaadin-lumo-styles|field-base)/**')) {
-    folder = path.join(folder, path.basename(testFile).replace(/\.test\.(js|ts)$/u, ''));
+    folder = path.join(folder, suite);
   }
 
   return path.join(folder, type, diff ? `${name}-diff` : name);
@@ -396,7 +411,7 @@ const createVisualTestsConfig = (theme) => {
         diffOptions: { threshold: 0.2 },
         failureThreshold: 0.05,
         failureThresholdType: 'percent',
-        update: process.env.TEST_ENV === 'update',
+        update: isUpdate,
       }),
       cssImportPlugin(),
     ],
