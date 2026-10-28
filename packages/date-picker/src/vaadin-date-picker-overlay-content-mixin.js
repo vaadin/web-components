@@ -372,7 +372,7 @@ export const DatePickerOverlayContentMixin = (superClass) =>
 
             // Use mousemove, as mouseover does not fire reliably for the date cells.
             scroller.addEventListener('mousemove', (e) => {
-              const date = e.composedPath()[0].date || null;
+              const date = this.__getEventDate(e);
               if (!dateEquals(date, this._hoveredDate)) {
                 this._hoveredDate = date;
               }
@@ -608,6 +608,16 @@ export const DatePickerOverlayContentMixin = (superClass) =>
     }
 
     /**
+     * Returns the date of the date cell the event happened in, or null. The event
+     * can target the date button or the cell padding around it.
+     * @private
+     */
+    __getEventDate(event) {
+      const cell = event.composedPath()[0].closest?.('[part~="date"]');
+      return cell?.date || null;
+    }
+
+    /**
      * Starts a range drag when pressing a date with a mouse or a pen: pressing an end
      * of the range drags that end, pressing any other date selects a new range.
      * Touch is left to scroll the calendar.
@@ -617,7 +627,7 @@ export const DatePickerOverlayContentMixin = (superClass) =>
       // A tap suppressed after the previous drag may never have arrived.
       this.__suppressTap = false;
 
-      const date = event.composedPath()[0].date;
+      const date = this.__getEventDate(event);
       if (!this.rangePreview || event.pointerType === 'touch' || event.button !== 0 || !date) {
         return;
       }

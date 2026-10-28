@@ -331,7 +331,7 @@ describe('vaadin-month-calendar', () => {
     });
 
     it('should include the range role in the accessible name of the dates', () => {
-      const label = (day) => getDateCell(monthCalendar, day).getAttribute('aria-label');
+      const label = (day) => getDateButton(getDateCell(monthCalendar, day)).getAttribute('aria-label');
       expect(label(10)).to.match(/, range start$/u);
       expect(label(12)).to.match(/, in range$/u);
       expect(label(14)).to.match(/, range end$/u);
@@ -341,9 +341,9 @@ describe('vaadin-month-calendar', () => {
     it('should use the range role labels from i18n', async () => {
       monthCalendar.i18n = { ...monthCalendar.i18n, rangeStart: 'Beginn', inRange: 'im Bereich', rangeEnd: 'Ende' };
       await nextRender();
-      expect(getDateCell(monthCalendar, 10).getAttribute('aria-label')).to.match(/, Beginn$/u);
-      expect(getDateCell(monthCalendar, 12).getAttribute('aria-label')).to.match(/, im Bereich$/u);
-      expect(getDateCell(monthCalendar, 14).getAttribute('aria-label')).to.match(/, Ende$/u);
+      expect(getDateButton(getDateCell(monthCalendar, 10)).getAttribute('aria-label')).to.match(/, Beginn$/u);
+      expect(getDateButton(getDateCell(monthCalendar, 12)).getAttribute('aria-label')).to.match(/, im Bereich$/u);
+      expect(getDateButton(getDateCell(monthCalendar, 14)).getAttribute('aria-label')).to.match(/, Ende$/u);
     });
 
     it('should mark a single-day range as both start and end without a band', async () => {

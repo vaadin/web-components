@@ -670,7 +670,7 @@ describe('date-range-picker', () => {
       await untilOverlayRendered(picker);
       const calendar = document.activeElement;
       expect(calendar.localName).to.equal('vaadin-month-calendar');
-      expect(calendar.shadowRoot.activeElement.getAttribute('part')).to.include('date');
+      expect(calendar.shadowRoot.activeElement).to.equal(calendar.focusableDateButton);
       expect(picker.opened).to.be.true;
     });
 
