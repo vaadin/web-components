@@ -8,6 +8,8 @@
  * See https://vaadin.com/commercial-license-and-service-terms for the full
  * license.
  */
+import { issueWarning } from '@vaadin/component-base/src/warnings.js';
+
 /**
  * A mixin that renders the text layer of the rendered pages, which makes the
  * text selectable and readable by assistive technology.
@@ -56,8 +58,16 @@ export const PdfViewerTextLayerMixin = (superClass) =>
       await super.__renderPageLayers(page);
 
       // The page may have been released meanwhile, e.g. when the document was unloaded.
-      if (page.canvas) {
+      if (!page.canvas) {
+        return;
+      }
+      try {
         await page.renderTextLayer(this.#getTextContent(page.pageNumber));
+      } catch (error) {
+        // The page keeps its canvas and links without text, and tries again when it renders again.
+        if (error.name !== 'AbortException' && page.canvas) {
+          issueWarning(`Failed to render the text of page ${page.pageNumber} of the PDF document: ${error.message}`);
+        }
       }
     }
 
@@ -70,12 +80,16 @@ export const PdfViewerTextLayerMixin = (superClass) =>
      */
     #getTextContent(pageNumber) {
       if (!this.#textContent.has(pageNumber)) {
-        this.#textContent.set(
-          pageNumber,
-          this._pdfDocument
-            .getPage(pageNumber)
-            .then((pdfPage) => pdfPage.getTextContent({ includeMarkedContent: true })),
-        );
+        const textContent = this._pdfDocument
+          .getPage(pageNumber)
+          .then((pdfPage) => pdfPage.getTextContent({ includeMarkedContent: true }));
+        // Load the text again next time, instead of keeping the failure.
+        textContent.catch(() => {
+          if (this.#textContent.get(pageNumber) === textContent) {
+            this.#textContent.delete(pageNumber);
+          }
+        });
+        this.#textContent.set(pageNumber, textContent);
       }
       return this.#textContent.get(pageNumber);
     }

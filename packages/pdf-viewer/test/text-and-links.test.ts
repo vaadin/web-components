@@ -4,6 +4,7 @@ import { fixtureSync, isDesktopSafari, nextFrame, nextRender, nextResize, nextUp
 import sinon from 'sinon';
 import './enable-feature-flag.js';
 import '../vaadin-pdf-viewer.js';
+import type { PDFPageProxy } from 'pdfjs-dist';
 import { getTextInside } from '../src/pdf-viewer-links.js';
 import { acquireWorker, loadPdfjs, releaseWorker } from '../src/pdfjs-loader.js';
 import type { PdfViewer } from '../vaadin-pdf-viewer.js';
@@ -21,16 +22,16 @@ import {
 const TAB = isDesktopSafari ? 'Alt+Tab' : 'Tab';
 
 /**
- * Spies on a method of the pages of every pdf.js document, including the
+ * Returns the prototype of the pages of every pdf.js document, including the
  * documents of the viewer, through a page of a document loaded for that.
  */
-async function spyOnPdfPages(method: 'getTextContent') {
+async function getPdfPagePrototype(): Promise<PDFPageProxy> {
   const pdfjs = await loadPdfjs();
   const handle = acquireWorker(pdfjs);
   const task = pdfjs.getDocument({ url: fixtureUrl('multi-page.pdf'), worker: handle.worker! });
   try {
     const pdfPage = await (await task.promise).getPage(1);
-    return sinon.spy(Object.getPrototypeOf(pdfPage), method);
+    return Object.getPrototypeOf(pdfPage);
   } finally {
     await task.destroy();
     releaseWorker(handle);
@@ -139,7 +140,7 @@ describe('text and links', () => {
     let spy: sinon.SinonSpy;
 
     beforeEach(async () => {
-      spy = await spyOnPdfPages('getTextContent');
+      spy = sinon.spy(await getPdfPagePrototype(), 'getTextContent');
     });
 
     it('should load the text of a page once when the page is rendered again', async () => {
@@ -165,6 +166,28 @@ describe('text and links', () => {
       await load('multi-page.pdf');
       expect(spy.thisValues.filter((pdfPage) => pdfPage.pageNumber === 1)).to.have.lengthOf(3);
     });
+  });
+
+  it('should render the links of a page whose text fails to load, and load the text again later', async () => {
+    const pdfPagePrototype = await getPdfPagePrototype();
+    const getTextContent = pdfPagePrototype.getTextContent;
+    let failed = false;
+    sinon.stub(pdfPagePrototype, 'getTextContent').callsFake(function (this: PDFPageProxy, ...args) {
+      if (this.pageNumber === 1 && !failed) {
+        failed = true;
+        return Promise.reject(new Error('Broken text'));
+      }
+      return getTextContent.apply(this, args);
+    });
+    const warn = sinon.stub(console, 'warn');
+    await load('links.pdf');
+    expect(getTextLayer(1)).to.be.null;
+    expect(getLinks(1)).to.have.lengthOf(2);
+    const warnings = warn.args.map(([message]) => message);
+    expect(warnings).to.include('Failed to render the text of page 1 of the PDF document: Broken text');
+    expect(warnings.some((message) => message.startsWith('Failed to render page'))).to.be.false;
+    await resizeViewer();
+    expect(getTextLayer(1)).to.be.ok;
   });
 
   describe('rotated page', () => {
@@ -450,6 +473,16 @@ describe('text and links', () => {
         await nextRenderIdle(viewer);
         expect(viewer.page).to.equal(page);
       });
+    });
+
+    it('should name the links of the next and previous page without a page number', () => {
+      // The links of page 2 got their names while page 1 was the current page.
+      expect(getLinks(2).map((link) => link.getAttribute('aria-label'))).to.deep.equal([
+        'Go to page 1',
+        'Go to page 4',
+        'Next page',
+        'Previous page',
+      ]);
     });
   });
 

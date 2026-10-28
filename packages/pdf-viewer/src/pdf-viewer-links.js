@@ -13,6 +13,12 @@ import { loadPdfjs } from './pdfjs-loader.js';
 /** The named actions of internal links that the viewer supports. */
 const SUPPORTED_LINK_ACTIONS = ['FirstPage', 'LastPage', 'NextPage', 'PrevPage'];
 
+/**
+ * The `i18n` keys of the names of named actions that go to a page relative to
+ * the current page, which is not known when the link gets its name.
+ */
+const RELATIVE_ACTION_NAMES = { NextPage: 'nextPage', PrevPage: 'previousPage' };
+
 /** The protocols of external links that the viewer opens. Links with other URLs are left out. */
 const ALLOWED_LINK_PROTOCOLS = ['http:', 'https:', 'mailto:'];
 
@@ -217,16 +223,19 @@ export async function resolveDestination(pdfDocument, { dest, action }, { page, 
 
 /**
  * Returns the accessible name of a link: its text, or the URL or the page it
- * goes to when it has none. Names of external links tell that they open in a
- * new tab.
+ * goes to when it has none. Links to the next or previous page are named so,
+ * as that page depends on the current page. Names of external links tell that
+ * they open in a new tab.
  *
- * @param {{ text: string, url?: string, targetPage: number | null }} link
- * @param {{ link: string, goToPage: string, externalLink: string }} i18n
+ * @param {{ text: string, url?: string, action?: string, targetPage: number | null }} link
+ * @param {{ link: string, goToPage: string, externalLink: string, nextPage: string, previousPage: string }} i18n
  * @return {string}
  */
-export function getLinkLabel({ text, url, targetPage }, i18n) {
+export function getLinkLabel({ text, url, action, targetPage }, i18n) {
   let label = text || url;
-  if (!label) {
+  if (!label && RELATIVE_ACTION_NAMES[action]) {
+    label = i18n[RELATIVE_ACTION_NAMES[action]];
+  } else if (!label) {
     label = targetPage ? i18n.goToPage.replace('{page}', targetPage) : i18n.link;
   }
   return url ? i18n.externalLink.replace('{text}', label) : label;

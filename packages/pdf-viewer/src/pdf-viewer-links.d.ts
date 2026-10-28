@@ -79,10 +79,11 @@ export declare function resolveDestination(
 
 /**
  * Returns the accessible name of a link: its text, or the URL or the page it
- * goes to when it has none. Names of external links tell that they open in a
- * new tab.
+ * goes to when it has none. Links to the next or previous page are named so,
+ * as that page depends on the current page. Names of external links tell that
+ * they open in a new tab.
  */
 export declare function getLinkLabel(
-  link: { text: string; url?: string; targetPage: number | null },
-  i18n: { link: string; goToPage: string; externalLink: string },
+  link: { text: string; url?: string; action?: string; targetPage: number | null },
+  i18n: { link: string; goToPage: string; externalLink: string; nextPage: string; previousPage: string },
 ): string;

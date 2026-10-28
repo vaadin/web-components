@@ -142,9 +142,9 @@ class PdfViewer extends PdfViewerMixin(
    *
    * ```
    * {
-   *   // Tooltip of the previous page button.
+   *   // Tooltip of the previous page button, and accessible name of a link to the previous page.
    *   previousPage: 'Previous page',
-   *   // Tooltip of the next page button.
+   *   // Tooltip of the next page button, and accessible name of a link to the next page.
    *   nextPage: 'Next page',
    *   // Error shown for a page that does not exist. {pageCount} is replaced with the page count.
    *   pageError: 'Enter 1–{pageCount}',

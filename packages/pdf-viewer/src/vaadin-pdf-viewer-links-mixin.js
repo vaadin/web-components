@@ -19,7 +19,7 @@ export const PdfViewerLinksMixin = (superClass) =>
   class PdfViewerLinksMixinClass extends superClass {
     /**
      * What the accessible name of each link is made of, to update it when the localization changes.
-     * @type {WeakMap<HTMLElement, { text: string, url?: string, targetPage: number | null }>}
+     * @type {WeakMap<HTMLElement, { text: string, url?: string, action?: string, targetPage: number | null }>}
      */
     #linkLabels = new WeakMap();
 
@@ -67,7 +67,7 @@ export const PdfViewerLinksMixin = (superClass) =>
             const target = await this.#resolveDestination(annotation);
             targetPage = target ? target.page : null;
           }
-          this.#linkLabels.set(link, { text, url: annotation.url, targetPage });
+          this.#linkLabels.set(link, { text, url: annotation.url, action: annotation.action, targetPage });
           this.#updateLinkLabel(link);
         }),
       );
