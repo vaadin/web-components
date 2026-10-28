@@ -572,6 +572,22 @@ describe('pages', () => {
       expect(getPageTop(3)).to.be.closeTo(getPaddingTop(), 1);
     });
 
+    it('should keep the scroll position when moved in the DOM', async () => {
+      await createViewer();
+      await loadAndRender(viewer, fixtureUrl('multi-page.pdf'));
+      viewer.page = 3;
+      await nextRenderIdle(viewer);
+      const { scrollTop } = content;
+      const container = document.createElement('div');
+      viewer.parentElement!.after(container);
+      container.appendChild(viewer);
+      await nextResize(content);
+      await nextFrame();
+      expect(content.scrollTop).to.be.closeTo(scrollTop, 1);
+      expect(viewer.page).to.equal(3);
+      container.remove();
+    });
+
     it('should size a page that gets its own size while the viewer is moved in the DOM', async () => {
       await createViewer();
       const idle = nextRenderIdle(viewer);

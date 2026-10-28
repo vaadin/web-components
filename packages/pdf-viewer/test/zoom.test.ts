@@ -109,6 +109,18 @@ describe('zoom', () => {
       expect(pages[0].offsetHeight).to.be.closeTo(getContentBoxSize(content).height, 1);
     });
 
+    it('should fit the whole page again when the toolbar gets taller', async () => {
+      viewer.zoom = 'page-fit';
+      await nextRenderIdle(viewer);
+      const control = document.createElement('div');
+      control.slot = 'toolbar-actions';
+      control.style.height = '100px';
+      viewer.append(control);
+      await nextResize(content);
+      await nextRenderIdle(viewer);
+      expect(pages[0].offsetHeight).to.be.closeTo(getContentBoxSize(content).height, 1);
+    });
+
     it('should show pages at their actual size with zoom 1', async () => {
       viewer.zoom = 1;
       await nextRenderIdle(viewer);

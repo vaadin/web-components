@@ -9,7 +9,6 @@
  * license.
  */
 import type { Constructor } from '@open-wc/dedupe-mixin';
-import type { ResizeMixinClass } from '@vaadin/component-base/src/resize-mixin.js';
 
 /**
  * A mixin that lays out the pages, keeps `page` in sync with scrolling and
@@ -17,7 +16,7 @@ import type { ResizeMixinClass } from '@vaadin/component-base/src/resize-mixin.j
  */
 export declare function PdfViewerScrollMixin<T extends Constructor<HTMLElement>>(
   base: T,
-): Constructor<PdfViewerScrollMixinClass> & Constructor<ResizeMixinClass> & T;
+): Constructor<PdfViewerScrollMixinClass> & T;
 
 export declare class PdfViewerScrollMixinClass {
   /**
