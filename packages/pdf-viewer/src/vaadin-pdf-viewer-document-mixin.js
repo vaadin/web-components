@@ -95,6 +95,9 @@ export const PdfViewerDocumentMixin = (superClass) =>
     /** @type {import('./pdf-viewer-document-controller.js').PdfViewerDocumentDetails | null} */
     #details = null;
 
+    /** The `src` of the last update. A different `src` starts loading in the next update. */
+    #updatedSrc;
+
     #documentController = new PdfViewerDocumentController(this, {
       onLoadStart: () => {
         this.__loading = true;
@@ -116,6 +119,7 @@ export const PdfViewerDocumentMixin = (superClass) =>
       super.updated(props);
 
       if (props.has('src')) {
+        this.#updatedSrc = this.src;
         this.#documentController.load();
       }
     }
@@ -127,6 +131,17 @@ export const PdfViewerDocumentMixin = (superClass) =>
      */
     get _pdfDocument() {
       return this.#pdfDocument;
+    }
+
+    /**
+     * Whether the document of `src` is loading, or starts loading in the
+     * next update after a change of `src`. Methods that need the document,
+     * e.g. `download()`, wait for it while this is true.
+     * @return {boolean}
+     * @protected
+     */
+    get _documentPending() {
+      return this.__loading || this.src !== this.#updatedSrc;
     }
 
     /**
