@@ -1,5 +1,4 @@
-import { aTimeout, click, fixtureSync, nextFrame, oneEvent } from '@vaadin/testing-helpers';
-import { emulateMedia } from '@web/test-runner-commands';
+import { click, fixtureSync, nextFrame, oneEvent } from '@vaadin/testing-helpers';
 import { visualDiff } from '@web/test-runner-visual-regression';
 import { temperatures } from './temperature-data.js';
 
@@ -699,11 +698,7 @@ const baseOnlyFixtures = {
     >
       <vaadin-chart-series title="Installation" values="${SOLAR_INSTALLATION}"></vaadin-chart-series>
       <vaadin-chart-series title="Manufacturing" values="${SOLAR_MANUFACTURING}"></vaadin-chart-series>
-      <vaadin-chart-series
-        type="areaspline"
-        title="Other"
-        values="[12908, 5948, 8105, 11248, 8989]"
-      ></vaadin-chart-series>
+      <vaadin-chart-series title="Other" values="[12908, 5948, 8105, 11248, 8989]"></vaadin-chart-series>
     </vaadin-chart>
   `,
 
@@ -955,15 +950,18 @@ const nonStyledFixtures = {
     </div>
   `,
 
-  // The chart and the SVG `getSVG()` produces for it, side by side.
+  // The chart and the SVG `getSVG()` produces for it, side by side. Highcharts
+  // exports at 600x400 unless the options give a size, so the export copy gets
+  // the size of its output box. The box is as tall as the chart, so that no
+  // page background, which follows the colour scheme, is in the screenshot.
   'export-svg': `
-    <div style="display: flex; width: 900px; height: 320px">
+    <div style="display: flex; width: 900px; height: 300px">
       <vaadin-chart
         type="column"
         title="Exported chart"
         style="width: 450px; height: 300px"
         categories="${SOLAR_CATEGORIES}"
-        additional-options='{ "exporting": { "enabled": true } }'
+        additional-options='{ "exporting": { "enabled": true, "sourceWidth": 450, "sourceHeight": 300 } }'
       >
         <vaadin-chart-series title="Installation" values="${SOLAR_INSTALLATION}"></vaadin-chart-series>
         <vaadin-chart-series title="Manufacturing" values="${SOLAR_MANUFACTURING}"></vaadin-chart-series>
@@ -1042,11 +1040,8 @@ const allFixtures = { ...fixtures, ...baseOnlyFixtures, ...nonStyledFixtures };
 /** Names of the fixtures `base/chart.test.js` renders on its own. */
 export const BASE_ONLY_FIXTURES = Object.keys(baseOnlyFixtures);
 
-/** Names of the shared fixtures every theme renders. */
-export const SHARED_FIXTURES = Object.keys(fixtures);
-
-/** Names of the fixtures only the non-styled-mode tests render. */
-export const NON_STYLED_FIXTURES = Object.keys(nonStyledFixtures);
+/** Names of every fixture, which the non-styled-mode suites render. */
+export const ALL_FIXTURES = Object.keys(allFixtures);
 
 /** Renders the named fixture and returns the element to snapshot. */
 async function renderFixture(name, { styledMode = true } = {}) {
@@ -1061,10 +1056,6 @@ async function renderFixture(name, { styledMode = true } = {}) {
   }
   if (interactions[name]) {
     await interactions[name](charts[0]);
-    if (!styledMode) {
-      // Outside styled mode, hover and inactive states fade in with JS animations.
-      await aTimeout(400);
-    }
   }
   return root;
 }
@@ -1072,11 +1063,10 @@ async function renderFixture(name, { styledMode = true } = {}) {
 /**
  * Declares one screenshot test per fixture. Passing `dark` renders them with a
  * dark colour scheme and appends `-dark` to the screenshot names, so that the
- * scheme and the name it produces are declared in one place. `prefersDark`
- * emulates `prefers-color-scheme: dark` instead and appends `-prefers-dark`.
+ * scheme and the name it produces are declared in one place.
  * `styledMode: false` renders the charts the way the Flow `Chart` does by default.
  */
-export function defineScreenshotTests(names, { dark = false, prefersDark = false, styledMode = true } = {}) {
+export function defineScreenshotTests(names, { dark = false, styledMode = true } = {}) {
   if (dark) {
     beforeEach(() => {
       document.documentElement.style.setProperty('color-scheme', 'dark');
@@ -1087,23 +1077,8 @@ export function defineScreenshotTests(names, { dark = false, prefersDark = false
     });
   }
 
-  if (prefersDark) {
-    beforeEach(async () => {
-      await emulateMedia({ colorScheme: 'dark' });
-    });
-
-    afterEach(async () => {
-      await emulateMedia({ colorScheme: 'light' });
-    });
-  }
-
   names.forEach((name) => {
-    let screenshot = name;
-    if (dark) {
-      screenshot += '-dark';
-    } else if (prefersDark) {
-      screenshot += '-prefers-dark';
-    }
+    const screenshot = dark ? `${name}-dark` : name;
     it(screenshot, async () => {
       await visualDiff(await renderFixture(name, { styledMode }), screenshot);
     });

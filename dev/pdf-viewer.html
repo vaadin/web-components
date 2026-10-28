@@ -11,7 +11,9 @@
       window.Vaadin.featureFlags.pdfViewerComponent = true;
     </script>
     <script type="module">
+      import '@vaadin/button';
       import '@vaadin/pdf-viewer';
+      import '@vaadin/tooltip';
 
       const viewer = document.querySelector('vaadin-pdf-viewer');
       const select = document.querySelector('#src');
@@ -52,6 +54,10 @@
       });
       viewer.addEventListener('page-count-changed', (e) => {
         pageInput.max = e.detail.value;
+      });
+
+      document.querySelector('#approve').addEventListener('click', () => {
+        log.textContent = 'Approve clicked';
       });
 
       viewer.addEventListener('document-load', (e) => {
@@ -95,6 +101,11 @@
       </label>
       <output id="log"></output>
     </p>
-    <vaadin-pdf-viewer></vaadin-pdf-viewer>
+    <vaadin-pdf-viewer>
+      <vaadin-button slot="toolbar-actions" id="approve" theme="tertiary">
+        Approve
+        <vaadin-tooltip slot="tooltip" text="Approve the document"></vaadin-tooltip>
+      </vaadin-button>
+    </vaadin-pdf-viewer>
   </body>
 </html>

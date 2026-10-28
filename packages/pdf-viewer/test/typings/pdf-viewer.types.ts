@@ -2,11 +2,13 @@ import '../../vaadin-pdf-viewer.js';
 import type { FocusMixinClass } from '@vaadin/a11y-base/src/focus-mixin.js';
 import type { KeyboardMixinClass } from '@vaadin/a11y-base/src/keyboard-mixin.js';
 import type { ElementMixinClass } from '@vaadin/component-base/src/element-mixin.js';
+import type { I18nMixinClass } from '@vaadin/component-base/src/i18n-mixin.js';
 import type { ResizeMixinClass } from '@vaadin/component-base/src/resize-mixin.js';
 import type {
   PdfViewer,
   PdfViewerDocumentErrorEvent,
   PdfViewerDocumentLoadEvent,
+  PdfViewerI18n,
   PdfViewerPageChangedEvent,
   PdfViewerPageCountChangedEvent,
 } from '../../src/vaadin-pdf-viewer.js';
@@ -14,6 +16,7 @@ import type { PdfViewerDocumentMixinClass } from '../../src/vaadin-pdf-viewer-do
 import type { PdfViewerKeyboardMixinClass } from '../../src/vaadin-pdf-viewer-keyboard-mixin.js';
 import type { PdfViewerRenderMixinClass } from '../../src/vaadin-pdf-viewer-render-mixin.js';
 import type { PdfViewerScrollMixinClass } from '../../src/vaadin-pdf-viewer-scroll-mixin.js';
+import type { PdfViewerToolbarMixinClass } from '../../src/vaadin-pdf-viewer-toolbar-mixin.js';
 
 const assertType = <TExpected>(actual: TExpected) => actual;
 
@@ -25,16 +28,19 @@ assertType<PdfViewer>(viewer);
 assertType<string | null | undefined>(viewer.src);
 assertType<number>(viewer.page);
 assertType<number>(viewer.pageCount);
+assertType<PdfViewerI18n | undefined>(viewer.i18n);
 
 // Mixins
 assertType<ElementMixinClass>(viewer);
 assertType<PdfViewerDocumentMixinClass>(viewer);
 assertType<PdfViewerRenderMixinClass>(viewer);
 assertType<PdfViewerScrollMixinClass>(viewer);
+assertType<PdfViewerToolbarMixinClass>(viewer);
 assertType<PdfViewerKeyboardMixinClass>(viewer);
 assertType<ResizeMixinClass>(viewer);
 assertType<FocusMixinClass>(viewer);
 assertType<KeyboardMixinClass>(viewer);
+assertType<I18nMixinClass<PdfViewerI18n>>(viewer);
 
 // Events
 viewer.addEventListener('document-load', (event) => {

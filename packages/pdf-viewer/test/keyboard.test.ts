@@ -9,24 +9,22 @@ import { loadDocument, nextRenderIdle, scrollSettled } from './helpers.js';
 
 describe('keyboard', () => {
   let viewer: PdfViewer;
-
-  function getContent() {
-    return viewer.shadowRoot!.querySelector<HTMLElement>('[part="content"]')!;
-  }
+  let content: HTMLElement;
 
   beforeEach(async () => {
     viewer = fixtureSync('<vaadin-pdf-viewer style="width: 400px; height: 400px"></vaadin-pdf-viewer>');
     await nextRender();
+    content = viewer.shadowRoot!.querySelector<HTMLElement>('[part="content"]')!;
   });
 
   it('should not make the page area focusable without a document', () => {
-    expect(getContent().getAttribute('tabindex')).to.equal('-1');
+    expect(content.getAttribute('tabindex')).to.equal('-1');
   });
 
   it('should make the page area focusable once a document has loaded', async () => {
     await loadDocument(viewer, 'multi-page.pdf');
     await nextUpdate(viewer);
-    expect(getContent().getAttribute('tabindex')).to.equal('0');
+    expect(content.getAttribute('tabindex')).to.equal('0');
   });
 
   describe('with a document', () => {
@@ -37,33 +35,32 @@ describe('keyboard', () => {
     });
 
     it('should scroll the pages with the arrow keys', async () => {
-      getContent().focus();
-      const scrolled = oneEvent(getContent(), 'scroll');
+      content.focus();
+      const scrolled = oneEvent(content, 'scroll');
       // WebKit stops the scroll animation on keyup, so hold the key
       await sendKeys({ down: 'ArrowDown' });
       await aTimeout(50);
       await sendKeys({ up: 'ArrowDown' });
       await scrolled;
-      expect(getContent().scrollTop).to.be.greaterThan(0);
+      expect(content.scrollTop).to.be.greaterThan(0);
     });
 
     it('should scroll by a page with PageDown', async () => {
-      getContent().focus();
+      content.focus();
       await sendKeys({ press: 'PageDown' });
-      await scrollSettled(getContent());
-      expect(getContent().scrollTop).to.be.greaterThan(getContent().clientHeight * 0.5);
+      await scrollSettled(content);
+      expect(content.scrollTop).to.be.greaterThan(content.clientHeight * 0.5);
     });
 
     it('should scroll to the end with End', async () => {
-      getContent().focus();
+      content.focus();
       await sendKeys({ press: 'End' });
-      await scrollSettled(getContent());
-      const content = getContent();
+      await scrollSettled(content);
       expect(content.scrollTop).to.be.closeTo(content.scrollHeight - content.clientHeight, 2);
     });
 
     it('should go to the last page with Ctrl+End', async () => {
-      getContent().focus();
+      content.focus();
       const idle = nextRenderIdle(viewer);
       await sendKeys({ press: 'Control+End' });
       await idle;
@@ -71,7 +68,6 @@ describe('keyboard', () => {
     });
 
     it('should scroll to the top of the current first page with Ctrl+Home', async () => {
-      const content = getContent();
       const scrolled = oneEvent(content, 'scroll');
       content.scrollTop = 50;
       await scrolled;
@@ -91,7 +87,6 @@ describe('keyboard', () => {
     it('should scroll to the top of the current last page with Ctrl+End', async () => {
       viewer.page = 6;
       await nextRenderIdle(viewer);
-      const content = getContent();
       const top = content.scrollTop;
       const scrolled = oneEvent(content, 'scroll');
       content.scrollTop = top - 50;
@@ -107,7 +102,7 @@ describe('keyboard', () => {
     it('should go to the first page with Ctrl+Home', async () => {
       viewer.page = 4;
       await nextRenderIdle(viewer);
-      getContent().focus();
+      content.focus();
       await sendKeys({ press: 'Control+Home' });
       await nextFrame();
       expect(viewer.page).to.equal(1);

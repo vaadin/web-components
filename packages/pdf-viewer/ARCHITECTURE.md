@@ -55,6 +55,10 @@ how to generate them.
 - `PdfViewerScrollMixin` owns the scale, the anchor, the visible pages and `page`. It asks for rendering
   only with `_renderVisible()` and `_cancelRender()`.
 - `PdfViewerKeyboardMixin` handles the keyboard shortcuts.
+- `PdfViewerToolbarMixin` renders the toolbar. Its controls are in the light DOM, so a theme styles the page
+  field like any other `vaadin-integer-field`. The element renders them before a marker comment, so application
+  children added later keep their place.
+- The element applies `I18nMixin` and defines the default texts. The mixins read them from `__effectiveI18n`.
 - The element applies `FocusMixin` and owns the focus state. Listeners on the page area in its template set
   `focused` and `focus-ring`, as focus moving inside the shadow root does not reach listeners on the host.
 - `PdfViewerRenderQueue` decides the render order, the memory budget and the release. It has no host

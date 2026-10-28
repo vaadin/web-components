@@ -30,12 +30,18 @@ const pdfViewerBaseStyles = css`
     display: none !important;
   }
 
+  .top-area {
+    flex: 0 1 auto;
+    overflow-y: auto;
+    scroll-padding: calc(var(--vaadin-focus-ring-width) * 2 + 2px);
+  }
+
   .content-area {
     position: relative;
     display: flex;
-    flex: 1 1 auto;
+    flex: 1 1 0;
     min-width: 0;
-    min-height: 0;
+    min-height: 40%;
   }
 
   [part='content'] {
@@ -56,6 +62,8 @@ const pdfViewerBaseStyles = css`
     z-index: 1;
     pointer-events: none;
     border-radius: max(0px, var(--vaadin-pdf-viewer-border-radius, var(--vaadin-radius-m)) - 1px);
+    border-start-start-radius: 0;
+    border-start-end-radius: 0;
     outline: var(--vaadin-focus-ring-width) solid var(--vaadin-focus-ring-color);
     outline-offset: calc(var(--vaadin-focus-ring-width) * -1);
   }
