@@ -16,8 +16,8 @@ describe('vaadin-pdf-viewer', () => {
   });
 
   describe('host', () => {
-    // The toolbar controls are other components, so only their attributes matter here.
-    const options = { ignoreChildren: ['vaadin-integer-field', 'vaadin-pdf-viewer-button', 'vaadin-select'] };
+    // Leaves out the tooltips of the buttons and the items of the select.
+    const options = { ignoreChildren: ['vaadin-pdf-viewer-button', 'vaadin-select'] };
 
     it('default', async () => {
       await expect(viewer).dom.to.equalSnapshot(options);

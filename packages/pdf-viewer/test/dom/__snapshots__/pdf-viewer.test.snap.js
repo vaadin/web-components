@@ -38,6 +38,29 @@ snapshots["vaadin-pdf-viewer host default"] =
     style="--_page-digits:1;"
     theme="align-right"
   >
+    <span slot="suffix">
+    </span>
+    <label
+      for="input-vaadin-integer-field-12"
+      id="label-vaadin-integer-field-2"
+      slot="label"
+    >
+    </label>
+    <div
+      hidden=""
+      id="error-message-vaadin-integer-field-4"
+      slot="error-message"
+    >
+    </div>
+    <input
+      disabled=""
+      id="input-vaadin-integer-field-12"
+      max="1"
+      min="1"
+      slot="input"
+      step="any"
+      type="number"
+    >
   </vaadin-integer-field>
   <vaadin-pdf-viewer-button
     aria-describedby="vaadin-tooltip-5"
@@ -111,6 +134,30 @@ snapshots["vaadin-pdf-viewer host document"] =
     style="--_page-digits:1;"
     theme="align-right"
   >
+    <span slot="suffix">
+      / 6
+    </span>
+    <label
+      for="input-vaadin-integer-field-12"
+      id="label-vaadin-integer-field-2"
+      slot="label"
+    >
+    </label>
+    <div
+      hidden=""
+      id="error-message-vaadin-integer-field-4"
+      slot="error-message"
+    >
+    </div>
+    <input
+      id="input-vaadin-integer-field-12"
+      max="6"
+      min="1"
+      slot="input"
+      step="any"
+      tabindex="0"
+      type="number"
+    >
   </vaadin-integer-field>
   <vaadin-pdf-viewer-button
     aria-describedby="vaadin-tooltip-5"
