@@ -8,14 +8,13 @@ import { fixtureUrl, loadDocument, nextRenderIdle } from './helpers.js';
 
 describe('vaadin-pdf-viewer', () => {
   let viewer: PdfViewer;
-
-  function getPages() {
-    return [...viewer.shadowRoot!.querySelectorAll<HTMLElement>('[part~="page"]')];
-  }
+  // A live collection, which follows the pages of the loaded document
+  let pages: HTMLCollectionOf<HTMLElement>;
 
   beforeEach(async () => {
     viewer = fixtureSync('<vaadin-pdf-viewer></vaadin-pdf-viewer>');
     await nextRender();
+    pages = viewer.shadowRoot!.querySelector('#pages')!.children as HTMLCollectionOf<HTMLElement>;
   });
 
   describe('custom element definition', () => {
@@ -76,7 +75,7 @@ describe('vaadin-pdf-viewer', () => {
       viewer.src = null;
       await nextFrame();
       expect(viewer.pageCount).to.equal(0);
-      expect(getPages()).to.be.empty;
+      expect(pages).to.have.lengthOf(0);
     });
 
     it('should only show the last document when src changes during loading', async () => {
@@ -89,7 +88,6 @@ describe('vaadin-pdf-viewer', () => {
       await nextRenderIdle(viewer);
       expect(spy).to.be.calledOnce;
       expect(viewer.pageCount).to.equal(1);
-      const pages = getPages();
       expect(pages).to.have.lengthOf(1);
       // US Letter (standard-font.pdf), not A4 (multi-page.pdf)
       const { width, height } = pages[0].getBoundingClientRect();
