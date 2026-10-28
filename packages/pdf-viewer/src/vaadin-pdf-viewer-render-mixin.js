@@ -8,6 +8,7 @@
  * See https://vaadin.com/commercial-license-and-service-terms for the full
  * license.
  */
+import { isKeyboardActive } from '@vaadin/a11y-base/src/focus-utils.js';
 import { issueWarning } from '@vaadin/component-base/src/warnings.js';
 import { MAX_CANVAS_PIXELS, PdfViewerPage } from './pdf-viewer-page.js';
 import { PdfViewerRenderQueue } from './pdf-viewer-render-queue.js';
@@ -38,7 +39,7 @@ export const PdfViewerRenderMixin = (superClass) =>
 
     #renderQueue = new PdfViewerRenderQueue({
       renderPage: (page, pixelRatio) => this.#renderPage(page, pixelRatio),
-      releasePage: (page) => page.release(),
+      releasePage: (page) => this.#releasePage(page),
       onIdle: () => this.#notifyIdle(),
       renderAhead: 1,
       keepRendered: 1,
@@ -119,6 +120,18 @@ export const PdfViewerRenderMixin = (superClass) =>
      * @protected
      */
     _pageSizesChanged() {
+      // To be implemented.
+    }
+
+    /**
+     * Renders the layers over the canvas of a page that has just rendered,
+     * e.g. the text layer. Overrides await `super` first, so that the layers
+     * render in the order of the mixins.
+     * @param {PdfViewerPage} _page
+     * @return {Promise<void>}
+     * @private
+     */
+    async __renderPageLayers(_page) {
       // To be implemented.
     }
 
@@ -212,6 +225,11 @@ export const PdfViewerRenderMixin = (superClass) =>
           this.#setPdfPage(page, pdfPage);
         }
         await page.render(pixelRatio);
+        // The page may have been released or rendered again meanwhile.
+        if (this._pdfDocument !== pdfDocument || !page.isRendered(pixelRatio)) {
+          return;
+        }
+        await this.__renderPageLayers(page);
       } catch (error) {
         const isCancelled = error?.name === 'RenderingCancelledException' || error?.name === 'AbortException';
         if (this._pdfDocument === pdfDocument && !isCancelled) {
@@ -219,6 +237,23 @@ export const PdfViewerRenderMixin = (superClass) =>
           issueWarning(`Failed to render page ${page.pageNumber} of the PDF document: ${error.message}`);
         }
       }
+    }
+
+    /**
+     * Releases a page, moving focus from inside the page to the pages, so
+     * that keyboard users stay in the viewer.
+     * @private
+     */
+    #releasePage(page) {
+      if (page.element.contains(this.shadowRoot.activeElement)) {
+        // WebKit scrolls the focused scroll container despite preventScroll.
+        const { content } = this.$;
+        const { scrollTop, scrollLeft } = content;
+        content.focus({ preventScroll: true, focusVisible: isKeyboardActive() });
+        content.scrollTop = scrollTop;
+        content.scrollLeft = scrollLeft;
+      }
+      page.release();
     }
 
     /**

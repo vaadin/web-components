@@ -60,6 +60,11 @@ how to generate them.
   - It overrides `_getScaleForSize()` to return the scale for `zoom`.
   - It calls `_refreshLayout()` when `zoom` changes.
   - Its `_zoomFactor` getter reads `_scale`, in units of the actual page size.
+- `PdfViewerTextLayerMixin` renders the text layer of each rendered page. It loads the text of a page once
+  per document and sets the document language on the pages.
+- `PdfViewerLinksMixin` adds the links of each rendered page and follows internal links with `_scrollToPage()`.
+- After a page canvas renders, `PdfViewerRenderMixin` awaits `__renderPageLayers(page)`. Each override awaits
+  `super` first, so the layers render in the order of the mixins: text, then links.
 - `PdfViewerKeyboardMixin` handles the keyboard shortcuts.
 - `PdfViewerToolbarMixin` renders the header and the toolbar. Its controls are in the light DOM, so a theme
   styles the page field like any other `vaadin-integer-field`. The element renders them before a marker comment,
@@ -75,6 +80,17 @@ how to generate them.
 - `pdf-viewer-zoom-utils.js` has the zoom levels, their format and the check of a `zoom` value.
 - To check whether a result belongs to the current document, a mixin compares `_pdfDocument` with the
   document from the start of the call.
+
+## Text and links
+
+- The text layer of pdf.js puts transparent text over the canvas. Users can select it, and screen readers
+  read it.
+- Pages that lose their canvas also lose their text and link layers. Screen readers therefore reach only
+  the text near the view.
+- Links are in their own layer over the text layer. Each link is named after the text it covers, or
+  after its URL or the page it goes to.
+- Only `http:`, `https:` and `mailto:` links open, in a new tab without access to the viewer.
+- When a focused link loses its page, focus moves to the page area.
 
 ## Install size
 

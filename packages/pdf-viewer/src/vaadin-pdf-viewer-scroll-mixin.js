@@ -151,12 +151,14 @@ export const PdfViewerScrollMixin = (superClass) =>
     }
 
     /**
-     * Scrolls to the start of the given page and makes it the current page,
-     * also when it is the current page already.
+     * Scrolls to the start of the given page, or to a position on it, and
+     * makes it the current page, also when it is the current page already.
      * @param {number} page
+     * @param {number} [top] the position in PDF units from the bottom of the
+     *   page, like in link destinations
      * @protected
      */
-    _scrollToPage(page) {
+    _scrollToPage(page, top) {
       if (!this.#hasLayout() || this._scale <= 0) {
         // Scroll once the pages can be laid out.
         this.#pendingPage = page;
@@ -172,7 +174,14 @@ export const PdfViewerScrollMixin = (superClass) =>
         );
       } else {
         const pageView = this.__pages[page - 1];
-        content.scrollTop = pageView.element.offsetTop - Number.parseFloat(getComputedStyle(content).paddingBlockStart);
+        let offset = -Number.parseFloat(getComputedStyle(content).paddingBlockStart);
+        if (top !== undefined) {
+          const y = pageView.pdfPage
+            ? pageView.pdfPage.getViewport({ scale: this._scale }).convertToViewportPoint(0, top)[1]
+            : (pageView.unscaledHeight - top) * this._scale;
+          offset = Math.max(y, 0);
+        }
+        content.scrollTop = pageView.element.offsetTop + offset;
         this.#setPageFromViewer(page);
       }
 

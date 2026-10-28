@@ -30,6 +30,9 @@ const DEFAULT_I18N = {
   pageWidth: 'Page width',
   pageFit: 'Page fit',
   document: 'PDF document',
+  link: 'Link',
+  goToPage: 'Go to page {page}',
+  externalLink: '{text} (opens in a new tab)',
 };
 
 /**
@@ -78,19 +81,20 @@ const DEFAULT_I18N = {
  *
  * The following custom CSS properties are available for styling:
  *
- * Custom CSS property                        |
- * :-------------------------------------------|
- * | `--vaadin-pdf-viewer-background`          |
- * | `--vaadin-pdf-viewer-border-color`        |
- * | `--vaadin-pdf-viewer-border-radius`       |
- * | `--vaadin-pdf-viewer-padding`             |
- * | `--vaadin-pdf-viewer-page-background`     |
- * | `--vaadin-pdf-viewer-page-gap`            |
- * | `--vaadin-pdf-viewer-page-shadow`         |
- * | `--vaadin-pdf-viewer-text-color`          |
- * | `--vaadin-pdf-viewer-toolbar-background`  |
- * | `--vaadin-pdf-viewer-toolbar-gap`         |
- * | `--vaadin-pdf-viewer-toolbar-padding`     |
+ * Custom CSS property                            |
+ * :----------------------------------------------|
+ * | `--vaadin-pdf-viewer-background`            |
+ * | `--vaadin-pdf-viewer-border-color`          |
+ * | `--vaadin-pdf-viewer-border-radius`         |
+ * | `--vaadin-pdf-viewer-padding`               |
+ * | `--vaadin-pdf-viewer-page-background`       |
+ * | `--vaadin-pdf-viewer-page-gap`              |
+ * | `--vaadin-pdf-viewer-page-shadow`           |
+ * | `--vaadin-pdf-viewer-selection-background`  |
+ * | `--vaadin-pdf-viewer-text-color`            |
+ * | `--vaadin-pdf-viewer-toolbar-background`    |
+ * | `--vaadin-pdf-viewer-toolbar-gap`           |
+ * | `--vaadin-pdf-viewer-toolbar-padding`       |
  *
  * See [Styling Components](https://vaadin.com/docs/latest/styling/styling-components) documentation.
  *
@@ -152,8 +156,14 @@ class PdfViewer extends PdfViewerMixin(
    *   pageWidth: 'Page width',
    *   // Zoom select item that fits the whole page into the viewer.
    *   pageFit: 'Page fit',
-   *   // Title of the header for a document without a file name or title.
-   *   document: 'PDF document'
+   *   // Title of the header for a document without a file name.
+   *   document: 'PDF document',
+   *   // Accessible name of a link without text whose destination is unknown.
+   *   link: 'Link',
+   *   // Accessible name of a link without text to another page. {page} is replaced with the page number.
+   *   goToPage: 'Go to page {page}',
+   *   // Accessible name of a link that opens in a new tab. {text} is replaced with the text of the link, or its URL.
+   *   externalLink: '{text} (opens in a new tab)'
    * }
    * ```
    *

@@ -31,6 +31,7 @@ function getErrorReason(error) {
 /**
  * @typedef {Object} PdfViewerDocumentDetails
  * @property {string} title The title from the metadata of the document, or an empty string.
+ * @property {string} language The language from the metadata of the document, or an empty string.
  * @property {import('pdfjs-dist').PDFPageProxy} firstPage The first page of the document.
  * @property {string} dispositionFileName The PDF file name from the `Content-Disposition` header of the
  *   response, or an empty string.
@@ -157,6 +158,7 @@ export class PdfViewerDocumentController {
     }
     this.#callbacks.onLoad(pdfDocument, {
       title: info?.Title || '',
+      language: info?.Language || '',
       firstPage,
       dispositionFileName: contentDispositionFilename || '',
     });
