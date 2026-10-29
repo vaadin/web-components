@@ -39,6 +39,7 @@ vaadin-pdf-viewer::part(find-bar),
 ::part(input-field),
 :where(
   vaadin-avatar-group,
+  vaadin-breadcrumbs,
   vaadin-combo-box,
   vaadin-confirm-dialog,
   vaadin-context-menu,
