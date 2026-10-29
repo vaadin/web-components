@@ -180,6 +180,28 @@ export async function resolveDestination(pdfDocument, { dest, action }, { page, 
 }
 
 /**
+ * Returns the URL to show for a link, without its user name and password, as
+ * in pdf.js. They could make a link look like it goes to another site, e.g.
+ * `https://vaadin.com@example.com/`.
+ *
+ * @param {string} url
+ * @return {string}
+ */
+function getDisplayUrl(url) {
+  try {
+    const parsedUrl = new URL(url);
+    if (parsedUrl.username || parsedUrl.password) {
+      parsedUrl.username = '';
+      parsedUrl.password = '';
+      return parsedUrl.href;
+    }
+  } catch {
+    // Invalid URLs get no link, see createLink().
+  }
+  return url;
+}
+
+/**
  * Returns the accessible name of a link: its text, or the URL or the page it
  * goes to when it has none. Links to the next or previous page are named so,
  * as that page depends on the current page. Names of external links tell that
@@ -190,7 +212,7 @@ export async function resolveDestination(pdfDocument, { dest, action }, { page, 
  * @return {string}
  */
 export function getLinkLabel({ text, url, action, targetPage }, i18n) {
-  let label = text || url;
+  let label = text || (url && getDisplayUrl(url));
   if (!label && RELATIVE_ACTION_NAMES[action]) {
     label = i18n[RELATIVE_ACTION_NAMES[action]];
   } else if (!label) {

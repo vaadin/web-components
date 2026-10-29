@@ -281,6 +281,13 @@ describe('links', () => {
       expect(getLinks(1)[0].getAttribute('aria-label')).to.equal('https://vaadin.com/ (opens in a new tab)');
     });
 
+    it('should leave the user name and password out of the URL in the name of a link without text', async () => {
+      await loadPdf([
+        { content: '', annotations: [uriLink([50, 700, 200, 720], 'https://vaadin.com:secret@example.com/')] },
+      ]);
+      expect(getLinks(1)[0].getAttribute('aria-label')).to.equal('https://example.com/ (opens in a new tab)');
+    });
+
     it('should name an internal link without text by the page it goes to', async () => {
       await loadPdf([
         { content: '', annotations: ['<< /Type /Annot /Subtype /Link /Rect [50 700 200 720] /Dest [1 /Fit] >>'] },
