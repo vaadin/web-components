@@ -12,6 +12,8 @@ import type { Constructor } from '@open-wc/dedupe-mixin';
 
 /**
  * A mixin that adds downloading the document, with a button in the toolbar.
+ * An application can replace the button with its own component in the
+ * `download-button` slot.
  */
 export declare function PdfViewerDownloadMixin<T extends Constructor<HTMLElement>>(
   base: T,

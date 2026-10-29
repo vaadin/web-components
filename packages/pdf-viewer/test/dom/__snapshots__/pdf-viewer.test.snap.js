@@ -103,7 +103,7 @@ snapshots["vaadin-pdf-viewer host default"] =
     has-tooltip=""
     icon="download"
     role="button"
-    slot="toolbar-default-actions"
+    slot="download-button"
     style="--_vaadin-button-disabled-pointer-events: auto;"
     tabindex="0"
     theme="tertiary icon"
@@ -205,7 +205,7 @@ snapshots["vaadin-pdf-viewer host document"] =
     has-tooltip=""
     icon="download"
     role="button"
-    slot="toolbar-default-actions"
+    slot="download-button"
     style="--_vaadin-button-disabled-pointer-events: auto;"
     tabindex="0"
     theme="tertiary icon"
@@ -247,7 +247,7 @@ snapshots["vaadin-pdf-viewer shadow default"] =
     <div part="toolbar-group">
       <slot name="toolbar-actions">
       </slot>
-      <slot name="toolbar-default-actions">
+      <slot name="download-button">
       </slot>
     </div>
   </div>
@@ -299,7 +299,7 @@ snapshots["vaadin-pdf-viewer shadow document"] =
     <div part="toolbar-group">
       <slot name="toolbar-actions">
       </slot>
-      <slot name="toolbar-default-actions">
+      <slot name="download-button">
       </slot>
     </div>
   </div>
@@ -449,7 +449,7 @@ snapshots["vaadin-pdf-viewer shadow header title"] =
     <div part="toolbar-group">
       <slot name="toolbar-actions">
       </slot>
-      <slot name="toolbar-default-actions">
+      <slot name="download-button">
       </slot>
     </div>
   </div>
@@ -600,7 +600,7 @@ snapshots["vaadin-pdf-viewer shadow header hidden"] =
     <div part="toolbar-group">
       <slot name="toolbar-actions">
       </slot>
-      <slot name="toolbar-default-actions">
+      <slot name="download-button">
       </slot>
     </div>
   </div>
@@ -751,7 +751,7 @@ snapshots["vaadin-pdf-viewer shadow toolbar collapsed"] =
     <div part="toolbar-group">
       <slot name="toolbar-actions">
       </slot>
-      <slot name="toolbar-default-actions">
+      <slot name="download-button">
       </slot>
     </div>
   </div>

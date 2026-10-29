@@ -12,7 +12,7 @@ import '@vaadin/integer-field/src/vaadin-integer-field.js';
 import '@vaadin/select/src/vaadin-select.js';
 import '@vaadin/tooltip/src/vaadin-tooltip.js';
 import './vaadin-pdf-viewer-button.js';
-import { html, nothing } from 'lit';
+import { html } from 'lit';
 import { styleMap } from 'lit/directives/style-map.js';
 import { slotContent } from '@vaadin/component-base/src/directives/slot-content.js';
 import { formatZoom, getZoomInLevel, getZoomOutLevel, ZOOM_LEVELS } from './pdf-viewer-zoom-utils.js';
@@ -106,18 +106,19 @@ export const PdfViewerToolbarMixin = (superClass) =>
           </div>
           <div part="toolbar-group">
             <slot name="toolbar-actions"></slot>
-            <slot name="toolbar-default-actions" ${slotContent(this._renderDefaultActions())}></slot>
+            ${this._renderToolbarActionSlots()}
           </div>
         </div>
       `;
     }
 
     /**
-     * Returns the template of the built-in buttons in the `toolbar-default-actions` slot.
+     * Returns the slots of the built-in buttons, which come after the
+     * application controls of `toolbar-actions`.
      * @protected
      */
-    _renderDefaultActions() {
-      return nothing;
+    _renderToolbarActionSlots() {
+      return html``;
     }
 
     /**
