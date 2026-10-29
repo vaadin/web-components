@@ -51,8 +51,16 @@ describe('vaadin-chart local exporting', () => {
     expect(postStub).to.be.not.called;
   });
 
-  it('should post the export to the export server from exportChart', async () => {
+  it('should export locally from exportChart', async () => {
+    // The download menu items call `exportChart()` without options too
     await chart.configuration.exportChart();
+
+    expect(downloadStub).to.be.calledOnce;
+    expect(postStub).to.be.not.called;
+  });
+
+  it('should post the export to the export server when local is false', async () => {
+    await chart.configuration.exportChart({ local: false });
 
     expect(postStub).to.be.calledOnce;
     expect(downloadStub).to.be.not.called;

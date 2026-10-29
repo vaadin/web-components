@@ -52,8 +52,8 @@ describe('vaadin-chart exporting', () => {
   }
 
   before(() => {
-    // Prevent posting the export to the export server, and downloading it in the
-    // browser, which `exporting.local` opts into
+    // Prevent posting the export to the export server, which is the default path,
+    // and downloading it in the browser, which `exporting.local` opts into
     postStub = sinon.stub(HttpUtilities, 'post');
     downloadStub = sinon.stub(Exporting.prototype, 'downloadSVG');
     // Hook into Highcharts events
@@ -84,16 +84,36 @@ describe('vaadin-chart exporting', () => {
       expect(postStub).to.be.calledOnce;
       expect(postStub.firstCall.args[0]).to.include('export-svg.highcharts.com');
       expect(postStub.firstCall.args[1].svg).to.include('<svg');
+      expect(downloadStub).to.be.not.called;
     });
 
     it('should post the export from the download menu items', async () => {
-      const exported = oneEvent(chart, 'chart-after-export');
+      const exported = waitForExport();
       simulateExportToPNG();
       await exported;
+      // `exportChart` posts once the export events have fired
       await nextRender();
 
       expect(postStub).to.be.calledOnce;
       expect(postStub.firstCall.args[1].type).to.equal('image/png');
+      expect(downloadStub).to.be.not.called;
+    });
+
+    it('should export in the browser when exportChart is called with local', async () => {
+      await chart.configuration.exportChart({ local: true });
+
+      expect(downloadStub).to.be.calledOnce;
+      expect(postStub).to.be.not.called;
+    });
+
+    it('should export in the browser when the chart options set local', async () => {
+      chart.updateConfiguration({ exporting: { local: true } });
+      await nextRender();
+
+      await chart.configuration.exportChart();
+
+      expect(downloadStub).to.be.calledOnce;
+      expect(postStub).to.be.not.called;
     });
   });
 
