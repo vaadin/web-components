@@ -12,16 +12,26 @@ import { SlotController } from '@vaadin/component-base/src/slot-controller.js';
 
 /**
  * A controller for the slot of a built-in toolbar button. It creates the
- * default button and sets its icon and tooltip. A custom component in the
- * slot keeps its own content, but gets the click action and the disabled
- * state too.
+ * default button and sets its icon, tooltip and disabled state. A custom
+ * component in the slot keeps its own content and state, and gets only the
+ * click action.
  */
 export class PdfViewerButtonController extends SlotController {
+  /** @type {() => void} */
+  #onClick;
+
   /**
    * The tooltip that the controller added to the default button.
    * @type {HTMLElement | null}
    */
   #tooltip = null;
+
+  /**
+   * The default button and the disabled state that the controller set on
+   * it last, so that it sets the state only when it changes.
+   * @type {{ button: HTMLElement | null, disabled: boolean }}
+   */
+  #applied = { button: null, disabled: false };
 
   /**
    * @param {HTMLElement} host
@@ -32,12 +42,7 @@ export class PdfViewerButtonController extends SlotController {
   constructor(host, slotName, icon, onClick) {
     super(host, slotName, 'vaadin-pdf-viewer-button');
     this.icon = icon;
-
-    host.addEventListener('click', (event) => {
-      if (this.node && event.composedPath().includes(this.node)) {
-        onClick();
-      }
-    });
+    this.#onClick = onClick;
   }
 
   /**
@@ -52,6 +57,8 @@ export class PdfViewerButtonController extends SlotController {
     if (button._isDefault) {
       this.defaultNode = button;
     }
+
+    button.addEventListener('click', this.#onClick);
 
     this.#tooltip = null;
     if (button === this.defaultNode) {
@@ -71,15 +78,29 @@ export class PdfViewerButtonController extends SlotController {
   }
 
   /**
-   * Updates the disabled state of the slotted component, and the text of
-   * the tooltip of the default button.
+   * Override method from `SlotController` to remove the click listener
+   * from a component that left the slot.
+   * @param {HTMLElement} button
+   * @protected
+   * @override
+   */
+  teardownNode(button) {
+    button.removeEventListener('click', this.#onClick);
+  }
+
+  /**
+   * Updates the disabled state and the tooltip text of the default button.
+   * The disabled state is set only when it changes, so that a state that the
+   * Flow counterpart sets on its own default button stays until then.
    * @param {boolean} disabled
    * @param {string} tooltipText
    */
   updateButton(disabled, tooltipText) {
-    if (this.node) {
-      this.node.disabled = disabled;
+    const button = this.node === this.defaultNode ? this.node : null;
+    if (button && (button !== this.#applied.button || disabled !== this.#applied.disabled)) {
+      button.disabled = disabled;
     }
+    this.#applied = { button, disabled };
     if (this.#tooltip) {
       this.#tooltip.text = tooltipText;
     }

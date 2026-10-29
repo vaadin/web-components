@@ -22,10 +22,10 @@ export declare class PdfViewerDocumentMixinClass {
   src: string | null | undefined;
 
   /**
-   * The name of the file that `download()` saves, which the header also
-   * shows. When not set, the name is the PDF file name from the
-   * `Content-Disposition` header of the response, else the PDF file name
-   * at the end of the path of `src`, else `document.pdf`.
+   * The name of the file that `download()` saves, used as given, which
+   * the header also shows. When not set, the name is the PDF file name
+   * from the `Content-Disposition` header of the response, else the PDF
+   * file name at the end of the path of `src`, else `document.pdf`.
    */
   fileName: string | null | undefined;
 
@@ -41,23 +41,24 @@ export declare class PdfViewerDocumentMixinClass {
   protected readonly _pdfDocument: PDFDocumentProxy | null;
 
   /**
-   * Whether the document of `src` is loading, or starts loading in the
-   * next update after a change of `src`. Methods that need the document,
-   * e.g. `download()`, wait for it while this is true.
+   * Returns a promise for the document of `src`. It resolves once the
+   * document has loaded, also when `src` changes meanwhile, and right away
+   * when no document is loading. It resolves with null without a document,
+   * or when the viewer is not attached.
    */
-  protected readonly _documentPending: boolean;
+  protected _whenDocumentReady(): Promise<PDFDocumentProxy | null>;
 
   /**
    * Returns the name of the document: `fileName`, else the PDF file name
    * from the `Content-Disposition` header, else the PDF file name at the
-   * end of the path of `src`, else an empty
-   * string.
+   * end of the path of `src`, else an empty string.
    */
   protected _getDocumentName(): string;
 
   /**
-   * Returns the name to save the document under: the name of the
-   * document, else `document`, with `.pdf` added when missing.
+   * Returns the name to save the document under: `fileName` as given,
+   * else the name of the document, else `document`, with `.pdf` added
+   * when missing.
    */
   protected _getFileName(): string;
 
