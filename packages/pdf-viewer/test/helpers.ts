@@ -1,4 +1,4 @@
-import { nextFrame, oneEvent } from '@vaadin/testing-helpers';
+import { nextFrame, nextUpdate, oneEvent } from '@vaadin/testing-helpers';
 import sinon from 'sinon';
 import type { PDFDocumentProxy } from 'pdfjs-dist';
 import { acquireWorker, loadPdfjs, releaseWorker } from '../src/pdfjs-loader.js';
@@ -117,6 +117,8 @@ export async function scrollSettled(element: HTMLElement): Promise<void> {
 export type PdfPage = {
   /** The content stream of the page. Font `/F1` is Helvetica. */
   content: string;
+  /** Annotation dictionaries, e.g. links. */
+  annotations?: string[];
   /** The size of the page in PDF units, A4 by default. */
   mediaBox?: [number, number, number, number];
 };
@@ -125,15 +127,18 @@ export type PdfPage = {
  * Creates a PDF with the given pages in memory, and returns an object URL for it.
  */
 export function createPdf(pages: PdfPage[]): string {
-  // Object 1 is the catalog, 2 the page tree, 3 the font, then each page and its content.
+  // Object 1 is the catalog, 2 the page tree, 3 the font, then each page, its content and its annotations.
   const objects = ['<< /Type /Catalog /Pages 2 0 R >>', '', '<< /Type /Font /Subtype /Type1 /BaseFont /Helvetica >>'];
   const pageIds: number[] = [];
-  pages.forEach(({ content, mediaBox = [0, 0, 595, 842] }) => {
+  pages.forEach(({ content, annotations = [], mediaBox = [0, 0, 595, 842] }) => {
     const id = objects.length + 1;
     pageIds.push(id);
+    const annotationIds = annotations.map((_, index) => id + 2 + index);
+    const annots = annotationIds.length ? ` /Annots [${annotationIds.map((ref) => `${ref} 0 R`).join(' ')}]` : '';
     objects.push(
-      `<< /Type /Page /Parent 2 0 R /MediaBox [${mediaBox.join(' ')}] /Resources << /Font << /F1 3 0 R >> >> /Contents ${id + 1} 0 R >>`,
+      `<< /Type /Page /Parent 2 0 R /MediaBox [${mediaBox.join(' ')}] /Resources << /Font << /F1 3 0 R >> >> /Contents ${id + 1} 0 R${annots} >>`,
       `<< /Length ${content.length} >>\nstream\n${content}\nendstream`,
+      ...annotations,
     );
   });
   objects[1] = `<< /Type /Pages /Kids [${pageIds.map((id) => `${id} 0 R`).join(' ')}] /Count ${pages.length} >>`;
@@ -180,4 +185,53 @@ export async function getPdfDocumentPrototype(): Promise<PDFDocumentProxy> {
     await task.destroy();
     releaseWorker(handle);
   }
+}
+
+/**
+ * Holds the pages of all documents from the given page number on until
+ * released, e.g. to stop printing before them. Returns the function that
+ * releases them.
+ */
+export async function holdPages(fromPage: number): Promise<() => void> {
+  const prototype = await getPdfDocumentPrototype();
+  const { getPage } = prototype;
+  let release!: () => void;
+  const released = new Promise<void>((resolve) => {
+    release = resolve;
+  });
+  prototype.getPage = async function (this: PDFDocumentProxy, pageNumber: number) {
+    if (pageNumber >= fromPage) {
+      await released;
+    }
+    return getPage.call(this, pageNumber);
+  };
+  return () => {
+    prototype.getPage = getPage;
+    release();
+  };
+}
+
+/**
+ * Starts printing and waits until the given number of pages is prepared and
+ * the progress bar shows it. Printing stays in progress until the returned
+ * function releases the pages.
+ */
+export async function startPrint(viewer: PdfViewer, preparedPages = 0): Promise<() => void> {
+  const release = await holdPages(preparedPages + 1);
+  viewer.print();
+  // The progress counts the prepared pages.
+  const progress = preparedPages / viewer.pageCount;
+  let progressBar: (HTMLElement & { value: number }) | null = null;
+  for (let i = 0; progressBar?.value !== progress; i++) {
+    if (i === 200) {
+      release();
+      throw new Error(`Printing did not prepare ${preparedPages} pages`);
+    }
+    await nextFrame();
+    progressBar = viewer.querySelector<HTMLElement & { value: number }>('vaadin-progress-bar');
+  }
+  // The bar animates its width to the value.
+  await nextUpdate(progressBar);
+  await Promise.all(progressBar.shadowRoot!.getAnimations().map((animation) => animation.finished));
+  return release;
 }

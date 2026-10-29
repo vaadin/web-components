@@ -64,7 +64,7 @@
         viewer.src = fileUrl;
       });
 
-      ['headerHidden', 'toolbarCollapsed', 'downloadButtonHidden'].forEach((prop) => {
+      ['headerHidden', 'toolbarCollapsed', 'downloadButtonHidden', 'printButtonHidden'].forEach((prop) => {
         document.getElementById(prop).addEventListener('checked-changed', (e) => {
           viewer[prop] = e.detail.value;
         });
@@ -81,6 +81,12 @@
 
       document.getElementById('download').addEventListener('click', () => {
         viewer.download();
+      });
+
+      document.getElementById('print').addEventListener('click', async () => {
+        log.textContent = 'print() called';
+        await viewer.print();
+        log.textContent = 'print() resolved';
       });
 
       document.querySelector('#direction').addEventListener('value-changed', (e) => {
@@ -149,6 +155,7 @@
             value="downloadButtonHidden"
             label="Hide download button"
           ></vaadin-checkbox>
+          <vaadin-checkbox id="printButtonHidden" value="printButtonHidden" label="Hide print button"></vaadin-checkbox>
         </vaadin-checkbox-group>
       </div>
       <div class="control-group">
@@ -158,6 +165,7 @@
       <div class="control-group">
         <span>Methods</span>
         <vaadin-button id="download">download()</vaadin-button>
+        <vaadin-button id="print">print()</vaadin-button>
       </div>
       <div class="control-group">
         <vaadin-radio-group id="direction" label="Direction">
