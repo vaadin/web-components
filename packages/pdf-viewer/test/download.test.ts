@@ -108,14 +108,20 @@ describe('download', () => {
       expect(button.querySelector('vaadin-tooltip')).to.be.null;
     });
 
-    it('should disable the custom button without document', () => {
+    it('should not disable the custom button without document', () => {
+      expect(button.disabled).to.be.false;
+    });
+
+    it('should keep the disabled state of the custom button when a document loads', async () => {
+      button.disabled = true;
+      await loadDocument(viewer, 'multi-page.pdf');
+      await nextUpdate(viewer);
       expect(button.disabled).to.be.true;
     });
 
     it('should download on custom button click', async () => {
       await loadDocument(viewer, 'multi-page.pdf');
       await nextUpdate(viewer);
-      expect(button.disabled).to.be.false;
       const download = nextDownload();
       button.click();
       const { link } = await download;
@@ -163,6 +169,14 @@ describe('download', () => {
 
     it('should keep the theme of the button', () => {
       expect(button.getAttribute('theme')).to.equal('primary icon');
+    });
+
+    it('should keep a disabled state set on the button until a document loads', async () => {
+      const disabledButton = button as HTMLElement & { disabled: boolean };
+      disabledButton.disabled = false;
+      viewer.headerTitle = 'Report';
+      await nextUpdate(viewer);
+      expect(disabledButton.disabled).to.be.false;
     });
   });
 
@@ -277,6 +291,14 @@ describe('download', () => {
       expect(link.download).to.equal('report.pdf');
     });
 
+    it('should use the file name set with fileName as given', async () => {
+      viewer.fileName = 'report';
+      const download = nextDownload();
+      viewer.download();
+      const { link } = await download;
+      expect(link.download).to.equal('report');
+    });
+
     it('should warn when the file cannot be read', async () => {
       const warnStub = sinon.stub(console, 'warn');
       sinon.stub(await getPdfDocumentPrototype(), 'getData').rejects(new Error('Read failed'));
@@ -293,14 +315,13 @@ describe('download', () => {
       expect(clickStub).to.be.not.called;
     });
 
-    it('should release the data when detached', async () => {
+    it('should download and keep the data when detached right after download()', async () => {
       const revokeSpy = sinon.spy(URL, 'revokeObjectURL');
       const download = nextDownload();
       viewer.download();
-      const { link } = await download;
-      expect(revokeSpy).to.be.not.called;
       viewer.remove();
-      expect(revokeSpy).to.be.calledOnceWith(link.href);
+      await download;
+      expect(revokeSpy).to.be.not.called;
     });
 
     describe('release timer', () => {
@@ -330,6 +351,8 @@ describe('download', () => {
 
     describe('while reading the file', () => {
       let release: () => void;
+      /** Resolves when the viewer starts reading the bytes. */
+      let reading: Promise<void>;
 
       beforeEach(async () => {
         // Delay the bytes of the documents until released, then return those of the
@@ -338,7 +361,12 @@ describe('download', () => {
         const released = new Promise<void>((resolve) => {
           release = resolve;
         });
+        let readingStarted: () => void;
+        reading = new Promise<void>((resolve) => {
+          readingStarted = resolve;
+        });
         sinon.stub(await getPdfDocumentPrototype(), 'getData').callsFake(async () => {
+          readingStarted();
           await released;
           return data;
         });
@@ -347,6 +375,7 @@ describe('download', () => {
       it('should download the file with its own name when another document loads', async () => {
         const download = nextDownload();
         getButton()!.click();
+        await reading;
         await loadDocument(viewer, 'links.pdf');
         release();
         const { link, blob } = await download;
@@ -357,18 +386,21 @@ describe('download', () => {
       it('should download the file with the name from when the download started', async () => {
         const download = nextDownload();
         getButton()!.click();
+        await reading;
         viewer.fileName = 'other.pdf';
         release();
         const { link } = await download;
         expect(link.download).to.equal('multi-page.pdf');
       });
 
-      it('should not download the file when detached meanwhile', async () => {
+      it('should download the file when detached meanwhile', async () => {
+        const download = nextDownload();
         getButton()!.click();
+        await reading;
         viewer.remove();
         release();
-        await nextFrame();
-        expect(clickStub).to.be.not.called;
+        const { link } = await download;
+        expect(link.download).to.equal('multi-page.pdf');
       });
     });
   });

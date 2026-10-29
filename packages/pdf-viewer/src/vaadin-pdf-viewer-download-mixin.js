@@ -35,47 +35,21 @@ export const PdfViewerDownloadMixin = (superClass) =>
       };
     }
 
-    /** Set when `download()` waits for the document to load. */
-    #downloadPending = false;
-
-    /**
-     * Aborted when the viewer is detached, to stop the downloads in progress
-     * and release their data.
-     * @type {AbortController | null}
-     */
-    #downloadsController = null;
-
-    /** @type {PdfViewerButtonController} */
-    #buttonController;
+    #buttonController = new PdfViewerButtonController(this, 'download-button', 'download', () => this.download());
 
     /** @protected */
     firstUpdated() {
       super.firstUpdated();
 
-      this.#buttonController = new PdfViewerButtonController(this, 'download-button', 'download', () =>
-        this.download(),
-      );
+      // The controller observes the slot, which exists after the first render.
       this.addController(this.#buttonController);
-    }
-
-    /** @protected */
-    disconnectedCallback() {
-      super.disconnectedCallback();
-
-      this.#downloadsController?.abort();
-      this.#downloadsController = null;
     }
 
     /** @protected */
     updated(props) {
       super.updated(props);
 
-      this.#buttonController?.updateButton(!this.pageCount, this.__effectiveI18n.download);
-
-      if (this.#downloadPending && !this._documentPending) {
-        this.#downloadPending = false;
-        this.#download();
-      }
+      this.#buttonController.updateButton(!this.pageCount, this.__effectiveI18n.download);
     }
 
     /**
@@ -87,15 +61,11 @@ export const PdfViewerDownloadMixin = (superClass) =>
      * without a document, or when the viewer is not attached.
      */
     download() {
-      if (!this.isConnected) {
-        return;
-      }
-
-      if (this._documentPending) {
-        this.#downloadPending = true;
-      } else {
-        this.#download();
-      }
+      this._whenDocumentReady().then((pdfDocument) => {
+        if (pdfDocument) {
+          this.#download(pdfDocument);
+        }
+      });
     }
 
     /**
@@ -112,19 +82,13 @@ export const PdfViewerDownloadMixin = (superClass) =>
     }
 
     /**
-     * Downloads the loaded document under the file name it has now, also
-     * when another document loads or `fileName` changes while its bytes
-     * are read.
+     * Downloads the document under the file name it has now, also when
+     * another document loads, `fileName` changes or the viewer is detached
+     * while its bytes are read.
      * @private
      */
-    #download() {
-      const pdfDocument = this._pdfDocument;
-      if (!pdfDocument || !this.isConnected) {
-        return;
-      }
-
-      this.#downloadsController ??= new AbortController();
-      downloadDocument(pdfDocument, this._getFileName(), this.#downloadsController.signal).catch((error) => {
+    #download(pdfDocument) {
+      downloadDocument(pdfDocument, this._getFileName()).catch((error) => {
         // Reading the bytes fails when the document is unloaded meanwhile.
         if (this._pdfDocument === pdfDocument) {
           issueWarning(`Failed to download the PDF document: ${error.message}`);

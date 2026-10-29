@@ -48,10 +48,10 @@ export const PdfViewerDocumentMixin = (superClass) =>
         },
 
         /**
-         * The name of the file that `download()` saves, which the header also
-         * shows. When not set, the name is the PDF file name from the
-         * `Content-Disposition` header of the response, else the PDF file name
-         * at the end of the path of `src`, else `document.pdf`.
+         * The name of the file that `download()` saves, used as given, which
+         * the header also shows. When not set, the name is the PDF file name
+         * from the `Content-Disposition` header of the response, else the PDF
+         * file name at the end of the path of `src`, else `document.pdf`.
          *
          * @attr {string} file-name
          */
@@ -98,6 +98,12 @@ export const PdfViewerDocumentMixin = (superClass) =>
     /** The `src` of the last update. A different `src` starts loading in the next update. */
     #updatedSrc;
 
+    /**
+     * The resolve functions of `_whenDocumentReady()` calls that wait for the document.
+     * @type {Array<(pdfDocument: import('pdfjs-dist').PDFDocumentProxy | null) => void>}
+     */
+    #readyCallbacks = [];
+
     #documentController = new PdfViewerDocumentController(this, {
       onLoadStart: () => {
         this.__loading = true;
@@ -122,6 +128,8 @@ export const PdfViewerDocumentMixin = (superClass) =>
         this.#updatedSrc = this.src;
         this.#documentController.load();
       }
+
+      this.#resolveReadyCallbacks();
     }
 
     /**
@@ -134,14 +142,21 @@ export const PdfViewerDocumentMixin = (superClass) =>
     }
 
     /**
-     * Whether the document of `src` is loading, or starts loading in the
-     * next update after a change of `src`. Methods that need the document,
-     * e.g. `download()`, wait for it while this is true.
-     * @return {boolean}
+     * Returns a promise for the document of `src`. It resolves once the
+     * document has loaded, also when `src` changes meanwhile, and right away
+     * when no document is loading. It resolves with null without a document,
+     * or when the viewer is not attached.
+     * @return {Promise<import('pdfjs-dist').PDFDocumentProxy | null>}
      * @protected
      */
-    get _documentPending() {
-      return this.__loading || this.src !== this.#updatedSrc;
+    _whenDocumentReady() {
+      if (!this.isConnected) {
+        return Promise.resolve(null);
+      }
+      return new Promise((resolve) => {
+        this.#readyCallbacks.push(resolve);
+        this.#resolveReadyCallbacks();
+      });
     }
 
     /**
@@ -164,8 +179,7 @@ export const PdfViewerDocumentMixin = (superClass) =>
     /**
      * Returns the name of the document: `fileName`, else the PDF file name
      * from the `Content-Disposition` header, else the PDF file name at the
-     * end of the path of `src`, else an empty
-     * string.
+     * end of the path of `src`, else an empty string.
      * @return {string}
      * @protected
      */
@@ -174,14 +188,32 @@ export const PdfViewerDocumentMixin = (superClass) =>
     }
 
     /**
-     * Returns the name to save the document under: the name of the
-     * document, else `document`, with `.pdf` added when missing.
+     * Returns the name to save the document under: `fileName` as given,
+     * else the name of the document, else `document`, with `.pdf` added
+     * when missing.
      * @return {string}
      * @protected
      */
     _getFileName() {
+      if (this.fileName) {
+        return this.fileName;
+      }
       const name = this._getDocumentName() || 'document';
       return /\.pdf$/iu.test(name) ? name : `${name}.pdf`;
+    }
+
+    /**
+     * Resolves the `_whenDocumentReady()` calls once no document is loading.
+     * @private
+     */
+    #resolveReadyCallbacks() {
+      if (this.__loading || this.src !== this.#updatedSrc || !this.#readyCallbacks.length) {
+        return;
+      }
+      const callbacks = this.#readyCallbacks;
+      this.#readyCallbacks = [];
+      const pdfDocument = this.isConnected ? this.#pdfDocument : null;
+      callbacks.forEach((resolve) => resolve(pdfDocument));
     }
 
     /** @private */
