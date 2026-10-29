@@ -10,8 +10,8 @@
  */
 
 /**
- * The text of a page for searching, built from the text items of pdf.js
- * `getTextContent()`. The text items are in the same order as the elements
+ * The text of a page for searching, built from the text items of
+ * `readTextItems()`. The text items are in the same order as the elements
  * of the text layer, so a match in the text maps to text layer elements.
  *
  * @typedef {Object} PageText
@@ -21,7 +21,26 @@
  */
 
 /**
- * @param {Array<{ str?: string, hasEOL?: boolean }>} contentItems the items of `getTextContent()`
+ * Returns the text items of a page, including the marked content items, as
+ * the text layer gets them. Unlike `getTextContent()` of pdf.js, it reads the
+ * stream without `for await`, which Safari 26 and earlier do not support.
+ *
+ * @param {import('pdfjs-dist').PDFPageProxy} pdfPage
+ * @return {Promise<Array<{ str?: string, hasEOL?: boolean }>>}
+ */
+export async function readTextItems(pdfPage) {
+  const reader = pdfPage.streamTextContent({ includeMarkedContent: true }).getReader();
+  const items = [];
+  let result = await reader.read();
+  while (!result.done) {
+    items.push(...result.value.items);
+    result = await reader.read();
+  }
+  return items;
+}
+
+/**
+ * @param {Array<{ str?: string, hasEOL?: boolean }>} contentItems the items of `readTextItems()`
  * @return {PageText}
  */
 export function createPageText(contentItems) {

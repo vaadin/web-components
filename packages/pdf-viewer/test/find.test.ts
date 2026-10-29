@@ -149,6 +149,21 @@ describe('find', () => {
         expect(event.detail.matchCount).to.equal(6);
       });
 
+      it('should find matches when streams are not async iterable', async () => {
+        // Safari 26 and earlier cannot iterate a ReadableStream with `for await`.
+        const descriptor = Object.getOwnPropertyDescriptor(ReadableStream.prototype, Symbol.asyncIterator);
+        delete (ReadableStream.prototype as Partial<ReadableStream>)[Symbol.asyncIterator];
+        try {
+          const result = oneEvent(viewer, 'find-result');
+          viewer.find('unique word');
+          expect((await result).detail.matchCount).to.equal(5);
+        } finally {
+          if (descriptor) {
+            Object.defineProperty(ReadableStream.prototype, Symbol.asyncIterator, descriptor);
+          }
+        }
+      });
+
       it('should highlight the matches on rendered pages', async () => {
         viewer.find('quick');
         await currentMatchShown(viewer);
@@ -427,12 +442,21 @@ describe('find', () => {
 
     describe('highlights', () => {
       it('should go to the page of the match when its text differs from the text layer', async () => {
-        // The text for searching has one more item than the text layer of the first page.
+        // The text for searching has one more item than the text layer of the first page, which has rendered already.
         const prototype = await getPdfPagePrototype();
-        const getTextContent = prototype.getTextContent;
-        sinon.stub(prototype, 'getTextContent').callsFake(async function (this: PDFPageProxy, ...args) {
-          const content = await getTextContent.apply(this, args);
-          return this.pageNumber === 1 ? { ...content, items: [...content.items, { str: 'extra' } as any] } : content;
+        const streamTextContent = prototype.streamTextContent;
+        sinon.stub(prototype, 'streamTextContent').callsFake(function (this: PDFPageProxy, ...args) {
+          const stream = streamTextContent.apply(this, args);
+          if (this.pageNumber !== 1) {
+            return stream;
+          }
+          return stream.pipeThrough(
+            new TransformStream({
+              transform(content, controller) {
+                controller.enqueue({ ...content, items: [...content.items, { str: 'extra' }] });
+              },
+            }),
+          );
         });
         getContent().scrollTop = 100;
         await scrollSettled(getContent());
@@ -449,19 +473,23 @@ describe('find', () => {
         clearWarnings();
         const warn = sinon.stub(console, 'warn');
         const prototype = await getPdfPagePrototype();
-        const getTextContent = prototype.getTextContent;
+        const streamTextContent = prototype.streamTextContent;
         let failed = false;
-        sinon.stub(prototype, 'getTextContent').callsFake(function (this: PDFPageProxy, ...args) {
+        sinon.stub(prototype, 'streamTextContent').callsFake(function (this: PDFPageProxy, ...args) {
           if (this.pageNumber === 5 && !failed) {
             failed = true;
-            return Promise.reject(new Error('Read failed'));
+            return new ReadableStream({
+              start(controller) {
+                controller.error(new Error('Read failed'));
+              },
+            });
           }
-          return getTextContent.apply(this, args);
+          return streamTextContent.apply(this, args);
         });
         let result = oneEvent(viewer, 'find-result');
         viewer.find('marker5');
         expect((await result).detail.matchCount).to.equal(0);
-        expect(warn).to.be.calledWithMatch(/text of page 5/u);
+        expect(warn).to.be.calledWithMatch(/load the text of page 5/u);
         result = oneEvent(viewer, 'find-result');
         viewer.find('marker5');
         expect((await result).detail.matchCount).to.equal(1);
@@ -525,14 +553,24 @@ describe('find', () => {
         // Delay the text of the fourth page of the current document until settled.
         settle = undefined;
         const prototype = await getPdfPagePrototype();
-        const getTextContent = prototype.getTextContent;
-        sinon.stub(prototype, 'getTextContent').callsFake(function (this: PDFPageProxy, ...args) {
+        const streamTextContent = prototype.streamTextContent;
+        sinon.stub(prototype, 'streamTextContent').callsFake(function (this: PDFPageProxy, ...args) {
           if (this.pageNumber === 4 && !settle) {
-            return new Promise((resolve, reject) => {
-              settle = { resolve, reject };
+            return new ReadableStream({
+              start(controller) {
+                settle = {
+                  resolve(value) {
+                    controller.enqueue(value);
+                    controller.close();
+                  },
+                  reject(error) {
+                    controller.error(error);
+                  },
+                };
+              },
             });
           }
-          return getTextContent.apply(this, args);
+          return streamTextContent.apply(this, args);
         });
         viewer.find('the needle');
         for (let i = 0; i < 50 && !settle; i++) {
