@@ -9,7 +9,7 @@
  * license.
  */
 import { issueWarning } from '@vaadin/component-base/src/warnings.js';
-import { createPageText, findInText, getMatchParts, normalizeText } from './pdf-viewer-find.js';
+import { createPageText, findInText, getMatchParts, normalizeText, readTextItems } from './pdf-viewer-find.js';
 
 /** The number of pages whose text is loaded at a time when searching. */
 const SEARCH_BATCH = 10;
@@ -210,8 +210,8 @@ export const PdfViewerFindMixin = (superClass) =>
         const pdfDocument = this._pdfDocument;
         const promise = pdfDocument
           .getPage(pageIndex + 1)
-          .then((pdfPage) => pdfPage.getTextContent({ includeMarkedContent: true }))
-          .then(({ items }) => {
+          .then((pdfPage) => readTextItems(pdfPage))
+          .then((items) => {
             // The marked content items have no text and are skipped by `createPageText()`.
             const pageText = createPageText(items);
             return { pageText, normalized: normalizeText(pageText.text) };
