@@ -156,7 +156,9 @@ export const PdfViewerScrollMixin = (superClass) =>
      * @param {number} page
      * @param {{ left: number, top: number }} [offset] the offset from the top
      *   left corner of the page in CSS pixels. Without it, the padding above
-     *   the page shows too, and the horizontal scroll position stays.
+     *   the page shows too, and the horizontal scroll position stays. While
+     *   the pages have no layout, e.g. in a hidden viewer, only the page is
+     *   kept, and the offset is dropped.
      * @protected
      */
     _scrollToPage(page, offset) {

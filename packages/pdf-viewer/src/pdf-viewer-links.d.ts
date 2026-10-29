@@ -24,6 +24,8 @@ export interface PdfViewerDestination {
 export interface PdfViewerLinkAnnotation extends PdfViewerDestination {
   rect: number[];
   url?: string;
+  /** The text that the link covers. */
+  overlaidText?: string;
 }
 
 /**
@@ -32,8 +34,8 @@ export interface PdfViewerLinkAnnotation extends PdfViewerDestination {
  * External links open in a new tab without access to the page.
  */
 export declare function createLink(
-  annotation: PdfViewerDestination & { url?: string },
-  followLink: (annotation: object) => void,
+  annotation: PdfViewerLinkAnnotation,
+  followLink: (annotation: PdfViewerLinkAnnotation) => void,
 ): HTMLAnchorElement | null;
 
 /**
