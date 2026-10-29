@@ -242,22 +242,23 @@ export class PdfViewerPage {
 
   /**
    * Highlights parts of the text of the text layer, e.g. the matches of a
-   * search, replacing the previous highlights. Does nothing without a text layer.
+   * search, replacing the previous highlights. Does nothing without a text
+   * layer, or while the page has no size, e.g. inside a hidden ancestor.
    *
    * @param {Array<{ itemIndex: number, start: number, end: number, current: boolean }>} parts
    *   the text item, by its index in the text layer, and the offsets of the text to highlight in it
    */
   renderFindLayer(parts) {
     this.clearFindLayer();
-    if (!this.textLayer || !parts.length) {
+    // Positioned in % of the page, so that they stay in place when zooming.
+    const pageRect = this.element.getBoundingClientRect();
+    if (!this.textLayer || !parts.length || !pageRect.width || !pageRect.height) {
       return;
     }
 
     const { textDivs } = this.textLayer;
     const layer = document.createElement('div');
     layer.className = 'find-layer';
-    // Positioned in % of the page, so that they stay in place when zooming.
-    const pageRect = this.element.getBoundingClientRect();
     parts.forEach(({ itemIndex, start, end, current }) => {
       const textNode = textDivs[itemIndex].firstChild;
       if (!textNode || end > textNode.length) {

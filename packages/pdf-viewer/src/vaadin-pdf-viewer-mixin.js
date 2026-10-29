@@ -21,9 +21,9 @@ import { PdfViewerZoomMixin } from './vaadin-pdf-viewer-zoom-mixin.js';
  * A mixin providing common PDF viewer functionality.
  */
 export const PdfViewerMixin = (superClass) =>
-  class PdfViewerMixinClass extends PdfViewerToolbarMixin(
-    PdfViewerKeyboardMixin(
-      PdfViewerFindMixin(
+  class PdfViewerMixinClass extends PdfViewerFindMixin(
+    PdfViewerToolbarMixin(
+      PdfViewerKeyboardMixin(
         PdfViewerTextLayerMixin(
           PdfViewerZoomMixin(PdfViewerScrollMixin(PdfViewerRenderMixin(PdfViewerDocumentMixin(superClass)))),
         ),

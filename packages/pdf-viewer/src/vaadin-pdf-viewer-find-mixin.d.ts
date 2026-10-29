@@ -24,7 +24,8 @@ export declare class PdfViewerFindMixinClass {
    * match. The matches are highlighted on the pages. Fires `find-result`
    * with the number of matches. While the document loads, it runs once
    * loaded. Does nothing without a document, or when the viewer is not
-   * attached.
+   * attached. Of several `find()` and `highlight()` calls in a row, only
+   * the last one runs.
    */
   find(text: string): void;
 
@@ -33,6 +34,8 @@ export declare class PdfViewerFindMixinClass {
    * a passage that the application has located. The next `highlight()` or
    * `find()` clears it. While the document loads, it runs once loaded.
    * Does nothing without a document, or when the viewer is not attached.
+   * Of several `find()` and `highlight()` calls in a row, only the last
+   * one runs.
    *
    * @param page the page number, starting from 1
    */

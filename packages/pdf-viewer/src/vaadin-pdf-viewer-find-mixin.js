@@ -39,21 +39,38 @@ export const PdfViewerFindMixin = (superClass) =>
     /** Set to scroll to the current match once it is highlighted. */
     #scrollToMatchPending = false;
 
+    /** Incremented on every `find()` and `highlight()` call, so that only the last call of a task runs. */
+    #callId = 0;
+
+    /**
+     * The text layer of each page whose layers have finished rendering. A
+     * page with another text layer, or none, is not ready for highlights.
+     * @type {WeakMap<import('./pdf-viewer-page.js').PdfViewerPage, object>}
+     */
+    #renderedTextLayers = new WeakMap();
+
+    /** @protected */
+    updated(props) {
+      super.updated(props);
+
+      // Drop the scroll to a match when the user goes to another page before the match is shown.
+      if (props.has('page') && this.#scrollToMatchPending && this.page !== this.#getCurrentMatch().pageIndex + 1) {
+        this.#scrollToMatchPending = false;
+      }
+    }
+
     /**
      * Searches the document for the given text and scrolls to the first
      * match. The matches are highlighted on the pages. Fires `find-result`
      * with the number of matches. While the document loads, it runs once
      * loaded. Does nothing without a document, or when the viewer is not
-     * attached.
+     * attached. Of several `find()` and `highlight()` calls in a row, only
+     * the last one runs.
      *
      * @param {string} text
      */
     find(text) {
-      this._whenDocumentReady().then((pdfDocument) => {
-        if (pdfDocument) {
-          this.#search(String(text ?? ''));
-        }
-      });
+      this.#runWhenReady(() => this.#search(String(text ?? '')));
     }
 
     /**
@@ -61,16 +78,14 @@ export const PdfViewerFindMixin = (superClass) =>
      * a passage that the application has located. The next `highlight()` or
      * `find()` clears it. While the document loads, it runs once loaded.
      * Does nothing without a document, or when the viewer is not attached.
+     * Of several `find()` and `highlight()` calls in a row, only the last
+     * one runs.
      *
      * @param {number} page the page number, starting from 1
      * @param {string} text
      */
     highlight(page, text) {
-      this._whenDocumentReady().then((pdfDocument) => {
-        if (pdfDocument) {
-          this.#highlight(page, text);
-        }
-      });
+      this.#runWhenReady(() => this.#highlight(page, text));
     }
 
     /**
@@ -81,6 +96,7 @@ export const PdfViewerFindMixin = (superClass) =>
      */
     _pageRendered(page) {
       super._pageRendered(page);
+      this.#renderedTextLayers.set(page, page.textLayer);
       this.#highlightPage(page);
     }
 
@@ -94,6 +110,21 @@ export const PdfViewerFindMixin = (superClass) =>
       super._documentUnloaded();
       this.#pageTexts.clear();
       this.#resetSearch();
+    }
+
+    /**
+     * Runs a `find()` or `highlight()` call once the document is ready,
+     * unless another call came meanwhile.
+     * @private
+     */
+    #runWhenReady(callback) {
+      this.#callId += 1;
+      const callId = this.#callId;
+      this._whenDocumentReady().then((pdfDocument) => {
+        if (pdfDocument && callId === this.#callId) {
+          callback();
+        }
+      });
     }
 
     /** @private */
@@ -155,14 +186,18 @@ export const PdfViewerFindMixin = (superClass) =>
 
       this.#matches = matches;
       this.#currentIndex = matches.length ? 0 : -1;
+      this.#scrollToMatchPending = matches.length > 0;
       // Also clears the highlights of a previous search on other pages.
       this.#highlightPages();
 
+      // Go to the page of the match, which scrolls to the match once the page has rendered.
+      const match = this.#getCurrentMatch();
+      if (match && !this.#isPageReady(this.__pages[match.pageIndex])) {
+        this._scrollToPage(match.pageIndex + 1);
+      }
+
       if (!pageNumber) {
         this.dispatchEvent(new CustomEvent('find-result', { detail: { query, matchCount: matches.length } }));
-      }
-      if (matches.length) {
-        this.#showCurrentMatch();
       }
     }
 
@@ -185,6 +220,8 @@ export const PdfViewerFindMixin = (superClass) =>
             // Loading the text fails when the document is unloaded meanwhile.
             if (this._pdfDocument === pdfDocument) {
               issueWarning(`Failed to load the text of page ${pageIndex + 1} of the PDF document: ${error.message}`);
+              // Load the text again for the next search.
+              this.#pageTexts.delete(pageIndex);
             }
             const pageText = createPageText([]);
             return { pageText, normalized: normalizeText('') };
@@ -194,41 +231,35 @@ export const PdfViewerFindMixin = (superClass) =>
       return this.#pageTexts.get(pageIndex);
     }
 
-    /**
-     * Scrolls to the current match, after going to its page when the page
-     * is not rendered.
-     * @private
-     */
-    #showCurrentMatch() {
-      const match = this.#matches[this.#currentIndex];
-      const page = this.__pages[match.pageIndex];
-      this.#scrollToMatchPending = true;
-      this.#highlightPages([match]);
-      if (!page || !page.textLayer) {
-        this.page = match.pageIndex + 1;
-      }
+    /** @private */
+    #getCurrentMatch() {
+      return this.#matches[this.#currentIndex];
     }
 
     /**
-     * Updates the highlights of the rendered pages that have the given
-     * matches, or of all rendered pages.
-     * @param {Array<{ pageIndex: number }>} [matches]
+     * Whether the layers of the page have finished rendering, so that its
+     * text layer can show highlights.
      * @private
      */
-    #highlightPages(matches) {
-      const pageIndexes = matches
-        ? new Set(matches.map((match) => match.pageIndex))
-        : Array.from({ length: this.pageCount }, (_, index) => index);
-      pageIndexes.forEach((pageIndex) => {
-        const page = this.__pages[pageIndex];
-        if (page && page.textLayer) {
+    #isPageReady(page) {
+      return Boolean(page?.textLayer) && this.#renderedTextLayers.get(page) === page.textLayer;
+    }
+
+    /**
+     * Updates the highlights of all pages that are ready for them.
+     * @private
+     */
+    #highlightPages() {
+      this.__pages.forEach((page) => {
+        if (this.#isPageReady(page)) {
           this.#highlightPage(page);
         }
       });
     }
 
     /**
-     * Draws the highlights of the matches on a page over its text layer.
+     * Draws the highlights of the matches on a page over its text layer, and
+     * scrolls to the current match when that is pending.
      * @private
      */
     #highlightPage(page) {
@@ -236,38 +267,36 @@ export const PdfViewerFindMixin = (superClass) =>
 
       const pageIndex = page.pageNumber - 1;
       const matches = this.#matches.filter((match) => match.pageIndex === pageIndex);
-      if (!matches.length || !page.textLayer) {
+      if (!matches.length) {
         return;
       }
 
       const searchId = this.#searchId;
       this.#getPageText(pageIndex)
         .then(({ pageText }) => {
+          // The page renders again or is released meanwhile, `_pageRendered()` draws the highlights then.
+          if (searchId !== this.#searchId || !this.#isPageReady(page)) {
+            return;
+          }
+
+          const currentMatch = this.#getCurrentMatch();
           // The highlights need the text layer elements that the text was taken from.
-          const textDivs = page.textLayer ? page.textLayer.textDivs : [];
-          if (searchId !== this.#searchId) {
-            return;
-          }
-          if (textDivs.length !== pageText.items.length) {
-            // Without highlights, go at least to the page of the current match.
-            this.#goToPendingMatchPage(pageIndex);
-            return;
+          if (page.textLayer.textDivs.length === pageText.items.length) {
+            page.renderFindLayer(
+              matches.flatMap((match) =>
+                getMatchParts(pageText, match).map((part) => ({ ...part, current: match === currentMatch })),
+              ),
+            );
           }
 
-          const currentMatch = this.#matches[this.#currentIndex];
-          page.renderFindLayer(
-            matches.flatMap((match) =>
-              getMatchParts(pageText, match).map((part) => ({ ...part, current: match === currentMatch })),
-            ),
-          );
-
-          if (this.#scrollToMatchPending && currentMatch && currentMatch.pageIndex === pageIndex) {
+          if (this.#scrollToMatchPending && currentMatch.pageIndex === pageIndex) {
             this.#scrollToMatchPending = false;
-            const currentElement = page.findLayerElement && page.findLayerElement.querySelector('.find-match.current');
+            const currentElement = page.findLayerElement?.querySelector('.find-match.current');
             if (currentElement) {
               this._scrollRectIntoView(currentElement.getBoundingClientRect());
             } else {
-              this.page = pageIndex + 1;
+              // Without highlights, go at least to the page of the match.
+              this._scrollToPage(pageIndex + 1);
             }
           }
         })
@@ -276,18 +305,5 @@ export const PdfViewerFindMixin = (superClass) =>
             `Failed to highlight the matches on page ${page.pageNumber} of the PDF document: ${error.message}`,
           );
         });
-    }
-
-    /**
-     * Goes to the page of the current match when scrolling to it is pending
-     * but the match cannot be highlighted on the page.
-     * @private
-     */
-    #goToPendingMatchPage(pageIndex) {
-      const currentMatch = this.#matches[this.#currentIndex];
-      if (this.#scrollToMatchPending && currentMatch && currentMatch.pageIndex === pageIndex) {
-        this.#scrollToMatchPending = false;
-        this.page = pageIndex + 1;
-      }
     }
   };

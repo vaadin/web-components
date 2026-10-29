@@ -6,6 +6,7 @@ import '../vaadin-pdf-viewer.js';
 import type { PDFPageProxy } from 'pdfjs-dist';
 import { clearWarnings } from '@vaadin/component-base/src/warnings.js';
 import { createPageText, findInText, getMatchParts, normalizeText } from '../src/pdf-viewer-find.js';
+import { loadPdfjs } from '../src/pdfjs-loader.js';
 import type { PdfViewer } from '../vaadin-pdf-viewer.js';
 import {
   createPdf,
@@ -209,6 +210,60 @@ describe('find', () => {
         expect(getMatches(2)).to.have.lengthOf(1);
       });
 
+      it('should run only the last of two find() calls in a row', async () => {
+        const spy = sinon.spy();
+        viewer.addEventListener('find-result', spy);
+        viewer.find('marker1');
+        viewer.find('marker2');
+        await currentMatchShown(viewer, 2);
+        await nextFrame();
+        expect(spy).to.be.calledOnce;
+        expect(spy.firstCall.args[0].detail.query).to.equal('marker2');
+        expect(getMatches(1)).to.be.empty;
+        expect(getMatches(2)).to.have.lengthOf(1);
+      });
+
+      it('should highlight each line of a match that spans a line break', async () => {
+        viewer.find('five dozen liquor');
+        await currentMatchShown(viewer);
+        expect(viewer.shadowRoot!.querySelectorAll('.find-match.current')).to.have.lengthOf(2);
+      });
+
+      it('should scroll to a match on a page whose text layer renders when find() runs', async () => {
+        // The match is below the view, at the bottom of the first page.
+        const url = createPdf([
+          { content: 'BT /F1 24 Tf 72 80 Td (Needle at the bottom) Tj ET' },
+          { content: 'BT /F1 24 Tf 72 700 Td (Second page) Tj ET' },
+        ]);
+        // Hold the text layers while they render.
+        const { TextLayer } = await loadPdfjs();
+        const render = TextLayer.prototype.render;
+        let release!: () => void;
+        const released = new Promise<void>((resolve) => {
+          release = resolve;
+        });
+        sinon.stub(TextLayer.prototype, 'render').callsFake(async function (this: InstanceType<typeof TextLayer>) {
+          await released;
+          return render.call(this);
+        });
+        try {
+          const loaded = oneEvent(viewer, 'document-load');
+          viewer.src = url;
+          await loaded;
+          for (let i = 0; i < 50 && !viewer.shadowRoot!.querySelector('.text-layer'); i++) {
+            await nextFrame();
+          }
+          const result = oneEvent(viewer, 'find-result');
+          viewer.find('needle');
+          await result;
+          release();
+          await currentMatchShown(viewer, 1);
+          expectInView(getCurrentMatch()!);
+        } finally {
+          URL.revokeObjectURL(url);
+        }
+      });
+
       it('should find once the document has loaded when called while it loads', async () => {
         viewer.src = fixtureUrl('links.pdf');
         viewer.find('internal link');
@@ -371,6 +426,47 @@ describe('find', () => {
     });
 
     describe('highlights', () => {
+      it('should go to the page of the match when its text differs from the text layer', async () => {
+        // The text for searching has one more item than the text layer of the first page.
+        const prototype = await getPdfPagePrototype();
+        const getTextContent = prototype.getTextContent;
+        sinon.stub(prototype, 'getTextContent').callsFake(async function (this: PDFPageProxy, ...args) {
+          const content = await getTextContent.apply(this, args);
+          return this.pageNumber === 1 ? { ...content, items: [...content.items, { str: 'extra' } as any] } : content;
+        });
+        getContent().scrollTop = 100;
+        await scrollSettled(getContent());
+        const result = oneEvent(viewer, 'find-result');
+        viewer.find('marker1');
+        await result;
+        await nextFrame();
+        expect(getMatches()).to.be.empty;
+        expect(viewer.page).to.equal(1);
+        expect(getContent().scrollTop).to.be.closeTo(0, 1);
+      });
+
+      it('should load the text of a page again after it failed to load', async () => {
+        clearWarnings();
+        const warn = sinon.stub(console, 'warn');
+        const prototype = await getPdfPagePrototype();
+        const getTextContent = prototype.getTextContent;
+        let failed = false;
+        sinon.stub(prototype, 'getTextContent').callsFake(function (this: PDFPageProxy, ...args) {
+          if (this.pageNumber === 5 && !failed) {
+            failed = true;
+            return Promise.reject(new Error('Read failed'));
+          }
+          return getTextContent.apply(this, args);
+        });
+        let result = oneEvent(viewer, 'find-result');
+        viewer.find('marker5');
+        expect((await result).detail.matchCount).to.equal(0);
+        expect(warn).to.be.calledWithMatch(/text of page 5/u);
+        result = oneEvent(viewer, 'find-result');
+        viewer.find('marker5');
+        expect((await result).detail.matchCount).to.equal(1);
+      });
+
       it('should remove the highlights of a page that is released and show them again when it renders', async () => {
         viewer.find('unique word');
         await currentMatchShown(viewer);
@@ -501,6 +597,25 @@ describe('find', () => {
         stop();
         expect(viewer.page).to.equal(5);
         expect(new Set(positions.map(Math.round)).size).to.be.at.most(2);
+      });
+
+      it('should not scroll to a match when the user goes to another page before it is shown', async () => {
+        const result = oneEvent(viewer, 'find-result');
+        viewer.find('marker5');
+        await result;
+        viewer.page = 2;
+        await nextRenderIdle(viewer);
+        expect(viewer.page).to.equal(2);
+        // Back on the page of the match, with the match above the view
+        viewer.page = 5;
+        await nextUpdate(viewer);
+        getContent().scrollTop += 300;
+        const top = getContent().scrollTop;
+        await nextRenderIdle(viewer);
+        await nextFrame();
+        await scrollSettled(getContent());
+        expect(getMatches(5)).to.have.lengthOf(1);
+        expect(getContent().scrollTop).to.equal(top);
       });
 
       it('should scroll a match below the view to the middle of the view', async () => {

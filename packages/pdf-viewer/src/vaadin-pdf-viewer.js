@@ -80,22 +80,21 @@ const DEFAULT_I18N = {
  *
  * The following custom CSS properties are available for styling:
  *
- * Custom CSS property                                 |
- * :----------------------------------------------------|
- * | `--vaadin-pdf-viewer-background`                   |
- * | `--vaadin-pdf-viewer-border-color`                 |
- * | `--vaadin-pdf-viewer-border-radius`                |
- * | `--vaadin-pdf-viewer-current-match-background`     |
- * | `--vaadin-pdf-viewer-current-match-outline-color`  |
- * | `--vaadin-pdf-viewer-match-background`             |
- * | `--vaadin-pdf-viewer-padding`                      |
- * | `--vaadin-pdf-viewer-page-background`              |
- * | `--vaadin-pdf-viewer-page-gap`                     |
- * | `--vaadin-pdf-viewer-page-shadow`                  |
- * | `--vaadin-pdf-viewer-text-color`                   |
- * | `--vaadin-pdf-viewer-toolbar-background`           |
- * | `--vaadin-pdf-viewer-toolbar-gap`                  |
- * | `--vaadin-pdf-viewer-toolbar-padding`              |
+ * Custom CSS property                              |
+ * :-------------------------------------------------|
+ * | `--vaadin-pdf-viewer-background`                |
+ * | `--vaadin-pdf-viewer-border-color`              |
+ * | `--vaadin-pdf-viewer-border-radius`             |
+ * | `--vaadin-pdf-viewer-current-match-background`  |
+ * | `--vaadin-pdf-viewer-match-background`          |
+ * | `--vaadin-pdf-viewer-padding`                   |
+ * | `--vaadin-pdf-viewer-page-background`           |
+ * | `--vaadin-pdf-viewer-page-gap`                  |
+ * | `--vaadin-pdf-viewer-page-shadow`               |
+ * | `--vaadin-pdf-viewer-text-color`                |
+ * | `--vaadin-pdf-viewer-toolbar-background`        |
+ * | `--vaadin-pdf-viewer-toolbar-gap`               |
+ * | `--vaadin-pdf-viewer-toolbar-padding`           |
  *
  * See [Styling Components](https://vaadin.com/docs/latest/styling/styling-components) documentation.
  *
