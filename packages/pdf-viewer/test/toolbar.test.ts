@@ -10,7 +10,14 @@ import type { SelectItem } from '@vaadin/select/src/vaadin-select-item.js';
 import type { Tooltip } from '@vaadin/tooltip';
 import type { PdfViewerButton } from '../src/vaadin-pdf-viewer-button.js';
 import type { PdfViewer } from '../vaadin-pdf-viewer.js';
-import { createPdfUrl, fixtureUrl, getContentBoxSize, loadAndRender, loadDocument, nextRenderIdle } from './helpers.js';
+import {
+  fixtureUrl,
+  getContentBoxSize,
+  loadAndRender,
+  loadDocument,
+  loadFixtureFrom,
+  nextRenderIdle,
+} from './helpers.js';
 
 describe('toolbar', () => {
   let viewer: PdfViewer;
@@ -401,9 +408,39 @@ describe('toolbar', () => {
       expect(title.textContent).to.equal('Annual report');
     });
 
-    it('should show a fallback title for src without a file name', async () => {
-      await loadAndRender(viewer, createPdfUrl(1));
+    it('should show the file name from the Content-Disposition header instead of the file name of src', async () => {
+      await loadFixtureFrom(viewer, new URL('/files/multi-page.pdf', location.href).href, {
+        'Content-Disposition': 'inline; filename="report.pdf"',
+      });
+      await nextFrame();
+      expect(title.textContent).to.equal('report.pdf');
+    });
+
+    it('should not show the name of the previous document when the next one fails to load', async () => {
+      await loadFixtureFrom(viewer, new URL('/files/multi-page.pdf', location.href).href, {
+        'Content-Disposition': 'inline; filename="report.pdf"',
+      });
+      viewer.src = new URL('/files/missing', location.href).href;
+      await oneEvent(viewer, 'document-error');
+      await nextFrame();
       expect(title.textContent).to.equal('PDF document');
+    });
+
+    it('should show a fallback title for src without a PDF file name', async () => {
+      await loadFixtureFrom(viewer, new URL('/files/123', location.href).href);
+      await nextFrame();
+      expect(title.textContent).to.equal('PDF document');
+    });
+
+    it('should show a fallback title for a blob URL instead of the title of the document', async () => {
+      const blob = await fetch(fixtureUrl('multi-page.pdf')).then((response) => response.blob());
+      const url = URL.createObjectURL(blob);
+      try {
+        await loadAndRender(viewer, url);
+        expect(title.textContent).to.equal('PDF document');
+      } finally {
+        URL.revokeObjectURL(url);
+      }
     });
 
     it('should use the fallback title set with i18n', async () => {

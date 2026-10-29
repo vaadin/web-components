@@ -22,7 +22,7 @@ export declare function PdfViewerToolbarMixin<T extends Constructor<HTMLElement>
 export declare class PdfViewerToolbarMixinClass {
   /**
    * Whether the header above the toolbar is hidden. The header shows
-   * `headerTitle`, or else the file name of `src`, and collapses and
+   * `headerTitle`, or else the name of the document, and collapses and
    * expands the toolbar when clicked.
    *
    * @attr {boolean} header-hidden
@@ -31,7 +31,9 @@ export declare class PdfViewerToolbarMixinClass {
 
   /**
    * The title shown in the header, see `headerHidden`. When not set,
-   * the header shows the file name of `src`.
+   * the header shows the PDF file name from the `Content-Disposition`
+   * header of the response, else the PDF file name at the end of the
+   * path of `src`, else the `document` text of `i18n`.
    *
    * @attr {string} header-title
    */

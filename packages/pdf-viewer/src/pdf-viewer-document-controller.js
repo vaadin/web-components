@@ -32,6 +32,8 @@ function getErrorReason(error) {
  * @typedef {Object} PdfViewerDocumentDetails
  * @property {string} title The title from the metadata of the document, or an empty string.
  * @property {import('pdfjs-dist').PDFPageProxy} firstPage The first page of the document.
+ * @property {string} dispositionFileName The PDF file name from the `Content-Disposition` header of the
+ *   response, or an empty string.
  */
 
 /**
@@ -146,13 +148,17 @@ export class PdfViewerDocumentController {
       return;
     }
 
-    const [{ info }, firstPage] = await Promise.all([pdfDocument.getMetadata(), pdfDocument.getPage(1)]);
+    const [{ info, contentDispositionFilename }, firstPage] = await Promise.all([
+      pdfDocument.getMetadata(),
+      pdfDocument.getPage(1),
+    ]);
     if (loadId !== this.#loadId) {
       return;
     }
     this.#callbacks.onLoad(pdfDocument, {
       title: info?.Title || '',
       firstPage,
+      dispositionFileName: contentDispositionFilename || '',
     });
   }
 

@@ -33,6 +33,13 @@ export declare class PdfViewerDocumentMixinClass {
   protected readonly _pdfDocument: PDFDocumentProxy | null;
 
   /**
+   * Returns the name of the document: the PDF file name from the
+   * `Content-Disposition` header, else the PDF file name at the end of the
+   * path of `src`, else an empty string.
+   */
+  protected _getDocumentName(): string;
+
+  /**
    * Called when a document has loaded, before `document-load` is fired.
    */
   protected _documentLoaded(details: { firstPage: PDFPageProxy }): void;
