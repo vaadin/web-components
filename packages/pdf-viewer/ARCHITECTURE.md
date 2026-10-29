@@ -69,7 +69,8 @@ how to generate them.
     else `_getDocumentName()` of the document mixin, the name that downloads also use.
 - `PdfViewerDownloadMixin` adds `download()` and its button. Each built-in button has its own slot, which the
   mixin adds after `toolbar-actions` with `_renderToolbarActionSlots()`.
-  - A `SlotController` creates the default button. An application can slot its own component instead.
+  - `PdfViewerButtonController`, a `SlotController`, creates the default button. An application can slot its own
+    component instead.
   - The viewer sets the icon and the tooltip only on the default button. Clicks and `disabled` apply to any
     slotted button.
   - The Flow counterpart sets `_isDefault` on its own default button before it slots it, as for CRUD and Upload.
