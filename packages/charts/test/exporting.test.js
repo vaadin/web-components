@@ -3,11 +3,12 @@ import { click, fixtureSync, nextRender, oneEvent } from '@vaadin/testing-helper
 import sinon from 'sinon';
 import './exporting-styles.js';
 import '../src/vaadin-chart.js';
+import HttpUtilities from 'highcharts/es-modules/Core/HttpUtilities.js';
 import { Exporting } from 'highcharts/es-modules/Extensions/Exporting/Exporting.js';
 import Highcharts from 'highcharts/es-modules/masters/highstock.src.js';
 
 describe('vaadin-chart exporting', () => {
-  let chart, chartContainer, fireEventSpy;
+  let chart, chartContainer, fireEventSpy, postStub, downloadStub;
   const attributeName = 'styled-mode';
 
   // The export renders the chart copy asynchronously, so it is only done once `chart-after-export` fires
@@ -51,9 +52,10 @@ describe('vaadin-chart exporting', () => {
   }
 
   before(() => {
-    // Prevent downloading the export. `exporting.local` defaults to `true`, so the
-    // export is rendered in the browser instead of being posted to the export server.
-    sinon.stub(Exporting.prototype, 'downloadSVG');
+    // Prevent posting the export to the export server, which is the default path,
+    // and downloading it in the browser, which `exporting.local` opts into
+    postStub = sinon.stub(HttpUtilities, 'post');
+    downloadStub = sinon.stub(Exporting.prototype, 'downloadSVG');
     // Hook into Highcharts events
     fireEventSpy = sinon.spy(Highcharts, 'fireEvent');
   });
@@ -71,6 +73,48 @@ describe('vaadin-chart exporting', () => {
 
   afterEach(() => {
     fireEventSpy.resetHistory();
+    postStub.resetHistory();
+    downloadStub.resetHistory();
+  });
+
+  describe('export path', () => {
+    it('should post the export to the export server by default', async () => {
+      await chart.configuration.exportChart();
+
+      expect(postStub).to.be.calledOnce;
+      expect(postStub.firstCall.args[0]).to.include('export-svg.highcharts.com');
+      expect(postStub.firstCall.args[1].svg).to.include('<svg');
+      expect(downloadStub).to.be.not.called;
+    });
+
+    it('should post the export from the download menu items', async () => {
+      const exported = waitForExport();
+      simulateExportToPNG();
+      await exported;
+      // `exportChart` posts once the export events have fired
+      await nextRender();
+
+      expect(postStub).to.be.calledOnce;
+      expect(postStub.firstCall.args[1].type).to.equal('image/png');
+      expect(downloadStub).to.be.not.called;
+    });
+
+    it('should export in the browser when exportChart is called with local', async () => {
+      await chart.configuration.exportChart({ local: true });
+
+      expect(downloadStub).to.be.calledOnce;
+      expect(postStub).to.be.not.called;
+    });
+
+    it('should export in the browser when the chart options set local', async () => {
+      chart.updateConfiguration({ exporting: { local: true } });
+      await nextRender();
+
+      await chart.configuration.exportChart();
+
+      expect(downloadStub).to.be.calledOnce;
+      expect(postStub).to.be.not.called;
+    });
   });
 
   it('should temporarily copy shadow styles to the body before export', async () => {

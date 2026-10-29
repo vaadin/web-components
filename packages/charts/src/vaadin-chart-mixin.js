@@ -68,6 +68,24 @@ Highcharts.wrap(Exporting.prototype, 'getSVG', function (proceed, ...args) {
   fireAfterExport();
   return result;
 });
+
+// Since Highcharts 12.3 `exporting.local` defaults to `true`, so PNG, JPEG and SVG exports render
+// in the browser instead of being posted to the export server. That makes `exporting.url` and
+// `width` have no effect, fails PDF exports when `fallbackToExportServer` is off, and needs
+// `blob:` and `data:` sources in a Content Security Policy. Keep the 12.2 behavior for now: use
+// the export server, unless the app loads the `offline-exporting` module, which used to switch
+// the download menu items and `exportChartLocal()` to the browser, or sets `exporting.local`.
+// TODO: Remove in the next major version to switch to the Highcharts default of local export
+delete Highcharts.getOptions().exporting.local;
+
+Highcharts.wrap(Exporting.prototype, 'exportChart', function (proceed, exportingOptions, chartOptions) {
+  if (exportingOptions?.local === undefined && this.options.local === undefined) {
+    // Only the `offline-exporting` module defines `exportChartLocal`
+    const local = typeof this.chart.exportChartLocal === 'function';
+    exportingOptions = { ...exportingOptions, local };
+  }
+  return proceed.call(this, exportingOptions, chartOptions);
+});
 /* eslint-enable @typescript-eslint/no-invalid-this, prefer-arrow-callback */
 
 // Document-level handlers see <vaadin-chart> as the target inside a shadow root, so retarget
