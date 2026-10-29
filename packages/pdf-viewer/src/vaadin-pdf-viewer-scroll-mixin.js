@@ -317,7 +317,6 @@ export const PdfViewerScrollMixin = (superClass) =>
       if (!this.#hasLayout()) {
         // Page sizes arrived while the viewer is hidden. Positions cannot be
         // measured now, so go back to the current page once shown again.
-        this._scale = scale;
         this.__pages.forEach((page) => page.setScale(scale));
         this.#pendingPage ||= this.page;
         return;

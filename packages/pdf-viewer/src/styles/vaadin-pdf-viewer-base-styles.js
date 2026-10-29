@@ -40,7 +40,6 @@ const pdfViewerBaseStyles = css`
     position: relative;
     display: flex;
     flex: 1 1 0;
-    min-width: 0;
     min-height: 40%;
   }
 
@@ -49,7 +48,6 @@ const pdfViewerBaseStyles = css`
     outline: none;
     flex: 1 1 auto;
     min-width: 0;
-    min-height: 0;
     overflow: auto;
     scrollbar-gutter: stable;
     padding: var(--vaadin-pdf-viewer-padding, var(--vaadin-padding-m));

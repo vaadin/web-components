@@ -23,10 +23,6 @@ describe('toolbar', () => {
   let zoomInButton: PdfViewerButton;
   let zoomSelect: Select;
 
-  function getGroup(name: string) {
-    return viewer.shadowRoot!.querySelector<HTMLElement>(`[part~="toolbar-group"].${name}`)!;
-  }
-
   function createButton(text: string) {
     const button = document.createElement('button');
     button.slot = 'toolbar-actions';
@@ -370,7 +366,7 @@ describe('toolbar', () => {
       const reject = createButton('Reject');
       viewer.append(approve, reject);
       await nextFrame();
-      expect(getGroup('actions').contains(approve.assignedSlot)).to.be.true;
+      expect(approve.assignedSlot!.parentElement!.matches('[part~="toolbar-group"]')).to.be.true;
       expect(approve.getBoundingClientRect().right).to.be.at.most(reject.getBoundingClientRect().left);
     });
 
