@@ -90,6 +90,14 @@ export const PdfViewerZoomMixin = (superClass) =>
     }
 
     /**
+     * Sets the zoom back to `page-width`.
+     * @protected
+     */
+    _resetZoom() {
+      this.zoom = 'page-width';
+    }
+
+    /**
      * Override method from `PdfViewerScrollMixin` to return the scale for `zoom`.
      * @param {number} width
      * @param {number} height

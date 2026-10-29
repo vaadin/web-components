@@ -43,7 +43,7 @@ export const PdfViewerKeyboardMixin = (superClass) =>
       } else if (key === '-' || code === 'NumpadSubtract') {
         this._stepZoom(-1);
       } else if (key === '0' || code === 'Digit0' || code === 'Numpad0') {
-        this.zoom = 'page-width';
+        this._resetZoom();
       } else {
         return;
       }

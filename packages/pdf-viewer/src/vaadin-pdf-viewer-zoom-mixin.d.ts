@@ -44,4 +44,9 @@ export declare class PdfViewerZoomMixinClass {
    * Zooms in or out to the next zoom level.
    */
   protected _stepZoom(direction: -1 | 1): void;
+
+  /**
+   * Sets the zoom back to `page-width`.
+   */
+  protected _resetZoom(): void;
 }
