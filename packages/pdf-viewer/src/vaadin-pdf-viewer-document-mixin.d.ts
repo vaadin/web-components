@@ -35,7 +35,7 @@ export declare class PdfViewerDocumentMixinClass {
   /**
    * Returns the name of the document: the PDF file name from the
    * `Content-Disposition` header, else the PDF file name at the end of the
-   * path of `src`, else the title of the document, else an empty string.
+   * path of `src`, else an empty string.
    */
   protected _getDocumentName(): string;
 

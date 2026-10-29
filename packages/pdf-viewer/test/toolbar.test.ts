@@ -11,7 +11,6 @@ import type { Tooltip } from '@vaadin/tooltip';
 import type { PdfViewerButton } from '../src/vaadin-pdf-viewer-button.js';
 import type { PdfViewer } from '../vaadin-pdf-viewer.js';
 import {
-  createPdfUrl,
   fixtureUrl,
   getContentBoxSize,
   loadAndRender,
@@ -427,26 +426,21 @@ describe('toolbar', () => {
       expect(title.textContent).to.equal('PDF document');
     });
 
-    it('should show the title of the document for src without a PDF file name', async () => {
+    it('should show a fallback title for src without a PDF file name', async () => {
       await loadFixtureFrom(viewer, new URL('/files/123', location.href).href);
       await nextFrame();
-      expect(title.textContent).to.equal('Multi-page fixture');
+      expect(title.textContent).to.equal('PDF document');
     });
 
-    it('should show the title of the document for a blob URL', async () => {
+    it('should show a fallback title for a blob URL instead of the title of the document', async () => {
       const blob = await fetch(fixtureUrl('multi-page.pdf')).then((response) => response.blob());
       const url = URL.createObjectURL(blob);
       try {
         await loadAndRender(viewer, url);
-        expect(title.textContent).to.equal('Multi-page fixture');
+        expect(title.textContent).to.equal('PDF document');
       } finally {
         URL.revokeObjectURL(url);
       }
-    });
-
-    it('should show a fallback title for a document without a file name or title', async () => {
-      await loadAndRender(viewer, createPdfUrl(1));
-      expect(title.textContent).to.equal('PDF document');
     });
 
     it('should use the fallback title set with i18n', async () => {

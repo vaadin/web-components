@@ -137,12 +137,12 @@ export const PdfViewerDocumentMixin = (superClass) =>
     /**
      * Returns the name of the document: the PDF file name from the
      * `Content-Disposition` header, else the PDF file name at the end of the
-     * path of `src`, else the title of the document, else an empty string.
+     * path of `src`, else an empty string.
      * @return {string}
      * @protected
      */
     _getDocumentName() {
-      return this.#details?.dispositionFileName || getFileNameFromUrl(this.src) || this.#details?.title || '';
+      return this.#details?.dispositionFileName || getFileNameFromUrl(this.src) || '';
     }
 
     /** @private */
