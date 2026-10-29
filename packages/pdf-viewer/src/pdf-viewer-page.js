@@ -192,21 +192,16 @@ export class PdfViewerPage {
    * a position given in PDF units from the bottom left corner of the unrotated
    * page, as in link destinations. A missing coordinate, or one outside the
    * page, gives an offset of 0 on the axis that it is on after the rotation
-   * of the page.
+   * of the page. Needs the page of the document, see `setPdfPage()`.
    *
    * @param {number | undefined} x
    * @param {number | undefined} y
    * @return {{ left: number, top: number }}
    */
   getOffset(x, y) {
-    let left = (x ?? 0) * this.scale;
-    let top = (this.unscaledHeight - (y ?? 0)) * this.scale;
-    let rotated = false;
-    if (this.pdfPage) {
-      const viewport = this.pdfPage.getViewport({ scale: this.scale });
-      [left, top] = viewport.convertToViewportPoint(x ?? 0, y ?? 0);
-      rotated = viewport.rotation % 180 !== 0;
-    }
+    const viewport = this.pdfPage.getViewport({ scale: this.scale });
+    let [left, top] = viewport.convertToViewportPoint(x ?? 0, y ?? 0);
+    const rotated = viewport.rotation % 180 !== 0;
     if ((rotated ? y : x) === undefined) {
       left = 0;
     }

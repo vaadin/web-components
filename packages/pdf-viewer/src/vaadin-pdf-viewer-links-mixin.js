@@ -108,13 +108,15 @@ export const PdfViewerLinksMixin = (superClass) =>
       const page = this.__pages[target.page - 1];
       const hasPosition = target.left !== undefined || target.top !== undefined;
       if (hasPosition) {
-        // The position depends on the size and the rotation of the page.
-        await this._loadPdfPage(page);
+        // The position depends on the size and the rotation of the page. A page that
+        // fails to load reports the error when it is rendered, and is scrolled to its start.
+        await this._loadPdfPage(page).catch(() => {});
         if (this._pdfDocument !== pdfDocument) {
           return;
         }
       }
-      this._scrollToPage(target.page, hasPosition ? page.getOffset(target.left, target.top) : undefined);
+      const offset = hasPosition && page.pdfPage ? page.getOffset(target.left, target.top) : undefined;
+      this._scrollToPage(target.page, offset);
       this.$.content.focus({ preventScroll: true, focusVisible: isKeyboardActive() });
     }
   };

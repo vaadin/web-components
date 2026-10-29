@@ -173,15 +173,7 @@ export const PdfViewerRenderMixin = (superClass) =>
       for (let start = 0; start < pages.length; start += PAGE_SIZE_BATCH) {
         const batch = pages.slice(start, start + PAGE_SIZE_BATCH);
         // A page that fails to load reports the error when it is rendered.
-        await Promise.allSettled(
-          batch.map((page) =>
-            pdfDocument.getPage(page.pageNumber).then((pdfPage) => {
-              if (this._pdfDocument === pdfDocument && !page.pdfPage) {
-                this.#setPdfPage(page, pdfPage);
-              }
-            }),
-          ),
-        );
+        await Promise.allSettled(batch.map((page) => this._loadPdfPage(page)));
         if (this._pdfDocument !== pdfDocument) {
           return;
         }
@@ -194,8 +186,8 @@ export const PdfViewerRenderMixin = (superClass) =>
     }
 
     /**
-     * Loads the page of the document for a page view whose size has not
-     * loaded yet, e.g. to find a position on it.
+     * Loads the page of the document for a page view that has none yet, and
+     * sizes the page view. Rejects when the page fails to load.
      * @param {PdfViewerPage} page
      * @return {Promise<void>}
      * @protected
@@ -205,13 +197,9 @@ export const PdfViewerRenderMixin = (superClass) =>
       if (page.pdfPage || !pdfDocument) {
         return;
       }
-      try {
-        const pdfPage = await pdfDocument.getPage(page.pageNumber);
-        if (this._pdfDocument === pdfDocument && !page.pdfPage) {
-          this.#setPdfPage(page, pdfPage);
-        }
-      } catch {
-        // A page that fails to load reports the error when it is rendered.
+      const pdfPage = await pdfDocument.getPage(page.pageNumber);
+      if (this._pdfDocument === pdfDocument && !page.pdfPage) {
+        this.#setPdfPage(page, pdfPage);
       }
     }
 
@@ -239,12 +227,9 @@ export const PdfViewerRenderMixin = (superClass) =>
     async #renderPage(page, pixelRatio) {
       const pdfDocument = this._pdfDocument;
       try {
-        if (!page.pdfPage) {
-          const pdfPage = await pdfDocument.getPage(page.pageNumber);
-          if (this._pdfDocument !== pdfDocument) {
-            return;
-          }
-          this.#setPdfPage(page, pdfPage);
+        await this._loadPdfPage(page);
+        if (this._pdfDocument !== pdfDocument) {
+          return;
         }
         await page.render(pixelRatio);
         // The page may have been released or rendered again meanwhile.
