@@ -55,6 +55,12 @@ export declare class PdfViewerToolbarMixinClass {
   protected _renderToolbar(): TemplateResult;
 
   /**
+   * Returns the slots of the built-in buttons, which come after the
+   * application controls of `toolbar-actions`.
+   */
+  protected _renderToolbarActionSlots(): TemplateResult;
+
+  /**
    * Returns the template of the toolbar controls, which are rendered into
    * the light DOM.
    */

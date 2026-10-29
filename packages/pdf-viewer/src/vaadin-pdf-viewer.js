@@ -52,6 +52,7 @@ const DEFAULT_I18N = {
  * Name              | Description
  * ------------------|-------------
  * `toolbar-actions` | Slot for application controls, e.g. buttons, at the end of the toolbar, before the built-in buttons
+ * `download-button` | Slot for a component that replaces the download button. Clicking it downloads the document
  *
  * ### Styling
  *

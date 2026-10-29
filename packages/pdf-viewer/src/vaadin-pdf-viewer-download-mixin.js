@@ -9,11 +9,14 @@
  * license.
  */
 import { html } from 'lit';
+import { SlotController } from '@vaadin/component-base/src/slot-controller.js';
 import { issueWarning } from '@vaadin/component-base/src/warnings.js';
 import { downloadDocument } from './pdf-viewer-download.js';
 
 /**
  * A mixin that adds downloading the document, with a button in the toolbar.
+ * An application can replace the button with its own component in the
+ * `download-button` slot.
  */
 export const PdfViewerDownloadMixin = (superClass) =>
   class PdfViewerDownloadMixinClass extends superClass {
@@ -42,6 +45,27 @@ export const PdfViewerDownloadMixin = (superClass) =>
      */
     #downloadsController = null;
 
+    /** @type {SlotController} */
+    #buttonController;
+
+    /**
+     * The tooltip that the viewer added to the default button.
+     * @type {HTMLElement | null}
+     */
+    #buttonTooltip = null;
+
+    /** @protected */
+    firstUpdated() {
+      super.firstUpdated();
+
+      this.#buttonController = new SlotController(this, 'download-button', 'vaadin-pdf-viewer-button', {
+        initializer: (button) => this.#initButton(button),
+      });
+      this.addController(this.#buttonController);
+
+      this.addEventListener('click', (event) => this.#onClick(event));
+    }
+
     /** @protected */
     disconnectedCallback() {
       super.disconnectedCallback();
@@ -53,6 +77,14 @@ export const PdfViewerDownloadMixin = (superClass) =>
     /** @protected */
     updated(props) {
       super.updated(props);
+
+      const button = this.#buttonController?.node;
+      if (button) {
+        button.disabled = !this.pageCount;
+      }
+      if (this.#buttonTooltip) {
+        this.#buttonTooltip.text = this.__effectiveI18n.download;
+      }
 
       if (this.#downloadPending && !this._documentPending) {
         this.#downloadPending = false;
@@ -81,29 +113,45 @@ export const PdfViewerDownloadMixin = (superClass) =>
     }
 
     /**
-     * Override method from `PdfViewerToolbarMixin` to add the download
-     * button after the application controls.
+     * Override method from `PdfViewerToolbarMixin` to add the slot of the
+     * download button after the application controls.
      * @protected
      * @override
      */
-    _renderToolbarControls() {
-      return html`${super._renderToolbarControls()}${this.#renderDownloadButton()}`;
+    _renderToolbarActionSlots() {
+      return html`
+        ${super._renderToolbarActionSlots()}
+        <slot name="download-button" ?hidden="${this.downloadButtonHidden}"></slot>
+      `;
     }
 
-    /** @private */
-    #renderDownloadButton() {
-      return html`
-        <vaadin-pdf-viewer-button
-          slot="toolbar-default-actions"
-          icon="download"
-          theme="tertiary icon"
-          ?hidden="${this.downloadButtonHidden}"
-          .disabled="${!this.pageCount}"
-          @click="${this.#onDownloadClick}"
-        >
-          <vaadin-tooltip slot="tooltip" .text="${this.__effectiveI18n.download}"></vaadin-tooltip>
-        </vaadin-pdf-viewer-button>
-      `;
+    /**
+     * Sets the icon and the tooltip on the default button. A custom button
+     * keeps its own content.
+     * @param {HTMLElement} button
+     * @private
+     */
+    #initButton(button) {
+      // The Flow counterpart creates its own default button, so that it can return it.
+      if (button._isDefault) {
+        this.#buttonController.defaultNode = button;
+      }
+
+      this.#buttonTooltip = null;
+      if (button === this.#buttonController.defaultNode) {
+        if (!button.hasAttribute('icon')) {
+          button.setAttribute('icon', 'download');
+        }
+        if (!button.hasAttribute('theme')) {
+          button.setAttribute('theme', 'tertiary icon');
+        }
+        if (!button.querySelector(':scope > [slot="tooltip"]')) {
+          this.#buttonTooltip = document.createElement('vaadin-tooltip');
+          this.#buttonTooltip.slot = 'tooltip';
+          button.append(this.#buttonTooltip);
+        }
+      }
+      this.requestUpdate();
     }
 
     /**
@@ -128,7 +176,10 @@ export const PdfViewerDownloadMixin = (superClass) =>
     }
 
     /** @private */
-    #onDownloadClick() {
-      this.download();
+    #onClick(event) {
+      const button = this.#buttonController.node;
+      if (button && event.composedPath().includes(button)) {
+        this.download();
+      }
     }
   };

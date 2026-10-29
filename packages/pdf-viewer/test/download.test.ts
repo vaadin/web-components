@@ -86,6 +86,85 @@ describe('download', () => {
     });
   });
 
+  describe('custom button', () => {
+    let button: HTMLButtonElement;
+
+    beforeEach(async () => {
+      button = document.createElement('button');
+      button.slot = 'download-button';
+      button.textContent = 'Download PDF';
+      viewer.appendChild(button);
+      await nextFrame();
+    });
+
+    it('should replace the default button', () => {
+      expect(getButton()).to.be.null;
+      expect(button.checkVisibility()).to.be.true;
+    });
+
+    it('should not add an icon or a tooltip to the custom button', () => {
+      expect(button.hasAttribute('icon')).to.be.false;
+      expect(button.querySelector('vaadin-tooltip')).to.be.null;
+    });
+
+    it('should disable the custom button without document', () => {
+      expect(button.disabled).to.be.true;
+    });
+
+    it('should download on custom button click', async () => {
+      await loadDocument(viewer, 'multi-page.pdf');
+      await nextUpdate(viewer);
+      expect(button.disabled).to.be.false;
+      const download = nextDownload();
+      button.click();
+      const { link } = await download;
+      expect(link.download).to.equal('multi-page.pdf');
+    });
+
+    it('should hide the custom button with downloadButtonHidden', async () => {
+      viewer.downloadButtonHidden = true;
+      await nextUpdate(viewer);
+      expect(button.checkVisibility()).to.be.false;
+    });
+
+    it('should use a button with _isDefault added instead as the default button', async () => {
+      const defaultButton = document.createElement('vaadin-pdf-viewer-button');
+      Object.assign(defaultButton, { _isDefault: true });
+      defaultButton.slot = 'download-button';
+      viewer.appendChild(defaultButton);
+      await nextFrame();
+      expect(button.isConnected).to.be.false;
+      expect(getButton()).to.equal(defaultButton);
+      expect(defaultButton.querySelector<Tooltip>('vaadin-tooltip')!.text).to.equal('Download');
+    });
+  });
+
+  describe('button with _isDefault', () => {
+    let button: HTMLElement;
+
+    beforeEach(async () => {
+      viewer = document.createElement('vaadin-pdf-viewer');
+      button = document.createElement('vaadin-pdf-viewer-button');
+      button.slot = 'download-button';
+      button.setAttribute('theme', 'primary icon');
+      // The Flow counterpart sets it before it adds the button to the slot.
+      Object.assign(button, { _isDefault: true });
+      viewer.appendChild(button);
+      fixtureSync('<div></div>').appendChild(viewer);
+      await nextRender();
+    });
+
+    it('should use the button as the default button', () => {
+      expect(viewer.querySelectorAll('[slot="download-button"]')).to.have.lengthOf(1);
+      expect(getButton()).to.equal(button);
+      expect(button.querySelector<Tooltip>('vaadin-tooltip')!.text).to.equal('Download');
+    });
+
+    it('should keep the theme of the button', () => {
+      expect(button.getAttribute('theme')).to.equal('primary icon');
+    });
+  });
+
   describe('with document', () => {
     beforeEach(async () => {
       await loadDocument(viewer, 'multi-page.pdf');

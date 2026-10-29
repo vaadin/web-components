@@ -102,10 +102,19 @@ export const PdfViewerToolbarMixin = (superClass) =>
           <div part="toolbar-group"><slot name="toolbar-zoom"></slot></div>
           <div part="toolbar-group">
             <slot name="toolbar-actions"></slot>
-            <slot name="toolbar-default-actions"></slot>
+            ${this._renderToolbarActionSlots()}
           </div>
         </div>
       `;
+    }
+
+    /**
+     * Returns the slots of the built-in buttons, which come after the
+     * application controls of `toolbar-actions`.
+     * @protected
+     */
+    _renderToolbarActionSlots() {
+      return html``;
     }
 
     /**

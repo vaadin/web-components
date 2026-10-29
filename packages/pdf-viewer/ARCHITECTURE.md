@@ -67,8 +67,12 @@ how to generate them.
   so application children added later keep their place.
   - The header is a button in the shadow DOM that collapses and expands the toolbar. It shows `headerTitle`,
     else `_getDocumentName()` of the document mixin, the name that downloads also use.
-- `PdfViewerDownloadMixin` adds `download()` and its button. Built-in buttons go to the
-  `toolbar-default-actions` slot after `toolbar-actions`, so they come after the application controls.
+- `PdfViewerDownloadMixin` adds `download()` and its button. Each built-in button has its own slot, which the
+  mixin adds after `toolbar-actions` with `_renderToolbarActionSlots()`.
+  - A `SlotController` creates the default button. An application can slot its own component instead.
+  - The viewer sets the icon and the tooltip only on the default button. Clicks and `disabled` apply to any
+    slotted button.
+  - The Flow counterpart sets `_isDefault` on its own default button before it slots it, as for CRUD and Upload.
 - The element applies `I18nMixin` and defines the default texts. The mixins read them from `__effectiveI18n`.
 - The element applies `FocusMixin` and owns the focus state. Listeners on the page area in its template set
   `focused` and `focus-ring`, as focus moving inside the shadow root does not reach listeners on the host.
