@@ -261,9 +261,18 @@ export const PdfViewerScrollMixin = (superClass) =>
       const scale = this.#computeScale();
       if (scale > 0 && scale !== this._scale) {
         this.#applyScale(scale);
-        return;
+      } else {
+        this.#scrollToPendingPage();
       }
-      if (this.#pendingPage && this._scale > 0) {
+    }
+
+    /**
+     * Scrolls to a page that was set before the pages could be laid out, or
+     * else updates the visible pages.
+     * @private
+     */
+    #scrollToPendingPage() {
+      if (this.#pendingPage) {
         this._scrollToPage(this.#pendingPage);
       } else {
         this.#updateVisiblePages();
@@ -335,12 +344,7 @@ export const PdfViewerScrollMixin = (superClass) =>
         content.scrollTop = 0;
       }
 
-      if (this.#pendingPage) {
-        // A page set before the pages could be laid out
-        this._scrollToPage(this.#pendingPage);
-      } else {
-        this.#updateVisiblePages();
-      }
+      this.#scrollToPendingPage();
     }
 
     /**

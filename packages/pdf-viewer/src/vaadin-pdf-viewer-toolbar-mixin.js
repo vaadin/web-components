@@ -31,7 +31,7 @@ export const PdfViewerToolbarMixin = (superClass) =>
       super.willUpdate(props);
 
       if (props.has('zoom') || props.has('__effectiveI18n')) {
-        this.#zoomItems = this.#getZoomItems(this.__effectiveI18n);
+        this.#zoomItems = this.#getZoomItems();
       }
     }
 
@@ -180,7 +180,8 @@ export const PdfViewerToolbarMixin = (superClass) =>
      * and a zoom set by the application that is not one of the levels.
      * @private
      */
-    #getZoomItems(i18n) {
+    #getZoomItems() {
+      const i18n = this.__effectiveI18n;
       const items = [
         { label: i18n.pageWidth, value: 'page-width' },
         { label: i18n.pageFit, value: 'page-fit' },

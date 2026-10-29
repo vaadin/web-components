@@ -176,8 +176,6 @@ export class PdfViewerPage {
       this.#freeCanvas(this.canvas);
       this.canvas = null;
     }
-    this.renderedScale = 0;
-    this.renderedPixelRatio = 0;
   }
 
   /** @private */

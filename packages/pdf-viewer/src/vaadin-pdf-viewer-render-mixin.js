@@ -213,7 +213,7 @@ export const PdfViewerRenderMixin = (superClass) =>
         }
         await page.render(pixelRatio);
       } catch (error) {
-        const isCancelled = error && (error.name === 'RenderingCancelledException' || error.name === 'AbortException');
+        const isCancelled = error?.name === 'RenderingCancelledException' || error?.name === 'AbortException';
         if (this._pdfDocument === pdfDocument && !isCancelled) {
           page.renderFailed = true;
           issueWarning(`Failed to render page ${page.pageNumber} of the PDF document: ${error.message}`);
