@@ -1,6 +1,6 @@
 import { expect } from '@vaadin/chai-plugins';
 import { sendKeys } from '@vaadin/test-runner-commands';
-import { fixtureSync, nextFrame, nextRender, oneEvent } from '@vaadin/testing-helpers';
+import { fixtureSync, nextFrame, nextRender, nextResize, oneEvent } from '@vaadin/testing-helpers';
 import sinon from 'sinon';
 import './enable-feature-flag.js';
 import '../vaadin-pdf-viewer.js';
@@ -10,11 +10,13 @@ import type { SelectItem } from '@vaadin/select/src/vaadin-select-item.js';
 import type { Tooltip } from '@vaadin/tooltip';
 import type { PdfViewerButton } from '../src/vaadin-pdf-viewer-button.js';
 import type { PdfViewer } from '../vaadin-pdf-viewer.js';
-import { fixtureUrl, loadAndRender, loadDocument, nextRenderIdle } from './helpers.js';
+import { createPdfUrl, fixtureUrl, getContentBoxSize, loadAndRender, loadDocument, nextRenderIdle } from './helpers.js';
 
 describe('toolbar', () => {
   let viewer: PdfViewer;
   let topArea: HTMLElement;
+  let header: HTMLElement;
+  let toolbar: HTMLElement;
   let content: HTMLElement;
   let previousButton: PdfViewerButton;
   let nextButton: PdfViewerButton;
@@ -50,6 +52,8 @@ describe('toolbar', () => {
     viewer = fixtureSync('<vaadin-pdf-viewer style="width: 600px; height: 400px"></vaadin-pdf-viewer>');
     await nextRender();
     topArea = viewer.shadowRoot!.querySelector<HTMLElement>('.top-area')!;
+    header = viewer.shadowRoot!.querySelector<HTMLElement>('[part~="header"]')!;
+    toolbar = viewer.shadowRoot!.querySelector<HTMLElement>('[part~="toolbar"]')!;
     content = viewer.shadowRoot!.querySelector<HTMLElement>('[part="content"]')!;
     previousButton = viewer.querySelector<PdfViewerButton>('vaadin-pdf-viewer-button[icon="previous-page"]')!;
     nextButton = viewer.querySelector<PdfViewerButton>('vaadin-pdf-viewer-button[icon="next-page"]')!;
@@ -355,6 +359,126 @@ describe('toolbar', () => {
     expect(topArea.scrollHeight).to.be.at.most(topArea.clientHeight);
   });
 
+  describe('header', () => {
+    let title: HTMLElement;
+
+    beforeEach(() => {
+      title = viewer.shadowRoot!.querySelector<HTMLElement>('[part~="title"]')!;
+    });
+
+    it('should show the header by default', () => {
+      expect(viewer.headerHidden).to.be.false;
+      expect(header.checkVisibility()).to.be.true;
+    });
+
+    it('should hide the header when set as attribute', async () => {
+      viewer.setAttribute('header-hidden', '');
+      await nextFrame();
+      expect(header.checkVisibility()).to.be.false;
+    });
+
+    it('should show a fallback title without a document', () => {
+      expect(title.textContent).to.equal('PDF document');
+    });
+
+    it('should show the file name of src while the document loads', async () => {
+      viewer.src = fixtureUrl('multi-page.pdf');
+      await nextFrame();
+      expect(title.textContent).to.equal('multi-page.pdf');
+    });
+
+    it('should show the file name of src when the document could not be loaded', async () => {
+      viewer.src = fixtureUrl('invalid.pdf');
+      await oneEvent(viewer, 'document-error');
+      await nextFrame();
+      expect(title.textContent).to.equal('invalid.pdf');
+    });
+
+    it('should show headerTitle instead of the file name', async () => {
+      viewer.src = fixtureUrl('multi-page.pdf');
+      viewer.headerTitle = 'Annual report';
+      await nextFrame();
+      expect(title.textContent).to.equal('Annual report');
+    });
+
+    it('should show a fallback title for src without a file name', async () => {
+      await loadAndRender(viewer, createPdfUrl(1));
+      expect(title.textContent).to.equal('PDF document');
+    });
+
+    it('should use the fallback title set with i18n', async () => {
+      viewer.i18n = { document: 'PDF-Dokument' };
+      await nextFrame();
+      expect(title.textContent).to.equal('PDF-Dokument');
+    });
+  });
+
+  describe('collapsed toolbar', () => {
+    beforeEach(async () => {
+      await loadAndRender(viewer, fixtureUrl('multi-page.pdf'));
+    });
+
+    it('should not collapse the toolbar by default', () => {
+      expect(viewer.toolbarCollapsed).to.be.false;
+      expect(toolbar.checkVisibility()).to.be.true;
+    });
+
+    it('should not collapse the toolbar without the header, which expands it', async () => {
+      viewer.headerHidden = true;
+      viewer.toolbarCollapsed = true;
+      await nextFrame();
+      expect(toolbar.checkVisibility()).to.be.true;
+    });
+
+    it('should collapse the toolbar when set as attribute', async () => {
+      viewer.setAttribute('toolbar-collapsed', '');
+      await nextFrame();
+      expect(viewer.toolbarCollapsed).to.be.true;
+      expect(toolbar.checkVisibility()).to.be.false;
+    });
+
+    it('should mark the header as the button that controls the toolbar', () => {
+      expect(header.localName).to.equal('button');
+      expect(header.getAttribute('aria-controls')).to.equal(toolbar.id);
+      expect(header.getAttribute('aria-expanded')).to.equal('true');
+    });
+
+    it('should collapse and expand the toolbar on header click', async () => {
+      const spy = sinon.spy();
+      viewer.addEventListener('toolbar-collapsed-changed', spy);
+      header.click();
+      await nextFrame();
+      expect(viewer.toolbarCollapsed).to.be.true;
+      expect(spy).to.be.calledOnce;
+      expect(toolbar.checkVisibility()).to.be.false;
+      expect(header.getAttribute('aria-expanded')).to.equal('false');
+
+      header.click();
+      await nextFrame();
+      expect(viewer.toolbarCollapsed).to.be.false;
+      expect(toolbar.checkVisibility()).to.be.true;
+      expect(header.getAttribute('aria-expanded')).to.equal('true');
+    });
+
+    it('should fit the whole page again when the toolbar collapses', async () => {
+      viewer.zoom = 'page-fit';
+      await nextRenderIdle(viewer);
+      viewer.toolbarCollapsed = true;
+      await nextResize(content);
+      await nextRenderIdle(viewer);
+      const page = viewer.shadowRoot!.querySelector<HTMLElement>('[part~="page"]')!;
+      expect(page.offsetHeight).to.be.closeTo(getContentBoxSize(content).height, 1);
+    });
+
+    it('should keep focus on the header when it is activated with the keyboard', async () => {
+      header.focus();
+      await sendKeys({ press: 'Enter' });
+      await nextFrame();
+      expect(viewer.toolbarCollapsed).to.be.true;
+      expect(viewer.shadowRoot!.activeElement).to.equal(header);
+    });
+  });
+
   describe('toolbar-actions slot', () => {
     beforeEach(async () => {
       await loadDocument(viewer, 'multi-page.pdf');
@@ -368,6 +492,14 @@ describe('toolbar', () => {
       await nextFrame();
       expect(approve.assignedSlot!.parentElement!.matches('[part~="toolbar-group"]')).to.be.true;
       expect(approve.getBoundingClientRect().right).to.be.at.most(reject.getBoundingClientRect().left);
+    });
+
+    it('should hide slotted controls with the collapsed toolbar', async () => {
+      const approve = createButton('Approve');
+      viewer.appendChild(approve);
+      viewer.toolbarCollapsed = true;
+      await nextFrame();
+      expect(approve.checkVisibility()).to.be.false;
     });
 
     describe('child added after the first render', () => {
@@ -421,29 +553,30 @@ describe('toolbar', () => {
     });
 
     it('should scroll each control into view when focused with the keyboard', async () => {
-      // The toolbar scrolls, so that some controls are out of view
+      // The header and the toolbar scroll, so that some controls are out of view
       expect(topArea.scrollHeight).to.be.greaterThan(topArea.clientHeight);
       // Go backwards from the pages through all toolbar controls.
       content.focus();
       await sendKeys({ press: 'Shift+Tab' });
       const visited = new Set<HTMLElement>();
       for (let i = 0; i < 10; i++) {
-        const active = document.activeElement!;
-        const control = getControls().find((element) => element === active || element.contains(active));
+        const active = viewer.shadowRoot!.activeElement ?? document.activeElement!;
+        const control = [header, ...getControls()].find((element) => element === active || element.contains(active));
         if (!control) {
           break;
         }
         visited.add(control);
         const name = control.getAttribute('icon') ?? control.localName;
         const rect = control.getBoundingClientRect();
-        // Visible in the toolbar, which is inside the viewer
+        // Visible in the header and the toolbar, which are inside the viewer
         const areaRect = topArea.getBoundingClientRect();
         const viewerRect = viewer.getBoundingClientRect();
         const top = Math.max(areaRect.top, viewerRect.top);
         const bottom = Math.min(areaRect.bottom, viewerRect.bottom);
-        // With room for the focus ring around the control
-        expect(rect.top, name).to.be.at.least(top + 3);
-        expect(rect.bottom, name).to.be.at.most(bottom - 3);
+        // With room for the focus ring around the control. The header has it inside.
+        const room = control === header ? 0 : 3;
+        expect(rect.top, name).to.be.at.least(top + room);
+        expect(rect.bottom, name).to.be.at.most(bottom - room);
         // The viewer itself does not scroll, which would move the toolbar or the pages out of view.
         expect(viewer.scrollTop, name).to.equal(0);
         await sendKeys({ press: 'Shift+Tab' });
@@ -451,6 +584,7 @@ describe('toolbar', () => {
       expect(visited).to.include(zoomSelect);
       expect(visited).to.include(pageField);
       expect(visited).to.include(nextButton);
+      expect(visited).to.include(header);
     });
   });
 });

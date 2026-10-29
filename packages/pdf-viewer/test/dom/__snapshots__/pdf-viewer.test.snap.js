@@ -193,7 +193,25 @@ snapshots["vaadin-pdf-viewer host document"] =
 
 snapshots["vaadin-pdf-viewer shadow default"] = 
 `<div class="top-area">
-  <div part="toolbar">
+  <button
+    aria-controls="toolbar"
+    aria-expanded="true"
+    part="header"
+  >
+    <span
+      dir="auto"
+      part="title"
+      title="PDF document"
+    >
+      PDF document
+    </span>
+    <span part="header-toggle">
+    </span>
+  </button>
+  <div
+    id="toolbar"
+    part="toolbar"
+  >
     <div part="toolbar-group">
       <slot name="toolbar-navigation">
       </slot>
@@ -225,7 +243,25 @@ snapshots["vaadin-pdf-viewer shadow default"] =
 
 snapshots["vaadin-pdf-viewer shadow document"] = 
 `<div class="top-area">
-  <div part="toolbar">
+  <button
+    aria-controls="toolbar"
+    aria-expanded="true"
+    part="header"
+  >
+    <span
+      dir="auto"
+      part="title"
+      title="multi-page.pdf"
+    >
+      multi-page.pdf
+    </span>
+    <span part="header-toggle">
+    </span>
+  </button>
+  <div
+    id="toolbar"
+    part="toolbar"
+  >
     <div part="toolbar-group">
       <slot name="toolbar-navigation">
       </slot>
@@ -270,4 +306,204 @@ snapshots["vaadin-pdf-viewer shadow document"] =
 </div>
 `;
 /* end snapshot vaadin-pdf-viewer shadow document */
+
+snapshots["vaadin-pdf-viewer shadow header title"] = 
+`<div class="top-area">
+  <button
+    aria-controls="toolbar"
+    aria-expanded="true"
+    part="header"
+  >
+    <span
+      dir="auto"
+      part="title"
+      title="Annual report"
+    >
+      Annual report
+    </span>
+    <span part="header-toggle">
+    </span>
+  </button>
+  <div
+    id="toolbar"
+    part="toolbar"
+  >
+    <div part="toolbar-group">
+      <slot name="toolbar-navigation">
+      </slot>
+    </div>
+    <div part="toolbar-group">
+      <slot name="toolbar-zoom">
+      </slot>
+    </div>
+    <div part="toolbar-group">
+      <slot name="toolbar-actions">
+      </slot>
+    </div>
+  </div>
+</div>
+<div part="loader">
+</div>
+<div class="content-area">
+  <div
+    id="content"
+    part="content"
+    tabindex="0"
+  >
+    <div id="pages">
+      <div part="page">
+        <canvas aria-hidden="true">
+        </canvas>
+      </div>
+      <div part="page">
+        <canvas aria-hidden="true">
+        </canvas>
+      </div>
+      <div part="page">
+      </div>
+      <div part="page">
+      </div>
+      <div part="page">
+      </div>
+      <div part="page">
+      </div>
+    </div>
+  </div>
+</div>
+`;
+/* end snapshot vaadin-pdf-viewer shadow header title */
+
+snapshots["vaadin-pdf-viewer shadow header hidden"] = 
+`<div class="top-area">
+  <button
+    aria-controls="toolbar"
+    aria-expanded="true"
+    hidden=""
+    part="header"
+  >
+    <span
+      dir="auto"
+      part="title"
+      title="multi-page.pdf"
+    >
+      multi-page.pdf
+    </span>
+    <span part="header-toggle">
+    </span>
+  </button>
+  <div
+    id="toolbar"
+    part="toolbar"
+  >
+    <div part="toolbar-group">
+      <slot name="toolbar-navigation">
+      </slot>
+    </div>
+    <div part="toolbar-group">
+      <slot name="toolbar-zoom">
+      </slot>
+    </div>
+    <div part="toolbar-group">
+      <slot name="toolbar-actions">
+      </slot>
+    </div>
+  </div>
+</div>
+<div part="loader">
+</div>
+<div class="content-area">
+  <div
+    id="content"
+    part="content"
+    tabindex="0"
+  >
+    <div id="pages">
+      <div part="page">
+        <canvas aria-hidden="true">
+        </canvas>
+      </div>
+      <div part="page">
+        <canvas aria-hidden="true">
+        </canvas>
+      </div>
+      <div part="page">
+      </div>
+      <div part="page">
+      </div>
+      <div part="page">
+      </div>
+      <div part="page">
+      </div>
+    </div>
+  </div>
+</div>
+`;
+/* end snapshot vaadin-pdf-viewer shadow header hidden */
+
+snapshots["vaadin-pdf-viewer shadow toolbar collapsed"] = 
+`<div class="top-area">
+  <button
+    aria-controls="toolbar"
+    aria-expanded="false"
+    part="header"
+  >
+    <span
+      dir="auto"
+      part="title"
+      title="multi-page.pdf"
+    >
+      multi-page.pdf
+    </span>
+    <span part="header-toggle">
+    </span>
+  </button>
+  <div
+    hidden=""
+    id="toolbar"
+    part="toolbar"
+  >
+    <div part="toolbar-group">
+      <slot name="toolbar-navigation">
+      </slot>
+    </div>
+    <div part="toolbar-group">
+      <slot name="toolbar-zoom">
+      </slot>
+    </div>
+    <div part="toolbar-group">
+      <slot name="toolbar-actions">
+      </slot>
+    </div>
+  </div>
+</div>
+<div part="loader">
+</div>
+<div class="content-area">
+  <div
+    id="content"
+    part="content"
+    tabindex="0"
+  >
+    <div id="pages">
+      <div part="page">
+        <canvas aria-hidden="true">
+        </canvas>
+      </div>
+      <div part="page">
+        <canvas aria-hidden="true">
+        </canvas>
+      </div>
+      <div part="page">
+      </div>
+      <div part="page">
+      </div>
+      <div part="page">
+      </div>
+      <div part="page">
+      </div>
+    </div>
+  </div>
+</div>
+`;
+/* end snapshot vaadin-pdf-viewer shadow toolbar collapsed */
 

@@ -12,6 +12,50 @@ import '@vaadin/component-base/src/styles/style-props.js';
 import { css } from 'lit';
 
 export const pdfViewerToolbarStyles = css`
+  [part~='header'] {
+    display: flex;
+    align-items: center;
+    gap: var(--vaadin-gap-xs);
+    width: 100%;
+    margin: 0;
+    padding: var(--vaadin-padding-xs) var(--vaadin-padding-s);
+    border: 0;
+    border-block-end: 1px solid var(--vaadin-pdf-viewer-border-color, var(--vaadin-border-color-secondary));
+    background: var(--vaadin-pdf-viewer-toolbar-background, var(--vaadin-background-color));
+    color: inherit;
+    font: inherit;
+    text-align: start;
+    cursor: var(--vaadin-clickable-cursor);
+    -webkit-user-select: none;
+    user-select: none;
+  }
+
+  [part~='header']:focus-visible {
+    outline: var(--vaadin-focus-ring-width) solid var(--vaadin-focus-ring-color);
+    outline-offset: calc(var(--vaadin-focus-ring-width) * -1);
+  }
+
+  [part~='title'] {
+    flex: 1;
+    min-width: 0;
+    font-weight: 600;
+    overflow: hidden;
+    text-overflow: ellipsis;
+    white-space: nowrap;
+  }
+
+  [part~='header-toggle'] {
+    flex: none;
+    width: var(--vaadin-icon-size, 1lh);
+    height: var(--vaadin-icon-size, 1lh);
+    background: currentColor;
+    mask: var(--_vaadin-icon-chevron-down) 50% / var(--vaadin-icon-visual-size, 100%) no-repeat;
+  }
+
+  [part~='header'][aria-expanded='true'] [part~='header-toggle'] {
+    scale: 1 -1;
+  }
+
   [part~='toolbar'] {
     display: flex;
     min-width: fit-content;
@@ -24,6 +68,10 @@ export const pdfViewerToolbarStyles = css`
     background: var(--vaadin-pdf-viewer-toolbar-background, var(--vaadin-background-color));
     -webkit-user-select: none;
     user-select: none;
+  }
+
+  :is([part~='header'], [part~='toolbar'])[hidden] {
+    display: none;
   }
 
   [part~='toolbar-group'] {
@@ -41,5 +89,11 @@ export const pdfViewerToolbarStyles = css`
 
   ::slotted(vaadin-select) {
     --vaadin-field-default-width: 9em;
+  }
+
+  @media (forced-colors: active) {
+    [part~='header-toggle'] {
+      background: CanvasText;
+    }
   }
 `;

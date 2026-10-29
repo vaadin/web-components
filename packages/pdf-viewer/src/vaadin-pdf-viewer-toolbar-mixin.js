@@ -17,12 +17,73 @@ import { styleMap } from 'lit/directives/style-map.js';
 import { formatZoom, getZoomInLevel, getZoomOutLevel, ZOOM_LEVELS } from './pdf-viewer-zoom-utils.js';
 
 /**
- * A mixin that adds the toolbar with the page navigation and the zoom. The
- * controls of the toolbar are Vaadin components, rendered into the light DOM
- * so that themes can style them like any other instance of these components.
+ * Returns the last part of the path of a URL, e.g. the file name of
+ * `/files/report.pdf`, or null for URLs without one, e.g. blob URLs.
+ * @param {string | null | undefined} src
+ * @return {string | null}
+ */
+function getFileNameFromUrl(src) {
+  if (!src) {
+    return null;
+  }
+  try {
+    const { protocol, pathname } = new URL(src, document.baseURI);
+    if (!['http:', 'https:', 'file:'].includes(protocol)) {
+      return null;
+    }
+    return decodeURIComponent(pathname.split('/').pop()) || null;
+  } catch {
+    return null;
+  }
+}
+
+/**
+ * A mixin that adds the header and the toolbar with the page navigation and
+ * the zoom. The controls of the toolbar are Vaadin components, rendered into
+ * the light DOM so that themes can style them like any other instance of
+ * these components.
  */
 export const PdfViewerToolbarMixin = (superClass) =>
   class PdfViewerToolbarMixinClass extends superClass {
+    static get properties() {
+      return {
+        /**
+         * Whether the header above the toolbar is hidden. The header shows
+         * `headerTitle`, or else the file name of `src`, and collapses and
+         * expands the toolbar when clicked.
+         *
+         * @attr {boolean} header-hidden
+         */
+        headerHidden: {
+          type: Boolean,
+          value: false,
+        },
+
+        /**
+         * The title shown in the header, see `headerHidden`. When not set,
+         * the header shows the file name of `src`.
+         *
+         * @attr {string} header-title
+         */
+        headerTitle: {
+          type: String,
+        },
+
+        /**
+         * Whether the toolbar is collapsed. The header collapses and expands
+         * it, so the toolbar collapses only while the header is shown, see
+         * `headerHidden`.
+         *
+         * @attr {boolean} toolbar-collapsed
+         */
+        toolbarCollapsed: {
+          type: Boolean,
+          value: false,
+          notify: true,
+        },
+      };
+    }
+
     /** The items of the zoom select, built again only when `zoom` or the texts change. */
     #zoomItems = [];
 
@@ -36,13 +97,26 @@ export const PdfViewerToolbarMixin = (superClass) =>
     }
 
     /**
-     * Returns the template of the toolbar, which shows the controls of
-     * `_renderToolbarControls()` in its slots.
+     * Returns the template of the header and the toolbar, which show the
+     * controls of `_renderToolbarControls()` in their slots.
      * @protected
      */
     _renderToolbar() {
+      const title = this.headerTitle || getFileNameFromUrl(this.src) || this.__effectiveI18n.document;
+      // The toolbar collapses only while the header, which expands it, is shown.
+      const collapsed = this.toolbarCollapsed && !this.headerHidden;
       return html`
-        <div part="toolbar">
+        <button
+          part="header"
+          aria-controls="toolbar"
+          aria-expanded="${collapsed ? 'false' : 'true'}"
+          ?hidden="${this.headerHidden}"
+          @click="${this.#onHeaderClick}"
+        >
+          <span part="title" dir="auto" title="${title}">${title}</span>
+          <span part="header-toggle"></span>
+        </button>
+        <div id="toolbar" part="toolbar" ?hidden="${collapsed}">
           <div part="toolbar-group"><slot name="toolbar-navigation"></slot></div>
           <div part="toolbar-group"><slot name="toolbar-zoom"></slot></div>
           <div part="toolbar-group"><slot name="toolbar-actions"></slot></div>
@@ -122,6 +196,11 @@ export const PdfViewerToolbarMixin = (superClass) =>
           <vaadin-tooltip slot="tooltip" .text="${i18n.zoomIn}"></vaadin-tooltip>
         </vaadin-pdf-viewer-button>
       `;
+    }
+
+    /** @private */
+    #onHeaderClick() {
+      this.toolbarCollapsed = !this.toolbarCollapsed;
     }
 
     /** @private */
