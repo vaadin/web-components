@@ -9,8 +9,8 @@
  * license.
  */
 import { html } from 'lit';
-import { SlotController } from '@vaadin/component-base/src/slot-controller.js';
 import { issueWarning } from '@vaadin/component-base/src/warnings.js';
+import { PdfViewerButtonController } from './pdf-viewer-button-controller.js';
 import { downloadDocument } from './pdf-viewer-download.js';
 
 /**
@@ -45,25 +45,17 @@ export const PdfViewerDownloadMixin = (superClass) =>
      */
     #downloadsController = null;
 
-    /** @type {SlotController} */
+    /** @type {PdfViewerButtonController} */
     #buttonController;
-
-    /**
-     * The tooltip that the viewer added to the default button.
-     * @type {HTMLElement | null}
-     */
-    #buttonTooltip = null;
 
     /** @protected */
     firstUpdated() {
       super.firstUpdated();
 
-      this.#buttonController = new SlotController(this, 'download-button', 'vaadin-pdf-viewer-button', {
-        initializer: (button) => this.#initButton(button),
-      });
+      this.#buttonController = new PdfViewerButtonController(this, 'download-button', 'download', () =>
+        this.download(),
+      );
       this.addController(this.#buttonController);
-
-      this.addEventListener('click', (event) => this.#onClick(event));
     }
 
     /** @protected */
@@ -78,13 +70,7 @@ export const PdfViewerDownloadMixin = (superClass) =>
     updated(props) {
       super.updated(props);
 
-      const button = this.#buttonController?.node;
-      if (button) {
-        button.disabled = !this.pageCount;
-      }
-      if (this.#buttonTooltip) {
-        this.#buttonTooltip.text = this.__effectiveI18n.download;
-      }
+      this.#buttonController?.updateButton(!this.pageCount, this.__effectiveI18n.download);
 
       if (this.#downloadPending && !this._documentPending) {
         this.#downloadPending = false;
@@ -126,35 +112,6 @@ export const PdfViewerDownloadMixin = (superClass) =>
     }
 
     /**
-     * Sets the icon and the tooltip on the default button. A custom button
-     * keeps its own content.
-     * @param {HTMLElement} button
-     * @private
-     */
-    #initButton(button) {
-      // The Flow counterpart creates its own default button, so that it can return it.
-      if (button._isDefault) {
-        this.#buttonController.defaultNode = button;
-      }
-
-      this.#buttonTooltip = null;
-      if (button === this.#buttonController.defaultNode) {
-        if (!button.hasAttribute('icon')) {
-          button.setAttribute('icon', 'download');
-        }
-        if (!button.hasAttribute('theme')) {
-          button.setAttribute('theme', 'tertiary icon');
-        }
-        if (!button.querySelector(':scope > [slot="tooltip"]')) {
-          this.#buttonTooltip = document.createElement('vaadin-tooltip');
-          this.#buttonTooltip.slot = 'tooltip';
-          button.append(this.#buttonTooltip);
-        }
-      }
-      this.requestUpdate();
-    }
-
-    /**
      * Downloads the loaded document under the file name it has now, also
      * when another document loads or `fileName` changes while its bytes
      * are read.
@@ -173,13 +130,5 @@ export const PdfViewerDownloadMixin = (superClass) =>
           issueWarning(`Failed to download the PDF document: ${error.message}`);
         }
       });
-    }
-
-    /** @private */
-    #onClick(event) {
-      const button = this.#buttonController.node;
-      if (button && event.composedPath().includes(button)) {
-        this.download();
-      }
     }
   };
