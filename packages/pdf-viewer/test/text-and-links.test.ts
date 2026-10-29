@@ -186,6 +186,26 @@ describe('text and links', () => {
     });
   });
 
+  [
+    { rotate: 90, corner: 'top right' },
+    { rotate: 180, corner: 'bottom right' },
+    { rotate: 270, corner: 'bottom left' },
+  ].forEach(({ rotate, corner }) => {
+    it(`should place the text and link of a page rotated by ${rotate} degrees in the ${corner} corner`, async () => {
+      // The text and its link are at the top left of the unrotated page.
+      await loadPdf([
+        { content: 'BT /F2 20 Tf 72 720 Td (Corner) Tj ET', rotate, annotations: [uriLink([70, 715, 140, 740])] },
+      ]);
+      const page = pages[0].getBoundingClientRect();
+      const text = [...getTextLayer(1)!.querySelectorAll('span')].find((span) => span.textContent === 'Corner')!;
+      const [vertical, horizontal] = corner.split(' ');
+      [text.getBoundingClientRect(), getLinks(1)[0].getBoundingClientRect()].forEach((rect) => {
+        expect(rect.top + rect.height / 2 < page.top + page.height / 2).to.equal(vertical === 'top');
+        expect(rect.left + rect.width / 2 < page.left + page.width / 2).to.equal(horizontal === 'left');
+      });
+    });
+  });
+
   describe('language', () => {
     let pagesContainer: HTMLElement;
 
