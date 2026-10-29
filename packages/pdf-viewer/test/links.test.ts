@@ -337,6 +337,16 @@ describe('links', () => {
     });
   });
 
+  it('should scroll horizontally to the position of a destination', async () => {
+    viewer.zoom = 2;
+    await loadLinkToPosition('[1 /XYZ 200 400 null]');
+    getLinks(1)[0].click();
+    await nextRenderIdle(viewer);
+    const page = pages[1];
+    expect(content.scrollLeft).to.be.greaterThan(0);
+    expect(content.scrollLeft).to.be.closeTo(page.offsetLeft + (200 / 595) * page.offsetWidth, 1);
+  });
+
   describe('named actions', () => {
     const actions = ['FirstPage', 'LastPage', 'NextPage', 'PrevPage'];
 

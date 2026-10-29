@@ -154,8 +154,9 @@ export const PdfViewerScrollMixin = (superClass) =>
      * Scrolls to the start of the given page, or to an offset on it, and
      * makes it the current page, also when it is the current page already.
      * @param {number} page
-     * @param {number} [offset] the offset from the top of the page in CSS
-     *   pixels. Without it, the padding above the page shows too.
+     * @param {{ left: number, top: number }} [offset] the offset from the top
+     *   left corner of the page in CSS pixels. Without it, the padding above
+     *   the page shows too, and the horizontal scroll position stays.
      * @protected
      */
     _scrollToPage(page, offset) {
@@ -174,8 +175,13 @@ export const PdfViewerScrollMixin = (superClass) =>
         );
       } else {
         const pageView = this.__pages[page - 1];
-        content.scrollTop =
-          pageView.element.offsetTop + (offset ?? -Number.parseFloat(getComputedStyle(content).paddingBlockStart));
+        if (offset) {
+          content.scrollTop = pageView.element.offsetTop + offset.top;
+          content.scrollLeft = pageView.element.offsetLeft + offset.left;
+        } else {
+          content.scrollTop =
+            pageView.element.offsetTop - Number.parseFloat(getComputedStyle(content).paddingBlockStart);
+        }
         this.#setPageFromViewer(page);
       }
 

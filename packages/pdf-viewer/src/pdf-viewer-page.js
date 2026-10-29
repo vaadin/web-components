@@ -188,24 +188,31 @@ export class PdfViewerPage {
   }
 
   /**
-   * Returns the distance in CSS pixels from the top of the page to a position
-   * given in PDF units from the bottom left corner of the unrotated page, as
-   * in link destinations. A missing coordinate gives a distance of 0 when the
-   * page is rotated so that the coordinate is vertical.
+   * Returns the offset in CSS pixels from the top left corner of the page to
+   * a position given in PDF units from the bottom left corner of the unrotated
+   * page, as in link destinations. A missing coordinate gives an offset of 0
+   * on the axis that it is on after the rotation of the page.
    *
    * @param {number | undefined} x
    * @param {number | undefined} y
-   * @return {number}
+   * @return {{ left: number, top: number }}
    */
-  getOffsetTop(x, y) {
+  getOffset(x, y) {
+    let left = (x ?? 0) * this.scale;
     let top = (this.unscaledHeight - (y ?? 0)) * this.scale;
     let rotated = false;
     if (this.pdfPage) {
       const viewport = this.pdfPage.getViewport({ scale: this.scale });
-      top = viewport.convertToViewportPoint(x ?? 0, y ?? 0)[1];
+      [left, top] = viewport.convertToViewportPoint(x ?? 0, y ?? 0);
       rotated = viewport.rotation % 180 !== 0;
     }
-    return (rotated ? x : y) === undefined ? 0 : Math.max(top, 0);
+    if ((rotated ? y : x) === undefined) {
+      left = 0;
+    }
+    if ((rotated ? x : y) === undefined) {
+      top = 0;
+    }
+    return { left: Math.max(left, 0), top: Math.max(top, 0) };
   }
 
   /**

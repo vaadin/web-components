@@ -58,7 +58,7 @@ export declare class PdfViewerPage {
 
   render(pixelRatio: number): Promise<void>;
 
-  getOffsetTop(x: number | undefined, y: number | undefined): number;
+  getOffset(x: number | undefined, y: number | undefined): { left: number; top: number };
 
   renderTextLayer(): Promise<void>;
 

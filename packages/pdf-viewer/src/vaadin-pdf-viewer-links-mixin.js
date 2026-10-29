@@ -107,7 +107,7 @@ export const PdfViewerLinksMixin = (superClass) =>
       const target = await this.#resolveDestination(annotation);
       if (this._pdfDocument === pdfDocument && target) {
         const hasPosition = target.left !== undefined || target.top !== undefined;
-        const offset = hasPosition ? this.__pages[target.page - 1].getOffsetTop(target.left, target.top) : undefined;
+        const offset = hasPosition ? this.__pages[target.page - 1].getOffset(target.left, target.top) : undefined;
         this._scrollToPage(target.page, offset);
         this.$.content.focus({ preventScroll: true, focusVisible: isKeyboardActive() });
       }
