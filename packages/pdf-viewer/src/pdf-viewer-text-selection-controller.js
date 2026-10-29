@@ -178,7 +178,12 @@ export class PdfViewerTextSelectionController {
     }
 
     const ranges = getSelectionRanges(this.host.shadowRoot);
-    const activePages = pages.filter((page) => ranges.some((range) => range.intersectsNode(page.textLayerElement)));
+    // As in later versions of pdf.js, the collapsed range of a click whose `selectionchange` comes after
+    // `pointerup` does not mark the text layer, as that would keep the links from being clicked.
+    const activeRanges = ranges.filter((range) => !range.collapsed || this.#isPointerDown);
+    const activePages = pages.filter((page) =>
+      activeRanges.some((range) => range.intersectsNode(page.textLayerElement)),
+    );
     pages.forEach((page) => {
       if (activePages.includes(page)) {
         page.textLayerElement.classList.add('selecting');

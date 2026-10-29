@@ -1,11 +1,12 @@
 import { expect } from '@vaadin/chai-plugins';
-import { sendKeys } from '@vaadin/test-runner-commands';
+import { resetMouse, sendKeys, sendMouse } from '@vaadin/test-runner-commands';
 import { fixtureSync, isDesktopSafari, nextFrame, nextRender, nextUpdate } from '@vaadin/testing-helpers';
 import sinon from 'sinon';
 import './enable-feature-flag.js';
 import '../vaadin-pdf-viewer.js';
 import type { PDFPageProxy } from 'pdfjs-dist';
 import { getTextInside } from '../src/pdf-viewer-links.js';
+import { getSelectionRanges } from '../src/pdf-viewer-text-selection-controller.js';
 import type { PdfViewer } from '../vaadin-pdf-viewer.js';
 import {
   createPdf,
@@ -166,6 +167,45 @@ describe('links', () => {
       const link = viewer.shadowRoot!.activeElement as HTMLAnchorElement;
       expect(getComputedStyle(link).outlineStyle).to.equal('solid');
     });
+  });
+
+  it('should not select the text after a link when dragging a selection over it', async () => {
+    await loadPdf([
+      {
+        content:
+          'BT /F1 20 Tf 50 700 Td (First line) Tj ET BT /F1 20 Tf 50 670 Td (Line with a link) Tj ET BT /F1 20 Tf 50 640 Td (Last line) Tj ET',
+        annotations: [uriLink([40, 660, 300, 690])],
+      },
+    ]);
+    const first = [...getTextLayer(1)!.querySelectorAll('span')]
+      .find((span) => span.textContent === 'First line')!
+      .getBoundingClientRect();
+    const link = getLinks(1)[0].getBoundingClientRect();
+    await sendMouse({ type: 'move', position: [Math.round(first.left + 2), Math.round(first.top + first.height / 2)] });
+    await sendMouse({ type: 'down' });
+    await sendMouse({ type: 'move', position: [Math.round(link.left + 60), Math.round(link.top + link.height / 2)] });
+    await nextFrame();
+    const selected = getSelectionRanges(viewer.shadowRoot!).join('');
+    await sendMouse({ type: 'up' });
+    await resetMouse();
+    document.getSelection()!.removeAllRanges();
+    expect(selected).to.include('First line');
+    expect(selected).to.not.include('Last line');
+  });
+
+  it('should keep links clickable when a click puts the caret in the text', async () => {
+    await load('links.pdf');
+    const text = [...getTextLayer(1)!.querySelectorAll('span')].find(
+      (span) => span.textContent === 'Links',
+    )!.firstChild!;
+    // The selection change of a click can come after the pointer is released.
+    const change = new Promise((resolve) => {
+      document.addEventListener('selectionchange', resolve, { once: true });
+    });
+    document.getSelection()!.collapse(text, 2);
+    await change;
+    document.getSelection()!.removeAllRanges();
+    expect(getComputedStyle(getLinks(1)[0]).pointerEvents).to.equal('auto');
   });
 
   describe('links over text', () => {

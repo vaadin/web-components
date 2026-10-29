@@ -54,6 +54,11 @@ export const pdfViewerPageStyles = css`
     cursor: var(--vaadin-clickable-cursor);
   }
 
+  /* Keeps the selection in the text while dragging over links, as in pdf.js */
+  [part='page']:has(> .text-layer.selecting) .link {
+    pointer-events: none;
+  }
+
   .link:focus-visible {
     outline: var(--vaadin-focus-ring-width) solid var(--vaadin-focus-ring-color);
     outline-offset: 1px;
