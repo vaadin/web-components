@@ -23,6 +23,8 @@ export declare class PdfViewerDownloadMixinClass {
   /**
    * Whether the button that downloads the document is hidden from the
    * toolbar. The `download()` method works also while it is hidden.
+   *
+   * @attr {boolean} download-button-hidden
    */
   downloadButtonHidden: boolean;
 

@@ -26,6 +26,8 @@ export declare class PdfViewerDocumentMixinClass {
    * the header also shows. When not set, the name is the PDF file name
    * from the `Content-Disposition` header of the response, else the PDF
    * file name at the end of the path of `src`, else `document.pdf`.
+   *
+   * @attr {string} file-name
    */
   fileName: string | null | undefined;
 
