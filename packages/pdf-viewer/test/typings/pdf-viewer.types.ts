@@ -29,7 +29,7 @@ assertType<PdfViewer>(viewer);
 
 // Properties
 assertType<string | null | undefined>(viewer.src);
-assertType<boolean>(viewer.headerVisible);
+assertType<boolean>(viewer.headerHidden);
 assertType<string | null | undefined>(viewer.headerTitle);
 assertType<boolean>(viewer.toolbarCollapsed);
 assertType<number>(viewer.page);

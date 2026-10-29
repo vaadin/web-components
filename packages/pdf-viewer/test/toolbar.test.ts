@@ -366,60 +366,50 @@ describe('toolbar', () => {
       title = viewer.shadowRoot!.querySelector<HTMLElement>('[part~="title"]')!;
     });
 
-    it('should not show the header by default', () => {
-      expect(viewer.headerVisible).to.be.false;
-      expect(header.checkVisibility()).to.be.false;
-    });
-
-    it('should show the header when set as attribute', async () => {
-      viewer.setAttribute('header-visible', '');
-      await nextFrame();
+    it('should show the header by default', () => {
+      expect(viewer.headerHidden).to.be.false;
       expect(header.checkVisibility()).to.be.true;
     });
 
-    describe('with headerVisible', () => {
-      beforeEach(async () => {
-        viewer.headerVisible = true;
-        await nextFrame();
-      });
+    it('should hide the header when set as attribute', async () => {
+      viewer.setAttribute('header-hidden', '');
+      await nextFrame();
+      expect(header.checkVisibility()).to.be.false;
+    });
 
-      it('should show the header without a document', () => {
-        expect(header.checkVisibility()).to.be.true;
-        expect(title.textContent).to.equal('PDF document');
-      });
+    it('should show a fallback title without a document', () => {
+      expect(title.textContent).to.equal('PDF document');
+    });
 
-      it('should show the file name of src while the document loads', async () => {
-        viewer.src = fixtureUrl('multi-page.pdf');
-        await nextFrame();
-        expect(header.checkVisibility()).to.be.true;
-        expect(title.textContent).to.equal('multi-page.pdf');
-      });
+    it('should show the file name of src while the document loads', async () => {
+      viewer.src = fixtureUrl('multi-page.pdf');
+      await nextFrame();
+      expect(title.textContent).to.equal('multi-page.pdf');
+    });
 
-      it('should show the file name of src when the document could not be loaded', async () => {
-        viewer.src = fixtureUrl('invalid.pdf');
-        await oneEvent(viewer, 'document-error');
-        await nextFrame();
-        expect(header.checkVisibility()).to.be.true;
-        expect(title.textContent).to.equal('invalid.pdf');
-      });
+    it('should show the file name of src when the document could not be loaded', async () => {
+      viewer.src = fixtureUrl('invalid.pdf');
+      await oneEvent(viewer, 'document-error');
+      await nextFrame();
+      expect(title.textContent).to.equal('invalid.pdf');
+    });
 
-      it('should show headerTitle instead of the file name', async () => {
-        viewer.src = fixtureUrl('multi-page.pdf');
-        viewer.headerTitle = 'Annual report';
-        await nextFrame();
-        expect(title.textContent).to.equal('Annual report');
-      });
+    it('should show headerTitle instead of the file name', async () => {
+      viewer.src = fixtureUrl('multi-page.pdf');
+      viewer.headerTitle = 'Annual report';
+      await nextFrame();
+      expect(title.textContent).to.equal('Annual report');
+    });
 
-      it('should show a fallback title for src without a file name', async () => {
-        await loadAndRender(viewer, createPdfUrl(1));
-        expect(title.textContent).to.equal('PDF document');
-      });
+    it('should show a fallback title for src without a file name', async () => {
+      await loadAndRender(viewer, createPdfUrl(1));
+      expect(title.textContent).to.equal('PDF document');
+    });
 
-      it('should use the fallback title set with i18n', async () => {
-        viewer.i18n = { document: 'PDF-Dokument' };
-        await nextFrame();
-        expect(title.textContent).to.equal('PDF-Dokument');
-      });
+    it('should use the fallback title set with i18n', async () => {
+      viewer.i18n = { document: 'PDF-Dokument' };
+      await nextFrame();
+      expect(title.textContent).to.equal('PDF-Dokument');
     });
   });
 
@@ -434,65 +424,58 @@ describe('toolbar', () => {
     });
 
     it('should not collapse the toolbar without the header, which expands it', async () => {
+      viewer.headerHidden = true;
       viewer.toolbarCollapsed = true;
       await nextFrame();
       expect(toolbar.checkVisibility()).to.be.true;
     });
 
-    it('should collapse the toolbar with the attributes', async () => {
+    it('should collapse the toolbar when set as attribute', async () => {
       viewer.setAttribute('toolbar-collapsed', '');
-      viewer.setAttribute('header-visible', '');
       await nextFrame();
       expect(viewer.toolbarCollapsed).to.be.true;
       expect(toolbar.checkVisibility()).to.be.false;
     });
 
-    describe('with header', () => {
-      beforeEach(async () => {
-        viewer.headerVisible = true;
-        await nextFrame();
-      });
+    it('should mark the header as the button that controls the toolbar', () => {
+      expect(header.localName).to.equal('button');
+      expect(header.getAttribute('aria-controls')).to.equal(toolbar.id);
+      expect(header.getAttribute('aria-expanded')).to.equal('true');
+    });
 
-      it('should mark the header as the button that controls the toolbar', () => {
-        expect(header.localName).to.equal('button');
-        expect(header.getAttribute('aria-controls')).to.equal(toolbar.id);
-        expect(header.getAttribute('aria-expanded')).to.equal('true');
-      });
+    it('should collapse and expand the toolbar on header click', async () => {
+      const spy = sinon.spy();
+      viewer.addEventListener('toolbar-collapsed-changed', spy);
+      header.click();
+      await nextFrame();
+      expect(viewer.toolbarCollapsed).to.be.true;
+      expect(spy).to.be.calledOnce;
+      expect(toolbar.checkVisibility()).to.be.false;
+      expect(header.getAttribute('aria-expanded')).to.equal('false');
 
-      it('should collapse and expand the toolbar on header click', async () => {
-        const spy = sinon.spy();
-        viewer.addEventListener('toolbar-collapsed-changed', spy);
-        header.click();
-        await nextFrame();
-        expect(viewer.toolbarCollapsed).to.be.true;
-        expect(spy).to.be.calledOnce;
-        expect(toolbar.checkVisibility()).to.be.false;
-        expect(header.getAttribute('aria-expanded')).to.equal('false');
+      header.click();
+      await nextFrame();
+      expect(viewer.toolbarCollapsed).to.be.false;
+      expect(toolbar.checkVisibility()).to.be.true;
+      expect(header.getAttribute('aria-expanded')).to.equal('true');
+    });
 
-        header.click();
-        await nextFrame();
-        expect(viewer.toolbarCollapsed).to.be.false;
-        expect(toolbar.checkVisibility()).to.be.true;
-        expect(header.getAttribute('aria-expanded')).to.equal('true');
-      });
+    it('should fit the whole page again when the toolbar collapses', async () => {
+      viewer.zoom = 'page-fit';
+      await nextRenderIdle(viewer);
+      viewer.toolbarCollapsed = true;
+      await nextResize(content);
+      await nextRenderIdle(viewer);
+      const page = viewer.shadowRoot!.querySelector<HTMLElement>('[part~="page"]')!;
+      expect(page.offsetHeight).to.be.closeTo(getContentBoxSize(content).height, 1);
+    });
 
-      it('should fit the whole page again when the toolbar collapses', async () => {
-        viewer.zoom = 'page-fit';
-        await nextRenderIdle(viewer);
-        viewer.toolbarCollapsed = true;
-        await nextResize(content);
-        await nextRenderIdle(viewer);
-        const page = viewer.shadowRoot!.querySelector<HTMLElement>('[part~="page"]')!;
-        expect(page.offsetHeight).to.be.closeTo(getContentBoxSize(content).height, 1);
-      });
-
-      it('should keep focus on the header when it is activated with the keyboard', async () => {
-        header.focus();
-        await sendKeys({ press: 'Enter' });
-        await nextFrame();
-        expect(viewer.toolbarCollapsed).to.be.true;
-        expect(viewer.shadowRoot!.activeElement).to.equal(header);
-      });
+    it('should keep focus on the header when it is activated with the keyboard', async () => {
+      header.focus();
+      await sendKeys({ press: 'Enter' });
+      await nextFrame();
+      expect(viewer.toolbarCollapsed).to.be.true;
+      expect(viewer.shadowRoot!.activeElement).to.equal(header);
     });
   });
 
@@ -514,7 +497,6 @@ describe('toolbar', () => {
     it('should hide slotted controls with the collapsed toolbar', async () => {
       const approve = createButton('Approve');
       viewer.appendChild(approve);
-      viewer.headerVisible = true;
       viewer.toolbarCollapsed = true;
       await nextFrame();
       expect(approve.checkVisibility()).to.be.false;
@@ -557,7 +539,6 @@ describe('toolbar', () => {
       viewer.style.maxWidth = '200px';
       viewer.style.maxHeight = '190px';
       viewer.style.fontSize = '32px';
-      viewer.headerVisible = true;
       await loadAndRender(viewer, fixtureUrl('multi-page.pdf'));
     });
 

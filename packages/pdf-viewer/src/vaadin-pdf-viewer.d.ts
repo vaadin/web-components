@@ -99,7 +99,7 @@ export interface PdfViewerEventMap extends HTMLElementEventMap, PdfViewerCustomE
  *
  * Part name       | Description
  * ----------------|------------
- * `header`        | The header above the toolbar, a button that collapses and expands it, see `headerVisible`.
+ * `header`        | The header above the toolbar, a button that collapses and expands it, see `headerHidden`.
  * `title`         | The title in the header.
  * `header-toggle` | The icon in the header that shows whether the toolbar is collapsed.
  * `toolbar`       | The toolbar above the pages.

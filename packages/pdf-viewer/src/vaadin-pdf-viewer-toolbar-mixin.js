@@ -48,19 +48,19 @@ export const PdfViewerToolbarMixin = (superClass) =>
     static get properties() {
       return {
         /**
-         * Whether the header is shown above the toolbar. The header shows
+         * Whether the header above the toolbar is hidden. The header shows
          * `headerTitle`, or else the file name of `src`, and collapses and
          * expands the toolbar when clicked.
          *
-         * @attr {boolean} header-visible
+         * @attr {boolean} header-hidden
          */
-        headerVisible: {
+        headerHidden: {
           type: Boolean,
           value: false,
         },
 
         /**
-         * The title shown in the header, see `headerVisible`. When not set,
+         * The title shown in the header, see `headerHidden`. When not set,
          * the header shows the file name of `src`.
          *
          * @attr {string} header-title
@@ -72,7 +72,7 @@ export const PdfViewerToolbarMixin = (superClass) =>
         /**
          * Whether the toolbar is collapsed. The header collapses and expands
          * it, so the toolbar collapses only while the header is shown, see
-         * `headerVisible`.
+         * `headerHidden`.
          *
          * @attr {boolean} toolbar-collapsed
          */
@@ -104,13 +104,13 @@ export const PdfViewerToolbarMixin = (superClass) =>
     _renderToolbar() {
       const title = this.headerTitle || getFileNameFromUrl(this.src) || this.__effectiveI18n.document;
       // The toolbar collapses only while the header, which expands it, is shown.
-      const collapsed = this.toolbarCollapsed && this.headerVisible;
+      const collapsed = this.toolbarCollapsed && !this.headerHidden;
       return html`
         <button
           part="header"
           aria-controls="toolbar"
           aria-expanded="${collapsed ? 'false' : 'true'}"
-          ?hidden="${!this.headerVisible}"
+          ?hidden="${this.headerHidden}"
           @click="${this.#onHeaderClick}"
         >
           <span part="title" dir="auto" title="${title}">${title}</span>

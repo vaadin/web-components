@@ -64,7 +64,7 @@
         viewer.src = fileUrl;
       });
 
-      ['headerVisible', 'toolbarCollapsed'].forEach((prop) => {
+      ['headerHidden', 'toolbarCollapsed'].forEach((prop) => {
         document.getElementById(prop).addEventListener('checked-changed', (e) => {
           viewer[prop] = e.detail.value;
         });
@@ -136,7 +136,7 @@
       </div>
       <div class="control-group">
         <vaadin-checkbox-group label="Options">
-          <vaadin-checkbox id="headerVisible" value="headerVisible" label="Show header"></vaadin-checkbox>
+          <vaadin-checkbox id="headerHidden" value="headerHidden" label="Hide header"></vaadin-checkbox>
           <vaadin-checkbox id="toolbarCollapsed" value="toolbarCollapsed" label="Collapse toolbar"></vaadin-checkbox>
         </vaadin-checkbox-group>
       </div>

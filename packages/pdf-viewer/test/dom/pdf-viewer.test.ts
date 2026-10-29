@@ -43,16 +43,21 @@ describe('vaadin-pdf-viewer', () => {
       await expect(viewer).shadowDom.to.equalSnapshot({ ignoreAttributes: ['style', 'width', 'height'] });
     });
 
-    it('header', async () => {
-      viewer.headerVisible = true;
+    it('header title', async () => {
       viewer.headerTitle = 'Annual report';
       viewer.src = fixtureUrl('multi-page.pdf');
       await nextRenderIdle(viewer);
       await expect(viewer).shadowDom.to.equalSnapshot({ ignoreAttributes: ['style', 'width', 'height'] });
     });
 
+    it('header hidden', async () => {
+      viewer.headerHidden = true;
+      viewer.src = fixtureUrl('multi-page.pdf');
+      await nextRenderIdle(viewer);
+      await expect(viewer).shadowDom.to.equalSnapshot({ ignoreAttributes: ['style', 'width', 'height'] });
+    });
+
     it('toolbar collapsed', async () => {
-      viewer.headerVisible = true;
       viewer.toolbarCollapsed = true;
       viewer.src = fixtureUrl('multi-page.pdf');
       await nextRenderIdle(viewer);
