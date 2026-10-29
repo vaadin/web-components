@@ -417,6 +417,16 @@ describe('toolbar', () => {
       expect(title.textContent).to.equal('report.pdf');
     });
 
+    it('should not show the name of the previous document when the next one fails to load', async () => {
+      await loadFixtureFrom(viewer, new URL('/files/multi-page.pdf', location.href).href, {
+        'Content-Disposition': 'inline; filename="report.pdf"',
+      });
+      viewer.src = new URL('/files/missing', location.href).href;
+      await oneEvent(viewer, 'document-error');
+      await nextFrame();
+      expect(title.textContent).to.equal('PDF document');
+    });
+
     it('should show the title of the document for src without a PDF file name', async () => {
       await loadFixtureFrom(viewer, new URL('/files/123', location.href).href);
       await nextFrame();
