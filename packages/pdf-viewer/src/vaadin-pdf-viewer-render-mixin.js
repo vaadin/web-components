@@ -193,6 +193,28 @@ export const PdfViewerRenderMixin = (superClass) =>
       }
     }
 
+    /**
+     * Loads the page of the document for a page view whose size has not
+     * loaded yet, e.g. to find a position on it.
+     * @param {PdfViewerPage} page
+     * @return {Promise<void>}
+     * @protected
+     */
+    async _loadPdfPage(page) {
+      const pdfDocument = this._pdfDocument;
+      if (page.pdfPage || !pdfDocument) {
+        return;
+      }
+      try {
+        const pdfPage = await pdfDocument.getPage(page.pageNumber);
+        if (this._pdfDocument === pdfDocument && !page.pdfPage) {
+          this.#setPdfPage(page, pdfPage);
+        }
+      } catch {
+        // A page that fails to load reports the error when it is rendered.
+      }
+    }
+
     /** @private */
     #setPdfPage(page, pdfPage) {
       if (page.setPdfPage(pdfPage)) {

@@ -377,6 +377,37 @@ describe('links', () => {
     });
   });
 
+  it('should scroll to the position on a rotated page whose size has not loaded yet', async () => {
+    const link = '<< /Type /Annot /Subtype /Link /Rect [50 700 300 720] /Border [0 0 0] /Dest [1 /XYZ 150 300 null] >>';
+    url = createPdf([{ content: '', annotations: [link] }, { content: '', rotate: 90 }, { content: '' }]);
+    // Hold back the second page, so that its size is still unknown when the link is followed.
+    let loadPage2!: () => void;
+    const page2Held = new Promise<void>((resolve) => {
+      loadPage2 = resolve;
+    });
+    viewer.addEventListener(
+      'document-load',
+      () => {
+        const pdfDocument = viewer['_pdfDocument']!;
+        const getPage = pdfDocument.getPage.bind(pdfDocument);
+        sinon
+          .stub(pdfDocument, 'getPage')
+          .callsFake(async (pageNumber) => (pageNumber === 2 ? page2Held.then(() => getPage(2)) : getPage(pageNumber)));
+      },
+      { once: true },
+    );
+    viewer.src = url;
+    for (let i = 0; i < 100 && !(pages.length && getLinks(1).length); i++) {
+      await nextFrame();
+    }
+    getLinks(1)[0].click();
+    loadPage2();
+    await nextRenderIdle(viewer);
+    const page = pages[1];
+    // On the rotated page, the position 150pt from the left of the unrotated page is 150pt from the top.
+    expect(content.scrollTop).to.be.closeTo(page.offsetTop + (150 / 595) * page.offsetHeight, 2);
+  });
+
   it('should scroll to the start of the page of a destination with a position outside the page', async () => {
     // Some PDF generators write -32768 for a missing position.
     await loadLinkToPosition('[1 /FitH -32768]');

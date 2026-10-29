@@ -34,6 +34,12 @@ export declare class PdfViewerRenderMixinClass {
   protected _renderPageLayers(page: PdfViewerPage): Promise<void>;
 
   /**
+   * Loads the page of the document for a page view whose size has not
+   * loaded yet, e.g. to find a position on it.
+   */
+  protected _loadPdfPage(page: PdfViewerPage): Promise<void>;
+
+  /**
    * Renders the visible pages, the most visible first, then the pages next
    * to them, and frees the canvases of pages far from the view. Stops
    * rendering when no page is visible.

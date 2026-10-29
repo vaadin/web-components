@@ -105,11 +105,19 @@ export const PdfViewerLinksMixin = (superClass) =>
     async #followLink(annotation) {
       const pdfDocument = this._pdfDocument;
       const target = await this.#resolveDestination(annotation);
-      if (this._pdfDocument === pdfDocument && target) {
-        const hasPosition = target.left !== undefined || target.top !== undefined;
-        const offset = hasPosition ? this.__pages[target.page - 1].getOffset(target.left, target.top) : undefined;
-        this._scrollToPage(target.page, offset);
-        this.$.content.focus({ preventScroll: true, focusVisible: isKeyboardActive() });
+      if (this._pdfDocument !== pdfDocument || !target) {
+        return;
       }
+      const page = this.__pages[target.page - 1];
+      const hasPosition = target.left !== undefined || target.top !== undefined;
+      if (hasPosition) {
+        // The position depends on the size and the rotation of the page.
+        await this._loadPdfPage(page);
+        if (this._pdfDocument !== pdfDocument) {
+          return;
+        }
+      }
+      this._scrollToPage(target.page, hasPosition ? page.getOffset(target.left, target.top) : undefined);
+      this.$.content.focus({ preventScroll: true, focusVisible: isKeyboardActive() });
     }
   };
