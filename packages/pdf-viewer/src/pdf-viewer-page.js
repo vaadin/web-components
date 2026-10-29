@@ -190,8 +190,9 @@ export class PdfViewerPage {
   /**
    * Returns the offset in CSS pixels from the top left corner of the page to
    * a position given in PDF units from the bottom left corner of the unrotated
-   * page, as in link destinations. A missing coordinate gives an offset of 0
-   * on the axis that it is on after the rotation of the page.
+   * page, as in link destinations. A missing coordinate, or one outside the
+   * page, gives an offset of 0 on the axis that it is on after the rotation
+   * of the page.
    *
    * @param {number | undefined} x
    * @param {number | undefined} y
@@ -212,7 +213,10 @@ export class PdfViewerPage {
     if ((rotated ? x : y) === undefined) {
       top = 0;
     }
-    return { left: Math.max(left, 0), top: Math.max(top, 0) };
+    return {
+      left: left >= 0 && left <= this.width ? left : 0,
+      top: top >= 0 && top <= this.height ? top : 0,
+    };
   }
 
   /**

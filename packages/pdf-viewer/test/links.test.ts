@@ -377,6 +377,15 @@ describe('links', () => {
     });
   });
 
+  it('should scroll to the start of the page of a destination with a position outside the page', async () => {
+    // Some PDF generators write -32768 for a missing position.
+    await loadLinkToPosition('[1 /FitH -32768]');
+    getLinks(1)[0].click();
+    await nextRenderIdle(viewer);
+    expect(viewer.page).to.equal(2);
+    expect(content.scrollTop).to.be.closeTo(pages[1].offsetTop, 1);
+  });
+
   it('should scroll horizontally to the position of a destination', async () => {
     viewer.zoom = 2;
     await loadLinkToPosition('[1 /XYZ 200 400 null]');
