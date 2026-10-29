@@ -29,7 +29,6 @@ export declare class PdfViewerPage {
   pdfPage: PDFPageProxy | null;
   unscaledWidth: number;
   unscaledHeight: number;
-  userUnit: number;
   element: HTMLElement;
   scale: number;
   canvas: HTMLCanvasElement | null;

@@ -38,9 +38,6 @@ export class PdfViewerPage {
     this.unscaledWidth = size.width;
     this.unscaledHeight = size.height;
 
-    /** The size of user space units, see `PageViewport.userUnit`. */
-    this.userUnit = 1;
-
     this.element = document.createElement('div');
     this.element.setAttribute('part', 'page');
 
@@ -98,8 +95,7 @@ export class PdfViewerPage {
    */
   setPdfPage(pdfPage) {
     this.pdfPage = pdfPage;
-    const { width, height, userUnit } = pdfPage.getViewport({ scale: 1 });
-    this.userUnit = userUnit;
+    const { width, height } = pdfPage.getViewport({ scale: 1 });
     this.#updateTextScale();
     if (width === this.unscaledWidth && height === this.unscaledHeight) {
       return false;
@@ -132,7 +128,7 @@ export class PdfViewerPage {
    * @private
    */
   #updateTextScale() {
-    this.element.style.setProperty('--total-scale-factor', String(this.scale * this.userUnit));
+    this.element.style.setProperty('--total-scale-factor', String(this.scale * (this.pdfPage?.userUnit ?? 1)));
   }
 
   /**
