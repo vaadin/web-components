@@ -194,24 +194,15 @@ snapshots["vaadin-pdf-viewer host document"] =
 snapshots["vaadin-pdf-viewer shadow default"] = 
 `<div class="top-area">
   <div part="toolbar">
-    <div
-      class="navigation"
-      part="toolbar-group"
-    >
+    <div part="toolbar-group">
       <slot name="toolbar-navigation">
       </slot>
     </div>
-    <div
-      class="viewing"
-      part="toolbar-group"
-    >
+    <div part="toolbar-group">
       <slot name="toolbar-zoom">
       </slot>
     </div>
-    <div
-      class="actions"
-      part="toolbar-group"
-    >
+    <div part="toolbar-group">
       <slot name="toolbar-actions">
       </slot>
     </div>
@@ -235,24 +226,15 @@ snapshots["vaadin-pdf-viewer shadow default"] =
 snapshots["vaadin-pdf-viewer shadow document"] = 
 `<div class="top-area">
   <div part="toolbar">
-    <div
-      class="navigation"
-      part="toolbar-group"
-    >
+    <div part="toolbar-group">
       <slot name="toolbar-navigation">
       </slot>
     </div>
-    <div
-      class="viewing"
-      part="toolbar-group"
-    >
+    <div part="toolbar-group">
       <slot name="toolbar-zoom">
       </slot>
     </div>
-    <div
-      class="actions"
-      part="toolbar-group"
-    >
+    <div part="toolbar-group">
       <slot name="toolbar-actions">
       </slot>
     </div>

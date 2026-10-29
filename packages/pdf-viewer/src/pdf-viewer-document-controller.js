@@ -19,10 +19,10 @@ import { acquireWorker, loadPdfjs, releaseWorker } from './pdfjs-loader.js';
  * @return {'invalid' | 'network' | 'password'}
  */
 function getErrorReason(error) {
-  if (error && error.name === 'PasswordException') {
+  if (error?.name === 'PasswordException') {
     return 'password';
   }
-  if (error && error.name === 'InvalidPDFException') {
+  if (error?.name === 'InvalidPDFException') {
     return 'invalid';
   }
   return 'network';
@@ -151,7 +151,7 @@ export class PdfViewerDocumentController {
       return;
     }
     this.#callbacks.onLoad(pdfDocument, {
-      title: (info && info.Title) || '',
+      title: info?.Title || '',
       firstPage,
     });
   }
