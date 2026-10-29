@@ -329,11 +329,6 @@ snapshots["vaadin-pdf-viewer shadow document"] =
           <div class="end-of-content">
           </div>
         </div>
-        <div
-          class="link-layer"
-          data-main-rotation="0"
-        >
-        </div>
       </div>
       <div part="page">
         <canvas aria-hidden="true">
@@ -378,11 +373,6 @@ snapshots["vaadin-pdf-viewer shadow document"] =
           </span>
           <div class="end-of-content">
           </div>
-        </div>
-        <div
-          class="link-layer"
-          data-main-rotation="0"
-        >
         </div>
       </div>
       <div part="page">
@@ -487,11 +477,6 @@ snapshots["vaadin-pdf-viewer shadow header title"] =
           <div class="end-of-content">
           </div>
         </div>
-        <div
-          class="link-layer"
-          data-main-rotation="0"
-        >
-        </div>
       </div>
       <div part="page">
         <canvas aria-hidden="true">
@@ -536,11 +521,6 @@ snapshots["vaadin-pdf-viewer shadow header title"] =
           </span>
           <div class="end-of-content">
           </div>
-        </div>
-        <div
-          class="link-layer"
-          data-main-rotation="0"
-        >
         </div>
       </div>
       <div part="page">
@@ -646,11 +626,6 @@ snapshots["vaadin-pdf-viewer shadow header hidden"] =
           <div class="end-of-content">
           </div>
         </div>
-        <div
-          class="link-layer"
-          data-main-rotation="0"
-        >
-        </div>
       </div>
       <div part="page">
         <canvas aria-hidden="true">
@@ -695,11 +670,6 @@ snapshots["vaadin-pdf-viewer shadow header hidden"] =
           </span>
           <div class="end-of-content">
           </div>
-        </div>
-        <div
-          class="link-layer"
-          data-main-rotation="0"
-        >
         </div>
       </div>
       <div part="page">
@@ -805,11 +775,6 @@ snapshots["vaadin-pdf-viewer shadow toolbar collapsed"] =
           <div class="end-of-content">
           </div>
         </div>
-        <div
-          class="link-layer"
-          data-main-rotation="0"
-        >
-        </div>
       </div>
       <div part="page">
         <canvas aria-hidden="true">
@@ -854,11 +819,6 @@ snapshots["vaadin-pdf-viewer shadow toolbar collapsed"] =
           </span>
           <div class="end-of-content">
           </div>
-        </div>
-        <div
-          class="link-layer"
-          data-main-rotation="0"
-        >
         </div>
       </div>
       <div part="page">

@@ -23,6 +23,9 @@ export const MAX_CANVAS_PIXELS = 2 ** 24;
  * to once it is needed.
  */
 export class PdfViewerPage {
+  /** Set once the links of the current canvas are rendered, also when the page has none. */
+  #linksRendered = false;
+
   /**
    * @param {number} pageNumber
    * @param {{ width: number, height: number }} size the estimated size of the page
@@ -272,15 +275,16 @@ export class PdfViewerPage {
    * Renders the link layer: the links of the page, positioned relative to the
    * page size so that they need no update when the scale changes. Like the
    * text layer, the layer has the size of the page without its rotation, and
-   * is rotated with the page. Returns the links with their annotations, or no
-   * links when the layer exists or the page was released meanwhile.
+   * is rotated with the page. A page without links gets no layer. Returns the
+   * links with their annotations, or no links when they are rendered already
+   * or the page was released meanwhile.
    *
    * @param {(annotation: object) => void} followLink called when an internal link is clicked
    * @return {Promise<Array<{ link: HTMLAnchorElement, annotation: object }>>}
    */
   async renderLinkLayer(followLink) {
     const canvas = this.canvas;
-    if (!canvas || this.linkLayerElement) {
+    if (!canvas || this.#linksRendered) {
       return [];
     }
     const [{ setLayerDimensions }, annotations] = await Promise.all([
@@ -288,9 +292,10 @@ export class PdfViewerPage {
       this.pdfPage.getAnnotations({ intent: 'display' }),
     ]);
     // The page may have been released or rendered again meanwhile.
-    if (this.canvas !== canvas || this.linkLayerElement) {
+    if (this.canvas !== canvas || this.#linksRendered) {
       return [];
     }
+    this.#linksRendered = true;
 
     const links = [];
     const viewport = this.pdfPage.getViewport({ scale: 1, rotation: 0 });
@@ -313,8 +318,10 @@ export class PdfViewerPage {
       links.push({ link, annotation });
     });
 
-    this.element.append(layer);
-    this.linkLayerElement = layer;
+    if (links.length) {
+      this.element.append(layer);
+      this.linkLayerElement = layer;
+    }
     return links;
   }
 
@@ -336,6 +343,7 @@ export class PdfViewerPage {
     this.endOfContentElement = null;
     this.linkLayerElement?.remove();
     this.linkLayerElement = null;
+    this.#linksRendered = false;
     if (this.canvas) {
       this.#freeCanvas(this.canvas);
       this.canvas = null;

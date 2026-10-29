@@ -64,6 +64,11 @@ describe('links', () => {
     }
   });
 
+  it('should not add a link layer to a page without links', async () => {
+    await load('multi-page.pdf');
+    expect(pages[0].querySelector('.link-layer')).to.be.null;
+  });
+
   it('should render and name the links of a page whose text fails to load', async () => {
     const pdfPagePrototype = await getPdfPagePrototype();
     const streamTextContent = pdfPagePrototype.streamTextContent;
