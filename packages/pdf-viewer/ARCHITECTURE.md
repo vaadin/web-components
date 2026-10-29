@@ -61,6 +61,8 @@ how to generate them.
 - `PdfViewerScrollMixin` owns the scale `_scale`, the anchor, the visible pages and `page`. It asks for
   rendering only with `_renderVisible()` and `_cancelRender()`. It gets the scale from `_getScaleForSize()`, which
   fits the width of the current page by default.
+  - `_scrollRectIntoView()` centers a rectangle in the view, unless it is well inside the view. It jumps,
+    as pdf.js does for a match.
 - `PdfViewerZoomMixin` owns `zoom`. It writes no render or scroll state:
   - It overrides `_getScaleForSize()` to return the scale for `zoom`.
   - It calls `_refreshLayout()` when `zoom` changes.
@@ -68,10 +70,16 @@ how to generate them.
 - `PdfViewerTextLayerMixin` renders the text layer of each rendered page and sets the document language on the
   pages. A page loads its text each time it renders, as pdf.js' own viewer does.
 - `PdfViewerLinksMixin` adds the links of each rendered page and follows internal links with `_scrollToPage()`.
+- `PdfViewerFindMixin` owns the matches. It loads the text of each page once per document into a private map.
+  The text layer loads its own text.
+  - When a page renders, the `_pageRendered()` hook of the render mixin highlights the matches with
+    `page.renderFindLayer()`.
+  - It scrolls to the current match with `_scrollRectIntoView()`.
 - After a page canvas renders, `PdfViewerRenderMixin` awaits `_renderPageLayers(page)`. Each override awaits
-  `super` first, so the layers render in the order of the mixins: text, then links.
-- The page view owns the DOM of a page: the canvas, the text layer and the link layer. Its methods check after
-  each await that the page still has the same canvas, so a released page gets no layers.
+  `super` first, so the layers render in the order of the mixins: text, then links. After the layers, it calls
+  `_pageRendered(page)`.
+- The page view owns the DOM of a page: the canvas, the text layer, the link layer and the find layer. Its
+  methods check after each await that the page still has the same canvas, so a released page gets no layers.
 - `PdfViewerKeyboardMixin` handles the keyboard shortcuts.
 - `PdfViewerToolbarMixin` renders the header and the toolbar. Its controls are in the light DOM, so a theme
   styles the page field like any other `vaadin-integer-field`. The `slotContent()` directive renders them, so
@@ -105,6 +113,14 @@ how to generate them.
 - A link that wraps to the next line is clickable only on its words, which the `QuadPoints` of the annotation
   give. Its focus ring goes around these words.
 - When a focused link loses its page, focus moves to the page area.
+
+## Find
+
+- Matching ignores case, diacritics, ligatures and differences in white space.
+- The highlights are in a layer under the text layer. They are positioned in percent of the page, so they
+  stay in place on zoom.
+- A page that loses its canvas also loses its highlights. It gets them back when it renders again.
+- `find()` and `highlight()` wait while the document loads. They do nothing when the viewer is not attached.
 
 ## Install size
 
