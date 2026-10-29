@@ -21,10 +21,17 @@ const RELATIVE_ACTION_NAMES = { NextPage: 'nextPage', PrevPage: 'previousPage' }
 const ALLOWED_LINK_PROTOCOLS = ['http:', 'https:', 'mailto:'];
 
 /**
- * The index of the top coordinate in the explicit destinations that have one,
- * by destination type, e.g. `[page, { name: 'XYZ' }, left, top, zoom]`.
+ * The indexes of the left and top coordinates in the explicit destinations
+ * that have them, by destination type, e.g. `[page, { name: 'XYZ' }, left, top, zoom]`.
  */
-const DESTINATION_TOP_INDEX = { XYZ: 3, FitH: 2, FitBH: 2, FitR: 5 };
+const DESTINATION_POSITION_INDEXES = {
+  XYZ: { left: 2, top: 3 },
+  FitH: { top: 2 },
+  FitBH: { top: 2 },
+  FitV: { left: 2 },
+  FitBV: { left: 2 },
+  FitR: { left: 2, top: 5 },
+};
 
 /** Finds the words of the text of a page, e.g. the text of a link. */
 const wordSegmenter = new Intl.Segmenter(undefined, { granularity: 'word' });
@@ -136,12 +143,12 @@ export function getTextInside(textDivs, element) {
 /**
  * Returns the page and the position on the page that an internal link or
  * an outline item points to, or null when it cannot be resolved. The
- * position is in PDF units from the bottom of the page.
+ * position is in PDF units from the bottom left corner of the unrotated page.
  *
  * @param {import('pdfjs-dist').PDFDocumentProxy} pdfDocument
  * @param {{ dest?: string | Array, action?: string }} destination
  * @param {{ page: number, pageCount: number }} position the current page and the number of pages
- * @return {Promise<{ page: number, top?: number } | null>}
+ * @return {Promise<{ page: number, left?: number, top?: number } | null>}
  */
 export async function resolveDestination(pdfDocument, { dest, action }, { page, pageCount }) {
   if (action) {
@@ -161,8 +168,11 @@ export async function resolveDestination(pdfDocument, { dest, action }, { page, 
       return null;
     }
     // Only some types of destinations have a position on the page, at different indexes.
-    const top = explicitDest[DESTINATION_TOP_INDEX[name]];
-    return { page: pageIndex + 1, top: typeof top === 'number' ? top : undefined };
+    const indexes = DESTINATION_POSITION_INDEXES[name] ?? {};
+    const [left, top] = [indexes.left, indexes.top].map((index) =>
+      typeof explicitDest[index] === 'number' ? explicitDest[index] : undefined,
+    );
+    return { page: pageIndex + 1, left, top };
   } catch {
     // A broken destination does nothing, like in other PDF viewers.
     return null;

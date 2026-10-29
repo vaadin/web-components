@@ -90,7 +90,7 @@ export const PdfViewerLinksMixin = (superClass) =>
     /**
      * Returns the page and the position on the page that an internal link
      * points to, or null when it cannot be resolved.
-     * @return {Promise<{ page: number, top?: number } | null>}
+     * @return {Promise<{ page: number, left?: number, top?: number } | null>}
      * @private
      */
     #resolveDestination(destination) {
@@ -106,7 +106,8 @@ export const PdfViewerLinksMixin = (superClass) =>
       const pdfDocument = this._pdfDocument;
       const target = await this.#resolveDestination(annotation);
       if (this._pdfDocument === pdfDocument && target) {
-        const offset = target.top === undefined ? undefined : this.__pages[target.page - 1].getOffsetTop(target.top);
+        const hasPosition = target.left !== undefined || target.top !== undefined;
+        const offset = hasPosition ? this.__pages[target.page - 1].getOffsetTop(target.left, target.top) : undefined;
         this._scrollToPage(target.page, offset);
         this.$.content.focus({ preventScroll: true, focusVisible: isKeyboardActive() });
       }

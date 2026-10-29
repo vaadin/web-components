@@ -316,6 +316,27 @@ describe('links', () => {
     });
   });
 
+  /** Loads a document whose first page links to the given position on page 2. */
+  async function loadLinkToPosition(dest: string, { rotate = 0 } = {}) {
+    const link = `<< /Type /Annot /Subtype /Link /Rect [50 700 300 720] /Border [0 0 0] /Dest ${dest} >>`;
+    await loadPdf([{ content: '', annotations: [link] }, { content: '', rotate }, { content: '' }]);
+  }
+
+  [
+    { rotate: 90, top: 150 / 595 },
+    { rotate: 180, top: 300 / 842 },
+    { rotate: 270, top: (595 - 150) / 595 },
+  ].forEach(({ rotate, top }) => {
+    it(`should scroll to the position of a destination on a page rotated by ${rotate} degrees`, async () => {
+      // The position is 150pt from the left and 300pt from the bottom of the unrotated A4 page.
+      await loadLinkToPosition('[1 /XYZ 150 300 null]', { rotate });
+      getLinks(1)[0].click();
+      await nextRenderIdle(viewer);
+      const page = pages[1];
+      expect(content.scrollTop).to.be.closeTo(page.offsetTop + top * page.offsetHeight, 1);
+    });
+  });
+
   describe('named actions', () => {
     const actions = ['FirstPage', 'LastPage', 'NextPage', 'PrevPage'];
 

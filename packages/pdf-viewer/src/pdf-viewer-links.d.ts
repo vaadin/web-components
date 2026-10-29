@@ -56,13 +56,13 @@ export declare function getTextInside(textDivs: HTMLElement[], element: Element)
 /**
  * Returns the page and the position on the page that an internal link or
  * an outline item points to, or null when it cannot be resolved. The
- * position is in PDF units from the bottom of the page.
+ * position is in PDF units from the bottom left corner of the unrotated page.
  */
 export declare function resolveDestination(
   pdfDocument: PDFDocumentProxy,
   destination: PdfViewerDestination,
   position: { page: number; pageCount: number },
-): Promise<{ page: number; top?: number } | null>;
+): Promise<{ page: number; left?: number; top?: number } | null>;
 
 /**
  * Returns the accessible name of a link: its text, or the URL or the page it
