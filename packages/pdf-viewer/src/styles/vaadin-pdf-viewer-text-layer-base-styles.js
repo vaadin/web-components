@@ -89,7 +89,7 @@ export const pdfViewerTextLayerStyles = css`
 
   .text-layer ::selection {
     color: transparent;
-    background: var(--vaadin-pdf-viewer-selection-background, Highlight);
+    background: Highlight;
   }
 
   .text-layer br::selection {
