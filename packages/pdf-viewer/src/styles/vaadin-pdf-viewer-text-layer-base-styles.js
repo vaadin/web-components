@@ -111,16 +111,16 @@ export const pdfViewerTextLayerStyles = css`
     top: 0;
   }
 
-  /* The text layer has the size of the unrotated page, and rotates with it */
-  .text-layer[data-main-rotation='90'] {
+  /* The text and link layers have the size of the unrotated page, and rotate with it */
+  :is(.text-layer, .link-layer)[data-main-rotation='90'] {
     transform: rotate(90deg) translateY(-100%);
   }
 
-  .text-layer[data-main-rotation='180'] {
+  :is(.text-layer, .link-layer)[data-main-rotation='180'] {
     transform: rotate(180deg) translate(-100%, -100%);
   }
 
-  .text-layer[data-main-rotation='270'] {
+  :is(.text-layer, .link-layer)[data-main-rotation='270'] {
     transform: rotate(270deg) translateX(-100%);
   }
 `;

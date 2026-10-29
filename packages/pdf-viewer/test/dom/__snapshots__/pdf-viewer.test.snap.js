@@ -329,6 +329,11 @@ snapshots["vaadin-pdf-viewer shadow document"] =
           <div class="end-of-content">
           </div>
         </div>
+        <div
+          class="link-layer"
+          data-main-rotation="0"
+        >
+        </div>
       </div>
       <div part="page">
         <canvas aria-hidden="true">
@@ -373,6 +378,11 @@ snapshots["vaadin-pdf-viewer shadow document"] =
           </span>
           <div class="end-of-content">
           </div>
+        </div>
+        <div
+          class="link-layer"
+          data-main-rotation="0"
+        >
         </div>
       </div>
       <div part="page">
@@ -477,6 +487,11 @@ snapshots["vaadin-pdf-viewer shadow header title"] =
           <div class="end-of-content">
           </div>
         </div>
+        <div
+          class="link-layer"
+          data-main-rotation="0"
+        >
+        </div>
       </div>
       <div part="page">
         <canvas aria-hidden="true">
@@ -521,6 +536,11 @@ snapshots["vaadin-pdf-viewer shadow header title"] =
           </span>
           <div class="end-of-content">
           </div>
+        </div>
+        <div
+          class="link-layer"
+          data-main-rotation="0"
+        >
         </div>
       </div>
       <div part="page">
@@ -626,6 +646,11 @@ snapshots["vaadin-pdf-viewer shadow header hidden"] =
           <div class="end-of-content">
           </div>
         </div>
+        <div
+          class="link-layer"
+          data-main-rotation="0"
+        >
+        </div>
       </div>
       <div part="page">
         <canvas aria-hidden="true">
@@ -670,6 +695,11 @@ snapshots["vaadin-pdf-viewer shadow header hidden"] =
           </span>
           <div class="end-of-content">
           </div>
+        </div>
+        <div
+          class="link-layer"
+          data-main-rotation="0"
+        >
         </div>
       </div>
       <div part="page">
@@ -775,6 +805,11 @@ snapshots["vaadin-pdf-viewer shadow toolbar collapsed"] =
           <div class="end-of-content">
           </div>
         </div>
+        <div
+          class="link-layer"
+          data-main-rotation="0"
+        >
+        </div>
       </div>
       <div part="page">
         <canvas aria-hidden="true">
@@ -819,6 +854,11 @@ snapshots["vaadin-pdf-viewer shadow toolbar collapsed"] =
           </span>
           <div class="end-of-content">
           </div>
+        </div>
+        <div
+          class="link-layer"
+          data-main-rotation="0"
+        >
         </div>
       </div>
       <div part="page">
@@ -1072,7 +1112,74 @@ snapshots["vaadin-pdf-viewer page tagged"] =
     <div class="end-of-content">
     </div>
   </div>
+  <div
+    class="link-layer"
+    data-main-rotation="0"
+  >
+    <a
+      aria-label="Vaadin website (opens in a new tab)"
+      class="link"
+      href="https://vaadin.com/"
+      rel="noopener noreferrer"
+      target="_blank"
+    >
+    </a>
+  </div>
 </div>
 `;
 /* end snapshot vaadin-pdf-viewer page tagged */
+
+snapshots["vaadin-pdf-viewer page links"] = 
+`<div part="page">
+  <canvas aria-hidden="true">
+  </canvas>
+  <div
+    class="text-layer"
+    data-main-rotation="0"
+  >
+    <span
+      dir="ltr"
+      role="presentation"
+    >
+      Links
+    </span>
+    <br role="presentation">
+    <span
+      dir="ltr"
+      role="presentation"
+    >
+      Internal link to page 2
+    </span>
+    <br role="presentation">
+    <span
+      dir="ltr"
+      role="presentation"
+    >
+      External link to vaadin.com
+    </span>
+    <div class="end-of-content">
+    </div>
+  </div>
+  <div
+    class="link-layer"
+    data-main-rotation="0"
+  >
+    <a
+      aria-label="Internal link to page 2"
+      class="link"
+      href="#"
+    >
+    </a>
+    <a
+      aria-label="External link to vaadin.com (opens in a new tab)"
+      class="link"
+      href="https://vaadin.com/"
+      rel="noopener noreferrer"
+      target="_blank"
+    >
+    </a>
+  </div>
+</div>
+`;
+/* end snapshot vaadin-pdf-viewer page links */
 
