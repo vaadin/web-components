@@ -1,6 +1,6 @@
 import { nextFrame, oneEvent } from '@vaadin/testing-helpers';
 import sinon from 'sinon';
-import type { PDFPageProxy } from 'pdfjs-dist';
+import type { PDFDocumentProxy, PDFPageProxy } from 'pdfjs-dist';
 import { acquireWorker, loadPdfjs, releaseWorker } from '../src/pdfjs-loader.js';
 import type { PdfViewer } from '../vaadin-pdf-viewer.js';
 
@@ -112,20 +112,54 @@ export async function scrollSettled(element: HTMLElement): Promise<void> {
 }
 
 /**
- * Returns the prototype of the pages of every pdf.js document, including the
- * documents of the viewer, through a page of a document loaded for that.
+ * Returns the prototype of an object of a pdf.js document loaded for that,
+ * which is the prototype of the same objects of the documents of the viewer.
  */
-export async function getPdfPagePrototype(): Promise<PDFPageProxy> {
+async function getPrototype<T>(read: (pdfDocument: PDFDocumentProxy) => Promise<T> | T): Promise<T> {
   const pdfjs = await loadPdfjs();
   const handle = acquireWorker(pdfjs);
   const task = pdfjs.getDocument({ url: fixtureUrl('multi-page.pdf'), worker: handle.worker! });
   try {
-    const pdfPage = await (await task.promise).getPage(1);
-    return Object.getPrototypeOf(pdfPage);
+    return Object.getPrototypeOf(await read(await task.promise));
   } finally {
     await task.destroy();
     releaseWorker(handle);
   }
+}
+
+/**
+ * Returns the prototype of the documents of pdf.js, including the documents of the viewer.
+ */
+export function getPdfDocumentPrototype(): Promise<PDFDocumentProxy> {
+  return getPrototype((pdfDocument) => pdfDocument);
+}
+
+/**
+ * Returns the prototype of the pages of every pdf.js document, including the documents of the viewer.
+ */
+export function getPdfPagePrototype(): Promise<PDFPageProxy> {
+  return getPrototype((pdfDocument) => pdfDocument.getPage(1));
+}
+
+/**
+ * Makes the text of the given page fail to load once, with the given message.
+ * `sinon.restore()` undoes it.
+ */
+export async function failTextOnce(pageNumber: number, message = 'Broken text'): Promise<void> {
+  const prototype = await getPdfPagePrototype();
+  const streamTextContent = prototype.streamTextContent;
+  let failed = false;
+  sinon.stub(prototype, 'streamTextContent').callsFake(function (this: PDFPageProxy, ...args) {
+    if (this.pageNumber === pageNumber && !failed) {
+      failed = true;
+      return new ReadableStream({
+        start(controller) {
+          controller.error(new Error(message));
+        },
+      });
+    }
+    return streamTextContent.apply(this, args);
+  });
 }
 
 /**
