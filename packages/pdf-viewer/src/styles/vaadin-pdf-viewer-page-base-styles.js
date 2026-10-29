@@ -69,5 +69,10 @@ export const pdfViewerPageStyles = css`
     [part='page'] {
       outline: 1px solid CanvasText;
     }
+
+    /* The canvas keeps its colors, so links are outlined as in pdf.js */
+    .link {
+      outline: 1.5px solid LinkText;
+    }
   }
 `;
