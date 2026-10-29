@@ -117,14 +117,18 @@ describe('text layer', () => {
 
   it('should keep the canvas of a page whose text fails to load, and load the text again later', async () => {
     const pdfPagePrototype = await getPdfPagePrototype();
-    const getTextContent = pdfPagePrototype.getTextContent;
+    const streamTextContent = pdfPagePrototype.streamTextContent;
     let failed = false;
-    sinon.stub(pdfPagePrototype, 'getTextContent').callsFake(function (this: PDFPageProxy, ...args) {
+    sinon.stub(pdfPagePrototype, 'streamTextContent').callsFake(function (this: PDFPageProxy, ...args) {
       if (this.pageNumber === 1 && !failed) {
         failed = true;
-        return Promise.reject(new Error('Broken text'));
+        return new ReadableStream({
+          start(controller) {
+            controller.error(new Error('Broken text'));
+          },
+        });
       }
-      return getTextContent.apply(this, args);
+      return streamTextContent.apply(this, args);
     });
     const warn = sinon.stub(console, 'warn');
     await load('multi-page.pdf');
@@ -135,6 +139,20 @@ describe('text layer', () => {
     expect(warnings.some((message) => message.startsWith('Failed to render page'))).to.be.false;
     await resizeViewer();
     expect(getTextLayer(1)).to.be.ok;
+  });
+
+  it('should render the text layer when streams are not async iterable', async () => {
+    // Safari 26 and earlier cannot iterate a ReadableStream with `for await`.
+    const descriptor = Object.getOwnPropertyDescriptor(ReadableStream.prototype, Symbol.asyncIterator);
+    delete (ReadableStream.prototype as Partial<ReadableStream>)[Symbol.asyncIterator];
+    try {
+      await load('multi-page.pdf');
+    } finally {
+      if (descriptor) {
+        Object.defineProperty(ReadableStream.prototype, Symbol.asyncIterator, descriptor);
+      }
+    }
+    expect(getTextLayer(1)!.textContent).to.include('marker1');
   });
 
   describe('rotated page', () => {

@@ -194,10 +194,7 @@ export class PdfViewerPage {
     }
 
     const canvas = this.canvas;
-    const [{ TextLayer }, textContentSource] = await Promise.all([
-      loadPdfjs(),
-      this.pdfPage.getTextContent({ includeMarkedContent: true }),
-    ]);
+    const { TextLayer } = await loadPdfjs();
     // The page may have been released or rendered again meanwhile.
     if (!canvas || this.canvas !== canvas || this.textLayer) {
       return;
@@ -219,14 +216,26 @@ export class PdfViewerPage {
     });
     this.element.append(container);
 
+    // As in the viewer of pdf.js, the text layer reads the stream itself. `getTextContent()`
+    // iterates the stream with `for await`, which Safari 26 and earlier do not support.
     const textLayer = new TextLayer({
-      textContentSource,
+      textContentSource: this.pdfPage.streamTextContent({ includeMarkedContent: true }),
       container,
       viewport: this.pdfPage.getViewport({ scale: this.scale }),
     });
     this.textLayer = textLayer;
     this.textLayerElement = container;
-    await textLayer.render();
+    try {
+      await textLayer.render();
+    } catch (error) {
+      // Without its text, the layer is removed, so that the page tries again when it renders again.
+      if (this.textLayer === textLayer) {
+        container.remove();
+        this.textLayer = null;
+        this.textLayerElement = null;
+      }
+      throw error;
+    }
 
     if (this.textLayer === textLayer) {
       // Extends the selection to the end of the page while selecting, see the styles.
