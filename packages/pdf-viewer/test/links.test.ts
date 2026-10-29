@@ -5,7 +5,6 @@ import sinon from 'sinon';
 import './enable-feature-flag.js';
 import '../vaadin-pdf-viewer.js';
 import type { PDFPageProxy } from 'pdfjs-dist';
-import { getTextInside } from '../src/pdf-viewer-links.js';
 import { getSelectionRanges } from '../src/pdf-viewer-text-selection-controller.js';
 import type { PdfViewer } from '../vaadin-pdf-viewer.js';
 import {
@@ -65,7 +64,7 @@ describe('links', () => {
     }
   });
 
-  it('should render the links of a page whose text fails to load', async () => {
+  it('should render and name the links of a page whose text fails to load', async () => {
     const pdfPagePrototype = await getPdfPagePrototype();
     const streamTextContent = pdfPagePrototype.streamTextContent;
     let failed = false;
@@ -84,6 +83,8 @@ describe('links', () => {
     await load('links.pdf');
     expect(getTextLayer(1)).to.be.null;
     expect(getLinks(1)).to.have.lengthOf(2);
+    // The worker finds the text of a link, also when the text layer fails.
+    expect(getLinks(1)[1].getAttribute('aria-label')).to.equal('External link to vaadin.com (opens in a new tab)');
     const warnings = warn.args.map(([message]) => message);
     expect(warnings).to.include('Failed to render the text of page 1 of the PDF document: Broken text');
     expect(warnings.some((message) => message.startsWith('Failed to render page'))).to.be.false;
@@ -490,42 +491,6 @@ describe('links', () => {
     expect(rect.top).to.be.at.least(view.top);
     expect(rect.bottom).to.be.at.most(view.bottom);
     expect(viewer.page).to.equal(2);
-  });
-
-  describe('words of links', () => {
-    let span: HTMLSpanElement;
-
-    afterEach(() => {
-      span.remove();
-    });
-
-    /** Returns the text that a link over the given word of the text finds, see `getTextInside()`. */
-    function getLinkText(text: string, word: string) {
-      span = document.createElement('span');
-      span.textContent = text;
-      span.style.cssText = 'position: absolute; top: 0; left: 0; font-size: 20px; white-space: pre';
-      document.body.append(span);
-      const range = document.createRange();
-      const index = text.indexOf(word);
-      range.setStart(span.firstChild!, index);
-      range.setEnd(span.firstChild!, index + word.length);
-      const wordRect = range.getBoundingClientRect();
-      const link: Pick<Element, 'getBoundingClientRect'> = { getBoundingClientRect: () => wordRect };
-      return getTextInside([span], link as Element).map(({ start, end }) => text.slice(start, end));
-    }
-
-    it('should keep a combining mark at the end of a word', () => {
-      expect(getLinkText('देखें हिन्दी में', 'हिन्दी')).to.deep.equal(['हिन्दी']);
-      expect(getLinkText('un café noir', 'café')).to.deep.equal(['café']);
-    });
-
-    it('should find a word in a language without spaces', () => {
-      expect(getLinkText('日本語のリンクです', 'リンク')).to.deep.equal(['リンク']);
-    });
-
-    it('should not include punctuation around a word', () => {
-      expect(getLinkText('See (vaadin.com), please', 'vaadin.com')).to.deep.equal(['vaadin.com']);
-    });
   });
 
   describe('localization', () => {

@@ -9,7 +9,7 @@
  * license.
  */
 import { isKeyboardActive } from '@vaadin/a11y-base/src/focus-utils.js';
-import { getLinkLabel, getTextInside, resolveDestination } from './pdf-viewer-links.js';
+import { getLinkLabel, resolveDestination } from './pdf-viewer-links.js';
 
 /**
  * A mixin that adds the links of the rendered pages, and goes to the
@@ -34,7 +34,7 @@ export const PdfViewerLinksMixin = (superClass) =>
 
     /**
      * Override method from `PdfViewerRenderMixin` to add the links of the
-     * page, after the text layer that their names are read from.
+     * page over the text layer.
      * @protected
      * @override
      */
@@ -42,7 +42,7 @@ export const PdfViewerLinksMixin = (superClass) =>
       await super._renderPageLayers(page);
 
       const links = await page.renderLinkLayer((annotation) => this.#followLink(annotation));
-      await this.#nameLinks(page, links);
+      await this.#nameLinks(links);
     }
 
     /**
@@ -50,14 +50,11 @@ export const PdfViewerLinksMixin = (superClass) =>
      * or the URL or the page they go to.
      * @private
      */
-    async #nameLinks(page, links) {
-      const textDivs = page.textLayer ? page.textLayer.textDivs : [];
-
+    async #nameLinks(links) {
       await Promise.all(
         links.map(async ({ link, annotation }) => {
-          const text = getTextInside(textDivs, link)
-            .map(({ element, start, end }) => element.textContent.slice(start, end).trim())
-            .join(' ');
+          // As in pdf.js, the text that the link covers, which the worker finds for each link.
+          const text = (annotation.overlaidText ?? '').replace(/\s+/gu, ' ').trim();
           let targetPage = null;
           if (!text && !annotation.url) {
             const target = await this.#resolveDestination(annotation);

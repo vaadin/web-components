@@ -27,15 +27,6 @@ export interface PdfViewerLinkAnnotation extends PdfViewerDestination {
 }
 
 /**
- * A part of the text of a text layer element, see `getTextInside()`.
- */
-export interface PdfViewerTextPart {
-  element: HTMLElement;
-  start: number;
-  end: number;
-}
-
-/**
  * Creates the link element for a link annotation, or returns null for
  * links that the viewer does not support or does not consider safe.
  * External links open in a new tab without access to the page.
@@ -44,14 +35,6 @@ export declare function createLink(
   annotation: PdfViewerDestination & { url?: string },
   followLink: (annotation: object) => void,
 ): HTMLAnchorElement | null;
-
-/**
- * Returns the text of a text layer that is inside the given element, e.g.
- * the text of a link, as the text layer elements with the offsets of their
- * words whose center is inside the element. Whole words are used, as the
- * text layer only places each element exactly, not each of its characters.
- */
-export declare function getTextInside(textDivs: HTMLElement[], element: Element): PdfViewerTextPart[];
 
 /**
  * Returns the page and the position on the page that an internal link or

@@ -33,15 +33,6 @@ const DESTINATION_POSITION_INDEXES = {
   FitR: { left: 2, top: 5 },
 };
 
-/** Finds the words of the text of a page, e.g. the text of a link. */
-const wordSegmenter = new Intl.Segmenter(undefined, { granularity: 'word' });
-
-/**
- * Whether a segment is a word. Firefox does not mark words that end with a
- * combining mark, e.g. "café" with a combining accent, as word-like.
- */
-const isWord = ({ isWordLike, segment }) => isWordLike || /[\p{L}\p{N}]/u.test(segment);
-
 /**
  * Returns whether the URL of a link is safe to open.
  * @param {string} url
@@ -86,58 +77,6 @@ export function createLink(annotation, followLink) {
   }
   link.className = 'link';
   return link;
-}
-
-/**
- * Returns the text of a text layer that is inside the given element, e.g.
- * the text of a link, as the text layer elements with the offsets of their
- * words whose center is inside the element. Whole words are used, as the
- * text layer only places each element exactly, not each of its characters.
- *
- * @param {HTMLElement[]} textDivs the text elements of the text layer
- * @param {Element} element
- * @return {Array<{ element: HTMLElement, start: number, end: number }>}
- */
-export function getTextInside(textDivs, element) {
-  const rect = element.getBoundingClientRect();
-  const isInside = (wordRect) => {
-    const x = wordRect.left + wordRect.width / 2;
-    const y = wordRect.top + wordRect.height / 2;
-    return x >= rect.left && x <= rect.right && y >= rect.top && y <= rect.bottom;
-  };
-  const parts = [];
-  const range = document.createRange();
-  textDivs.forEach((span) => {
-    const textNode = span.firstChild;
-    const spanRect = span.getBoundingClientRect();
-    const overlaps =
-      spanRect.left <= rect.right &&
-      spanRect.right >= rect.left &&
-      spanRect.top <= rect.bottom &&
-      spanRect.bottom >= rect.top;
-    if (!textNode || !overlaps) {
-      return;
-    }
-    // The words inside a link are next to each other, as a link is a rectangle.
-    let start = -1;
-    let end = -1;
-    // Words as the browser finds them, also in languages without spaces, without punctuation.
-    for (const word of wordSegmenter.segment(textNode.data)) {
-      if (!isWord(word)) {
-        continue;
-      }
-      range.setStart(textNode, word.index);
-      range.setEnd(textNode, word.index + word.segment.length);
-      if (isInside(range.getBoundingClientRect())) {
-        start = start < 0 ? word.index : start;
-        end = word.index + word.segment.length;
-      }
-    }
-    if (start >= 0) {
-      parts.push({ element: span, start, end });
-    }
-  });
-  return parts;
 }
 
 /**
