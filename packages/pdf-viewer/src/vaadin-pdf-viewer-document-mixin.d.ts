@@ -22,6 +22,16 @@ export declare class PdfViewerDocumentMixinClass {
   src: string | null | undefined;
 
   /**
+   * The name of the file that `download()` saves, used as given, which
+   * the header also shows. When not set, the name is the PDF file name
+   * from the `Content-Disposition` header of the response, else the PDF
+   * file name at the end of the path of `src`, else `document.pdf`.
+   *
+   * @attr {string} file-name
+   */
+  fileName: string | null | undefined;
+
+  /**
    * The number of pages in the loaded document, or 0 when no document
    * is loaded.
    */
@@ -33,11 +43,26 @@ export declare class PdfViewerDocumentMixinClass {
   protected readonly _pdfDocument: PDFDocumentProxy | null;
 
   /**
-   * Returns the name of the document: the PDF file name from the
-   * `Content-Disposition` header, else the PDF file name at the end of the
-   * path of `src`, else an empty string.
+   * Returns a promise for the document of `src`. It resolves once the
+   * document has loaded, also when `src` changes meanwhile, and right away
+   * when no document is loading. It resolves with null without a document,
+   * or when the viewer is not attached.
+   */
+  protected _whenDocumentReady(): Promise<PDFDocumentProxy | null>;
+
+  /**
+   * Returns the name of the document: `fileName`, else the PDF file name
+   * from the `Content-Disposition` header, else the PDF file name at the
+   * end of the path of `src`, else an empty string.
    */
   protected _getDocumentName(): string;
+
+  /**
+   * Returns the name to save the document under: `fileName` as given,
+   * else the name of the document, else `document`, with `.pdf` added
+   * when missing.
+   */
+  protected _getFileName(): string;
 
   /**
    * Called when a document has loaded, before `document-load` is fired.

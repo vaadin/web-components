@@ -9,6 +9,7 @@
  * license.
  */
 import { PdfViewerDocumentMixin } from './vaadin-pdf-viewer-document-mixin.js';
+import { PdfViewerDownloadMixin } from './vaadin-pdf-viewer-download-mixin.js';
 import { PdfViewerKeyboardMixin } from './vaadin-pdf-viewer-keyboard-mixin.js';
 import { PdfViewerRenderMixin } from './vaadin-pdf-viewer-render-mixin.js';
 import { PdfViewerScrollMixin } from './vaadin-pdf-viewer-scroll-mixin.js';
@@ -19,8 +20,10 @@ import { PdfViewerZoomMixin } from './vaadin-pdf-viewer-zoom-mixin.js';
  * A mixin providing common PDF viewer functionality.
  */
 export const PdfViewerMixin = (superClass) =>
-  class PdfViewerMixinClass extends PdfViewerToolbarMixin(
-    PdfViewerKeyboardMixin(
-      PdfViewerZoomMixin(PdfViewerScrollMixin(PdfViewerRenderMixin(PdfViewerDocumentMixin(superClass)))),
+  class PdfViewerMixinClass extends PdfViewerDownloadMixin(
+    PdfViewerToolbarMixin(
+      PdfViewerKeyboardMixin(
+        PdfViewerZoomMixin(PdfViewerScrollMixin(PdfViewerRenderMixin(PdfViewerDocumentMixin(superClass)))),
+      ),
     ),
   ) {};

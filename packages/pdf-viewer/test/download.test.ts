@@ -1,0 +1,491 @@
+import { expect } from '@vaadin/chai-plugins';
+import { fixtureSync, nextFrame, nextRender, nextUpdate, oneEvent } from '@vaadin/testing-helpers';
+import sinon from 'sinon';
+import './enable-feature-flag.js';
+import '../vaadin-pdf-viewer.js';
+import type { Tooltip } from '@vaadin/tooltip';
+import type { PdfViewer } from '../vaadin-pdf-viewer.js';
+import { createPdfUrl, fixtureUrl, getPdfDocumentPrototype, loadDocument, loadFixtureFrom } from './helpers.js';
+
+describe('download', () => {
+  let viewer: PdfViewer;
+  let clickStub: sinon.SinonStub;
+  let createObjectUrlSpy: sinon.SinonSpy;
+
+  function getButton() {
+    return viewer.querySelector<HTMLElement & { disabled: boolean }>('vaadin-pdf-viewer-button[icon="download"]');
+  }
+
+  /**
+   * Returns a promise for the next download, with the link that starts it
+   * and the data that it saves.
+   */
+  function nextDownload() {
+    return new Promise<{ link: HTMLAnchorElement; blob: Blob }>((resolve) => {
+      clickStub.callsFake(function (this: HTMLAnchorElement) {
+        resolve({ link: this, blob: createObjectUrlSpy.lastCall.args[0] });
+      });
+    });
+  }
+
+  async function getOriginal(): Promise<Uint8Array> {
+    const response = await fetch(fixtureUrl('multi-page.pdf'));
+    return new Uint8Array(await response.arrayBuffer());
+  }
+
+  beforeEach(async () => {
+    clickStub = sinon.stub(HTMLAnchorElement.prototype, 'click');
+    createObjectUrlSpy = sinon.spy(URL, 'createObjectURL');
+    viewer = fixtureSync('<vaadin-pdf-viewer style="width: 600px; height: 400px"></vaadin-pdf-viewer>');
+    await nextRender();
+  });
+
+  afterEach(() => {
+    sinon.restore();
+  });
+
+  describe('button', () => {
+    it('should disable the button without document', () => {
+      expect(getButton()!.disabled).to.be.true;
+    });
+
+    it('should disable the button while the document loads', async () => {
+      viewer.src = fixtureUrl('multi-page.pdf');
+      await nextUpdate(viewer);
+      expect(getButton()!.disabled).to.be.true;
+    });
+
+    it('should enable the button when the document has loaded', async () => {
+      await loadDocument(viewer, 'multi-page.pdf');
+      await nextUpdate(viewer);
+      expect(getButton()!.disabled).to.be.false;
+    });
+
+    it('should use i18n for the tooltip', async () => {
+      const getTooltipText = () => getButton()!.querySelector<Tooltip>('vaadin-tooltip')!.text;
+      expect(getTooltipText()).to.equal('Download');
+      viewer.i18n = { download: 'Lataa' };
+      await nextUpdate(viewer);
+      expect(getTooltipText()).to.equal('Lataa');
+    });
+
+    it('should toggle the button on downloadButtonHidden change', async () => {
+      viewer.downloadButtonHidden = true;
+      await nextUpdate(viewer);
+      expect(getButton()!.checkVisibility()).to.be.false;
+      viewer.downloadButtonHidden = false;
+      await nextUpdate(viewer);
+      expect(getButton()!.checkVisibility()).to.be.true;
+    });
+
+    it('should hide the button with the attribute', async () => {
+      viewer.setAttribute('download-button-hidden', '');
+      await nextUpdate(viewer);
+      expect(viewer.downloadButtonHidden).to.be.true;
+      expect(getButton()!.checkVisibility()).to.be.false;
+    });
+  });
+
+  describe('custom button', () => {
+    let button: HTMLButtonElement;
+
+    beforeEach(async () => {
+      button = document.createElement('button');
+      button.slot = 'download-button';
+      button.textContent = 'Download PDF';
+      viewer.appendChild(button);
+      await nextFrame();
+    });
+
+    it('should replace the default button', () => {
+      expect(getButton()).to.be.null;
+      expect(button.checkVisibility()).to.be.true;
+    });
+
+    it('should not add an icon or a tooltip to the custom button', () => {
+      expect(button.hasAttribute('icon')).to.be.false;
+      expect(button.querySelector('vaadin-tooltip')).to.be.null;
+    });
+
+    it('should not disable the custom button without document', () => {
+      expect(button.disabled).to.be.false;
+    });
+
+    it('should keep the disabled state of the custom button when a document loads', async () => {
+      button.disabled = true;
+      await loadDocument(viewer, 'multi-page.pdf');
+      await nextUpdate(viewer);
+      expect(button.disabled).to.be.true;
+    });
+
+    it('should download on custom button click', async () => {
+      await loadDocument(viewer, 'multi-page.pdf');
+      await nextUpdate(viewer);
+      const download = nextDownload();
+      button.click();
+      const { link } = await download;
+      expect(link.download).to.equal('multi-page.pdf');
+    });
+
+    it('should hide the custom button with downloadButtonHidden', async () => {
+      viewer.downloadButtonHidden = true;
+      await nextUpdate(viewer);
+      expect(button.checkVisibility()).to.be.false;
+    });
+
+    it('should use a button with _isDefault added instead as the default button', async () => {
+      const defaultButton = document.createElement('vaadin-pdf-viewer-button');
+      Object.assign(defaultButton, { _isDefault: true });
+      defaultButton.slot = 'download-button';
+      viewer.appendChild(defaultButton);
+      await nextFrame();
+      expect(button.isConnected).to.be.false;
+      expect(getButton()).to.equal(defaultButton);
+      expect(defaultButton.querySelector<Tooltip>('vaadin-tooltip')!.text).to.equal('Download');
+    });
+  });
+
+  describe('button with _isDefault', () => {
+    let button: HTMLElement;
+
+    beforeEach(async () => {
+      viewer = document.createElement('vaadin-pdf-viewer');
+      button = document.createElement('vaadin-pdf-viewer-button');
+      button.slot = 'download-button';
+      button.setAttribute('theme', 'primary icon');
+      // The Flow counterpart sets it before it adds the button to the slot.
+      Object.assign(button, { _isDefault: true });
+      viewer.appendChild(button);
+      fixtureSync('<div></div>').appendChild(viewer);
+      await nextRender();
+    });
+
+    it('should use the button as the default button', () => {
+      expect(viewer.querySelectorAll('[slot="download-button"]')).to.have.lengthOf(1);
+      expect(getButton()).to.equal(button);
+      expect(button.querySelector<Tooltip>('vaadin-tooltip')!.text).to.equal('Download');
+    });
+
+    it('should keep the theme of the button', () => {
+      expect(button.getAttribute('theme')).to.equal('primary icon');
+    });
+
+    it('should keep a disabled state set on the button until a document loads', async () => {
+      const disabledButton = button as HTMLElement & { disabled: boolean };
+      disabledButton.disabled = false;
+      viewer.headerTitle = 'Report';
+      await nextUpdate(viewer);
+      expect(disabledButton.disabled).to.be.false;
+    });
+  });
+
+  describe('with document', () => {
+    beforeEach(async () => {
+      await loadDocument(viewer, 'multi-page.pdf');
+      await nextUpdate(viewer);
+    });
+
+    it('should download the original file on button click', async () => {
+      const download = nextDownload();
+      getButton()!.click();
+      const { blob } = await download;
+      expect(blob.type).to.equal('application/pdf');
+      expect(new Uint8Array(await blob.arrayBuffer())).to.deep.equal(await getOriginal());
+    });
+
+    it('should download the original file with download()', async () => {
+      const download = nextDownload();
+      viewer.download();
+      const { link, blob } = await download;
+      expect(link.href).to.equal(createObjectUrlSpy.lastCall.returnValue);
+      expect(new Uint8Array(await blob.arrayBuffer())).to.deep.equal(await getOriginal());
+    });
+
+    it('should download with download() while the button is hidden', async () => {
+      viewer.downloadButtonHidden = true;
+      await nextUpdate(viewer);
+      const download = nextDownload();
+      viewer.download();
+      const { link } = await download;
+      expect(link.download).to.equal('multi-page.pdf');
+    });
+
+    it('should not request the document again', async () => {
+      performance.clearResourceTimings();
+      const url = fixtureUrl('links.pdf');
+      await loadDocument(viewer, 'links.pdf');
+      expect(performance.getEntriesByName(url)).to.have.lengthOf(1);
+      const download = nextDownload();
+      viewer.download();
+      await download;
+      expect(performance.getEntriesByName(url)).to.have.lengthOf(1);
+    });
+
+    it('should use the file name of the URL', async () => {
+      const download = nextDownload();
+      viewer.download();
+      const { link } = await download;
+      expect(link.download).to.equal('multi-page.pdf');
+    });
+
+    it('should use a fallback name for a blob URL instead of the title of the document', async () => {
+      const blob = await fetch(fixtureUrl('multi-page.pdf')).then((response) => response.blob());
+      const url = URL.createObjectURL(blob);
+      try {
+        const loaded = oneEvent(viewer, 'document-load');
+        viewer.src = url;
+        await loaded;
+        const download = nextDownload();
+        viewer.download();
+        const { link } = await download;
+        expect(link.download).to.equal('document.pdf');
+      } finally {
+        URL.revokeObjectURL(url);
+      }
+    });
+
+    it('should use a fallback name for a document without name', async () => {
+      const loaded = oneEvent(viewer, 'document-load');
+      viewer.src = createPdfUrl(1);
+      await loaded;
+      const download = nextDownload();
+      viewer.download();
+      const { link } = await download;
+      expect(link.download).to.equal('document.pdf');
+    });
+
+    it('should decode the file name and ignore the query string', async () => {
+      const loaded = oneEvent(viewer, 'document-load');
+      viewer.src = `${fixtureUrl('multi-page.pdf').replace('multi-page.pdf', 'multi%2Dpage.pdf')}?version=2`;
+      await loaded;
+      const download = nextDownload();
+      viewer.download();
+      const { link } = await download;
+      expect(link.download).to.equal('multi-page.pdf');
+    });
+
+    it('should use the file name from the Content-Disposition header', async () => {
+      await loadFixtureFrom(viewer, new URL('/files/multi-page.pdf', location.href).href, {
+        'Content-Disposition': 'inline; filename="report.pdf"',
+      });
+      const download = nextDownload();
+      viewer.download();
+      const { link } = await download;
+      expect(link.download).to.equal('report.pdf');
+    });
+
+    it('should use a fallback name for a URL without a PDF file name', async () => {
+      await loadFixtureFrom(viewer, new URL('/files/123', location.href).href);
+      const download = nextDownload();
+      viewer.download();
+      const { link } = await download;
+      expect(link.download).to.equal('document.pdf');
+    });
+
+    it('should use the file name set with fileName', async () => {
+      viewer.fileName = 'report.pdf';
+      const download = nextDownload();
+      viewer.download();
+      const { link } = await download;
+      expect(link.download).to.equal('report.pdf');
+    });
+
+    it('should use the file name set with fileName as given', async () => {
+      viewer.fileName = 'report';
+      const download = nextDownload();
+      viewer.download();
+      const { link } = await download;
+      expect(link.download).to.equal('report');
+    });
+
+    it('should warn when the file cannot be read', async () => {
+      const warnStub = sinon.stub(console, 'warn');
+      sinon.stub(await getPdfDocumentPrototype(), 'getData').rejects(new Error('Read failed'));
+      viewer.download();
+      await nextFrame();
+      expect(warnStub).to.be.calledOnceWith('Failed to download the PDF document: Read failed');
+      expect(clickStub).to.be.not.called;
+    });
+
+    it('should do nothing when not attached', async () => {
+      viewer.remove();
+      viewer.download();
+      await nextFrame();
+      expect(clickStub).to.be.not.called;
+    });
+
+    it('should download and keep the data when detached right after download()', async () => {
+      const revokeSpy = sinon.spy(URL, 'revokeObjectURL');
+      const download = nextDownload();
+      viewer.download();
+      viewer.remove();
+      await download;
+      expect(revokeSpy).to.be.not.called;
+    });
+
+    describe('release timer', () => {
+      let clock: sinon.SinonFakeTimers;
+
+      beforeEach(() => {
+        clock = sinon.useFakeTimers({ shouldClearNativeTimers: true });
+      });
+
+      afterEach(() => {
+        clock.restore();
+      });
+
+      it('should release the data after a minute', async () => {
+        const revokeSpy = sinon.spy(URL, 'revokeObjectURL');
+        const download = nextDownload();
+        viewer.download();
+        const { link } = await download;
+        await clock.tickAsync(59000);
+        expect(revokeSpy).to.be.not.called;
+        await clock.tickAsync(1000);
+        expect(revokeSpy).to.be.calledOnceWith(link.href);
+        viewer.remove();
+        expect(revokeSpy).to.be.calledOnce;
+      });
+    });
+
+    describe('while reading the file', () => {
+      let release: () => void;
+      /** Resolves when the viewer starts reading the bytes. */
+      let reading: Promise<void>;
+
+      beforeEach(async () => {
+        // Delay the bytes of the documents until released, then return those of the
+        // loaded document, also when it is unloaded meanwhile.
+        const data = await getOriginal();
+        const released = new Promise<void>((resolve) => {
+          release = resolve;
+        });
+        let readingStarted: () => void;
+        reading = new Promise<void>((resolve) => {
+          readingStarted = resolve;
+        });
+        sinon.stub(await getPdfDocumentPrototype(), 'getData').callsFake(async () => {
+          readingStarted();
+          await released;
+          return data;
+        });
+      });
+
+      it('should download the file with its own name when another document loads', async () => {
+        const download = nextDownload();
+        getButton()!.click();
+        await reading;
+        await loadDocument(viewer, 'links.pdf');
+        release();
+        const { link, blob } = await download;
+        expect(link.download).to.equal('multi-page.pdf');
+        expect(new Uint8Array(await blob.arrayBuffer())).to.deep.equal(await getOriginal());
+      });
+
+      it('should download the file with the name from when the download started', async () => {
+        const download = nextDownload();
+        getButton()!.click();
+        await reading;
+        viewer.fileName = 'other.pdf';
+        release();
+        const { link } = await download;
+        expect(link.download).to.equal('multi-page.pdf');
+      });
+
+      it('should download the file when detached meanwhile', async () => {
+        const download = nextDownload();
+        getButton()!.click();
+        await reading;
+        viewer.remove();
+        release();
+        const { link } = await download;
+        expect(link.download).to.equal('multi-page.pdf');
+      });
+    });
+  });
+
+  describe('before load', () => {
+    it('should download the document once loaded when called in the same task as setting src', async () => {
+      const download = nextDownload();
+      viewer.src = fixtureUrl('multi-page.pdf');
+      viewer.download();
+      const { link, blob } = await download;
+      expect(viewer.pageCount).to.equal(6);
+      expect(link.download).to.equal('multi-page.pdf');
+      expect(new Uint8Array(await blob.arrayBuffer())).to.deep.equal(await getOriginal());
+    });
+
+    it('should download the document once loaded when called while it loads', async () => {
+      viewer.src = fixtureUrl('multi-page.pdf');
+      // The update that starts loading
+      await nextUpdate(viewer);
+      const download = nextDownload();
+      viewer.download();
+      const { link } = await download;
+      expect(link.download).to.equal('multi-page.pdf');
+    });
+
+    it('should download the new document when src changes while loading', async () => {
+      viewer.src = fixtureUrl('multi-page.pdf');
+      await nextUpdate(viewer);
+      const download = nextDownload();
+      viewer.download();
+      viewer.src = fixtureUrl('links.pdf');
+      const { link } = await download;
+      expect(link.download).to.equal('links.pdf');
+      expect(clickStub).to.be.calledOnce;
+    });
+
+    it('should do nothing without src', async () => {
+      viewer.download();
+      await nextFrame();
+      await loadDocument(viewer, 'multi-page.pdf');
+      await nextFrame();
+      expect(clickStub).to.be.not.called;
+    });
+
+    it('should do nothing when the document could not be loaded', async () => {
+      viewer.src = fixtureUrl('invalid.pdf');
+      viewer.download();
+      await oneEvent(viewer, 'document-error');
+      await nextFrame();
+      await loadDocument(viewer, 'multi-page.pdf');
+      await nextFrame();
+      expect(clickStub).to.be.not.called;
+    });
+
+    it('should do nothing when src is cleared while loading', async () => {
+      viewer.src = fixtureUrl('multi-page.pdf');
+      await nextUpdate(viewer);
+      viewer.download();
+      viewer.src = '';
+      await nextFrame();
+      await loadDocument(viewer, 'multi-page.pdf');
+      await nextFrame();
+      expect(clickStub).to.be.not.called;
+    });
+
+    it('should do nothing when detached as the document loads', async () => {
+      viewer.src = fixtureUrl('multi-page.pdf');
+      viewer.download();
+      viewer.addEventListener('document-load', () => viewer.remove(), { once: true });
+      await oneEvent(viewer, 'document-load');
+      await nextFrame();
+      expect(clickStub).to.be.not.called;
+    });
+
+    it('should do nothing when detached while loading', async () => {
+      const parent = viewer.parentElement!;
+      viewer.src = fixtureUrl('multi-page.pdf');
+      await nextUpdate(viewer);
+      viewer.download();
+      viewer.remove();
+      await nextFrame();
+      const loaded = oneEvent(viewer, 'document-load');
+      parent.appendChild(viewer);
+      await loaded;
+      await nextFrame();
+      expect(clickStub).to.be.not.called;
+    });
+  });
+});

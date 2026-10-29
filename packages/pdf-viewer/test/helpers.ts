@@ -1,5 +1,7 @@
 import { nextFrame, oneEvent } from '@vaadin/testing-helpers';
 import sinon from 'sinon';
+import type { PDFDocumentProxy } from 'pdfjs-dist';
+import { acquireWorker, loadPdfjs, releaseWorker } from '../src/pdfjs-loader.js';
 import type { PdfViewer } from '../vaadin-pdf-viewer.js';
 
 export type Fixture =
@@ -162,4 +164,20 @@ export function createPdfUrl(pageCount: number): string {
       mediaBox: [0, 0, 612, 792],
     })),
   );
+}
+
+/**
+ * Returns the prototype of every pdf.js document, including the documents of
+ * the viewer, through a document loaded for that.
+ */
+export async function getPdfDocumentPrototype(): Promise<PDFDocumentProxy> {
+  const pdfjs = await loadPdfjs();
+  const handle = acquireWorker(pdfjs);
+  const task = pdfjs.getDocument({ url: fixtureUrl('multi-page.pdf'), worker: handle.worker! });
+  try {
+    return Object.getPrototypeOf(await task.promise);
+  } finally {
+    await task.destroy();
+    releaseWorker(handle);
+  }
 }

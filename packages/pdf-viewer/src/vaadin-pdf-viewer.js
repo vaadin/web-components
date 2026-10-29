@@ -30,6 +30,7 @@ const DEFAULT_I18N = {
   pageWidth: 'Page width',
   pageFit: 'Page fit',
   document: 'PDF document',
+  download: 'Download',
 };
 
 /**
@@ -50,7 +51,8 @@ const DEFAULT_I18N = {
  *
  * Name              | Description
  * ------------------|-------------
- * `toolbar-actions` | Slot for application controls, e.g. buttons, at the end of the toolbar
+ * `toolbar-actions` | Slot for application controls, e.g. buttons, at the end of the toolbar, before the built-in buttons
+ * `download-button` | Slot for a component that replaces the download button. Clicking it downloads the document
  *
  * ### Styling
  *
@@ -153,7 +155,9 @@ class PdfViewer extends PdfViewerMixin(
    *   // Zoom select item that fits the whole page into the viewer.
    *   pageFit: 'Page fit',
    *   // Title of the header for a document without a file name or title.
-   *   document: 'PDF document'
+   *   document: 'PDF document',
+   *   // Tooltip of the download button.
+   *   download: 'Download'
    * }
    * ```
    *

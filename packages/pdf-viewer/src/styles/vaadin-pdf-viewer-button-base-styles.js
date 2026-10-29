@@ -44,6 +44,10 @@ export const pdfViewerButtonStyles = css`
     --_icon: var(--_vaadin-icon-plus);
   }
 
+  :host([icon='download']) {
+    --_icon: var(--_vaadin-icon-download);
+  }
+
   @media (forced-colors: active) {
     [part~='icon'] {
       background: CanvasText;
