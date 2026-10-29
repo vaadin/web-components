@@ -25,10 +25,11 @@ export const pdfViewerFindStyles = css`
     background: var(--vaadin-pdf-viewer-match-background, color-mix(in srgb, Mark 40%, transparent));
   }
 
-  /* Orange, like the current match of browser find, with an outline of at least 3:1 contrast */
+  /* Orange, like the current match of browser find, with a darker outline of at least 3:1 contrast */
   .find-match.current {
-    background: var(--vaadin-pdf-viewer-current-match-background, #ff9632);
-    outline: 2px solid var(--vaadin-pdf-viewer-current-match-outline-color, color-mix(in srgb, #ff9632, black 50%));
+    --_current-match-background: var(--vaadin-pdf-viewer-current-match-background, #ff9632);
+    background: var(--_current-match-background);
+    outline: 2px solid color-mix(in srgb, var(--_current-match-background), black 50%);
   }
 
   @media (forced-colors: active) {
