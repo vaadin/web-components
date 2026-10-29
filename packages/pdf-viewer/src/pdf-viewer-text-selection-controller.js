@@ -56,7 +56,7 @@ function getRanges(selection) {
  * @param {ShadowRoot} root
  * @return {Range[]}
  */
-function getSelectionRanges(root) {
+export function getSelectionRanges(root) {
   if (typeof root.getSelection === 'function') {
     return getRanges(root.getSelection());
   }
@@ -73,15 +73,14 @@ function getSelectionRanges(root) {
 }
 
 /**
- * Puts the end-of-content element back at the end of its text layer.
- * @param {HTMLElement} end
- * @param {HTMLElement} textLayer
+ * Puts the end-of-content element of a page back at the end of its text layer.
+ * @param {import('./pdf-viewer-page.js').PdfViewerPage} page
  */
-function reset(end, textLayer) {
-  textLayer.append(end);
-  end.style.width = '';
-  end.style.height = '';
-  textLayer.classList.remove('selecting');
+function reset({ textLayerElement, endOfContentElement }) {
+  textLayerElement.append(endOfContentElement);
+  endOfContentElement.style.width = '';
+  endOfContentElement.style.height = '';
+  textLayerElement.classList.remove('selecting');
 }
 
 /**
@@ -103,12 +102,11 @@ export class PdfViewerTextSelectionController {
 
   /**
    * @param {HTMLElement} host
-   * @param {() => Map<HTMLElement, HTMLElement>} getTextLayers returns the
-   *   end-of-content element of each rendered text layer, by text layer
+   * @param {() => import('./pdf-viewer-page.js').PdfViewerPage[]} getPages returns the page views
    */
-  constructor(host, getTextLayers) {
+  constructor(host, getPages) {
     this.host = host;
-    this.getTextLayers = getTextLayers;
+    this.getPages = getPages;
   }
 
   hostConnected() {
@@ -125,7 +123,7 @@ export class PdfViewerTextSelectionController {
       'pointerup',
       () => {
         this.#isPointerDown = false;
-        this.getTextLayers().forEach(reset);
+        this.#getTextLayerPages().forEach(reset);
       },
       { signal },
     );
@@ -133,7 +131,7 @@ export class PdfViewerTextSelectionController {
       'blur',
       () => {
         this.#isPointerDown = false;
-        this.getTextLayers().forEach(reset);
+        this.#getTextLayerPages().forEach(reset);
       },
       { signal },
     );
@@ -141,7 +139,7 @@ export class PdfViewerTextSelectionController {
       'keyup',
       () => {
         if (!this.#isPointerDown) {
-          this.getTextLayers().forEach(reset);
+          this.#getTextLayerPages().forEach(reset);
         }
       },
       { signal },
@@ -154,33 +152,34 @@ export class PdfViewerTextSelectionController {
     this.#abortController = null;
   }
 
+  /**
+   * Returns the pages whose text layer has rendered.
+   * @private
+   */
+  #getTextLayerPages() {
+    return this.getPages().filter((page) => page.endOfContentElement);
+  }
+
   /** @private */
   #onSelectionChange() {
-    const textLayers = this.getTextLayers();
-    if (!textLayers.size) {
+    const pages = this.#getTextLayerPages();
+    if (!pages.length) {
       return;
     }
 
     const ranges = getSelectionRanges(this.host.shadowRoot);
-    const activeTextLayers = new Set();
-    ranges.forEach((range) => {
-      textLayers.forEach((_, textLayer) => {
-        if (range.intersectsNode(textLayer)) {
-          activeTextLayers.add(textLayer);
-        }
-      });
-    });
-    textLayers.forEach((end, textLayer) => {
-      if (activeTextLayers.has(textLayer)) {
-        textLayer.classList.add('selecting');
+    const activePages = pages.filter((page) => ranges.some((range) => range.intersectsNode(page.textLayerElement)));
+    pages.forEach((page) => {
+      if (activePages.includes(page)) {
+        page.textLayerElement.classList.add('selecting');
       } else {
-        reset(end, textLayer);
+        reset(page);
       }
     });
 
     // Unlike in pdf.js, which handles the text layers of all viewers together,
     // only a selection in the text layers of this viewer moves their elements.
-    if (!activeTextLayers.size) {
+    if (!activePages.length) {
       this.#prevRange = null;
       return;
     }
@@ -211,7 +210,7 @@ export class PdfViewerTextSelectionController {
     }
 
     const textLayer = anchor?.parentElement?.closest('.text-layer');
-    const end = textLayers.get(textLayer);
+    const end = pages.find((page) => page.textLayerElement === textLayer)?.endOfContentElement;
     if (end) {
       end.style.width = textLayer.style.width;
       end.style.height = textLayer.style.height;

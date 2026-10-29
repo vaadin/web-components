@@ -17,21 +17,10 @@ import { PdfViewerTextSelectionController } from './pdf-viewer-text-selection-co
  */
 export const PdfViewerTextLayerMixin = (superClass) =>
   class PdfViewerTextLayerMixinClass extends superClass {
-    #textSelectionController = new PdfViewerTextSelectionController(
-      this,
-      () =>
-        new Map(
-          this.__pages
-            .filter((page) => page.endOfContentElement)
-            .map((page) => [page.textLayerElement, page.endOfContentElement]),
-        ),
-    );
+    constructor() {
+      super();
 
-    /** @protected */
-    firstUpdated() {
-      super.firstUpdated();
-
-      this.addController(this.#textSelectionController);
+      this.addController(new PdfViewerTextSelectionController(this, () => this.__pages));
     }
 
     /**

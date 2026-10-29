@@ -1,5 +1,7 @@
 import { nextFrame, oneEvent } from '@vaadin/testing-helpers';
 import sinon from 'sinon';
+import type { PDFPageProxy } from 'pdfjs-dist';
+import { acquireWorker, loadPdfjs, releaseWorker } from '../src/pdfjs-loader.js';
 import type { PdfViewer } from '../vaadin-pdf-viewer.js';
 
 export type Fixture =
@@ -106,6 +108,23 @@ export async function scrollSettled(element: HTMLElement): Promise<void> {
     await nextFrame();
     stableFrames = element.scrollTop === last ? stableFrames + 1 : 0;
     last = element.scrollTop;
+  }
+}
+
+/**
+ * Returns the prototype of the pages of every pdf.js document, including the
+ * documents of the viewer, through a page of a document loaded for that.
+ */
+export async function getPdfPagePrototype(): Promise<PDFPageProxy> {
+  const pdfjs = await loadPdfjs();
+  const handle = acquireWorker(pdfjs);
+  const task = pdfjs.getDocument({ url: fixtureUrl('multi-page.pdf'), worker: handle.worker! });
+  try {
+    const pdfPage = await (await task.promise).getPage(1);
+    return Object.getPrototypeOf(pdfPage);
+  } finally {
+    await task.destroy();
+    releaseWorker(handle);
   }
 }
 
