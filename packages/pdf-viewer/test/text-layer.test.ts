@@ -115,6 +115,16 @@ describe('text layer', () => {
     });
   });
 
+  it('should not give marked content a box', async () => {
+    // Safari paints the selection over the whole box of an element with selected text.
+    await load('tagged.pdf');
+    const markedContent = getTextLayer(1)!.querySelectorAll('.markedContent');
+    expect(markedContent).to.not.be.empty;
+    markedContent.forEach((element) => {
+      expect(element.getClientRects()).to.have.lengthOf(0);
+    });
+  });
+
   it('should keep the canvas of a page whose text fails to load, and load the text again later', async () => {
     const pdfPagePrototype = await getPdfPagePrototype();
     const streamTextContent = pdfPagePrototype.streamTextContent;

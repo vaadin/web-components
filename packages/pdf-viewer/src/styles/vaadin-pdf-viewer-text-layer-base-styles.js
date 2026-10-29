@@ -71,14 +71,8 @@ export const pdfViewerTextLayerStyles = css`
     transform: rotate(var(--rotate)) scaleX(var(--scale-x)) scale(var(--min-font-size-inv));
   }
 
-  /* Unlike in pdf.js, marked content covers the page, so the text in it keeps its position */
   .text-layer .markedContent {
-    inset: 0;
-    pointer-events: none;
-  }
-
-  .text-layer .markedContent > :not(.markedContent) {
-    pointer-events: auto;
+    display: contents;
   }
 
   .text-layer ::selection {
