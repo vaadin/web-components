@@ -183,6 +183,31 @@ export const PdfViewerScrollMixin = (superClass) =>
     }
 
     /**
+     * Scrolls the pages so that the given client rectangle is in the middle
+     * of the view, unless it is well inside the view already.
+     * @param {DOMRect} rect
+     * @protected
+     */
+    _scrollRectIntoView(rect) {
+      const { content } = this.$;
+      const view = content.getBoundingClientRect();
+      const top = view.top;
+      const height = content.clientHeight;
+      // Also scroll when the rectangle is close to an edge, where it is easy to miss.
+      const margin = Math.min(64, height / 4);
+      let deltaY = 0;
+      let deltaX = 0;
+      if (rect.top < top + margin || rect.bottom > top + height - margin) {
+        deltaY = rect.top + rect.height / 2 - (top + height / 2);
+      }
+      if (rect.left < view.left || rect.right > view.left + content.clientWidth) {
+        deltaX = rect.left + rect.width / 2 - (view.left + content.clientWidth / 2);
+      }
+      content.scrollTop += deltaY;
+      content.scrollLeft += deltaX;
+    }
+
+    /**
      * Override method from `PdfViewerDocumentMixin` to lay out the pages.
      * @protected
      * @override

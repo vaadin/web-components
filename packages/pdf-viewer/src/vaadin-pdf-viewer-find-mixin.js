@@ -1,0 +1,329 @@
+/**
+ * @license
+ * Copyright (c) 2000 - 2026 Vaadin Ltd.
+ *
+ * This program is available under Vaadin Commercial License and Service Terms.
+ *
+ *
+ * See https://vaadin.com/commercial-license-and-service-terms for the full
+ * license.
+ */
+import { issueWarning } from '@vaadin/component-base/src/warnings.js';
+import { createPageText, findInText, getMatchParts, normalizeText } from './pdf-viewer-find.js';
+
+/** The number of pages whose text is loaded at a time when searching. */
+const SEARCH_BATCH = 10;
+
+/**
+ * A mixin that finds text in the document and highlights the matches on
+ * the rendered pages.
+ */
+export const PdfViewerFindMixin = (superClass) =>
+  class PdfViewerFindMixinClass extends superClass {
+    /** @type {Array<{ pageIndex: number, start: number, end: number }>} */
+    #matches = [];
+
+    /** The index of the current match, or -1. */
+    #currentIndex = -1;
+
+    /**
+     * The text of each page for searching, by page index. Holds the promise
+     * while the text loads.
+     * @type {Map<number, Promise<{ pageText: import('./pdf-viewer-find.js').PageText, normalized: { text: string, offsets: number[] } }>>}
+     */
+    #pageTexts = new Map();
+
+    /** Incremented on every search, to drop results of an outdated search. */
+    #searchId = 0;
+
+    /** Set to scroll to the current match once it is highlighted. */
+    #scrollToMatchPending = false;
+
+    /**
+     * A `find()` or `highlight()` call that waits for the document to load.
+     * @type {(() => void) | null}
+     */
+    #pendingCall = null;
+
+    /** @protected */
+    updated(props) {
+      super.updated(props);
+
+      if (this.#pendingCall && !this._documentPending) {
+        const call = this.#pendingCall;
+        this.#pendingCall = null;
+        call();
+      }
+    }
+
+    /**
+     * Searches the document for the given text and scrolls to the first
+     * match. The matches are highlighted on the pages. Fires `find-result`
+     * with the number of matches. While the document loads, it runs once
+     * loaded. Does nothing without a document, or when the viewer is not
+     * attached.
+     *
+     * @param {string} text
+     */
+    find(text) {
+      if (this.isConnected) {
+        this.#runAfterLoad(() => this.#find(text));
+      }
+    }
+
+    /**
+     * Highlights the given text on the given page and scrolls to it, for
+     * a passage that the application has located. The next `highlight()` or
+     * `find()` clears it. While the document loads, it runs once loaded.
+     * Does nothing without a document, or when the viewer is not attached.
+     *
+     * @param {number} page the page number, starting from 1
+     * @param {string} text
+     */
+    highlight(page, text) {
+      if (this.isConnected) {
+        this.#runAfterLoad(() => this.#highlight(page, text));
+      }
+    }
+
+    /**
+     * Override method from `PdfViewerRenderMixin` to highlight the matches
+     * on a page once it is rendered.
+     * @protected
+     * @override
+     */
+    _pageRendered(page) {
+      super._pageRendered(page);
+      this.#highlightPage(page);
+    }
+
+    /**
+     * Override method from `PdfViewerDocumentMixin` to forget the text and
+     * the matches of the previous document.
+     * @protected
+     * @override
+     */
+    _documentUnloaded() {
+      super._documentUnloaded();
+      this.#pageTexts.clear();
+      this.#resetSearch();
+    }
+
+    /**
+     * Runs a method call now, or once the document has loaded while it loads.
+     * @private
+     */
+    #runAfterLoad(callback) {
+      if (this._documentPending) {
+        this.#pendingCall = callback;
+      } else {
+        callback();
+      }
+    }
+
+    /** @private */
+    #find(text) {
+      if (!this._pdfDocument || !this.isConnected) {
+        return;
+      }
+      this.#search(String(text ?? ''));
+    }
+
+    /** @private */
+    #highlight(page, text) {
+      if (!this._pdfDocument || !this.isConnected) {
+        return;
+      }
+      if (Number.isInteger(page) && page >= 1 && page <= this.pageCount) {
+        this.#search(String(text ?? ''), page);
+      } else {
+        issueWarning(
+          `The page ${page} is out of range for <vaadin-pdf-viewer>, the document has ${this.pageCount} pages.`,
+        );
+        this.#resetSearch();
+        this.#highlightPages();
+      }
+    }
+
+    /**
+     * Drops the results and stops a running search.
+     * @private
+     */
+    #resetSearch() {
+      this.#searchId += 1;
+      this.#matches = [];
+      this.#currentIndex = -1;
+      this.#scrollToMatchPending = false;
+    }
+
+    /**
+     * Searches the document, or one page of it, for the text, and shows the
+     * first match. A search of the whole document fires `find-result`.
+     * @param {string} query
+     * @param {number} [pageNumber] the page to search, or 0 for all pages
+     * @private
+     */
+    #search(query, pageNumber = 0) {
+      this.#searchPages(query, pageNumber).catch((error) => {
+        issueWarning(`Failed to find text in the PDF document: ${error.message}`);
+      });
+    }
+
+    /** @private */
+    async #searchPages(query, pageNumber) {
+      this.#resetSearch();
+      const searchId = this.#searchId;
+      const pageIndexes = pageNumber ? [pageNumber - 1] : Array.from({ length: this.pageCount }, (_, index) => index);
+      const matches = [];
+
+      if (query.trim() && this._pdfDocument) {
+        for (let start = 0; start < pageIndexes.length; start += SEARCH_BATCH) {
+          const batch = pageIndexes.slice(start, start + SEARCH_BATCH);
+          const texts = await Promise.all(batch.map((pageIndex) => this.#getPageText(pageIndex)));
+          if (searchId !== this.#searchId) {
+            return;
+          }
+          texts.forEach(({ normalized }, i) => {
+            findInText(normalized, query).forEach((match) => matches.push({ pageIndex: batch[i], ...match }));
+          });
+        }
+      }
+
+      this.#matches = matches;
+      this.#currentIndex = matches.length ? 0 : -1;
+      // Also clears the highlights of a previous search on other pages.
+      this.#highlightPages();
+
+      if (!pageNumber) {
+        this.dispatchEvent(new CustomEvent('find-result', { detail: { query, matchCount: matches.length } }));
+      }
+      if (matches.length) {
+        this.#showCurrentMatch();
+      }
+    }
+
+    /**
+     * Returns the text of a page for searching, loading it when needed.
+     * @private
+     */
+    #getPageText(pageIndex) {
+      if (!this.#pageTexts.has(pageIndex)) {
+        const pdfDocument = this._pdfDocument;
+        const promise = pdfDocument
+          .getPage(pageIndex + 1)
+          .then((pdfPage) => pdfPage.getTextContent({ includeMarkedContent: true }))
+          .then(({ items }) => {
+            // The marked content items have no text and are skipped by `createPageText()`.
+            const pageText = createPageText(items);
+            return { pageText, normalized: normalizeText(pageText.text) };
+          })
+          .catch((error) => {
+            // Loading the text fails when the document is unloaded meanwhile.
+            if (this._pdfDocument === pdfDocument) {
+              issueWarning(`Failed to load the text of page ${pageIndex + 1} of the PDF document: ${error.message}`);
+            }
+            const pageText = createPageText([]);
+            return { pageText, normalized: normalizeText('') };
+          });
+        this.#pageTexts.set(pageIndex, promise);
+      }
+      return this.#pageTexts.get(pageIndex);
+    }
+
+    /**
+     * Scrolls to the current match, after going to its page when the page
+     * is not rendered.
+     * @private
+     */
+    #showCurrentMatch() {
+      const match = this.#matches[this.#currentIndex];
+      const page = this.__pages[match.pageIndex];
+      this.#scrollToMatchPending = true;
+      this.#highlightPages([match]);
+      if (!page || !page.textLayer) {
+        this.page = match.pageIndex + 1;
+      }
+    }
+
+    /**
+     * Updates the highlights of the rendered pages that have the given
+     * matches, or of all rendered pages.
+     * @param {Array<{ pageIndex: number }>} [matches]
+     * @private
+     */
+    #highlightPages(matches) {
+      const pageIndexes = matches
+        ? new Set(matches.map((match) => match.pageIndex))
+        : Array.from({ length: this.pageCount }, (_, index) => index);
+      pageIndexes.forEach((pageIndex) => {
+        const page = this.__pages[pageIndex];
+        if (page && page.textLayer) {
+          this.#highlightPage(page);
+        }
+      });
+    }
+
+    /**
+     * Draws the highlights of the matches on a page over its text layer.
+     * @private
+     */
+    #highlightPage(page) {
+      page.clearFindLayer();
+
+      const pageIndex = page.pageNumber - 1;
+      const matches = this.#matches.filter((match) => match.pageIndex === pageIndex);
+      if (!matches.length || !page.textLayer) {
+        return;
+      }
+
+      const searchId = this.#searchId;
+      this.#getPageText(pageIndex)
+        .then(({ pageText }) => {
+          // The highlights need the text layer elements that the text was taken from.
+          const textDivs = page.textLayer ? page.textLayer.textDivs : [];
+          if (searchId !== this.#searchId) {
+            return;
+          }
+          if (textDivs.length !== pageText.items.length) {
+            // Without highlights, go at least to the page of the current match.
+            this.#goToPendingMatchPage(pageIndex);
+            return;
+          }
+
+          const currentMatch = this.#matches[this.#currentIndex];
+          page.renderFindLayer(
+            matches.flatMap((match) =>
+              getMatchParts(pageText, match).map((part) => ({ ...part, current: match === currentMatch })),
+            ),
+          );
+
+          if (this.#scrollToMatchPending && currentMatch && currentMatch.pageIndex === pageIndex) {
+            this.#scrollToMatchPending = false;
+            const currentElement = page.findLayerElement && page.findLayerElement.querySelector('.find-match.current');
+            if (currentElement) {
+              this._scrollRectIntoView(currentElement.getBoundingClientRect());
+            } else {
+              this.page = pageIndex + 1;
+            }
+          }
+        })
+        .catch((error) => {
+          issueWarning(
+            `Failed to highlight the matches on page ${page.pageNumber} of the PDF document: ${error.message}`,
+          );
+        });
+    }
+
+    /**
+     * Goes to the page of the current match when scrolling to it is pending
+     * but the match cannot be highlighted on the page.
+     * @private
+     */
+    #goToPendingMatchPage(pageIndex) {
+      const currentMatch = this.#matches[this.#currentIndex];
+      if (this.#scrollToMatchPending && currentMatch && currentMatch.pageIndex === pageIndex) {
+        this.#scrollToMatchPending = false;
+        this.page = pageIndex + 1;
+      }
+    }
+  };

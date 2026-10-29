@@ -34,6 +34,11 @@ export declare class PdfViewerRenderMixinClass {
   protected _renderPageLayers(page: PdfViewerPage): Promise<void>;
 
   /**
+   * Called when a page has been rendered, including its layers.
+   */
+  protected _pageRendered(page: PdfViewerPage): void;
+
+  /**
    * Renders the visible pages, the most visible first, then the pages next
    * to them, and frees the canvases of pages far from the view. Stops
    * rendering when no page is visible.

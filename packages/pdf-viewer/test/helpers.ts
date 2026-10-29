@@ -112,6 +112,23 @@ export async function scrollSettled(element: HTMLElement): Promise<void> {
 }
 
 /**
+ * Waits until the current match of a search is highlighted, on the given
+ * page when one is given, and scrolled to.
+ */
+export async function currentMatchShown(viewer: PdfViewer, pageNumber?: number): Promise<void> {
+  const getCurrentMatch = () => {
+    const root = pageNumber
+      ? viewer.shadowRoot!.querySelectorAll('[part~="page"]')[pageNumber - 1]
+      : viewer.shadowRoot!;
+    return root.querySelector('.find-match.current');
+  };
+  for (let i = 0; i < 50 && !getCurrentMatch(); i++) {
+    await nextFrame();
+  }
+  await scrollSettled(viewer.shadowRoot!.querySelector<HTMLElement>('[part="content"]')!);
+}
+
+/**
  * Returns the prototype of the pages of every pdf.js document, including the
  * documents of the viewer, through a page of a document loaded for that.
  */

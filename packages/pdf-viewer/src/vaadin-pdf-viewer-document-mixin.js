@@ -124,7 +124,7 @@ export const PdfViewerDocumentMixin = (superClass) =>
     /**
      * Whether the document of `src` is loading, or starts loading in the
      * next update after a change of `src`. Methods that need the document,
-     * e.g. `download()`, wait for it while this is true.
+     * e.g. `find()`, wait for it while this is true.
      * @return {boolean}
      * @protected
      */

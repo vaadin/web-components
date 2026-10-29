@@ -43,6 +43,12 @@ export declare class PdfViewerScrollMixinClass {
   protected _scrollToPage(page: number): void;
 
   /**
+   * Scrolls the pages so that the given client rectangle is in the middle
+   * of the view, unless it is well inside the view already.
+   */
+  protected _scrollRectIntoView(rect: DOMRect): void;
+
+  /**
    * Returns the scale of the pages in CSS pixels per PDF unit for the given
    * available size: the scale that fits the width of the current page.
    */
