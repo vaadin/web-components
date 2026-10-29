@@ -43,6 +43,18 @@ export const pdfViewerTextLayerStyles = css`
     forced-color-adjust: none;
     transform-origin: 0 0;
     caret-color: CanvasText;
+    /* Prevent host styles from affecting pdf.js */
+    font-style: normal;
+    font-weight: normal;
+    font-variant: normal;
+    font-stretch: normal;
+    font-feature-settings: normal;
+    font-variation-settings: normal;
+    font-kerning: auto;
+    text-transform: none;
+    text-indent: 0;
+    tab-size: 8;
+    writing-mode: horizontal-tb;
     /* The page is white paper, also in a dark color scheme */
     color-scheme: only light;
     z-index: 0;
