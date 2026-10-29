@@ -113,38 +113,32 @@ export async function scrollSettled(element: HTMLElement): Promise<void> {
  * A page of a PDF created with `createPdf()`.
  */
 export type PdfPage = {
-  /** The content stream of the page. Font `/F1` is Helvetica, `/F2` is Courier. */
+  /** The content stream of the page. Font `/F1` is Helvetica. */
   content: string;
   /** The rotation of the page in degrees. */
   rotate?: number;
-  /** Annotation dictionaries, e.g. links. */
-  annotations?: string[];
   /** The size of the page in PDF units, A4 by default. */
   mediaBox?: [number, number, number, number];
 };
 
 /**
  * Creates a PDF with the given pages in memory, and returns an object URL for it.
- * `dests` is the content of the named destinations dictionary, `lang` the language of the document.
+ * `lang` is the language of the document.
  */
-export function createPdf(pages: PdfPage[], { dests = '', lang = '' }: { dests?: string; lang?: string } = {}): string {
-  // Object 1 is the catalog, 2 the page tree, 3 and 4 the fonts, then each page, its content and its annotations.
+export function createPdf(pages: PdfPage[], { lang = '' }: { lang?: string } = {}): string {
+  // Object 1 is the catalog, 2 the page tree, 3 the font, then each page and its content.
   const objects = [
-    `<< /Type /Catalog /Pages 2 0 R${dests ? ` /Dests << ${dests} >>` : ''}${lang ? ` /Lang (${lang})` : ''} >>`,
+    `<< /Type /Catalog /Pages 2 0 R${lang ? ` /Lang (${lang})` : ''} >>`,
     '',
     '<< /Type /Font /Subtype /Type1 /BaseFont /Helvetica >>',
-    '<< /Type /Font /Subtype /Type1 /BaseFont /Courier >>',
   ];
   const pageIds: number[] = [];
-  pages.forEach(({ content, rotate = 0, annotations = [], mediaBox = [0, 0, 595, 842] }) => {
+  pages.forEach(({ content, rotate = 0, mediaBox = [0, 0, 595, 842] }) => {
     const id = objects.length + 1;
     pageIds.push(id);
-    const annotationIds = annotations.map((_, index) => id + 2 + index);
-    const annots = annotationIds.length ? ` /Annots [${annotationIds.map((ref) => `${ref} 0 R`).join(' ')}]` : '';
     objects.push(
-      `<< /Type /Page /Parent 2 0 R /MediaBox [${mediaBox.join(' ')}] /Rotate ${rotate} /Resources << /Font << /F1 3 0 R /F2 4 0 R >> >> /Contents ${id + 1} 0 R${annots} >>`,
+      `<< /Type /Page /Parent 2 0 R /MediaBox [${mediaBox.join(' ')}] /Rotate ${rotate} /Resources << /Font << /F1 3 0 R >> >> /Contents ${id + 1} 0 R >>`,
       `<< /Length ${content.length} >>\nstream\n${content}\nendstream`,
-      ...annotations,
     );
   });
   objects[1] = `<< /Type /Pages /Kids [${pageIds.map((id) => `${id} 0 R`).join(' ')}] /Count ${pages.length} >>`;

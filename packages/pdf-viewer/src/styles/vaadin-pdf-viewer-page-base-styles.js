@@ -111,37 +111,17 @@ export const pdfViewerPageStyles = css`
     top: 0;
   }
 
-  /* The text and link layers have the size of the unrotated page, and rotate with it */
-  :is(.text-layer, .link-layer)[data-main-rotation='90'] {
+  /* The text layer has the size of the unrotated page, and rotates with it */
+  .text-layer[data-main-rotation='90'] {
     transform: rotate(90deg) translateY(-100%);
   }
 
-  :is(.text-layer, .link-layer)[data-main-rotation='180'] {
+  .text-layer[data-main-rotation='180'] {
     transform: rotate(180deg) translate(-100%, -100%);
   }
 
-  :is(.text-layer, .link-layer)[data-main-rotation='270'] {
+  .text-layer[data-main-rotation='270'] {
     transform: rotate(270deg) translateX(-100%);
-  }
-
-  .link-layer {
-    position: absolute;
-    inset: 0;
-    z-index: 1;
-    transform-origin: 0 0;
-    pointer-events: none;
-  }
-
-  .link {
-    position: absolute;
-    z-index: 2;
-    pointer-events: auto;
-    cursor: var(--vaadin-clickable-cursor);
-  }
-
-  .link:focus-visible {
-    outline: var(--vaadin-focus-ring-width) solid var(--vaadin-focus-ring-color);
-    outline-offset: 1px;
   }
 
   @media (forced-colors: active) {

@@ -16,7 +16,6 @@ import type {
 } from '../../src/vaadin-pdf-viewer.js';
 import type { PdfViewerDocumentMixinClass } from '../../src/vaadin-pdf-viewer-document-mixin.js';
 import type { PdfViewerKeyboardMixinClass } from '../../src/vaadin-pdf-viewer-keyboard-mixin.js';
-import type { PdfViewerLinksMixinClass } from '../../src/vaadin-pdf-viewer-links-mixin.js';
 import type { PdfViewerRenderMixinClass } from '../../src/vaadin-pdf-viewer-render-mixin.js';
 import type { PdfViewerScrollMixinClass } from '../../src/vaadin-pdf-viewer-scroll-mixin.js';
 import type { PdfViewerTextLayerMixinClass } from '../../src/vaadin-pdf-viewer-text-layer-mixin.js';
@@ -39,7 +38,6 @@ assertType<number>(viewer.pageCount);
 assertType<PdfViewerZoom>(viewer.zoom);
 assertType<'page-fit' | 'page-width' | number>(viewer.zoom);
 assertType<PdfViewerI18n | undefined>(viewer.i18n);
-assertType<PdfViewerI18n>({ link: 'Link', goToPage: 'Go to page {page}', externalLink: '{text} (opens in a new tab)' });
 
 // Mixins
 assertType<ElementMixinClass>(viewer);
@@ -47,7 +45,6 @@ assertType<PdfViewerDocumentMixinClass>(viewer);
 assertType<PdfViewerRenderMixinClass>(viewer);
 assertType<PdfViewerScrollMixinClass>(viewer);
 assertType<PdfViewerTextLayerMixinClass>(viewer);
-assertType<PdfViewerLinksMixinClass>(viewer);
 assertType<PdfViewerZoomMixinClass>(viewer);
 assertType<PdfViewerToolbarMixinClass>(viewer);
 assertType<PdfViewerKeyboardMixinClass>(viewer);
