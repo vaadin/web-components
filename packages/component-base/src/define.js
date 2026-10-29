@@ -13,7 +13,7 @@ function dashToCamelCase(dash) {
 
 const experimentalMap = {};
 
-export function defineCustomElement(CustomElement, version = '24.9.20') {
+export function defineCustomElement(CustomElement, version = '24.9.21') {
   Object.defineProperty(CustomElement, 'version', {
     get() {
       return version;
