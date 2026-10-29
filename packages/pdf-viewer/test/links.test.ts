@@ -358,6 +358,40 @@ describe('links', () => {
       expect(content.scrollTop).to.be.closeTo(pages[1].offsetTop, 1);
     });
 
+    ['FitV', 'FitBV'].forEach((type) => {
+      it(`should scroll to the left position of a ${type} destination at the top of the page`, async () => {
+        viewer.zoom = 2;
+        await loadLinkToPosition(`[1 /${type} 200]`);
+        getLinks(1)[0].click();
+        await nextRenderIdle(viewer);
+        const page = pages[1];
+        expect(content.scrollLeft).to.be.closeTo(page.offsetLeft + (200 / 595) * page.offsetWidth, 1);
+        expect(content.scrollTop).to.be.closeTo(page.offsetTop, 1);
+      });
+    });
+
+    ['Fit', 'FitB'].forEach((type) => {
+      it(`should scroll to the start of the page of a ${type} destination`, async () => {
+        await loadLinkToPosition(`[1 /${type}]`);
+        getLinks(1)[0].click();
+        await nextRenderIdle(viewer);
+        const padding = parseFloat(getComputedStyle(content).paddingBlockStart);
+        expect(viewer.page).to.equal(2);
+        expect(content.scrollTop).to.be.closeTo(pages[1].offsetTop - padding, 1);
+      });
+    });
+
+    it('should do nothing for a link to a page out of range', async () => {
+      await loadPdf([{ content: '', annotations: [destLink('[9 /Fit]')] }, { content: '' }]);
+      const warn = sinon.stub(console, 'warn');
+      getLinks(1)[0].click();
+      await nextFrame();
+      await nextFrame();
+      expect(viewer.page).to.equal(1);
+      expect(content.scrollTop).to.equal(0);
+      expect(warn).to.be.not.called;
+    });
+
     it('should scroll horizontally to the position of a destination', async () => {
       viewer.zoom = 2;
       await loadLinkToPosition('[1 /XYZ 200 400 null]');
@@ -393,6 +427,24 @@ describe('links', () => {
         getLinks(2)[actions.indexOf(action as string)].click();
         await nextRenderIdle(viewer);
         expect(viewer.page).to.equal(page);
+      });
+    });
+
+    [
+      ['PrevPage', 1],
+      ['NextPage', 4],
+    ].forEach(([action, page]) => {
+      it(`should do nothing for the ${action} action on page ${page}`, async () => {
+        viewer.page = page as number;
+        await scrollSettled(content);
+        const { scrollTop } = content;
+        const warn = sinon.stub(console, 'warn');
+        getLinks(page as number)[actions.indexOf(action as string)].click();
+        await nextFrame();
+        await nextFrame();
+        expect(viewer.page).to.equal(page);
+        expect(content.scrollTop).to.equal(scrollTop);
+        expect(warn).to.be.not.called;
       });
     });
 
