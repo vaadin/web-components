@@ -25,7 +25,7 @@ export const pdfViewerPageStyles = css`
     flex: none;
     /* pdf.js draws text wrong in an RTL canvas */
     direction: ltr;
-    /* Used by the text layer of pdf.js */
+    /* Used by pdf.js to size layers of a page */
     --scale-round-x: 1px;
     --scale-round-y: 1px;
     background: var(--vaadin-pdf-viewer-page-background, #fff);
