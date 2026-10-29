@@ -9,6 +9,7 @@
  * license.
  */
 import { issueWarning } from '@vaadin/component-base/src/warnings.js';
+import { PdfViewerTextSelectionController } from './pdf-viewer-text-selection-controller.js';
 
 /**
  * A mixin that renders the text layer of the rendered pages, which makes the
@@ -16,6 +17,23 @@ import { issueWarning } from '@vaadin/component-base/src/warnings.js';
  */
 export const PdfViewerTextLayerMixin = (superClass) =>
   class PdfViewerTextLayerMixinClass extends superClass {
+    #textSelectionController = new PdfViewerTextSelectionController(
+      this,
+      () =>
+        new Map(
+          this.__pages
+            .filter((page) => page.endOfContentElement)
+            .map((page) => [page.textLayerElement, page.endOfContentElement]),
+        ),
+    );
+
+    /** @protected */
+    firstUpdated() {
+      super.firstUpdated();
+
+      this.addController(this.#textSelectionController);
+    }
+
     /**
      * Override method from `PdfViewerDocumentMixin` to set the language of
      * the document on the pages.

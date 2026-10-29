@@ -58,6 +58,9 @@ export class PdfViewerPage {
     /** @type {HTMLElement | null} */
     this.textLayerElement = null;
 
+    /** @type {HTMLElement | null} */
+    this.endOfContentElement = null;
+
     /** The scale and device pixel ratio of the current canvas, to know when it is outdated. */
     this.renderedScale = 0;
     this.renderedPixelRatio = 0;
@@ -203,16 +206,10 @@ export class PdfViewerPage {
     const container = document.createElement('div');
     container.className = 'text-layer';
     // While selecting, the end-of-content element covers the page, so that
-    // dragging over empty space does not lose the selection.
-    container.addEventListener('pointerdown', () => {
+    // dragging over empty space does not lose the selection. As in pdf.js,
+    // `PdfViewerTextSelectionController` removes the class.
+    container.addEventListener('mousedown', () => {
       container.classList.add('selecting');
-      const controller = new AbortController();
-      const stop = () => {
-        container.classList.remove('selecting');
-        controller.abort();
-      };
-      window.addEventListener('pointerup', stop, { signal: controller.signal });
-      window.addEventListener('pointercancel', stop, { signal: controller.signal });
     });
     this.element.append(container);
 
@@ -242,6 +239,7 @@ export class PdfViewerPage {
       const endOfContent = document.createElement('div');
       endOfContent.className = 'end-of-content';
       container.append(endOfContent);
+      this.endOfContentElement = endOfContent;
     }
   }
 
@@ -260,6 +258,7 @@ export class PdfViewerPage {
     this.textLayer = null;
     this.textLayerElement?.remove();
     this.textLayerElement = null;
+    this.endOfContentElement = null;
     if (this.canvas) {
       this.#freeCanvas(this.canvas);
       this.canvas = null;

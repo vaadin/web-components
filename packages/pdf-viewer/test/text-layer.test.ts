@@ -1,9 +1,11 @@
 import { expect } from '@vaadin/chai-plugins';
+import { resetMouse, sendMouse } from '@vaadin/test-runner-commands';
 import { fixtureSync, nextFrame, nextRender, nextResize } from '@vaadin/testing-helpers';
 import sinon from 'sinon';
 import './enable-feature-flag.js';
 import '../vaadin-pdf-viewer.js';
 import type { PDFPageProxy } from 'pdfjs-dist';
+import { isSafari } from '@vaadin/component-base/src/browser-utils.js';
 import { acquireWorker, loadPdfjs, releaseWorker } from '../src/pdfjs-loader.js';
 import type { PdfViewer } from '../vaadin-pdf-viewer.js';
 import { createPdf, type Fixture, fixtureUrl, loadAndRender, nextRenderIdle, type PdfPage } from './helpers.js';
@@ -218,6 +220,98 @@ describe('text layer', () => {
     });
   });
 
+  describe('selection', () => {
+    let lines: HTMLElement[];
+
+    /** Returns the selected text, also in browsers that only return ranges in shadow roots from `getComposedRanges()`. */
+    function getSelectedText() {
+      const root = viewer.shadowRoot as ShadowRoot & { getSelection?(): Selection };
+      if (root.getSelection) {
+        return root.getSelection().toString();
+      }
+      const selection = document.getSelection()!;
+      if (!selection.rangeCount || !selection.getComposedRanges) {
+        return selection.toString();
+      }
+      const [{ startContainer, startOffset, endContainer, endOffset }] = selection.getComposedRanges({
+        shadowRoots: [root],
+      });
+      const range = document.createRange();
+      range.setStart(startContainer, startOffset);
+      range.setEnd(endContainer, endOffset);
+      return range.toString();
+    }
+
+    function nextSelectionChange() {
+      return new Promise((resolve) => {
+        document.addEventListener('selectionchange', resolve, { once: true });
+      });
+    }
+
+    /** Selects the start of the first line, and drags into the empty space to the right of the second line. */
+    async function dragOverEmptySpace() {
+      const [first, second] = lines.map((line) => line.getBoundingClientRect());
+      const page = pages[0].getBoundingClientRect();
+      const y = Math.round(second.top + second.height / 2);
+      await sendMouse({
+        type: 'move',
+        position: [Math.round(first.left + 2), Math.round(first.top + first.height / 2)],
+      });
+      await sendMouse({ type: 'down' });
+      await sendMouse({ type: 'move', position: [Math.round(second.left + 20), y] });
+      await sendMouse({ type: 'move', position: [Math.round(page.right - 10), y] });
+      await nextFrame();
+    }
+
+    beforeEach(async () => {
+      viewer.style.height = '900px';
+      await load('multi-page.pdf');
+      lines = [...getTextLayer(1)!.querySelectorAll('span')].filter((span) =>
+        /^(The quick brown fox|liquor jugs)/u.test(span.textContent!),
+      );
+    });
+
+    afterEach(async () => {
+      await resetMouse();
+      document.getSelection()!.removeAllRanges();
+    });
+
+    it('should not select the text after the pointer when dragging over empty space', async () => {
+      await dragOverEmptySpace();
+      expect(getSelectedText()).to.include('The quick brown fox');
+      expect(getSelectedText()).to.not.include('judge my vow');
+      await sendMouse({ type: 'up' });
+    });
+
+    // Firefox and Chromium 148 and later keep the selection in place without moving the element.
+    (isSafari ? it : it.skip)('should move the end of the content after the text under the pointer', async () => {
+      await dragOverEmptySpace();
+      const end = getTextLayer(1)!.querySelector('.end-of-content')!;
+      expect(end.previousElementSibling).to.equal(lines[1]);
+      await sendMouse({ type: 'up' });
+    });
+
+    it('should put the end of the content back after the text when the pointer is released', async () => {
+      await dragOverEmptySpace();
+      await sendMouse({ type: 'up' });
+      const textLayer = getTextLayer(1)!;
+      expect(textLayer.lastElementChild!.classList.contains('end-of-content')).to.be.true;
+      expect(textLayer.classList.contains('selecting')).to.be.false;
+    });
+
+    it('should mark the text layer as selecting while its text is selected', async () => {
+      const text = lines[0].firstChild!;
+      let change = nextSelectionChange();
+      document.getSelection()!.setBaseAndExtent(text, 0, text, 9);
+      await change;
+      expect(getTextLayer(1)!.classList.contains('selecting')).to.be.true;
+      change = nextSelectionChange();
+      document.getSelection()!.removeAllRanges();
+      await change;
+      expect(getTextLayer(1)!.classList.contains('selecting')).to.be.false;
+    });
+  });
+
   describe('released pages', () => {
     beforeEach(() => {
       viewer.style.height = '300px';
@@ -240,10 +334,11 @@ describe('text layer', () => {
     expect(stub).to.be.not.called;
   });
 
-  it('should use the pdf.js version that the text layer styles are ported from', async () => {
-    const path = '../src/styles/vaadin-pdf-viewer-page-base-styles.js';
-    const source = await (await fetch(new URL(path, import.meta.url))).text();
-    const { version } = await loadPdfjs();
-    expect(source.match(/pdf\.js (\d+\.\d+\.\d+)/u)![1]).to.equal(version);
+  ['styles/vaadin-pdf-viewer-text-layer-base-styles.js', 'pdf-viewer-text-selection-controller.js'].forEach((path) => {
+    it(`should use the pdf.js version that ${path} is ported from`, async () => {
+      const source = await (await fetch(new URL(`../src/${path}`, import.meta.url))).text();
+      const { version } = await loadPdfjs();
+      expect(source.match(/pdf\.js (\d+\.\d+\.\d+)/u)![1]).to.equal(version);
+    });
   });
 });

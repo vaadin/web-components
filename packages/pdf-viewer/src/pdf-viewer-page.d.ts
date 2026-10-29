@@ -35,6 +35,7 @@ export declare class PdfViewerPage {
   renderFailed: boolean;
   textLayer: TextLayer | null;
   textLayerElement: HTMLElement | null;
+  endOfContentElement: HTMLElement | null;
   renderedScale: number;
   renderedPixelRatio: number;
 
