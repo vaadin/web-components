@@ -53,7 +53,8 @@ how to generate them.
 
 - `PdfViewerDocumentMixin` loads `src`. It calls `_documentLoaded(details)` with the title, language and first
   page, and `_documentUnloaded()`.
-  Methods that need the document, e.g. `find()`, wait while `_documentPending` is true.
+  Methods that need the document, e.g. `find()`, await `_whenDocumentReady()`. It resolves once no document
+  is loading, with the document or null.
 - `PdfViewerRenderMixin` owns the page views, their sizes, the render queue and the device pixel ratio. It calls `_pageSizesChanged()` at most once per frame when pages get their own size.
 - `PdfViewerScrollMixin` owns the scale `_scale`, the anchor, the visible pages and `page`. It asks for
   rendering only with `_renderVisible()` and `_cancelRender()`. It gets the scale from `_getScaleForSize()`, which

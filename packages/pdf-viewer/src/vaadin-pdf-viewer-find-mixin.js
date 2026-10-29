@@ -40,23 +40,6 @@ export const PdfViewerFindMixin = (superClass) =>
     #scrollToMatchPending = false;
 
     /**
-     * A `find()` or `highlight()` call that waits for the document to load.
-     * @type {(() => void) | null}
-     */
-    #pendingCall = null;
-
-    /** @protected */
-    updated(props) {
-      super.updated(props);
-
-      if (this.#pendingCall && !this._documentPending) {
-        const call = this.#pendingCall;
-        this.#pendingCall = null;
-        call();
-      }
-    }
-
-    /**
      * Searches the document for the given text and scrolls to the first
      * match. The matches are highlighted on the pages. Fires `find-result`
      * with the number of matches. While the document loads, it runs once
@@ -66,9 +49,11 @@ export const PdfViewerFindMixin = (superClass) =>
      * @param {string} text
      */
     find(text) {
-      if (this.isConnected) {
-        this.#runAfterLoad(() => this.#find(text));
-      }
+      this._whenDocumentReady().then((pdfDocument) => {
+        if (pdfDocument) {
+          this.#search(String(text ?? ''));
+        }
+      });
     }
 
     /**
@@ -81,9 +66,11 @@ export const PdfViewerFindMixin = (superClass) =>
      * @param {string} text
      */
     highlight(page, text) {
-      if (this.isConnected) {
-        this.#runAfterLoad(() => this.#highlight(page, text));
-      }
+      this._whenDocumentReady().then((pdfDocument) => {
+        if (pdfDocument) {
+          this.#highlight(page, text);
+        }
+      });
     }
 
     /**
@@ -109,31 +96,8 @@ export const PdfViewerFindMixin = (superClass) =>
       this.#resetSearch();
     }
 
-    /**
-     * Runs a method call now, or once the document has loaded while it loads.
-     * @private
-     */
-    #runAfterLoad(callback) {
-      if (this._documentPending) {
-        this.#pendingCall = callback;
-      } else {
-        callback();
-      }
-    }
-
-    /** @private */
-    #find(text) {
-      if (!this._pdfDocument || !this.isConnected) {
-        return;
-      }
-      this.#search(String(text ?? ''));
-    }
-
     /** @private */
     #highlight(page, text) {
-      if (!this._pdfDocument || !this.isConnected) {
-        return;
-      }
       if (Number.isInteger(page) && page >= 1 && page <= this.pageCount) {
         this.#search(String(text ?? ''), page);
       } else {
