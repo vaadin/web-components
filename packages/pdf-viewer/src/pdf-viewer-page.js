@@ -8,6 +8,7 @@
  * See https://vaadin.com/commercial-license-and-service-terms for the full
  * license.
  */
+import { loadPdfjs } from './pdfjs-loader.js';
 
 /**
  * The maximum number of pixels of a page canvas. Larger canvases use too much
@@ -17,7 +18,8 @@ export const MAX_CANVAS_PIXELS = 2 ** 24;
 
 /**
  * Manages the DOM of a single page of the document: a placeholder sized to
- * the page, and the canvas the page is rendered to once it is needed.
+ * the page, and the canvas and the text layer the page is rendered to once
+ * it is needed.
  */
 export class PdfViewerPage {
   /**
@@ -49,6 +51,15 @@ export class PdfViewerPage {
 
     /** Set when rendering failed, to not try again at the same scale. */
     this.renderFailed = false;
+
+    /** @type {import('pdfjs-dist').TextLayer | null} */
+    this.textLayer = null;
+
+    /** @type {HTMLElement | null} */
+    this.textLayerElement = null;
+
+    /** @type {HTMLElement | null} */
+    this.endOfContentElement = null;
 
     /** The scale and device pixel ratio of the current canvas, to know when it is outdated. */
     this.renderedScale = 0;
@@ -84,6 +95,7 @@ export class PdfViewerPage {
   setPdfPage(pdfPage) {
     this.pdfPage = pdfPage;
     const { width, height } = pdfPage.getViewport({ scale: 1 });
+    this.#updateTextScale();
     if (width === this.unscaledWidth && height === this.unscaledHeight) {
       return false;
     }
@@ -106,6 +118,16 @@ export class PdfViewerPage {
     this.renderFailed = false;
     this.element.style.width = `${this.width}px`;
     this.element.style.height = `${this.height}px`;
+    this.#updateTextScale();
+  }
+
+  /**
+   * Sizes the text layer with the page, also before the page renders again
+   * at the new scale. The text layer of pdf.js reads this property.
+   * @private
+   */
+  #updateTextScale() {
+    this.element.style.setProperty('--total-scale-factor', String(this.scale * (this.pdfPage?.userUnit ?? 1)));
   }
 
   /**
@@ -161,6 +183,60 @@ export class PdfViewerPage {
     this.renderedPixelRatio = pixelRatio;
   }
 
+  /**
+   * Renders the text layer: transparent text on top of the canvas, which makes
+   * the text selectable and readable by assistive technology. When the layer
+   * exists, it is only resized to the current scale.
+   *
+   * @return {Promise<void>}
+   */
+  async renderTextLayer() {
+    if (this.textLayer) {
+      this.textLayer.update({ viewport: this.pdfPage.getViewport({ scale: this.scale }) });
+      return;
+    }
+
+    const canvas = this.canvas;
+    const { TextLayer } = await loadPdfjs();
+    // The page may have been released or rendered again meanwhile.
+    if (!canvas || this.canvas !== canvas || this.textLayer) {
+      return;
+    }
+
+    const container = document.createElement('div');
+    container.className = 'text-layer';
+    this.element.append(container);
+
+    // As in the viewer of pdf.js, the text layer reads the stream itself. `getTextContent()`
+    // iterates the stream with `for await`, which Safari 26 and earlier do not support.
+    const textLayer = new TextLayer({
+      textContentSource: this.pdfPage.streamTextContent({ includeMarkedContent: true }),
+      container,
+      viewport: this.pdfPage.getViewport({ scale: this.scale }),
+    });
+    this.textLayer = textLayer;
+    this.textLayerElement = container;
+    try {
+      await textLayer.render();
+    } catch (error) {
+      // Without its text, the layer is removed, so that the page tries again when it renders again.
+      if (this.textLayer === textLayer) {
+        container.remove();
+        this.textLayer = null;
+        this.textLayerElement = null;
+      }
+      throw error;
+    }
+
+    if (this.textLayer === textLayer) {
+      // Extends the selection to the end of the page while selecting, see the styles.
+      const endOfContent = document.createElement('div');
+      endOfContent.className = 'end-of-content';
+      container.append(endOfContent);
+      this.endOfContentElement = endOfContent;
+    }
+  }
+
   /** Cancels a pending render. */
   cancel() {
     if (this.renderTask) {
@@ -169,9 +245,14 @@ export class PdfViewerPage {
     }
   }
 
-  /** Cancels a pending render and frees the canvas memory. */
+  /** Cancels a pending render and frees the canvas memory and the text layer. */
   release() {
     this.cancel();
+    this.textLayer?.cancel();
+    this.textLayer = null;
+    this.textLayerElement?.remove();
+    this.textLayerElement = null;
+    this.endOfContentElement = null;
     if (this.canvas) {
       this.#freeCanvas(this.canvas);
       this.canvas = null;

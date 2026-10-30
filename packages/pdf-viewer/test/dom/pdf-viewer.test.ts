@@ -64,4 +64,16 @@ describe('vaadin-pdf-viewer', () => {
       await expect(viewer).shadowDom.to.equalSnapshot({ ignoreAttributes: ['style', 'width', 'height'] });
     });
   });
+
+  describe('page', () => {
+    // Sizes and positions depend on the browser and the device pixel ratio
+    const ignoreAttributes = ['style', 'width', 'height'];
+
+    it('tagged', async () => {
+      viewer.src = fixtureUrl('tagged.pdf');
+      await nextRenderIdle(viewer);
+      const page = viewer.shadowRoot!.querySelector('[part="page"]')!;
+      await expect(page).dom.to.equalSnapshot({ ignoreAttributes });
+    });
+  });
 });

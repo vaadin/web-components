@@ -25,6 +25,10 @@ export const pdfViewerPageStyles = css`
     flex: none;
     /* pdf.js draws text wrong in an RTL canvas */
     direction: ltr;
+    /* pdf.js rounds the size of page layers down to these steps.
+       1px keeps the text within a pixel of the canvas, as in pdf.js. */
+    --scale-round-x: 1px;
+    --scale-round-y: 1px;
     background: var(--vaadin-pdf-viewer-page-background, #fff);
     box-shadow: var(--vaadin-pdf-viewer-page-shadow, 0 0 0 1px var(--vaadin-border-color-secondary));
   }

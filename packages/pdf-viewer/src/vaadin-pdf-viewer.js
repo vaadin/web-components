@@ -18,6 +18,7 @@ import { PolylitMixin } from '@vaadin/component-base/src/polylit-mixin.js';
 import { LumoInjectionMixin } from '@vaadin/vaadin-themable-mixin/lumo-injection-mixin.js';
 import { pdfViewerStyles } from './styles/vaadin-pdf-viewer-base-styles.js';
 import { pdfViewerPageStyles } from './styles/vaadin-pdf-viewer-page-base-styles.js';
+import { pdfViewerTextLayerStyles } from './styles/vaadin-pdf-viewer-text-layer-base-styles.js';
 import { pdfViewerToolbarStyles } from './styles/vaadin-pdf-viewer-toolbar-base-styles.js';
 import { PdfViewerMixin } from './vaadin-pdf-viewer-mixin.js';
 
@@ -120,7 +121,7 @@ class PdfViewer extends PdfViewerMixin(
   }
 
   static get styles() {
-    return [pdfViewerStyles, pdfViewerToolbarStyles, pdfViewerPageStyles];
+    return [pdfViewerStyles, pdfViewerToolbarStyles, pdfViewerPageStyles, pdfViewerTextLayerStyles];
   }
 
   static get defaultI18n() {
@@ -152,7 +153,7 @@ class PdfViewer extends PdfViewerMixin(
    *   pageWidth: 'Page width',
    *   // Zoom select item that fits the whole page into the viewer.
    *   pageFit: 'Page fit',
-   *   // Title of the header for a document without a file name or title.
+   *   // Title of the header for a document without a file name.
    *   document: 'PDF document'
    * }
    * ```

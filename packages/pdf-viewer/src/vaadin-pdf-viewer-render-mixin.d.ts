@@ -9,6 +9,7 @@
  * license.
  */
 import type { Constructor } from '@open-wc/dedupe-mixin';
+import type { PdfViewerPage } from './pdf-viewer-page.js';
 
 /**
  * A mixin that creates the page views of the document, loads their sizes and
@@ -24,6 +25,13 @@ export declare class PdfViewerRenderMixinClass {
    * differs from the estimate.
    */
   protected _pageSizesChanged(): void;
+
+  /**
+   * Renders the layers over the canvas of a page that has just rendered,
+   * e.g. the text layer. Overrides await `super` first, so that the layers
+   * render in the order of the mixins.
+   */
+  protected _renderPageLayers(page: PdfViewerPage): Promise<void>;
 
   /**
    * Renders the visible pages, the most visible first, then the pages next

@@ -123,6 +123,18 @@ export const PdfViewerRenderMixin = (superClass) =>
     }
 
     /**
+     * Renders the layers over the canvas of a page that has just rendered,
+     * e.g. the text layer. Overrides await `super` first, so that the layers
+     * render in the order of the mixins.
+     * @param {PdfViewerPage} _page
+     * @return {Promise<void>}
+     * @protected
+     */
+    async _renderPageLayers(_page) {
+      // To be implemented.
+    }
+
+    /**
      * Renders the visible pages, the most visible first, then the pages next
      * to them, and frees the canvases of pages far from the view. Stops
      * rendering when no page is visible.
@@ -212,6 +224,11 @@ export const PdfViewerRenderMixin = (superClass) =>
           this.#setPdfPage(page, pdfPage);
         }
         await page.render(pixelRatio);
+        // The page may have been released or rendered again meanwhile.
+        if (this._pdfDocument !== pdfDocument || !page.isRendered(pixelRatio)) {
+          return;
+        }
+        await this._renderPageLayers(page);
       } catch (error) {
         const isCancelled = error?.name === 'RenderingCancelledException' || error?.name === 'AbortException';
         if (this._pdfDocument === pdfDocument && !isCancelled) {

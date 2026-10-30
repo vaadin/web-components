@@ -1,5 +1,7 @@
 import { nextFrame, oneEvent } from '@vaadin/testing-helpers';
 import sinon from 'sinon';
+import type { PDFPageProxy } from 'pdfjs-dist';
+import { acquireWorker, loadPdfjs, releaseWorker } from '../src/pdfjs-loader.js';
 import type { PdfViewer } from '../vaadin-pdf-viewer.js';
 
 export type Fixture =
@@ -110,27 +112,51 @@ export async function scrollSettled(element: HTMLElement): Promise<void> {
 }
 
 /**
+ * Returns the prototype of the pages of every pdf.js document, including the
+ * documents of the viewer, through a page of a document loaded for that.
+ */
+export async function getPdfPagePrototype(): Promise<PDFPageProxy> {
+  const pdfjs = await loadPdfjs();
+  const handle = acquireWorker(pdfjs);
+  const task = pdfjs.getDocument({ url: fixtureUrl('multi-page.pdf'), worker: handle.worker! });
+  try {
+    const pdfPage = await (await task.promise).getPage(1);
+    return Object.getPrototypeOf(pdfPage);
+  } finally {
+    await task.destroy();
+    releaseWorker(handle);
+  }
+}
+
+/**
  * A page of a PDF created with `createPdf()`.
  */
 export type PdfPage = {
   /** The content stream of the page. Font `/F1` is Helvetica. */
   content: string;
+  /** The rotation of the page in degrees. */
+  rotate?: number;
   /** The size of the page in PDF units, A4 by default. */
   mediaBox?: [number, number, number, number];
 };
 
 /**
  * Creates a PDF with the given pages in memory, and returns an object URL for it.
+ * `lang` is the language of the document.
  */
-export function createPdf(pages: PdfPage[]): string {
+export function createPdf(pages: PdfPage[], { lang = '' }: { lang?: string } = {}): string {
   // Object 1 is the catalog, 2 the page tree, 3 the font, then each page and its content.
-  const objects = ['<< /Type /Catalog /Pages 2 0 R >>', '', '<< /Type /Font /Subtype /Type1 /BaseFont /Helvetica >>'];
+  const objects = [
+    `<< /Type /Catalog /Pages 2 0 R${lang ? ` /Lang (${lang})` : ''} >>`,
+    '',
+    '<< /Type /Font /Subtype /Type1 /BaseFont /Helvetica >>',
+  ];
   const pageIds: number[] = [];
-  pages.forEach(({ content, mediaBox = [0, 0, 595, 842] }) => {
+  pages.forEach(({ content, rotate = 0, mediaBox = [0, 0, 595, 842] }) => {
     const id = objects.length + 1;
     pageIds.push(id);
     objects.push(
-      `<< /Type /Page /Parent 2 0 R /MediaBox [${mediaBox.join(' ')}] /Resources << /Font << /F1 3 0 R >> >> /Contents ${id + 1} 0 R >>`,
+      `<< /Type /Page /Parent 2 0 R /MediaBox [${mediaBox.join(' ')}] /Rotate ${rotate} /Resources << /Font << /F1 3 0 R >> >> /Contents ${id + 1} 0 R >>`,
       `<< /Length ${content.length} >>\nstream\n${content}\nendstream`,
     );
   });

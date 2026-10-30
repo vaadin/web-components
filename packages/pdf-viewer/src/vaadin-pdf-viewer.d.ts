@@ -170,7 +170,7 @@ declare class PdfViewer extends PdfViewerMixin(
    *   pageWidth: 'Page width',
    *   // Zoom select item that fits the whole page into the viewer.
    *   pageFit: 'Page fit',
-   *   // Title of the header for a document without a file name or title.
+   *   // Title of the header for a document without a file name.
    *   document: 'PDF document'
    * }
    * ```
