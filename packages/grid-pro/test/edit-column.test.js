@@ -666,6 +666,18 @@ describe('edit column', () => {
         expect(hasEditablePart(0, cells.length - 1)).to.be.true;
       });
 
+      it('should not run renderers of columns that stay visible when scrolling', async () => {
+        const column = grid.querySelector('vaadin-grid-pro-edit-column');
+        column.frozen = true;
+        column.renderer = sinon.spy();
+        flushGrid(grid);
+        column.renderer.resetHistory();
+
+        await scrollHorizontally(400);
+
+        expect(column.renderer.called).to.be.false;
+      });
+
       // Focus button mode that is active on MacOS causes issues with Tab key navigation in Firefox when run with Playwright
       (isFirefox && isMac ? it.skip : it)('should navigate through editable cells with Tab', async () => {
         let cell = getCellByColumnPath('col1');
