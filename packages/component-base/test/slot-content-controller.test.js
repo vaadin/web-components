@@ -646,4 +646,60 @@ describe('SlotContentController', () => {
       expect(ignored.isConnected).to.be.true;
     });
   });
+
+  describe('create', () => {
+    let hooks;
+
+    beforeEach(() => {
+      element = fixtureSync(`<${tag}></${tag}>`);
+      hooks = {
+        createDefaultNode: sinon.stub().callsFake(() => document.createElement('div')),
+        _initNode: sinon.spy(),
+        _updateNode: sinon.spy(),
+        _teardownNode: sinon.spy(),
+      };
+      controller = SlotContentController.create(element, 'foo', { idPrefix: 'foo', ...hooks });
+      element.addController(controller);
+      defaultNode = controller.node;
+    });
+
+    it('should create a SlotContentController instance', () => {
+      expect(controller).to.be.instanceOf(SlotContentController);
+    });
+
+    it('should pass the config to the controller', () => {
+      expect(defaultNode.id).to.equal(controller.defaultId);
+    });
+
+    it('should call the hooks with the controller as this', () => {
+      expect(hooks.createDefaultNode).to.be.calledOnce;
+      expect(hooks.createDefaultNode).to.be.calledOn(controller);
+      expect(hooks._initNode).to.be.calledOnceWith(defaultNode);
+      expect(hooks._initNode).to.be.calledOn(controller);
+      expect(hooks._updateNode).to.be.calledOnceWith(defaultNode);
+    });
+
+    it('should call the teardown hook when the node stops being content', async () => {
+      addCustomNode();
+      await nextFrame();
+      expect(hooks._teardownNode).to.be.calledOnceWith(defaultNode);
+    });
+
+    it('should not change the prototype of the class it is called on', () => {
+      expect(SlotContentController.prototype._initNode).to.not.equal(hooks._initNode);
+    });
+
+    it('should create an instance of the class it is called on', () => {
+      class SubController extends SlotContentController {}
+      expect(SubController.create(element, 'foo')).to.be.instanceOf(SubController);
+    });
+
+    it('should warn about an unknown hook', () => {
+      const stub = sinon.stub(console, 'warn');
+      SlotContentController.create(element, 'foo', { initNode: () => {} });
+      stub.restore();
+      expect(stub).to.be.calledOnce;
+      expect(stub.firstCall.args[0]).to.include('initNode');
+    });
+  });
 });

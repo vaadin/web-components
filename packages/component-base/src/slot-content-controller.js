@@ -5,6 +5,9 @@
  */
 import { hasNodeContent, isEmptyTextNode } from './dom-utils.js';
 import { generateUniqueId } from './unique-id-utils.js';
+import { issueWarning } from './warnings.js';
+
+const HOOKS = ['createDefaultNode', 'shouldRenderDefaultNode', '_initNode', '_updateNode', '_teardownNode'];
 
 /**
  * A controller that manages the content of a slot: the custom nodes slotted
@@ -26,6 +29,30 @@ export class SlotContentController extends EventTarget {
    */
   static generateId(host, prefix) {
     return `${prefix}-${host.localName}-${generateUniqueId()}`;
+  }
+
+  /**
+   * Create a controller with the given hooks without declaring a subclass.
+   * The hooks are put on the prototype of a subclass created on the fly,
+   * so regular functions, unlike arrow functions, get the controller as `this`.
+   *
+   * @param {HTMLElement} host
+   * @param {string} slotName
+   * @param {Object} options the constructor config and the hooks to override
+   * @return {SlotContentController}
+   */
+  static create(host, slotName, { multiple, idPrefix, observeContent, ...hooks } = {}) {
+    const Controller = class extends this {};
+
+    Object.entries(hooks).forEach(([name, hook]) => {
+      if (HOOKS.includes(name)) {
+        Controller.prototype[name] = hook;
+      } else {
+        issueWarning(`Ignored unknown SlotContentController hook "${name}".`);
+      }
+    });
+
+    return new Controller(host, slotName, { multiple, idPrefix, observeContent });
   }
 
   /**
