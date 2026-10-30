@@ -5,6 +5,7 @@ import sinon from 'sinon';
 import './grid-test-styles.js';
 import '../all-imports.js';
 import {
+  dragAndDropOver,
   fire,
   flushGrid,
   getBodyCellContent,
@@ -1350,6 +1351,29 @@ describe('select row accessible name', () => {
     it('should use the row header cell text for the placeholder', () => {
       expect(getBodyCheckbox(0).accessibleName).to.equal('Select Row John');
       expect(getBodyCheckbox(1).accessibleName).to.equal('Select Row Jane');
+    });
+  });
+
+  describe('multiple row headers reordered', () => {
+    beforeEach(async () => {
+      grid = fixtureSync(`
+        <vaadin-grid column-reordering-allowed style="width: 300px; height: 300px;">
+          <vaadin-grid-selection-column></vaadin-grid-selection-column>
+          <vaadin-grid-column path="firstName" row-header></vaadin-grid-column>
+          <vaadin-grid-column path="lastName" row-header></vaadin-grid-column>
+        </vaadin-grid>
+      `);
+      grid.items = [{ firstName: 'John', lastName: 'Doe' }];
+      flushGrid(grid);
+      await nextRender();
+    });
+
+    it('should use the text of the first row header in visual order on select', async () => {
+      dragAndDropOver(getHeaderCell(grid, 0, 2), getHeaderCell(grid, 0, 1));
+      grid.selectItem(grid.items[0]);
+      await nextRender();
+
+      expect(getBodyCheckbox(0).accessibleName).to.equal('Select Row Doe');
     });
   });
 
