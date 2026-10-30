@@ -5,7 +5,7 @@
  */
 import type { ReactiveController } from 'lit';
 
-export interface SlotContentControllerConfig {
+export interface SlottedContentControllerConfig {
   /**
    * Keep all the custom nodes as content, instead of a single one.
    */
@@ -24,15 +24,15 @@ export interface SlotContentControllerConfig {
   observeContent?: boolean;
 }
 
-export type SlotContentChangedEvent = CustomEvent<{
+export type SlottedContentChangedEvent = CustomEvent<{
   node: Node | null;
   nodes: Node[];
   hasContent: boolean;
   isDefault: boolean;
 }>;
 
-export interface SlotContentControllerEventMap {
-  'slot-content-changed': SlotContentChangedEvent;
+export interface SlottedContentControllerEventMap {
+  'slot-content-changed': SlottedContentChangedEvent;
 }
 
 /**
@@ -45,7 +45,7 @@ export interface SlotContentControllerEventMap {
  * In single mode, a newly slotted custom node replaces the current one.
  * With the `multiple` option, all the custom nodes are kept as content.
  */
-export class SlotContentController extends EventTarget implements ReactiveController {
+export class SlottedContentController extends EventTarget implements ReactiveController {
   /**
    * Generate an ID unique per host instance.
    */
@@ -56,15 +56,15 @@ export class SlotContentController extends EventTarget implements ReactiveContro
    * runs the initializer once for every node that becomes content, default or
    * custom. For the cases that do not need a subclass.
    */
-  static create<T extends SlotContentController>(
+  static create<T extends SlottedContentController>(
     this: new (...args: any[]) => T,
     host: HTMLElement,
     slotName: string,
     tagName: string | null,
-    config?: SlotContentControllerConfig & { initializer?(node: Node, host: HTMLElement): void },
+    config?: SlottedContentControllerConfig & { initializer?(node: Node, host: HTMLElement): void },
   ): T;
 
-  constructor(host: HTMLElement, slotName: string, config?: SlotContentControllerConfig);
+  constructor(host: HTMLElement, slotName: string, config?: SlottedContentControllerConfig);
 
   /**
    * The controller host element.
@@ -141,9 +141,9 @@ export class SlotContentController extends EventTarget implements ReactiveContro
    */
   protected _teardownNode(node: Node): void;
 
-  addEventListener<K extends keyof SlotContentControllerEventMap>(
+  addEventListener<K extends keyof SlottedContentControllerEventMap>(
     type: K,
-    listener: (this: SlotContentController, ev: SlotContentControllerEventMap[K]) => void,
+    listener: (this: SlottedContentController, ev: SlottedContentControllerEventMap[K]) => void,
     options?: AddEventListenerOptions | boolean,
   ): void;
 
@@ -153,9 +153,9 @@ export class SlotContentController extends EventTarget implements ReactiveContro
     options?: AddEventListenerOptions | boolean,
   ): void;
 
-  removeEventListener<K extends keyof SlotContentControllerEventMap>(
+  removeEventListener<K extends keyof SlottedContentControllerEventMap>(
     type: K,
-    listener: (this: SlotContentController, ev: SlotContentControllerEventMap[K]) => void,
+    listener: (this: SlottedContentController, ev: SlottedContentControllerEventMap[K]) => void,
     options?: EventListenerOptions | boolean,
   ): void;
 

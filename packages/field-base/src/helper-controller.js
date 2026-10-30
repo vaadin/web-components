@@ -3,12 +3,12 @@
  * Copyright (c) 2021 - 2026 Vaadin Ltd.
  * This program is available under Apache License Version 2.0, available at https://vaadin.com/license/
  */
-import { SlotContentController } from '@vaadin/component-base/src/slot-content-controller.js';
+import { SlottedContentController } from '@vaadin/component-base/src/slotted-content-controller.js';
 
 /**
  * A controller that manages the helper node content.
  */
-export class HelperController extends SlotContentController {
+export class HelperController extends SlottedContentController {
   constructor(host) {
     super(host, 'helper', { idPrefix: 'helper', observeContent: true });
   }
@@ -24,7 +24,7 @@ export class HelperController extends SlotContentController {
   }
 
   /**
-   * Override method from `SlotContentController` to create the default helper element.
+   * Override method from `SlottedContentController` to create the default helper element.
    *
    * @return {HTMLDivElement}
    * @protected
@@ -35,7 +35,7 @@ export class HelperController extends SlotContentController {
   }
 
   /**
-   * Override method from `SlotContentController` to create the default helper
+   * Override method from `SlottedContentController` to create the default helper
    * element lazily, once there is helper text, and to keep it from then on.
    *
    * @return {boolean}
@@ -48,7 +48,7 @@ export class HelperController extends SlotContentController {
   }
 
   /**
-   * Override method from `SlotContentController` to show the helper text in the default helper element.
+   * Override method from `SlottedContentController` to show the helper text in the default helper element.
    *
    * @param {Node} node
    * @protected

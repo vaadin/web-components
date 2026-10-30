@@ -1,11 +1,11 @@
-import type { SlotContentChangedEvent } from '../../../src/slot-content-controller.js';
-import { SlotContentController } from '../../../src/slot-content-controller.js';
+import type { SlottedContentChangedEvent } from '../../../src/slotted-content-controller.js';
+import { SlottedContentController } from '../../../src/slotted-content-controller.js';
 
 const assertType = <TExpected>(actual: TExpected) => actual;
 
 const host = document.createElement('div');
 
-class TestController extends SlotContentController {}
+class TestController extends SlottedContentController {}
 
 const controller = new TestController(host, 'foo', { multiple: true, idPrefix: 'foo', observeContent: true });
 
@@ -17,10 +17,10 @@ assertType<Node | null>(controller.defaultNode);
 assertType<string | undefined>(controller.defaultId);
 assertType<boolean>(controller.hasContent);
 controller.update();
-assertType<string>(SlotContentController.generateId(host, 'foo'));
+assertType<string>(SlottedContentController.generateId(host, 'foo'));
 
 controller.addEventListener('slot-content-changed', (event) => {
-  assertType<SlotContentChangedEvent>(event);
+  assertType<SlottedContentChangedEvent>(event);
   assertType<Node | null>(event.detail.node);
   assertType<Node[]>(event.detail.nodes);
   assertType<boolean>(event.detail.hasContent);
@@ -30,8 +30,8 @@ controller.addEventListener('slot-content-changed', (event) => {
 // `create()` returns an instance of the class it is called on
 assertType<TestController>(TestController.create(host, 'foo', 'div'));
 
-assertType<SlotContentController>(
-  SlotContentController.create(host, 'foo', null, {
+assertType<SlottedContentController>(
+  SlottedContentController.create(host, 'foo', null, {
     multiple: true,
     idPrefix: 'foo',
     observeContent: true,

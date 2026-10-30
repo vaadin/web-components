@@ -4,12 +4,12 @@
  * This program is available under Apache License Version 2.0, available at https://vaadin.com/license/
  */
 import { announce } from '@vaadin/a11y-base/src/announce.js';
-import { SlotContentController } from '@vaadin/component-base/src/slot-content-controller.js';
+import { SlottedContentController } from '@vaadin/component-base/src/slotted-content-controller.js';
 
 /**
  * A controller that manages the error message node content.
  */
-export class ErrorController extends SlotContentController {
+export class ErrorController extends SlottedContentController {
   constructor(host) {
     super(host, 'error-message', { idPrefix: 'error-message' });
   }
@@ -35,7 +35,7 @@ export class ErrorController extends SlotContentController {
   }
 
   /**
-   * Override method from `SlotContentController` to create the default error message element.
+   * Override method from `SlottedContentController` to create the default error message element.
    *
    * @return {HTMLDivElement}
    * @protected
@@ -46,7 +46,7 @@ export class ErrorController extends SlotContentController {
   }
 
   /**
-   * Override method from `SlotContentController` to use the content
+   * Override method from `SlottedContentController` to use the content
    * of a custom error message element as the error message.
    *
    * @param {Node} node
@@ -60,7 +60,7 @@ export class ErrorController extends SlotContentController {
   }
 
   /**
-   * Override method from `SlotContentController` to show the error message
+   * Override method from `SlottedContentController` to show the error message
    * while the host is invalid. Unlike other controllers, this applies
    * to both the default and a custom error message element.
    *

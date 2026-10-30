@@ -16,7 +16,7 @@ import { generateUniqueId } from './unique-id-utils.js';
  * In single mode, a newly slotted custom node replaces the current one.
  * With the `multiple` option, all the custom nodes are kept as content.
  */
-export class SlotContentController extends EventTarget {
+export class SlottedContentController extends EventTarget {
   /**
    * Generate an ID unique per host instance.
    *
@@ -37,7 +37,7 @@ export class SlotContentController extends EventTarget {
    * @param {string} slotName
    * @param {string | null} tagName
    * @param {{ initializer?: (node: Node, host: HTMLElement) => void, multiple?: boolean, idPrefix?: string, observeContent?: boolean }} config
-   * @return {SlotContentController}
+   * @return {SlottedContentController}
    */
   static create(host, slotName, tagName, { initializer, ...config } = {}) {
     const Controller = class extends this {

@@ -3,12 +3,12 @@
  * Copyright (c) 2021 - 2026 Vaadin Ltd.
  * This program is available under Apache License Version 2.0, available at https://vaadin.com/license/
  */
-import { SlotContentController } from '@vaadin/component-base/src/slot-content-controller.js';
+import { SlottedContentController } from '@vaadin/component-base/src/slotted-content-controller.js';
 
 /**
  * A controller that manages the error message node content.
  */
-export class ErrorController extends SlotContentController {
+export class ErrorController extends SlottedContentController {
   constructor(host: HTMLElement);
 
   /**

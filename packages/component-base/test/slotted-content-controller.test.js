@@ -2,16 +2,16 @@ import { expect } from '@vaadin/chai-plugins';
 import { defineLit, fixtureSync, nextFrame } from '@vaadin/testing-helpers';
 import sinon from 'sinon';
 import { PolylitMixin } from '../src/polylit-mixin.js';
-import { SlotContentController } from '../src/slot-content-controller.js';
+import { SlottedContentController } from '../src/slotted-content-controller.js';
 
-describe('SlotContentController', () => {
+describe('SlottedContentController', () => {
   const tag = defineLit(
-    'slot-content-controller',
+    'slotted-content-controller',
     '<slot name="foo"></slot><slot></slot>',
     (Base) => class extends PolylitMixin(Base) {},
   );
 
-  class DefaultController extends SlotContentController {
+  class DefaultController extends SlottedContentController {
     createDefaultNode() {
       return document.createElement('div');
     }
@@ -59,7 +59,7 @@ describe('SlotContentController', () => {
   describe('no default content', () => {
     beforeEach(() => {
       element = fixtureSync(`<${tag}></${tag}>`);
-      controller = new SlotContentController(element, 'foo');
+      controller = new SlottedContentController(element, 'foo');
       element.addController(controller);
     });
 
@@ -657,7 +657,7 @@ describe('SlotContentController', () => {
 
     describe('tag name', () => {
       beforeEach(() => {
-        controller = SlotContentController.create(element, 'foo', 'div', { initializer, idPrefix: 'foo' });
+        controller = SlottedContentController.create(element, 'foo', 'div', { initializer, idPrefix: 'foo' });
         element.addController(controller);
         defaultNode = controller.node;
       });
@@ -690,7 +690,7 @@ describe('SlotContentController', () => {
 
     describe('no tag name', () => {
       beforeEach(() => {
-        controller = SlotContentController.create(element, 'foo', null, { initializer });
+        controller = SlottedContentController.create(element, 'foo', null, { initializer });
         element.addController(controller);
       });
 
@@ -709,7 +709,7 @@ describe('SlotContentController', () => {
     describe('subclass', () => {
       let hookSpy;
 
-      class SubController extends SlotContentController {
+      class SubController extends SlottedContentController {
         _initNode(node) {
           hookSpy(node);
         }

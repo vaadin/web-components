@@ -7,24 +7,24 @@ the source for full APIs — most files have JSDoc on every exported member.
 
 Core utilities used by every component.
 
-| Export                  | Source                           | Purpose                                                                                             |
-| ----------------------- | -------------------------------- | --------------------------------------------------------------------------------------------------- |
-| `ElementMixin`          | `src/element-mixin.js`           | Registers the component for telemetry; required for **public** components.                          |
-| `PolylitMixin`          | `src/polylit-mixin.js`           | Forces initial sync render; provides Polymer-style `ready()`, observers, computed properties.       |
-| `DirMixin`              | `src/dir-mixin.js`               | Mirrors `<html dir>` to the host; exposes `__isRTL` for RTL-specific styles.                        |
-| `ResizeMixin`           | `src/resize-mixin.js`            | ResizeObserver-driven `_onResize()` callback; supports parent-resize observation.                   |
-| `DelegateStateMixin`    | `src/delegate-state-mixin.js`    | Forwards properties and attributes from the host to a `stateTarget` (see below).                    |
-| `SlotStylesMixin`       | `src/slot-styles-mixin.js`       | Injects styles into the outer scope to reach slotted children when `::slotted()` isn't enough.      |
-| `I18nMixin`             | `src/i18n-mixin.js`              | Deep-merges the partial localization values set by the application over the component's defaults.   |
-| `defineCustomElement`   | `src/define.js`                  | Wraps `customElements.define`; logs a warning if the tag is already registered.                     |
-| `deepMerge`             | `src/object-utils.js`            | Recursive object merge; `deepMergePartials` merges sources that provide only some properties.       |
-| `SlotContentController` | `src/slot-content-controller.js` | Manages slot content: creates a default node when nothing is slotted; init/update/teardown hooks.   |
-| `SlotController`        | `src/slot-controller.js`         | Observes a named slot; can create a default node when empty.                                        |
-| `TooltipController`     | `src/tooltip-controller.js`      | Wires up a slotted `vaadin-tooltip`.                                                                |
-| `MediaQueryController`  | `src/media-query-controller.js`  | Reactive `window.matchMedia` callback.                                                              |
-| `OverflowController`    | `src/overflow-controller.js`     | Sets an `overflow` attribute on a scroll container.                                                 |
-| Virtualizer             | `src/virtualizer.js`             | List virtualization engine. Used by `grid`, `combo-box`, `virtual-list`.                            |
-| Gestures                | `src/gestures.js`                | Polymer-era cross-platform `down`/`up`/`tap`/`track` events. Used by `context-menu`, `ActiveMixin`. |
+| Export                     | Source                              | Purpose                                                                                             |
+| -------------------------- | ----------------------------------- | --------------------------------------------------------------------------------------------------- |
+| `ElementMixin`             | `src/element-mixin.js`              | Registers the component for telemetry; required for **public** components.                          |
+| `PolylitMixin`             | `src/polylit-mixin.js`              | Forces initial sync render; provides Polymer-style `ready()`, observers, computed properties.       |
+| `DirMixin`                 | `src/dir-mixin.js`                  | Mirrors `<html dir>` to the host; exposes `__isRTL` for RTL-specific styles.                        |
+| `ResizeMixin`              | `src/resize-mixin.js`               | ResizeObserver-driven `_onResize()` callback; supports parent-resize observation.                   |
+| `DelegateStateMixin`       | `src/delegate-state-mixin.js`       | Forwards properties and attributes from the host to a `stateTarget` (see below).                    |
+| `SlotStylesMixin`          | `src/slot-styles-mixin.js`          | Injects styles into the outer scope to reach slotted children when `::slotted()` isn't enough.      |
+| `I18nMixin`                | `src/i18n-mixin.js`                 | Deep-merges the partial localization values set by the application over the component's defaults.   |
+| `defineCustomElement`      | `src/define.js`                     | Wraps `customElements.define`; logs a warning if the tag is already registered.                     |
+| `deepMerge`                | `src/object-utils.js`               | Recursive object merge; `deepMergePartials` merges sources that provide only some properties.       |
+| `SlottedContentController` | `src/slotted-content-controller.js` | Manages slot content: creates a default node when nothing is slotted; init/update/teardown hooks.   |
+| `SlotController`           | `src/slot-controller.js`            | Observes a named slot; can create a default node when empty.                                        |
+| `TooltipController`        | `src/tooltip-controller.js`         | Wires up a slotted `vaadin-tooltip`.                                                                |
+| `MediaQueryController`     | `src/media-query-controller.js`     | Reactive `window.matchMedia` callback.                                                              |
+| `OverflowController`       | `src/overflow-controller.js`        | Sets an `overflow` attribute on a scroll container.                                                 |
+| Virtualizer                | `src/virtualizer.js`                | List virtualization engine. Used by `grid`, `combo-box`, `virtual-list`.                            |
+| Gestures                   | `src/gestures.js`                   | Polymer-era cross-platform `down`/`up`/`tap`/`track` events. Used by `context-menu`, `ActiveMixin`. |
 
 ## `@vaadin/a11y-base`
 

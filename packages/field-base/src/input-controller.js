@@ -3,12 +3,12 @@
  * Copyright (c) 2021 - 2026 Vaadin Ltd.
  * This program is available under Apache License Version 2.0, available at https://vaadin.com/license/
  */
-import { SlotContentController } from '@vaadin/component-base/src/slot-content-controller.js';
+import { SlottedContentController } from '@vaadin/component-base/src/slotted-content-controller.js';
 
 /**
  * A controller to create and initialize slotted `<input>` element.
  */
-export class InputController extends SlotContentController {
+export class InputController extends SlottedContentController {
   #callback;
 
   constructor(host, callback, options = {}) {
@@ -18,7 +18,7 @@ export class InputController extends SlotContentController {
   }
 
   /**
-   * Override method from `SlotContentController` to create the default input element.
+   * Override method from `SlottedContentController` to create the default input element.
    *
    * @return {HTMLInputElement}
    * @protected
@@ -29,7 +29,7 @@ export class InputController extends SlotContentController {
   }
 
   /**
-   * Override method from `SlotContentController` to apply the host value
+   * Override method from `SlottedContentController` to apply the host value
    * and type to the input element, and to pass it to the callback.
    *
    * @param {HTMLInputElement} node

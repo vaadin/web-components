@@ -3,12 +3,12 @@
  * Copyright (c) 2021 - 2026 Vaadin Ltd.
  * This program is available under Apache License Version 2.0, available at https://vaadin.com/license/
  */
-import { SlotContentController } from '@vaadin/component-base/src/slot-content-controller.js';
+import { SlottedContentController } from '@vaadin/component-base/src/slotted-content-controller.js';
 
 /**
  * A controller to manage the label element.
  */
-export class LabelController extends SlotContentController {
+export class LabelController extends SlottedContentController {
   constructor(host) {
     super(host, 'label', { idPrefix: 'label', observeContent: true });
   }
@@ -24,7 +24,7 @@ export class LabelController extends SlotContentController {
   }
 
   /**
-   * Override method from `SlotContentController` to create the default label element.
+   * Override method from `SlottedContentController` to create the default label element.
    *
    * @return {HTMLLabelElement}
    * @protected
@@ -35,7 +35,7 @@ export class LabelController extends SlotContentController {
   }
 
   /**
-   * Override method from `SlotContentController` to show the label text in the default label element.
+   * Override method from `SlottedContentController` to show the label text in the default label element.
    *
    * @param {Node} node
    * @protected
