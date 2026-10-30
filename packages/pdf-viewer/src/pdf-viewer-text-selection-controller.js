@@ -112,6 +112,15 @@ export class PdfViewerTextSelectionController {
   hostConnected() {
     this.#abortController = new AbortController();
     const { signal } = this.#abortController;
+    // While selecting, the end-of-content element covers the page, so that
+    // dragging over empty space does not lose the selection.
+    this.host.shadowRoot.addEventListener(
+      'mousedown',
+      (event) => {
+        event.target.closest?.('.text-layer')?.classList.add('selecting');
+      },
+      { signal },
+    );
     document.addEventListener(
       'pointerdown',
       () => {

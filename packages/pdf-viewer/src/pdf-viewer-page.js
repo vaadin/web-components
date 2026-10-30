@@ -205,12 +205,6 @@ export class PdfViewerPage {
 
     const container = document.createElement('div');
     container.className = 'text-layer';
-    // While selecting, the end-of-content element covers the page, so that
-    // dragging over empty space does not lose the selection. As in pdf.js,
-    // `PdfViewerTextSelectionController` removes the class.
-    container.addEventListener('mousedown', () => {
-      container.classList.add('selecting');
-    });
     this.element.append(container);
 
     // As in the viewer of pdf.js, the text layer reads the stream itself. `getTextContent()`
