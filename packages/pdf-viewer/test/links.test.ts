@@ -30,10 +30,9 @@ describe('links', () => {
   let url: string | undefined;
 
   // Courier at 20pt has 12pt wide characters, so character `i` starts at x = 50 + 12 * i:
-  // "Vaadin" is at x=110-182, "for" at 194-230, "documentation" at 242-398.
+  // "Vaadin" is at x=110-182 and "documentation" at 242-398.
   const sentence = 'BT /F2 20 Tf 50 700 Td (Read Vaadin for documentation today) Tj ET';
   const vaadinRect = [110, 695, 182, 725];
-  const forRect = [194, 695, 230, 725];
   const documentationRect = [242, 695, 398, 725];
 
   function getTextLayer(pageNumber: number) {
@@ -158,8 +157,16 @@ describe('links', () => {
   });
 
   describe('external links', () => {
-    it('should open http, https and mailto links in a new window without access to the viewer', async () => {
-      const urls = ['http://vaadin.com/', 'https://vaadin.com/', 'mailto:info@vaadin.com'];
+    it('should only create links with allowed protocols, which open in a new window without access to the viewer', async () => {
+      // pdf.js drops `javascript:` links itself, the viewer drops other protocols.
+      const urls = [
+        'http://vaadin.com/',
+        'https://vaadin.com/',
+        'mailto:info@vaadin.com',
+        'javascript:alert(1)',
+        'ftp://example.com/',
+        'tel:123456',
+      ];
       await loadPdf([
         {
           content: '',
@@ -167,33 +174,21 @@ describe('links', () => {
         },
       ]);
       const links = getLinks(1);
-      expect(links.map((link) => link.href)).to.deep.equal(urls);
+      expect(links.map((link) => link.href)).to.deep.equal(urls.slice(0, 3));
       links.forEach((link) => {
         expect(link.target).to.equal('_blank');
         expect(link.rel).to.equal('noopener noreferrer');
       });
     });
-
-    it('should only create links with allowed protocols', async () => {
-      await load('unsafe-links.pdf');
-      expect(getLinks(1).map((link) => link.href)).to.deep.equal(['https://vaadin.com/']);
-    });
   });
 
   describe('names', () => {
-    it('should use the text of the link as its accessible name', async () => {
+    it('should name links by their text, and tell that external links open in a new tab', async () => {
       await load('links.pdf');
-      expect(getInternalLink().getAttribute('aria-label')).to.equal('Internal link to page 2');
-    });
-
-    it('should tell that an external link opens in a new tab', async () => {
-      await load('links.pdf');
-      expect(getExternalLink().getAttribute('aria-label')).to.equal('External link to vaadin.com (opens in a new tab)');
-    });
-
-    it('should name a link by the word it covers in the middle of a text item', async () => {
-      await loadPdf([{ content: sentence, annotations: [uriLink(forRect)] }]);
-      expect(getLinkNames()).to.deep.equal(['for (opens in a new tab)']);
+      expect(getLinkNames()).to.deep.equal([
+        'Internal link to page 2',
+        'External link to vaadin.com (opens in a new tab)',
+      ]);
     });
 
     it('should name several links in one text item by their words', async () => {
@@ -253,18 +248,12 @@ describe('links', () => {
   });
 
   describe('destinations', () => {
-    it('should go to the destination of an internal link', async () => {
-      await load('links.pdf');
-      getInternalLink().click();
-      await nextRenderIdle(viewer);
-      expect(viewer.page).to.equal(2);
-    });
-
-    it('should not change the URL of the page when following an internal link', async () => {
+    it('should go to the destination of an internal link without changing the URL of the page', async () => {
       await load('links.pdf');
       const href = window.location.href;
       getInternalLink().click();
-      await nextFrame();
+      await nextRenderIdle(viewer);
+      expect(viewer.page).to.equal(2);
       expect(window.location.href).to.equal(href);
     });
 
