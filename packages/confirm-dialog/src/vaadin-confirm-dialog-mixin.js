@@ -5,6 +5,7 @@
  */
 import { SlotController } from '@vaadin/component-base/src/slot-controller.js';
 import { DialogSizeMixin } from '@vaadin/dialog/src/vaadin-dialog-size-mixin.js';
+import { HeaderController } from './vaadin-confirm-dialog-header-controller.js';
 
 export const ConfirmDialogMixin = (superClass) =>
   class ConfirmDialogMixinClass extends DialogSizeMixin(superClass) {
@@ -170,14 +171,6 @@ export const ConfirmDialogMixin = (superClass) =>
         },
 
         /**
-         * A reference to the "header" node which will be teleported to the overlay.
-         * @private
-         */
-        _headerNode: {
-          type: Object,
-        },
-
-        /**
          * A list of message nodes which will be placed in the overlay default slot.
          * @private
          */
@@ -200,7 +193,6 @@ export const ConfirmDialogMixin = (superClass) =>
       return [
         '__updateConfirmButton(_confirmButton, confirmText, confirmTheme)',
         '__updateCancelButton(_cancelButton, cancelText, cancelTheme, cancelButtonVisible)',
-        '__updateHeaderNode(_headerNode, header, headingLevel)',
         '__updateMessageNodes(_messageNodes, message)',
         '__updateRejectButton(_rejectButton, rejectText, rejectTheme, rejectButtonVisible)',
         '__accessibleDescriptionRefChanged(_messageNodes, accessibleDescriptionRef)',
@@ -246,11 +238,7 @@ export const ConfirmDialogMixin = (superClass) =>
       this.setAttribute('aria-modal', 'true');
       this.setAttribute('tabindex', '0');
 
-      this._headerController = new SlotController(this, 'header', 'h3', {
-        initializer: (node) => {
-          this._headerNode = node;
-        },
-      });
+      this._headerController = new HeaderController(this);
       this.addController(this._headerController);
 
       this._messageController = new SlotController(this, '', 'div', {
@@ -293,7 +281,11 @@ export const ConfirmDialogMixin = (superClass) =>
       super.updated(props);
 
       if (props.has('header')) {
-        this.ariaLabel = this.header || 'confirmation';
+        this._headerController.setHeader(this.header);
+      }
+
+      if (props.has('headingLevel')) {
+        this._headerController.setLevel(this.headingLevel);
       }
     }
 
@@ -354,15 +346,6 @@ export const ConfirmDialogMixin = (superClass) =>
       if (button && button === this._confirmController.defaultNode) {
         button.textContent = confirmText;
         button.setAttribute('theme', confirmTheme);
-      }
-    }
-
-    /** @private */
-    __updateHeaderNode(headerNode, header, headingLevel) {
-      // Only update the default header node.
-      if (headerNode && headerNode === this._headerController.defaultNode) {
-        headerNode.textContent = header;
-        headerNode.setAttribute('aria-level', headingLevel ?? 1);
       }
     }
 
