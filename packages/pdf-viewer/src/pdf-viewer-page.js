@@ -9,6 +9,7 @@
  * license.
  */
 import { createLink } from './pdf-viewer-links.js';
+import { PdfViewerStructureLayer } from './pdf-viewer-structure-layer.js';
 import { addLinksToText, ANNOTATION_ID_PREFIX, compareAnnotationPositions } from './pdf-viewer-text-accessibility.js';
 import { loadPdfjs } from './pdfjs-loader.js';
 
@@ -62,12 +63,21 @@ function addLinkAreas(link, { rect: [left, bottom, right, top], quadPoints }) {
 
 /**
  * Manages the DOM of a single page of the document: a placeholder sized to
- * the page, and the canvas and the text and link layers the page is rendered
- * to once it is needed.
+ * the page, and the canvas, the text layer, the structure and the link layer
+ * the page is rendered to once it is needed.
  */
 export class PdfViewerPage {
   /** Set once the links of the current canvas are rendered, also when the page has none. */
   #linksRendered = false;
+
+  /** Set once the structure of the current text layer is rendered, also when the page has none. */
+  #structureRendered = false;
+
+  /** Set when the page has no structure, to not ask the worker again when the page renders again. */
+  #hasNoStructure = false;
+
+  /** @type {PdfViewerStructureLayer | null} */
+  #structureLayer = null;
 
   /**
    * @param {number} pageNumber
@@ -328,7 +338,51 @@ export class PdfViewerPage {
       endOfContent.className = 'end-of-content';
       container.append(endOfContent);
       this.endOfContentElement = endOfContent;
-      this.#addLinksToText();
+    }
+  }
+
+  /**
+   * Renders the structure of a tagged PDF page for assistive technology,
+   * once the text layer has rendered, as its elements own the text.
+   *
+   * @return {Promise<void>}
+   */
+  async renderStructureLayer() {
+    const textLayerElement = this.textLayerElement;
+    if (!this.endOfContentElement || this.#structureRendered) {
+      return;
+    }
+    let tree = null;
+    if (!this.#hasNoStructure) {
+      try {
+        tree = await this.pdfPage.getStructTree();
+      } catch {
+        // The structure is optional. A page with a broken one is shown as untagged.
+      }
+    }
+    // The page may have been released meanwhile.
+    if (this.textLayerElement !== textLayerElement || this.#structureRendered) {
+      return;
+    }
+    this.#structureRendered = true;
+    const structureLayer = tree && this.#createStructureLayer(tree, textLayerElement);
+    this.#hasNoStructure = !structureLayer;
+    if (structureLayer) {
+      this.#structureLayer = structureLayer;
+      textLayerElement.before(structureLayer.element);
+    }
+    this.#addLinksToContent();
+  }
+
+  /** @private */
+  #createStructureLayer(tree, textLayerElement) {
+    try {
+      const structureLayer = new PdfViewerStructureLayer(tree, this.pageNumber);
+      structureLayer.updateTextLayer(textLayerElement);
+      return structureLayer;
+    } catch {
+      // As in pdf.js, a structure that fails to render does not break the other layers.
+      return null;
     }
   }
 
@@ -388,20 +442,49 @@ export class PdfViewerPage {
     if (links.length) {
       this.element.append(layer);
       this.linkLayerElement = layer;
-      this.#addLinksToText();
+      this.#addLinksToContent();
     }
     return links;
   }
 
   /**
-   * Adds the links to the text, for assistive technology, once both the text
-   * layer and the link layer have rendered, in either order.
+   * Adds the links to the structure or to the text, for assistive technology,
+   * once both the structure and the link layer have rendered, in either
+   * order. As in pdf.js, the structure owns its links, and the other links
+   * are added to the text before them. The links mixin names the links, see
+   * `getLinkAlt()`.
    * @private
    */
-  #addLinksToText() {
-    if (this.endOfContentElement && this.linkLayerElement) {
-      addLinksToText(this.textLayer.textDivs, [...this.linkLayerElement.children]);
+  #addLinksToContent() {
+    if (!this.#structureRendered || !this.linkLayerElement) {
+      return;
     }
+    const links = [...this.linkLayerElement.children];
+    const structureLayer = this.#structureLayer;
+    if (structureLayer) {
+      links.forEach((link) => {
+        structureLayer.getAriaAttributes(link.id)?.forEach((value, name) => {
+          if (name !== 'aria-label') {
+            link.setAttribute(name, value);
+          }
+        });
+      });
+    }
+    addLinksToText(
+      this.textLayer.textDivs,
+      links.filter((link) => !structureLayer?.annotationIds.has(link.id)),
+    );
+  }
+
+  /**
+   * Returns the alternative text that the structure of a tagged PDF gives a
+   * link of this page, to name the link with, as in pdf.js.
+   *
+   * @param {HTMLElement} link
+   * @return {string | undefined}
+   */
+  getLinkAlt(link) {
+    return this.#structureLayer?.getAriaAttributes(link.id)?.get('aria-label');
   }
 
   cancel() {
@@ -411,7 +494,7 @@ export class PdfViewerPage {
     }
   }
 
-  /** Cancels a pending render and frees the canvas memory and the text and link layers. */
+  /** Cancels a pending render and frees the canvas memory, the layers and the structure. */
   release() {
     this.cancel();
     this.textLayer?.cancel();
@@ -419,6 +502,9 @@ export class PdfViewerPage {
     this.textLayerElement?.remove();
     this.textLayerElement = null;
     this.endOfContentElement = null;
+    this.#structureLayer?.element.remove();
+    this.#structureLayer = null;
+    this.#structureRendered = false;
     this.linkLayerElement?.remove();
     this.linkLayerElement = null;
     this.#linksRendered = false;

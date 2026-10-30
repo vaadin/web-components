@@ -1015,6 +1015,145 @@ snapshots["vaadin-pdf-viewer page tagged"] =
 >
   <canvas aria-hidden="true">
   </canvas>
+  <span class="struct-tree">
+    <span lang="en">
+      <span
+        aria-level="1"
+        role="heading"
+      >
+        <span role="none">
+          <span aria-owns="p2R_mc1_0">
+          </span>
+        </span>
+      </span>
+      <span role="paragraph">
+        <span role="none">
+          <span aria-owns="p2R_mc2_0">
+          </span>
+        </span>
+        <span>
+          <span
+            id="pdfjs_internal_struct_1_link_1"
+            role="none"
+          >
+            <span aria-owns="p2R_mc3_0 p2R_mc3_1">
+            </span>
+          </span>
+          <span aria-owns="pdfjs_internal_id_11R">
+          </span>
+        </span>
+        <span role="none">
+          <span aria-owns="p2R_mc4_0">
+          </span>
+        </span>
+      </span>
+      <span
+        lang="sv"
+        role="paragraph"
+      >
+        <span role="none">
+          <span aria-owns="p2R_mc5_0">
+          </span>
+        </span>
+      </span>
+      <span
+        aria-level="2"
+        role="heading"
+      >
+        <span role="none">
+          <span aria-owns="p2R_mc6_0">
+          </span>
+        </span>
+      </span>
+      <span role="list">
+        <span role="listitem">
+          <span>
+          </span>
+          <span role="none">
+            <span aria-owns="p2R_mc8_0">
+            </span>
+          </span>
+        </span>
+        <span role="listitem">
+          <span>
+          </span>
+          <span role="none">
+            <span aria-owns="p2R_mc10_0">
+            </span>
+          </span>
+        </span>
+      </span>
+      <span
+        aria-level="2"
+        role="heading"
+      >
+        <span role="none">
+          <span aria-owns="p2R_mc11_0">
+          </span>
+        </span>
+      </span>
+      <span role="table">
+        <span role="row">
+          <span role="columnheader">
+            <span role="none">
+              <span aria-owns="p2R_mc12_0">
+              </span>
+            </span>
+          </span>
+          <span role="columnheader">
+            <span role="none">
+              <span aria-owns="p2R_mc13_0 p2R_mc13_1">
+              </span>
+            </span>
+          </span>
+        </span>
+        <span role="row">
+          <span role="cell">
+            <span role="none">
+              <span aria-owns="p2R_mc14_0">
+              </span>
+            </span>
+          </span>
+          <span role="cell">
+            <span role="none">
+              <span aria-owns="p2R_mc15_0 p2R_mc15_1">
+              </span>
+            </span>
+          </span>
+        </span>
+        <span role="row">
+          <span role="cell">
+            <span role="none">
+              <span aria-owns="p2R_mc16_0">
+              </span>
+            </span>
+          </span>
+          <span role="cell">
+            <span role="none">
+              <span aria-owns="p2R_mc17_0 p2R_mc17_1">
+              </span>
+            </span>
+          </span>
+        </span>
+      </span>
+      <span
+        aria-level="2"
+        role="heading"
+      >
+        <span role="none">
+          <span aria-owns="p2R_mc18_0">
+          </span>
+        </span>
+      </span>
+      <span role="figure">
+        <span
+          aria-label="A blue square"
+          role="img"
+        >
+        </span>
+      </span>
+    </span>
+  </span>
   <div
     class="text-layer"
     data-main-rotation="0"
@@ -1030,6 +1169,7 @@ snapshots["vaadin-pdf-viewer page tagged"] =
     >
       <span
         dir="ltr"
+        id="p2R_mc1_0"
         role="presentation"
       >
         Tagged document
@@ -1042,6 +1182,7 @@ snapshots["vaadin-pdf-viewer page tagged"] =
       <br role="presentation">
       <span
         dir="ltr"
+        id="p2R_mc2_0"
         role="presentation"
       >
         Visit the
@@ -1052,13 +1193,14 @@ snapshots["vaadin-pdf-viewer page tagged"] =
       id="p2R_mc3"
     >
       <span
-        aria-owns="pdfjs_internal_id_11R"
         dir="ltr"
+        id="p2R_mc3_0"
         role="presentation"
       >
       </span>
       <span
         dir="ltr"
+        id="p2R_mc3_1"
         role="presentation"
       >
         Vaadin website
@@ -1070,6 +1212,7 @@ snapshots["vaadin-pdf-viewer page tagged"] =
     >
       <span
         dir="ltr"
+        id="p2R_mc4_0"
         role="presentation"
       >
         .
@@ -1082,6 +1225,7 @@ snapshots["vaadin-pdf-viewer page tagged"] =
       <br role="presentation">
       <span
         dir="ltr"
+        id="p2R_mc5_0"
         role="presentation"
       >
         Hej världen
@@ -1094,6 +1238,7 @@ snapshots["vaadin-pdf-viewer page tagged"] =
       <br role="presentation">
       <span
         dir="ltr"
+        id="p2R_mc6_0"
         role="presentation"
       >
         A list
@@ -1111,6 +1256,7 @@ snapshots["vaadin-pdf-viewer page tagged"] =
       <br role="presentation">
       <span
         dir="ltr"
+        id="p2R_mc8_0"
         role="presentation"
       >
         First item
@@ -1128,6 +1274,7 @@ snapshots["vaadin-pdf-viewer page tagged"] =
       <br role="presentation">
       <span
         dir="ltr"
+        id="p2R_mc10_0"
         role="presentation"
       >
         Second item
@@ -1140,6 +1287,7 @@ snapshots["vaadin-pdf-viewer page tagged"] =
       <br role="presentation">
       <span
         dir="ltr"
+        id="p2R_mc11_0"
         role="presentation"
       >
         A table
@@ -1152,6 +1300,7 @@ snapshots["vaadin-pdf-viewer page tagged"] =
       <br role="presentation">
       <span
         dir="ltr"
+        id="p2R_mc12_0"
         role="presentation"
       >
         Name
@@ -1163,11 +1312,13 @@ snapshots["vaadin-pdf-viewer page tagged"] =
     >
       <span
         dir="ltr"
+        id="p2R_mc13_0"
         role="presentation"
       >
       </span>
       <span
         dir="ltr"
+        id="p2R_mc13_1"
         role="presentation"
       >
         Value
@@ -1180,6 +1331,7 @@ snapshots["vaadin-pdf-viewer page tagged"] =
       <br role="presentation">
       <span
         dir="ltr"
+        id="p2R_mc14_0"
         role="presentation"
       >
         Alpha
@@ -1191,11 +1343,13 @@ snapshots["vaadin-pdf-viewer page tagged"] =
     >
       <span
         dir="ltr"
+        id="p2R_mc15_0"
         role="presentation"
       >
       </span>
       <span
         dir="ltr"
+        id="p2R_mc15_1"
         role="presentation"
       >
         1
@@ -1208,6 +1362,7 @@ snapshots["vaadin-pdf-viewer page tagged"] =
       <br role="presentation">
       <span
         dir="ltr"
+        id="p2R_mc16_0"
         role="presentation"
       >
         Beta
@@ -1219,11 +1374,13 @@ snapshots["vaadin-pdf-viewer page tagged"] =
     >
       <span
         dir="ltr"
+        id="p2R_mc17_0"
         role="presentation"
       >
       </span>
       <span
         dir="ltr"
+        id="p2R_mc17_1"
         role="presentation"
       >
         2
@@ -1236,6 +1393,7 @@ snapshots["vaadin-pdf-viewer page tagged"] =
       <br role="presentation">
       <span
         dir="ltr"
+        id="p2R_mc18_0"
         role="presentation"
       >
         A figure
@@ -1255,6 +1413,7 @@ snapshots["vaadin-pdf-viewer page tagged"] =
   >
     <a
       aria-label="Vaadin website (opens in a new tab)"
+      aria-owns="pdfjs_internal_struct_1_link_1"
       class="link"
       href="https://vaadin.com/"
       id="pdfjs_internal_id_11R"

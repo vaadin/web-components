@@ -19,7 +19,7 @@ export const PdfViewerLinksMixin = (superClass) =>
   class PdfViewerLinksMixinClass extends superClass {
     /**
      * What the accessible name of each link is made of, to update it when the localization changes.
-     * @type {WeakMap<HTMLElement, { text: string, url?: string, action?: string, targetPage: number | null }>}
+     * @type {WeakMap<HTMLElement, { text: string, alt?: string, url?: string, action?: string, targetPage: number | null }>}
      */
     #linkLabels = new WeakMap();
 
@@ -45,6 +45,7 @@ export const PdfViewerLinksMixin = (superClass) =>
       const optionalContentConfig = await this._pdfDocument?.getOptionalContentConfig({ intent: 'display' });
       const links = await page.renderLinkLayer((annotation) => this.#followLink(annotation), optionalContentConfig);
       await this.#nameLinks(links);
+      this.#nameLinksByStructure(page);
     }
 
     /**
@@ -68,9 +69,27 @@ export const PdfViewerLinksMixin = (superClass) =>
       );
     }
 
+    /**
+     * Names the links of a page by the alternative text that the structure of
+     * a tagged PDF gives them, as in pdf.js. The structure renders after the
+     * links when the text of the page failed to render at first.
+     * @private
+     */
+    #nameLinksByStructure(page) {
+      [...(page.linkLayerElement?.children ?? [])].forEach((link) => {
+        const parts = this.#linkLabels.get(link);
+        const alt = page.getLinkAlt(link)?.replace(/\s+/gu, ' ').trim();
+        if (parts && alt && parts.alt !== alt) {
+          parts.alt = alt;
+          this.#updateLinkLabel(link);
+        }
+      });
+    }
+
     /** @private */
     #updateLinkLabel(link) {
-      link.setAttribute('aria-label', getLinkLabel(this.#linkLabels.get(link), this.__effectiveI18n));
+      const { alt, ...parts } = this.#linkLabels.get(link);
+      link.setAttribute('aria-label', getLinkLabel({ ...parts, text: alt || parts.text }, this.__effectiveI18n));
     }
 
     /** @private */
