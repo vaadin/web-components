@@ -3,7 +3,7 @@
  * Copyright (c) 2018 - 2026 Vaadin Ltd.
  * This program is available under Apache License Version 2.0, available at https://vaadin.com/license/
  */
-import { html, render } from 'lit';
+import { html } from 'lit';
 import { ifDefined } from 'lit/directives/if-defined.js';
 import { LoginMixin } from './vaadin-login-mixin.js';
 
@@ -30,17 +30,6 @@ export const LoginFormMixin = (superClass) =>
       return this.querySelector('#vaadinLoginPassword');
     }
 
-    /**
-     * Override update to render slotted form and buttons
-     * into light DOM after rendering shadow DOM.
-     * @protected
-     */
-    update(props) {
-      super.update(props);
-
-      this.__renderSlottedForm();
-    }
-
     /** @protected */
     updated(props) {
       super.updated(props);
@@ -61,58 +50,65 @@ export const LoginFormMixin = (superClass) =>
       }
     }
 
-    __renderSlottedForm() {
-      render(
-        html`
-          <form method="POST" action="${ifDefined(this.action)}" @formdata="${this._onFormData}" slot="form">
-            <input id="csrf" type="hidden" />
-            <vaadin-text-field
-              name="username"
-              .label="${this.__effectiveI18n.form.username}"
-              .errorMessage="${this.__effectiveI18n.errorMessage.username}"
-              id="vaadinLoginUsername"
-              required
-              @keydown="${this._handleInputKeydown}"
-              autocapitalize="none"
-              autocorrect="off"
-              spellcheck="false"
-              autocomplete="username"
-              manual-validation
-            >
-              <input type="text" slot="input" @keyup="${this._handleInputKeyup}" />
-            </vaadin-text-field>
-
-            <vaadin-password-field
-              name="password"
-              .label="${this.__effectiveI18n.form.password}"
-              .errorMessage="${this.__effectiveI18n.errorMessage.password}"
-              id="vaadinLoginPassword"
-              required
-              @keydown="${this._handleInputKeydown}"
-              spellcheck="false"
-              autocomplete="current-password"
-              manual-validation
-            >
-              <input type="password" slot="input" @keyup="${this._handleInputKeyup}" />
-            </vaadin-password-field>
-          </form>
-
-          <vaadin-button slot="submit" theme="primary submit" @click="${this.submit}" .disabled="${this.disabled}">
-            ${this.__effectiveI18n.form.submit}
-          </vaadin-button>
-
-          <vaadin-button
-            slot="forgot-password"
-            theme="tertiary small"
-            @click="${this._onForgotPasswordClick}"
-            ?hidden="${this.noForgotPassword}"
+    /** @protected */
+    _renderForm() {
+      return html`
+        <form method="POST" action="${ifDefined(this.action)}" @formdata="${this._onFormData}" slot="form">
+          <input id="csrf" type="hidden" />
+          <vaadin-text-field
+            name="username"
+            .label="${this.__effectiveI18n.form.username}"
+            .errorMessage="${this.__effectiveI18n.errorMessage.username}"
+            id="vaadinLoginUsername"
+            required
+            @keydown="${this._handleInputKeydown}"
+            autocapitalize="none"
+            autocorrect="off"
+            spellcheck="false"
+            autocomplete="username"
+            manual-validation
           >
-            ${this.__effectiveI18n.form.forgotPassword}
-          </vaadin-button>
-        `,
-        this,
-        { host: this },
-      );
+            <input type="text" slot="input" @keyup="${this._handleInputKeyup}" />
+          </vaadin-text-field>
+
+          <vaadin-password-field
+            name="password"
+            .label="${this.__effectiveI18n.form.password}"
+            .errorMessage="${this.__effectiveI18n.errorMessage.password}"
+            id="vaadinLoginPassword"
+            required
+            @keydown="${this._handleInputKeydown}"
+            spellcheck="false"
+            autocomplete="current-password"
+            manual-validation
+          >
+            <input type="password" slot="input" @keyup="${this._handleInputKeyup}" />
+          </vaadin-password-field>
+        </form>
+      `;
+    }
+
+    /** @protected */
+    _renderSubmitButton() {
+      return html`
+        <vaadin-button slot="submit" theme="primary submit" @click="${this.submit}" .disabled="${this.disabled}">
+          ${this.__effectiveI18n.form.submit}
+        </vaadin-button>
+      `;
+    }
+
+    /** @protected */
+    _renderForgotPasswordButton() {
+      return html`
+        <vaadin-button
+          slot="forgot-password"
+          theme="tertiary small"
+          @click="${this._onForgotPasswordClick}"
+          ?hidden="${this.noForgotPassword}"
+        >
+          ${this.__effectiveI18n.form.forgotPassword}
+        </vaadin-button>
+      `;
     }
 
     /**

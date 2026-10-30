@@ -4,12 +4,13 @@
  * This program is available under Apache License Version 2.0, available at https://vaadin.com/license/
  */
 import './vaadin-slider-bubble.js';
-import { css, html, LitElement, render } from 'lit';
+import { css, html, LitElement } from 'lit';
 import { ifDefined } from 'lit/directives/if-defined.js';
 import { styleMap } from 'lit/directives/style-map.js';
 import { FocusMixin } from '@vaadin/a11y-base/src/focus-mixin.js';
 import { isElementFocused } from '@vaadin/a11y-base/src/focus-utils.js';
 import { defineCustomElement } from '@vaadin/component-base/src/define.js';
+import { slotContent } from '@vaadin/component-base/src/directives/slot-content.js';
 import { ElementMixin } from '@vaadin/component-base/src/element-mixin.js';
 import { PolylitMixin } from '@vaadin/component-base/src/polylit-mixin.js';
 import { generateUniqueId } from '@vaadin/component-base/src/unique-id-utils.js';
@@ -306,6 +307,75 @@ class RangeSlider extends FieldMixin(
     };
   }
 
+  /** @private */
+  __renderInputs() {
+    const [startValue, endValue] = this.__value;
+    const { min, max, step } = this.__getConstraints();
+
+    return html`
+      <input
+        type="range"
+        id="${this.__inputId0}"
+        slot="input"
+        aria-label="${this.accessibleNameStart || this.__getAriaLabel('min')}"
+        .min="${min}"
+        .max="${max}"
+        .step="${step}"
+        .value="${startValue}"
+        .disabled="${this.disabled}"
+        tabindex="${this.disabled ? -1 : 0}"
+        @pointerenter="${this.__onStartPointerEnter}"
+        @pointermove="${this.__onStartPointerMove}"
+        @pointerleave="${this.__onStartPointerLeave}"
+        @keydown="${this.__onKeyDown}"
+        @input="${this.__onStartInput}"
+        @change="${this.__onChange}"
+      />
+      <input
+        type="range"
+        id="${this.__inputId1}"
+        slot="input"
+        aria-label="${this.accessibleNameEnd || this.__getAriaLabel('max')}"
+        .min="${min}"
+        .max="${max}"
+        .step="${step}"
+        .value="${endValue}"
+        .disabled="${this.disabled}"
+        tabindex="${this.disabled ? -1 : 0}"
+        @pointerenter="${this.__onEndPointerEnter}"
+        @pointermove="${this.__onEndPointerMove}"
+        @pointerleave="${this.__onEndPointerLeave}"
+        @keydown="${this.__onKeyDown}"
+        @input="${this.__onEndInput}"
+        @change="${this.__onChange}"
+      />
+    `;
+  }
+
+  /** @private */
+  __renderBubbles() {
+    const [startValue, endValue] = this.__value;
+
+    return html`
+      <vaadin-slider-bubble
+        slot="bubble"
+        .positionTarget="${this.__thumbStartElement}"
+        .opened="${this.valueAlwaysVisible || this.__startBubbleOpened}"
+        theme="${ifDefined(this._theme)}"
+      >
+        ${startValue}
+      </vaadin-slider-bubble>
+      <vaadin-slider-bubble
+        slot="bubble"
+        .positionTarget="${this.__thumbEndElement}"
+        .opened="${this.valueAlwaysVisible || this.__endBubbleOpened}"
+        theme="${ifDefined(this._theme)}"
+      >
+        ${endValue}
+      </vaadin-slider-bubble>
+    `;
+  }
+
   /** @protected */
   render() {
     const [startValue, endValue] = this.__value;
@@ -327,8 +397,8 @@ class RangeSlider extends FieldMixin(
           </div>
           <div part="thumb thumb-start"></div>
           <div part="thumb thumb-end"></div>
-          <slot name="input"></slot>
-          <slot name="bubble"></slot>
+          <slot name="input" ${slotContent(this.__renderInputs())}></slot>
+          <slot name="bubble" ${slotContent(this.__renderBubbles())}></slot>
         </div>
 
         <div part="marks" aria-hidden="true">
@@ -391,77 +461,6 @@ class RangeSlider extends FieldMixin(
     window.removeEventListener('pointercancel', this.__onPointerUp);
     this.removeAttribute('start-active');
     this.removeAttribute('end-active');
-  }
-
-  /**
-   * Override update to render slotted `<input type="range" />`
-   * into light DOM after rendering shadow DOM.
-   * @protected
-   */
-  update(props) {
-    super.update(props);
-
-    const [startValue, endValue] = this.__value;
-    const { min, max, step } = this.__getConstraints();
-
-    render(
-      html`
-        <input
-          type="range"
-          id="${this.__inputId0}"
-          slot="input"
-          aria-label="${this.accessibleNameStart || this.__getAriaLabel('min')}"
-          .min="${min}"
-          .max="${max}"
-          .step="${step}"
-          .value="${startValue}"
-          .disabled="${this.disabled}"
-          tabindex="${this.disabled ? -1 : 0}"
-          @pointerenter="${this.__onStartPointerEnter}"
-          @pointermove="${this.__onStartPointerMove}"
-          @pointerleave="${this.__onStartPointerLeave}"
-          @keydown="${this.__onKeyDown}"
-          @input="${this.__onStartInput}"
-          @change="${this.__onChange}"
-        />
-        <input
-          type="range"
-          id="${this.__inputId1}"
-          slot="input"
-          aria-label="${this.accessibleNameEnd || this.__getAriaLabel('max')}"
-          .min="${min}"
-          .max="${max}"
-          .step="${step}"
-          .value="${endValue}"
-          .disabled="${this.disabled}"
-          tabindex="${this.disabled ? -1 : 0}"
-          @pointerenter="${this.__onEndPointerEnter}"
-          @pointermove="${this.__onEndPointerMove}"
-          @pointerleave="${this.__onEndPointerLeave}"
-          @keydown="${this.__onKeyDown}"
-          @input="${this.__onEndInput}"
-          @change="${this.__onChange}"
-        />
-        <vaadin-slider-bubble
-          slot="bubble"
-          .positionTarget="${this.__thumbStartElement}"
-          .opened="${this.valueAlwaysVisible || this.__startBubbleOpened}"
-          theme="${ifDefined(this._theme)}"
-        >
-          ${startValue}
-        </vaadin-slider-bubble>
-        <vaadin-slider-bubble
-          slot="bubble"
-          .positionTarget="${this.__thumbEndElement}"
-          .opened="${this.valueAlwaysVisible || this.__endBubbleOpened}"
-          theme="${ifDefined(this._theme)}"
-        >
-          ${endValue}
-        </vaadin-slider-bubble>
-      `,
-      this,
-      { host: this },
-    );
   }
 
   /** @protected */
