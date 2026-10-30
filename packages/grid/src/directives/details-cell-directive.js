@@ -17,22 +17,14 @@ class DetailsCellDirective extends AsyncDirective {
     if (!this.#cell) {
       this.#grid = grid;
       this.#cell = part.element;
-      this.#observe();
+      this.#grid._detailsCellResizeObserver.observe(this.#cell);
+      this.#grid._frozenCellsChanged();
     }
     return nothing;
   }
 
-  reconnected() {
-    this.#observe();
-  }
-
   disconnected() {
     this.#grid._detailsCellResizeObserver.unobserve(this.#cell);
-    this.#grid._frozenCellsChanged();
-  }
-
-  #observe() {
-    this.#grid._detailsCellResizeObserver.observe(this.#cell);
     this.#grid._frozenCellsChanged();
   }
 }
