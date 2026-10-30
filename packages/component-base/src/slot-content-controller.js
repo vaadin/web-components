@@ -7,27 +7,18 @@ import { hasNodeContent, isEmptyTextNode } from './dom-utils.js';
 import { generateUniqueId } from './unique-id-utils.js';
 
 /**
- * A controller that manages the content of a slot: either the custom nodes
- * slotted by the user, or a default node that the controller creates when
- * nothing custom is slotted. Custom content always wins over the default.
- *
- * Subclasses customize the behavior by overriding the hooks:
- *
- * - `createDefault()` returns the default node, or `null` for no default content.
- * - `shouldShowDefault()` tells whether the default node belongs in the DOM.
- * - `initNode(node)` runs once when a node becomes content, default or custom.
- * - `updateNode(node)` runs after `initNode()` and on every `update()`.
- * - `teardownNode(node)` runs once when a node stops being content.
- *
- * The host calls `update()` when a property used by the hooks changes,
- * and listens for the `content-changed` event to react to the content.
+ * A controller that manages the content of a slot: the custom nodes slotted
+ * by the user, or a default node created by the controller when there are none.
+ * Subclasses override the hooks to create the default node and to set up,
+ * update and tear down the content nodes. The host calls `update()` when
+ * a property used by the hooks changes, and listens for `content-changed`.
  *
  * In single mode, a newly slotted custom node replaces the current one.
  * With the `multiple` option, all the custom nodes are kept as content.
  */
 export class SlotContentController extends EventTarget {
   /**
-   * Generate an ID that is unique per host instance.
+   * Generate an ID unique per host instance.
    *
    * @param {HTMLElement} host
    * @param {string} prefix
@@ -50,13 +41,13 @@ export class SlotContentController extends EventTarget {
   nodes = [];
 
   /**
-   * The default node created by `createDefault()`, whether or not it is in the DOM.
+   * The default node created by `createDefault()`, also when not in the DOM.
    * @type {Node | null}
    */
   defaultNode = null;
 
   /**
-   * The ID assigned to the content that has none, when `idPrefix` is set.
+   * The ID generated from `idPrefix` for content that has no ID of its own.
    * @type {string | undefined}
    */
   defaultId;
@@ -106,12 +97,9 @@ export class SlotContentController extends EventTarget {
   }
 
   /**
-   * Update the content to match the slot children and the host state.
-   * Attaches the default node when there is no custom content, calls
-   * `teardownNode()` for the nodes that stopped being content, `initNode()`
-   * for the new ones and `updateNode()` for all of them, then dispatches
-   * the `content-changed` event. Does nothing until the controller is
-   * connected to the host.
+   * Update the content to match the slot children and the host state, running
+   * the hooks for the nodes that changed and `updateNode()` for all of them,
+   * then dispatch `content-changed`. Does nothing before `hostConnected()`.
    */
   update() {
     if (!this.#initialized) {
@@ -143,8 +131,7 @@ export class SlotContentController extends EventTarget {
   }
 
   /**
-   * Override to create the default node, used as content when nothing
-   * custom is slotted. Return `null` when the slot has no default content.
+   * Override to create the default node. Return `null` for no default content.
    *
    * @return {Node | null}
    * @protected
@@ -154,9 +141,8 @@ export class SlotContentController extends EventTarget {
   }
 
   /**
-   * Override to tell whether the default node belongs in the DOM. Only asked
-   * when nothing custom is slotted. Return `false` to create the default node
-   * lazily, or to remove it, e.g. while the host property it shows is empty.
+   * Override to control whether the default node is in the DOM, e.g. only
+   * while the host property it shows is not empty.
    *
    * @return {boolean}
    * @protected
@@ -166,8 +152,7 @@ export class SlotContentController extends EventTarget {
   }
 
   /**
-   * Override to set up a node once it becomes content, default or custom,
-   * e.g. to add event listeners. Runs after the generated ID is assigned.
+   * Override to set up a node once it becomes content, e.g. to add listeners.
    *
    * @param {Node} _node
    * @protected
@@ -175,8 +160,8 @@ export class SlotContentController extends EventTarget {
   initNode(_node) {}
 
   /**
-   * Override to make a content node reflect the host state. Runs after
-   * `initNode()` and on every `update()`, for default and custom nodes alike.
+   * Override to apply the host state to a content node. Runs after `initNode()`
+   * and on every `update()`, for default and custom nodes alike.
    *
    * @param {Node} _node
    * @protected
@@ -184,18 +169,13 @@ export class SlotContentController extends EventTarget {
   updateNode(_node) {}
 
   /**
-   * Override to clean up a node once it stops being content, e.g. to remove
-   * the event listeners added in `initNode()`.
+   * Override to clean up a node once it stops being content.
    *
    * @param {Node} _node
    * @protected
    */
   teardownNode(_node) {}
 
-  /**
-   * Return the content nodes, attaching or detaching the default node as needed.
-   * @return {Node[]}
-   */
   #collectNodes() {
     const customNodes = this.#getCustomNodes();
     if (customNodes.length > 0) {
@@ -219,17 +199,13 @@ export class SlotContentController extends EventTarget {
     return [this.defaultNode];
   }
 
-  /**
-   * Return the custom nodes slotted by the user. In single mode, the newest
-   * one replaces the current one, and the others are removed from the DOM.
-   * @return {Node[]}
-   */
   #getCustomNodes() {
     const nodes = [...this.host.childNodes].filter((node) => this.#isCustomNode(node));
     if (this.multiple || nodes.length <= 1) {
       return nodes;
     }
 
+    // In single mode, the newest custom node replaces the current one.
     const node = nodes.findLast((n) => n !== this.node);
     nodes.filter((n) => n !== node).forEach((n) => n.remove());
     return [node];

@@ -35,8 +35,7 @@ export class LabelController extends SlotContentController {
   }
 
   /**
-   * Override method from `SlotContentController` to show the label text
-   * in the default label element. A custom label keeps its own content.
+   * Override method from `SlotContentController` to show the label text in the default label element.
    *
    * @param {Node} node
    * @protected
