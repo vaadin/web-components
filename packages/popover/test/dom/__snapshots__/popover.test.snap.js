@@ -23,6 +23,7 @@ snapshots["vaadin-popover shadow"] =
   opened=""
   popover="manual"
   position="bottom"
+  role="none"
 >
   <slot>
   </slot>
@@ -51,6 +52,7 @@ snapshots["vaadin-popover modal shadow"] =
   opened=""
   popover="manual"
   position="bottom"
+  role="none"
 >
   <slot>
   </slot>
@@ -67,6 +69,7 @@ snapshots["vaadin-popover theme"] =
   opened=""
   popover="manual"
   position="bottom"
+  role="none"
   theme="arrow"
 >
   <slot>

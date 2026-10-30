@@ -61,6 +61,7 @@ snapshots["vaadin-confirm-dialog shadow"] =
   opened=""
   popover="manual"
   restore-focus-on-close=""
+  role="none"
   with-backdrop=""
 >
   <slot
@@ -99,6 +100,7 @@ snapshots["vaadin-confirm-dialog theme"] =
   opened=""
   popover="manual"
   restore-focus-on-close=""
+  role="none"
   theme="custom"
   with-backdrop=""
 >

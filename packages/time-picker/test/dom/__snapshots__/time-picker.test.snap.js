@@ -660,6 +660,7 @@ snapshots["vaadin-time-picker host opened overlay"] =
   no-vertical-overlap=""
   opened=""
   popover="manual"
+  role="none"
   start-aligned=""
   top-aligned=""
 >
@@ -720,6 +721,7 @@ snapshots["vaadin-time-picker shadow default"] =
   id="overlay"
   no-vertical-overlap=""
   popover="manual"
+  role="none"
 >
   <slot name="overlay">
   </slot>
@@ -781,6 +783,7 @@ snapshots["vaadin-time-picker shadow disabled"] =
   id="overlay"
   no-vertical-overlap=""
   popover="manual"
+  role="none"
 >
   <slot name="overlay">
   </slot>
@@ -842,6 +845,7 @@ snapshots["vaadin-time-picker shadow readonly"] =
   id="overlay"
   no-vertical-overlap=""
   popover="manual"
+  role="none"
 >
   <slot name="overlay">
   </slot>
@@ -903,6 +907,7 @@ snapshots["vaadin-time-picker shadow invalid"] =
   id="overlay"
   no-vertical-overlap=""
   popover="manual"
+  role="none"
 >
   <slot name="overlay">
   </slot>
@@ -964,6 +969,7 @@ snapshots["vaadin-time-picker shadow theme"] =
   id="overlay"
   no-vertical-overlap=""
   popover="manual"
+  role="none"
   theme="align-right"
 >
   <slot name="overlay">

@@ -159,6 +159,7 @@ snapshots["context-menu overlay"] =
   exportparts="backdrop, overlay, content"
   id="overlay"
   popover="manual"
+  role="none"
 >
   <slot name="overlay">
   </slot>
@@ -178,6 +179,7 @@ snapshots["context-menu shadow"] =
   exportparts="backdrop, overlay, content"
   id="overlay"
   popover="manual"
+  role="none"
 >
   <slot name="overlay">
   </slot>

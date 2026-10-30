@@ -172,6 +172,7 @@ snapshots["menu-bar host overlay"] =
   id="overlay"
   opened=""
   popover="manual"
+  role="none"
   start-aligned=""
   top-aligned=""
 >
