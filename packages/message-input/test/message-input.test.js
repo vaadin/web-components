@@ -62,6 +62,26 @@ describe('message-input', () => {
       expect(spy.called).to.be.false;
     });
 
+    it('should not fire a submit event on Enter keydown during IME composition', () => {
+      const spy = sinon.spy();
+      messageInput.addEventListener('submit', spy);
+      textArea.value = 'にほん';
+      textArea.inputElement.dispatchEvent(
+        new KeyboardEvent('keydown', { key: 'Enter', keyCode: 13, isComposing: true, bubbles: true }),
+      );
+      expect(spy.called).to.be.false;
+    });
+
+    it('should not fire a submit event on Enter keydown with IME key code after composition end', () => {
+      const spy = sinon.spy();
+      messageInput.addEventListener('submit', spy);
+      textArea.value = '日本';
+      textArea.inputElement.dispatchEvent(
+        new KeyboardEvent('keydown', { key: 'Enter', keyCode: 229, isComposing: false, bubbles: true }),
+      );
+      expect(spy.called).to.be.false;
+    });
+
     it('should not fire a submit event if value is empty', () => {
       const spy = sinon.spy();
       messageInput.addEventListener('submit', spy);
