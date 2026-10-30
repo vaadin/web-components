@@ -8,7 +8,7 @@
  * See https://vaadin.com/commercial-license-and-service-terms for the full
  * license.
  */
-import { html, LitElement, render } from 'lit';
+import { html, LitElement } from 'lit';
 import { FocusMixin } from '@vaadin/a11y-base/src/focus-mixin.js';
 import { isKeyboardActive } from '@vaadin/a11y-base/src/focus-utils.js';
 import { defineCustomElement } from '@vaadin/component-base/src/define.js';
@@ -168,9 +168,6 @@ class PdfViewer extends PdfViewerMixin(
     super.i18n = value;
   }
 
-  /** The node before which the toolbar controls are rendered into the light DOM. */
-  #controlsMarker = document.createComment('');
-
   /** @protected */
   render() {
     return html`
@@ -188,18 +185,6 @@ class PdfViewer extends PdfViewerMixin(
         </div>
       </div>
     `;
-  }
-
-  /** @protected */
-  update(props) {
-    super.update(props);
-
-    // Children that the application adds later go after the marker, so that
-    // rendering the controls again does not move or remove them.
-    if (!this.hasUpdated) {
-      this.appendChild(this.#controlsMarker);
-    }
-    render(this._renderToolbarControls(), this, { host: this, renderBefore: this.#controlsMarker });
   }
 
   /**

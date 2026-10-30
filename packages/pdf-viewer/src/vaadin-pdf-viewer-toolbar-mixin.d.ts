@@ -49,14 +49,17 @@ export declare class PdfViewerToolbarMixinClass {
   toolbarCollapsed: boolean;
 
   /**
-   * Returns the template of the header and the toolbar, which show the
-   * controls of `_renderToolbarControls()` in their slots.
+   * Returns the template of the header and the toolbar.
    */
   protected _renderToolbar(): TemplateResult;
 
   /**
-   * Returns the template of the toolbar controls, which are rendered into
-   * the light DOM.
+   * Returns the template of the navigation controls in the `toolbar-navigation` slot.
    */
-  protected _renderToolbarControls(): TemplateResult;
+  protected _renderNavigationControls(): TemplateResult;
+
+  /**
+   * Returns the template of the zoom controls in the `toolbar-zoom` slot.
+   */
+  protected _renderZoomControls(): TemplateResult;
 }
