@@ -67,11 +67,12 @@ how to generate them.
   - Its `_zoomFactor` getter reads `_scale`, in units of the actual page size.
 - `PdfViewerTextLayerMixin` renders the text layer of each rendered page and sets the document language on the
   pages. A page loads its text each time it renders, as pdf.js' own viewer does.
+- `PdfViewerStructureMixin` renders the structure of each rendered page of a tagged PDF, after its text layer.
 - `PdfViewerLinksMixin` adds the links of each rendered page and follows internal links with `_scrollToPage()`.
 - After a page canvas renders, `PdfViewerRenderMixin` awaits `_renderPageLayers(page)`. Each override awaits
-  `super` first, so the layers render in the order of the mixins: text, then links.
-- The page view owns the DOM of a page: the canvas, the text layer and the link layer. Its methods check after
-  each await that the page still has the same canvas, so a released page gets no layers.
+  `super` first, so the layers render in the order of the mixins: text, then structure, then links.
+- The page view owns the DOM of a page: the canvas, the text layer, the structure and the link layer. Its methods
+  check after each await that the page still has the same canvas or text layer, so a released page gets no layers.
 - `PdfViewerKeyboardMixin` handles the keyboard shortcuts.
 - `PdfViewerToolbarMixin` renders the header and the toolbar. Its controls are in the light DOM, so a theme
   styles the page field like any other `vaadin-integer-field`. The `slotContent()` directive renders them, so
@@ -104,6 +105,13 @@ how to generate them.
 - Links on layers that the document hides are left out, as in pdf.js.
 - A link that wraps to the next line is clickable only on its words, which the `QuadPoints` of the annotation
   give. Its focus ring goes around these words.
+- Tagged PDFs have a structure of headings, lists, tables and figures. As in pdf.js, a hidden element tree
+  exposes it to screen readers. Its elements own the text layer elements with `aria-owns`.
+- The structure owns the text elements in marked content, not the marked content itself. Marked content has
+  `display: contents`, and Chrome ignores `aria-owns` of such elements. Artifacts, such as page numbers, stay hidden.
+- The links mixin names all links. It uses the alternative text that the structure gives a link, as in pdf.js.
+- As in pdf.js, a link of the structure owns the text of its structure element. Other links are added to the
+  text before them, so screen readers read them in the order of the text.
 - When a focused link loses its page, focus moves to the page area.
 
 ## Install size
