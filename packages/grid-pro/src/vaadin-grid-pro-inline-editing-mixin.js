@@ -535,6 +535,10 @@ export const InlineEditingMixin = (superClass) =>
           }
           // Stop looking if the next cell is editable
           const nextRow = this._getRowByIndex(nextIndex);
+          if (nextRow && this._lazyColumns) {
+            // Make sure the cells of the column are rendered
+            this.scrollToColumn(nextColumn);
+          }
           // eslint-disable-next-line no-loop-func
           nextCell = nextRow && Array.from(nextRow.__cells).find((cell) => cell._column === nextColumn);
           if (nextCell && this._isCellEditable(nextCell)) {
@@ -545,6 +549,10 @@ export const InlineEditingMixin = (superClass) =>
 
       // Focus current cell as fallback
       if (!nextCell) {
+        if (this._lazyColumns) {
+          // Make sure the cell of the edited column is rendered again
+          this.scrollToColumn(column);
+        }
         nextCell = cell;
         nextIndex = model.index;
       }
@@ -559,9 +567,10 @@ export const InlineEditingMixin = (superClass) =>
 
     /**
      * @param {!HTMLElement} row
+     * @param {{ skipRenderers?: boolean }} options
      * @private
      */
-    __updateRow(row) {
+    __updateRow(row, options) {
       const item = this.__getRowItem(row);
       if (this.__edited) {
         const { cell, model } = this.__edited;
@@ -573,7 +582,7 @@ export const InlineEditingMixin = (superClass) =>
           this._stopEdit();
         }
       }
-      super.__updateRow(row, item);
+      super.__updateRow(row, options);
     }
 
     /**
