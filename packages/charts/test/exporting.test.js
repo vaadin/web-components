@@ -292,6 +292,30 @@ describe('vaadin-chart exporting', () => {
       expect(chart.tempBodyStyle).to.be.undefined;
       expect(document.body.hasAttribute(attributeName)).to.be.false;
     });
+
+    it('should keep the styled-mode attribute on the body when the export ends during a print', async () => {
+      Highcharts.fireEvent(chart.configuration, 'beforePrint');
+      await chart.configuration.exporting.getSVGForExport({}, {});
+
+      expect(chart.tempBodyStyle).to.be.ok;
+      expect(document.body.hasAttribute(attributeName)).to.be.true;
+
+      Highcharts.fireEvent(chart.configuration, 'afterPrint');
+      expect(chart.tempBodyStyle).to.be.undefined;
+      expect(document.body.hasAttribute(attributeName)).to.be.false;
+    });
+
+    it('should remove the shadow styles from the body when the chart is detached during the export', async () => {
+      // An export that has started and will not fire `afterExport`, as the chart gets destroyed
+      Highcharts.fireEvent(chart.configuration, 'beforeExport');
+      const style = chart.tempBodyStyle;
+      chart.remove();
+      await Promise.resolve();
+
+      expect(style.isConnected).to.be.false;
+      expect(chart.tempBodyStyle).to.be.undefined;
+      expect(document.body.hasAttribute(attributeName)).to.be.false;
+    });
   });
 
   it('should add styled-mode attribute to body before export and delete it afterwards', async () => {
