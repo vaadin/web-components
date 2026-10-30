@@ -5,9 +5,6 @@
  */
 import { hasNodeContent, isEmptyTextNode } from './dom-utils.js';
 import { generateUniqueId } from './unique-id-utils.js';
-import { issueWarning } from './warnings.js';
-
-const HOOKS = ['createDefaultNode', 'shouldRenderDefaultNode', '_initNode', '_updateNode', '_teardownNode'];
 
 /**
  * A controller that manages the content of a slot: the custom nodes slotted
@@ -32,27 +29,32 @@ export class SlotContentController extends EventTarget {
   }
 
   /**
-   * Create a controller with the given hooks without declaring a subclass.
-   * The hooks are put on the prototype of a subclass created on the fly,
-   * so regular functions, unlike arrow functions, get the controller as `this`.
+   * Create a controller that creates the default node from the tag name, and
+   * runs the initializer once for every node that becomes content, default or
+   * custom. For the cases that do not need a subclass.
    *
    * @param {HTMLElement} host
    * @param {string} slotName
-   * @param {Object} options the constructor config and the hooks to override
+   * @param {string | null} tagName
+   * @param {{ initializer?: (node: Node, host: HTMLElement) => void, multiple?: boolean, idPrefix?: string, observeContent?: boolean }} config
    * @return {SlotContentController}
    */
-  static create(host, slotName, { multiple, idPrefix, observeContent, ...hooks } = {}) {
-    const Controller = class extends this {};
-
-    Object.entries(hooks).forEach(([name, hook]) => {
-      if (HOOKS.includes(name)) {
-        Controller.prototype[name] = hook;
-      } else {
-        issueWarning(`Ignored unknown SlotContentController hook "${name}".`);
+  static create(host, slotName, tagName, { initializer, ...config } = {}) {
+    const Controller = class extends this {
+      createDefaultNode() {
+        return tagName ? document.createElement(tagName) : super.createDefaultNode();
       }
-    });
 
-    return new Controller(host, slotName, { multiple, idPrefix, observeContent });
+      _initNode(node) {
+        super._initNode(node);
+
+        if (typeof initializer === 'function') {
+          initializer(node, host);
+        }
+      }
+    };
+
+    return new Controller(host, slotName, config);
   }
 
   /**

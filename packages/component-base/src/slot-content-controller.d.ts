@@ -35,14 +35,6 @@ export interface SlotContentControllerEventMap {
   'slot-content-changed': SlotContentChangedEvent;
 }
 
-export interface SlotContentControllerHooks {
-  createDefaultNode?(this: SlotContentController): Node | null;
-  shouldRenderDefaultNode?(this: SlotContentController): boolean;
-  _initNode?(this: SlotContentController, node: Node): void;
-  _updateNode?(this: SlotContentController, node: Node): void;
-  _teardownNode?(this: SlotContentController, node: Node): void;
-}
-
 /**
  * A controller that manages the content of a slot: the custom nodes slotted
  * by the user, or a default node created by the controller when there are none.
@@ -60,15 +52,16 @@ export class SlotContentController extends EventTarget implements ReactiveContro
   static generateId(host: HTMLElement, prefix: string): string;
 
   /**
-   * Create a controller with the given hooks without declaring a subclass.
-   * The hooks are put on the prototype of a subclass created on the fly,
-   * so regular functions, unlike arrow functions, get the controller as `this`.
+   * Create a controller that creates the default node from the tag name, and
+   * runs the initializer once for every node that becomes content, default or
+   * custom. For the cases that do not need a subclass.
    */
   static create<T extends SlotContentController>(
     this: new (...args: any[]) => T,
     host: HTMLElement,
     slotName: string,
-    options?: SlotContentControllerConfig & SlotContentControllerHooks,
+    tagName: string | null,
+    config?: SlotContentControllerConfig & { initializer?(node: Node, host: HTMLElement): void },
   ): T;
 
   constructor(host: HTMLElement, slotName: string, config?: SlotContentControllerConfig);

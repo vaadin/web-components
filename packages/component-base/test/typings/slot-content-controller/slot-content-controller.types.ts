@@ -28,23 +28,16 @@ controller.addEventListener('slot-content-changed', (event) => {
 });
 
 // `create()` returns an instance of the class it is called on
-assertType<TestController>(TestController.create(host, 'foo'));
+assertType<TestController>(TestController.create(host, 'foo', 'div'));
 
 assertType<SlotContentController>(
-  SlotContentController.create(host, 'foo', {
+  SlotContentController.create(host, 'foo', null, {
     multiple: true,
     idPrefix: 'foo',
     observeContent: true,
-    createDefaultNode() {
-      assertType<SlotContentController>(this);
-      return document.createElement('div');
-    },
-    shouldRenderDefaultNode: () => true,
-    _initNode(node) {
-      assertType<SlotContentController>(this);
+    initializer: (node, initHost) => {
       assertType<Node>(node);
+      assertType<HTMLElement>(initHost);
     },
-    _updateNode: (node) => assertType<Node>(node),
-    _teardownNode: (node) => assertType<Node>(node),
   }),
 );

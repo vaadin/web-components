@@ -648,58 +648,87 @@ describe('SlotContentController', () => {
   });
 
   describe('create', () => {
-    let hooks;
+    let initializer;
 
     beforeEach(() => {
       element = fixtureSync(`<${tag}></${tag}>`);
-      hooks = {
-        createDefaultNode: sinon.stub().callsFake(() => document.createElement('div')),
-        _initNode: sinon.spy(),
-        _updateNode: sinon.spy(),
-        _teardownNode: sinon.spy(),
-      };
-      controller = SlotContentController.create(element, 'foo', { idPrefix: 'foo', ...hooks });
-      element.addController(controller);
-      defaultNode = controller.node;
+      initializer = sinon.spy();
     });
 
-    it('should create a SlotContentController instance', () => {
-      expect(controller).to.be.instanceOf(SlotContentController);
+    describe('tag name', () => {
+      beforeEach(() => {
+        controller = SlotContentController.create(element, 'foo', 'div', { initializer, idPrefix: 'foo' });
+        element.addController(controller);
+        defaultNode = controller.node;
+      });
+
+      it('should create the default node from the tag name', () => {
+        expect(defaultNode).to.be.instanceOf(HTMLDivElement);
+        expect(defaultNode.getAttribute('slot')).to.equal('foo');
+      });
+
+      it('should run the initializer once with the node and the host', () => {
+        expect(initializer).to.be.calledOnceWith(defaultNode, element);
+      });
+
+      it('should not run the initializer again on update', () => {
+        controller.update();
+        expect(initializer).to.be.calledOnce;
+      });
+
+      it('should run the initializer for an added custom node', async () => {
+        const custom = addCustomNode();
+        await nextFrame();
+        expect(initializer).to.be.calledTwice;
+        expect(initializer.secondCall).to.be.calledWith(custom, element);
+      });
+
+      it('should pass the config to the controller', () => {
+        expect(defaultNode.id).to.equal(controller.defaultId);
+      });
     });
 
-    it('should pass the config to the controller', () => {
-      expect(defaultNode.id).to.equal(controller.defaultId);
+    describe('no tag name', () => {
+      beforeEach(() => {
+        controller = SlotContentController.create(element, 'foo', null, { initializer });
+        element.addController(controller);
+      });
+
+      it('should not create a default node', () => {
+        expect(controller.node).to.be.null;
+        expect(initializer).to.be.not.called;
+      });
+
+      it('should run the initializer for a custom node', async () => {
+        const custom = addCustomNode();
+        await nextFrame();
+        expect(initializer).to.be.calledOnceWith(custom, element);
+      });
     });
 
-    it('should call the hooks with the controller as this', () => {
-      expect(hooks.createDefaultNode).to.be.calledOnce;
-      expect(hooks.createDefaultNode).to.be.calledOn(controller);
-      expect(hooks._initNode).to.be.calledOnceWith(defaultNode);
-      expect(hooks._initNode).to.be.calledOn(controller);
-      expect(hooks._updateNode).to.be.calledOnceWith(defaultNode);
-    });
+    describe('subclass', () => {
+      let hookSpy;
 
-    it('should call the teardown hook when the node stops being content', async () => {
-      addCustomNode();
-      await nextFrame();
-      expect(hooks._teardownNode).to.be.calledOnceWith(defaultNode);
-    });
+      class SubController extends SlotContentController {
+        _initNode(node) {
+          hookSpy(node);
+        }
+      }
 
-    it('should not change the prototype of the class it is called on', () => {
-      expect(SlotContentController.prototype._initNode).to.not.equal(hooks._initNode);
-    });
+      beforeEach(() => {
+        hookSpy = sinon.spy();
+        controller = SubController.create(element, 'foo', 'div', { initializer });
+        element.addController(controller);
+      });
 
-    it('should create an instance of the class it is called on', () => {
-      class SubController extends SlotContentController {}
-      expect(SubController.create(element, 'foo')).to.be.instanceOf(SubController);
-    });
+      it('should create an instance of the class it is called on', () => {
+        expect(controller).to.be.instanceOf(SubController);
+      });
 
-    it('should warn about an unknown hook', () => {
-      const stub = sinon.stub(console, 'warn');
-      SlotContentController.create(element, 'foo', { initNode: () => {} });
-      stub.restore();
-      expect(stub).to.be.calledOnce;
-      expect(stub.firstCall.args[0]).to.include('initNode');
+      it('should run both the subclass hook and the initializer', () => {
+        expect(hookSpy).to.be.calledOnceWith(controller.node);
+        expect(initializer).to.be.calledOnceWith(controller.node, element);
+      });
     });
   });
 });
