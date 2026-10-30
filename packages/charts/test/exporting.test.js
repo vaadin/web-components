@@ -150,6 +150,18 @@ describe('vaadin-chart exporting', () => {
     expect(document.body.hasAttribute(attributeName)).to.be.false;
   });
 
+  it('should remove the shadow styles from the body when the chart is detached during a print', async () => {
+    // Highcharts fires `afterPrint` a while after the print dialog closes
+    Highcharts.fireEvent(chart.configuration, 'beforePrint');
+    const style = chart.tempBodyStyle;
+    chart.remove();
+    await Promise.resolve();
+
+    expect(style.isConnected).to.be.false;
+    expect(chart.tempBodyStyle).to.be.undefined;
+    expect(document.body.hasAttribute(attributeName)).to.be.false;
+  });
+
   // TODO add test for print button.
   // The original issue https://github.com/highcharts/highcharts/issues/13489 is fixed now.
 });
