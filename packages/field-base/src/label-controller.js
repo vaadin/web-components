@@ -30,7 +30,7 @@ export class LabelController extends SlotContentController {
    * @protected
    * @override
    */
-  createDefault() {
+  createDefaultNode() {
     return document.createElement('label');
   }
 

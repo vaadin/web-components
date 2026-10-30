@@ -12,7 +12,7 @@ describe('SlotContentController', () => {
   );
 
   class DefaultController extends SlotContentController {
-    createDefault() {
+    createDefaultNode() {
       return document.createElement('div');
     }
   }
@@ -63,7 +63,7 @@ describe('SlotContentController', () => {
       element.addController(controller);
     });
 
-    it('should not create a default node when createDefault returns null', () => {
+    it('should not create a default node when createDefaultNode returns null', () => {
       expect(element.querySelector('[slot="foo"]')).to.be.null;
       expect(controller.node).to.be.null;
       expect(controller.nodes).to.be.empty;

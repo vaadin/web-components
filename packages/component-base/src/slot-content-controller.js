@@ -41,7 +41,7 @@ export class SlotContentController extends EventTarget {
   nodes = [];
 
   /**
-   * The default node created by `createDefault()`, also when not in the DOM.
+   * The default node created by `createDefaultNode()`, also when not in the DOM.
    * @type {Node | null}
    */
   defaultNode = null;
@@ -136,7 +136,7 @@ export class SlotContentController extends EventTarget {
    * @return {Node | null}
    * @protected
    */
-  createDefault() {
+  createDefaultNode() {
     return null;
   }
 
@@ -188,9 +188,15 @@ export class SlotContentController extends EventTarget {
       return [];
     }
 
-    this.defaultNode ??= this.#createDefaultNode();
     if (!this.defaultNode) {
-      return [];
+      const node = this.createDefaultNode();
+      if (!node) {
+        return [];
+      }
+      if (node instanceof Element && this.slotName !== '') {
+        node.setAttribute('slot', this.slotName);
+      }
+      this.defaultNode = node;
     }
 
     if (this.defaultNode.parentNode !== this.host) {
@@ -222,14 +228,6 @@ export class SlotContentController extends EventTarget {
 
     // Text nodes only count as content of the default slot.
     return node.nodeType === Node.TEXT_NODE && this.slotName === '' && !isEmptyTextNode(node);
-  }
-
-  #createDefaultNode() {
-    const node = this.createDefault();
-    if (node instanceof Element && this.slotName !== '') {
-      node.setAttribute('slot', this.slotName);
-    }
-    return node;
   }
 
   #detachDefaultNode() {

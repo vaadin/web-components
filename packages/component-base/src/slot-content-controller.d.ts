@@ -74,7 +74,7 @@ export class SlotContentController extends EventTarget implements ReactiveContro
   nodes: Node[];
 
   /**
-   * The default node created by `createDefault()`, also when not in the DOM.
+   * The default node created by `createDefaultNode()`, also when not in the DOM.
    */
   defaultNode: Node | null;
 
@@ -104,7 +104,7 @@ export class SlotContentController extends EventTarget implements ReactiveContro
   /**
    * Override to create the default node. Return `null` for no default content.
    */
-  protected createDefault(): Node | null;
+  protected createDefaultNode(): Node | null;
 
   /**
    * Override to control whether the default node is in the DOM, e.g. only
