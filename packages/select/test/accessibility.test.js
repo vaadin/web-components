@@ -53,16 +53,6 @@ describe('accessibility', () => {
       expect(valueButton.hasAttribute('aria-readonly')).to.be.false;
     });
 
-    it('should set aria-readonly attribute when readonly and disabled are set before attach', async () => {
-      select = document.createElement('vaadin-select');
-      select.items = [{ label: 'Option 1', value: 'Option 1' }];
-      select.readonly = true;
-      select.disabled = true;
-      fixtureSync('<div></div>').appendChild(select);
-      await nextRender();
-      expect(select.focusElement.getAttribute('aria-readonly')).to.equal('true');
-    });
-
     it('should add aria-live attribute on first-letter shortcut selection', async () => {
       select.focus();
       await sendKeys({ press: 'o' });
@@ -95,6 +85,42 @@ describe('accessibility', () => {
       await nextUpdate(select);
       const labelId = select.querySelector('[slot=label]').id;
       expect(valueButton.getAttribute('aria-labelledby')).to.equal(labelId);
+    });
+  });
+
+  describe('set before attach', () => {
+    let container;
+
+    beforeEach(() => {
+      container = fixtureSync('<div></div>');
+      select = document.createElement('vaadin-select');
+      select.items = [{ label: 'Option 1', value: 'Option 1' }];
+    });
+
+    it('should set aria-readonly attribute when readonly and disabled are set', async () => {
+      select.readonly = true;
+      select.disabled = true;
+      container.appendChild(select);
+      await nextRender();
+      expect(select.focusElement.getAttribute('aria-readonly')).to.equal('true');
+    });
+
+    it('should set aria-expanded and aria-controls attributes when opened is set', async () => {
+      select.opened = true;
+      container.appendChild(select);
+      await nextRender();
+      const listBox = select.querySelector('vaadin-select-list-box');
+      expect(select.focusElement.getAttribute('aria-expanded')).to.equal('true');
+      expect(select.focusElement.getAttribute('aria-controls')).to.equal(listBox.id);
+    });
+
+    it('should not set aria-controls attribute when opened and disabled are set', async () => {
+      select.opened = true;
+      select.disabled = true;
+      container.appendChild(select);
+      await nextRender();
+      expect(select.focusElement.getAttribute('aria-expanded')).to.equal('false');
+      expect(select.focusElement.hasAttribute('aria-controls')).to.be.false;
     });
   });
 
