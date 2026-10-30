@@ -14,6 +14,7 @@ import '@vaadin/tooltip/src/vaadin-tooltip.js';
 import './vaadin-pdf-viewer-button.js';
 import { html } from 'lit';
 import { styleMap } from 'lit/directives/style-map.js';
+import { slotContent } from '@vaadin/component-base/src/directives/slot-content.js';
 import { formatZoom, getZoomInLevel, getZoomOutLevel, ZOOM_LEVELS } from './pdf-viewer-zoom-utils.js';
 
 /**
@@ -78,8 +79,7 @@ export const PdfViewerToolbarMixin = (superClass) =>
     }
 
     /**
-     * Returns the template of the header and the toolbar, which show the
-     * controls of `_renderToolbarControls()` in their slots.
+     * Returns the template of the header and the toolbar.
      * @protected
      */
     _renderToolbar() {
@@ -98,21 +98,25 @@ export const PdfViewerToolbarMixin = (superClass) =>
           <span part="header-toggle"></span>
         </button>
         <div id="toolbar" part="toolbar" ?hidden="${collapsed}">
-          <div part="toolbar-group"><slot name="toolbar-navigation"></slot></div>
-          <div part="toolbar-group"><slot name="toolbar-zoom"></slot></div>
-          <div part="toolbar-group"><slot name="toolbar-actions"></slot></div>
+          <div part="toolbar-group">
+            <slot name="toolbar-navigation" ${slotContent(this._renderNavigationControls())}></slot>
+          </div>
+          <div part="toolbar-group">
+            <slot name="toolbar-zoom" ${slotContent(this._renderZoomControls())}></slot>
+          </div>
+          <div part="toolbar-group">
+            <slot name="toolbar-actions"></slot>
+          </div>
         </div>
       `;
     }
 
     /**
-     * Returns the template of the toolbar controls, which are rendered into
-     * the light DOM.
+     * Returns the template of the navigation controls in the `toolbar-navigation` slot.
      * @protected
      */
-    _renderToolbarControls() {
+    _renderNavigationControls() {
       const { page, pageCount } = this;
-      const zoomFactor = this._zoomFactor;
       const hasDocument = pageCount > 0;
       const i18n = this.__effectiveI18n;
 
@@ -150,6 +154,19 @@ export const PdfViewerToolbarMixin = (superClass) =>
         >
           <span slot="suffix">${hasDocument ? `/ ${pageCount}` : ''}</span>
         </vaadin-integer-field>
+      `;
+    }
+
+    /**
+     * Returns the template of the zoom controls in the `toolbar-zoom` slot.
+     * @protected
+     */
+    _renderZoomControls() {
+      const zoomFactor = this._zoomFactor;
+      const hasDocument = this.pageCount > 0;
+      const i18n = this.__effectiveI18n;
+
+      return html`
         <vaadin-pdf-viewer-button
           slot="toolbar-zoom"
           icon="zoom-out"
