@@ -307,6 +307,47 @@ class RangeSlider extends FieldMixin(
     };
   }
 
+  /** @protected */
+  render() {
+    const [startValue, endValue] = this.__value;
+
+    const startPercent = this.__getPercentFromValue(startValue);
+    const endPercent = this.__getPercentFromValue(endValue);
+    const { min, max } = this.__getConstraints();
+
+    return html`
+      <div class="vaadin-slider-container">
+        <div part="label" @click="${this.focus}">
+          <slot name="label"></slot>
+          <span part="required-indicator" aria-hidden="true"></span>
+        </div>
+
+        <div id="controls" style="${styleMap({ '--start-value': startPercent, '--end-value': endPercent })}">
+          <div part="track">
+            <div part="track-fill"></div>
+          </div>
+          <div part="thumb thumb-start"></div>
+          <div part="thumb thumb-end"></div>
+          <slot name="input" ${slotContent(this.__renderInputs())}></slot>
+          <slot name="bubble" ${slotContent(this.__renderBubbles())}></slot>
+        </div>
+
+        <div part="marks" aria-hidden="true">
+          <span part="min">${min}</span>
+          <span part="max">${max}</span>
+        </div>
+
+        <div part="helper-text">
+          <slot name="helper"></slot>
+        </div>
+
+        <div part="error-message">
+          <slot name="error-message"></slot>
+        </div>
+      </div>
+    `;
+  }
+
   /** @private */
   __renderInputs() {
     const [startValue, endValue] = this.__value;
@@ -373,47 +414,6 @@ class RangeSlider extends FieldMixin(
       >
         ${endValue}
       </vaadin-slider-bubble>
-    `;
-  }
-
-  /** @protected */
-  render() {
-    const [startValue, endValue] = this.__value;
-
-    const startPercent = this.__getPercentFromValue(startValue);
-    const endPercent = this.__getPercentFromValue(endValue);
-    const { min, max } = this.__getConstraints();
-
-    return html`
-      <div class="vaadin-slider-container">
-        <div part="label" @click="${this.focus}">
-          <slot name="label"></slot>
-          <span part="required-indicator" aria-hidden="true"></span>
-        </div>
-
-        <div id="controls" style="${styleMap({ '--start-value': startPercent, '--end-value': endPercent })}">
-          <div part="track">
-            <div part="track-fill"></div>
-          </div>
-          <div part="thumb thumb-start"></div>
-          <div part="thumb thumb-end"></div>
-          <slot name="input" ${slotContent(this.__renderInputs())}></slot>
-          <slot name="bubble" ${slotContent(this.__renderBubbles())}></slot>
-        </div>
-
-        <div part="marks" aria-hidden="true">
-          <span part="min">${min}</span>
-          <span part="max">${max}</span>
-        </div>
-
-        <div part="helper-text">
-          <slot name="helper"></slot>
-        </div>
-
-        <div part="error-message">
-          <slot name="error-message"></slot>
-        </div>
-      </div>
     `;
   }
 

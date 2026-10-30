@@ -212,6 +212,44 @@ class Slider extends FieldMixin(
     };
   }
 
+  /** @protected */
+  render() {
+    const [value] = this.__value;
+    const percent = this.__getPercentFromValue(value);
+    const { min, max } = this.__getConstraints();
+
+    return html`
+      <div class="vaadin-slider-container">
+        <div part="label">
+          <slot name="label"></slot>
+          <span part="required-indicator" aria-hidden="true" @click="${this.focus}"></span>
+        </div>
+
+        <div id="controls" style="${styleMap({ '--value': percent })}">
+          <div part="track">
+            <div part="track-fill"></div>
+          </div>
+          <div part="thumb"></div>
+          <slot name="input" ${slotContent(this.__renderInput())}></slot>
+          <slot name="bubble" ${slotContent(this.__renderBubble())}></slot>
+        </div>
+
+        <div part="marks" aria-hidden="true">
+          <span part="min">${min}</span>
+          <span part="max">${max}</span>
+        </div>
+
+        <div part="helper-text">
+          <slot name="helper"></slot>
+        </div>
+
+        <div part="error-message">
+          <slot name="error-message"></slot>
+        </div>
+      </div>
+    `;
+  }
+
   /** @private */
   __renderInput() {
     const [value] = this.__value;
@@ -251,44 +289,6 @@ class Slider extends FieldMixin(
       >
         ${value}
       </vaadin-slider-bubble>
-    `;
-  }
-
-  /** @protected */
-  render() {
-    const [value] = this.__value;
-    const percent = this.__getPercentFromValue(value);
-    const { min, max } = this.__getConstraints();
-
-    return html`
-      <div class="vaadin-slider-container">
-        <div part="label">
-          <slot name="label"></slot>
-          <span part="required-indicator" aria-hidden="true" @click="${this.focus}"></span>
-        </div>
-
-        <div id="controls" style="${styleMap({ '--value': percent })}">
-          <div part="track">
-            <div part="track-fill"></div>
-          </div>
-          <div part="thumb"></div>
-          <slot name="input" ${slotContent(this.__renderInput())}></slot>
-          <slot name="bubble" ${slotContent(this.__renderBubble())}></slot>
-        </div>
-
-        <div part="marks" aria-hidden="true">
-          <span part="min">${min}</span>
-          <span part="max">${max}</span>
-        </div>
-
-        <div part="helper-text">
-          <slot name="helper"></slot>
-        </div>
-
-        <div part="error-message">
-          <slot name="error-message"></slot>
-        </div>
-      </div>
     `;
   }
 
