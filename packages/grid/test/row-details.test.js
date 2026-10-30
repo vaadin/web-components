@@ -412,6 +412,19 @@ describe('row details', () => {
       expect(bodyRows[0].children[0].getAttribute('part')).to.include('first-row-cell');
       expect(bodyRows[1].children[0].getAttribute('part')).to.include('last-row-cell');
     });
+
+    it('should keep the details cell in place when scrolled horizontally', async () => {
+      grid.querySelector('vaadin-grid-column').width = '2000px';
+      grid.detailsOpenedItems = [...grid.items];
+      grid.rowDetailsRenderer = (root) => {
+        root.textContent = 'details';
+      };
+      await nextFrame();
+      grid.$.table.scrollLeft = 100;
+      await nextFrame();
+      const detailsCell = bodyRows[0].querySelector('[part~="details-cell"]');
+      expect(detailsCell.getBoundingClientRect().left).to.be.closeTo(grid.$.table.getBoundingClientRect().left, 1);
+    });
   });
 
   describe('details cell height change', () => {
@@ -455,6 +468,12 @@ describe('row details', () => {
       grid.detailsOpenedItems = [...grid.items];
       grid.detailsOpenedItems = [];
       await nextFrame();
+      expect(bodyRow.style.paddingBottom).to.equal('');
+    });
+
+    it('should clear row padding bottom when renderer is cleared', () => {
+      grid.detailsOpenedItems = [...grid.items];
+      grid.rowDetailsRenderer = null;
       expect(bodyRow.style.paddingBottom).to.equal('');
     });
 
