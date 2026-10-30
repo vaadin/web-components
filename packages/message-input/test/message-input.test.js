@@ -67,7 +67,7 @@ describe('message-input', () => {
       messageInput.addEventListener('submit', spy);
       textArea.value = 'にほん';
       textArea.inputElement.dispatchEvent(
-        new KeyboardEvent('keydown', { key: 'Enter', keyCode: 229, isComposing: true, bubbles: true }),
+        new KeyboardEvent('keydown', { key: 'Enter', keyCode: 13, isComposing: true, bubbles: true }),
       );
       expect(spy.called).to.be.false;
     });
