@@ -110,6 +110,12 @@ export const MessageInputMixin = (superClass) =>
           });
 
           textarea.addEventListener('keydown', (event) => {
+            // Let the IME handle Enter that confirms a composition. Safari fires
+            // compositionend before keydown, so also check the IME key code.
+            if (event.isComposing || event.keyCode === 229) {
+              return;
+            }
+
             if (event.key === 'Enter' && !event.shiftKey) {
               event.preventDefault();
               event.stopImmediatePropagation();
