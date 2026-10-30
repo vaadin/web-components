@@ -216,11 +216,11 @@ describe('SlotContentController', () => {
     });
   });
 
-  describe('shouldShowDefault', () => {
+  describe('shouldRenderDefaultNode', () => {
     class LazyController extends DefaultController {
       visible = false;
 
-      shouldShowDefault() {
+      shouldRenderDefaultNode() {
         return this.visible;
       }
     }
@@ -231,12 +231,12 @@ describe('SlotContentController', () => {
       element.addController(controller);
     });
 
-    it('should not create the default node while shouldShowDefault returns false', () => {
+    it('should not create the default node while shouldRenderDefaultNode returns false', () => {
       expect(element.querySelector('[slot="foo"]')).to.be.null;
       expect(controller.node).to.be.null;
     });
 
-    it('should create the default node on update once shouldShowDefault returns true', () => {
+    it('should create the default node on update once shouldRenderDefaultNode returns true', () => {
       controller.visible = true;
       controller.update();
       defaultNode = element.querySelector('[slot="foo"]');
@@ -244,7 +244,7 @@ describe('SlotContentController', () => {
       expect(controller.node).to.equal(defaultNode);
     });
 
-    it('should remove the default node on update once shouldShowDefault returns false', () => {
+    it('should remove the default node on update once shouldRenderDefaultNode returns false', () => {
       controller.visible = true;
       controller.update();
       defaultNode = controller.node;

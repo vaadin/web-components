@@ -147,7 +147,7 @@ export class SlotContentController extends EventTarget {
    * @return {boolean}
    * @protected
    */
-  shouldShowDefault() {
+  shouldRenderDefaultNode() {
     return true;
   }
 
@@ -183,7 +183,7 @@ export class SlotContentController extends EventTarget {
       return customNodes;
     }
 
-    if (!this.shouldShowDefault()) {
+    if (!this.shouldRenderDefaultNode()) {
       this.#detachDefaultNode();
       return [];
     }

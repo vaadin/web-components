@@ -110,7 +110,7 @@ export class SlotContentController extends EventTarget implements ReactiveContro
    * Override to control whether the default node is in the DOM, e.g. only
    * while the host property it shows is not empty.
    */
-  protected shouldShowDefault(): boolean;
+  protected shouldRenderDefaultNode(): boolean;
 
   /**
    * Override to set up a node once it becomes content, e.g. to add listeners.
