@@ -7,8 +7,6 @@
  * See https://vaadin.com/commercial-license-and-service-terms for the full
  * license.
  */
-// Must be imported before Highcharts, see highcharts-policy.js
-import './highcharts-policy.js';
 import 'highcharts/es-modules/masters/highstock.src.js';
 import 'highcharts/es-modules/masters/modules/accessibility.src.js';
 import 'highcharts/es-modules/masters/modules/annotations.src.js';
@@ -32,6 +30,7 @@ import 'highcharts/es-modules/masters/modules/draggable-points.src.js';
 import './highcharts-patches.js';
 import KeyboardNavigation from 'highcharts/es-modules/Accessibility/KeyboardNavigation.js';
 import Pointer from 'highcharts/es-modules/Core/Pointer.js';
+import { Exporting } from 'highcharts/es-modules/Extensions/Exporting/Exporting.js';
 import Highcharts from 'highcharts/es-modules/masters/highstock.src.js';
 import { deepMerge } from '@vaadin/component-base/src/object-utils.js';
 import { get } from '@vaadin/component-base/src/path-utils.js';
@@ -42,14 +41,50 @@ import { cleanupExport, inflateFunctions, prepareExport } from './helpers.js';
 // Highcharts moves a copy of the chart into the document body when exporting, losing the styles
 // defined in the shadow root. The `beforeExport` and `afterExport` events copy them over for the
 // duration of the export. Wrapping `getSVG` covers every export path, as both `exportChart` and
-// `exportChartLocal` call it through `getSVGForExport`.
+// `exportChartLocal` call it through `getSVGForExport`. It has to be the `Exporting` method: the
+// `getSVG` left on `Chart` is a proxy that nothing in Highcharts calls.
 // Workaround for https://github.com/vaadin/vaadin-charts/issues/389
 /* eslint-disable @typescript-eslint/no-invalid-this, prefer-arrow-callback */
-Highcharts.wrap(Highcharts.Chart.prototype, 'getSVG', function (proceed, ...args) {
-  Highcharts.fireEvent(this, 'beforeExport');
-  const result = proceed.apply(this, args);
-  Highcharts.fireEvent(this, 'afterExport');
+Highcharts.wrap(Exporting.prototype, 'getSVG', function (proceed, ...args) {
+  const chart = this.chart;
+  const fireAfterExport = () => Highcharts.fireEvent(chart, 'afterExport');
+
+  Highcharts.fireEvent(chart, 'beforeExport');
+
+  let result;
+  try {
+    result = proceed.apply(this, args);
+  } catch (error) {
+    fireAfterExport();
+    throw error;
+  }
+
+  // In async mode, which `getSVGForExport` uses, the result is a promise that settles once the
+  // chart copy has rendered. Removing the styles before that would produce an unstyled export.
+  if (result instanceof Promise) {
+    return result.finally(fireAfterExport);
+  }
+
+  fireAfterExport();
   return result;
+});
+
+// Since Highcharts 12.3 `exporting.local` defaults to `true`, so PNG, JPEG and SVG exports render
+// in the browser instead of being posted to the export server. That makes `exporting.url` and
+// `width` have no effect, fails PDF exports when `fallbackToExportServer` is off, and needs
+// `blob:` and `data:` sources in a Content Security Policy. Keep the 12.2 behavior for now: use
+// the export server, unless the app loads the `offline-exporting` module, which used to switch
+// the download menu items and `exportChartLocal()` to the browser, or sets `exporting.local`.
+// TODO: Remove in the next major version to switch to the Highcharts default of local export
+delete Highcharts.getOptions().exporting.local;
+
+Highcharts.wrap(Exporting.prototype, 'exportChart', function (proceed, exportingOptions, chartOptions) {
+  if (exportingOptions?.local === undefined && this.options.local === undefined) {
+    // Only the `offline-exporting` module defines `exportChartLocal`
+    const local = typeof this.chart.exportChartLocal === 'function';
+    exportingOptions = { ...exportingOptions, local };
+  }
+  return proceed.call(this, exportingOptions, chartOptions);
 });
 /* eslint-enable @typescript-eslint/no-invalid-this, prefer-arrow-callback */
 
@@ -75,6 +110,72 @@ function withComposedTarget(proceed, e, ...args) {
 
 Highcharts.wrap(Pointer.prototype, 'onDocumentMouseMove', withComposedTarget);
 Highcharts.wrap(KeyboardNavigation.prototype, 'onMouseUp', withComposedTarget);
+
+// In styled mode Highcharts removes the `highcharts-color-{n}` classes from solid gauge points
+// whenever `yAxis.stops` is set, so that CSS does not override the gradient color it writes as a
+// `fill` attribute. But `stops` always falls back to `[[0, minColor], [1, maxColor]]`, and both
+// colors are undefined in styled mode, so the points lose their classes with no color painted.
+// Re-apply the class list when the stops carry no usable color. Replacing the list drops stale
+// color classes after `colorIndex` changes, so the point state class is added back explicitly.
+// TODO: Remove once fixed upstream, see https://github.com/highcharts/highcharts/issues/23279
+/* eslint-disable @typescript-eslint/no-invalid-this, prefer-arrow-callback */
+Highcharts.wrap(Highcharts.seriesTypes.solidgauge.prototype, 'drawPoints', function (proceed, ...args) {
+  proceed.apply(this, args);
+
+  const stops = this.yAxis?.stops;
+  if (!this.chart.styledMode || stops?.every((stop) => stop.color?.get('rgb') !== '')) {
+    return;
+  }
+
+  this.points.forEach((point) => {
+    if (point.graphic) {
+      const stateClass = point.state ? ` highcharts-point-${point.state}` : '';
+      point.graphic.addClass(`${point.getClassName()}${stateClass}`, true);
+    }
+  });
+});
+
+// Since Highcharts 12.5 a `setClip` listener offsets the clip box of a series on a gauge or polar
+// chart by the pane position, which cuts off the top and left of an animated solid gauge. Upstream
+// removes the listener and uses the plot area as the clip box for series on radial axes instead.
+// TODO: Remove once fixed upstream, see https://github.com/highcharts/highcharts/issues/24460
+Highcharts.removeEvent(Highcharts.Series, 'setClip');
+Highcharts.wrap(Highcharts.Chart.prototype, 'getClipBox', function (proceed, series, chartCoords) {
+  const clipBox = proceed.call(this, series, chartCoords);
+  const { xAxis, yAxis } = series || {};
+  if (!xAxis?.isRadial && !yAxis?.isRadial) {
+    return clipBox;
+  }
+
+  // Same as `getClipBox`, except that the length of a radial axis is not a usable size
+  let { width, height } = this.clipBox;
+  if (xAxis && !xAxis.isRadial && xAxis.len !== this.plotSizeX) {
+    width = xAxis.len;
+  }
+  if (yAxis && !yAxis.isRadial && yAxis.len !== this.plotSizeY) {
+    height = yAxis.len;
+  }
+  if (this.inverted && !series.invertible) {
+    [width, height] = [height, width];
+  }
+  return { ...clipBox, width, height };
+});
+
+// Since Highcharts 12.6 an outside tooltip adds the scroll offset of a scrollable plot area to the
+// default position, which already accounts for it, so the tooltip moves away from the point by the
+// scrolled distance. Upstream only adds the offset for a custom `positioner` or a `fixed` tooltip.
+// TODO: Remove once fixed upstream, see https://github.com/highcharts/highcharts/issues/24548
+Highcharts.wrap(Highcharts.Tooltip.prototype, 'getPosition', function (proceed, ...args) {
+  const position = proceed.apply(this, args);
+  // Annotation labels call this method with a stand-in object that has no `options`
+  if (this.outside && !this.options.fixed && !this.options.positioner) {
+    const { scrollLeft = 0, scrollTop = 0 } = this.chart.scrollablePlotArea?.scrollingContainer || {};
+    position.x -= scrollLeft;
+    position.y -= scrollTop;
+  }
+  return position;
+});
+/* eslint-enable @typescript-eslint/no-invalid-this, prefer-arrow-callback */
 
 // Init Highcharts global language defaults
 // No data message should be empty by default
@@ -767,6 +868,11 @@ export const ChartMixin = (superClass) =>
         }
 
         if (this.configuration) {
+          // Destroying the chart removes its event handlers, so a pending export would never fire
+          // `afterExport` to remove the styles it copied to the body
+          this.__pendingExports = 0;
+          cleanupExport(this);
+
           this.configuration.destroy();
           this.configuration = undefined;
 
@@ -1074,12 +1180,12 @@ export const ChartMixin = (superClass) =>
             // Workaround for https://github.com/vaadin/vaadin-charts/issues/389
             // Hook into beforePrint and beforeExport to ensure correct styling
             if (['beforePrint', 'beforeExport'].indexOf(event.type) >= 0) {
-              prepareExport(self);
+              prepareExport(self, event.type === 'beforeExport');
             }
 
             // Hook into afterPrint and afterExport to revert changes made before
             if (['afterPrint', 'afterExport'].indexOf(event.type) >= 0) {
-              cleanupExport(self);
+              cleanupExport(self, event.type === 'afterExport');
             }
 
             self.dispatchEvent(new CustomEvent(eventList[key], customEvent));

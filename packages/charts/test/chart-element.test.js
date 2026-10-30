@@ -645,4 +645,53 @@ describe('vaadin-chart', () => {
       });
     });
   });
+
+  describe('outside tooltip in a scrollable plot area', () => {
+    [true, false].forEach((styledMode) => {
+      it(`should render the tooltip next to the hovered point after scrolling, styledMode: ${styledMode}`, async () => {
+        const chart = fixtureSync(`
+          <vaadin-chart
+            type="column"
+            tooltip
+            style="width: 400px; height: 300px"
+            additional-options='{
+              "tooltip": { "outside": true },
+              "chart": {
+                "styledMode": ${styledMode},
+                "scrollablePlotArea": { "minWidth": 1200, "scrollPositionX": 1 }
+              }
+            }'
+          >
+            <vaadin-chart-series values="[1, 2, 3, 4, 5, 6, 7, 8, 9, 10, 11, 12]"></vaadin-chart-series>
+          </vaadin-chart>
+        `);
+        await oneEvent(chart, 'chart-load');
+        expect(chart.configuration.styledMode).to.equal(styledMode);
+        const point = chart.configuration.series[0].points[11];
+        point.onMouseOver();
+        await nextFrame();
+
+        const pointRect = point.graphic.element.getBoundingClientRect();
+        const tooltipRect = chart.configuration.tooltip.container.getBoundingClientRect();
+        const pointCenter = pointRect.left + pointRect.width / 2;
+        expect(tooltipRect.left).to.be.below(pointCenter);
+        expect(tooltipRect.right).to.be.above(pointCenter);
+      });
+    });
+  });
+
+  it('should render an annotation label positioned by distance', async () => {
+    const chart = fixtureSync(`
+      <vaadin-chart
+        tooltip
+        additional-options='{
+          "annotations": [{ "labels": [{ "point": { "x": 1, "y": 2, "xAxis": 0, "yAxis": 0 }, "distance": 20, "text": "Label" }] }]
+        }'
+      >
+        <vaadin-chart-series values="[1, 2, 3]"></vaadin-chart-series>
+      </vaadin-chart>
+    `);
+    await oneEvent(chart, 'chart-load');
+    expect(chart.$.chart.querySelector('.highcharts-annotation-label text').textContent).to.equal('Label');
+  });
 });

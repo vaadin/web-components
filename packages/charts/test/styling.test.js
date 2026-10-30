@@ -1,5 +1,5 @@
 import { expect } from '@vaadin/chai-plugins';
-import { fixtureSync, nextFrame, nextResize, oneEvent } from '@vaadin/testing-helpers';
+import { aTimeout, fixtureSync, nextFrame, nextResize, oneEvent } from '@vaadin/testing-helpers';
 import './chart-not-animated-styles.js';
 import './theme-styles.js';
 import '../src/vaadin-chart.js';
@@ -262,6 +262,122 @@ describe('vaadin-chart styling', () => {
         expect(outside.boxFill).to.equal('rgb(255, 255, 255)');
         expect(outside.usesHighchartsShadow).to.be.true;
         expect(outside).to.deep.equal(nonStyledTooltipStyles(await fixtureTooltip(false, { styledMode: false })));
+      });
+    });
+  });
+
+  describe('solid gauge', () => {
+    let chart;
+
+    function points() {
+      return [...chart.$.chart.querySelectorAll('.highcharts-solidgauge-series .highcharts-point')];
+    }
+
+    async function createChart(yAxis) {
+      chart = fixtureSync('<vaadin-chart type="solidgauge"></vaadin-chart>');
+      chart.additionalOptions = { yAxis: { min: 0, max: 100, ...yAxis } };
+      await oneEvent(chart, 'chart-load');
+      chart.configuration.addSeries({
+        data: [
+          { y: 20, colorIndex: 1 },
+          { y: 50, colorIndex: 3 },
+        ],
+      });
+    }
+
+    it('should paint points with their color class when no stops are defined', async () => {
+      await createChart();
+      expect(points().map((point) => point.getAttribute('class'))).to.eql([
+        'highcharts-point highcharts-color-1',
+        'highcharts-point highcharts-color-3',
+      ]);
+      expect(getComputedStyle(points()[0]).fill).to.not.equal('none');
+    });
+
+    it('should update the color class when colorIndex changes', async () => {
+      await createChart();
+      chart.configuration.series[0].points[0].update({ colorIndex: 5 });
+      expect(points()[0].getAttribute('class')).to.equal('highcharts-point highcharts-color-5');
+    });
+
+    it('should keep the point state class when points are redrawn', async () => {
+      await createChart();
+      chart.configuration.series[0].points[0].setState('hover');
+      chart.configuration.setSize(300, 300, false);
+      expect(points()[0].classList.contains('highcharts-point-hover')).to.be.true;
+      expect(points()[0].classList.contains('highcharts-color-1')).to.be.true;
+    });
+
+    it('should not add color classes when stops are defined', async () => {
+      await createChart({
+        stops: [
+          [0, '#ff0000'],
+          [1, '#0000ff'],
+        ],
+      });
+      points().forEach((point) => {
+        expect(point.getAttribute('class')).to.equal('highcharts-point');
+        expect(point.getAttribute('fill')).to.not.equal('none');
+      });
+    });
+
+    it('should not add color classes when minColor and maxColor are defined', async () => {
+      await createChart({ minColor: '#ff0000', maxColor: '#0000ff' });
+      points().forEach((point) => {
+        expect(point.getAttribute('class')).to.equal('highcharts-point');
+        expect(point.getAttribute('fill')).to.not.equal('none');
+      });
+    });
+    [true, false].forEach((styledMode) => {
+      it(`should not clip an animated solid gauge, styledMode: ${styledMode}`, async () => {
+        chart = fixtureSync(`
+          <vaadin-chart
+            type="solidgauge"
+            style="width: 400px; height: 400px"
+            additional-options='{
+              "chart": { "styledMode": ${styledMode}, "animation": { "duration": 50 } },
+              "plotOptions": { "series": { "animation": { "duration": 50 } } },
+              "pane": { "startAngle": 0, "endAngle": 360 },
+              "yAxis": { "min": 0, "max": 100 }
+            }'
+          >
+            <vaadin-chart-series values='[{ "y": 80, "radius": "112%", "innerRadius": "88%" }]'></vaadin-chart-series>
+          </vaadin-chart>
+        `);
+        await oneEvent(chart, 'chart-load');
+        await aTimeout(100);
+
+        expect(chart.configuration.styledMode).to.equal(styledMode);
+        const series = chart.configuration.series[0];
+        const clipId = series.group.element.getAttribute('clip-path').match(/#([^)]+)/u)[1];
+        const clip = chart.$.chart.querySelector(`[id="${clipId}"] rect`).getBBox();
+        const point = series.points[0].graphic.element.getBBox();
+        expect(clip.x).to.be.at.most(point.x);
+        expect(clip.y).to.be.at.most(point.y);
+      });
+    });
+
+    describe('non-styled mode', () => {
+      async function createNonStyledChart(yAxis) {
+        chart = fixtureSync('<vaadin-chart type="solidgauge"></vaadin-chart>');
+        chart.additionalOptions = { chart: { styledMode: false }, yAxis: { min: 0, max: 100, ...yAxis } };
+        await oneEvent(chart, 'chart-load');
+        chart.configuration.addSeries({ data: [100] });
+      }
+
+      it('should paint points with the stop color', async () => {
+        await createNonStyledChart({
+          stops: [
+            [0, '#ff0000'],
+            [1, '#0000ff'],
+          ],
+        });
+        expect(getComputedStyle(points()[0]).fill).to.equal('rgb(0, 0, 255)');
+      });
+
+      it('should paint points with the series color when no stops are defined', async () => {
+        await createNonStyledChart();
+        expect(getComputedStyle(points()[0]).fill).to.equal('rgb(44, 175, 254)');
       });
     });
   });
