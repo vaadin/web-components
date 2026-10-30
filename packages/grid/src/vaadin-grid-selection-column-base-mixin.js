@@ -230,7 +230,7 @@ export const GridSelectionColumnBaseMixin = (superClass) =>
         if (!checkbox.isConnected || !row) {
           return;
         }
-        const rowHeaderColumn = this._grid._columnTree.at(-1).find((column) => !column.hidden && column.rowHeader);
+        const rowHeaderColumn = this._grid._getColumnsInOrder().find((column) => column.rowHeader);
         const rowHeaderCell = rowHeaderColumn?._cells?.find((cell) => cell.__parentRow === row);
         const value = rowHeaderCell?._content?.textContent.trim() || String(row.index + 1);
         checkbox.accessibleName = ariaLabel.replace('{rowHeader}', value);
