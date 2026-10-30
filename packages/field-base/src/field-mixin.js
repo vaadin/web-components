@@ -77,17 +77,17 @@ export const FieldMixin = (superclass) =>
     constructor() {
       super();
 
-      this._labelController.addEventListener('content-changed', (event) => {
+      this._labelController.addEventListener('slot-content-changed', (event) => {
         this.#onLabelSlotContentChange(event);
       });
 
       this._helperController = new HelperController(this);
-      this._helperController.addEventListener('content-changed', (event) => {
+      this._helperController.addEventListener('slot-content-changed', (event) => {
         this.#onHelperSlotContentChange(event);
       });
 
       this._errorController = new ErrorController(this);
-      this._errorController.addEventListener('content-changed', (event) => {
+      this._errorController.addEventListener('slot-content-changed', (event) => {
         this.#onErrorSlotContentChange(event);
       });
 

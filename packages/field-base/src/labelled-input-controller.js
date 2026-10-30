@@ -11,7 +11,7 @@ export class LabelledInputController {
   constructor(input, labelController) {
     this.input = input;
 
-    labelController.addEventListener('content-changed', (event) => {
+    labelController.addEventListener('slot-content-changed', (event) => {
       this.#initLabel(event.detail.node);
     });
 

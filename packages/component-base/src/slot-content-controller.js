@@ -11,7 +11,7 @@ import { generateUniqueId } from './unique-id-utils.js';
  * by the user, or a default node created by the controller when there are none.
  * Subclasses override the hooks to create the default node and to set up,
  * update and tear down the content nodes. The host calls `update()` when
- * a property used by the hooks changes, and listens for `content-changed`.
+ * a property used by the hooks changes, and listens for `slot-content-changed`.
  *
  * In single mode, a newly slotted custom node replaces the current one.
  * With the `multiple` option, all the custom nodes are kept as content.
@@ -99,7 +99,7 @@ export class SlotContentController extends EventTarget {
   /**
    * Update the content to match the slot children and the host state, running
    * the hooks for the nodes that changed and `_updateNode()` for all of them,
-   * then dispatch `content-changed`. Does nothing before `hostConnected()`.
+   * then dispatch `slot-content-changed`. Does nothing before `hostConnected()`.
    */
   update() {
     if (!this.#initialized) {
@@ -274,7 +274,7 @@ export class SlotContentController extends EventTarget {
     this.#hasContent = hasContent;
 
     this.dispatchEvent(
-      new CustomEvent('content-changed', {
+      new CustomEvent('slot-content-changed', {
         detail: { node, nodes, hasContent, isDefault: node !== null && node === this.defaultNode },
       }),
     );

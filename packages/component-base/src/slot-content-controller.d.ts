@@ -18,7 +18,7 @@ export interface SlotContentControllerConfig {
   idPrefix?: string;
 
   /**
-   * Observe text and child changes of the content, so that `content-changed`
+   * Observe text and child changes of the content, so that `slot-content-changed`
    * is also dispatched when `hasContent` changes.
    */
   observeContent?: boolean;
@@ -32,7 +32,7 @@ export type SlotContentChangedEvent = CustomEvent<{
 }>;
 
 export interface SlotContentControllerEventMap {
-  'content-changed': SlotContentChangedEvent;
+  'slot-content-changed': SlotContentChangedEvent;
 }
 
 /**
@@ -40,7 +40,7 @@ export interface SlotContentControllerEventMap {
  * by the user, or a default node created by the controller when there are none.
  * Subclasses override the hooks to create the default node and to set up,
  * update and tear down the content nodes. The host calls `update()` when
- * a property used by the hooks changes, and listens for `content-changed`.
+ * a property used by the hooks changes, and listens for `slot-content-changed`.
  *
  * In single mode, a newly slotted custom node replaces the current one.
  * With the `multiple` option, all the custom nodes are kept as content.
@@ -97,7 +97,7 @@ export class SlotContentController extends EventTarget implements ReactiveContro
   /**
    * Update the content to match the slot children and the host state, running
    * the hooks for the nodes that changed and `_updateNode()` for all of them,
-   * then dispatch `content-changed`. Does nothing before `hostConnected()`.
+   * then dispatch `slot-content-changed`. Does nothing before `hostConnected()`.
    */
   update(): void;
 

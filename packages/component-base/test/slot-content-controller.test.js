@@ -288,7 +288,7 @@ describe('SlotContentController', () => {
       initSpy = sinon.spy(controller, '_initNode');
       updateSpy = sinon.spy(controller, '_updateNode');
       changeSpy = sinon.spy();
-      controller.addEventListener('content-changed', changeSpy);
+      controller.addEventListener('slot-content-changed', changeSpy);
     });
 
     it('should do nothing before the controller is connected', () => {
@@ -326,7 +326,7 @@ describe('SlotContentController', () => {
         expect(initSpy).to.be.not.called;
       });
 
-      it('should dispatch content-changed with the default content details', () => {
+      it('should dispatch slot-content-changed with the default content details', () => {
         controller.update();
         expect(changeSpy).to.be.calledOnce;
         const { detail } = changeSpy.firstCall.args[0];
@@ -336,7 +336,7 @@ describe('SlotContentController', () => {
         expect(detail.isDefault).to.be.true;
       });
 
-      it('should dispatch content-changed with the custom content details', async () => {
+      it('should dispatch slot-content-changed with the custom content details', async () => {
         const custom = addCustomNode('bar');
         await nextFrame();
         const { detail } = changeSpy.firstCall.args[0];
@@ -362,7 +362,7 @@ describe('SlotContentController', () => {
         // Wait for the initial slotchange event
         await nextFrame();
         changeSpy = sinon.spy();
-        controller.addEventListener('content-changed', changeSpy);
+        controller.addEventListener('slot-content-changed', changeSpy);
       });
 
       it('should set the generated ID on the default node', () => {
@@ -376,13 +376,13 @@ describe('SlotContentController', () => {
         expect(defaultNode.id).to.equal(controller.defaultId);
       });
 
-      it('should dispatch content-changed once when the ID is removed', async () => {
+      it('should dispatch slot-content-changed once when the ID is removed', async () => {
         defaultNode.removeAttribute('id');
         await nextFrame();
         expect(changeSpy).to.be.calledOnce;
       });
 
-      it('should keep a changed ID and dispatch content-changed', async () => {
+      it('should keep a changed ID and dispatch slot-content-changed', async () => {
         defaultNode.id = 'custom-id';
         await nextFrame();
         expect(defaultNode.id).to.equal('custom-id');
@@ -454,17 +454,17 @@ describe('SlotContentController', () => {
         // Wait for the initial slotchange event
         await nextFrame();
         changeSpy = sinon.spy();
-        controller.addEventListener('content-changed', changeSpy);
+        controller.addEventListener('slot-content-changed', changeSpy);
       });
 
-      it('should dispatch content-changed when the content becomes non-empty', async () => {
+      it('should dispatch slot-content-changed when the content becomes non-empty', async () => {
         defaultNode.textContent = 'bar';
         await nextFrame();
         expect(changeSpy).to.be.calledOnce;
         expect(changeSpy.firstCall.args[0].detail.hasContent).to.be.true;
       });
 
-      it('should dispatch content-changed when the content becomes empty', async () => {
+      it('should dispatch slot-content-changed when the content becomes empty', async () => {
         defaultNode.textContent = 'bar';
         await nextFrame();
         changeSpy.resetHistory();
@@ -474,7 +474,7 @@ describe('SlotContentController', () => {
         expect(changeSpy.firstCall.args[0].detail.hasContent).to.be.false;
       });
 
-      it('should dispatch content-changed when a child text node changes', async () => {
+      it('should dispatch slot-content-changed when a child text node changes', async () => {
         defaultNode.appendChild(document.createTextNode(''));
         await nextFrame();
         changeSpy.resetHistory();
@@ -483,7 +483,7 @@ describe('SlotContentController', () => {
         expect(changeSpy).to.be.calledOnce;
       });
 
-      it('should not dispatch content-changed when hasContent does not change', async () => {
+      it('should not dispatch slot-content-changed when hasContent does not change', async () => {
         defaultNode.textContent = 'bar';
         await nextFrame();
         changeSpy.resetHistory();
@@ -529,10 +529,10 @@ describe('SlotContentController', () => {
         // Wait for the initial slotchange event
         await nextFrame();
         changeSpy = sinon.spy();
-        controller.addEventListener('content-changed', changeSpy);
+        controller.addEventListener('slot-content-changed', changeSpy);
       });
 
-      it('should dispatch content-changed only once for an update', async () => {
+      it('should dispatch slot-content-changed only once for an update', async () => {
         controller.text = 'bar';
         controller.update();
         await nextFrame();
@@ -549,10 +549,10 @@ describe('SlotContentController', () => {
         // Wait for the initial slotchange event
         await nextFrame();
         changeSpy = sinon.spy();
-        controller.addEventListener('content-changed', changeSpy);
+        controller.addEventListener('slot-content-changed', changeSpy);
       });
 
-      it('should not dispatch content-changed when the content changes', async () => {
+      it('should not dispatch slot-content-changed when the content changes', async () => {
         defaultNode.textContent = 'bar';
         await nextFrame();
         expect(changeSpy).to.be.not.called;
