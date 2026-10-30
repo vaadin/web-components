@@ -29,5 +29,5 @@ export class LabelController extends SlotContentController {
   /**
    * Override method from `SlotContentController` to show the label text in the default label element.
    */
-  protected updateNode(node: Node): void;
+  protected _updateNode(node: Node): void;
 }

@@ -33,8 +33,8 @@ describe('SlotContentController', () => {
     beforeEach(() => {
       element = fixtureSync(`<${tag}></${tag}>`);
       controller = new DefaultController(element, 'foo');
-      initSpy = sinon.spy(controller, 'initNode');
-      updateSpy = sinon.spy(controller, 'updateNode');
+      initSpy = sinon.spy(controller, '_initNode');
+      updateSpy = sinon.spy(controller, '_updateNode');
       element.addController(controller);
       defaultNode = element.querySelector('[slot="foo"]');
     });
@@ -49,7 +49,7 @@ describe('SlotContentController', () => {
       expect(controller.defaultNode).to.equal(defaultNode);
     });
 
-    it('should call initNode and then updateNode for the default node', () => {
+    it('should call _initNode and then _updateNode for the default node', () => {
       expect(initSpy).to.be.calledOnceWith(defaultNode);
       expect(updateSpy).to.be.calledOnceWith(defaultNode);
       expect(initSpy).to.be.calledBefore(updateSpy);
@@ -77,8 +77,8 @@ describe('SlotContentController', () => {
       element = fixtureSync(`<${tag}><div slot="foo">bar</div></${tag}>`);
       custom = element.querySelector('[slot="foo"]');
       controller = new DefaultController(element, 'foo');
-      initSpy = sinon.spy(controller, 'initNode');
-      updateSpy = sinon.spy(controller, 'updateNode');
+      initSpy = sinon.spy(controller, '_initNode');
+      updateSpy = sinon.spy(controller, '_updateNode');
       element.addController(controller);
     });
 
@@ -92,7 +92,7 @@ describe('SlotContentController', () => {
       expect(controller.nodes).to.have.ordered.members([custom]);
     });
 
-    it('should call initNode and then updateNode for the custom node', () => {
+    it('should call _initNode and then _updateNode for the custom node', () => {
       expect(initSpy).to.be.calledOnceWith(custom);
       expect(updateSpy).to.be.calledOnceWith(custom);
       expect(initSpy).to.be.calledBefore(updateSpy);
@@ -145,8 +145,8 @@ describe('SlotContentController', () => {
       defaultNode = controller.node;
       // Wait for the initial slotchange event
       await nextFrame();
-      initSpy = sinon.spy(controller, 'initNode');
-      teardownSpy = sinon.spy(controller, 'teardownNode');
+      initSpy = sinon.spy(controller, '_initNode');
+      teardownSpy = sinon.spy(controller, '_teardownNode');
     });
 
     it('should replace the default node with the added custom node', async () => {
@@ -156,7 +156,7 @@ describe('SlotContentController', () => {
       expect(controller.node).to.equal(custom);
     });
 
-    it('should call teardownNode for the default node and then initNode for the custom node', async () => {
+    it('should call _teardownNode for the default node and then _initNode for the custom node', async () => {
       const custom = addCustomNode();
       await nextFrame();
       expect(teardownSpy).to.be.calledOnceWith(defaultNode);
@@ -173,7 +173,7 @@ describe('SlotContentController', () => {
       expect(controller.node).to.equal(defaultNode);
     });
 
-    it('should call teardownNode for the removed custom node and initNode for the restored default node', async () => {
+    it('should call _teardownNode for the removed custom node and _initNode for the restored default node', async () => {
       const custom = addCustomNode();
       await nextFrame();
       teardownSpy.resetHistory();
@@ -204,7 +204,7 @@ describe('SlotContentController', () => {
       expect(controller.node).to.equal(other);
     });
 
-    it('should call initNode again when the same custom node is added back', async () => {
+    it('should call _initNode again when the same custom node is added back', async () => {
       const custom = addCustomNode();
       await nextFrame();
       custom.remove();
@@ -248,7 +248,7 @@ describe('SlotContentController', () => {
       controller.visible = true;
       controller.update();
       defaultNode = controller.node;
-      const teardownSpy = sinon.spy(controller, 'teardownNode');
+      const teardownSpy = sinon.spy(controller, '_teardownNode');
 
       controller.visible = false;
       controller.update();
@@ -285,8 +285,8 @@ describe('SlotContentController', () => {
     beforeEach(() => {
       element = fixtureSync(`<${tag}></${tag}>`);
       controller = new DefaultController(element, 'foo');
-      initSpy = sinon.spy(controller, 'initNode');
-      updateSpy = sinon.spy(controller, 'updateNode');
+      initSpy = sinon.spy(controller, '_initNode');
+      updateSpy = sinon.spy(controller, '_updateNode');
       changeSpy = sinon.spy();
       controller.addEventListener('content-changed', changeSpy);
     });
@@ -310,13 +310,13 @@ describe('SlotContentController', () => {
         changeSpy.resetHistory();
       });
 
-      it('should call updateNode but not initNode for the default node', () => {
+      it('should call _updateNode but not _initNode for the default node', () => {
         controller.update();
         expect(updateSpy).to.be.calledOnceWith(defaultNode);
         expect(initSpy).to.be.not.called;
       });
 
-      it('should call updateNode but not initNode for the custom node', async () => {
+      it('should call _updateNode but not _initNode for the custom node', async () => {
         const custom = addCustomNode();
         await nextFrame();
         updateSpy.resetHistory();
@@ -513,11 +513,11 @@ describe('SlotContentController', () => {
       });
     });
 
-    describe('changes made by updateNode', () => {
+    describe('changes made by _updateNode', () => {
       class TextController extends DefaultController {
         text = '';
 
-        updateNode(node) {
+        _updateNode(node) {
           node.textContent = this.text;
         }
       }

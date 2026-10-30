@@ -96,7 +96,7 @@ export class SlotContentController extends EventTarget implements ReactiveContro
 
   /**
    * Update the content to match the slot children and the host state, running
-   * the hooks for the nodes that changed and `updateNode()` for all of them,
+   * the hooks for the nodes that changed and `_updateNode()` for all of them,
    * then dispatch `content-changed`. Does nothing before `hostConnected()`.
    */
   update(): void;
@@ -115,18 +115,18 @@ export class SlotContentController extends EventTarget implements ReactiveContro
   /**
    * Override to set up a node once it becomes content, e.g. to add listeners.
    */
-  protected initNode(node: Node): void;
+  protected _initNode(node: Node): void;
 
   /**
-   * Override to apply the host state to a content node. Runs after `initNode()`
+   * Override to apply the host state to a content node. Runs after `_initNode()`
    * and on every `update()`, for default and custom nodes alike.
    */
-  protected updateNode(node: Node): void;
+  protected _updateNode(node: Node): void;
 
   /**
    * Override to clean up a node once it stops being content.
    */
-  protected teardownNode(node: Node): void;
+  protected _teardownNode(node: Node): void;
 
   addEventListener<K extends keyof SlotContentControllerEventMap>(
     type: K,

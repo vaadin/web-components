@@ -98,7 +98,7 @@ export class SlotContentController extends EventTarget {
 
   /**
    * Update the content to match the slot children and the host state, running
-   * the hooks for the nodes that changed and `updateNode()` for all of them,
+   * the hooks for the nodes that changed and `_updateNode()` for all of them,
    * then dispatch `content-changed`. Does nothing before `hostConnected()`.
    */
   update() {
@@ -129,10 +129,10 @@ export class SlotContentController extends EventTarget {
     const removedNodes = prevNodes.filter((node) => !nextNodes.includes(node));
     const addedNodes = nextNodes.filter((node) => !prevNodes.includes(node));
 
-    removedNodes.forEach((node) => this.teardownNode(node));
+    removedNodes.forEach((node) => this._teardownNode(node));
     nextNodes.forEach((node) => this.#assignId(node));
-    addedNodes.forEach((node) => this.initNode(node));
-    nextNodes.forEach((node) => this.updateNode(node));
+    addedNodes.forEach((node) => this._initNode(node));
+    nextNodes.forEach((node) => this._updateNode(node));
 
     if (removedNodes.length > 0 || addedNodes.length > 0) {
       this.#observeNodes();
@@ -172,16 +172,16 @@ export class SlotContentController extends EventTarget {
    * @param {Node} _node
    * @protected
    */
-  initNode(_node) {}
+  _initNode(_node) {}
 
   /**
-   * Override to apply the host state to a content node. Runs after `initNode()`
+   * Override to apply the host state to a content node. Runs after `_initNode()`
    * and on every `update()`, for default and custom nodes alike.
    *
    * @param {Node} _node
    * @protected
    */
-  updateNode(_node) {}
+  _updateNode(_node) {}
 
   /**
    * Override to clean up a node once it stops being content.
@@ -189,7 +189,7 @@ export class SlotContentController extends EventTarget {
    * @param {Node} _node
    * @protected
    */
-  teardownNode(_node) {}
+  _teardownNode(_node) {}
 
   #getCustomNodes() {
     return [...this.host.childNodes].filter((node) => this.#isCustomNode(node));

@@ -41,7 +41,7 @@ export class LabelController extends SlotContentController {
    * @protected
    * @override
    */
-  updateNode(node) {
+  _updateNode(node) {
     if (node === this.defaultNode) {
       node.textContent = this.label;
     }
