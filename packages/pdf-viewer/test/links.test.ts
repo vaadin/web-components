@@ -156,6 +156,57 @@ describe('links', () => {
     });
   });
 
+  describe('reading order', () => {
+    // "Vaadin" ends the first line at x=110-182, "docs" ends the second line at x=98-146.
+    const twoLines = 'BT /F2 20 Tf 50 700 Td (Read Vaadin) Tj ET BT /F2 20 Tf 50 600 Td (See docs) Tj ET';
+    const docsRect = [98, 595, 146, 625];
+
+    function getTextDivs() {
+      return [...getTextLayer(1)!.querySelectorAll<HTMLElement>(':scope > span')];
+    }
+
+    async function loadTwoLines() {
+      await loadPdf([
+        { content: twoLines, annotations: [uriLink(docsRect, 'https://vaadin.com/docs'), uriLink(vaadinRect)] },
+      ]);
+    }
+
+    it('should put the links of a page in reading order', async () => {
+      await loadTwoLines();
+      expect(getLinks(1).map((link) => link.href)).to.deep.equal(['https://vaadin.com/', 'https://vaadin.com/docs']);
+    });
+
+    it('should add each link to the text before it for assistive technology', async () => {
+      await loadTwoLines();
+      const [vaadin, docs] = getLinks(1);
+      expect(vaadin.id).to.be.ok.and.not.equal(docs.id);
+      expect(getTextDivs().map((div) => div.getAttribute('aria-owns'))).to.deep.equal([vaadin.id, docs.id]);
+    });
+
+    it('should add several links to the same text before them', async () => {
+      await loadPdf([
+        {
+          content: sentence,
+          annotations: [uriLink(documentationRect, 'https://vaadin.com/docs'), uriLink(vaadinRect)],
+        },
+      ]);
+      const [vaadin, documentation] = getLinks(1);
+      expect(getTextDivs()[0].getAttribute('aria-owns')).to.equal(`${vaadin.id} ${documentation.id}`);
+    });
+
+    it('should add the links to the text when the text renders after them', async () => {
+      await failTextOnce(1);
+      sinon.stub(console, 'warn');
+      await loadTwoLines();
+      expect(getTextLayer(1)).to.be.null;
+      const idle = nextRenderIdle(viewer);
+      viewer.style.width = '900px';
+      await idle;
+      const [vaadin, docs] = getLinks(1);
+      expect(getTextDivs().map((div) => div.getAttribute('aria-owns'))).to.deep.equal([vaadin.id, docs.id]);
+    });
+  });
+
   describe('external links', () => {
     it('should only create links with allowed protocols, which open in a new window without access to the viewer', async () => {
       // pdf.js drops `javascript:` links itself, the viewer drops other protocols.
@@ -198,7 +249,7 @@ describe('links', () => {
           annotations: [uriLink(documentationRect, 'https://vaadin.com/docs'), uriLink(vaadinRect)],
         },
       ]);
-      expect(getLinkNames()).to.deep.equal(['documentation (opens in a new tab)', 'Vaadin (opens in a new tab)']);
+      expect(getLinkNames()).to.deep.equal(['Vaadin (opens in a new tab)', 'documentation (opens in a new tab)']);
     });
 
     it('should name a link that covers several lines with the text of all lines', async () => {

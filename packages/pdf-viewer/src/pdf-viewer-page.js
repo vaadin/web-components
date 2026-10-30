@@ -9,6 +9,7 @@
  * license.
  */
 import { createLink } from './pdf-viewer-links.js';
+import { addLinksToText, ANNOTATION_ID_PREFIX, compareAnnotationPositions } from './pdf-viewer-text-accessibility.js';
 import { loadPdfjs } from './pdfjs-loader.js';
 
 /**
@@ -268,6 +269,7 @@ export class PdfViewerPage {
       endOfContent.className = 'end-of-content';
       container.append(endOfContent);
       this.endOfContentElement = endOfContent;
+      this.#addLinksToText();
     }
   }
 
@@ -275,7 +277,8 @@ export class PdfViewerPage {
    * Renders the link layer: the links of the page, positioned relative to the
    * page size so that they need no update when the scale changes. Like the
    * text layer, the layer has the size of the page without its rotation, and
-   * is rotated with the page. A page without links gets no layer. Returns the
+   * is rotated with the page. The links are in reading order, as in pdf.js,
+   * also for the Tab key. A page without links gets no layer. Returns the
    * links with their annotations, or no links when they are rendered already
    * or the page was released meanwhile.
    *
@@ -303,11 +306,13 @@ export class PdfViewerPage {
     layer.className = 'link-layer';
     setLayerDimensions(layer, this.pdfPage.getViewport({ scale: 1 }));
 
-    annotations.forEach((annotation) => {
+    // A copy, as pdf.js returns the same annotations to each call.
+    [...annotations].sort(compareAnnotationPositions).forEach((annotation) => {
       const link = annotation.subtype === 'Link' && createLink(annotation, followLink);
       if (!link) {
         return;
       }
+      link.id = `${ANNOTATION_ID_PREFIX}${annotation.id}`;
       const [x1, y1] = viewport.convertToViewportPoint(annotation.rect[0], annotation.rect[1]);
       const [x2, y2] = viewport.convertToViewportPoint(annotation.rect[2], annotation.rect[3]);
       link.style.left = `${(Math.min(x1, x2) / viewport.width) * 100}%`;
@@ -321,8 +326,20 @@ export class PdfViewerPage {
     if (links.length) {
       this.element.append(layer);
       this.linkLayerElement = layer;
+      this.#addLinksToText();
     }
     return links;
+  }
+
+  /**
+   * Adds the links to the text, for assistive technology, once both the text
+   * layer and the link layer have rendered, in either order.
+   * @private
+   */
+  #addLinksToText() {
+    if (this.endOfContentElement && this.linkLayerElement) {
+      addLinksToText(this.textLayer.textDivs, [...this.linkLayerElement.children]);
+    }
   }
 
   /** Cancels a pending render. */

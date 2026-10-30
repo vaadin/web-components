@@ -876,6 +876,7 @@ snapshots["vaadin-pdf-viewer page tagged"] =
       id="p2R_mc3"
     >
       <span
+        aria-owns="pdfjs_internal_id_11R"
         dir="ltr"
         role="presentation"
       >
@@ -1080,6 +1081,7 @@ snapshots["vaadin-pdf-viewer page tagged"] =
       aria-label="Vaadin website (opens in a new tab)"
       class="link"
       href="https://vaadin.com/"
+      id="pdfjs_internal_id_11R"
       rel="noopener noreferrer"
       target="_blank"
     >
@@ -1105,6 +1107,7 @@ snapshots["vaadin-pdf-viewer page links"] =
     </span>
     <br role="presentation">
     <span
+      aria-owns="pdfjs_internal_id_7R"
       dir="ltr"
       role="presentation"
     >
@@ -1112,6 +1115,7 @@ snapshots["vaadin-pdf-viewer page links"] =
     </span>
     <br role="presentation">
     <span
+      aria-owns="pdfjs_internal_id_8R"
       dir="ltr"
       role="presentation"
     >
@@ -1128,12 +1132,14 @@ snapshots["vaadin-pdf-viewer page links"] =
       aria-label="Internal link to page 2"
       class="link"
       href="#"
+      id="pdfjs_internal_id_7R"
     >
     </a>
     <a
       aria-label="External link to vaadin.com (opens in a new tab)"
       class="link"
       href="https://vaadin.com/"
+      id="pdfjs_internal_id_8R"
       rel="noopener noreferrer"
       target="_blank"
     >
