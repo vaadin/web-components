@@ -279,7 +279,9 @@ describe('text layer', () => {
       await dragOverEmptySpace();
       await sendMouse({ type: 'up' });
       const textLayer = getTextLayer(1)!;
-      expect(textLayer.lastElementChild!.classList.contains('end-of-content')).to.be.true;
+      const end = textLayer.lastElementChild as HTMLElement;
+      expect(end.classList.contains('end-of-content')).to.be.true;
+      expect(end.style.cssText).to.equal('');
       expect(textLayer.classList.contains('selecting')).to.be.false;
     });
 

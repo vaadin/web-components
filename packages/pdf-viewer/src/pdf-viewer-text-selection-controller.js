@@ -80,6 +80,7 @@ function reset({ textLayerElement, endOfContentElement }) {
   textLayerElement.append(endOfContentElement);
   endOfContentElement.style.width = '';
   endOfContentElement.style.height = '';
+  endOfContentElement.style.userSelect = '';
   textLayerElement.classList.remove('selecting');
 }
 
