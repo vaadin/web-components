@@ -57,7 +57,7 @@ snapshots["vaadin-pdf-viewer host default"] =
     >
     </span>
     <label
-      for="input-vaadin-integer-field-17"
+      for="input-vaadin-integer-field-15"
       id="label-vaadin-integer-field-1"
       slot="label"
     >
@@ -72,7 +72,7 @@ snapshots["vaadin-pdf-viewer host default"] =
       aria-describedby="pdf-viewer-page-error-0"
       aria-label="Page"
       disabled=""
-      id="input-vaadin-integer-field-17"
+      id="input-vaadin-integer-field-15"
       max="1"
       min="1"
       slot="input"
@@ -219,7 +219,7 @@ snapshots["vaadin-pdf-viewer host error"] =
     >
     </span>
     <label
-      for="input-vaadin-integer-field-17"
+      for="input-vaadin-integer-field-15"
       id="label-vaadin-integer-field-1"
       slot="label"
     >
@@ -234,7 +234,7 @@ snapshots["vaadin-pdf-viewer host error"] =
       aria-describedby="pdf-viewer-page-error-0"
       aria-label="Page"
       disabled=""
-      id="input-vaadin-integer-field-17"
+      id="input-vaadin-integer-field-15"
       max="1"
       min="1"
       slot="input"
@@ -377,7 +377,7 @@ snapshots["vaadin-pdf-viewer find bar host"] =
       / 6
     </span>
     <label
-      for="input-vaadin-integer-field-17"
+      for="input-vaadin-integer-field-15"
       id="label-vaadin-integer-field-1"
       slot="label"
     >
@@ -391,7 +391,7 @@ snapshots["vaadin-pdf-viewer find bar host"] =
     <input
       aria-describedby="pdf-viewer-page-error-0"
       aria-label="Page of 6"
-      id="input-vaadin-integer-field-17"
+      id="input-vaadin-integer-field-15"
       max="6"
       min="1"
       slot="input"
@@ -478,20 +478,20 @@ snapshots["vaadin-pdf-viewer find bar host"] =
     >
     </span>
     <label
-      for="input-vaadin-text-field-24"
-      id="label-vaadin-text-field-18"
+      for="input-vaadin-text-field-23"
+      id="label-vaadin-text-field-17"
       slot="label"
     >
     </label>
     <div
       hidden=""
-      id="error-message-vaadin-text-field-20"
+      id="error-message-vaadin-text-field-19"
       slot="error-message"
     >
     </div>
     <input
       aria-label="Find in document"
-      id="input-vaadin-text-field-24"
+      id="input-vaadin-text-field-23"
       placeholder="Find in document"
       slot="input"
       type="text"
