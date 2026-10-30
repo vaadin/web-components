@@ -107,7 +107,22 @@ export class SlotContentController extends EventTarget {
     }
 
     const prevNodes = this.nodes;
-    const nextNodes = this.#collectNodes();
+    let nextNodes = this.#getCustomNodes();
+
+    if (nextNodes.length > 1 && !this.multiple) {
+      // In single mode, the newest custom node replaces the current one.
+      const node = nextNodes.findLast((n) => n !== this.node);
+      nextNodes.filter((n) => n !== node).forEach((n) => n.remove());
+      nextNodes = [node];
+    }
+
+    if (nextNodes.length === 0 && this.shouldRenderDefaultNode()) {
+      this.#attachDefaultNode();
+      nextNodes = this.defaultNode ? [this.defaultNode] : [];
+    } else {
+      this.#detachDefaultNode();
+    }
+
     this.nodes = nextNodes;
     this.node = nextNodes[0] ?? null;
 
@@ -176,45 +191,8 @@ export class SlotContentController extends EventTarget {
    */
   teardownNode(_node) {}
 
-  #collectNodes() {
-    const customNodes = this.#getCustomNodes();
-    if (customNodes.length > 0) {
-      this.#detachDefaultNode();
-      return customNodes;
-    }
-
-    if (!this.shouldRenderDefaultNode()) {
-      this.#detachDefaultNode();
-      return [];
-    }
-
-    if (!this.defaultNode) {
-      const node = this.createDefaultNode();
-      if (!node) {
-        return [];
-      }
-      if (node instanceof Element && this.slotName !== '') {
-        node.setAttribute('slot', this.slotName);
-      }
-      this.defaultNode = node;
-    }
-
-    if (this.defaultNode.parentNode !== this.host) {
-      this.host.appendChild(this.defaultNode);
-    }
-    return [this.defaultNode];
-  }
-
   #getCustomNodes() {
-    const nodes = [...this.host.childNodes].filter((node) => this.#isCustomNode(node));
-    if (this.multiple || nodes.length <= 1) {
-      return nodes;
-    }
-
-    // In single mode, the newest custom node replaces the current one.
-    const node = nodes.findLast((n) => n !== this.node);
-    nodes.filter((n) => n !== node).forEach((n) => n.remove());
-    return [node];
+    return [...this.host.childNodes].filter((node) => this.#isCustomNode(node));
   }
 
   #isCustomNode(node) {
@@ -228,6 +206,20 @@ export class SlotContentController extends EventTarget {
 
     // Text nodes only count as content of the default slot.
     return node.nodeType === Node.TEXT_NODE && this.slotName === '' && !isEmptyTextNode(node);
+  }
+
+  #attachDefaultNode() {
+    if (!this.defaultNode) {
+      const node = this.createDefaultNode();
+      if (node instanceof Element && this.slotName !== '') {
+        node.setAttribute('slot', this.slotName);
+      }
+      this.defaultNode = node;
+    }
+
+    if (this.defaultNode && this.defaultNode.parentNode !== this.host) {
+      this.host.appendChild(this.defaultNode);
+    }
   }
 
   #detachDefaultNode() {
