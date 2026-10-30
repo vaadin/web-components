@@ -20,14 +20,4 @@ export class LabelController extends SlotContentController {
    * Set label based on corresponding host property.
    */
   setLabel(label: string | null | undefined): void;
-
-  /**
-   * Override method from `SlotContentController` to create the default label element.
-   */
-  protected createDefaultNode(): HTMLLabelElement;
-
-  /**
-   * Override method from `SlotContentController` to show the label text in the default label element.
-   */
-  protected _updateNode(node: Node): void;
 }
