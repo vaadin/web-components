@@ -53,6 +53,16 @@ describe('accessibility', () => {
       expect(valueButton.hasAttribute('aria-readonly')).to.be.false;
     });
 
+    it('should set aria-readonly attribute when readonly and disabled are set before attach', async () => {
+      select = document.createElement('vaadin-select');
+      select.items = [{ label: 'Option 1', value: 'Option 1' }];
+      select.readonly = true;
+      select.disabled = true;
+      fixtureSync('<div></div>').appendChild(select);
+      await nextRender();
+      expect(select.focusElement.getAttribute('aria-readonly')).to.equal('true');
+    });
+
     it('should add aria-live attribute on first-letter shortcut selection', async () => {
       select.focus();
       await sendKeys({ press: 'o' });

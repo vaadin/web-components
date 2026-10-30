@@ -225,12 +225,14 @@ export const SelectBaseMixin = (superClass) =>
         }
       }
 
-      if (props.has('opened') || props.has('_menuElement')) {
-        setOrRemoveAttribute(this.focusElement, 'aria-controls', this.opened && this._menuElement?.id);
-      }
+      if (this.focusElement) {
+        if (props.has('opened') || props.has('_menuElement')) {
+          setOrRemoveAttribute(this.focusElement, 'aria-controls', this.opened && this._menuElement?.id);
+        }
 
-      if (props.has('readonly')) {
-        setOrRemoveAttribute(this.focusElement, 'aria-readonly', this.readonly && 'true');
+        if (props.has('readonly')) {
+          setOrRemoveAttribute(this.focusElement, 'aria-readonly', this.readonly && 'true');
+        }
       }
 
       // Validate when the required constraint is removed.
