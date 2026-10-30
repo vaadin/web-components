@@ -8,6 +8,7 @@
  * See https://vaadin.com/commercial-license-and-service-terms for the full
  * license.
  */
+import type * as pdfjs from 'pdfjs-dist';
 import type { PDFPageProxy, RenderTask, TextLayer } from 'pdfjs-dist';
 
 /**
@@ -17,9 +18,17 @@ import type { PDFPageProxy, RenderTask, TextLayer } from 'pdfjs-dist';
 export declare const MAX_CANVAS_PIXELS: number;
 
 /**
+ * A part of the text of a text layer element, see `PdfViewerPage.getTextInside()`.
+ */
+export interface TextPart {
+  element: HTMLElement;
+  start: number;
+  end: number;
+}
+
+/**
  * Manages the DOM of a single page of the document: a placeholder sized to
- * the page, and the canvas and the text layer the page is rendered to once
- * it is needed.
+ * the page, and the canvas the page is rendered to once it is needed.
  */
 export declare class PdfViewerPage {
   constructor(pageNumber: number, size: { width: number; height: number });
@@ -28,6 +37,7 @@ export declare class PdfViewerPage {
   pdfPage: PDFPageProxy | null;
   unscaledWidth: number;
   unscaledHeight: number;
+  userUnit: number;
   element: HTMLElement;
   scale: number;
   canvas: HTMLCanvasElement | null;
@@ -35,9 +45,11 @@ export declare class PdfViewerPage {
   renderFailed: boolean;
   textLayer: TextLayer | null;
   textLayerElement: HTMLElement | null;
-  endOfContentElement: HTMLElement | null;
+  linkLayerElement: HTMLElement | null;
+  structTreeElement: HTMLElement | null;
+  hasNoStructTree: boolean;
   renderedScale: number;
-  renderedPixelRatio: number;
+  renderedOutputScale: number;
 
   /** The width of the page in CSS pixels at the current scale. */
   readonly width: number;
@@ -48,15 +60,26 @@ export declare class PdfViewerPage {
   /** The number of canvas pixels this page uses. */
   readonly canvasPixels: number;
 
-  isRendered(pixelRatio: number): boolean;
+  isRendered(outputScale: number): boolean;
 
-  setPdfPage(pdfPage: PDFPageProxy): boolean;
+  setPdfPage(pdfPage: PDFPageProxy): void;
 
   setScale(scale: number): void;
 
-  render(pixelRatio: number): Promise<void>;
+  render(devicePixelRatio: number): Promise<void>;
 
-  renderTextLayer(): Promise<void>;
+  renderTextLayer(pdfjsModule: typeof pdfjs): Promise<void>;
+
+  renderStructTree(): Promise<void>;
+
+  renderLinks(
+    annotations: Array<{ rect: number[] }>,
+    createLink: (annotation: object) => HTMLAnchorElement | null,
+  ): Array<{ link: HTMLAnchorElement; annotation: object }>;
+
+  getTextInside(element: Element): TextPart[];
+
+  placeLinks(links: Array<{ link: HTMLElement; parts: TextPart[] }>): void;
 
   cancel(): void;
 

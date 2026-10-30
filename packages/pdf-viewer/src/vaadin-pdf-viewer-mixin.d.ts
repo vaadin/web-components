@@ -9,26 +9,38 @@
  * license.
  */
 import type { Constructor } from '@open-wc/dedupe-mixin';
-import type { KeyboardMixinClass } from '@vaadin/a11y-base/src/keyboard-mixin.js';
-import type { PdfViewerDocumentMixinClass } from './vaadin-pdf-viewer-document-mixin.js';
-import type { PdfViewerKeyboardMixinClass } from './vaadin-pdf-viewer-keyboard-mixin.js';
-import type { PdfViewerRenderMixinClass } from './vaadin-pdf-viewer-render-mixin.js';
-import type { PdfViewerScrollMixinClass } from './vaadin-pdf-viewer-scroll-mixin.js';
-import type { PdfViewerTextLayerMixinClass } from './vaadin-pdf-viewer-text-layer-mixin.js';
-import type { PdfViewerToolbarMixinClass } from './vaadin-pdf-viewer-toolbar-mixin.js';
-import type { PdfViewerZoomMixinClass } from './vaadin-pdf-viewer-zoom-mixin.js';
+import type { ResizeMixinClass } from '@vaadin/component-base/src/resize-mixin.js';
 
-/**
- * A mixin providing common PDF viewer functionality.
- */
+export type PdfViewerZoom = 'page-fit' | 'page-width' | number;
+
 export declare function PdfViewerMixin<T extends Constructor<HTMLElement>>(
   base: T,
-): Constructor<PdfViewerToolbarMixinClass> &
-  Constructor<PdfViewerKeyboardMixinClass> &
-  Constructor<KeyboardMixinClass> &
-  Constructor<PdfViewerTextLayerMixinClass> &
-  Constructor<PdfViewerZoomMixinClass> &
-  Constructor<PdfViewerScrollMixinClass> &
-  Constructor<PdfViewerRenderMixinClass> &
-  Constructor<PdfViewerDocumentMixinClass> &
-  T;
+): Constructor<PdfViewerMixinClass> & Constructor<ResizeMixinClass> & T;
+
+export declare class PdfViewerMixinClass {
+  /**
+   * The URL of the PDF document to show.
+   */
+  src: string | null | undefined;
+
+  /**
+   * The current page, starting from 1. The viewer updates it while the
+   * user scrolls, to the page that takes up most of the visible area.
+   * Setting it scrolls to the start of that page.
+   */
+  page: number;
+
+  /**
+   * The zoom level of the pages:
+   * - `page-width` (default) fits the width of the first page to the viewer.
+   * - `page-fit` fits the whole first page into the viewer.
+   * - A number scales the pages relative to their actual size, e.g. `1` for 100%.
+   */
+  zoom: PdfViewerZoom;
+
+  /**
+   * The number of pages in the loaded document, or 0 when no document
+   * is loaded.
+   */
+  readonly pageCount: number;
+}

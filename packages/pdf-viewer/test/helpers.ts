@@ -1,7 +1,4 @@
 import { nextFrame, oneEvent } from '@vaadin/testing-helpers';
-import sinon from 'sinon';
-import type { PDFPageProxy } from 'pdfjs-dist';
-import { acquireWorker, loadPdfjs, releaseWorker } from '../src/pdfjs-loader.js';
 import type { PdfViewer } from '../vaadin-pdf-viewer.js';
 
 export type Fixture =
@@ -12,7 +9,6 @@ export type Fixture =
   | 'links.pdf'
   | 'multi-page.pdf'
   | 'outline.pdf'
-  | 'rotated.pdf'
   | 'standard-font.pdf'
   | 'tagged.pdf'
   | 'unsafe-links.pdf';
@@ -38,67 +34,6 @@ export async function nextRenderIdle(viewer: PdfViewer): Promise<void> {
 }
 
 /**
- * Sets the `src` of the viewer and waits until the document has loaded and
- * the viewer has rendered the pages it shows.
- */
-export async function loadAndRender(viewer: PdfViewer, src: string): Promise<void> {
-  const idle = nextRenderIdle(viewer);
-  const loaded = oneEvent(viewer, 'document-load');
-  viewer.src = src;
-  await loaded;
-  await idle;
-}
-
-/**
- * Sets the `src` of the viewer to a URL that serves `multi-page.pdf` with
- * extra response headers, and waits until the document has loaded. Stubs
- * `fetch` until then.
- */
-export async function loadFixtureFrom(
-  viewer: PdfViewer,
-  url: string,
-  headers: Record<string, string> = {},
-): Promise<void> {
-  const fetch = window.fetch;
-  const stub = sinon.stub(window, 'fetch').callsFake(async (input, init) => {
-    if (String(input) !== url) {
-      return fetch(input, init);
-    }
-    const response = await fetch(fixtureUrl('multi-page.pdf'), init);
-    const responseHeaders = new Headers(response.headers);
-    Object.entries(headers).forEach(([name, value]) => responseHeaders.set(name, value));
-    return new Response(response.body, { status: response.status, headers: responseHeaders });
-  });
-  try {
-    const loaded = oneEvent(viewer, 'document-load');
-    viewer.src = url;
-    await loaded;
-  } finally {
-    stub.restore();
-  }
-}
-
-/**
- * Returns the size of the content area of the viewer without its padding.
- */
-export function getContentBoxSize(content: HTMLElement): { width: number; height: number } {
-  const style = getComputedStyle(content);
-  return {
-    width: content.clientWidth - parseFloat(style.paddingLeft) - parseFloat(style.paddingRight),
-    height: content.clientHeight - parseFloat(style.paddingTop) - parseFloat(style.paddingBottom),
-  };
-}
-
-/**
- * Returns the horizontal middle of the visible content area in viewport
- * coordinates. It leaves out a vertical scrollbar, which is on the left in
- * RTL, where `clientLeft` includes it.
- */
-export function getViewCenter(content: HTMLElement): number {
-  return content.getBoundingClientRect().left + content.clientLeft + content.clientWidth / 2;
-}
-
-/**
  * Waits until a scroll, which can be animated, has settled.
  */
 export async function scrollSettled(element: HTMLElement): Promise<void> {
@@ -112,52 +47,52 @@ export async function scrollSettled(element: HTMLElement): Promise<void> {
 }
 
 /**
- * Returns the prototype of the pages of every pdf.js document, including the
- * documents of the viewer, through a page of a document loaded for that.
+ * Waits until the current find match is highlighted and the viewer has
+ * finished scrolling to it, which is animated when its page is rendered.
  */
-export async function getPdfPagePrototype(): Promise<PDFPageProxy> {
-  const pdfjs = await loadPdfjs();
-  const handle = acquireWorker(pdfjs);
-  const task = pdfjs.getDocument({ url: fixtureUrl('multi-page.pdf'), worker: handle.worker! });
-  try {
-    const pdfPage = await (await task.promise).getPage(1);
-    return Object.getPrototypeOf(pdfPage);
-  } finally {
-    await task.destroy();
-    releaseWorker(handle);
+export async function currentMatchShown(viewer: PdfViewer): Promise<void> {
+  for (let i = 0; i < 50 && !viewer.shadowRoot!.querySelector('.find-match.current'); i++) {
+    await nextFrame();
   }
+  await scrollSettled(viewer.shadowRoot!.querySelector<HTMLElement>('[part="content"]')!);
 }
 
 /**
  * A page of a PDF created with `createPdf()`.
  */
 export type PdfPage = {
-  /** The content stream of the page. Font `/F1` is Helvetica. */
+  /** The content stream of the page. Font `/F1` is Helvetica, `/F2` is Courier. */
   content: string;
   /** The rotation of the page in degrees. */
   rotate?: number;
+  /** Annotation dictionaries, e.g. links. */
+  annotations?: string[];
   /** The size of the page in PDF units, A4 by default. */
   mediaBox?: [number, number, number, number];
 };
 
 /**
  * Creates a PDF with the given pages in memory, and returns an object URL for it.
- * `lang` is the language of the document.
+ * `dests` is the content of the dictionary of named destinations, e.g. `/name [0 /Fit]`.
  */
-export function createPdf(pages: PdfPage[], { lang = '' }: { lang?: string } = {}): string {
-  // Object 1 is the catalog, 2 the page tree, 3 the font, then each page and its content.
+export function createPdf(pages: PdfPage[], { dests = '' } = {}): string {
+  // Object 1 is the catalog, 2 the page tree, 3 and 4 the fonts, then the page, its content and its annotations.
   const objects = [
-    `<< /Type /Catalog /Pages 2 0 R${lang ? ` /Lang (${lang})` : ''} >>`,
+    `<< /Type /Catalog /Pages 2 0 R${dests ? ` /Dests << ${dests} >>` : ''} >>`,
     '',
     '<< /Type /Font /Subtype /Type1 /BaseFont /Helvetica >>',
+    '<< /Type /Font /Subtype /Type1 /BaseFont /Courier >>',
   ];
   const pageIds: number[] = [];
-  pages.forEach(({ content, rotate = 0, mediaBox = [0, 0, 595, 842] }) => {
+  pages.forEach(({ content, rotate = 0, annotations = [], mediaBox = [0, 0, 595, 842] }) => {
     const id = objects.length + 1;
     pageIds.push(id);
+    const annotationIds = annotations.map((_, index) => id + 2 + index);
+    const annots = annotationIds.length ? ` /Annots [${annotationIds.map((ref) => `${ref} 0 R`).join(' ')}]` : '';
     objects.push(
-      `<< /Type /Page /Parent 2 0 R /MediaBox [${mediaBox.join(' ')}] /Rotate ${rotate} /Resources << /Font << /F1 3 0 R >> >> /Contents ${id + 1} 0 R >>`,
+      `<< /Type /Page /Parent 2 0 R /MediaBox [${mediaBox.join(' ')}] /Rotate ${rotate} /Resources << /Font << /F1 3 0 R /F2 4 0 R >> >> /Contents ${id + 1} 0 R${annots} >>`,
       `<< /Length ${content.length} >>\nstream\n${content}\nendstream`,
+      ...annotations,
     );
   });
   objects[1] = `<< /Type /Pages /Kids [${pageIds.map((id) => `${id} 0 R`).join(' ')}] /Count ${pages.length} >>`;

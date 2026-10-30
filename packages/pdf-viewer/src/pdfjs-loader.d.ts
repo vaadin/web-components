@@ -22,6 +22,7 @@ export interface WorkerHandle {
   port: Worker;
   failed: Promise<never> | null;
   users: number;
+  pdfjs: Pdfjs;
 }
 
 /**

@@ -36,6 +36,7 @@
     "@vaadin/number-field": "25.4.0-alpha5",
     "@vaadin/overlay": "25.4.0-alpha5",
     "@vaadin/password-field": "25.4.0-alpha5",
+    "@vaadin/pdf-viewer": "25.4.0-alpha5",
     "@vaadin/popover": "25.4.0-alpha5",
     "@vaadin/radio-group": "25.4.0-alpha5",
     "@vaadin/scroller": "25.4.0-alpha5",

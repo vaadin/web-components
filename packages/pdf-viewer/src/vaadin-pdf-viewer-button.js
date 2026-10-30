@@ -40,7 +40,11 @@ class PdfViewerButton extends ButtonMixin(DirMixin(PolylitMixin(LumoInjectionMix
     return [buttonStyles, pdfViewerButtonStyles];
   }
 
-  /** @protected */
+  /**
+   * Override method from `LitElement` to render the icon of the button.
+   * @protected
+   * @override
+   */
   render() {
     return html`
       <div class="vaadin-button-container" role="presentation">
@@ -50,17 +54,16 @@ class PdfViewerButton extends ButtonMixin(DirMixin(PolylitMixin(LumoInjectionMix
     `;
   }
 
-  /** @protected */
+  /**
+   * Override method from `PolylitMixin` to show a tooltip slotted into the button for it.
+   * @protected
+   * @override
+   */
   ready() {
     super.ready();
 
     this._tooltipController = new TooltipController(this);
     this.addController(this._tooltipController);
-  }
-
-  /** @override */
-  __shouldAllowFocusWhenDisabled() {
-    return true;
   }
 }
 

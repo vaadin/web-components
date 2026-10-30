@@ -9,11 +9,11 @@
  * license.
  */
 import type { Constructor } from '@open-wc/dedupe-mixin';
-import type { TemplateResult } from 'lit';
 
 /**
- * A mixin that adds the header and the toolbar with the page navigation and
- * the zoom.
+ * Renders the toolbar of the PDF viewer. Its controls are Vaadin components,
+ * rendered into the light DOM so that themes can style them like any other
+ * instance of these components.
  */
 export declare function PdfViewerToolbarMixin<T extends Constructor<HTMLElement>>(
   base: T,
@@ -21,45 +21,15 @@ export declare function PdfViewerToolbarMixin<T extends Constructor<HTMLElement>
 
 export declare class PdfViewerToolbarMixinClass {
   /**
-   * Whether the header above the toolbar is hidden. The header shows
-   * `headerTitle`, or else the name of the document, and collapses and
-   * expands the toolbar when clicked.
+   * Whether the toolbar is collapsed. The button that collapses and
+   * expands it is next to the file name, so the toolbar collapses only
+   * while the file name is shown, see `fileNameVisible`. The find bar
+   * stays open when the toolbar collapses.
    *
-   * @attr {boolean} header-hidden
-   */
-  headerHidden: boolean;
-
-  /**
-   * The title shown in the header, see `headerHidden`. When not set,
-   * the header shows the PDF file name from the `Content-Disposition`
-   * header of the response, else the PDF file name at the end of the
-   * path of `src`, else the `document` text of `i18n`.
-   *
-   * @attr {string} header-title
-   */
-  headerTitle: string | null | undefined;
-
-  /**
-   * Whether the toolbar is collapsed. The header collapses and expands
-   * it, so the toolbar collapses only while the header is shown, see
-   * `headerHidden`.
+   * Defaults to collapsed on devices whose main pointer is touch, like
+   * phones, where the pages need all the space they can get.
    *
    * @attr {boolean} toolbar-collapsed
    */
   toolbarCollapsed: boolean;
-
-  /**
-   * Returns the template of the header and the toolbar.
-   */
-  protected _renderToolbar(): TemplateResult;
-
-  /**
-   * Returns the template of the navigation controls in the `toolbar-navigation` slot.
-   */
-  protected _renderNavigationControls(): TemplateResult;
-
-  /**
-   * Returns the template of the zoom controls in the `toolbar-zoom` slot.
-   */
-  protected _renderZoomControls(): TemplateResult;
 }
