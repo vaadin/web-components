@@ -162,7 +162,7 @@ shadow root are unreachable that way, so confining them to the light DOM is
 what makes the theme system work end-to-end.
 
 The host then arranges these children using `<slot>` elements in its
-template, typically with a controller (`SlotController` or a subclass)
+template, typically with a controller (`SlotContentController` or a subclass)
 managing creation, ordering, and observation.
 
 ### Named slots and default content
@@ -170,8 +170,8 @@ managing creation, ordering, and observation.
 Components commonly accept content via slots **and** offer a property as a
 shortcut for the default case. The convention is: if the slot is empty, the
 component creates a default node from the property; if the slot has content,
-the property is ignored. `SlotController` from `@vaadin/component-base` and
-controllers extending it in `@vaadin/field-base` implement this pattern.
+the property is ignored. `SlotContentController` from `@vaadin/component-base`
+and controllers extending it in `@vaadin/field-base` implement this pattern.
 
 Field components use the named slots `label`, `helper`, and `error-message`
 plus the matching `label`, `helperText`, and `errorMessage` properties.

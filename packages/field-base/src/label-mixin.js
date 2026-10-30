@@ -28,7 +28,7 @@ export const LabelMixin = (superclass) =>
 
       this._labelController = new LabelController(this);
 
-      this._labelController.addEventListener('slot-content-changed', (event) => {
+      this._labelController.addEventListener('content-changed', (event) => {
         this.toggleAttribute('has-label', event.detail.hasContent);
       });
     }

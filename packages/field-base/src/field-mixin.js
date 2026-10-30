@@ -77,7 +77,7 @@ export const FieldMixin = (superclass) =>
     constructor() {
       super();
 
-      this._labelController.addEventListener('slot-content-changed', (event) => {
+      this._labelController.addEventListener('content-changed', (event) => {
         this.#onLabelSlotContentChange(event);
       });
 
