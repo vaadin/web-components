@@ -1076,3 +1076,58 @@ snapshots["vaadin-pdf-viewer page tagged"] =
 `;
 /* end snapshot vaadin-pdf-viewer page tagged */
 
+snapshots["vaadin-pdf-viewer page find matches"] = 
+`<div part="page">
+  <canvas aria-hidden="true">
+  </canvas>
+  <div class="find-layer">
+    <div class="current find-match">
+    </div>
+    <div class="find-match">
+    </div>
+  </div>
+  <div
+    class="text-layer"
+    data-main-rotation="0"
+  >
+    <span
+      dir="ltr"
+      role="presentation"
+    >
+      Page 1
+    </span>
+    <br role="presentation">
+    <span
+      dir="ltr"
+      role="presentation"
+    >
+      The quick brown fox jumps over the lazy dog. Pack my box with five dozen
+    </span>
+    <br role="presentation">
+    <span
+      dir="ltr"
+      role="presentation"
+    >
+      liquor jugs. How vexingly quick daft zebras jump. Sphinx of black quartz,
+    </span>
+    <br role="presentation">
+    <span
+      dir="ltr"
+      role="presentation"
+    >
+      judge my vow.
+    </span>
+    <br role="presentation">
+    <span
+      dir="ltr"
+      role="presentation"
+    >
+      Unique word on this page: marker1.
+    </span>
+    <div class="end-of-content">
+    </div>
+  </div>
+</div>
+`;
+/* end snapshot vaadin-pdf-viewer page find matches */
+

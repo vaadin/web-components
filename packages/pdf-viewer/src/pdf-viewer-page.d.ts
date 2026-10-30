@@ -18,8 +18,8 @@ export declare const MAX_CANVAS_PIXELS: number;
 
 /**
  * Manages the DOM of a single page of the document: a placeholder sized to
- * the page, and the canvas and the text layer the page is rendered to once
- * it is needed.
+ * the page, and the canvas and the text and find layers the page is rendered
+ * to once it is needed.
  */
 export declare class PdfViewerPage {
   constructor(pageNumber: number, size: { width: number; height: number });
@@ -36,6 +36,7 @@ export declare class PdfViewerPage {
   textLayer: TextLayer | null;
   textLayerElement: HTMLElement | null;
   endOfContentElement: HTMLElement | null;
+  findLayerElement: HTMLElement | null;
   renderedScale: number;
   renderedPixelRatio: number;
 
@@ -57,6 +58,10 @@ export declare class PdfViewerPage {
   render(pixelRatio: number): Promise<void>;
 
   renderTextLayer(): Promise<void>;
+
+  renderFindLayer(parts: Array<{ itemIndex: number; start: number; end: number; current: boolean }>): void;
+
+  clearFindLayer(): void;
 
   cancel(): void;
 

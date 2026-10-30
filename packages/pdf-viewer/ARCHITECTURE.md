@@ -53,20 +53,34 @@ how to generate them.
 
 - `PdfViewerDocumentMixin` loads `src`. It calls `_documentLoaded(details)` with the title, language and first
   page, and `_documentUnloaded()`.
+  Methods that need the document, e.g. `find()`, await `_whenDocumentReady()`. It resolves once no document
+  is loading, with the document or null.
 - `PdfViewerRenderMixin` owns the page views, their sizes, the render queue and the device pixel ratio. It calls `_pageSizesChanged()` at most once per frame when pages get their own size.
 - `PdfViewerScrollMixin` owns the scale `_scale`, the anchor, the visible pages and `page`. It asks for
   rendering only with `_renderVisible()` and `_cancelRender()`. It gets the scale from `_getScaleForSize()`, which
   fits the width of the current page by default.
+  - `_scrollRectIntoView()` centers a rectangle in the view, unless it is well inside the view. It jumps,
+    as pdf.js does for a match.
 - `PdfViewerZoomMixin` owns `zoom`. It writes no render or scroll state:
   - It overrides `_getScaleForSize()` to return the scale for `zoom`.
   - It calls `_refreshLayout()` when `zoom` changes.
   - Its `_zoomFactor` getter reads `_scale`, in units of the actual page size.
 - `PdfViewerTextLayerMixin` renders the text layer of each rendered page and sets the document language on the
   pages. A page loads its text each time it renders, as pdf.js' own viewer does.
+- `PdfViewerFindMixin` owns the matches. It loads the text of each page once per document into a private map.
+  The text layer loads its own text. Text that fails to load is loaded again by the next search.
+  - When a page renders, the `_pageRendered()` hook of the render mixin highlights the matches with
+    `page.renderFindLayer()`. Only a page that has passed this hook with its current text layer gets
+    highlights, as the text layer of a page is set before it has rendered.
+  - It scrolls to the current match with `_scrollRectIntoView()`. When the page of the match has not rendered,
+    it goes to the page with `_scrollToPage()` first. A pending scroll to a match is dropped when `page` changes
+    to another page.
+  - It sits above the toolbar mixin, as a feature mixin, so that its find button can override toolbar hooks.
 - After a page canvas renders, `PdfViewerRenderMixin` awaits `_renderPageLayers(page)`. Each override awaits
-  `super` first, so the layers render in the order of the mixins.
-- The page view owns the DOM of a page: the canvas and the text layer. Its methods check after each await that
-  the page still has the same canvas, so a released page gets no layers.
+  `super` first, so the layers render in the order of the mixins. After the layers, it calls
+  `_pageRendered(page)`.
+- The page view owns the DOM of a page: the canvas, the text layer and the find layer. Its methods check after
+  each await that the page still has the same canvas, so a released page gets no layers.
 - `PdfViewerKeyboardMixin` handles the keyboard shortcuts.
 - `PdfViewerToolbarMixin` renders the header and the toolbar. Its controls are in the light DOM, so a theme
   styles the page field like any other `vaadin-integer-field`. The element renders them before a marker comment,
@@ -89,6 +103,16 @@ how to generate them.
   read it.
 - Pages that lose their canvas also lose their text layer. Screen readers therefore reach only the text near
   the view.
+
+## Find
+
+- Matching ignores case, diacritics, ligatures and differences in white space.
+- The highlights are in a layer under the text layer. They are positioned in percent of the page, so they
+  stay in place on zoom.
+- A page that loses its canvas also loses its highlights. It gets them back when it renders again.
+- `find()` and `highlight()` wait while the document loads. They do nothing when the viewer is not attached.
+  Of several calls in a row, only the last one runs.
+- A page without size, e.g. inside a hidden ancestor, gets no highlights until it renders again.
 
 ## Install size
 

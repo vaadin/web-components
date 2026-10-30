@@ -1,5 +1,5 @@
 import { expect } from '@vaadin/chai-plugins';
-import { fixtureSync, nextRender, nextUpdate, oneEvent } from '@vaadin/testing-helpers';
+import { fixtureSync, nextFrame, nextRender, nextUpdate, oneEvent } from '@vaadin/testing-helpers';
 import '../enable-feature-flag.js';
 import '../../vaadin-pdf-viewer.js';
 import { resetUniqueId } from '@vaadin/component-base/src/unique-id-utils.js';
@@ -72,6 +72,17 @@ describe('vaadin-pdf-viewer', () => {
     it('tagged', async () => {
       viewer.src = fixtureUrl('tagged.pdf');
       await nextRenderIdle(viewer);
+      const page = viewer.shadowRoot!.querySelector('[part="page"]')!;
+      await expect(page).dom.to.equalSnapshot({ ignoreAttributes });
+    });
+
+    it('find matches', async () => {
+      viewer.src = fixtureUrl('multi-page.pdf');
+      await nextRenderIdle(viewer);
+      const result = oneEvent(viewer, 'find-result');
+      viewer.find('quick');
+      await result;
+      await nextFrame();
       const page = viewer.shadowRoot!.querySelector('[part="page"]')!;
       await expect(page).dom.to.equalSnapshot({ ignoreAttributes });
     });

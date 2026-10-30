@@ -83,6 +83,15 @@ export const PdfViewerDocumentMixin = (superClass) =>
     /** @type {import('./pdf-viewer-document-controller.js').PdfViewerDocumentDetails | null} */
     #details = null;
 
+    /** The `src` of the last update. A different `src` starts loading in the next update. */
+    #updatedSrc;
+
+    /**
+     * The resolve functions of `_whenDocumentReady()` calls that wait for the document.
+     * @type {Array<(pdfDocument: import('pdfjs-dist').PDFDocumentProxy | null) => void>}
+     */
+    #readyCallbacks = [];
+
     #documentController = new PdfViewerDocumentController(this, {
       onLoadStart: () => {
         this.__loading = true;
@@ -104,8 +113,11 @@ export const PdfViewerDocumentMixin = (superClass) =>
       super.updated(props);
 
       if (props.has('src')) {
+        this.#updatedSrc = this.src;
         this.#documentController.load();
       }
+
+      this.#resolveReadyCallbacks();
     }
 
     /**
@@ -115,6 +127,24 @@ export const PdfViewerDocumentMixin = (superClass) =>
      */
     get _pdfDocument() {
       return this.#pdfDocument;
+    }
+
+    /**
+     * Returns a promise for the document of `src`. It resolves once the
+     * document has loaded, also when `src` changes meanwhile, and right away
+     * when no document is loading. It resolves with null without a document,
+     * or when the viewer is not attached.
+     * @return {Promise<import('pdfjs-dist').PDFDocumentProxy | null>}
+     * @protected
+     */
+    _whenDocumentReady() {
+      if (!this.isConnected) {
+        return Promise.resolve(null);
+      }
+      return new Promise((resolve) => {
+        this.#readyCallbacks.push(resolve);
+        this.#resolveReadyCallbacks();
+      });
     }
 
     /**
@@ -143,6 +173,20 @@ export const PdfViewerDocumentMixin = (superClass) =>
      */
     _getDocumentName() {
       return this.#details?.dispositionFileName || getFileNameFromUrl(this.src) || '';
+    }
+
+    /**
+     * Resolves the `_whenDocumentReady()` calls once no document is loading.
+     * @private
+     */
+    #resolveReadyCallbacks() {
+      if (this.__loading || this.src !== this.#updatedSrc || !this.#readyCallbacks.length) {
+        return;
+      }
+      const callbacks = this.#readyCallbacks;
+      this.#readyCallbacks = [];
+      const pdfDocument = this.isConnected ? this.#pdfDocument : null;
+      callbacks.forEach((resolve) => resolve(pdfDocument));
     }
 
     /** @private */

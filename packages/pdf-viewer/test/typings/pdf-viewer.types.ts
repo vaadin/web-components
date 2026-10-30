@@ -7,6 +7,7 @@ import type {
   PdfViewer,
   PdfViewerDocumentErrorEvent,
   PdfViewerDocumentLoadEvent,
+  PdfViewerFindResultEvent,
   PdfViewerI18n,
   PdfViewerPageChangedEvent,
   PdfViewerPageCountChangedEvent,
@@ -15,6 +16,7 @@ import type {
   PdfViewerZoomChangedEvent,
 } from '../../src/vaadin-pdf-viewer.js';
 import type { PdfViewerDocumentMixinClass } from '../../src/vaadin-pdf-viewer-document-mixin.js';
+import type { PdfViewerFindMixinClass } from '../../src/vaadin-pdf-viewer-find-mixin.js';
 import type { PdfViewerKeyboardMixinClass } from '../../src/vaadin-pdf-viewer-keyboard-mixin.js';
 import type { PdfViewerRenderMixinClass } from '../../src/vaadin-pdf-viewer-render-mixin.js';
 import type { PdfViewerScrollMixinClass } from '../../src/vaadin-pdf-viewer-scroll-mixin.js';
@@ -39,12 +41,17 @@ assertType<PdfViewerZoom>(viewer.zoom);
 assertType<'page-fit' | 'page-width' | number>(viewer.zoom);
 assertType<PdfViewerI18n | undefined>(viewer.i18n);
 
+// Methods
+assertType<(text: string) => void>(viewer.find);
+assertType<(page: number, text: string) => void>(viewer.highlight);
+
 // Mixins
 assertType<ElementMixinClass>(viewer);
 assertType<PdfViewerDocumentMixinClass>(viewer);
 assertType<PdfViewerRenderMixinClass>(viewer);
 assertType<PdfViewerScrollMixinClass>(viewer);
 assertType<PdfViewerTextLayerMixinClass>(viewer);
+assertType<PdfViewerFindMixinClass>(viewer);
 assertType<PdfViewerZoomMixinClass>(viewer);
 assertType<PdfViewerToolbarMixinClass>(viewer);
 assertType<PdfViewerKeyboardMixinClass>(viewer);
@@ -63,6 +70,12 @@ viewer.addEventListener('document-error', (event) => {
   assertType<PdfViewerDocumentErrorEvent>(event);
   assertType<'invalid' | 'network' | 'password'>(event.detail.reason);
   assertType<unknown>(event.detail.error);
+});
+
+viewer.addEventListener('find-result', (event) => {
+  assertType<PdfViewerFindResultEvent>(event);
+  assertType<string>(event.detail.query);
+  assertType<number>(event.detail.matchCount);
 });
 
 viewer.addEventListener('page-changed', (event) => {

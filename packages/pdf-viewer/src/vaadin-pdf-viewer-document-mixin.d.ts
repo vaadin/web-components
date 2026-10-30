@@ -45,6 +45,14 @@ export declare class PdfViewerDocumentMixinClass {
   protected readonly _pdfDocument: PDFDocumentProxy | null;
 
   /**
+   * Returns a promise for the document of `src`. It resolves once the
+   * document has loaded, also when `src` changes meanwhile, and right away
+   * when no document is loading. It resolves with null without a document,
+   * or when the viewer is not attached.
+   */
+  protected _whenDocumentReady(): Promise<PDFDocumentProxy | null>;
+
+  /**
    * Returns the name of the document: the PDF file name from the
    * `Content-Disposition` header, else the PDF file name at the end of the
    * path of `src`, else an empty string.
