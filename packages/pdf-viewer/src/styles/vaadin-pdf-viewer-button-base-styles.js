@@ -36,6 +36,14 @@ export const pdfViewerButtonStyles = css`
     --_icon: var(--_vaadin-icon-chevron-down);
   }
 
+  :host([icon='zoom-out']) {
+    --_icon: var(--_vaadin-icon-minus);
+  }
+
+  :host([icon='zoom-in']) {
+    --_icon: var(--_vaadin-icon-plus);
+  }
+
   @media (forced-colors: active) {
     [part~='icon'] {
       background: CanvasText;

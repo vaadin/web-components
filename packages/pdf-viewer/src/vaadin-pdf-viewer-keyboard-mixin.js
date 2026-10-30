@@ -29,9 +29,24 @@ export const PdfViewerKeyboardMixin = (superClass) =>
         return;
       }
 
-      if ((event.key === 'Home' || event.key === 'End') && event.composedPath().includes(this.$.content)) {
-        this._scrollToPage(event.key === 'Home' ? 1 : this.pageCount);
-        event.preventDefault();
+      const { key, code } = event;
+      const path = event.composedPath();
+      const target = path[0];
+      if ((key === 'Home' || key === 'End') && path.includes(this.$.content)) {
+        this._scrollToPage(key === 'Home' ? 1 : this.pageCount);
+      } else if (target.matches('input, textarea') || target.isContentEditable) {
+        // Text fields keep the browser zoom, which low vision users may rely on.
+        return;
+      } else if (key === '+' || key === '=' || code === 'NumpadAdd') {
+        // Check the key code too, for keyboard layouts that need Shift for these keys.
+        this._stepZoom(1);
+      } else if (key === '-' || code === 'NumpadSubtract') {
+        this._stepZoom(-1);
+      } else if (key === '0' || code === 'Digit0' || code === 'Numpad0') {
+        this._resetZoom();
+      } else {
+        return;
       }
+      event.preventDefault();
     }
   };

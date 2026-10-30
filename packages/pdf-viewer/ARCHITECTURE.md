@@ -28,8 +28,9 @@ how to generate them.
 ## Rendering
 
 - After load, each page gets a placeholder with the size of the first page. The other page sizes load in
-  batches of 10, and the layout updates once per frame. The pages fit the width of the first page to
-  the viewer.
+  batches of 10, and the layout updates once per frame. The pages fit the width of the current page to
+  the viewer, as in pdf.js. The fit is computed again on resize and when page sizes load, not when the
+  user scrolls to a page of another size.
 - The viewer renders the visible pages, the most visible first. Then it renders one page after and one
   page before them.
 - Only one page renders at a time. A new canvas replaces the old one only when it is complete.
@@ -42,7 +43,7 @@ how to generate them.
 - A new `src` resets `page` to 1, unless the application sets `page` in the same update.
 - `page` follows the page that takes up most of the view. A page set by the application stays current
   until the user scrolls.
-- On resize, the viewer keeps the same point of the current page at the top of the view.
+- On resize and zoom, the viewer keeps the same point of the current page at the top of the view.
 - The viewer fires an internal `render-idle` event when no page is left to render, once the page sizes are
   loaded. It is only intended for testing purposes and is not part of the public API.
 
@@ -50,22 +51,44 @@ how to generate them.
 
 `PdfViewerMixin` composes one mixin for each concern. Each part of the state has one owner.
 
-- `PdfViewerDocumentMixin` loads `src`. It calls `_documentLoaded({ firstPage })` and `_documentUnloaded()`.
+- `PdfViewerDocumentMixin` loads `src`. It calls `_documentLoaded(details)` with the title, language and first
+  page, and `_documentUnloaded()`.
 - `PdfViewerRenderMixin` owns the page views, their sizes, the render queue and the device pixel ratio. It calls `_pageSizesChanged()` at most once per frame when pages get their own size.
-- `PdfViewerScrollMixin` owns the scale, the anchor, the visible pages and `page`. It asks for rendering
-  only with `_renderVisible()` and `_cancelRender()`.
+- `PdfViewerScrollMixin` owns the scale `_scale`, the anchor, the visible pages and `page`. It asks for
+  rendering only with `_renderVisible()` and `_cancelRender()`. It gets the scale from `_getScaleForSize()`, which
+  fits the width of the current page by default.
+- `PdfViewerZoomMixin` owns `zoom`. It writes no render or scroll state:
+  - It overrides `_getScaleForSize()` to return the scale for `zoom`.
+  - It calls `_refreshLayout()` when `zoom` changes.
+  - Its `_zoomFactor` getter reads `_scale`, in units of the actual page size.
+- `PdfViewerTextLayerMixin` renders the text layer of each rendered page and sets the document language on the
+  pages. A page loads its text each time it renders, as pdf.js' own viewer does.
+- After a page canvas renders, `PdfViewerRenderMixin` awaits `_renderPageLayers(page)`. Each override awaits
+  `super` first, so the layers render in the order of the mixins.
+- The page view owns the DOM of a page: the canvas and the text layer. Its methods check after each await that
+  the page still has the same canvas, so a released page gets no layers.
 - `PdfViewerKeyboardMixin` handles the keyboard shortcuts.
-- `PdfViewerToolbarMixin` renders the toolbar. Its controls are in the light DOM, so a theme styles the page
-  field like any other `vaadin-integer-field`. The element renders them before a marker comment, so application
-  children added later keep their place.
+- `PdfViewerToolbarMixin` renders the header and the toolbar. Its controls are in the light DOM, so a theme
+  styles the page field like any other `vaadin-integer-field`. The element renders them before a marker comment,
+  so application children added later keep their place.
+  - The header is a button in the shadow DOM that collapses and expands the toolbar. It shows `headerTitle`,
+    else `_getDocumentName()` of the document mixin.
 - The element applies `I18nMixin` and defines the default texts. The mixins read them from `__effectiveI18n`.
 - The element applies `FocusMixin` and owns the focus state. Listeners on the page area in its template set
   `focused` and `focus-ring`, as focus moving inside the shadow root does not reach listeners on the host.
 - `PdfViewerRenderQueue` decides the render order, the memory budget and the release. It has no host
   reference, and its limits are options.
 - `pdf-viewer-layout.js` has the layout math without DOM access: visible pages, anchor and fit scale.
+- `pdf-viewer-zoom-utils.js` has the zoom levels, their format and the check of a `zoom` value.
 - To check whether a result belongs to the current document, a mixin compares `_pdfDocument` with the
   document from the start of the call.
+
+## Text layer
+
+- The text layer of pdf.js puts transparent text over the canvas. Users can select it, and screen readers
+  read it.
+- Pages that lose their canvas also lose their text layer. Screen readers therefore reach only the text near
+  the view.
 
 ## Install size
 

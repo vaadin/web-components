@@ -19,10 +19,10 @@ import { acquireWorker, loadPdfjs, releaseWorker } from './pdfjs-loader.js';
  * @return {'invalid' | 'network' | 'password'}
  */
 function getErrorReason(error) {
-  if (error && error.name === 'PasswordException') {
+  if (error?.name === 'PasswordException') {
     return 'password';
   }
-  if (error && error.name === 'InvalidPDFException') {
+  if (error?.name === 'InvalidPDFException') {
     return 'invalid';
   }
   return 'network';
@@ -31,7 +31,10 @@ function getErrorReason(error) {
 /**
  * @typedef {Object} PdfViewerDocumentDetails
  * @property {string} title The title from the metadata of the document, or an empty string.
+ * @property {string} language The language from the metadata of the document, or an empty string.
  * @property {import('pdfjs-dist').PDFPageProxy} firstPage The first page of the document.
+ * @property {string} dispositionFileName The PDF file name from the `Content-Disposition` header of the
+ *   response, or an empty string.
  */
 
 /**
@@ -146,13 +149,18 @@ export class PdfViewerDocumentController {
       return;
     }
 
-    const [{ info }, firstPage] = await Promise.all([pdfDocument.getMetadata(), pdfDocument.getPage(1)]);
+    const [{ info, contentDispositionFilename }, firstPage] = await Promise.all([
+      pdfDocument.getMetadata(),
+      pdfDocument.getPage(1),
+    ]);
     if (loadId !== this.#loadId) {
       return;
     }
     this.#callbacks.onLoad(pdfDocument, {
-      title: (info && info.Title) || '',
+      title: info?.Title || '',
+      language: info?.Language || '',
       firstPage,
+      dispositionFileName: contentDispositionFilename || '',
     });
   }
 

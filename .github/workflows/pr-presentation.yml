@@ -2,15 +2,15 @@ name: PR Presentation
 
 # Builds a slide deck that explains a pull request from its code and links the
 # deck from one comment on the PR. Triggered automatically when a feature or
-# bugfix PR is opened or marked ready for review (eligibility rules on the job
-# condition), or on request by adding the "pr-presentation" label to any PR.
+# bugfix PR against main is opened or marked ready for review (eligibility rules
+# on the job condition), or on request by adding the "pr-presentation" label to
+# any PR, including PRs against other branches.
 # The deck itself is built by the shared vaadin/github-actions/pr-presentation
 # action; this workflow owns the triggers and eligibility rules.
 
 on:
   pull_request:
     types: [opened, ready_for_review, labeled]
-    branches: [main]
 
 env:
   PR_NUMBER: ${{ github.event.pull_request.number }}
@@ -21,7 +21,8 @@ jobs:
     # check in the job. The label trigger only checks who added the label: only
     # users with triage access can add labels, and the job checks that user's
     # org membership. Auto triggers (opened, ready for review) additionally skip
-    # drafts, known bots, and PRs whose title is not a feat or fix. The
+    # PRs not against main, drafts, known bots, and PRs whose title is not a
+    # feat or fix. The
     # pre-filter allows CONTRIBUTOR because on pull_request events the
     # author_association of a private org member is reported as CONTRIBUTOR;
     # the org-membership API call in the job is what actually confirms access.
@@ -29,6 +30,7 @@ jobs:
       (github.event.action == 'labeled' &&
        github.event.label.name == 'pr-presentation') ||
       (contains(fromJSON('["opened", "ready_for_review"]'), github.event.action) &&
+       github.event.pull_request.base.ref == 'main' &&
        github.event.pull_request.draft == false &&
        !contains(fromJSON('["dependabot[bot]", "vaadin-bot"]'), github.event.pull_request.user.login) &&
        contains(fromJSON('["OWNER", "MEMBER", "COLLABORATOR", "CONTRIBUTOR"]'), github.event.pull_request.author_association) &&

@@ -11,6 +11,29 @@
 import { PdfViewerDocumentController } from './pdf-viewer-document-controller.js';
 
 /**
+ * Returns the PDF file name at the end of the path of a URL, e.g.
+ * `report.pdf` of `/files/report.pdf`, or null for URLs without one, e.g.
+ * blob URLs or `/files/123`.
+ * @param {string | null | undefined} src
+ * @return {string | null}
+ */
+function getFileNameFromUrl(src) {
+  if (!src) {
+    return null;
+  }
+  try {
+    const { protocol, pathname } = new URL(src, document.baseURI);
+    if (!['http:', 'https:', 'file:'].includes(protocol)) {
+      return null;
+    }
+    const name = decodeURIComponent(pathname.split('/').pop());
+    return /\.pdf$/iu.test(name) ? name : null;
+  } catch {
+    return null;
+  }
+}
+
+/**
  * A mixin that loads the document of `src` and reports the result.
  */
 export const PdfViewerDocumentMixin = (superClass) =>
@@ -57,6 +80,9 @@ export const PdfViewerDocumentMixin = (superClass) =>
     /** @type {import('pdfjs-dist').PDFDocumentProxy | null} */
     #pdfDocument = null;
 
+    /** @type {import('./pdf-viewer-document-controller.js').PdfViewerDocumentDetails | null} */
+    #details = null;
+
     #documentController = new PdfViewerDocumentController(this, {
       onLoadStart: () => {
         this.__loading = true;
@@ -93,7 +119,7 @@ export const PdfViewerDocumentMixin = (superClass) =>
 
     /**
      * Called when a document has loaded, before `document-load` is fired.
-     * @param {{ firstPage: import('pdfjs-dist').PDFPageProxy }} _details
+     * @param {import('./pdf-viewer-document-controller.js').PdfViewerDocumentDetails} _details
      * @protected
      */
     _documentLoaded(_details) {
@@ -108,13 +134,27 @@ export const PdfViewerDocumentMixin = (superClass) =>
       // To be implemented.
     }
 
+    /**
+     * Returns the name of the document: the PDF file name from the
+     * `Content-Disposition` header, else the PDF file name at the end of the
+     * path of `src`, else an empty string.
+     * @return {string}
+     * @protected
+     */
+    _getDocumentName() {
+      return this.#details?.dispositionFileName || getFileNameFromUrl(this.src) || '';
+    }
+
     /** @private */
-    #onLoad(pdfDocument, { title, firstPage }) {
+    #onLoad(pdfDocument, details) {
       this.#pdfDocument = pdfDocument;
-      this._documentLoaded({ firstPage });
+      this.#details = details;
+      this._documentLoaded(details);
       this._setPageCount(pdfDocument.numPages);
       this.__loading = false;
-      this.dispatchEvent(new CustomEvent('document-load', { detail: { pageCount: pdfDocument.numPages, title } }));
+      this.dispatchEvent(
+        new CustomEvent('document-load', { detail: { pageCount: pdfDocument.numPages, title: details.title } }),
+      );
     }
 
     /** @private */
@@ -129,6 +169,7 @@ export const PdfViewerDocumentMixin = (superClass) =>
       this.__hasError = false;
       if (this.#pdfDocument) {
         this.#pdfDocument = null;
+        this.#details = null;
         this._setPageCount(0);
         this._documentUnloaded();
       }

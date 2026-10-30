@@ -8,7 +8,7 @@ const DAY_0 = 1514764800000;
 /** Timestamp N days after `DAY_0`, so fixtures read as day offsets. */
 const day = (n) => DAY_0 + n * 24 * 60 * 60 * 1000;
 
-// Four fixtures deliberately share one dataset so their screenshots stay comparable.
+// Several fixtures deliberately share one dataset so their screenshots stay comparable.
 const SOLAR_CATEGORIES = '[2010, 2011, 2012, 2013, 2014]';
 const SOLAR_INSTALLATION = '[43934, 52503, 57177, 69658, 97031]';
 const SOLAR_MANUFACTURING = '[24916, 24064, 29742, 29851, 32490]';
@@ -39,32 +39,42 @@ function buildTooltipFixture(outside) {
   `;
 }
 
-/** One radial progress gauge; `solidgauge` renders three that differ only in value and colour. */
-function buildProgressGauge(y, colorIndex) {
+/**
+ * One solid gauge. `pane` and `yAxis` are merged over the defaults, and `series`
+ * is the JSON of the data array, so each fixture only states what differs.
+ */
+function buildSolidGauge({ title, pane, yAxis = {}, series, seriesOptions }) {
+  const seriesAttribute = seriesOptions ? ` additional-options='${JSON.stringify(seriesOptions)}'` : '';
   return `
     <vaadin-chart
-      title="Progress"
+      title="${title}"
       type="solidgauge"
       style="width: 200px; height: 260px"
       additional-options='{
-        "pane": {
-          "center": ["50%", "50%"],
-          "startAngle": 0,
-          "endAngle": 360,
-          "background": { "innerRadius": "60%", "outerRadius": "100%", "shape": "arc" }
-        },
-        "yAxis": {
-          "min": 0,
-          "max": 100,
-          "minorTickInterval": null,
-          "tickAmount": 0,
-          "labels": { "enabled": false }
-        }
+        "pane": ${JSON.stringify({
+          background: { innerRadius: '60%', outerRadius: '100%', shape: 'arc' },
+          ...pane,
+        })},
+        "yAxis": ${JSON.stringify({ min: 0, max: 100, minorTickInterval: null, ...yAxis })}
       }'
     >
-      <vaadin-chart-series title="Progress" values='[{ "y": ${y}, "colorIndex": ${colorIndex} }]'></vaadin-chart-series>
+      <vaadin-chart-series title="${title}" values='${series}'${seriesAttribute}></vaadin-chart-series>
     </vaadin-chart>
   `;
+}
+
+/** The half-circle pane with two axis labels that the speed and stops gauges share. */
+const HALF_PANE = { center: ['50%', '85%'], startAngle: -90, endAngle: 90 };
+const HALF_AXIS = { tickAmount: 2, labels: { y: 16 } };
+
+/** One radial progress gauge; `solidgauge` renders three that differ only in value and colour. */
+function buildProgressGauge(y, colorIndex) {
+  return buildSolidGauge({
+    title: 'Progress',
+    pane: { center: ['50%', '50%'], startAngle: 0, endAngle: 360 },
+    yAxis: { tickAmount: 0, labels: { enabled: false } },
+    series: JSON.stringify([{ y, colorIndex }]),
+  });
 }
 
 /** Candlestick and OHLC must plot identical data for the up/down point comparison to mean anything. */
@@ -156,32 +166,13 @@ const fixtures = {
   // string percentages on `pane.background` are unaffected by that change.
   solidgauge: `
     <div style="display: flex; width: 800px; height: 260px">
-      <vaadin-chart
-        title="Speed"
-        type="solidgauge"
-        style="width: 200px; height: 260px"
-        additional-options='{
-          "pane": {
-            "center": ["50%", "85%"],
-            "startAngle": -90,
-            "endAngle": 90,
-            "background": { "innerRadius": "60%", "outerRadius": "100%", "shape": "arc" }
-          },
-          "yAxis": {
-            "min": 0,
-            "max": 200,
-            "minorTickInterval": null,
-            "tickAmount": 2,
-            "labels": { "y": 16 }
-          }
-        }'
-      >
-        <vaadin-chart-series
-          title="Speed"
-          values='[{ "y": 80, "colorIndex": 1 }]'
-          additional-options='{ "radius": 100, "innerRadius": 60 }'
-        ></vaadin-chart-series>
-      </vaadin-chart>${[
+      ${buildSolidGauge({
+        title: 'Speed',
+        pane: HALF_PANE,
+        yAxis: { max: 200, ...HALF_AXIS },
+        series: '[{ "y": 80, "colorIndex": 1 }]',
+        seriesOptions: { radius: 100, innerRadius: 60 },
+      })}${[
         [12, 2],
         [47, 3],
         [80, 4],
@@ -450,10 +441,10 @@ const baseOnlyFixtures = {
       type="column"
       title="Solar employment growth"
       style="width: 600px; height: 400px"
-      categories="[2010, 2011, 2012, 2013, 2014]"
+      categories="${SOLAR_CATEGORIES}"
       additional-options='{ "exporting": { "enabled": true } }'
     >
-      <vaadin-chart-series title="Installation" values="[43934, 52503, 57177, 69658, 97031]"></vaadin-chart-series>
+      <vaadin-chart-series title="Installation" values="${SOLAR_INSTALLATION}"></vaadin-chart-series>
     </vaadin-chart>
   `,
 
@@ -464,11 +455,11 @@ const baseOnlyFixtures = {
       type="column"
       title="Point states"
       style="width: 600px; height: 400px"
-      categories="[2010, 2011, 2012, 2013, 2014]"
+      categories="${SOLAR_CATEGORIES}"
       additional-options='{ "plotOptions": { "series": { "allowPointSelect": true } } }'
     >
-      <vaadin-chart-series title="Installation" values="[43934, 52503, 57177, 69658, 97031]"></vaadin-chart-series>
-      <vaadin-chart-series title="Manufacturing" values="[24916, 24064, 29742, 29851, 32490]"></vaadin-chart-series>
+      <vaadin-chart-series title="Installation" values="${SOLAR_INSTALLATION}"></vaadin-chart-series>
+      <vaadin-chart-series title="Manufacturing" values="${SOLAR_MANUFACTURING}"></vaadin-chart-series>
     </vaadin-chart>
   `,
 
@@ -534,15 +525,15 @@ const baseOnlyFixtures = {
       title="Rendered with useHTML"
       tooltip
       style="width: 600px; height: 400px"
-      categories="[2010, 2011, 2012, 2013, 2014]"
+      categories="${SOLAR_CATEGORIES}"
       additional-options='{
         "tooltip": { "useHTML": true },
         "legend": { "useHTML": true },
         "plotOptions": { "series": { "dataLabels": { "enabled": true, "useHTML": true } } }
       }'
     >
-      <vaadin-chart-series title="Installation" values="[43934, 52503, 57177, 69658, 97031]"></vaadin-chart-series>
-      <vaadin-chart-series title="Manufacturing" values="[24916, 24064, 29742, 29851, 32490]"></vaadin-chart-series>
+      <vaadin-chart-series title="Installation" values="${SOLAR_INSTALLATION}"></vaadin-chart-series>
+      <vaadin-chart-series title="Manufacturing" values="${SOLAR_MANUFACTURING}"></vaadin-chart-series>
     </vaadin-chart>
   `,
 
@@ -872,48 +863,28 @@ const baseOnlyFixtures = {
   `,
 };
 
-/** A solid gauge whose colour comes from `yAxis.stops`, or from the series when `stops` is null. */
-function buildStopsGauge(y, stops) {
-  return `
-    <vaadin-chart
-      title="${stops ? 'Stops' : 'No stops'}"
-      type="solidgauge"
-      style="width: 200px; height: 260px"
-      additional-options='{
-        "pane": {
-          "center": ["50%", "85%"],
-          "startAngle": -90,
-          "endAngle": 90,
-          "background": { "innerRadius": "60%", "outerRadius": "100%", "shape": "arc" }
-        },
-        "yAxis": {
-          "min": 0,
-          "max": 100,
-          "minorTickInterval": null,
-          "tickAmount": 2,
-          "labels": { "y": 16 }
-          ${stops ? `, "stops": ${JSON.stringify(stops)}` : ''}
-        }
-      }'
-    >
-      <vaadin-chart-series title="Value" values="[${y}]"></vaadin-chart-series>
-    </vaadin-chart>
-  `;
-}
-
 const GAUGE_STOPS = [
   [0.1, '#55BF3B'],
   [0.5, '#DDDF0D'],
   [0.9, '#DF5353'],
 ];
 
+/** A solid gauge whose colour comes from `yAxis.stops`, or from the series when `stops` is null. */
+function buildStopsGauge(y, stops) {
+  return buildSolidGauge({
+    title: stops ? 'Stops' : 'No stops',
+    pane: HALF_PANE,
+    yAxis: { ...HALF_AXIS, ...(stops && { stops }) },
+    series: `[${y}]`,
+  });
+}
+
 /**
  * Fixtures rendered only by `base/chart-non-styled.test.js`. They cover chart
  * types and code paths that only differ outside styled mode.
  */
 const nonStyledFixtures = {
-  // Basic cartesian types, which the shared fixtures leave to the styled-mode
-  // `pie` / `exporting` tests of each theme.
+  // Line, area, bar and scatter: the basic types no other fixture renders on its own.
   cartesian: `
     <div style="display: flex; flex-wrap: wrap; width: 800px; height: 600px">
       ${['line', 'area', 'bar', 'scatter']
