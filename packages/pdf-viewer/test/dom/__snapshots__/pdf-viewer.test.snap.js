@@ -41,7 +41,7 @@ snapshots["vaadin-pdf-viewer host default"] =
     <span slot="suffix">
     </span>
     <label
-      for="input-vaadin-integer-field-12"
+      for="input-vaadin-integer-field-10"
       id="label-vaadin-integer-field-2"
       slot="label"
     >
@@ -54,7 +54,7 @@ snapshots["vaadin-pdf-viewer host default"] =
     </div>
     <input
       disabled=""
-      id="input-vaadin-integer-field-12"
+      id="input-vaadin-integer-field-10"
       max="1"
       min="1"
       slot="input"
@@ -84,7 +84,7 @@ snapshots["vaadin-pdf-viewer host default"] =
   >
   </vaadin-select>
   <vaadin-pdf-viewer-button
-    aria-describedby="vaadin-tooltip-11"
+    aria-describedby="vaadin-tooltip-9"
     aria-disabled="true"
     disabled=""
     has-tooltip=""
@@ -138,7 +138,7 @@ snapshots["vaadin-pdf-viewer host document"] =
       / 6
     </span>
     <label
-      for="input-vaadin-integer-field-12"
+      for="input-vaadin-integer-field-10"
       id="label-vaadin-integer-field-2"
       slot="label"
     >
@@ -150,7 +150,7 @@ snapshots["vaadin-pdf-viewer host document"] =
     >
     </div>
     <input
-      id="input-vaadin-integer-field-12"
+      id="input-vaadin-integer-field-10"
       max="6"
       min="1"
       slot="input"
@@ -177,7 +177,7 @@ snapshots["vaadin-pdf-viewer host document"] =
   >
   </vaadin-select>
   <vaadin-pdf-viewer-button
-    aria-describedby="vaadin-tooltip-11"
+    aria-describedby="vaadin-tooltip-9"
     has-tooltip=""
     icon="zoom-in"
     role="button"
