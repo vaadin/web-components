@@ -63,10 +63,11 @@ how to generate them.
   - Its `_zoomFactor` getter reads `_scale`, in units of the actual page size.
 - `PdfViewerTextLayerMixin` renders the text layer of each rendered page and sets the document language on the
   pages. A page loads its text each time it renders, as pdf.js' own viewer does.
+- `PdfViewerLinksMixin` adds the links of each rendered page and follows internal links with `_scrollToPage()`.
 - After a page canvas renders, `PdfViewerRenderMixin` awaits `_renderPageLayers(page)`. Each override awaits
-  `super` first, so the layers render in the order of the mixins.
-- The page view owns the DOM of a page: the canvas and the text layer. Its methods check after each await that
-  the page still has the same canvas, so a released page gets no layers.
+  `super` first, so the layers render in the order of the mixins: text, then links.
+- The page view owns the DOM of a page: the canvas, the text layer and the link layer. Its methods check after
+  each await that the page still has the same canvas, so a released page gets no layers.
 - `PdfViewerKeyboardMixin` handles the keyboard shortcuts.
 - `PdfViewerToolbarMixin` renders the header and the toolbar. Its controls are in the light DOM, so a theme
   styles the page field like any other `vaadin-integer-field`. The element renders them before a marker comment,
@@ -83,12 +84,16 @@ how to generate them.
 - To check whether a result belongs to the current document, a mixin compares `_pdfDocument` with the
   document from the start of the call.
 
-## Text layer
+## Text and links
 
 - The text layer of pdf.js puts transparent text over the canvas. Users can select it, and screen readers
   read it.
-- Pages that lose their canvas also lose their text layer. Screen readers therefore reach only the text near
-  the view.
+- Pages that lose their canvas also lose their text and link layers. Screen readers therefore reach only
+  the text near the view.
+- Links are in their own layer over the text layer. Each link is named after the text it covers, or
+  after its URL or the page it goes to.
+- Only `http:`, `https:` and `mailto:` links open, in a new tab without access to the viewer.
+- When a focused link loses its page, focus moves to the page area.
 
 ## Install size
 

@@ -8,6 +8,8 @@
  * See https://vaadin.com/commercial-license-and-service-terms for the full
  * license.
  */
+import { createLink } from './pdf-viewer-links.js';
+import { addLinksToText, ANNOTATION_ID_PREFIX, compareAnnotationPositions } from './pdf-viewer-text-accessibility.js';
 import { loadPdfjs } from './pdfjs-loader.js';
 
 /**
@@ -18,10 +20,13 @@ export const MAX_CANVAS_PIXELS = 2 ** 24;
 
 /**
  * Manages the DOM of a single page of the document: a placeholder sized to
- * the page, and the canvas and the text layer the page is rendered to once
- * it is needed.
+ * the page, and the canvas and the text and link layers the page is rendered
+ * to once it is needed.
  */
 export class PdfViewerPage {
+  /** Set once the links of the current canvas are rendered, also when the page has none. */
+  #linksRendered = false;
+
   /**
    * @param {number} pageNumber
    * @param {{ width: number, height: number }} size the estimated size of the page
@@ -60,6 +65,9 @@ export class PdfViewerPage {
 
     /** @type {HTMLElement | null} */
     this.endOfContentElement = null;
+
+    /** @type {HTMLElement | null} */
+    this.linkLayerElement = null;
 
     /** The scale and device pixel ratio of the current canvas, to know when it is outdated. */
     this.renderedScale = 0;
@@ -184,6 +192,33 @@ export class PdfViewerPage {
   }
 
   /**
+   * Returns the offset in CSS pixels from the top left corner of the page to
+   * a position given in PDF units from the bottom left corner of the unrotated
+   * page, as in link destinations. A missing coordinate, or one outside the
+   * page, gives an offset of 0 on the axis that it is on after the rotation
+   * of the page. Needs the page of the document, see `setPdfPage()`.
+   *
+   * @param {number | undefined} x
+   * @param {number | undefined} y
+   * @return {{ left: number, top: number }}
+   */
+  getOffset(x, y) {
+    const viewport = this.pdfPage.getViewport({ scale: this.scale });
+    let [left, top] = viewport.convertToViewportPoint(x ?? 0, y ?? 0);
+    const rotated = viewport.rotation % 180 !== 0;
+    if ((rotated ? y : x) === undefined) {
+      left = 0;
+    }
+    if ((rotated ? x : y) === undefined) {
+      top = 0;
+    }
+    return {
+      left: left >= 0 && left <= this.width ? left : 0,
+      top: top >= 0 && top <= this.height ? top : 0,
+    };
+  }
+
+  /**
    * Renders the text layer: transparent text on top of the canvas, which makes
    * the text selectable and readable by assistive technology. When the layer
    * exists, it is only resized to the current scale.
@@ -234,6 +269,76 @@ export class PdfViewerPage {
       endOfContent.className = 'end-of-content';
       container.append(endOfContent);
       this.endOfContentElement = endOfContent;
+      this.#addLinksToText();
+    }
+  }
+
+  /**
+   * Renders the link layer: the links of the page, positioned relative to the
+   * page size so that they need no update when the scale changes. Like the
+   * text layer, the layer has the size of the page without its rotation, and
+   * is rotated with the page. The links are in reading order, as in pdf.js,
+   * also for the Tab key. A page without links gets no layer. Returns the
+   * links with their annotations, or no links when they are rendered already
+   * or the page was released meanwhile.
+   *
+   * @param {(annotation: object) => void} followLink called when an internal link is clicked
+   * @return {Promise<Array<{ link: HTMLAnchorElement, annotation: object }>>}
+   */
+  async renderLinkLayer(followLink) {
+    const canvas = this.canvas;
+    if (!canvas || this.#linksRendered) {
+      return [];
+    }
+    const [{ setLayerDimensions }, annotations] = await Promise.all([
+      loadPdfjs(),
+      this.pdfPage.getAnnotations({ intent: 'display' }),
+    ]);
+    // The page may have been released or rendered again meanwhile.
+    if (this.canvas !== canvas || this.#linksRendered) {
+      return [];
+    }
+    this.#linksRendered = true;
+
+    const links = [];
+    const viewport = this.pdfPage.getViewport({ scale: 1, rotation: 0 });
+    const layer = document.createElement('div');
+    layer.className = 'link-layer';
+    setLayerDimensions(layer, this.pdfPage.getViewport({ scale: 1 }));
+
+    // A copy, as pdf.js returns the same annotations to each call.
+    [...annotations].sort(compareAnnotationPositions).forEach((annotation) => {
+      const link = annotation.subtype === 'Link' && createLink(annotation, followLink);
+      if (!link) {
+        return;
+      }
+      link.id = `${ANNOTATION_ID_PREFIX}${annotation.id}`;
+      const [x1, y1] = viewport.convertToViewportPoint(annotation.rect[0], annotation.rect[1]);
+      const [x2, y2] = viewport.convertToViewportPoint(annotation.rect[2], annotation.rect[3]);
+      link.style.left = `${(Math.min(x1, x2) / viewport.width) * 100}%`;
+      link.style.top = `${(Math.min(y1, y2) / viewport.height) * 100}%`;
+      link.style.width = `${(Math.abs(x2 - x1) / viewport.width) * 100}%`;
+      link.style.height = `${(Math.abs(y2 - y1) / viewport.height) * 100}%`;
+      layer.append(link);
+      links.push({ link, annotation });
+    });
+
+    if (links.length) {
+      this.element.append(layer);
+      this.linkLayerElement = layer;
+      this.#addLinksToText();
+    }
+    return links;
+  }
+
+  /**
+   * Adds the links to the text, for assistive technology, once both the text
+   * layer and the link layer have rendered, in either order.
+   * @private
+   */
+  #addLinksToText() {
+    if (this.endOfContentElement && this.linkLayerElement) {
+      addLinksToText(this.textLayer.textDivs, [...this.linkLayerElement.children]);
     }
   }
 
@@ -245,7 +350,7 @@ export class PdfViewerPage {
     }
   }
 
-  /** Cancels a pending render and frees the canvas memory and the text layer. */
+  /** Cancels a pending render and frees the canvas memory and the text and link layers. */
   release() {
     this.cancel();
     this.textLayer?.cancel();
@@ -253,6 +358,9 @@ export class PdfViewerPage {
     this.textLayerElement?.remove();
     this.textLayerElement = null;
     this.endOfContentElement = null;
+    this.linkLayerElement?.remove();
+    this.linkLayerElement = null;
+    this.#linksRendered = false;
     if (this.canvas) {
       this.#freeCanvas(this.canvas);
       this.canvas = null;

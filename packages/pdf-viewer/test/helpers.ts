@@ -1,6 +1,6 @@
 import { nextFrame, oneEvent } from '@vaadin/testing-helpers';
 import sinon from 'sinon';
-import type { PDFPageProxy } from 'pdfjs-dist';
+import type { PDFDocumentProxy, PDFPageProxy } from 'pdfjs-dist';
 import { acquireWorker, loadPdfjs, releaseWorker } from '../src/pdfjs-loader.js';
 import type { PdfViewer } from '../vaadin-pdf-viewer.js';
 
@@ -112,16 +112,15 @@ export async function scrollSettled(element: HTMLElement): Promise<void> {
 }
 
 /**
- * Returns the prototype of the pages of every pdf.js document, including the
- * documents of the viewer, through a page of a document loaded for that.
+ * Returns the prototype of an object of a pdf.js document loaded for that,
+ * which is the prototype of the same objects of the documents of the viewer.
  */
-export async function getPdfPagePrototype(): Promise<PDFPageProxy> {
+async function getPrototype<T>(read: (pdfDocument: PDFDocumentProxy) => Promise<T> | T): Promise<T> {
   const pdfjs = await loadPdfjs();
   const handle = acquireWorker(pdfjs);
   const task = pdfjs.getDocument({ url: fixtureUrl('multi-page.pdf'), worker: handle.worker! });
   try {
-    const pdfPage = await (await task.promise).getPage(1);
-    return Object.getPrototypeOf(pdfPage);
+    return Object.getPrototypeOf(await read(await task.promise));
   } finally {
     await task.destroy();
     releaseWorker(handle);
@@ -129,35 +128,76 @@ export async function getPdfPagePrototype(): Promise<PDFPageProxy> {
 }
 
 /**
+ * Returns the prototype of the documents of pdf.js, including the documents of the viewer.
+ */
+export function getPdfDocumentPrototype(): Promise<PDFDocumentProxy> {
+  return getPrototype((pdfDocument) => pdfDocument);
+}
+
+/**
+ * Returns the prototype of the pages of every pdf.js document, including the documents of the viewer.
+ */
+export function getPdfPagePrototype(): Promise<PDFPageProxy> {
+  return getPrototype((pdfDocument) => pdfDocument.getPage(1));
+}
+
+/**
+ * Makes the text of the given page fail to load once, with the given message.
+ * `sinon.restore()` undoes it.
+ */
+export async function failTextOnce(pageNumber: number, message = 'Broken text'): Promise<void> {
+  const prototype = await getPdfPagePrototype();
+  const streamTextContent = prototype.streamTextContent;
+  let failed = false;
+  sinon.stub(prototype, 'streamTextContent').callsFake(function (this: PDFPageProxy, ...args) {
+    if (this.pageNumber === pageNumber && !failed) {
+      failed = true;
+      return new ReadableStream({
+        start(controller) {
+          controller.error(new Error(message));
+        },
+      });
+    }
+    return streamTextContent.apply(this, args);
+  });
+}
+
+/**
  * A page of a PDF created with `createPdf()`.
  */
 export type PdfPage = {
-  /** The content stream of the page. Font `/F1` is Helvetica. */
+  /** The content stream of the page. Font `/F1` is Helvetica, `/F2` is Courier. */
   content: string;
   /** The rotation of the page in degrees. */
   rotate?: number;
+  /** Annotation dictionaries, e.g. links. */
+  annotations?: string[];
   /** The size of the page in PDF units, A4 by default. */
   mediaBox?: [number, number, number, number];
 };
 
 /**
  * Creates a PDF with the given pages in memory, and returns an object URL for it.
- * `lang` is the language of the document.
+ * `dests` is the content of the named destinations dictionary, `lang` the language of the document.
  */
-export function createPdf(pages: PdfPage[], { lang = '' }: { lang?: string } = {}): string {
-  // Object 1 is the catalog, 2 the page tree, 3 the font, then each page and its content.
+export function createPdf(pages: PdfPage[], { dests = '', lang = '' }: { dests?: string; lang?: string } = {}): string {
+  // Object 1 is the catalog, 2 the page tree, 3 and 4 the fonts, then each page, its content and its annotations.
   const objects = [
-    `<< /Type /Catalog /Pages 2 0 R${lang ? ` /Lang (${lang})` : ''} >>`,
+    `<< /Type /Catalog /Pages 2 0 R${dests ? ` /Dests << ${dests} >>` : ''}${lang ? ` /Lang (${lang})` : ''} >>`,
     '',
     '<< /Type /Font /Subtype /Type1 /BaseFont /Helvetica >>',
+    '<< /Type /Font /Subtype /Type1 /BaseFont /Courier >>',
   ];
   const pageIds: number[] = [];
-  pages.forEach(({ content, rotate = 0, mediaBox = [0, 0, 595, 842] }) => {
+  pages.forEach(({ content, rotate = 0, annotations = [], mediaBox = [0, 0, 595, 842] }) => {
     const id = objects.length + 1;
     pageIds.push(id);
+    const annotationIds = annotations.map((_, index) => id + 2 + index);
+    const annots = annotationIds.length ? ` /Annots [${annotationIds.map((ref) => `${ref} 0 R`).join(' ')}]` : '';
     objects.push(
-      `<< /Type /Page /Parent 2 0 R /MediaBox [${mediaBox.join(' ')}] /Rotate ${rotate} /Resources << /Font << /F1 3 0 R >> >> /Contents ${id + 1} 0 R >>`,
+      `<< /Type /Page /Parent 2 0 R /MediaBox [${mediaBox.join(' ')}] /Rotate ${rotate} /Resources << /Font << /F1 3 0 R /F2 4 0 R >> >> /Contents ${id + 1} 0 R${annots} >>`,
       `<< /Length ${content.length} >>\nstream\n${content}\nendstream`,
+      ...annotations,
     );
   });
   objects[1] = `<< /Type /Pages /Kids [${pageIds.map((id) => `${id} 0 R`).join(' ')}] /Count ${pages.length} >>`;

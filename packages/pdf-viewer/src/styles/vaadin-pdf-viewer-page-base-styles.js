@@ -39,10 +39,40 @@ export const pdfViewerPageStyles = css`
     height: 100%;
   }
 
+  .link-layer {
+    position: absolute;
+    inset: 0;
+    z-index: 1;
+    transform-origin: 0 0;
+    pointer-events: none;
+  }
+
+  .link {
+    position: absolute;
+    z-index: 2;
+    pointer-events: auto;
+    cursor: var(--vaadin-clickable-cursor);
+  }
+
+  /* Keeps the selection in the text while dragging over links, as in pdf.js */
+  [part='page']:has(> .text-layer.selecting) .link {
+    pointer-events: none;
+  }
+
+  .link:focus-visible {
+    outline: var(--vaadin-focus-ring-width) solid var(--vaadin-focus-ring-color);
+    outline-offset: 1px;
+  }
+
   @media (forced-colors: active) {
     /* Pages lose their shadow in forced colors */
     [part='page'] {
       outline: 1px solid CanvasText;
+    }
+
+    /* The canvas keeps its colors, so links are outlined as in pdf.js */
+    .link {
+      outline: 1.5px solid LinkText;
     }
   }
 `;
