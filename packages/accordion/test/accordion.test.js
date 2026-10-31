@@ -335,14 +335,18 @@ describe('vaadin-accordion', () => {
       content = accordion.items[0].querySelector('div');
     });
 
-    it('should set aria-controls attribute on the heading linking to content', () => {
-      expect(heading.getAttribute('aria-controls')).to.equal(content.id);
+    it('should link the button in the heading to the content with aria-controls', () => {
+      expect(heading.$.button.ariaControlsElements).to.deep.equal([content]);
     });
 
-    it('should remove aria-controls attribute from the heading when content is removed', async () => {
+    it('should not set aria-controls attribute on the heading', () => {
+      expect(heading.hasAttribute('aria-controls')).to.be.false;
+    });
+
+    it('should reset the button aria-controls link when content is removed', async () => {
       content.remove();
       await nextRender();
-      expect(heading.hasAttribute('aria-controls')).to.be.false;
+      expect(heading.$.button.ariaControlsElements).to.be.null;
     });
   });
 
