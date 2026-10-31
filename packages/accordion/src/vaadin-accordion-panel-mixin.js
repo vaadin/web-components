@@ -5,7 +5,6 @@
  */
 import { DelegateFocusMixin } from '@vaadin/a11y-base/src/delegate-focus-mixin.js';
 import { DelegateStateMixin } from '@vaadin/component-base/src/delegate-state-mixin.js';
-import { setOrRemoveAttribute } from '@vaadin/component-base/src/dom-utils.js';
 import { TooltipController } from '@vaadin/component-base/src/tooltip-controller.js';
 import { CollapsibleMixin } from '@vaadin/details/src/collapsible-mixin.js';
 import { SummaryController } from '@vaadin/details/src/summary-controller.js';
@@ -136,7 +135,27 @@ export const AccordionPanelMixin = (superClass) =>
           node.setAttribute('aria-labelledby', focusElement.id);
         }
 
-        setOrRemoveAttribute(focusElement, 'aria-controls', node?.id);
+        this.__updateAriaControls(focusElement);
       }
+    }
+
+    /** @private */
+    __updateAriaControls(focusElement) {
+      const button = focusElement.$ && focusElement.$.button;
+
+      // The heading may not have rendered its button yet.
+      if (!button) {
+        focusElement.updateComplete.then(() => {
+          if (focusElement === this.focusElement) {
+            this.__updateAriaControls(focusElement);
+          }
+        });
+        return;
+      }
+
+      // The button is in the heading's shadow root while the content is not, so
+      // an ID reference cannot link them: use an element reference instead.
+      const node = this._contentElements && this._contentElements[0];
+      button.ariaControlsElements = node ? [node] : null;
     }
   };
