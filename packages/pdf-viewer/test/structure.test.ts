@@ -133,19 +133,6 @@ describe('structure', () => {
     });
   });
 
-  it('should own a link in the structure when the text renders after the link', async () => {
-    await failTextOnce(1);
-    sinon.stub(console, 'warn');
-    await loadAndRender(viewer, fixtureUrl('tagged.pdf'));
-    expect(getTree()).to.be.null;
-    expect(getLink().hasAttribute('aria-owns')).to.be.false;
-    const idle = nextRenderIdle(viewer);
-    viewer.style.width = '900px';
-    await idle;
-    expect(getOwnedText(getLink())).to.equal('Vaadin website');
-    expect(viewer.shadowRoot!.querySelector('.text-layer [aria-owns]')).to.be.null;
-  });
-
   describe('links that the viewer leaves out', () => {
     [
       // The layer is object 5, so the page is object 6 and its link object 8.
@@ -239,16 +226,22 @@ describe('structure', () => {
       await loadAndRender(viewer, url);
       expect(getLink().getAttribute('aria-label')).to.equal('Vaadin documentation (opens in a new tab)');
       expect(getOwnedText(getLink())).to.equal('Docs');
+      // The alternative text names the link, not its structure element.
+      expect(getTree()!.querySelector('[aria-label]')).to.be.null;
     });
 
-    it('should keep the alternative text in the name when the structure renders after the link', async () => {
+    it('should own and name a link by its structure element when the structure renders after the link', async () => {
       await failTextOnce(1);
       sinon.stub(console, 'warn');
       await loadAndRender(viewer, url);
+      expect(getTree()).to.be.null;
+      expect(getLink().hasAttribute('aria-owns')).to.be.false;
       expect(getLink().getAttribute('aria-label')).to.equal('Docs (opens in a new tab)');
       const idle = nextRenderIdle(viewer);
       viewer.style.width = '900px';
       await idle;
+      expect(getOwnedText(getLink())).to.equal('Docs');
+      expect(viewer.shadowRoot!.querySelector('.text-layer [aria-owns]')).to.be.null;
       expect(getLink().getAttribute('aria-label')).to.equal('Vaadin documentation (opens in a new tab)');
       viewer.i18n = { externalLink: '{text} (åpnes i en ny fane)' };
       await nextUpdate(viewer);
@@ -363,38 +356,21 @@ describe('structure', () => {
       expect(structure.annotationIds).to.be.empty;
     });
 
-    describe('links', () => {
-      let structure: PdfViewerStructureLayer;
-
-      beforeEach(() => {
-        structure = create([
-          {
-            role: 'Link',
-            alt: 'Vaadin',
-            children: [
-              { type: 'content', id: 'p3R_mc0' },
-              { type: 'annotation', id: 'pdfjs_internal_id_5R' },
-            ],
-          },
-        ]);
-      });
-
-      it('should keep the role of a link structure element until a link takes its place', () => {
-        const link = structure.element.querySelector('[role="link"]')!;
-        expect(link).to.be.ok;
-        const owns = structure.getAriaAttributes('pdfjs_internal_id_5R')!.get('aria-owns')!;
-        expect(link.hasAttribute('role')).to.be.false;
-        expect(structure.element.querySelector(`#${owns}`)!.getAttribute('aria-owns')).to.equal('p3R_mc0');
-      });
-
-      it('should name the link with the alternative text of its structure element', () => {
-        expect(structure.getAriaAttributes('pdfjs_internal_id_5R')!.get('aria-label')).to.equal('Vaadin');
-        expect(structure.element.querySelector('[aria-label]')).to.be.null;
-      });
-
-      it('should list the annotations that the structure owns', () => {
-        expect([...structure.annotationIds]).to.deep.equal(['pdfjs_internal_id_5R']);
-      });
+    it('should keep the role of a link structure element until a link takes its place', () => {
+      const structure = create([
+        {
+          role: 'Link',
+          children: [
+            { type: 'content', id: 'p3R_mc0' },
+            { type: 'annotation', id: 'pdfjs_internal_id_5R' },
+          ],
+        },
+      ]);
+      const link = structure.element.querySelector('[role="link"]')!;
+      expect(link).to.be.ok;
+      const owns = structure.getAriaAttributes('pdfjs_internal_id_5R')!.get('aria-owns')!;
+      expect(link.hasAttribute('role')).to.be.false;
+      expect(structure.element.querySelector(`#${owns}`)!.getAttribute('aria-owns')).to.equal('p3R_mc0');
     });
   });
 
