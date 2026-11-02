@@ -563,6 +563,19 @@ describe('links', () => {
       expect(getTextLayer(1)).to.be.null;
       expect(viewer.shadowRoot!.activeElement).to.equal(content);
     });
+
+    it('should not stop a smooth scroll that releases the page of a focused link', async () => {
+      viewer.style.height = '300px';
+      const emptyPages = Array.from({ length: 8 }, () => ({ content: '' }));
+      await loadPdf([{ content: '', annotations: [uriLink([50, 700, 300, 720])] }, ...emptyPages]);
+      getLinks(1)[0].focus();
+      await nextFrame();
+      const end = content.scrollHeight - content.clientHeight;
+      content.scrollTo({ top: end, behavior: 'smooth' });
+      await scrollSettled(content);
+      expect(viewer.shadowRoot!.activeElement).to.equal(content);
+      expect(content.scrollTop).to.be.closeTo(end, 1);
+    });
   });
 
   describe('selection', () => {

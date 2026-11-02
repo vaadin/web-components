@@ -253,12 +253,7 @@ export const PdfViewerRenderMixin = (superClass) =>
      */
     #releasePage(page) {
       if (page.element.contains(this.shadowRoot.activeElement)) {
-        // WebKit scrolls the focused scroll container despite preventScroll.
-        const { content } = this.$;
-        const { scrollTop, scrollLeft } = content;
-        content.focus({ preventScroll: true, focusVisible: isKeyboardActive() });
-        content.scrollTop = scrollTop;
-        content.scrollLeft = scrollLeft;
+        this.$.content.focus({ preventScroll: true, focusVisible: isKeyboardActive() });
       }
       page.release();
     }
