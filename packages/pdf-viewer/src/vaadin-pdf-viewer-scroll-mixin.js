@@ -179,7 +179,10 @@ export const PdfViewerScrollMixin = (superClass) =>
         const pageView = this.__pages[page - 1];
         if (offset) {
           content.scrollTop = pageView.element.offsetTop + offset.top;
-          content.scrollLeft = pageView.element.offsetLeft + offset.left;
+          // Not offsetLeft, which Chromium measures from behind the scrollbar on the left in RTL.
+          const view = content.getBoundingClientRect();
+          const box = pageView.element.getBoundingClientRect();
+          content.scrollLeft += box.left + offset.left - (view.left + content.clientLeft);
         } else {
           content.scrollTop =
             pageView.element.offsetTop - Number.parseFloat(getComputedStyle(content).paddingBlockStart);

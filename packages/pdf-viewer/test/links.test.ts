@@ -441,6 +441,17 @@ describe('links', () => {
       expect(content.scrollLeft).to.be.greaterThan(0);
       expect(content.scrollLeft).to.be.closeTo(page.offsetLeft + (200 / 595) * page.offsetWidth, 1);
     });
+
+    it('should scroll horizontally to the position of a destination in RTL', async () => {
+      viewer.setAttribute('dir', 'rtl');
+      viewer.zoom = 2;
+      await loadLinkToPosition('[1 /XYZ 200 400 null]');
+      getLinks(1)[0].click();
+      await nextRenderIdle(viewer);
+      const page = pages[1].getBoundingClientRect();
+      const viewLeft = content.getBoundingClientRect().left + content.clientLeft;
+      expect(page.left + (200 / 595) * page.width).to.be.closeTo(viewLeft, 1);
+    });
   });
 
   describe('named actions', () => {
