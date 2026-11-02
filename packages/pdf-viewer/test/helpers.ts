@@ -270,26 +270,16 @@ export async function holdPages(fromPage: number): Promise<() => void> {
 }
 
 /**
- * Starts printing and waits until the given number of pages is prepared and
- * the progress bar shows it. Printing stays in progress until the returned
- * function releases the pages.
+ * Starts printing and waits until the progress shows. Printing stays in
+ * progress until the returned function releases the pages.
  */
-export async function startPrint(viewer: PdfViewer, preparedPages = 0): Promise<() => void> {
-  const release = await holdPages(preparedPages + 1);
+export async function startPrint(viewer: PdfViewer): Promise<() => void> {
+  const release = await holdPages(1);
   viewer.print();
-  // The progress counts the prepared pages.
-  const progress = preparedPages / viewer.pageCount;
-  let progressBar: (HTMLElement & { value: number }) | null = null;
-  for (let i = 0; progressBar?.value !== progress; i++) {
-    if (i === 200) {
-      release();
-      throw new Error(`Printing did not prepare ${preparedPages} pages`);
-    }
+  const getProgressBar = () => viewer.querySelector<HTMLElement>('vaadin-progress-bar');
+  for (let i = 0; i < 50 && !getProgressBar(); i++) {
     await nextFrame();
-    progressBar = viewer.querySelector<HTMLElement & { value: number }>('vaadin-progress-bar');
   }
-  // The bar animates its width to the value.
-  await nextUpdate(progressBar);
-  await Promise.all(progressBar.shadowRoot!.getAnimations().map((animation) => animation.finished));
+  await nextUpdate(getProgressBar()!);
   return release;
 }

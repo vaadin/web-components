@@ -17,6 +17,8 @@ describe('vaadin-pdf-viewer', () => {
   });
 
   afterEach(() => {
+    // Cancels printing first, so that the released pages do not open the print dialog.
+    viewer.remove();
     release?.();
     release = undefined;
   });

@@ -4,10 +4,18 @@ import { fixtureSync, nextFrame, nextRender, nextUpdate, oneEvent } from '@vaadi
 import sinon from 'sinon';
 import './enable-feature-flag.js';
 import '../vaadin-pdf-viewer.js';
+import type { PDFPageProxy } from 'pdfjs-dist';
 import { clearWarnings } from '@vaadin/component-base/src/warnings.js';
 import type { Tooltip } from '@vaadin/tooltip';
 import type { PdfViewer } from '../vaadin-pdf-viewer.js';
-import { createPdf, fixtureUrl, getPdfDocumentPrototype, holdPages, loadDocument } from './helpers.js';
+import {
+  createPdf,
+  fixtureUrl,
+  getPdfDocumentPrototype,
+  getPdfPagePrototype,
+  holdPages,
+  loadDocument,
+} from './helpers.js';
 
 describe('print', () => {
   let viewer: PdfViewer;
@@ -322,6 +330,42 @@ describe('print', () => {
       expect(printSpy).to.be.not.called;
     });
 
+    it('should print again while a cancelled print still waits for a page', async () => {
+      release = await holdPages(3);
+      const cancelled = viewer.print();
+      await pagesPrepared(2);
+      getCancelButton()!.click();
+      await cancelled;
+      const printed = viewer.print();
+      await pagesPrepared(2);
+      // The page of the cancelled print arrives while the new print waits for it too.
+      release();
+      await printed;
+      expect(printSpy).to.be.calledOnce;
+      expect(getImages()).to.have.lengthOf(6);
+      await nextUpdate(viewer);
+      expect(getProgress().hidden).to.be.true;
+    });
+
+    it('should not warn when printing is cancelled while a page renders', async () => {
+      const warnStub = sinon.stub(console, 'warn');
+      const prototype = await getPdfPagePrototype();
+      const render = prototype.render;
+      function fakeRender(this: PDFPageProxy, ...args: Parameters<PDFPageProxy['render']>) {
+        const task = render.apply(this, args);
+        if (args[0].intent === 'print') {
+          // Once the frame holds the render task, which the cancel stops.
+          queueMicrotask(() => getCancelButton()!.click());
+        }
+        return task;
+      }
+      sinon.stub(prototype, 'render').callsFake(fakeRender);
+      await viewer.print();
+      expect(warnStub).to.be.not.called;
+      expect(printSpy).to.be.not.called;
+      expect(getFrame()).to.be.null;
+    });
+
     it('should release the prepared pages when cancelled', async () => {
       release = await holdPages(3);
       const revokeSpy = sinon.spy(URL, 'revokeObjectURL');
@@ -380,14 +424,22 @@ describe('print', () => {
     });
 
     it('should cancel printing when detached', async () => {
+      const parent = viewer.parentElement!;
       release = await holdPages(3);
       const printed = viewer.print();
       await pagesPrepared(2);
       viewer.remove();
       expect(getFrame()).to.be.null;
-      release();
       await printed;
+      await nextUpdate(viewer);
+      expect(getProgress().hidden).to.be.true;
       expect(printSpy).to.be.not.called;
+      release();
+      const loaded = oneEvent(viewer, 'document-load');
+      parent.appendChild(viewer);
+      await loaded;
+      await viewer.print();
+      expect(printSpy).to.be.calledOnce;
     });
 
     it('should cancel printing when another document loads', async () => {
@@ -397,9 +449,13 @@ describe('print', () => {
       viewer.src = fixtureUrl('links.pdf');
       await oneEvent(viewer, 'document-load');
       expect(getFrame()).to.be.null;
-      release();
       await printed;
+      await nextUpdate(viewer);
+      expect(getProgress().hidden).to.be.true;
       expect(printSpy).to.be.not.called;
+      release();
+      await viewer.print();
+      expect(printSpy).to.be.calledOnce;
     });
 
     it('should warn and stop when a page cannot be printed', async () => {
