@@ -8,7 +8,7 @@ import { getDeepActiveElement } from '@vaadin/a11y-base/src/focus-utils.js';
 import type { TextField } from '@vaadin/text-field';
 import { createPageText, findInText, getMatchParts, normalizeText } from '../src/pdf-viewer-find.js';
 import type { PdfViewer } from '../vaadin-pdf-viewer.js';
-import { loadDocument, nextRenderIdle } from './helpers.js';
+import { loadDocument, nextRenderIdle, untilFrame } from './helpers.js';
 
 describe('find', () => {
   describe('text helpers', () => {
@@ -511,9 +511,7 @@ describe('find', () => {
           const field = getFindField();
           field.value = 'Internal link to page 2';
           field.inputElement.dispatchEvent(new Event('input', { bubbles: true, composed: true }));
-          for (let i = 0; i < 50 && !settle; i++) {
-            await nextFrame();
-          }
+          await untilFrame(() => settle);
           await loadDocument(viewer, 'links.pdf');
           await waitForResult();
           expect(getResultText()).to.equal('1 of 1');

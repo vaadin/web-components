@@ -5,7 +5,7 @@ import sinon from 'sinon';
 import './enable-feature-flag.js';
 import '../vaadin-pdf-viewer.js';
 import type { PdfViewer } from '../vaadin-pdf-viewer.js';
-import { fixtureUrl, loadDocument } from './helpers.js';
+import { fixtureUrl, loadDocument, untilFrame } from './helpers.js';
 
 describe('download and print', () => {
   let viewer: PdfViewer;
@@ -43,9 +43,7 @@ describe('download and print', () => {
 
     async function download() {
       getButton('download').click();
-      for (let i = 0; i < 50 && !link; i++) {
-        await nextFrame();
-      }
+      await untilFrame(() => link);
       return link!;
     }
 
@@ -114,9 +112,7 @@ describe('download and print', () => {
       });
 
       async function expectDownload(fileName: string) {
-        for (let i = 0; i < 50 && !link; i++) {
-          await nextFrame();
-        }
+        await untilFrame(() => link);
         expect(link!.download).to.equal(fileName);
         const downloaded = await fetch(link!.href).then((response) => response.arrayBuffer());
         expect(new Uint8Array(downloaded)).to.deep.equal(new Uint8Array(original));
@@ -169,9 +165,7 @@ describe('download and print', () => {
     });
 
     async function waitForPrint() {
-      for (let i = 0; i < 200 && !(printStub && printStub.called); i++) {
-        await nextFrame();
-      }
+      await untilFrame(() => printStub && printStub.called, 200);
     }
 
     it('should print every page at the size of the page', async () => {

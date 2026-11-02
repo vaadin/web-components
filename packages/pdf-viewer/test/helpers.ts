@@ -124,3 +124,13 @@ export function createPdfUrl(pageCount: number): string {
     })),
   );
 }
+
+/**
+ * Waits a frame at a time until the condition holds, for at most the given
+ * number of frames.
+ */
+export async function untilFrame(condition: () => unknown, maxFrames = 50): Promise<void> {
+  for (let i = 0; i < maxFrames && !condition(); i++) {
+    await nextFrame();
+  }
+}
