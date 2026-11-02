@@ -33,7 +33,7 @@ describe('GridPro', () => {
     columnElementName: string,
     assertions: { expectedColumnCount: number; expectedCellCount: number },
   ) {
-    return vi.waitFor(async () => {
+    return vi.waitFor(() => {
       const grid = document.querySelector('vaadin-grid, vaadin-grid-pro')!;
       expect(grid).to.exist;
 
@@ -139,7 +139,7 @@ describe('GridPro', () => {
         element.dispatchEvent(new MouseEvent('dblclick', { bubbles: true }));
       }
 
-      beforeEach(async () => {
+      beforeEach(() => {
         items = [{ name: 'name-0' }];
       });
 
@@ -213,7 +213,7 @@ describe('GridPro', () => {
         element.blur();
       }
 
-      beforeEach(async () => {
+      beforeEach(() => {
         items = Array.from(new Array(1)).map((_, i) => ({ name: `name-${i}` }));
       });
 
@@ -402,7 +402,7 @@ describe('GridPro', () => {
           </GridPro>,
         );
 
-        let cellContent = await until(() =>
+        const cellContent = await until(() =>
           Array.from(document.querySelectorAll('vaadin-grid-cell-content')).find((c) => c.textContent === 'name-0'),
         );
         doubleClick(cellContent!);

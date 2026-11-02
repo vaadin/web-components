@@ -8,7 +8,7 @@ const subMenuTag = 'vaadin-menu-bar-submenu';
 const menuItemTag = 'vaadin-menu-bar-item';
 const menuButtonTag = 'vaadin-menu-bar-button';
 
-async function overlayOpened(): Promise<void> {
+function overlayOpened(): Promise<void> {
   return new Promise((resolve) => {
     document.addEventListener(
       'vaadin-overlay-open',

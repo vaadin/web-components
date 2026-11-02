@@ -44,7 +44,7 @@ describe('Notification', () => {
   });
 
   describe('show()', () => {
-    it('should render correctly', async () => {
+    it('should render correctly', () => {
       ref.current = Notification.show('FooBar');
       assert();
     });
