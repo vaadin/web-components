@@ -15,11 +15,12 @@ import './vaadin-pdf-viewer-button.js';
 import { html } from 'lit';
 import { styleMap } from 'lit/directives/style-map.js';
 import { slotContent } from '@vaadin/component-base/src/directives/slot-content.js';
+import { PdfViewerButtonController } from './pdf-viewer-button-controller.js';
 import { formatZoom, getZoomInLevel, getZoomOutLevel, ZOOM_LEVELS } from './pdf-viewer-zoom-utils.js';
 
 /**
- * A mixin that adds the header and the toolbar with the page navigation and
- * the zoom. The controls of the toolbar are Vaadin components, rendered into
+ * A mixin that adds the header and the toolbar with the page navigation, the
+ * zoom and the download button. The controls of the toolbar are Vaadin components, rendered into
  * the light DOM so that themes can style them like any other instance of
  * these components.
  */
@@ -63,8 +64,23 @@ export const PdfViewerToolbarMixin = (superClass) =>
           value: false,
           notify: true,
         },
+
+        /**
+         * Whether the button that downloads the document is hidden from the
+         * toolbar. The `download()` method works also while it is hidden.
+         *
+         * @attr {boolean} download-button-hidden
+         */
+        downloadButtonHidden: {
+          type: Boolean,
+          value: false,
+        },
       };
     }
+
+    #downloadButtonController = new PdfViewerButtonController(this, 'download-button', 'download', () =>
+      this.download(),
+    );
 
     /** The items of the zoom select, built again only when `zoom` or the texts change. */
     #zoomItems = [];
@@ -76,6 +92,21 @@ export const PdfViewerToolbarMixin = (superClass) =>
       if (props.has('zoom') || props.has('__effectiveI18n')) {
         this.#zoomItems = this.#getZoomItems();
       }
+    }
+
+    /** @protected */
+    firstUpdated() {
+      super.firstUpdated();
+
+      // The controller observes the slot, which exists after the first render.
+      this.addController(this.#downloadButtonController);
+    }
+
+    /** @protected */
+    updated(props) {
+      super.updated(props);
+
+      this.#downloadButtonController.updateButton(!this.pageCount, this.__effectiveI18n.download);
     }
 
     /**
@@ -106,19 +137,10 @@ export const PdfViewerToolbarMixin = (superClass) =>
           </div>
           <div part="toolbar-group">
             <slot name="toolbar-actions"></slot>
-            ${this._renderToolbarActionSlots()}
+            <slot name="download-button" ?hidden="${this.downloadButtonHidden}"></slot>
           </div>
         </div>
       `;
-    }
-
-    /**
-     * Returns the slots of the built-in buttons, which come after the
-     * application controls of `toolbar-actions`.
-     * @protected
-     */
-    _renderToolbarActionSlots() {
-      return html``;
     }
 
     /**

@@ -11,23 +11,14 @@
 import type { Constructor } from '@open-wc/dedupe-mixin';
 
 /**
- * A mixin that adds downloading the document, with a button in the toolbar.
- * An application can replace the button with its own component in the
- * `download-button` slot.
+ * A mixin that adds downloading the document. The toolbar has a button that
+ * calls `download()`.
  */
 export declare function PdfViewerDownloadMixin<T extends Constructor<HTMLElement>>(
   base: T,
 ): Constructor<PdfViewerDownloadMixinClass> & T;
 
 export declare class PdfViewerDownloadMixinClass {
-  /**
-   * Whether the button that downloads the document is hidden from the
-   * toolbar. The `download()` method works also while it is hidden.
-   *
-   * @attr {boolean} download-button-hidden
-   */
-  downloadButtonHidden: boolean;
-
   /**
    * Downloads the document. The file has the original bytes of the
    * document, so the viewer does not request it again, and signatures stay

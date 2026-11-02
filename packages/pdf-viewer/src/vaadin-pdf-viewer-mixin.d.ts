@@ -25,8 +25,7 @@ import type { PdfViewerZoomMixinClass } from './vaadin-pdf-viewer-zoom-mixin.js'
  */
 export declare function PdfViewerMixin<T extends Constructor<HTMLElement>>(
   base: T,
-): Constructor<PdfViewerDownloadMixinClass> &
-  Constructor<PdfViewerToolbarMixinClass> &
+): Constructor<PdfViewerToolbarMixinClass> &
   Constructor<PdfViewerKeyboardMixinClass> &
   Constructor<KeyboardMixinClass> &
   Constructor<PdfViewerLinksMixinClass> &
@@ -34,5 +33,6 @@ export declare function PdfViewerMixin<T extends Constructor<HTMLElement>>(
   Constructor<PdfViewerZoomMixinClass> &
   Constructor<PdfViewerScrollMixinClass> &
   Constructor<PdfViewerRenderMixinClass> &
+  Constructor<PdfViewerDownloadMixinClass> &
   Constructor<PdfViewerDocumentMixinClass> &
   T;

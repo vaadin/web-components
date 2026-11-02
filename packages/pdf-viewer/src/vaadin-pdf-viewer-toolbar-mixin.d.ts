@@ -12,8 +12,8 @@ import type { Constructor } from '@open-wc/dedupe-mixin';
 import type { TemplateResult } from 'lit';
 
 /**
- * A mixin that adds the header and the toolbar with the page navigation and
- * the zoom.
+ * A mixin that adds the header and the toolbar with the page navigation, the
+ * zoom and the download button.
  */
 export declare function PdfViewerToolbarMixin<T extends Constructor<HTMLElement>>(
   base: T,
@@ -49,15 +49,17 @@ export declare class PdfViewerToolbarMixinClass {
   toolbarCollapsed: boolean;
 
   /**
+   * Whether the button that downloads the document is hidden from the
+   * toolbar. The `download()` method works also while it is hidden.
+   *
+   * @attr {boolean} download-button-hidden
+   */
+  downloadButtonHidden: boolean;
+
+  /**
    * Returns the template of the header and the toolbar.
    */
   protected _renderToolbar(): TemplateResult;
-
-  /**
-   * Returns the slots of the built-in buttons, which come after the
-   * application controls of `toolbar-actions`.
-   */
-  protected _renderToolbarActionSlots(): TemplateResult;
 
   /**
    * Returns the template of the navigation controls in the `toolbar-navigation` slot.
