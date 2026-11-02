@@ -38,6 +38,8 @@ Use this template, in this fixed section order:
 
 Fixes https://github.com/vaadin/web-components/issues/951
 
+<Prose: a short paragraph, only in the cases listed under Prose>
+
 - <What changed, one behavior per bullet>
 - <…>
   - <Sub-bullet: a detail or the reason, only when the parent bullet needs it>
@@ -83,6 +85,9 @@ One short paragraph between the links and the bullets, only when the bullets can
 the _why_: a non-obvious root cause, a rejected alternative a reviewer would otherwise
 propose, a constraint that shaped the approach. A subtle bug fix usually earns one;
 a feature almost never does.
+
+Prose should also replace the bullets when there would be only a single bullet, with or
+without sub-bullets.
 
 Use plain, common English. Most Vaadin readers are non-native English speakers, so avoid
 advanced or uncommon vocabulary.
