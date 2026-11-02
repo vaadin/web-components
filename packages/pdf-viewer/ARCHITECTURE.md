@@ -71,6 +71,8 @@ how to generate them.
   pages. A page loads its text each time it renders, as pdf.js' own viewer does.
 - `PdfViewerStructureMixin` renders the structure of each rendered page of a tagged PDF, after its text layer.
 - `PdfViewerLinksMixin` adds the links of each rendered page and follows internal links with `_scrollToPage()`.
+  - The page adds the links to the structure or to the text once both the structure and the links have rendered.
+    The links mixin therefore needs the structure mixin, which marks a page without structure as rendered too.
 - After a page canvas renders, `PdfViewerRenderMixin` awaits `_renderPageLayers(page)`. Each override awaits
   `super` first, so the layers render in the order of the mixins: text, then structure, then links.
 - The page view owns the DOM of a page: the canvas, the text layer, the structure and the link layer. Its methods
