@@ -669,16 +669,19 @@ export const KeyboardNavigationMixin = (superClass) =>
 
       let focusStepTarget = tabOrder[index];
 
+      // In focus button mode, the focusable is a button inside the cell
+      const focusStepCell = isCell(focusStepTarget?.parentElement) ? focusStepTarget.parentElement : focusStepTarget;
+
       // If the target focusable is tied to a column that is not visible,
       // find the first visible column and update the target in order to
       // prevent scrolling to the start of the row.
-      if (focusStepTarget && !this.__isHorizontallyInViewport(focusStepTarget)) {
+      if (focusStepTarget && !this.__isHorizontallyInViewport(focusStepCell)) {
         const firstVisibleColumn = this._getColumnsInOrder().find((column) => this.__isColumnInViewport(column));
         if (firstVisibleColumn) {
           if (focusStepTarget === this._headerFocusable) {
             focusStepTarget = firstVisibleColumn._headerCell;
           } else if (focusStepTarget === this._itemsFocusable) {
-            const row = focusStepTarget.parentElement;
+            const row = focusStepCell.parentElement;
             focusStepTarget = [...row.children].find((cell) => cell._column === firstVisibleColumn);
           } else if (focusStepTarget === this._footerFocusable) {
             focusStepTarget = firstVisibleColumn._footerCell;
