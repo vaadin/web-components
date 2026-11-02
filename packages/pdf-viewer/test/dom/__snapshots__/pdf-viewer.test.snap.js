@@ -1083,6 +1083,7 @@ snapshots["vaadin-pdf-viewer page tagged"] =
       href="https://vaadin.com/"
       id="pdfjs_internal_id_11R"
       rel="noopener noreferrer"
+      tabindex="0"
       target="_blank"
     >
     </a>
@@ -1133,6 +1134,7 @@ snapshots["vaadin-pdf-viewer page links"] =
       class="link"
       href="#"
       id="pdfjs_internal_id_7R"
+      tabindex="0"
     >
     </a>
     <a
@@ -1141,6 +1143,7 @@ snapshots["vaadin-pdf-viewer page links"] =
       href="https://vaadin.com/"
       id="pdfjs_internal_id_8R"
       rel="noopener noreferrer"
+      tabindex="0"
       target="_blank"
     >
     </a>

@@ -1,6 +1,6 @@
 import { expect } from '@vaadin/chai-plugins';
 import { resetMouse, sendKeys, sendMouse } from '@vaadin/test-runner-commands';
-import { fixtureSync, isDesktopSafari, nextFrame, nextRender, nextUpdate } from '@vaadin/testing-helpers';
+import { fixtureSync, nextFrame, nextRender, nextUpdate } from '@vaadin/testing-helpers';
 import sinon from 'sinon';
 import './enable-feature-flag.js';
 import '../vaadin-pdf-viewer.js';
@@ -18,9 +18,6 @@ import {
   type PdfPage,
   scrollSettled,
 } from './helpers.js';
-
-/** Safari moves focus to links with Option+Tab, unless the user enables Tab for links. */
-const TAB = isDesktopSafari ? 'Alt+Tab' : 'Tab';
 
 describe('links', () => {
   let viewer: PdfViewer;
@@ -597,7 +594,7 @@ describe('links', () => {
       content.focus();
       const focused: Element[] = [];
       for (let i = 0; i < 3; i++) {
-        await sendKeys({ press: TAB });
+        await sendKeys({ press: 'Tab' });
         focused.push(viewer.shadowRoot!.activeElement || document.activeElement!);
       }
       after.remove();
@@ -607,7 +604,7 @@ describe('links', () => {
     it('should show the focus ring of a focused link', async () => {
       await load('links.pdf');
       content.focus();
-      await sendKeys({ press: TAB });
+      await sendKeys({ press: 'Tab' });
       const link = viewer.shadowRoot!.activeElement as HTMLAnchorElement;
       expect(getComputedStyle(link).outlineStyle).to.equal('solid');
     });
@@ -615,7 +612,7 @@ describe('links', () => {
     it('should show the focus ring around the quadrilaterals of a focused link that wraps', async () => {
       await loadWrappingLink();
       content.focus();
-      await sendKeys({ press: TAB });
+      await sendKeys({ press: 'Tab' });
       const link = viewer.shadowRoot!.activeElement as HTMLAnchorElement;
       const areas = [...link.querySelectorAll('.link-area')];
       expect(getComputedStyle(link).outlineStyle).to.equal('none');
@@ -630,8 +627,8 @@ describe('links', () => {
         { content: '', annotations: [uriLink([50, 410, 200, 430], 'https://vaadin.com/docs')] },
       ]);
       content.focus();
-      await sendKeys({ press: TAB });
-      await sendKeys({ press: TAB });
+      await sendKeys({ press: 'Tab' });
+      await sendKeys({ press: 'Tab' });
       const link = viewer.shadowRoot!.activeElement!;
       expect(link).to.equal(getLinks(2)[0]);
       await scrollSettled(content);

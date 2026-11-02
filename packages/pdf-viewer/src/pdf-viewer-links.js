@@ -77,6 +77,8 @@ export function createLink(annotation, followLink) {
     return null;
   }
   link.className = 'link';
+  // Safari skips links on Tab without it, unless the user turns on Tab for links.
+  link.tabIndex = 0;
   return link;
 }
 
