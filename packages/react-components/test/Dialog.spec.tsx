@@ -1,8 +1,8 @@
+import { nextFrame, nextRender } from '@vaadin/testing-helpers/dist/utils.js';
 import sinon from 'sinon';
 import { useState } from 'react';
 import { describe, expect, it } from 'vitest';
 import { render } from 'vitest-browser-react';
-import { nextRender } from '../../../react/test/utils/nextRender.js';
 import { Dialog } from '../src/Dialog.js';
 
 describe('Dialog', () => {
@@ -82,7 +82,7 @@ describe('Dialog', () => {
 
     const warn = sinon.stub(console, 'error');
     document.querySelector<HTMLButtonElement>('#open-button')?.click();
-    await new Promise((resolve) => requestAnimationFrame(resolve));
+    await nextFrame();
     warn.restore();
 
     expect(warn.called).to.be.false;

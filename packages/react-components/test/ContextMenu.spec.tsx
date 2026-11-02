@@ -1,8 +1,8 @@
+import { nextRender } from '@vaadin/testing-helpers/dist/utils.js';
 import sinon from 'sinon';
 import { describe, expect, it } from 'vitest';
 import { render } from 'vitest-browser-react';
 import catchRender from '../../../react/test/utils/catchRender.js';
-import { nextRender } from '../../../react/test/utils/nextRender.js';
 import { ContextMenu, type ContextMenuItem, type ContextMenuReactRendererProps } from '../src/ContextMenu.js';
 import { Item } from '../src/Item.js';
 import { ListBox } from '../src/ListBox.js';
