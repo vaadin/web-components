@@ -1,11 +1,12 @@
+import { nextFrame } from '@vaadin/testing-helpers/dist/utils.js';
 import { describe, expect, it } from 'vitest';
 import { render } from 'vitest-browser-react';
 import { Popover, type PopoverElement } from '../src/Popover.js';
 
 describe('Popover', () => {
   async function assert(popover: PopoverElement) {
-    await new Promise((r) => requestAnimationFrame(r));
-    await new Promise((r) => requestAnimationFrame(r));
+    await nextFrame();
+    await nextFrame();
 
     const childNodes = Array.from(popover.childNodes);
 

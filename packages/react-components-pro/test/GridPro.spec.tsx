@@ -1,9 +1,9 @@
+import { nextRender } from '@vaadin/testing-helpers/dist/utils.js';
 import sinon from 'sinon';
 import { useEffect, useState } from 'react';
 import { beforeEach, describe, expect, it, vi } from 'vitest';
 import { render } from 'vitest-browser-react';
 import { findByQuerySelector } from '../../../react/test/utils/findByQuerySelector.js';
-import { nextRender } from '../../../react/test/utils/nextRender.js';
 import { until } from '../../../react/test/utils/until.js';
 import type { GridBodyReactRendererProps } from '../../react-components/src/renderers/grid.js';
 import { GridPro } from '../src/GridPro.js';
@@ -33,7 +33,7 @@ describe('GridPro', () => {
     columnElementName: string,
     assertions: { expectedColumnCount: number; expectedCellCount: number },
   ) {
-    return vi.waitFor(async () => {
+    return vi.waitFor(() => {
       const grid = document.querySelector('vaadin-grid, vaadin-grid-pro')!;
       expect(grid).to.exist;
 
@@ -139,7 +139,7 @@ describe('GridPro', () => {
         element.dispatchEvent(new MouseEvent('dblclick', { bubbles: true }));
       }
 
-      beforeEach(async () => {
+      beforeEach(() => {
         items = [{ name: 'name-0' }];
       });
 
@@ -213,7 +213,7 @@ describe('GridPro', () => {
         element.blur();
       }
 
-      beforeEach(async () => {
+      beforeEach(() => {
         items = Array.from(new Array(1)).map((_, i) => ({ name: `name-${i}` }));
       });
 
@@ -402,7 +402,7 @@ describe('GridPro', () => {
           </GridPro>,
         );
 
-        let cellContent = await until(() =>
+        const cellContent = await until(() =>
           Array.from(document.querySelectorAll('vaadin-grid-cell-content')).find((c) => c.textContent === 'name-0'),
         );
         doubleClick(cellContent!);

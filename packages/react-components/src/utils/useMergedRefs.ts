@@ -10,7 +10,7 @@ export default function useMergedRefs<T extends HTMLElement>(...refs: ReadonlyAr
     refs.forEach((ref) => {
       if (typeof ref === 'function') {
         ref(element);
-      } else if (!!ref) {
+      } else if (ref) {
         ref.current = element;
       }
     });

@@ -236,6 +236,7 @@ export default [
       'wtr-utils.js',
       'custom-rules/**/*.js',
       'api-docs/.eleventy.js',
+      'api-docs/*.ts',
       'manifest/**/*.js',
       'react/scripts/**/*.{js,ts}',
       'react/*.ts',
@@ -293,6 +294,12 @@ export default [
       'react/jsx-no-useless-fragment': 'off', // Renderers in tests return text-only fragments
       '@typescript-eslint/no-unused-vars': 'off', // Typings tests declare unused values, specs destructure partially
       '@typescript-eslint/no-namespace': 'off', // JSX.IntrinsicElements augmentation needs a nested namespace
+    },
+  },
+  {
+    files: ['react/dev/**'],
+    rules: {
+      'no-console': 'off', // Dev pages log events for manual testing
     },
   },
 ];

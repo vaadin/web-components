@@ -1,8 +1,8 @@
+import { nextRender } from '@vaadin/testing-helpers/dist/utils.js';
 import sinon from 'sinon';
 import { describe, expect, it } from 'vitest';
 import { render } from 'vitest-browser-react';
 import catchRender from '../../../react/test/utils/catchRender.js';
-import { nextRender } from '../../../react/test/utils/nextRender.js';
 import { ContextMenu, type ContextMenuItem, type ContextMenuReactRendererProps } from '../src/ContextMenu.js';
 import { Item } from '../src/Item.js';
 import { ListBox } from '../src/ListBox.js';
@@ -10,7 +10,7 @@ import { ListBox } from '../src/ListBox.js';
 const menuTag = 'vaadin-context-menu';
 const menuItemTag = 'vaadin-context-menu-item';
 
-async function overlayOpened(): Promise<void> {
+function overlayOpened(): Promise<void> {
   return new Promise((resolve) => {
     document.addEventListener(
       'vaadin-overlay-open',
