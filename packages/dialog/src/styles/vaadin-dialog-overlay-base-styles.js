@@ -68,18 +68,15 @@ export const dialogOverlayBase = css`
 
   :host([theme~='no-padding']) [part='content'] {
     padding: 0 !important;
-    margin: 0 !important;
   }
 
   /* Keep focus outlines inside the scrollable content's clipping area. */
   :host(:is([has-header], [has-title])) [part='content'] {
     padding-top: calc(var(--vaadin-focus-ring-width, 2px) + 2px);
-    margin-top: calc(var(--vaadin-focus-ring-width, 2px) * -1 - 2px);
   }
 
   :host([has-footer]) [part='content'] {
     padding-bottom: calc(var(--vaadin-focus-ring-width, 2px) + 2px);
-    margin-bottom: calc(var(--vaadin-focus-ring-width, 2px) * -1 - 2px);
   }
 
   [part='header'] {
