@@ -206,6 +206,27 @@ export class PdfViewerStructureLayer {
   }
 
   /**
+   * Removes an annotation that has no element, e.g. a link on a hidden layer
+   * or with a URL that the viewer does not open. A `Link` structure element
+   * of the annotation loses its role, so that its text is read as text.
+   *
+   * @param {string} annotationId
+   */
+  removeAnnotation(annotationId) {
+    [this.element, ...this.element.querySelectorAll('[aria-owns]')].forEach((owner) => {
+      const ids = (owner.getAttribute('aria-owns') ?? '').split(' ').filter((id) => id && id !== annotationId);
+      if (ids.length) {
+        owner.setAttribute('aria-owns', ids.join(' '));
+      } else {
+        owner.removeAttribute('aria-owns');
+      }
+    });
+    this.#pendingLinkOwnership.get(annotationId)?.element.removeAttribute('role');
+    this.#pendingLinkOwnership.delete(annotationId);
+    this.annotationIds.delete(annotationId);
+  }
+
+  /**
    * Makes the structure own the elements in the marked content of the text
    * layer, rather than the marked content itself. Chrome leaves out the
    * elements that `aria-owns` refers to when they have `display: contents`,
