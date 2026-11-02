@@ -204,9 +204,12 @@ export const PdfViewerScrollMixin = (superClass) =>
      */
     _scrollRectIntoView(rect) {
       const { content } = this.$;
-      const view = content.getBoundingClientRect();
-      const top = view.top;
+      const box = content.getBoundingClientRect();
+      // The client area, without the scrollbar on the left in RTL.
+      const top = box.top + content.clientTop;
+      const left = box.left + content.clientLeft;
       const height = content.clientHeight;
+      const width = content.clientWidth;
       // Also scroll when the rectangle is close to an edge, where it is easy to miss.
       const margin = Math.min(64, height / 4);
       let deltaY = 0;
@@ -214,8 +217,8 @@ export const PdfViewerScrollMixin = (superClass) =>
       if (rect.top < top + margin || rect.bottom > top + height - margin) {
         deltaY = rect.top + rect.height / 2 - (top + height / 2);
       }
-      if (rect.left < view.left || rect.right > view.left + content.clientWidth) {
-        deltaX = rect.left + rect.width / 2 - (view.left + content.clientWidth / 2);
+      if (rect.left < left || rect.right > left + width) {
+        deltaX = rect.left + rect.width / 2 - (left + width / 2);
       }
       content.scrollTop += deltaY;
       content.scrollLeft += deltaX;

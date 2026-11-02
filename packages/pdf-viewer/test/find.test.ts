@@ -14,6 +14,7 @@ import {
   failTextOnce,
   fixtureUrl,
   getPdfPagePrototype,
+  getViewCenter,
   loadAndRender,
   loadDocument,
   nextRenderIdle,
@@ -658,6 +659,25 @@ describe('find', () => {
         const bottom = top + getContent().clientHeight;
         expect(viewer.page).to.equal(2);
         expect(match.top + match.height / 2).to.be.closeTo((top + bottom) / 2, 1);
+      });
+
+      it('should scroll a match beside the view to the middle of the view', async () => {
+        viewer.zoom = 3;
+        await loadAndRender(viewer, createPdf([{ content: 'BT /F1 12 Tf 420 400 Td (Right) Tj ET' }]));
+        viewer.highlight(1, 'Right');
+        await currentMatchShown(viewer);
+        const match = getCurrentMatch()!.getBoundingClientRect();
+        expect(match.left + match.width / 2).to.be.closeTo(getViewCenter(getContent()), 1);
+      });
+
+      it('should scroll a match beside the view to the middle of the view in RTL', async () => {
+        viewer.setAttribute('dir', 'rtl');
+        viewer.zoom = 3;
+        await loadAndRender(viewer, createPdf([{ content: 'BT /F1 12 Tf 150 400 Td (Left) Tj ET' }]));
+        viewer.highlight(1, 'Left');
+        await currentMatchShown(viewer);
+        const match = getCurrentMatch()!.getBoundingClientRect();
+        expect(match.left + match.width / 2).to.be.closeTo(getViewCenter(getContent()), 1);
       });
 
       it('should not scroll to a match well inside the view', async () => {
