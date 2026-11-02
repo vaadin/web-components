@@ -348,6 +348,21 @@ describe('vaadin-accordion', () => {
       await nextRender();
       expect(heading.$.button.ariaControlsElements).to.be.null;
     });
+
+    it('should link the button in a new heading to the content', async () => {
+      const newHeading = document.createElement('vaadin-accordion-heading');
+      newHeading.setAttribute('slot', 'summary');
+      heading.replaceWith(newHeading);
+      await nextRender();
+      expect(newHeading.$.button.ariaControlsElements).to.deep.equal([content]);
+    });
+
+    it('should link the button in the heading to new content', async () => {
+      const newContent = document.createElement('div');
+      content.replaceWith(newContent);
+      await nextRender();
+      expect(heading.$.button.ariaControlsElements).to.deep.equal([newContent]);
+    });
   });
 
   describe('heading level', () => {

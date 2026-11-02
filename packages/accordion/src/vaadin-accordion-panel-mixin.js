@@ -42,7 +42,7 @@ export const AccordionPanelMixin = (superClass) =>
     }
 
     static get delegateProps() {
-      return ['disabled', 'opened', '_theme', '_headingLevel'];
+      return ['disabled', 'opened', '_theme', '_headingLevel', '_contentElements'];
     }
 
     constructor() {
@@ -134,28 +134,6 @@ export const AccordionPanelMixin = (superClass) =>
           node.setAttribute('role', 'region');
           node.setAttribute('aria-labelledby', focusElement.id);
         }
-
-        this.__updateAriaControls(focusElement);
       }
-    }
-
-    /** @private */
-    __updateAriaControls(focusElement) {
-      const button = focusElement.$ && focusElement.$.button;
-
-      // The heading may not have rendered its button yet.
-      if (!button) {
-        focusElement.updateComplete.then(() => {
-          if (focusElement === this.focusElement) {
-            this.__updateAriaControls(focusElement);
-          }
-        });
-        return;
-      }
-
-      // The button is in the heading's shadow root while the content is not, so
-      // an ID reference cannot link them: use an element reference instead.
-      const node = this._contentElements && this._contentElements[0];
-      button.ariaControlsElements = node ? [node] : null;
     }
   };
