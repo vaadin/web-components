@@ -555,7 +555,7 @@ export const InlineEditingMixin = (superClass) =>
         this.scrollToColumn(nextColumn);
       }
 
-      const nextCell = [...nextRow.children].find((cell) => cell._column === nextColumn);
+      const nextCell = nextRow.__cells.find((cell) => cell._column === nextColumn);
 
       if (!this.singleCellEdit && nextCell !== cell) {
         this._startEdit(nextCell, nextColumn);
