@@ -1,15 +1,16 @@
 import { expect } from '@vaadin/chai-plugins';
-import { fixtureSync, nextFrame, nextRender, nextUpdate, oneEvent } from '@vaadin/testing-helpers';
+import { fixtureSync, nextFrame, nextRender, nextResize, nextUpdate, oneEvent } from '@vaadin/testing-helpers';
 import sinon from 'sinon';
 import './enable-feature-flag.js';
 import '../vaadin-pdf-viewer.js';
 import type { PDFPageProxy } from 'pdfjs-dist';
 import { clearWarnings } from '@vaadin/component-base/src/warnings.js';
-import { createPageText, findInText, getMatchParts, normalizeText } from '../src/pdf-viewer-find.js';
+import { createPageText, findInText, getMatchParts, normalizeText, readTextItems } from '../src/pdf-viewer-find.js';
 import { loadPdfjs } from '../src/pdfjs-loader.js';
 import type { PdfViewer } from '../vaadin-pdf-viewer.js';
 import {
   createPdf,
+  createPdfUrl,
   currentMatchShown,
   failTextOnce,
   fixtureUrl,
@@ -54,6 +55,19 @@ describe('find', () => {
       expect(find('fish')).to.deep.equal(['ﬁsh']);
     });
 
+    it('should normalize the query like the text', () => {
+      expect(find('CAFÉ')).to.deep.equal(['café']);
+      expect(find('ﬁsh')).to.deep.equal(['ﬁsh']);
+      expect(find('quick   brown')).to.deep.equal(['Quick\nbrown']);
+    });
+
+    it('should not ignore the marks that make another letter in other scripts', () => {
+      // Japanese voiced kana, and a Devanagari vowel sign
+      expect(findInText(normalizeText('がく'), 'かく')).to.be.empty;
+      expect(findInText(normalizeText('किताब'), 'कताब')).to.be.empty;
+      expect(findInText(normalizeText('がく'), 'がく')).to.have.lengthOf(1);
+    });
+
     it('should find nothing for an empty query', () => {
       expect(find('   ')).to.be.empty;
     });
@@ -64,6 +78,26 @@ describe('find', () => {
         { itemIndex: 0, start: 4, end: 9 },
         { itemIndex: 1, start: 0, end: 5 },
       ]);
+    });
+
+    it('should not return a part of the next item for a match that ends with an item', () => {
+      // "fox" ends the second item, which the third item follows without a line break.
+      const [match] = findInText(normalizeText(pageText.text), 'fox');
+      expect(getMatchParts(pageText, match)).to.deep.equal([{ itemIndex: 1, start: 7, end: 10 }]);
+    });
+
+    it('should read the text items of all chunks of the stream', async () => {
+      const chunks = [{ items: [{ str: 'First' }] }, { items: [{ str: 'Second', hasEOL: true }] }];
+      const pdfPage = {
+        streamTextContent: () =>
+          new ReadableStream({
+            start(controller) {
+              chunks.forEach((chunk) => controller.enqueue(chunk));
+              controller.close();
+            },
+          }),
+      } as unknown as PDFPageProxy;
+      expect(await readTextItems(pdfPage)).to.deep.equal([{ str: 'First' }, { str: 'Second', hasEOL: true }]);
     });
   });
 
@@ -240,6 +274,27 @@ describe('find', () => {
         expect(getMatches(2)).to.have.lengthOf(1);
       });
 
+      it('should run only the last of a find() and a highlight() call in a row', async () => {
+        const spy = sinon.spy();
+        viewer.addEventListener('find-result', spy);
+        viewer.find('marker1');
+        viewer.highlight(2, 'marker2');
+        await currentMatchShown(viewer, 2);
+        await nextFrame();
+        expect(spy).to.be.not.called;
+        expect(getMatches(1)).to.be.empty;
+        expect(getMatches(2)).to.have.lengthOf(1);
+      });
+
+      it('should find matches on pages after the first ten', async () => {
+        await loadAndRender(viewer, createPdfUrl(12));
+        const result = oneEvent(viewer, 'find-result');
+        viewer.find('Page 12');
+        expect((await result).detail.matchCount).to.equal(1);
+        await currentMatchShown(viewer, 12);
+        expect(viewer.page).to.equal(12);
+      });
+
       it('should highlight each line of a match that spans a line break', async () => {
         viewer.find('five dozen liquor');
         await currentMatchShown(viewer);
@@ -271,6 +326,7 @@ describe('find', () => {
           for (let i = 0; i < 50 && !viewer.shadowRoot!.querySelector('.text-layer'); i++) {
             await nextFrame();
           }
+          expect(viewer.shadowRoot!.querySelector('.text-layer')).to.be.ok;
           const result = oneEvent(viewer, 'find-result');
           viewer.find('needle');
           await result;
@@ -303,6 +359,26 @@ describe('find', () => {
         await nextFrame();
         expect(spy).to.be.not.called;
         expect(getMatches()).to.be.empty;
+      });
+
+      it('should do nothing without src', async () => {
+        viewer.src = '';
+        await nextUpdate(viewer);
+        const spy = sinon.spy();
+        viewer.addEventListener('find-result', spy);
+        viewer.find('marker1');
+        await nextFrame();
+        expect(spy).to.be.not.called;
+      });
+
+      it('should do nothing when the document could not be loaded', async () => {
+        viewer.src = fixtureUrl('invalid.pdf');
+        await oneEvent(viewer, 'document-error');
+        const spy = sinon.spy();
+        viewer.addEventListener('find-result', spy);
+        viewer.find('marker1');
+        await nextFrame();
+        expect(spy).to.be.not.called;
       });
 
       it('should search the new document when called after src changes', async () => {
@@ -368,15 +444,25 @@ describe('find', () => {
         expect(getMatches()).to.be.empty;
       });
 
-      it('should warn and clear the previous highlight for a page out of range', async () => {
-        const stub = sinon.stub(console, 'warn');
-        viewer.highlight(1, 'marker1');
-        await currentMatchShown(viewer);
-        viewer.highlight(7, 'marker1');
-        await nextFrame();
-        expect(stub).to.be.calledOnce;
-        expect(stub.firstCall.args[0]).to.include('out of range');
-        expect(getMatches()).to.be.empty;
+      it('should highlight the text on the last page', async () => {
+        viewer.highlight(6, 'landscape');
+        await currentMatchShown(viewer, 6);
+        expect(getMatches(6)).to.have.lengthOf(1);
+      });
+
+      [0, 1.5, 7].forEach((page) => {
+        it(`should warn and clear the previous highlight for page ${page}, which is out of range`, async () => {
+          // The warning is issued once per page.
+          clearWarnings();
+          const stub = sinon.stub(console, 'warn');
+          viewer.highlight(1, 'marker1');
+          await currentMatchShown(viewer);
+          viewer.highlight(page, 'marker1');
+          await nextFrame();
+          expect(stub).to.be.calledOnce;
+          expect(stub.firstCall.args[0]).to.include('out of range');
+          expect(getMatches()).to.be.empty;
+        });
       });
 
       it('should highlight once the document has loaded when called while it loads', async () => {
@@ -426,6 +512,20 @@ describe('find', () => {
         });
       });
 
+      it('should drop the matches when detached', async () => {
+        viewer.find('marker1');
+        await currentMatchShown(viewer);
+        const parent = viewer.parentElement!;
+        viewer.remove();
+        // The viewer releases the document when it stays detached
+        await nextFrame();
+        const idle = nextRenderIdle(viewer);
+        parent.appendChild(viewer);
+        await idle;
+        await nextFrame();
+        expect(getMatches()).to.be.empty;
+      });
+
       it('should not run find() when detached as the document loads', async () => {
         viewer.src = fixtureUrl('links.pdf');
         viewer.find('internal link');
@@ -471,6 +571,22 @@ describe('find', () => {
         expect(getMatches()).to.be.empty;
         expect(viewer.page).to.equal(1);
         expect(getContent().scrollTop).to.be.closeTo(0, 1);
+      });
+
+      it('should highlight and scroll to the matches of a hidden viewer once it is shown', async () => {
+        // As in an inactive tab
+        viewer.parentElement!.hidden = true;
+        await nextResize(viewer);
+        const result = oneEvent(viewer, 'find-result');
+        viewer.find('marker1');
+        await result;
+        await nextFrame();
+        expect(getMatches()).to.be.empty;
+        viewer.parentElement!.hidden = false;
+        await nextResize(viewer);
+        await currentMatchShown(viewer, 1);
+        expect(getMatches(1)).to.have.lengthOf(1);
+        expectInView(getCurrentMatch()!);
       });
 
       it('should load the text of a page again after it failed to load', async () => {
@@ -659,6 +775,30 @@ describe('find', () => {
         const bottom = top + getContent().clientHeight;
         expect(viewer.page).to.equal(2);
         expect(match.top + match.height / 2).to.be.closeTo((top + bottom) / 2, 1);
+      });
+
+      it('should scroll a match close to an edge of the view to the middle of the view', async () => {
+        viewer.highlight(3, 'marker3');
+        await currentMatchShown(viewer, 3);
+        const content = getContent();
+        const top = content.getBoundingClientRect().top;
+        // In the view, 16px above its bottom edge
+        content.scrollTop -= top + content.clientHeight - 16 - getCurrentMatch()!.getBoundingClientRect().bottom;
+        await scrollSettled(content);
+        viewer.highlight(3, 'marker3');
+        await nextFrame();
+        await scrollSettled(content);
+        const match = getCurrentMatch()!.getBoundingClientRect();
+        expect(match.top + match.height / 2).to.be.closeTo(top + content.clientHeight / 2, 1);
+      });
+
+      it('should not scroll horizontally to a match that is in the view horizontally', async () => {
+        viewer.zoom = 2;
+        await loadAndRender(viewer, createPdf([{ content: 'BT /F1 12 Tf 160 400 Td (Needle) Tj ET' }]));
+        viewer.highlight(1, 'Needle');
+        await currentMatchShown(viewer);
+        expect(getContent().scrollLeft).to.equal(0);
+        expectInView(getCurrentMatch()!);
       });
 
       it('should scroll a match beside the view to the middle of the view', async () => {
