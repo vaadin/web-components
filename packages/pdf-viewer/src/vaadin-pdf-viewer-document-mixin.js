@@ -144,8 +144,9 @@ export const PdfViewerDocumentMixin = (superClass) =>
     /**
      * Returns a promise for the document of `src`. It resolves once the
      * document has loaded, also when `src` changes meanwhile, and right away
-     * when no document is loading. It resolves with null without a document,
-     * or when the viewer is not attached.
+     * when no document is loading. A `src` set later in the same task counts
+     * as loading. It resolves with null without a document, or when the
+     * viewer is not attached.
      * @return {Promise<import('pdfjs-dist').PDFDocumentProxy | null>}
      * @protected
      */
@@ -155,7 +156,9 @@ export const PdfViewerDocumentMixin = (superClass) =>
       }
       return new Promise((resolve) => {
         this.#readyCallbacks.push(resolve);
-        this.#resolveReadyCallbacks();
+        // Check once the calling code has run, as it may still set `src`. Detaching meanwhile
+        // keeps the document, as the document controller unloads it only after that check.
+        Promise.resolve().then(() => this.#resolveReadyCallbacks(this.#pdfDocument));
       });
     }
 
@@ -189,15 +192,15 @@ export const PdfViewerDocumentMixin = (superClass) =>
 
     /**
      * Resolves the `_whenDocumentReady()` calls once no document is loading.
+     * @param {import('pdfjs-dist').PDFDocumentProxy | null} pdfDocument the document to resolve with
      * @private
      */
-    #resolveReadyCallbacks() {
+    #resolveReadyCallbacks(pdfDocument = this.isConnected ? this.#pdfDocument : null) {
       if (this.__loading || this.src !== this.#updatedSrc || !this.#readyCallbacks.length) {
         return;
       }
       const callbacks = this.#readyCallbacks;
       this.#readyCallbacks = [];
-      const pdfDocument = this.isConnected ? this.#pdfDocument : null;
       callbacks.forEach((resolve) => resolve(pdfDocument));
     }
 

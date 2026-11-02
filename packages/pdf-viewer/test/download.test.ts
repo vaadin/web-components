@@ -5,7 +5,14 @@ import './enable-feature-flag.js';
 import '../vaadin-pdf-viewer.js';
 import type { Tooltip } from '@vaadin/tooltip';
 import type { PdfViewer } from '../vaadin-pdf-viewer.js';
-import { createPdfUrl, fixtureUrl, getPdfDocumentPrototype, loadDocument, loadFixtureFrom } from './helpers.js';
+import {
+  createPdfUrl,
+  type Fixture,
+  fixtureUrl,
+  getPdfDocumentPrototype,
+  loadDocument,
+  loadFixtureFrom,
+} from './helpers.js';
 
 describe('download', () => {
   let viewer: PdfViewer;
@@ -29,8 +36,8 @@ describe('download', () => {
     });
   }
 
-  async function getOriginal(): Promise<Uint8Array> {
-    const response = await fetch(fixtureUrl('multi-page.pdf'));
+  async function getOriginal(name: Fixture = 'multi-page.pdf'): Promise<Uint8Array> {
+    const response = await fetch(fixtureUrl(name));
     return new Uint8Array(await response.arrayBuffer());
   }
 
@@ -229,6 +236,16 @@ describe('download', () => {
       viewer.remove();
       await download;
       expect(revokeSpy).to.be.not.called;
+    });
+
+    it('should download the new document when src is set right after download()', async () => {
+      const download = nextDownload();
+      viewer.download();
+      viewer.src = fixtureUrl('links.pdf');
+      const { link, blob } = await download;
+      expect(link.download).to.equal('links.pdf');
+      expect(new Uint8Array(await blob.arrayBuffer())).to.deep.equal(await getOriginal('links.pdf'));
+      expect(clickStub).to.be.calledOnce;
     });
 
     describe('release timer', () => {

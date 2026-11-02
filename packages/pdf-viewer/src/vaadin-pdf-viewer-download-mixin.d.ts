@@ -24,8 +24,10 @@ export declare class PdfViewerDownloadMixinClass {
    * document, so the viewer does not request it again, and signatures stay
    * intact. The file name is `fileName` when set, else the name from the
    * response or `src`, see `fileName`.
-   * While the document loads, it is downloaded once loaded. Does nothing
-   * without a document, or when the viewer is not attached.
+   * While the document loads, it is downloaded once loaded. When `src`
+   * changes meanwhile, also in the same task, the new document is
+   * downloaded. Does nothing without a document, or when the viewer is not
+   * attached.
    */
   download(): void;
 }

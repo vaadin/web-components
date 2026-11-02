@@ -57,8 +57,9 @@ export declare class PdfViewerDocumentMixinClass {
   /**
    * Returns a promise for the document of `src`. It resolves once the
    * document has loaded, also when `src` changes meanwhile, and right away
-   * when no document is loading. It resolves with null without a document,
-   * or when the viewer is not attached.
+   * when no document is loading. A `src` set later in the same task counts
+   * as loading. It resolves with null without a document, or when the
+   * viewer is not attached.
    */
   protected _whenDocumentReady(): Promise<PDFDocumentProxy | null>;
 
