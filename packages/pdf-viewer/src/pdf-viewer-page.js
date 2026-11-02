@@ -44,9 +44,9 @@ function addLinkAreas(link, { rect: [left, bottom, right, top], quadPoints }) {
       (areaTop - areaBottom) / height,
     ]);
   }
-  const [first] = areas;
-  const isWholeLink = (value, index) => Math.abs(value - (index < 2 ? 0 : 1)) < 0.001;
-  if (areas.length === 1 && first.every(isWholeLink)) {
+  // The left, top, width and height of an area that covers the whole link.
+  const wholeLink = [0, 0, 1, 1];
+  if (areas.length === 1 && areas[0].every((value, index) => Math.abs(value - wholeLink[index]) < 0.001)) {
     return;
   }
   areas.forEach(([areaLeft, areaTop, areaWidth, areaHeight]) => {
