@@ -686,6 +686,23 @@ describe('edit column', () => {
         expect(getCellEditor(cell)).to.be.ok;
       });
 
+      (isFirefox && isMac ? it.skip : it)(
+        'should focus next editable cell outside viewport with singleCellEdit',
+        async () => {
+          grid.singleCellEdit = true;
+
+          const cell = getCellByColumnPath('col3');
+          cell.focus();
+          await sendKeys({ press: 'Enter' });
+          expect(getCellEditor(cell)).to.be.ok;
+
+          await sendKeys({ press: 'Tab' });
+
+          const nextCell = getCellByColumnPath('col5');
+          expect(nextCell.contains(grid.shadowRoot.activeElement)).to.be.true;
+        },
+      );
+
       it('should edit cell again after it was temporarily removed due to scrolling', async () => {
         const cell = getCellByColumnPath('col1');
         cell.focus();
