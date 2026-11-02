@@ -179,14 +179,29 @@ export type PdfPage = {
 /**
  * Creates a PDF with the given pages in memory, and returns an object URL for it.
  * `dests` is the content of the named destinations dictionary, `lang` the language of the document.
+ * `layers` are the optional content groups, objects 5 and up in their order, e.g. `/OC 5 0 R`.
  */
-export function createPdf(pages: PdfPage[], { dests = '', lang = '' }: { dests?: string; lang?: string } = {}): string {
-  // Object 1 is the catalog, 2 the page tree, 3 and 4 the fonts, then each page, its content and its annotations.
+export function createPdf(
+  pages: PdfPage[],
+  {
+    dests = '',
+    lang = '',
+    layers = [],
+  }: { dests?: string; lang?: string; layers?: Array<{ name: string; visible: boolean }> } = {},
+): string {
+  const layerRefs = layers.map((_, index) => `${index + 5} 0 R`);
+  const hiddenLayerRefs = layerRefs.filter((_, index) => !layers[index].visible);
+  const ocProperties = layers.length
+    ? ` /OCProperties << /OCGs [${layerRefs.join(' ')}] /D << /OFF [${hiddenLayerRefs.join(' ')}] >> >>`
+    : '';
+  // Object 1 is the catalog, 2 the page tree, 3 and 4 the fonts, then the layers, then each page,
+  // its content and its annotations.
   const objects = [
-    `<< /Type /Catalog /Pages 2 0 R${dests ? ` /Dests << ${dests} >>` : ''}${lang ? ` /Lang (${lang})` : ''} >>`,
+    `<< /Type /Catalog /Pages 2 0 R${dests ? ` /Dests << ${dests} >>` : ''}${lang ? ` /Lang (${lang})` : ''}${ocProperties} >>`,
     '',
     '<< /Type /Font /Subtype /Type1 /BaseFont /Helvetica >>',
     '<< /Type /Font /Subtype /Type1 /BaseFont /Courier >>',
+    ...layers.map(({ name }) => `<< /Type /OCG /Name (${name}) >>`),
   ];
   const pageIds: number[] = [];
   pages.forEach(({ content, rotate = 0, annotations = [], mediaBox = [0, 0, 595, 842] }) => {

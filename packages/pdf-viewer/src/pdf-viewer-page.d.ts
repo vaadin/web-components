@@ -8,7 +8,7 @@
  * See https://vaadin.com/commercial-license-and-service-terms for the full
  * license.
  */
-import type { PDFPageProxy, RenderTask, TextLayer } from 'pdfjs-dist';
+import type { PDFDocumentProxy, PDFPageProxy, RenderTask, TextLayer } from 'pdfjs-dist';
 import type { PdfViewerLinkAnnotation } from './pdf-viewer-links.js';
 
 /**
@@ -69,6 +69,7 @@ export declare class PdfViewerPage {
 
   renderLinkLayer(
     followLink: (annotation: PdfViewerLinkAnnotation) => void,
+    optionalContentConfig?: Awaited<ReturnType<PDFDocumentProxy['getOptionalContentConfig']>>,
   ): Promise<Array<{ link: HTMLAnchorElement; annotation: PdfViewerLinkAnnotation }>>;
 
   cancel(): void;

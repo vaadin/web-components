@@ -41,7 +41,9 @@ export const PdfViewerLinksMixin = (superClass) =>
     async _renderPageLayers(page) {
       await super._renderPageLayers(page);
 
-      const links = await page.renderLinkLayer((annotation) => this.#followLink(annotation));
+      // The layers that the canvas shows, see `PDFPageProxy.render()`.
+      const optionalContentConfig = await this._pdfDocument?.getOptionalContentConfig({ intent: 'display' });
+      const links = await page.renderLinkLayer((annotation) => this.#followLink(annotation), optionalContentConfig);
       await this.#nameLinks(links);
     }
 

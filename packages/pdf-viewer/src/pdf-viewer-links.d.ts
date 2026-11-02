@@ -26,6 +26,8 @@ export interface PdfViewerLinkAnnotation extends PdfViewerDestination {
   url?: string;
   /** The text that the link covers. */
   overlaidText?: string;
+  /** The layer of the document that the link is on. */
+  oc?: object;
 }
 
 /**

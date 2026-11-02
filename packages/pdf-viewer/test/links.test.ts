@@ -61,7 +61,7 @@ describe('links', () => {
     await loadAndRender(viewer, fixtureUrl(name));
   }
 
-  async function loadPdf(pdfPages: PdfPage[], options?: { dests?: string; lang?: string }) {
+  async function loadPdf(pdfPages: PdfPage[], options?: Parameters<typeof createPdf>[1]) {
     url = createPdf(pdfPages, options);
     await loadAndRender(viewer, url);
   }
@@ -98,6 +98,29 @@ describe('links', () => {
     it('should not add a link layer to a page without links', async () => {
       await load('multi-page.pdf');
       expect(pages[0].querySelector('.link-layer')).to.be.null;
+    });
+
+    it('should leave out the links on a hidden layer', async () => {
+      const layerLink = (layer: number, rect: number[], uri: string) =>
+        `<< /Type /Annot /Subtype /Link /Rect [${rect.join(' ')}] /Border [0 0 0] /OC ${layer} 0 R /A << /S /URI /URI (${uri}) >> >>`;
+      await loadPdf(
+        [
+          {
+            content: '',
+            annotations: [
+              layerLink(5, [50, 700, 300, 720], 'https://vaadin.com/hidden'),
+              layerLink(6, [50, 600, 300, 620], 'https://vaadin.com/visible'),
+            ],
+          },
+        ],
+        {
+          layers: [
+            { name: 'Hidden', visible: false },
+            { name: 'Visible', visible: true },
+          ],
+        },
+      );
+      expect(getLinks(1).map((link) => link.href)).to.deep.equal(['https://vaadin.com/visible']);
     });
 
     it('should render and name the links of a page whose text fails to load', async () => {

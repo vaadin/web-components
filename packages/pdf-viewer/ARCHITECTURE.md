@@ -93,6 +93,7 @@ how to generate them.
 - Links are in their own layer over the text layer. Each link is named after the text it covers, or
   after its URL or the page it goes to.
 - Only `http:`, `https:` and `mailto:` links open, in a new tab without access to the viewer.
+- Links on layers that the document hides are left out, as in pdf.js.
 - When a focused link loses its page, focus moves to the page area.
 
 ## Install size

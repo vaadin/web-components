@@ -285,14 +285,16 @@ export class PdfViewerPage {
    * page size so that they need no update when the scale changes. Like the
    * text layer, the layer has the size of the page without its rotation, and
    * is rotated with the page. The links are in reading order, as in pdf.js,
-   * also for the Tab key. A page without links gets no layer. Returns the
-   * links with their annotations, or no links when they are rendered already
-   * or the page was released meanwhile.
+   * also for the Tab key. Links on hidden layers of the document are left
+   * out. A page without links gets no layer. Returns the links with their
+   * annotations, or no links when they are rendered already or the page was
+   * released meanwhile.
    *
    * @param {(annotation: object) => void} followLink called when an internal link is clicked
+   * @param {{ isVisible: (group: object) => boolean }} [optionalContentConfig] the visible layers
    * @return {Promise<Array<{ link: HTMLAnchorElement, annotation: object }>>}
    */
-  async renderLinkLayer(followLink) {
+  async renderLinkLayer(followLink, optionalContentConfig) {
     const canvas = this.canvas;
     if (!canvas || this.#linksRendered) {
       return [];
@@ -315,6 +317,10 @@ export class PdfViewerPage {
 
     // A copy, as pdf.js returns the same annotations to each call.
     [...annotations].sort(compareAnnotationPositions).forEach((annotation) => {
+      // As in pdf.js, which hides the links on hidden layers.
+      if (annotation.oc && optionalContentConfig?.isVisible(annotation.oc) === false) {
+        return;
+      }
       const link = annotation.subtype === 'Link' && createLink(annotation, followLink);
       if (!link) {
         return;
