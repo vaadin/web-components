@@ -100,7 +100,7 @@ async function bundle() {
     outdir: fileURLToPath(packageURL),
     sourcemap: 'linked',
     sourcesContent: true,
-    target: 'es2021',
+    target: 'es2023',
     tsconfig: fileURLToPath(new URL('./tsconfig.build.json', packageURL)),
   } as const;
 
