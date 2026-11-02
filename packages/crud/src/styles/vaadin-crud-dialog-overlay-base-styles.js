@@ -35,15 +35,6 @@ const crudDialogOverlay = css`
     padding-top: var(--_focus-ring-space);
   }
 
-  :host(:is(*, #id)) [part='header'] {
-    --_padding: var(--vaadin-crud-header-padding, var(--vaadin-dialog-padding, var(--vaadin-padding-l)));
-    padding-bottom: calc(var(--_padding) - var(--_focus-ring-space));
-  }
-
-  :host(:is(*, #id)) [part='footer'] {
-    padding-top: var(--vaadin-dialog-padding, var(--vaadin-padding-l));
-  }
-
   ::slotted([slot='form']) {
     --vaadin-crud-form-padding: 0;
   }

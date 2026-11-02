@@ -76,16 +76,8 @@ export const dialogOverlayBase = css`
     padding-top: var(--_focus-ring-space);
   }
 
-  :host(:is([has-header], [has-title]):not([theme~='no-padding'])) [part='header'] {
-    padding-bottom: calc(var(--vaadin-dialog-padding, var(--vaadin-padding-l)) - var(--_focus-ring-space));
-  }
-
   :host([has-footer]) [part='content'] {
     padding-bottom: var(--_focus-ring-space);
-  }
-
-  :host([has-footer]:not([theme~='no-padding'])) [part='footer'] {
-    padding-top: calc(var(--vaadin-dialog-padding, var(--vaadin-padding-l)) - var(--_focus-ring-space));
   }
 
   [part='header'] {
