@@ -48,15 +48,15 @@ export function mapItemsWithComponents<T>(
         children: webComponentChildren,
         __item: item,
       };
-    } else {
-      return {
-        // Component is a string, or undefined, add it as such
-        ...rest,
-        component,
-        children: webComponentChildren,
-        __item: item,
-      };
     }
+
+    return {
+      // Component is a string, or undefined, add it as such
+      ...rest,
+      component,
+      children: webComponentChildren,
+      __item: item,
+    };
   });
 
   return [itemPortals, webComponentItems];

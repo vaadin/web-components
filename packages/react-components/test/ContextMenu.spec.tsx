@@ -10,7 +10,7 @@ import { ListBox } from '../src/ListBox.js';
 const menuTag = 'vaadin-context-menu';
 const menuItemTag = 'vaadin-context-menu-item';
 
-async function overlayOpened(): Promise<void> {
+function overlayOpened(): Promise<void> {
   return new Promise((resolve) => {
     document.addEventListener(
       'vaadin-overlay-open',

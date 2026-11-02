@@ -1,8 +1,8 @@
 import { ContextMenu, type ContextMenuItemData } from '../../src/ContextMenu.js';
 
-const assertType = function <TExpected>(value: TExpected) {
+function assertType<TExpected>(value: TExpected) {
   return value;
-};
+}
 
 type CustomContextMenuItem = ContextMenuItemData<{ value: string }>;
 

@@ -19,7 +19,7 @@ export function useSimpleOrChildrenRenderer<O extends HTMLElement>(
 ): UseRendererResult<WebComponentSimpleRenderer<O>> {
   let _children: ReactNode | undefined;
   let _fnRenderer: ComponentType<ReactSimpleRendererProps<O>> | null | undefined;
-  let shouldUseSimpleRendererResult = false;
+  let shouldUseSimpleRendererResult: boolean;
 
   if (typeof children === 'function') {
     _children = undefined;

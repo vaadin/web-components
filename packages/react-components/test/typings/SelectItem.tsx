@@ -13,4 +13,4 @@ const items: SelectItemData[] = [];
 let deprecated: SelectItem[];
 
 // Escape hatch: the deprecated type is still importable directly from the Select.js subpath.
-let stillWorks: SelectItemType[] = [];
+const stillWorks: SelectItemType[] = [];

@@ -18,4 +18,4 @@ const items: ContextMenuItemData[] = [{ text: 'View', component: <b>View</b> }];
 let deprecated: ContextMenuItem[];
 
 // Escape hatch: the deprecated type is still importable directly from the ContextMenu.js subpath.
-let stillWorks: ContextMenuItemType[] = [];
+const stillWorks: ContextMenuItemType[] = [];

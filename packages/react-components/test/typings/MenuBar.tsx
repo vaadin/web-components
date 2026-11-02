@@ -1,8 +1,8 @@
 import { MenuBar, type MenuBarItem } from '../../src/MenuBar.js';
 
-const assertType = function <TExpected>(value: TExpected) {
+function assertType<TExpected>(value: TExpected) {
   return value;
-};
+}
 
 type CustomMenuBarItem = MenuBarItem<{ value: string }>;
 
