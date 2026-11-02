@@ -11,6 +11,7 @@
 import '@vaadin/button/src/vaadin-button.js';
 import '@vaadin/progress-bar/src/vaadin-progress-bar.js';
 import { html, nothing } from 'lit';
+import { createRef, ref } from 'lit/directives/ref.js';
 import { getDeepActiveElement, isKeyboardActive } from '@vaadin/a11y-base/src/focus-utils.js';
 import { slotContent } from '@vaadin/component-base/src/directives/slot-content.js';
 import { issueWarning } from '@vaadin/component-base/src/warnings.js';
@@ -24,6 +25,21 @@ import { PdfViewerPrintFrame } from './pdf-viewer-print-frame.js';
 function getFocusedElement() {
   const active = getDeepActiveElement();
   return active !== document.body ? active : null;
+}
+
+/**
+ * Returns whether the element is inside the host, also inside shadow roots.
+ * @param {HTMLElement} host
+ * @param {Node | null} element
+ * @return {boolean}
+ */
+function isInside(host, element) {
+  for (let node = element; node; node = node.parentNode || node.host) {
+    if (node === host) {
+      return true;
+    }
+  }
+  return false;
 }
 
 /**
@@ -53,6 +69,9 @@ export const PdfViewerPrintMixin = (superClass) =>
 
     /** Set when focus returns to where it was before printing, after the next update. */
     #restoreFocusPending = false;
+
+    /** The cancel button of the print progress. */
+    #cancelButtonRef = createRef();
 
     /**
      * Whether the pages are prepared for printing.
@@ -85,9 +104,7 @@ export const PdfViewerPrintMixin = (superClass) =>
         // Printing disables the print button. Move focus from it to the cancel button.
         const focused = this.#returnFocus;
         if (focused?.disabled && focused.matches(':focus-within')) {
-          this.querySelector(':scope > vaadin-button[slot="print-progress"]').focus({
-            focusVisible: isKeyboardActive(),
-          });
+          this.#cancelButtonRef.value.focus({ focusVisible: isKeyboardActive() });
         }
       } else if (this.#restoreFocusPending) {
         this.#restoreFocusPending = false;
@@ -99,11 +116,13 @@ export const PdfViewerPrintMixin = (superClass) =>
      * Prints the document with the print dialog of the browser. The viewer
      * prepares the pages for printing first, which can take a while for long
      * documents. Meanwhile, it shows the progress with a button that cancels
-     * printing, and Escape cancels it too. Each page prints on paper of its
-     * own size. While the document loads, it is printed once loaded. Does
-     * nothing without a document, when the viewer is not attached, or while
-     * a print is prepared already. The returned promise resolves when
-     * printing ends or is cancelled.
+     * printing, and Escape in the viewer cancels it too. Each page prints on
+     * paper of its own size. While the document loads, it is printed once
+     * loaded. Does nothing without a document, when the viewer is not
+     * attached, or while a print is prepared already. The returned promise
+     * resolves when the print dialog closes or printing is cancelled. In
+     * browsers whose print dialog does not block the page, it resolves once
+     * the dialog opens.
      *
      * @return {Promise<void>}
      */
@@ -151,7 +170,12 @@ export const PdfViewerPrintMixin = (superClass) =>
           aria-label="${i18n.printing}"
           .value="${this.#progress}"
         ></vaadin-progress-bar>
-        <vaadin-button slot="print-progress" theme="small" @click="${this.#onCancelClick}">
+        <vaadin-button
+          slot="print-progress"
+          theme="small"
+          ${ref(this.#cancelButtonRef)}
+          @click="${this.#onCancelClick}"
+        >
           ${i18n.cancelPrint}
         </vaadin-button>
       `;
@@ -219,8 +243,9 @@ export const PdfViewerPrintMixin = (superClass) =>
     }
 
     /**
-     * Returns focus to where it was before printing, when it was in the viewer
-     * and has been lost meanwhile, e.g. because the cancel button was removed.
+     * Returns focus to where it was before printing, when it has been lost
+     * meanwhile, e.g. because the cancel button was removed. Moves focus to
+     * the pages instead when it was in the viewer and that element is gone.
      * @private
      */
     #restoreFocus() {
@@ -245,7 +270,7 @@ export const PdfViewerPrintMixin = (superClass) =>
       if (returnFocus && returnFocus.isConnected && !returnFocus.disabled && returnFocus.checkVisibility()) {
         returnFocus.focus(options);
       }
-      if (getFocusedElement() !== returnFocus && this.pageCount) {
+      if (getFocusedElement() !== returnFocus && isInside(this, returnFocus) && this.pageCount) {
         this.$.content.focus(options);
       }
     }

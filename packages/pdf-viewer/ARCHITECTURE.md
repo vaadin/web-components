@@ -116,9 +116,14 @@ how to generate them.
 - Pages render one at a time at 150 DPI, with the print intent of pdf.js. The print intent selects
   the annotations and the optional content that the document prints.
 - Large pages render at a lower resolution, as a canvas has at most 2^24 pixels.
+- The images have `blob:` URLs, as in the viewer of pdf.js. A Content Security Policy must allow them
+  in its `img-src` directive. An image that fails to load stops printing with a warning.
+- Printing waits until each image has loaded, as the viewer of pdf.js does. It does not decode the
+  images, which would hold the pixels of every page in memory at once.
 - Each image has a named `@page` rule with the size of its PDF page, so each page prints on paper of
   its own size.
 - The frame and the images are released after printing, on cancel, on a new `src` and on detach.
+  A cancel stops printing without waiting for the page that is loading.
 
 ## Install size
 

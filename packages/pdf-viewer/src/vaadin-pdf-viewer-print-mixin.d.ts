@@ -24,11 +24,13 @@ export declare class PdfViewerPrintMixinClass {
    * Prints the document with the print dialog of the browser. The viewer
    * prepares the pages for printing first, which can take a while for long
    * documents. Meanwhile, it shows the progress with a button that cancels
-   * printing, and Escape cancels it too. Each page prints on paper of its
-   * own size. While the document loads, it is printed once loaded. Does
-   * nothing without a document, when the viewer is not attached, or while
-   * a print is prepared already. The returned promise resolves when
-   * printing ends or is cancelled.
+   * printing, and Escape in the viewer cancels it too. Each page prints on
+   * paper of its own size. While the document loads, it is printed once
+   * loaded. Does nothing without a document, when the viewer is not
+   * attached, or while a print is prepared already. The returned promise
+   * resolves when the print dialog closes or printing is cancelled. In
+   * browsers whose print dialog does not block the page, it resolves once
+   * the dialog opens.
    */
   print(): Promise<void>;
 

@@ -4,6 +4,7 @@ import { fixtureSync, nextFrame, nextRender, nextUpdate, oneEvent } from '@vaadi
 import sinon from 'sinon';
 import './enable-feature-flag.js';
 import '../vaadin-pdf-viewer.js';
+import { clearWarnings } from '@vaadin/component-base/src/warnings.js';
 import type { Tooltip } from '@vaadin/tooltip';
 import type { PdfViewer } from '../vaadin-pdf-viewer.js';
 import { createPdf, fixtureUrl, getPdfDocumentPrototype, holdPages, loadDocument } from './helpers.js';
@@ -64,6 +65,8 @@ describe('print', () => {
   }
 
   beforeEach(async () => {
+    // The warnings are issued once per page, so that each test sees its own.
+    clearWarnings();
     printSpy = sinon.spy();
     // Replace the print dialog of each print frame as soon as the frame is added.
     observer = new MutationObserver((records) => {
@@ -309,13 +312,13 @@ describe('print', () => {
     it('should cancel printing with the cancel button', async () => {
       release = await holdPages(3);
       const printed = viewer.print();
-      await progressShown();
+      await pagesPrepared(2);
       getCancelButton()!.click();
+      // Resolves without waiting for the page that is still loading.
+      await printed;
       await nextUpdate(viewer);
       expect(getFrame()).to.be.null;
       expect(getProgress().hidden).to.be.true;
-      release();
-      await printed;
       expect(printSpy).to.be.not.called;
     });
 
@@ -410,6 +413,22 @@ describe('print', () => {
       expect(getProgress().hidden).to.be.true;
     });
 
+    it('should warn and stop when the image of a page cannot be loaded', async () => {
+      const warnStub = sinon.stub(console, 'warn');
+      const createObjectURL = URL.createObjectURL;
+      // An image URL that does not load, as when a Content Security Policy blocks it.
+      sinon
+        .stub(URL, 'createObjectURL')
+        .callsFake((object: Blob | MediaSource) =>
+          object instanceof Blob && object.type === 'image/png' ? 'blob:invalid' : createObjectURL(object),
+        );
+      await viewer.print();
+      expect(warnStub).to.be.calledOnce;
+      expect(warnStub.firstCall.args[0]).to.include('img-src');
+      expect(printSpy).to.be.not.called;
+      expect(getFrame()).to.be.null;
+    });
+
     describe('focus', () => {
       it('should move focus to the cancel button and back when printing from the print button', async () => {
         release = await holdPages(3);
@@ -437,6 +456,36 @@ describe('print', () => {
         await sendKeys({ press: 'Escape' });
         await nextUpdate(viewer);
         expect(viewer.shadowRoot!.activeElement).to.equal(viewer.shadowRoot!.querySelector('[part="content"]'));
+      });
+
+      it('should move focus to its own cancel button when the progress slot has another button', async () => {
+        const appButton = document.createElement('vaadin-button');
+        appButton.slot = 'print-progress';
+        // Before the controls of the viewer, as a child in the initial markup is.
+        viewer.prepend(appButton);
+        release = await holdPages(3);
+        getButton()!.focus();
+        getButton()!.click();
+        await progressShown();
+        const cancelButton = [...viewer.querySelectorAll('vaadin-button[slot="print-progress"]')].find(
+          (button) => button !== appButton,
+        );
+        expect(document.activeElement).to.equal(cancelButton);
+      });
+
+      it('should not move focus into the viewer when the element outside it that printing started from is gone', async () => {
+        const button = document.createElement('button');
+        document.body.append(button);
+        button.focus();
+        release = await holdPages(3);
+        const printed = viewer.print();
+        await pagesPrepared(2);
+        button.remove();
+        release();
+        await printed;
+        await nextUpdate(viewer);
+        expect(viewer.shadowRoot!.activeElement).to.be.null;
+        expect(document.activeElement).to.equal(document.body);
       });
 
       it('should keep focus on an element outside the viewer when printing from it', async () => {

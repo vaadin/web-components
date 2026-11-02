@@ -12,7 +12,7 @@ import '@vaadin/component-base/src/styles/style-props.js';
 import { css } from 'lit';
 
 export const pdfViewerPrintStyles = css`
-  [part='print-progress'] {
+  [part~='print-progress'] {
     position: absolute;
     inset: 50% auto auto 50%;
     translate: -50% -50%;
@@ -30,7 +30,7 @@ export const pdfViewerPrintStyles = css`
     box-shadow: 0 4px 16px rgba(0, 0, 0, 0.2);
   }
 
-  [part='print-progress'][hidden] {
+  [part~='print-progress'][hidden] {
     display: none;
   }
 
@@ -39,7 +39,7 @@ export const pdfViewerPrintStyles = css`
   }
 
   @media (forced-colors: active) {
-    [part='print-progress'] {
+    [part~='print-progress'] {
       border: 1px solid CanvasText;
     }
   }

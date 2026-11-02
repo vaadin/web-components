@@ -46,6 +46,14 @@ export class PdfViewerPrintFrame {
 
   #removed = false;
 
+  /** @type {() => void} */
+  #resolveRemoved;
+
+  /** Resolves when the frame is removed, so that rendering stops without waiting for the current page. */
+  #whenRemoved = new Promise((resolve) => {
+    this.#resolveRemoved = resolve;
+  });
+
   constructor() {
     const frame = document.createElement('iframe');
     frame.setAttribute('aria-hidden', 'true');
@@ -67,7 +75,7 @@ export class PdfViewerPrintFrame {
 
   /**
    * Renders the pages of the document as images into the frame, and waits
-   * until the images are decoded. Calls `onProgress` with the part of the
+   * until the images have loaded. Calls `onProgress` with the part of the
    * pages that is done, from 0 to 1. Stops when the frame is removed.
    *
    * @param {import('pdfjs-dist').PDFDocumentProxy} pdfDocument
@@ -83,8 +91,6 @@ export class PdfViewerPrintFrame {
       }
       onProgress(pageNumber / numPages);
     }
-    const images = [...this.#frame.contentDocument.images];
-    await Promise.all(images.map((image) => image.decode().catch(() => {})));
   }
 
   /**
@@ -103,6 +109,7 @@ export class PdfViewerPrintFrame {
    */
   remove() {
     this.#removed = true;
+    this.#resolveRemoved();
     this.#renderTask?.cancel();
     this.#frame.remove();
     this.#urls.forEach((url) => URL.revokeObjectURL(url));
@@ -115,7 +122,7 @@ export class PdfViewerPrintFrame {
    * @private
    */
   async #renderPage(pdfDocument, pageNumber) {
-    const pdfPage = await pdfDocument.getPage(pageNumber);
+    const pdfPage = await Promise.race([pdfDocument.getPage(pageNumber), this.#whenRemoved]);
     if (this.#removed) {
       return;
     }
@@ -151,12 +158,28 @@ export class PdfViewerPrintFrame {
     const url = URL.createObjectURL(blob);
     this.#urls.push(url);
     const image = this.#frame.contentDocument.createElement('img');
+    // Wait until the image has loaded, as the viewer of pdf.js does. Decoding all images would hold
+    // the pixels of every page in memory at once.
+    const loaded = new Promise((resolve, reject) => {
+      image.addEventListener('load', resolve, { once: true });
+      image.addEventListener(
+        'error',
+        () =>
+          reject(
+            new Error(
+              `Failed to load the image of page ${pageNumber}. If the page has a Content Security Policy, check that its img-src directive allows blob: URLs.`,
+            ),
+          ),
+        { once: true },
+      );
+    });
     image.src = url;
     image.alt = '';
     image.style.width = `${width}pt`;
     image.style.height = `${height}pt`;
     image.style.page = this.#getPageName(width, height);
     this.#frame.contentDocument.body.append(image);
+    await Promise.race([loaded, this.#whenRemoved]);
   }
 
   /**
