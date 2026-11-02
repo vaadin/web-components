@@ -19,6 +19,48 @@ import { loadPdfjs } from './pdfjs-loader.js';
 export const MAX_CANVAS_PIXELS = 2 ** 24;
 
 /**
+ * Limits the clickable area of a link to the quadrilaterals of its annotation,
+ * e.g. to the words of a link that wraps to the next line, as pdf.js does.
+ * A link whose only quadrilateral is its rectangle gets no areas.
+ *
+ * @param {HTMLAnchorElement} link
+ * @param {{ rect: number[], quadPoints?: ArrayLike<number> | null }} annotation
+ */
+function addLinkAreas(link, { rect: [left, bottom, right, top], quadPoints }) {
+  if (!quadPoints?.length) {
+    return;
+  }
+  const width = right - left;
+  const height = top - bottom;
+  const areas = [];
+  // pdf.js orders the corners of each quadrilateral as top left, top right, bottom left, bottom right.
+  for (let i = 0; i < quadPoints.length; i += 8) {
+    const [areaLeft, areaTop, areaRight] = [quadPoints[i], quadPoints[i + 1], quadPoints[i + 2]];
+    const areaBottom = quadPoints[i + 5];
+    areas.push([
+      (areaLeft - left) / width,
+      (top - areaTop) / height,
+      (areaRight - areaLeft) / width,
+      (areaTop - areaBottom) / height,
+    ]);
+  }
+  const [first] = areas;
+  const isWholeLink = (value, index) => Math.abs(value - (index < 2 ? 0 : 1)) < 0.001;
+  if (areas.length === 1 && first.every(isWholeLink)) {
+    return;
+  }
+  areas.forEach(([areaLeft, areaTop, areaWidth, areaHeight]) => {
+    const area = document.createElement('span');
+    area.className = 'link-area';
+    area.style.left = `${areaLeft * 100}%`;
+    area.style.top = `${areaTop * 100}%`;
+    area.style.width = `${areaWidth * 100}%`;
+    area.style.height = `${areaHeight * 100}%`;
+    link.append(area);
+  });
+}
+
+/**
  * Manages the DOM of a single page of the document: a placeholder sized to
  * the page, and the canvas and the text and link layers the page is rendered
  * to once it is needed.
@@ -332,6 +374,7 @@ export class PdfViewerPage {
       link.style.top = `${(Math.min(y1, y2) / viewport.height) * 100}%`;
       link.style.width = `${(Math.abs(x2 - x1) / viewport.width) * 100}%`;
       link.style.height = `${(Math.abs(y2 - y1) / viewport.height) * 100}%`;
+      addLinkAreas(link, annotation);
       layer.append(link);
       links.push({ link, annotation });
     });

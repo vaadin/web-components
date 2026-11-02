@@ -74,6 +74,21 @@ describe('links', () => {
     return `<< /Type /Annot /Subtype /Link /Rect [50 ${700 - index * 40} 300 ${720 - index * 40}] /Border [0 0 0] /Dest ${dest} >>`;
   }
 
+  /**
+   * Loads a document with a link on "Vaadin" at the end of the first line (x=336-408) and on
+   * "docs" at the start of the second (x=72-120). The rectangle of the link covers both lines.
+   */
+  async function loadWrappingLink() {
+    await loadPdf([
+      {
+        content: `BT /F2 20 Tf 72 460 Td (For details, read the Vaadin) Tj ET BT /F2 20 Tf 72 436 Td (docs before you start.) Tj ET`,
+        annotations: [
+          '<< /Type /Annot /Subtype /Link /Rect [72 431 408 479] /Border [0 0 0] /QuadPoints [336 479 408 479 336 455 408 455 72 455 120 455 72 431 120 431] /A << /S /URI /URI (https://vaadin.com/docs) >> >>',
+        ],
+      },
+    ]);
+  }
+
   /** Loads a document whose first page links to the given position on page 2. */
   async function loadLinkToPosition(dest: string, { rotate = 0 } = {}) {
     await loadPdf([{ content: '', annotations: [destLink(dest)] }, { content: '', rotate }, { content: '' }]);
@@ -98,6 +113,21 @@ describe('links', () => {
     it('should not add a link layer to a page without links', async () => {
       await load('multi-page.pdf');
       expect(pages[0].querySelector('.link-layer')).to.be.null;
+    });
+
+    it('should only make the quadrilaterals of a link that wraps clickable', async () => {
+      await loadWrappingLink();
+      const linkAt = (x: number, y: number) => {
+        const rect = pages[0].getBoundingClientRect();
+        const left = rect.left + (x / 595) * rect.width;
+        const top = rect.top + ((842 - y) / 842) * rect.height;
+        return viewer.shadowRoot!.elementFromPoint(left, top)?.closest('a') ?? null;
+      };
+      const [link] = getLinks(1);
+      expect(linkAt(370, 465)).to.equal(link);
+      expect(linkAt(95, 440)).to.equal(link);
+      expect(linkAt(150, 465)).to.be.null;
+      expect(linkAt(250, 440)).to.be.null;
     });
 
     it('should leave out the links on a hidden layer', async () => {
@@ -580,6 +610,16 @@ describe('links', () => {
       await sendKeys({ press: TAB });
       const link = viewer.shadowRoot!.activeElement as HTMLAnchorElement;
       expect(getComputedStyle(link).outlineStyle).to.equal('solid');
+    });
+
+    it('should show the focus ring around the quadrilaterals of a focused link that wraps', async () => {
+      await loadWrappingLink();
+      content.focus();
+      await sendKeys({ press: TAB });
+      const link = viewer.shadowRoot!.activeElement as HTMLAnchorElement;
+      const areas = [...link.querySelectorAll('.link-area')];
+      expect(getComputedStyle(link).outlineStyle).to.equal('none');
+      expect(areas.map((area) => getComputedStyle(area).outlineStyle)).to.deep.equal(['solid', 'solid']);
     });
 
     it('should scroll to a link on another page and update the page when tabbing to it', async () => {

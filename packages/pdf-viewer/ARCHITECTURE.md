@@ -94,6 +94,8 @@ how to generate them.
   after its URL or the page it goes to.
 - Only `http:`, `https:` and `mailto:` links open, in a new tab without access to the viewer.
 - Links on layers that the document hides are left out, as in pdf.js.
+- A link that wraps to the next line is clickable only on its words, which the `QuadPoints` of the annotation
+  give. Its focus ring goes around these words.
 - When a focused link loses its page, focus moves to the page area.
 
 ## Install size

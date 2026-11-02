@@ -54,14 +54,29 @@ export const pdfViewerPageStyles = css`
     cursor: var(--vaadin-clickable-cursor);
   }
 
-  /* Keeps the selection in the text while dragging over links, as in pdf.js */
-  [part='page']:has(> .text-layer.selecting) .link {
+  /* Only the areas of a link that wraps are clickable, not the words between them */
+  .link:has(> .link-area) {
     pointer-events: none;
   }
 
-  .link:focus-visible {
+  .link-area {
+    position: absolute;
+    pointer-events: auto;
+  }
+
+  /* Keeps the selection in the text while dragging over links, as in pdf.js */
+  [part='page']:has(> .text-layer.selecting) :is(.link, .link-area) {
+    pointer-events: none;
+  }
+
+  .link:focus-visible,
+  .link:focus-visible > .link-area {
     outline: var(--vaadin-focus-ring-width) solid var(--vaadin-focus-ring-color);
     outline-offset: 1px;
+  }
+
+  .link:focus-visible:has(> .link-area) {
+    outline: none;
   }
 
   @media (forced-colors: active) {
@@ -71,7 +86,8 @@ export const pdfViewerPageStyles = css`
     }
 
     /* The canvas keeps its colors, so links are outlined as in pdf.js */
-    .link {
+    .link:not(:has(> .link-area)),
+    .link-area {
       outline: 1.5px solid LinkText;
     }
   }
