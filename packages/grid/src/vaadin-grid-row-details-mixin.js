@@ -87,7 +87,7 @@ export const RowDetailsMixin = (superClass) =>
         // Only update the rows if the column tree has already been initialized
         this._getRenderedRows().forEach((row) => {
           if (!row.querySelector('.details-cell')) {
-            this.__initRow(row, this._columnTree.at(-1));
+            this.__initRow(row, this._columnTree.at(-1), 'body', true);
             this.__updateRow(row);
             return;
           }
@@ -96,6 +96,9 @@ export const RowDetailsMixin = (superClass) =>
             this.__updateRow(row);
           }
         });
+
+        // Details cells are frozen, so the frozen cells cache needs to include them
+        this._frozenCellsChanged();
       }
     }
 
