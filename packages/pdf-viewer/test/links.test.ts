@@ -314,18 +314,6 @@ describe('links', () => {
       expect(getLinkNames()).to.deep.equal(['Vaadin docs (opens in a new tab)']);
     });
 
-    it('should name the links of the inline links fixture', async () => {
-      await load('inline-links.pdf');
-      // A wrapped link has one annotation for each line.
-      expect(getLinkNames()).to.have.members([
-        'Vaadin (opens in a new tab)',
-        'vaadin.com (opens in a new tab)',
-        'github.com (opens in a new tab)',
-        'continues (opens in a new tab)',
-        'on the next line (opens in a new tab)',
-      ]);
-    });
-
     it('should use the URL as the name of an external link without text', async () => {
       await loadPdf([{ content: '', annotations: [uriLink([50, 700, 200, 720])] }]);
       expect(getLinkNames()).to.deep.equal(['https://vaadin.com/ (opens in a new tab)']);

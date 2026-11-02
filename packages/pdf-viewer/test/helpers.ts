@@ -6,7 +6,6 @@ import type { PdfViewer } from '../vaadin-pdf-viewer.js';
 
 export type Fixture =
   | 'encrypted.pdf'
-  | 'inline-links.pdf'
   | 'invalid.pdf'
   | 'javascript.pdf'
   | 'links.pdf'
