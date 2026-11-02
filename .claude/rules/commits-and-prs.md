@@ -86,8 +86,7 @@ the _why_: a non-obvious root cause, a rejected alternative a reviewer would oth
 propose, a constraint that shaped the approach. A subtle bug fix usually earns one;
 a feature almost never does.
 
-Prose should also replace the bullets when there would be only a single bullet, with or
-without sub-bullets.
+Prose should also replace the bullets when there would be only a single bullet, with or without sub-bullets.
 
 Use plain, common English. Most Vaadin readers are non-native English speakers, so avoid
 advanced or uncommon vocabulary.
