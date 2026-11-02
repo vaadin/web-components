@@ -26,6 +26,7 @@
  * See the License for the specific language governing permissions and
  * limitations under the License.
  */
+import { removeValuesFromAttribute } from '@vaadin/component-base/src/dom-utils.js';
 import { ANNOTATION_ID_PREFIX } from './pdf-viewer-text-accessibility.js';
 
 /** The ARIA roles of the standard structure types of tagged PDFs. */
@@ -134,7 +135,8 @@ function getContentElements(content, contentIds) {
  */
 function getRole(node, parents) {
   const { role } = node;
-  let ariaRole = PDF_ROLE_TO_ARIA_ROLE[role] || null;
+  // Not an inherited property, e.g. for a role named `constructor`.
+  let ariaRole = Object.hasOwn(PDF_ROLE_TO_ARIA_ROLE, role) ? PDF_ROLE_TO_ARIA_ROLE[role] : null;
   if (role === 'TH') {
     const parent = parents.at(-1);
     const grandParent = parents.at(-2);
@@ -214,12 +216,7 @@ export class PdfViewerStructureLayer {
    */
   removeAnnotation(annotationId) {
     [this.element, ...this.element.querySelectorAll('[aria-owns]')].forEach((owner) => {
-      const ids = (owner.getAttribute('aria-owns') ?? '').split(' ').filter((id) => id && id !== annotationId);
-      if (ids.length) {
-        owner.setAttribute('aria-owns', ids.join(' '));
-      } else {
-        owner.removeAttribute('aria-owns');
-      }
+      removeValuesFromAttribute(owner, 'aria-owns', annotationId);
     });
     this.#pendingLinkOwnership.get(annotationId)?.element.removeAttribute('role');
     this.#pendingLinkOwnership.delete(annotationId);

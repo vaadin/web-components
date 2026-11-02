@@ -468,10 +468,11 @@ export class PdfViewerPage {
         });
       });
     }
-    addLinksToText(
-      this.textLayer.textDivs,
-      links.filter((link) => !structureLayer?.annotationIds.has(link.id)),
-    );
+    const textLinks = links.filter((link) => !structureLayer?.annotationIds.has(link.id));
+    // Comparing the positions of the text forces a layout, which a page without links does not need.
+    if (textLinks.length) {
+      addLinksToText(this.textLayer.textDivs, textLinks);
+    }
   }
 
   /**
