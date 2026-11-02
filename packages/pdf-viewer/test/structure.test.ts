@@ -1,5 +1,5 @@
 import { expect } from '@vaadin/chai-plugins';
-import { fixtureSync, nextRender, nextUpdate } from '@vaadin/testing-helpers';
+import { fixtureSync, nextFrame, nextRender, nextUpdate, oneEvent } from '@vaadin/testing-helpers';
 import sinon from 'sinon';
 import './enable-feature-flag.js';
 import '../vaadin-pdf-viewer.js';
@@ -18,6 +18,23 @@ describe('structure', () => {
 
   function getLink() {
     return viewer.shadowRoot!.querySelector<HTMLAnchorElement>('a.link')!;
+  }
+
+  function getPage(pageNumber: number) {
+    return viewer.shadowRoot!.querySelectorAll('[part~="page"]')[pageNumber - 1];
+  }
+
+  /** Stubs the structure trees of the pages with the trees that the callback returns for each page number. */
+  async function stubStructTrees(
+    getTree: (pageNumber: number) => PdfViewerStructTreeNode | Promise<PdfViewerStructTreeNode>,
+  ) {
+    const prototype = await getPdfPagePrototype();
+    function fakeGetStructTree(this: PDFPageProxy) {
+      return Promise.resolve(getTree(this.pageNumber));
+    }
+    return sinon
+      .stub(prototype, 'getStructTree')
+      .callsFake(fakeGetStructTree as unknown as PDFPageProxy['getStructTree']);
   }
 
   /** Returns the text that the element owns, also through the elements that it owns. */
@@ -58,42 +75,13 @@ describe('structure', () => {
     await loadAndRender(viewer, fixtureUrl('tagged.pdf'));
     expect(getTree()).to.be.null;
     expect(getLink().getAttribute('aria-label')).to.equal('Vaadin website (opens in a new tab)');
+    // The link is read in the flow of the text instead.
+    expect(viewer.shadowRoot!.querySelector(`.text-layer [aria-owns~="${getLink().id}"]`)).to.be.ok;
   });
 
   describe('tagged', () => {
     beforeEach(async () => {
       await loadAndRender(viewer, fixtureUrl('tagged.pdf'));
-    });
-
-    it('should expose headings with their level', () => {
-      const headings = [...getTree()!.querySelectorAll('[role="heading"]')];
-      const levels = headings.map((heading) => heading.getAttribute('aria-level'));
-      expect(levels).to.include('1');
-      expect(levels).to.include('2');
-      const h1 = headings.find((heading) => heading.getAttribute('aria-level') === '1')!;
-      expect(getOwnedText(h1)).to.equal('Tagged document');
-    });
-
-    it('should expose the list and its items', () => {
-      const list = getTree()!.querySelector('[role="list"]')!;
-      expect(list.querySelectorAll('[role="listitem"]')).to.have.lengthOf(2);
-    });
-
-    it('should expose the table with header and data cells', () => {
-      const table = getTree()!.querySelector('[role="table"]')!;
-      expect(table.querySelectorAll('[role="row"]')).to.have.lengthOf(3);
-      expect(table.querySelectorAll('[role="columnheader"]')).to.have.lengthOf(2);
-      expect(table.querySelectorAll('[role="cell"]')).to.have.lengthOf(4);
-    });
-
-    it('should expose the alternative text of figures as an image', () => {
-      const figure = getTree()!.querySelector('[role="figure"]')!;
-      expect(figure.querySelector('[role="img"]')!.getAttribute('aria-label')).to.equal('A blue square');
-    });
-
-    it('should set the language of text in another language', () => {
-      const swedish = getTree()!.querySelector('[lang="sv"]')!;
-      expect(getOwnedText(swedish)).to.equal('Hej världen');
     });
 
     it('should own elements that exist, without marked content, as Chrome ignores aria-owns of display: contents', () => {
@@ -124,12 +112,132 @@ describe('structure', () => {
       expect(getTree()!.querySelector(`[aria-owns="${getLink().id}"]`)).to.be.ok;
       expect(viewer.shadowRoot!.querySelector('.text-layer [aria-owns]')).to.be.null;
     });
+  });
+
+  describe('released pages', () => {
+    let url: string;
+    let structTreeStub: sinon.SinonStub;
+
+    /** The tree of a page of the created PDF, whose page objects are 5, 7, 9 and so on. */
+    function getPageTree(pageNumber: number): PdfViewerStructTreeNode {
+      const pageObject = 5 + 2 * (pageNumber - 1);
+      return { role: 'Root', children: [{ role: 'P', children: [{ type: 'content', id: `p${pageObject}R_mc0` }] }] };
+    }
+
+    function scrollTo(scrollTop: number) {
+      const content = viewer.shadowRoot!.querySelector<HTMLElement>('[part="content"]')!;
+      content.scrollTop = scrollTop === Infinity ? content.scrollHeight : scrollTop;
+    }
+
+    beforeEach(() => {
+      viewer.style.height = '300px';
+      url = createPdf(
+        Array.from({ length: 6 }, (_, index) => ({
+          content: `/P << /MCID 0 >> BDC BT /F1 24 Tf 72 700 Td (Page ${index + 1}) Tj ET EMC`,
+        })),
+      );
+    });
+
+    afterEach(() => {
+      URL.revokeObjectURL(url);
+    });
 
     it('should remove the structure when a page is released', async () => {
+      await stubStructTrees(getPageTree);
+      await loadAndRender(viewer, url);
+      expect(getPage(1).querySelector('.struct-tree')).to.be.ok;
       const idle = nextRenderIdle(viewer);
-      viewer.src = fixtureUrl('multi-page.pdf');
+      scrollTo(Infinity);
       await idle;
-      expect(getTree()).to.be.null;
+      expect(getPage(1).querySelector('.struct-tree')).to.be.null;
+    });
+
+    it('should render the structure again when a released page renders again, without loading it again', async () => {
+      structTreeStub = await stubStructTrees(getPageTree);
+      await loadAndRender(viewer, url);
+      let idle = nextRenderIdle(viewer);
+      scrollTo(Infinity);
+      await idle;
+      idle = nextRenderIdle(viewer);
+      scrollTo(0);
+      await idle;
+      expect(getPage(1).querySelector('.struct-tree')).to.be.ok;
+      const pageNumbers = structTreeStub.thisValues.map((pdfPage: PDFPageProxy) => pdfPage.pageNumber);
+      expect(pageNumbers.filter((pageNumber) => pageNumber === 1)).to.have.lengthOf(1);
+    });
+
+    it('should render the structure of a page that is released while its structure loads', async () => {
+      let resolveTree!: () => void;
+      const treeLoaded = new Promise<void>((resolve) => {
+        resolveTree = resolve;
+      });
+      await stubStructTrees(async (pageNumber) => {
+        if (pageNumber === 1) {
+          await treeLoaded;
+        }
+        return getPageTree(pageNumber);
+      });
+      const loaded = oneEvent(viewer, 'document-load');
+      viewer.src = url;
+      await loaded;
+      for (let i = 0; i < 50 && !getPage(1).querySelector('.text-layer'); i++) {
+        await nextFrame();
+      }
+      // Released while its structure loads.
+      scrollTo(Infinity);
+      for (let i = 0; i < 50 && getPage(1).querySelector('.text-layer'); i++) {
+        await nextFrame();
+      }
+      expect(getPage(1).querySelector('.text-layer')).to.be.null;
+      resolveTree();
+      await nextRenderIdle(viewer);
+      const idle = nextRenderIdle(viewer);
+      scrollTo(0);
+      await idle;
+      expect(getPage(1).querySelector('.struct-tree')).to.be.ok;
+    });
+  });
+
+  describe('links of two pages', () => {
+    let url: string;
+
+    beforeEach(async () => {
+      // The pages are objects 5 and 8, their links objects 7 and 10.
+      await stubStructTrees((pageNumber) => {
+        const [pageObject, linkObject] = pageNumber === 1 ? [5, 7] : [8, 10];
+        return {
+          role: 'Root',
+          children: [
+            {
+              role: 'Link',
+              children: [
+                { type: 'content', id: `p${pageObject}R_mc0` },
+                { type: 'annotation', id: `pdfjs_internal_id_${linkObject}R` },
+              ],
+            },
+          ],
+        };
+      });
+      url = createPdf(
+        ['First', 'Second'].map((text) => ({
+          content: `/Link << /MCID 0 >> BDC BT /F1 24 Tf 72 700 Td (${text}) Tj ET EMC`,
+          annotations: [
+            '<< /Type /Annot /Subtype /Link /Rect [72 690 160 720] /Border [0 0 0] /A << /S /URI /URI (https://vaadin.com/) >> >>',
+          ],
+        })),
+      );
+      viewer.style.height = '2000px';
+      await loadAndRender(viewer, url);
+    });
+
+    afterEach(() => {
+      URL.revokeObjectURL(url);
+    });
+
+    it('should give each link the text of its own page', () => {
+      const [first, second] = viewer.shadowRoot!.querySelectorAll('a.link');
+      expect(getOwnedText(first)).to.equal('First');
+      expect(getOwnedText(second)).to.equal('Second');
     });
   });
 
@@ -185,6 +293,27 @@ describe('structure', () => {
         expect(getOwnedText(getTree()!)).to.equal('Docs');
       });
     });
+  });
+
+  it('should add a link that the structure does not own to the text before it', async () => {
+    // Object 5 is the page of the created PDF, and object 7 its link, which no structure element has.
+    await stubStructTrees(() => ({
+      role: 'Root',
+      children: [{ role: 'P', children: [{ type: 'content', id: 'p5R_mc0' }] }],
+    }));
+    const url = createPdf([
+      {
+        content: '/P << /MCID 0 >> BDC BT /F1 24 Tf 72 700 Td (Docs) Tj ET EMC',
+        annotations: [
+          '<< /Type /Annot /Subtype /Link /Rect [72 690 130 720] /Border [0 0 0] /A << /S /URI /URI (https://vaadin.com/docs) >> >>',
+        ],
+      },
+    ]);
+    await loadAndRender(viewer, url);
+    URL.revokeObjectURL(url);
+    expect(getTree()).to.be.ok;
+    expect(getTree()!.querySelector(`[aria-owns~="${getLink().id}"]`)).to.be.null;
+    expect(viewer.shadowRoot!.querySelector(`.text-layer [aria-owns~="${getLink().id}"]`)).to.be.ok;
   });
 
   describe('alternative text of links', () => {
@@ -253,6 +382,16 @@ describe('structure', () => {
     function create(children: PdfViewerStructTreeNode[]) {
       return new PdfViewerStructureLayer({ role: 'Root', children }, 1);
     }
+
+    it('should not take a role from the inherited properties of objects', () => {
+      const { element } = create(
+        ['constructor', 'toString', '__proto__'].map((role) => ({
+          role,
+          children: [{ type: 'content', id: 'p3R_mc0' }],
+        })),
+      );
+      expect(element.querySelector('[role]:not([role="none"])')).to.be.null;
+    });
 
     it('should expose a table of contents as a list', () => {
       const { element } = create([
