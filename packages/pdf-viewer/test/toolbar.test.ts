@@ -424,6 +424,15 @@ describe('toolbar', () => {
       expect(title.textContent).to.equal('report.pdf');
     });
 
+    it('should show fileName instead of the file name from the Content-Disposition header', async () => {
+      await loadFixtureFrom(viewer, new URL('/files/multi-page.pdf', location.href).href, {
+        'Content-Disposition': 'inline; filename="report.pdf"',
+      });
+      viewer.fileName = 'summary.pdf';
+      await nextFrame();
+      expect(title.textContent).to.equal('summary.pdf');
+    });
+
     it('should not show the name of the previous document when the next one fails to load', async () => {
       await loadFixtureFrom(viewer, new URL('/files/multi-page.pdf', location.href).href, {
         'Content-Disposition': 'inline; filename="report.pdf"',

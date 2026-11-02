@@ -3,6 +3,7 @@ import { fixtureSync, nextFrame, nextRender, nextUpdate, oneEvent } from '@vaadi
 import sinon from 'sinon';
 import './enable-feature-flag.js';
 import '../vaadin-pdf-viewer.js';
+import { clearWarnings } from '@vaadin/component-base/src/warnings.js';
 import type { Tooltip } from '@vaadin/tooltip';
 import type { PdfViewer } from '../vaadin-pdf-viewer.js';
 import {
@@ -42,6 +43,8 @@ describe('download', () => {
   }
 
   beforeEach(async () => {
+    // The warnings are issued once per page, so that each test sees its own.
+    clearWarnings();
     clickStub = sinon.stub(HTMLAnchorElement.prototype, 'click');
     createObjectUrlSpy = sinon.spy(URL, 'createObjectURL');
     viewer = fixtureSync('<vaadin-pdf-viewer style="width: 600px; height: 400px"></vaadin-pdf-viewer>');
@@ -205,6 +208,17 @@ describe('download', () => {
       expect(link.download).to.equal('report.pdf');
     });
 
+    it('should use the file name set with fileName instead of the one from the Content-Disposition header', async () => {
+      await loadFixtureFrom(viewer, new URL('/files/multi-page.pdf', location.href).href, {
+        'Content-Disposition': 'inline; filename="report.pdf"',
+      });
+      viewer.fileName = 'summary.pdf';
+      const download = nextDownload();
+      viewer.download();
+      const { link } = await download;
+      expect(link.download).to.equal('summary.pdf');
+    });
+
     it('should use the file name set with fileName as given', async () => {
       viewer.fileName = 'report';
       const download = nextDownload();
@@ -222,20 +236,39 @@ describe('download', () => {
       expect(clickStub).to.be.not.called;
     });
 
-    it('should do nothing when not attached', async () => {
-      viewer.remove();
+    it('should not warn when the file cannot be read after the document is unloaded', async () => {
+      const warnStub = sinon.stub(console, 'warn');
+      let reject!: (error: Error) => void;
+      const getDataStub = sinon.stub(await getPdfDocumentPrototype(), 'getData').callsFake(
+        () =>
+          new Promise((_, rejectData) => {
+            reject = rejectData;
+          }),
+      );
       viewer.download();
       await nextFrame();
+      expect(getDataStub).to.be.calledOnce;
+      await loadDocument(viewer, 'links.pdf');
+      reject(new Error('Worker was destroyed'));
+      await nextFrame();
+      expect(warnStub).to.be.not.called;
       expect(clickStub).to.be.not.called;
     });
 
-    it('should download and keep the data when detached right after download()', async () => {
-      const revokeSpy = sinon.spy(URL, 'revokeObjectURL');
+    it('should do nothing when not attached', async () => {
+      const getDataSpy = sinon.spy(await getPdfDocumentPrototype(), 'getData');
+      viewer.remove();
+      viewer.download();
+      await nextFrame();
+      expect(getDataSpy).to.be.not.called;
+    });
+
+    it('should download when detached right after download()', async () => {
       const download = nextDownload();
       viewer.download();
       viewer.remove();
-      await download;
-      expect(revokeSpy).to.be.not.called;
+      const { link } = await download;
+      expect(link.download).to.equal('multi-page.pdf');
     });
 
     it('should download the new document when src is set right after download()', async () => {
@@ -270,6 +303,18 @@ describe('download', () => {
         expect(revokeSpy).to.be.calledOnceWith(link.href);
         viewer.remove();
         expect(revokeSpy).to.be.calledOnce;
+      });
+
+      it('should keep the data for a minute when detached right after download()', async () => {
+        const revokeSpy = sinon.spy(URL, 'revokeObjectURL');
+        const download = nextDownload();
+        viewer.download();
+        viewer.remove();
+        const { link } = await download;
+        await clock.tickAsync(59000);
+        expect(revokeSpy).to.be.not.called;
+        await clock.tickAsync(1000);
+        expect(revokeSpy).to.be.calledOnceWith(link.href);
       });
     });
 
@@ -330,6 +375,13 @@ describe('download', () => {
   });
 
   describe('before load', () => {
+    /** Called when a download reads the bytes, before the link is clicked. */
+    let getDataSpy: sinon.SinonSpy;
+
+    beforeEach(async () => {
+      getDataSpy = sinon.spy(await getPdfDocumentPrototype(), 'getData');
+    });
+
     it('should download the document once loaded when called in the same task as setting src', async () => {
       const download = nextDownload();
       viewer.src = fixtureUrl('multi-page.pdf');
@@ -366,7 +418,7 @@ describe('download', () => {
       await nextFrame();
       await loadDocument(viewer, 'multi-page.pdf');
       await nextFrame();
-      expect(clickStub).to.be.not.called;
+      expect(getDataSpy).to.be.not.called;
     });
 
     it('should do nothing when the document could not be loaded', async () => {
@@ -376,7 +428,7 @@ describe('download', () => {
       await nextFrame();
       await loadDocument(viewer, 'multi-page.pdf');
       await nextFrame();
-      expect(clickStub).to.be.not.called;
+      expect(getDataSpy).to.be.not.called;
     });
 
     it('should do nothing when src is cleared while loading', async () => {
@@ -387,7 +439,7 @@ describe('download', () => {
       await nextFrame();
       await loadDocument(viewer, 'multi-page.pdf');
       await nextFrame();
-      expect(clickStub).to.be.not.called;
+      expect(getDataSpy).to.be.not.called;
     });
 
     it('should do nothing when detached as the document loads', async () => {
@@ -396,7 +448,7 @@ describe('download', () => {
       viewer.addEventListener('document-load', () => viewer.remove(), { once: true });
       await oneEvent(viewer, 'document-load');
       await nextFrame();
-      expect(clickStub).to.be.not.called;
+      expect(getDataSpy).to.be.not.called;
     });
 
     it('should do nothing when detached while loading', async () => {
@@ -410,7 +462,7 @@ describe('download', () => {
       parent.appendChild(viewer);
       await loaded;
       await nextFrame();
-      expect(clickStub).to.be.not.called;
+      expect(getDataSpy).to.be.not.called;
     });
   });
 });
