@@ -5,6 +5,7 @@ import sinon from 'sinon';
 import './enable-feature-flag.js';
 import '../vaadin-pdf-viewer.js';
 import type { PDFDocumentProxy } from 'pdfjs-dist';
+import { getDeepActiveElement } from '@vaadin/a11y-base/src/focus-utils.js';
 import { getSelectionRanges } from '../src/pdf-viewer-text-selection-controller.js';
 import type { PdfViewer } from '../vaadin-pdf-viewer.js';
 import {
@@ -595,7 +596,7 @@ describe('links', () => {
       const focused: Element[] = [];
       for (let i = 0; i < 3; i++) {
         await sendKeys({ press: 'Tab' });
-        focused.push(viewer.shadowRoot!.activeElement || document.activeElement!);
+        focused.push(getDeepActiveElement());
       }
       after.remove();
       expect(focused).to.deep.equal([...getLinks(1), after]);

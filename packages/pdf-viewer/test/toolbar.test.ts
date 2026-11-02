@@ -4,6 +4,7 @@ import { fixtureSync, nextFrame, nextRender, nextResize, oneEvent } from '@vaadi
 import sinon from 'sinon';
 import './enable-feature-flag.js';
 import '../vaadin-pdf-viewer.js';
+import { getDeepActiveElement } from '@vaadin/a11y-base/src/focus-utils.js';
 import type { IntegerField } from '@vaadin/integer-field';
 import type { Select } from '@vaadin/select';
 import type { SelectItem } from '@vaadin/select/src/vaadin-select-item.js';
@@ -597,7 +598,7 @@ describe('toolbar', () => {
       await sendKeys({ press: 'Shift+Tab' });
       const visited = new Set<HTMLElement>();
       for (let i = 0; i < 10; i++) {
-        const active = viewer.shadowRoot!.activeElement ?? document.activeElement!;
+        const active = getDeepActiveElement();
         const control = [header, ...getControls()].find((element) => element === active || element.contains(active));
         if (!control) {
           break;
