@@ -146,6 +146,60 @@ describe('structure', () => {
     expect(viewer.shadowRoot!.querySelector('.text-layer [aria-owns]')).to.be.null;
   });
 
+  describe('links that the viewer leaves out', () => {
+    [
+      // The layer is object 5, so the page is object 6 and its link object 8.
+      {
+        name: 'whose link is on a hidden layer',
+        page: 6,
+        link: 8,
+        entries: '/OC 5 0 R',
+        uri: 'https://vaadin.com/docs',
+      },
+      {
+        name: 'whose link has a URL that the viewer does not open',
+        page: 5,
+        link: 7,
+        entries: '',
+        // eslint-disable-next-line no-script-url -- the viewer must not create this link
+        uri: 'javascript:void(0)',
+      },
+    ].forEach(({ name, page, link, entries, uri }) => {
+      it(`should read the text of a link structure element ${name} as text`, async () => {
+        const prototype = await getPdfPagePrototype();
+        const tree: PdfViewerStructTreeNode = {
+          role: 'Root',
+          children: [
+            {
+              role: 'Link',
+              children: [
+                { type: 'content', id: `p${page}R_mc0` },
+                { type: 'annotation', id: `pdfjs_internal_id_${link}R` },
+              ],
+            },
+          ],
+        };
+        sinon.stub(prototype, 'getStructTree').resolves(tree as Awaited<ReturnType<PDFPageProxy['getStructTree']>>);
+        const url = createPdf(
+          [
+            {
+              content: '/Link << /MCID 0 >> BDC BT /F1 24 Tf 72 700 Td (Docs) Tj ET EMC',
+              annotations: [
+                `<< /Type /Annot /Subtype /Link /Rect [72 690 130 720] /Border [0 0 0] ${entries} /A << /S /URI /URI (${uri}) >> >>`,
+              ],
+            },
+          ],
+          { layers: entries ? [{ name: 'Hidden', visible: false }] : [] },
+        );
+        await loadAndRender(viewer, url);
+        URL.revokeObjectURL(url);
+        expect(viewer.shadowRoot!.querySelector('a.link')).to.be.null;
+        expect(getTree()!.querySelector('[role="link"]')).to.be.null;
+        expect(getOwnedText(getTree()!)).to.equal('Docs');
+      });
+    });
+  });
+
   describe('alternative text of links', () => {
     let url: string;
 

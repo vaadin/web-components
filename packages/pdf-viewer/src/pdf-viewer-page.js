@@ -436,8 +436,8 @@ export class PdfViewerPage {
     if (links.length) {
       this.element.append(layer);
       this.linkLayerElement = layer;
-      this.#addLinksToContent();
     }
+    this.#addLinksToContent();
     return links;
   }
 
@@ -445,17 +445,23 @@ export class PdfViewerPage {
    * Adds the links to the structure or to the text, for assistive technology,
    * once both the structure and the link layer have rendered, in either
    * order. As in pdf.js, the structure owns its links, and the other links
-   * are added to the text before them. The links mixin names the links, see
-   * `getLinkAlt()`.
+   * are added to the text before them. Annotations of the structure that have
+   * no link, e.g. on a hidden layer, are removed from it. The links mixin
+   * names the links, see `getLinkAlt()`.
    * @private
    */
   #addLinksToContent() {
-    if (!this.#structureRendered || !this.linkLayerElement) {
+    if (!this.#structureRendered || !this.#linksRendered) {
       return;
     }
-    const links = [...this.linkLayerElement.children];
+    const links = [...(this.linkLayerElement?.children ?? [])];
     const structureLayer = this.#structureLayer;
     if (structureLayer) {
+      // Annotations that the viewer leaves out, so that no link of the structure stays without its link.
+      const linkIds = new Set(links.map((link) => link.id));
+      [...structureLayer.annotationIds]
+        .filter((id) => !linkIds.has(id))
+        .forEach((id) => structureLayer.removeAnnotation(id));
       links.forEach((link) => {
         structureLayer.getAriaAttributes(link.id)?.forEach((value, name) => {
           if (name !== 'aria-label') {

@@ -112,6 +112,7 @@ how to generate them.
 - The links mixin names all links. It uses the alternative text that the structure gives a link, as in pdf.js.
 - As in pdf.js, a link of the structure owns the text of its structure element. Other links are added to the
   text before them, so screen readers read them in the order of the text.
+- A link of the structure without a link element, e.g. on a hidden layer, loses its role. Its text is read as text.
 - When a focused link loses its page, focus moves to the page area.
 
 ## Install size

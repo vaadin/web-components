@@ -58,4 +58,11 @@ export declare class PdfViewerStructureLayer {
    * element, which then loses its role, as the link takes its place.
    */
   getAriaAttributes(annotationId: string): Map<string, string> | undefined;
+
+  /**
+   * Removes an annotation that has no element, e.g. a link on a hidden layer
+   * or with a URL that the viewer does not open. A `Link` structure element
+   * of the annotation loses its role, so that its text is read as text.
+   */
+  removeAnnotation(annotationId: string): void;
 }
