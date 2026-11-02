@@ -496,6 +496,29 @@ describe('header/footer feature', () => {
       expect(getComputedStyle(headerPart).display).to.be.equal('none');
     });
   });
+
+  describe('content part position', () => {
+    let headerPart, contentPart, footerPart;
+
+    beforeEach(async () => {
+      dialog.headerTitle = 'Title';
+      dialog.footerRenderer = createRenderer('Footer');
+      dialog.renderer = createRenderer('Content');
+      dialog.opened = true;
+      await nextRender();
+      headerPart = overlay.shadowRoot.querySelector('[part="header"]');
+      contentPart = overlay.shadowRoot.querySelector('[part="content"]');
+      footerPart = overlay.shadowRoot.querySelector('[part="footer"]');
+    });
+
+    it('should not overlap content part with header part', () => {
+      expect(contentPart.getBoundingClientRect().top).to.be.closeTo(headerPart.getBoundingClientRect().bottom, 1);
+    });
+
+    it('should not overlap content part with footer part', () => {
+      expect(contentPart.getBoundingClientRect().bottom).to.be.closeTo(footerPart.getBoundingClientRect().top, 1);
+    });
+  });
 });
 
 describe('renderer set before attach', () => {
