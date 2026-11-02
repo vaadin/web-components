@@ -43,7 +43,7 @@ export const PdfViewerFindMixin = (superClass) =>
     #callId = 0;
 
     /**
-     * The text layer of each page whose layers have finished rendering. A
+     * The text layer of each page whose text layer has finished rendering. A
      * page with another text layer, or none, is not ready for highlights.
      * @type {WeakMap<import('./pdf-viewer-page.js').PdfViewerPage, object>}
      */
@@ -90,12 +90,13 @@ export const PdfViewerFindMixin = (superClass) =>
 
     /**
      * Override method from `PdfViewerRenderMixin` to highlight the matches
-     * on a page once it is rendered.
+     * on a page once its text layer has rendered.
      * @protected
      * @override
      */
-    _pageRendered(page) {
-      super._pageRendered(page);
+    async _renderPageLayers(page) {
+      await super._renderPageLayers(page);
+
       this.#renderedTextLayers.set(page, page.textLayer);
       this.#highlightPage(page);
     }
@@ -237,8 +238,8 @@ export const PdfViewerFindMixin = (superClass) =>
     }
 
     /**
-     * Whether the layers of the page have finished rendering, so that its
-     * text layer can show highlights.
+     * Whether the text layer of the page has finished rendering, so that it
+     * can show highlights.
      * @private
      */
     #isPageReady(page) {
@@ -274,7 +275,7 @@ export const PdfViewerFindMixin = (superClass) =>
       const searchId = this.#searchId;
       this.#getPageText(pageIndex)
         .then(({ pageText }) => {
-          // The page renders again or is released meanwhile, `_pageRendered()` draws the highlights then.
+          // The page renders again or is released meanwhile, `_renderPageLayers()` draws the highlights then.
           if (searchId !== this.#searchId || !this.#isPageReady(page)) {
             return;
           }
