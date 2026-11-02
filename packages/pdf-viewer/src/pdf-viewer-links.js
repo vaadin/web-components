@@ -23,6 +23,7 @@ const ALLOWED_LINK_PROTOCOLS = ['http:', 'https:', 'mailto:'];
 /**
  * The indexes of the left and top coordinates in the explicit destinations
  * that have them, by destination type, e.g. `[page, { name: 'XYZ' }, left, top, zoom]`.
+ * The rectangle of `FitR` also has its right and bottom coordinates.
  */
 const DESTINATION_POSITION_INDEXES = {
   XYZ: { left: 2, top: 3 },
@@ -30,7 +31,7 @@ const DESTINATION_POSITION_INDEXES = {
   FitBH: { top: 2 },
   FitV: { left: 2 },
   FitBV: { left: 2 },
-  FitR: { left: 2, top: 5 },
+  FitR: { left: 2, bottom: 3, right: 4, top: 5 },
 };
 
 /**
@@ -83,11 +84,12 @@ export function createLink(annotation, followLink) {
  * Returns the page and the position on the page that an internal link or
  * an outline item points to, or null when it cannot be resolved. The
  * position is in PDF units from the bottom left corner of the unrotated page.
+ * A `FitR` destination also has the right and bottom of its rectangle.
  *
  * @param {import('pdfjs-dist').PDFDocumentProxy} pdfDocument
  * @param {{ dest?: string | Array, action?: string }} destination
  * @param {{ page: number, pageCount: number }} position the current page and the number of pages
- * @return {Promise<{ page: number, left?: number, top?: number } | null>}
+ * @return {Promise<{ page: number, left?: number, top?: number, right?: number, bottom?: number } | null>}
  */
 export async function resolveDestination(pdfDocument, { dest, action }, { page, pageCount }) {
   if (action) {
@@ -108,10 +110,10 @@ export async function resolveDestination(pdfDocument, { dest, action }, { page, 
     }
     // Only some types of destinations have a position on the page, at different indexes.
     const indexes = DESTINATION_POSITION_INDEXES[name] ?? {};
-    const [left, top] = [indexes.left, indexes.top].map((index) =>
+    const [left, top, right, bottom] = [indexes.left, indexes.top, indexes.right, indexes.bottom].map((index) =>
       typeof explicitDest[index] === 'number' ? explicitDest[index] : undefined,
     );
-    return { page: pageIndex + 1, left, top };
+    return { page: pageIndex + 1, left, top, right, bottom };
   } catch {
     // A broken destination does nothing, like in other PDF viewers.
     return null;

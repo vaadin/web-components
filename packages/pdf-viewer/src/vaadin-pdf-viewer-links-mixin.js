@@ -87,7 +87,7 @@ export const PdfViewerLinksMixin = (superClass) =>
     /**
      * Returns the page and the position on the page that an internal link
      * points to, or null when it cannot be resolved.
-     * @return {Promise<{ page: number, left?: number, top?: number } | null>}
+     * @return {Promise<{ page: number, left?: number, top?: number, right?: number, bottom?: number } | null>}
      * @private
      */
     #resolveDestination(destination) {
@@ -115,7 +115,8 @@ export const PdfViewerLinksMixin = (superClass) =>
           return;
         }
       }
-      const offset = hasPosition && page.pdfPage ? page.getOffset(target.left, target.top) : undefined;
+      const offset =
+        hasPosition && page.pdfPage ? page.getOffset(target.left, target.top, target.right, target.bottom) : undefined;
       this._scrollToPage(target.page, offset);
       this.$.content.focus({ preventScroll: true, focusVisible: isKeyboardActive() });
     }

@@ -358,6 +358,23 @@ describe('links', () => {
       });
     });
 
+    [
+      { rotate: 90, left: 200 / 842, top: 100 / 595 },
+      { rotate: 180, left: 295 / 595, top: 200 / 842 },
+      { rotate: 270, left: 442 / 842, top: 295 / 595 },
+    ].forEach(({ rotate, left, top }) => {
+      it(`should scroll to the top left corner of a FitR rectangle on a page rotated by ${rotate} degrees`, async () => {
+        viewer.zoom = 2;
+        // The rectangle is 100pt to 300pt from the left and 200pt to 400pt from the bottom of the unrotated A4 page.
+        await loadLinkToPosition('[1 /FitR 100 200 300 400]', { rotate });
+        getLinks(1)[0].click();
+        await nextRenderIdle(viewer);
+        const page = pages[1];
+        expect(content.scrollLeft).to.be.closeTo(page.offsetLeft + left * page.offsetWidth, 1);
+        expect(content.scrollTop).to.be.closeTo(page.offsetTop + top * page.offsetHeight, 1);
+      });
+    });
+
     it('should scroll to the position on a rotated page whose size has not loaded yet', async () => {
       // Hold back the second page, so that its size is still unknown when the link is followed.
       let loadPage2!: () => void;

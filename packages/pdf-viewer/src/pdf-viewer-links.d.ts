@@ -42,12 +42,13 @@ export declare function createLink(
  * Returns the page and the position on the page that an internal link or
  * an outline item points to, or null when it cannot be resolved. The
  * position is in PDF units from the bottom left corner of the unrotated page.
+ * A `FitR` destination also has the right and bottom of its rectangle.
  */
 export declare function resolveDestination(
   pdfDocument: PDFDocumentProxy,
   destination: PdfViewerDestination,
   position: { page: number; pageCount: number },
-): Promise<{ page: number; left?: number; top?: number } | null>;
+): Promise<{ page: number; left?: number; top?: number; right?: number; bottom?: number } | null>;
 
 /**
  * Returns the accessible name of a link: its text, or the URL or the page it
