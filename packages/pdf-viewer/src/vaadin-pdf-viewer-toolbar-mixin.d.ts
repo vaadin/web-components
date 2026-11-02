@@ -70,4 +70,9 @@ export declare class PdfViewerToolbarMixinClass {
    * Returns the template of the zoom controls in the `toolbar-zoom` slot.
    */
   protected _renderZoomControls(): TemplateResult;
+
+  /**
+   * Returns the template of the download button in the `toolbar-download` slot.
+   */
+  protected _renderDownloadButton(): TemplateResult;
 }

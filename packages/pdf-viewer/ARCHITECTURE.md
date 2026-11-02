@@ -80,15 +80,8 @@ how to generate them.
     else `_getDocumentName()` of the document mixin, the name that downloads also use.
   - The controls call the methods of the inner mixins, for example `_scrollToPage()`, `_stepZoom()` and
     `download()`.
-  - The download button has its own slot after `toolbar-actions`. `downloadButtonHidden` hides the slot, so it
-    also hides a custom component.
-  - `PdfViewerButtonController`, a `SlotController`, creates the default button. An application can slot its own
-    component instead.
-  - The viewer sets the icon, the tooltip and `disabled` only on the default button. Any slotted component gets
-    the click action.
-  - The Flow counterpart sets `_isDefault` on its own default button before it slots it, as for CRUD and Upload.
-  - The page and zoom controls use `slotContent()` instead, because nothing replaces them. Flow can only return a
-    component that it created, so a replaceable button needs a slot.
+  - The download button is after `toolbar-actions`. To replace it, an application hides it with
+    `downloadButtonHidden` and adds its own button that calls `download()` to `toolbar-actions`.
 - The element applies `I18nMixin` and defines the default texts. The mixins read them from `__effectiveI18n`.
 - The element applies `FocusMixin` and owns the focus state. Listeners on the page area in its template set
   `focused` and `focus-ring`, as focus moving inside the shadow root does not reach listeners on the host.

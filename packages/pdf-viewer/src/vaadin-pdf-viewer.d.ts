@@ -91,12 +91,30 @@ export interface PdfViewerEventMap extends HTMLElementEventMap, PdfViewerCustomE
  * window.Vaadin.featureFlags.pdfViewerComponent = true;
  * ```
  *
- * ### Slots
+ * ### Customization
  *
- * Name              | Description
+ * You can add application controls to the toolbar by using `slot` names.
+ *
+ * Slot name         | Description
  * ------------------|-------------
- * `toolbar-actions` | Slot for application controls, e.g. buttons, at the end of the toolbar, before the built-in buttons
- * `download-button` | Slot for a component that replaces the download button. Clicking it downloads the document
+ * `toolbar-actions` | Application controls, e.g. buttons, at the end of the toolbar, before the download button.
+ *
+ * #### Example
+ *
+ * A custom button that replaces the download button:
+ *
+ * ```html
+ * <vaadin-pdf-viewer src="/files/report.pdf" download-button-hidden>
+ *   <vaadin-button slot="toolbar-actions">Save a copy</vaadin-button>
+ * </vaadin-pdf-viewer>
+ * ```
+ *
+ * ```js
+ * const viewer = document.querySelector('vaadin-pdf-viewer');
+ * viewer.querySelector('vaadin-button').addEventListener('click', () => {
+ *   viewer.download();
+ * });
+ * ```
  *
  * ### Styling
  *

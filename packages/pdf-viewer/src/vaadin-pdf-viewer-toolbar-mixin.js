@@ -15,14 +15,13 @@ import './vaadin-pdf-viewer-button.js';
 import { html } from 'lit';
 import { styleMap } from 'lit/directives/style-map.js';
 import { slotContent } from '@vaadin/component-base/src/directives/slot-content.js';
-import { PdfViewerButtonController } from './pdf-viewer-button-controller.js';
 import { formatZoom, getZoomInLevel, getZoomOutLevel, ZOOM_LEVELS } from './pdf-viewer-zoom-utils.js';
 
 /**
  * A mixin that adds the header and the toolbar with the page navigation, the
- * zoom and the download button. The controls of the toolbar are Vaadin components, rendered into
- * the light DOM so that themes can style them like any other instance of
- * these components.
+ * zoom and the download button. The controls of the toolbar are Vaadin
+ * components, rendered into the light DOM so that themes can style them like
+ * any other instance of these components.
  */
 export const PdfViewerToolbarMixin = (superClass) =>
   class PdfViewerToolbarMixinClass extends superClass {
@@ -78,10 +77,6 @@ export const PdfViewerToolbarMixin = (superClass) =>
       };
     }
 
-    #downloadButtonController = new PdfViewerButtonController(this, 'download-button', 'download', () =>
-      this.download(),
-    );
-
     /** The items of the zoom select, built again only when `zoom` or the texts change. */
     #zoomItems = [];
 
@@ -92,21 +87,6 @@ export const PdfViewerToolbarMixin = (superClass) =>
       if (props.has('zoom') || props.has('__effectiveI18n')) {
         this.#zoomItems = this.#getZoomItems();
       }
-    }
-
-    /** @protected */
-    firstUpdated() {
-      super.firstUpdated();
-
-      // The controller observes the slot, which exists after the first render.
-      this.addController(this.#downloadButtonController);
-    }
-
-    /** @protected */
-    updated(props) {
-      super.updated(props);
-
-      this.#downloadButtonController.updateButton(!this.pageCount, this.__effectiveI18n.download);
     }
 
     /**
@@ -137,7 +117,7 @@ export const PdfViewerToolbarMixin = (superClass) =>
           </div>
           <div part="toolbar-group">
             <slot name="toolbar-actions"></slot>
-            <slot name="download-button" ?hidden="${this.downloadButtonHidden}"></slot>
+            <slot name="toolbar-download" ${slotContent(this._renderDownloadButton())}></slot>
           </div>
         </div>
       `;
@@ -228,6 +208,25 @@ export const PdfViewerToolbarMixin = (superClass) =>
       `;
     }
 
+    /**
+     * Returns the template of the download button in the `toolbar-download` slot.
+     * @protected
+     */
+    _renderDownloadButton() {
+      return html`
+        <vaadin-pdf-viewer-button
+          slot="toolbar-download"
+          icon="download"
+          theme="tertiary icon"
+          ?hidden="${this.downloadButtonHidden}"
+          .disabled="${!this.pageCount}"
+          @click="${this.#onDownloadClick}"
+        >
+          <vaadin-tooltip slot="tooltip" .text="${this.__effectiveI18n.download}"></vaadin-tooltip>
+        </vaadin-pdf-viewer-button>
+      `;
+    }
+
     /** @private */
     #onHeaderClick() {
       this.toolbarCollapsed = !this.toolbarCollapsed;
@@ -236,6 +235,11 @@ export const PdfViewerToolbarMixin = (superClass) =>
     /** @private */
     #onPreviousPageClick() {
       this._scrollToPage(Math.min(this.page, this.pageCount + 1) - 1);
+    }
+
+    /** @private */
+    #onDownloadClick() {
+      this.download();
     }
 
     /** @private */
