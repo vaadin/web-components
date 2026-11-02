@@ -148,7 +148,7 @@ export async function failTextOnce(pageNumber: number, message = 'Broken text'):
   const prototype = await getPdfPagePrototype();
   const streamTextContent = prototype.streamTextContent;
   let failed = false;
-  sinon.stub(prototype, 'streamTextContent').callsFake(function (this: PDFPageProxy, ...args) {
+  function fakeStreamTextContent(this: PDFPageProxy, ...args: Parameters<PDFPageProxy['streamTextContent']>) {
     if (this.pageNumber === pageNumber && !failed) {
       failed = true;
       return new ReadableStream({
@@ -158,7 +158,8 @@ export async function failTextOnce(pageNumber: number, message = 'Broken text'):
       });
     }
     return streamTextContent.apply(this, args);
-  });
+  }
+  sinon.stub(prototype, 'streamTextContent').callsFake(fakeStreamTextContent);
 }
 
 /**

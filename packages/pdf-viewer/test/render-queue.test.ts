@@ -33,10 +33,11 @@ describe('render queue', () => {
 
   function createQueue(options: Partial<PdfViewerRenderQueueOptions<FakePage>> = {}) {
     queue = new PdfViewerRenderQueue<FakePage>({
-      async renderPage(page, pixelRatio) {
+      renderPage(page, pixelRatio) {
         rendered.push(page.pageNumber);
         page.canvasPixels = PAGE_PIXELS;
         page.renderedPixelRatio = pixelRatio;
+        return Promise.resolve();
       },
       releasePage(page) {
         released.push(page.pageNumber);
