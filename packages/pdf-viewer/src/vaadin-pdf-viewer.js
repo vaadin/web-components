@@ -31,6 +31,9 @@ const DEFAULT_I18N = {
   pageWidth: 'Page width',
   pageFit: 'Page fit',
   document: 'PDF document',
+  link: 'Link',
+  goToPage: 'Go to page {page}',
+  externalLink: '{text} (opens in a new tab)',
 };
 
 /**
@@ -139,9 +142,9 @@ class PdfViewer extends PdfViewerMixin(
    *
    * ```
    * {
-   *   // Tooltip of the previous page button.
+   *   // Tooltip of the previous page button, and accessible name of a link to the previous page.
    *   previousPage: 'Previous page',
-   *   // Tooltip of the next page button.
+   *   // Tooltip of the next page button, and accessible name of a link to the next page.
    *   nextPage: 'Next page',
    *   // Error shown for a page that does not exist. {pageCount} is replaced with the page count.
    *   pageError: 'Enter 1–{pageCount}',
@@ -154,7 +157,13 @@ class PdfViewer extends PdfViewerMixin(
    *   // Zoom select item that fits the whole page into the viewer.
    *   pageFit: 'Page fit',
    *   // Title of the header for a document without a file name.
-   *   document: 'PDF document'
+   *   document: 'PDF document',
+   *   // Accessible name of a link without text whose destination is unknown.
+   *   link: 'Link',
+   *   // Accessible name of a link without text to another page. {page} is replaced with the page number.
+   *   goToPage: 'Go to page {page}',
+   *   // Accessible name of a link that opens in a new tab. {text} is replaced with the text of the link, or its URL.
+   *   externalLink: '{text} (opens in a new tab)'
    * }
    * ```
    *

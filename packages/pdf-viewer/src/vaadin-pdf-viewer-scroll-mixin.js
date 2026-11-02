@@ -151,12 +151,17 @@ export const PdfViewerScrollMixin = (superClass) =>
     }
 
     /**
-     * Scrolls to the start of the given page and makes it the current page,
-     * also when it is the current page already.
+     * Scrolls to the start of the given page, or to an offset on it, and
+     * makes it the current page, also when it is the current page already.
      * @param {number} page
+     * @param {{ left: number, top: number }} [offset] the offset from the top
+     *   left corner of the page in CSS pixels. Without it, the padding above
+     *   the page shows too, and the horizontal scroll position stays. While
+     *   the pages have no layout, e.g. in a hidden viewer, only the page is
+     *   kept, and the offset is dropped.
      * @protected
      */
-    _scrollToPage(page) {
+    _scrollToPage(page, offset) {
       if (!this.#hasLayout() || this._scale <= 0) {
         // Scroll once the pages can be laid out.
         this.#pendingPage = page;
@@ -172,7 +177,16 @@ export const PdfViewerScrollMixin = (superClass) =>
         );
       } else {
         const pageView = this.__pages[page - 1];
-        content.scrollTop = pageView.element.offsetTop - Number.parseFloat(getComputedStyle(content).paddingBlockStart);
+        if (offset) {
+          content.scrollTop = pageView.element.offsetTop + offset.top;
+          // Not offsetLeft, which Chromium measures from behind the scrollbar on the left in RTL.
+          const view = content.getBoundingClientRect();
+          const box = pageView.element.getBoundingClientRect();
+          content.scrollLeft += box.left + offset.left - (view.left + content.clientLeft);
+        } else {
+          content.scrollTop =
+            pageView.element.offsetTop - Number.parseFloat(getComputedStyle(content).paddingBlockStart);
+        }
         this.#setPageFromViewer(page);
       }
 

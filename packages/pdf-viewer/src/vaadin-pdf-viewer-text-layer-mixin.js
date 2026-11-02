@@ -59,7 +59,7 @@ export const PdfViewerTextLayerMixin = (superClass) =>
       try {
         await page.renderTextLayer();
       } catch (error) {
-        // The page keeps its canvas without text, and tries again when it renders again.
+        // The page keeps its canvas and links without text, and tries again when it renders again.
         if (error.name !== 'AbortException' && page.canvas) {
           issueWarning(`Failed to render the text of page ${page.pageNumber} of the PDF document: ${error.message}`);
         }
