@@ -265,6 +265,7 @@ describe('links', () => {
         'http://vaadin.com/',
         'https://vaadin.com/',
         'mailto:info@vaadin.com',
+        // eslint-disable-next-line no-script-url -- the viewer must not create this link
         'javascript:alert(1)',
         'ftp://example.com/',
         'tel:123456',
@@ -422,12 +423,13 @@ describe('links', () => {
       });
       const prototype = await getPdfDocumentPrototype();
       const getPage = prototype.getPage;
-      sinon.stub(prototype, 'getPage').callsFake(async function (this: PDFDocumentProxy, pageNumber: number) {
+      async function fakeGetPage(this: PDFDocumentProxy, pageNumber: number) {
         if (pageNumber === 2) {
           await page2Held;
         }
         return getPage.call(this, pageNumber);
-      });
+      }
+      sinon.stub(prototype, 'getPage').callsFake(fakeGetPage);
       url = createPdf([
         { content: '', annotations: [destLink('[1 /XYZ 150 300 null]')] },
         { content: '', rotate: 90 },
