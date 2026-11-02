@@ -40,11 +40,26 @@ export const PdfViewerDownloadMixin = (superClass) =>
      * @private
      */
     #download(pdfDocument) {
-      downloadDocument(pdfDocument, this._getFileName()).catch((error) => {
+      downloadDocument(pdfDocument, this.#getDownloadFileName()).catch((error) => {
         // Reading the bytes fails when the document is unloaded meanwhile.
         if (this._pdfDocument === pdfDocument) {
           issueWarning(`Failed to download the PDF document: ${error.message}`);
         }
       });
+    }
+
+    /**
+     * Returns the name to save the document under: `fileName` as given,
+     * else the name of the document, else `document`, with `.pdf` added
+     * when missing.
+     * @return {string}
+     * @private
+     */
+    #getDownloadFileName() {
+      if (this.fileName) {
+        return this.fileName;
+      }
+      const name = this._getDocumentName() || 'document';
+      return /\.pdf$/iu.test(name) ? name : `${name}.pdf`;
     }
   };

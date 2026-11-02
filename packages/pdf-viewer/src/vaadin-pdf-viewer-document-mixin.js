@@ -188,21 +188,6 @@ export const PdfViewerDocumentMixin = (superClass) =>
     }
 
     /**
-     * Returns the name to save the document under: `fileName` as given,
-     * else the name of the document, else `document`, with `.pdf` added
-     * when missing.
-     * @return {string}
-     * @protected
-     */
-    _getFileName() {
-      if (this.fileName) {
-        return this.fileName;
-      }
-      const name = this._getDocumentName() || 'document';
-      return /\.pdf$/iu.test(name) ? name : `${name}.pdf`;
-    }
-
-    /**
      * Resolves the `_whenDocumentReady()` calls once no document is loading.
      * @private
      */

@@ -70,13 +70,6 @@ export declare class PdfViewerDocumentMixinClass {
   protected _getDocumentName(): string;
 
   /**
-   * Returns the name to save the document under: `fileName` as given,
-   * else the name of the document, else `document`, with `.pdf` added
-   * when missing.
-   */
-  protected _getFileName(): string;
-
-  /**
    * Called when a document has loaded, before `document-load` is fired.
    */
   protected _documentLoaded(details: PdfViewerDocumentDetails): void;
