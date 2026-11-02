@@ -1368,7 +1368,7 @@ describe('select row accessible name', () => {
       await nextRender();
     });
 
-    it('should use the text of the first row header in visual order on select', async () => {
+    it('should use the row header that comes first after reordering', async () => {
       dragAndDropOver(getHeaderCell(grid, 0, 2), getHeaderCell(grid, 0, 1));
       grid.selectItem(grid.items[0]);
       await nextRender();
