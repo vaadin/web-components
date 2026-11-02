@@ -231,7 +231,7 @@ export const InlineEditingMixin = (superClass) =>
             return;
           }
 
-          if (!this._isCellEditable(cell)) {
+          if (!this._isCellEditable(cell._column, cell.__parentRow)) {
             return;
           }
 
@@ -359,7 +359,7 @@ export const InlineEditingMixin = (superClass) =>
     /** @private */
     _startEdit(cell, column) {
       // TODO: remove `_editingDisabled` after Flow counterpart is updated.
-      if (this.disabled || this._editingDisabled || !this._isCellEditable(cell)) {
+      if (this.disabled || this._editingDisabled || !this._isCellEditable(cell._column, cell.__parentRow)) {
         return;
       }
 
@@ -375,7 +375,7 @@ export const InlineEditingMixin = (superClass) =>
 
       // Stopping the previous edit runs listeners that may have made this cell
       // non-editable
-      if (!this._isCellEditable(cell)) {
+      if (!this._isCellEditable(cell._column, cell.__parentRow)) {
         return;
       }
 
@@ -504,7 +504,8 @@ export const InlineEditingMixin = (superClass) =>
       // Try to find the next editable cell
       let nextIndex = model.index;
       let nextColumn = column;
-      let nextCell = cell;
+      let nextRow = cell.__parentRow;
+      let nextCell;
       let directionX = 0;
       let directionY = 0;
 
@@ -519,7 +520,7 @@ export const InlineEditingMixin = (superClass) =>
       }
 
       if (directionX || directionY) {
-        while (nextCell) {
+        while (nextRow) {
           if (directionX) {
             // Move horizontally
             nextColumn = editableColumns[editableColumns.indexOf(nextColumn) + directionX];
@@ -534,10 +535,10 @@ export const InlineEditingMixin = (superClass) =>
             nextIndex += directionY;
           }
           // Stop looking if the next cell is editable
-          const nextRow = this._getRowByIndex(nextIndex);
-          // eslint-disable-next-line no-loop-func
-          nextCell = nextRow && Array.from(nextRow.__cells).find((cell) => cell._column === nextColumn);
-          if (nextCell && this._isCellEditable(nextCell)) {
+          nextRow = this._getRowByIndex(nextIndex);
+          if (nextRow && this._isCellEditable(nextColumn, nextRow)) {
+            // eslint-disable-next-line no-loop-func
+            nextCell = nextRow.__cells.find((cell) => cell._column === nextColumn);
             break;
           }
         }
@@ -565,7 +566,7 @@ export const InlineEditingMixin = (superClass) =>
       const item = this.__getRowItem(row);
       if (this.__edited) {
         const { cell, model } = this.__edited;
-        if (!this._isCellEditable(cell)) {
+        if (!this._isCellEditable(cell._column, cell.__parentRow)) {
           // Cell is no longer editable, cancel edit
           this._stopEdit(true, true);
         } else if (cell.__parentRow === row && item && this.getItemId(model.item) !== this.getItemId(item)) {
@@ -586,15 +587,20 @@ export const InlineEditingMixin = (superClass) =>
       super._generateCellPartNames(row, model);
 
       iterateRowCells(row, (cell) => {
-        const isEditable = !row.hasAttribute('loading') && this._isCellEditable(cell);
+        const isEditable = !row.hasAttribute('loading') && this._isCellEditable(cell._column, row);
         const target = cell._focusButton || cell;
         updatePart(target, 'editable-cell', isEditable);
       });
     }
 
-    /** @private */
-    _isCellEditable(cell) {
-      const column = cell._column;
+    /**
+     * Returns true if the cell of the given column in the given row is editable.
+     *
+     * @param {!GridColumn} column
+     * @param {!HTMLElement} row
+     * @private
+     */
+    _isCellEditable(column, row) {
       // Not editable if the column is not an edit column
       if (!this._isEditColumn(column)) {
         return false;
@@ -604,7 +610,7 @@ export const InlineEditingMixin = (superClass) =>
         return true;
       }
       // Otherwise, check isCellEditable function
-      const model = this.__getRowModel(cell.__parentRow);
+      const model = this.__getRowModel(row);
       return column.isCellEditable(model);
     }
   };
