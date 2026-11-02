@@ -408,13 +408,17 @@ export class PdfViewerPage {
    *
    * @param {Array<{ itemIndex: number, start: number, end: number, current: boolean }>} parts
    *   the text item, by its index in the text layer, and the offsets of the text to highlight in it
+   * @return {boolean} false when the page has no size, so that it needs the highlights again once it has one
    */
   renderFindLayer(parts) {
     this.clearFindLayer();
     // Positioned in % of the page, so that they stay in place when zooming.
     const pageRect = this.element.getBoundingClientRect();
-    if (!this.textLayer || !parts.length || !pageRect.width || !pageRect.height) {
-      return;
+    if (!pageRect.width || !pageRect.height) {
+      return false;
+    }
+    if (!this.textLayer || !parts.length) {
+      return true;
     }
 
     const { textDivs } = this.textLayer;
@@ -442,6 +446,7 @@ export class PdfViewerPage {
     // Below the text layer, so that the text stays selectable.
     this.textLayerElement.before(layer);
     this.findLayerElement = layer;
+    return true;
   }
 
   /** Removes the highlights of `renderFindLayer()`. */
