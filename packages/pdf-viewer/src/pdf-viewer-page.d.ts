@@ -75,7 +75,7 @@ export declare class PdfViewerPage {
     optionalContentConfig?: Awaited<ReturnType<PDFDocumentProxy['getOptionalContentConfig']>>,
   ): Promise<Array<{ link: HTMLAnchorElement; annotation: PdfViewerLinkAnnotation }>>;
 
-  renderFindLayer(parts: Array<{ itemIndex: number; start: number; end: number; current: boolean }>): void;
+  renderFindLayer(parts: Array<{ itemIndex: number; start: number; end: number; current: boolean }>): boolean;
 
   clearFindLayer(): void;
 

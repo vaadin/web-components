@@ -74,8 +74,8 @@ how to generate them.
 - `PdfViewerFindMixin` owns the matches. It loads the text of each page once per document into a private map.
   The text layer loads its own text. Text that fails to load is loaded again by the next search.
   - Its `_renderPageLayers()` override highlights the matches with `page.renderFindLayer()` once the text
-    layer has rendered. Only a page that has passed this override with its current text layer gets
-    highlights, as the text layer of a page is set before it has rendered.
+    layer has rendered. A page gets highlights only when it has `endOfContentElement`, as the text layer
+    of a page is set before it has rendered.
   - It scrolls to the current match with `_scrollRectIntoView()`. When the page of the match has not rendered,
     it goes to the page with `_scrollToPage()` first. A pending scroll to a match is dropped when `page` changes
     to another page.
@@ -124,13 +124,15 @@ how to generate them.
 
 ## Find
 
-- Matching ignores case, diacritics, ligatures and differences in white space.
+- Matching ignores case, ligatures, differences in white space and the diacritics of Latin, Greek and
+  Cyrillic letters. Marks of other scripts make another letter, so matching keeps them.
 - The highlights are in a layer under the text layer. They are positioned in percent of the page, so they
   stay in place on zoom.
 - A page that loses its canvas also loses its highlights. It gets them back when it renders again.
 - `find()` and `highlight()` wait while the document loads. They do nothing when the viewer is not attached.
   Of several calls in a row, only the last one runs.
-- A page without size, e.g. inside a hidden ancestor, gets no highlights until it renders again.
+- A page without size, e.g. inside a hidden ancestor, gets its highlights once the viewer has a size again.
+  The scroll to the current match waits for it too.
 
 ## Install size
 

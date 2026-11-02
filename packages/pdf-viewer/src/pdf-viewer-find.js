@@ -63,8 +63,17 @@ export function createPageText(contentItems) {
 }
 
 /**
- * Normalizes text for searching: ignores case, diacritics and differences in
- * white space, and splits ligatures (e.g. "ﬁ" into "fi"). Returns the
+ * The combining diacritical marks of Latin, Greek and Cyrillic letters, which
+ * searching ignores. Marks of other scripts are kept, as they make another
+ * letter, e.g. the voiced marks of Japanese kana and the vowel signs of
+ * Indic scripts.
+ */
+const DIACRITICS = /[\u0300-\u036f]|[\u1ab0-\u1aff]|[\u1dc0-\u1dff]|[\u20d0-\u20ff]|[\ufe20-\ufe2f]/gu;
+
+/**
+ * Normalizes text for searching: ignores case, the diacritics of Latin, Greek
+ * and Cyrillic letters and differences in white space, and splits ligatures
+ * (e.g. "ﬁ" into "fi"). Returns the
  * normalized text, and for each of its characters the offset of the original
  * character it comes from.
  *
@@ -86,7 +95,7 @@ export function normalizeText(text) {
       continue;
     }
     isPreviousSpace = false;
-    const folded = char.normalize('NFKD').replace(/\p{M}/gu, '').toLowerCase();
+    const folded = char.normalize('NFKD').replace(DIACRITICS, '').toLowerCase();
     for (const foldedChar of folded) {
       normalized += foldedChar;
       offsets.push(index);

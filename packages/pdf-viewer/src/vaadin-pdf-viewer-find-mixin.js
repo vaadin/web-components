@@ -43,11 +43,11 @@ export const PdfViewerFindMixin = (superClass) =>
     #callId = 0;
 
     /**
-     * The text layer of each page whose text layer has finished rendering. A
-     * page with another text layer, or none, is not ready for highlights.
-     * @type {WeakMap<import('./pdf-viewer-page.js').PdfViewerPage, object>}
+     * The pages that could not show their highlights, as they had no size,
+     * e.g. in a hidden viewer.
+     * @type {Set<import('./pdf-viewer-page.js').PdfViewerPage>}
      */
-    #renderedTextLayers = new WeakMap();
+    #pagesWithoutSize = new Set();
 
     /** @protected */
     updated(props) {
@@ -61,11 +61,12 @@ export const PdfViewerFindMixin = (superClass) =>
 
     /**
      * Searches the document for the given text and scrolls to the first
-     * match. The matches are highlighted on the pages. Fires `find-result`
-     * with the number of matches. While the document loads, it runs once
-     * loaded. Does nothing without a document, or when the viewer is not
-     * attached. Of several `find()` and `highlight()` calls in a row, only
-     * the last one runs.
+     * match. The matches are highlighted on the pages until the next search,
+     * or until the document unloads, e.g. on a new `src` or a detach. Fires
+     * `find-result` with the number of matches. While the document loads, it
+     * runs once loaded. Does nothing without a document, or when the viewer
+     * is not attached. Of several `find()` and `highlight()` calls in a row,
+     * only the last one runs.
      *
      * @param {string} text
      */
@@ -74,12 +75,12 @@ export const PdfViewerFindMixin = (superClass) =>
     }
 
     /**
-     * Highlights the given text on the given page and scrolls to it, for
-     * a passage that the application has located. The next `highlight()` or
-     * `find()` clears it. While the document loads, it runs once loaded.
-     * Does nothing without a document, or when the viewer is not attached.
-     * Of several `find()` and `highlight()` calls in a row, only the last
-     * one runs.
+     * Highlights every occurrence of the given text on the given page and
+     * scrolls to the first one, for a passage that the application has
+     * located. The next `highlight()` or `find()` clears it. While the
+     * document loads, it runs once loaded. Does nothing without a document,
+     * or when the viewer is not attached. Of several `find()` and
+     * `highlight()` calls in a row, only the last one runs.
      *
      * @param {number} page the page number, starting from 1
      * @param {string} text
@@ -97,8 +98,24 @@ export const PdfViewerFindMixin = (superClass) =>
     async _renderPageLayers(page) {
       await super._renderPageLayers(page);
 
-      this.#renderedTextLayers.set(page, page.textLayer);
-      this.#highlightPage(page);
+      // The text layer may still render for another render of the page, which highlights the page then.
+      if (this.#isPageReady(page)) {
+        this.#highlightPage(page);
+      }
+    }
+
+    /**
+     * Override method from `PdfViewerScrollMixin` to highlight the matches on
+     * the pages that had no size, once they have one.
+     * @protected
+     * @override
+     */
+    _refreshLayout() {
+      super._refreshLayout();
+
+      const pages = [...this.#pagesWithoutSize];
+      this.#pagesWithoutSize.clear();
+      pages.filter((page) => this.#isPageReady(page)).forEach((page) => this.#highlightPage(page));
     }
 
     /**
@@ -150,6 +167,7 @@ export const PdfViewerFindMixin = (superClass) =>
       this.#matches = [];
       this.#currentIndex = -1;
       this.#scrollToMatchPending = false;
+      this.#pagesWithoutSize.clear();
     }
 
     /**
@@ -239,11 +257,12 @@ export const PdfViewerFindMixin = (superClass) =>
 
     /**
      * Whether the text layer of the page has finished rendering, so that it
-     * can show highlights.
+     * can show highlights. The text layer of a page is set before it renders,
+     * its end of content element only once it has rendered.
      * @private
      */
     #isPageReady(page) {
-      return Boolean(page?.textLayer) && this.#renderedTextLayers.get(page) === page.textLayer;
+      return Boolean(page?.textLayer && page.endOfContentElement);
     }
 
     /**
@@ -259,7 +278,7 @@ export const PdfViewerFindMixin = (superClass) =>
     }
 
     /**
-     * Draws the highlights of the matches on a page over its text layer, and
+     * Draws the highlights of the matches on a page under its text layer, and
      * scrolls to the current match when that is pending.
      * @private
      */
@@ -283,11 +302,16 @@ export const PdfViewerFindMixin = (superClass) =>
           const currentMatch = this.#getCurrentMatch();
           // The highlights need the text layer elements that the text was taken from.
           if (page.textLayer.textDivs.length === pageText.items.length) {
-            page.renderFindLayer(
+            const hasSize = page.renderFindLayer(
               matches.flatMap((match) =>
                 getMatchParts(pageText, match).map((part) => ({ ...part, current: match === currentMatch })),
               ),
             );
+            if (!hasSize) {
+              // `_refreshLayout()` draws the highlights, and scrolls to the current match, once the page has a size.
+              this.#pagesWithoutSize.add(page);
+              return;
+            }
           }
 
           if (this.#scrollToMatchPending && currentMatch.pageIndex === pageIndex) {
