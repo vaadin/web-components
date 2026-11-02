@@ -136,15 +136,6 @@ export const PdfViewerRenderMixin = (superClass) =>
     }
 
     /**
-     * Called when a page has been rendered, including its layers.
-     * @param {PdfViewerPage} _page
-     * @protected
-     */
-    _pageRendered(_page) {
-      // To be implemented.
-    }
-
-    /**
      * Renders the visible pages, the most visible first, then the pages next
      * to them, and frees the canvases of pages far from the view. Stops
      * rendering when no page is visible.
@@ -246,7 +237,6 @@ export const PdfViewerRenderMixin = (superClass) =>
           return;
         }
         await this._renderPageLayers(page);
-        this._pageRendered(page);
       } catch (error) {
         const isCancelled = error?.name === 'RenderingCancelledException' || error?.name === 'AbortException';
         if (this._pdfDocument === pdfDocument && !isCancelled) {
