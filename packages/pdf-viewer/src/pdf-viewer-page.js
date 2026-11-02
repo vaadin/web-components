@@ -73,8 +73,12 @@ export class PdfViewerPage {
   /** Set once the structure of the current text layer is rendered, also when the page has none. */
   #structureRendered = false;
 
-  /** Set when the page has no structure, to not ask the worker again when the page renders again. */
-  #hasNoStructure = false;
+  /**
+   * The structure tree of the page, or null without one, kept to not ask the worker again
+   * when the page renders again, as pdf.js does.
+   * @type {Promise<object | null> | null}
+   */
+  #structTree = null;
 
   /** @type {PdfViewerStructureLayer | null} */
   #structureLayer = null;
@@ -352,21 +356,15 @@ export class PdfViewerPage {
     if (!this.endOfContentElement || this.#structureRendered) {
       return;
     }
-    let tree = null;
-    if (!this.#hasNoStructure) {
-      try {
-        tree = await this.pdfPage.getStructTree();
-      } catch {
-        // The structure is optional. A page with a broken one is shown as untagged.
-      }
-    }
+    // The structure is optional. A page with a broken one is shown as untagged.
+    this.#structTree ??= this.pdfPage.getStructTree().catch(() => null);
+    const tree = await this.#structTree;
     // The page may have been released meanwhile.
     if (this.textLayerElement !== textLayerElement || this.#structureRendered) {
       return;
     }
     this.#structureRendered = true;
     const structureLayer = tree && this.#createStructureLayer(tree, textLayerElement);
-    this.#hasNoStructure = !structureLayer;
     if (structureLayer) {
       this.#structureLayer = structureLayer;
       textLayerElement.before(structureLayer.element);
