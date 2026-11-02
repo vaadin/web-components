@@ -505,7 +505,7 @@ export const InlineEditingMixin = (superClass) =>
       let nextIndex = model.index;
       let nextColumn = column;
       let nextRow = cell.__parentRow;
-      let nextCell;
+      let found = false;
       let directionX = 0;
       let directionY = 0;
 
@@ -537,18 +537,25 @@ export const InlineEditingMixin = (superClass) =>
           // Stop looking if the next cell is editable
           nextRow = this._getRowByIndex(nextIndex);
           if (nextRow && this._isCellEditable(nextColumn, nextRow)) {
-            // eslint-disable-next-line no-loop-func
-            nextCell = nextRow.__cells.find((cell) => cell._column === nextColumn);
+            found = true;
             break;
           }
         }
       }
 
       // Focus current cell as fallback
-      if (!nextCell) {
-        nextCell = cell;
+      if (!found) {
+        nextColumn = column;
+        nextRow = cell.__parentRow;
         nextIndex = model.index;
       }
+
+      if (this._lazyColumns) {
+        // Make sure the cells of the target column are rendered
+        this.scrollToColumn(nextColumn);
+      }
+
+      const nextCell = [...nextRow.children].find((cell) => cell._column === nextColumn);
 
       if (!this.singleCellEdit && nextCell !== cell) {
         this._startEdit(nextCell, nextColumn);
