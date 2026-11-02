@@ -88,7 +88,7 @@ describe('pdfjs-loader', () => {
   it('should fire document-error event with network reason and warn once when the worker fails to load', async () => {
     const warnStub = sinon.stub(console, 'warn');
     // Loading the worker script fails, as when the Content Security Policy blocks it.
-    sinon.stub(window, 'Worker').callsFake(function (_url: string | URL, options?: WorkerOptions) {
+    sinon.stub(window, 'Worker').callsFake((_url: string | URL, options?: WorkerOptions) => {
       return new NativeWorker(new URL('./missing-worker.js', import.meta.url), options);
     });
     const error = oneEvent(viewers[0], 'document-error');

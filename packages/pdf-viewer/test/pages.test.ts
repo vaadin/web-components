@@ -424,13 +424,10 @@ describe('pages', () => {
       await createViewer();
       const getContext = HTMLCanvasElement.prototype.getContext;
       // The canvas of a page gets an opaque context, the context of a page fails to be created
-      getContextStub = sinon.stub(HTMLCanvasElement.prototype, 'getContext').callsFake(function (
-        this: HTMLCanvasElement,
-        type: string,
-        options?: { alpha?: boolean },
-      ) {
+      function fakeGetContext(this: HTMLCanvasElement, type: string, options?: { alpha?: boolean }) {
         return options && options.alpha === false ? null : getContext.call(this, type, options);
-      });
+      }
+      getContextStub = sinon.stub(HTMLCanvasElement.prototype, 'getContext').callsFake(fakeGetContext);
       warnStub = sinon.stub(console, 'warn');
     });
 
@@ -598,6 +595,7 @@ describe('pages', () => {
       ]);
       await loaded;
       // Resolves after the viewer got the page and requested a frame to apply its size
+      // eslint-disable-next-line dot-notation -- bracket access reaches the protected member
       await viewer['_pdfDocument']!.getPage(2);
       viewer.parentElement!.appendChild(viewer);
       await idle;

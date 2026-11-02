@@ -16,7 +16,7 @@ const dataProvider: GridDataProvider<Item> = ({ parentItem, page, pageSize }, cb
     const indexInLevel = page * pageSize + i;
 
     return {
-      name: `${parentItem ? parentItem.name + '-' : ''}${indexInLevel}`,
+      name: `${parentItem ? `${parentItem.name}-` : ''}${indexInLevel}`,
       children: true,
     };
   });

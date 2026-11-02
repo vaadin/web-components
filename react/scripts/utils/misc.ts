@@ -9,7 +9,7 @@ export function camelCase(str: string): string {
     .join('');
 }
 
-const prefixPattern = /vaadin/gi;
+const prefixPattern = /vaadin/giu;
 
 export function stripPrefix(str: string): string {
   return str.replaceAll(prefixPattern, '');
@@ -50,5 +50,5 @@ const collator = new Intl.Collator('en');
  */
 export async function listModuleNames(srcDir: string): Promise<string[]> {
   const files = await glob('*.{ts,tsx}', { cwd: srcDir, nodir: true, ignore: '*.d.ts' });
-  return files.map((file) => file.replace(/\.tsx?$/, '')).sort(collator.compare);
+  return files.map((file) => file.replace(/\.tsx?$/u, '')).sort(collator.compare);
 }

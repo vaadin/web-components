@@ -91,7 +91,9 @@ export default function ComboBoxPage() {
   const nextLogId = useRef(0);
   const logEvent = useCallback((event: string) => {
     const text = `${new Date().toLocaleTimeString()}: ${event}`;
-    setEventLog((prev) => [{ id: nextLogId.current++, text }, ...prev].slice(0, 100));
+    const id = nextLogId.current;
+    nextLogId.current += 1;
+    setEventLog((prev) => [{ id, text }, ...prev].slice(0, 100));
   }, []);
 
   useEffect(() => {
