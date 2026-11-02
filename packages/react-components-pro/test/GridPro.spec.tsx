@@ -1,9 +1,9 @@
+import { nextRender } from '@vaadin/testing-helpers/dist/utils.js';
 import sinon from 'sinon';
 import { useEffect, useState } from 'react';
 import { beforeEach, describe, expect, it, vi } from 'vitest';
 import { render } from 'vitest-browser-react';
 import { findByQuerySelector } from '../../../react/test/utils/findByQuerySelector.js';
-import { nextRender } from '../../../react/test/utils/nextRender.js';
 import { until } from '../../../react/test/utils/until.js';
 import type { GridBodyReactRendererProps } from '../../react-components/src/renderers/grid.js';
 import { GridPro } from '../src/GridPro.js';
