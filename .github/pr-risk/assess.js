@@ -14,13 +14,18 @@ const OPENAI_MODEL = 'gpt-5.5';
 const EFFORT = 'medium';
 const MAX_TOKENS = 16000;
 
+// Two attempts of at most five minutes each fit in the job timeout
+const CLIENT_OPTIONS = { timeout: 5 * 60 * 1000, maxRetries: 1 };
+
+const LEVELS = ['low', 'medium', 'high'];
+
 /** Characters of the description that the agent reads */
 const DESCRIPTION_BUDGET = 20_000;
 
 const RATING = {
   type: 'object',
   properties: {
-    level: { type: 'string', enum: ['low', 'medium', 'high'] },
+    level: { type: 'string', enum: LEVELS },
     reason: { type: 'string' },
   },
   required: ['level', 'reason'],
@@ -66,6 +71,25 @@ export function buildUserMessage({ pr, files, diff }) {
   return sections.join('\n\n');
 }
 
+/**
+ * The assessment, when it matches the schema. The API does not enforce every
+ * part of the schema: the Anthropic SDK turns enums into descriptions, for
+ * example. An off-schema category would otherwise reach the labels.
+ */
+export function validateAssessment(value) {
+  const isText = (field) => typeof field === 'string';
+  const isRating = (rating) => LEVELS.includes(rating?.level) && isText(rating.reason);
+  const valid =
+    CATEGORIES.includes(value?.category) &&
+    isText(value.summary) &&
+    isText(value.rationale) &&
+    [value.impact, value.blast_radius, value.uncertainty, value.reversibility].every(isRating);
+  if (!valid) {
+    throw new Error('The assessment does not match the schema');
+  }
+  return value;
+}
+
 /** The npm package of the provider that `assess` uses with these environment variables, or null without a key */
 export function providerPackage(env) {
   if (env.ANTHROPIC_API_KEY) {
@@ -81,33 +105,37 @@ async function assessWithClaude(content, apiKey) {
   const { default: Anthropic } = await import('@anthropic-ai/sdk');
   const { jsonSchemaOutputFormat } = await import('@anthropic-ai/sdk/helpers/json-schema');
 
-  const client = new Anthropic({ apiKey });
-  const response = await client.beta.messages.parse({
+  // The schema in the form that the API supports
+  const { type, schema } = jsonSchemaOutputFormat(ASSESSMENT_SCHEMA);
+  const client = new Anthropic({ apiKey, ...CLIENT_OPTIONS });
+  const response = await client.beta.messages.create({
     model: CLAUDE_MODEL,
     max_tokens: MAX_TOKENS,
     // A request that the safety classifiers decline runs again on the
     // fallback model that Anthropic recommends for the refusal category
     betas: ['server-side-fallback-2026-07-01'],
     fallbacks: 'default',
-    output_config: { effort: EFFORT, format: jsonSchemaOutputFormat(ASSESSMENT_SCHEMA) },
+    output_config: { effort: EFFORT, format: { type, schema } },
     system: SYSTEM_PROMPT,
     messages: [{ role: 'user', content }],
   });
 
+  // Checked before parsing, so that a refusal or a cut-off answer says so
   if (response.stop_reason !== 'end_turn') {
     const category = response.stop_details?.category;
     throw new Error(`${response.model} stopped with ${response.stop_reason}${category ? ` (${category})` : ''}`);
   }
-  if (!response.parsed_output) {
+  const output = response.content.find((block) => block.type === 'text');
+  if (!output) {
     throw new Error(`${response.model} returned no assessment`);
   }
-  return { ...response.parsed_output, model: response.model };
+  return { ...validateAssessment(JSON.parse(output.text)), model: response.model };
 }
 
 async function assessWithOpenAI(content, apiKey, model) {
   const { default: OpenAI } = await import('openai');
 
-  const client = new OpenAI({ apiKey });
+  const client = new OpenAI({ apiKey, ...CLIENT_OPTIONS });
   const response = await client.responses.create({
     model,
     max_output_tokens: MAX_TOKENS,
@@ -127,7 +155,7 @@ async function assessWithOpenAI(content, apiKey, model) {
   if (refusal) {
     throw new Error(`${response.model} refused: ${refusal.refusal}`);
   }
-  return { ...JSON.parse(response.output_text), model: response.model };
+  return { ...validateAssessment(JSON.parse(response.output_text)), model: response.model };
 }
 
 /**

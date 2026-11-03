@@ -13,6 +13,15 @@ name: PR Risk
 # the added code, the title and the author, which the suggestion cannot go
 # below. One comment on the pull request explains the label.
 #
+# The category is also reported as the "PR risk" check run on the head commit:
+# `success` for green, `neutral` for amber and red. Anyone with triage access
+# can change a label, and a label stays when new commits arrive, so a merge
+# gate must use the check run: the latest "PR risk" check run of the
+# github-actions app on the current head SHA must be `success`. Workflows run
+# from branches of this repository share that app, so a gate that must hold
+# against members with write access should also verify the workflow run that
+# `external_id` names.
+#
 # To see how a pull request would be classified, without changing it, run
 # `node .github/pr-risk/cli.js <pull request URL>`.
 #
@@ -29,11 +38,12 @@ permissions: {}
 
 jobs:
   classify:
-    # Drafts are classified once they are ready for review. Of the edits, only
-    # a new title can change the category.
+    # Drafts are classified once they are ready for review. Of the edits, a new
+    # title or description can change the category, and a pull request whose
+    # base changes back to main may have new commits that no run classified.
     if: |
       github.event.pull_request.draft == false &&
-      (github.event.action != 'edited' || github.event.changes.title)
+      (github.event.action != 'edited' || github.event.changes.title || github.event.changes.body || github.event.changes.base)
     # One run per pull request at a time; a new push queues instead of
     # aborting a run that may be mid-labeling. Group is enforced on the job
     # level, so that a skipped run does not cancel a queued run.
@@ -43,6 +53,7 @@ jobs:
     runs-on: ubuntu-26.04
     timeout-minutes: 15
     permissions:
+      checks: write
       contents: read
       issues: write
       pull-requests: write

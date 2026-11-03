@@ -4,7 +4,15 @@
  * assessment into the final category, and render the PR comment.
  */
 import { matchesGlob } from 'node:path';
-import { BREAKING_TITLE, CONTENT_RULES, PATH_RULES, TRUSTED_ASSOCIATIONS } from './policy.js';
+import {
+  BREAKING_BODY,
+  BREAKING_TITLE,
+  CONTENT_PATHS,
+  CONTENT_RULES,
+  PATH_RULES,
+  SCREENSHOT_PATHS,
+  TRUSTED_ASSOCIATIONS,
+} from './policy.js';
 
 /** From lowest to highest risk */
 export const CATEGORIES = ['green', 'amber', 'red'];
@@ -33,16 +41,18 @@ export const DIFF_BUDGET = 400_000;
 /** The pull request files endpoint lists at most this many files */
 const MAX_LISTED_FILES = 3000;
 
-/** Files without a text diff, the GitHub API sends no patch for them */
-const BINARY_FILE = /\.(?:png|jpe?g|gif|webp|ico|woff2?|ttf|otf|eot|pdf|zip|gz)$/iu;
-
 /** Lockfiles go last in the diff, so that their size does not crowd out the code */
 const LOCKFILE = /(?:^|\/)(?:yarn\.lock|package-lock\.json)$/u;
 
-/** A blank line or a line that only holds a comment (`//`, `/*`, `*`, `<!--`) */
-const COMMENT_LINE = /^\s*(?:$|\/\/|\/\*|\*|<!--)/u;
+// A blank line, or a line that only holds a comment: a line comment, a block
+// comment that ends on the line, a JSDoc ` * …` line, or the end of a block
+// comment, with no code after the comment
+const COMMENT_LINE = /^\s*(?:$|\/\/|\*\/\s*$|(?:\/\*|\*(?!\/))(?:(?!\*\/).)*(?:\*\/\s*)?$)/u;
 
 const MAX_LISTED_FINDING_FILES = 10;
+
+/** Characters of each model text in the comment */
+const MAX_TEXT = 1000;
 
 export function maxCategory(a, b) {
   return CATEGORIES.indexOf(a) >= CATEGORIES.indexOf(b) ? a : b;
@@ -62,12 +72,23 @@ export function changedLines(patch = '') {
   return { added, removed };
 }
 
+// `matchesGlob` has no option to let wildcards match names that start with a
+// dot, such as `.lib` in `src/.lib/x.js`. A leading dot is swapped for a
+// character that globs treat as plain, in the path and in the glob alike.
+function hideDots(value) {
+  return value.replace(/(^|\/)\./gu, '$1\u2024');
+}
+
+function matchesGlobs(path, globs) {
+  return globs.some((glob) => matchesGlob(hideDots(path), hideDots(glob)));
+}
+
 function paths(file) {
   return file.previous_filename ? [file.filename, file.previous_filename] : [file.filename];
 }
 
 function matchesAny(file, globs) {
-  return paths(file).some((path) => globs.some((glob) => matchesGlob(path, glob)));
+  return paths(file).some((path) => matchesGlobs(path, globs));
 }
 
 /** Whether the file changes more than comments and blank lines. A file without a patch counts as code. */
@@ -79,16 +100,13 @@ function changesCode(file) {
   return [...added, ...removed].some((line) => !COMMENT_LINE.test(line));
 }
 
-function addedCode(file) {
-  return changedLines(file.patch).added.filter((line) => !COMMENT_LINE.test(line));
-}
-
 /**
  * The rules of the repository policy that match a pull request, each with the
  * minimum category it sets and the files that made it match.
  */
-export function evaluatePolicy({ title, authorTrusted, files }) {
+export function evaluatePolicy({ title, body, authorTrusted, headTrusted, files }) {
   const findings = [];
+  const shipped = files.filter((file) => matchesGlobs(file.filename, CONTENT_PATHS));
 
   for (const rule of PATH_RULES) {
     const matched = files.filter((file) => matchesAny(file, rule.paths) && (!rule.codeOnly || changesCode(file)));
@@ -98,24 +116,40 @@ export function evaluatePolicy({ title, authorTrusted, files }) {
   }
 
   for (const rule of CONTENT_RULES) {
-    const matched = files.filter(
-      (file) => matchesAny(file, rule.paths) && addedCode(file).some((line) => rule.pattern.test(line)),
-    );
+    const matched = shipped.filter((file) => changedLines(file.patch).added.some((line) => rule.pattern.test(line)));
     if (matched.length > 0) {
-      findings.push({
-        category: rule.category,
-        reason: `adds ${rule.reason}`,
-        files: matched.map((file) => file.filename),
-      });
+      findings.push({ category: rule.category, reason: rule.reason, files: matched.map((file) => file.filename) });
     }
+  }
+
+  // The content rules only see the changed lines, not the rest of a file that moves in
+  const movedIn = shipped.filter(
+    (file) => file.previous_filename && !matchesGlobs(file.previous_filename, CONTENT_PATHS),
+  );
+  if (movedIn.length > 0) {
+    findings.push({
+      category: 'amber',
+      reason: 'moves files into shipped code, so the rules did not check all of their content',
+      files: movedIn.map((file) => file.filename),
+    });
   }
 
   if (BREAKING_TITLE.test(title)) {
     findings.push({ category: 'red', reason: 'breaking change (`!` in the title)', files: [] });
   }
+  if (BREAKING_BODY.test(body ?? '')) {
+    findings.push({ category: 'red', reason: 'breaking change (`BREAKING CHANGE:` in the description)', files: [] });
+  }
 
   if (!authorTrusted) {
     findings.push({ category: 'amber', reason: 'the author is not a member of the organization', files: [] });
+  }
+  if (!headTrusted) {
+    findings.push({
+      category: 'amber',
+      reason: 'the head branch is in a fork that the author does not own',
+      files: [],
+    });
   }
 
   return findings;
@@ -123,6 +157,15 @@ export function evaluatePolicy({ title, authorTrusted, files }) {
 
 export function isTrustedAuthor({ authorAssociation, isMember }) {
   return isMember || TRUSTED_ASSOCIATIONS.includes(authorAssociation);
+}
+
+/**
+ * Whether the head branch is in the base repository or in a fork of the
+ * author. Others who can push to the head could change the pull request
+ * after a trusted author opened it.
+ */
+export function isTrustedHead(pr) {
+  return pr.head.repo?.full_name === pr.base.repo.full_name || pr.head.repo?.owner.login === pr.user.login;
 }
 
 function diffHeader(file) {
@@ -133,8 +176,10 @@ function diffHeader(file) {
 
 /**
  * The unified diff that the agent reads, within the character budget. `omitted`
- * lists the text files that changed but whose diff is not in `text`, because
- * the API sent no patch for them or the budget ran out.
+ * lists the changed files whose diff is not in `text`, because the API sent no
+ * patch for them (binary files, files that git treats as binary, very large
+ * diffs) or the budget ran out. Deleted files, pure renames and screenshots do
+ * not count as omitted.
  */
 export function buildDiff(files, budget = DIFF_BUDGET) {
   const ordered = [
@@ -147,7 +192,11 @@ export function buildDiff(files, budget = DIFF_BUDGET) {
 
   for (const file of ordered) {
     if (!file.patch) {
-      if (file.changes > 0 && !BINARY_FILE.test(file.filename)) {
+      const seen =
+        file.status === 'removed' ||
+        (file.status === 'renamed' && file.changes === 0) ||
+        matchesGlobs(file.filename, SCREENSHOT_PATHS);
+      if (!seen) {
         omitted.push(file.filename);
       }
       continue;
@@ -195,22 +244,30 @@ export function classify({ policyFindings, omitted, assessment }) {
   return { category, findings };
 }
 
-/** Model output is steered by the pull request, so keep it from pinging users or breaking the table */
+/**
+ * Model output and file names come from the pull request, so keep them from
+ * pinging users, breaking the table or making the comment too long
+ */
 function text(value) {
-  return String(value)
+  const line = String(value)
     .replace(/\s*\n\s*/gu, ' ')
     .replace(/@(?=[\w-])/gu, '@\u200b')
     .trim();
+  return line.length > MAX_TEXT ? `${line.slice(0, MAX_TEXT)}\u2026` : line;
 }
 
 function cell(value) {
   return text(value).replace(/\|/gu, '\\|');
 }
 
+function code(value) {
+  return `\`${text(value).replace(/`/gu, "'")}\``;
+}
+
 function renderFinding({ category, reason, files }) {
   const lines = [`- ${CATEGORY_TEXT[category].icon} **${category}**: ${reason}`];
   for (const file of files.slice(0, MAX_LISTED_FINDING_FILES)) {
-    lines.push(`  - \`${file}\``);
+    lines.push(`  - ${code(file)}`);
   }
   if (files.length > MAX_LISTED_FINDING_FILES) {
     lines.push(`  - and ${files.length - MAX_LISTED_FINDING_FILES} more`);
@@ -231,7 +288,7 @@ export function renderComment({ marker, result, assessment, headSha, runUrl }) {
 
   if (assessment) {
     const raised = category !== assessment.category ? ` The rules below raised it to **${category}**.` : '';
-    const agent = `The agent (\`${text(assessment.model)}\`)`;
+    const agent = `The agent (${code(assessment.model)})`;
     lines.push(`${agent} suggested **${assessment.category}**.${raised} ${text(assessment.summary)}`, '');
     lines.push('| Dimension | Risk | Reason |', '| --- | --- | --- |');
     for (const { key, title } of DIMENSIONS) {

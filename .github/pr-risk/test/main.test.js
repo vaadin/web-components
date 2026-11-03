@@ -30,6 +30,9 @@ function createGithub({ pr, files, comments = [] }) {
         get: () => Promise.resolve({ data: pr }),
         listFiles: 'listFiles',
       },
+      checks: {
+        create: record('createCheck'),
+      },
       issues: {
         listComments: 'listComments',
         createLabel: record('createLabel'),
@@ -81,7 +84,9 @@ describe('run', () => {
       title: 'docs: fix typo',
       body: '',
       author_association: 'CONTRIBUTOR',
-      head: { sha: 'abcdef0123456789' },
+      user: { login: 'dev' },
+      head: { sha: 'abcdef0123456789', repo: { full_name: 'vaadin/web-components', owner: { login: 'vaadin' } } },
+      base: { repo: { full_name: 'vaadin/web-components' } },
       labels: [{ name: 'risk: red' }, { name: 'a11y' }],
     };
   });
@@ -92,13 +97,14 @@ describe('run', () => {
     const core = createCore();
     await run({ github, context, core, env, assess: () => Promise.resolve(GREEN) });
 
+    // The old label goes first, so that a run that stops halfway leaves no label
     assert.deepEqual(
       github.calls.map(([name]) => name),
-      ['createLabel', 'addLabels', 'removeLabel', 'createComment'],
+      ['createCheck', 'removeLabel', 'createLabel', 'addLabels', 'createComment'],
     );
-    assert.deepEqual(github.calls[1][1].labels, ['risk: green']);
-    assert.equal(github.calls[2][1].name, 'risk: red');
-    assert.ok(github.calls[3][1].body.startsWith(MARKER));
+    assert.equal(github.calls[1][1].name, 'risk: red');
+    assert.deepEqual(github.calls[3][1].labels, ['risk: green']);
+    assert.ok(github.calls[4][1].body.startsWith(MARKER));
     assert.equal(core.outputs.category, 'green');
     assert.equal(core.failed, null);
   });
@@ -115,9 +121,9 @@ describe('run', () => {
 
     assert.deepEqual(
       github.calls.map(([name]) => name),
-      ['updateComment'],
+      ['createCheck', 'updateComment'],
     );
-    assert.equal(github.calls[0][1].comment_id, 2);
+    assert.equal(github.calls[1][1].comment_id, 2);
   });
 
   test('labels by the policy alone and fails the run when the assessment fails', async () => {
@@ -132,8 +138,52 @@ describe('run', () => {
       assess: () => Promise.reject(new Error('overloaded')),
     });
 
-    assert.deepEqual(github.calls[1][1].labels, ['risk: amber']);
+    assert.deepEqual(github.calls.find(([name]) => name === 'addLabels')[1].labels, ['risk: amber']);
     assert.equal(core.failed, 'The agent assessment failed: overloaded');
+  });
+
+  test('removes a green label before the assessment', async () => {
+    pr.labels = [{ name: 'risk: green' }];
+    const files = [{ filename: 'README.md', status: 'modified', changes: 2, patch: '@@\n-teh\n+the' }];
+    const github = createGithub({ pr, files });
+    let callsBeforeAssessment;
+    const assess = () => {
+      callsBeforeAssessment = github.calls.map(([name, params]) => `${name} ${params.name}`);
+      return Promise.resolve(GREEN);
+    };
+    await run({ github, context, core: createCore(), env, assess });
+
+    assert.deepEqual(callsBeforeAssessment, ['removeLabel risk: green']);
+    assert.deepEqual(github.calls.find(([name]) => name === 'addLabels')[1].labels, ['risk: green']);
+  });
+
+  test('reports the category as a check run on the head commit', async () => {
+    const files = [{ filename: 'README.md', status: 'modified', changes: 2, patch: '@@\n-teh\n+the' }];
+    const green = createGithub({ pr, files });
+    await run({ github: green, context, core: createCore(), env, assess: () => Promise.resolve(GREEN) });
+    const [, check] = green.calls.find(([name]) => name === 'createCheck');
+    assert.deepEqual(
+      { ...check, output: check.output.title },
+      {
+        owner: 'vaadin',
+        repo: 'web-components',
+        name: 'PR risk',
+        head_sha: 'abcdef0123456789',
+        status: 'completed',
+        conclusion: 'success',
+        external_id: '7',
+        details_url: 'https://github.com/vaadin/web-components/actions/runs/7',
+        output: 'Green',
+      },
+    );
+    assert.ok(check.output.summary.startsWith(MARKER));
+
+    pr.title = 'feat!: remove the API';
+    const red = createGithub({ pr, files });
+    await run({ github: red, context, core: createCore(), env, assess: () => Promise.resolve(GREEN) });
+    const [, redCheck] = red.calls.find(([name]) => name === 'createCheck');
+    assert.equal(redCheck.conclusion, 'neutral');
+    assert.equal(redCheck.output.title, 'Red');
   });
 
   test('skips draft pull requests', async () => {

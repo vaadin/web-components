@@ -73,6 +73,9 @@ function createDryRunGithub(writes) {
         },
         listFiles,
       },
+      checks: {
+        create: record('createCheck'),
+      },
       issues: {
         // An existing comment only decides between creating and updating it
         listComments: () => [],
