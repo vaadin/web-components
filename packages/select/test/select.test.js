@@ -21,6 +21,24 @@ import { html, render } from 'lit';
 describe('vaadin-select', () => {
   let select, valueButton;
 
+  it('closes the popup when disabled after opening', async () => {
+    const select = fixtureSync('<vaadin-select></vaadin-select>');
+    select.items = [
+      { label: 'Apple', value: 'apple' },
+      { label: 'Orange', value: 'orange' },
+    ];
+    select.value = 'apple';
+    await nextRender();
+    select.opened = true;
+    await nextRender();
+
+    select.disabled = true;
+    await nextRender();
+
+    expect(select.opened).to.be.false;
+    expect(select.value).to.equal('apple');
+  });
+
   describe('empty', () => {
     let select;
 

@@ -198,6 +198,10 @@ export const SelectBaseMixin = (superClass) =>
     updated(props) {
       super.updated(props);
 
+      if (props.has('disabled') && this.disabled) {
+        this.opened = false;
+      }
+
       if (props.has('_phone')) {
         this.toggleAttribute('phone', this._phone);
       }
