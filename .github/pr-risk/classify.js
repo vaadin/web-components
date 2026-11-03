@@ -1,6 +1,6 @@
 /**
  * Pure functions of the PR risk workflow: evaluate the repository policy,
- * build the diff that Claude reads, combine the policy with Claude's
+ * build the diff that the agent reads, combine the policy with the agent's
  * assessment into the final category, and render the PR comment.
  */
 import { matchesGlob } from 'node:path';
@@ -27,7 +27,7 @@ const CATEGORY_TEXT = {
 
 const LEVEL_ICONS = { low: '🟢', medium: '🟡', high: '🔴' };
 
-/** Characters of diff that Claude reads, about 100k tokens */
+/** Characters of diff that the agent reads, about 100k tokens */
 export const DIFF_BUDGET = 400_000;
 
 /** The pull request files endpoint lists at most this many files */
@@ -132,7 +132,7 @@ function diffHeader(file) {
 }
 
 /**
- * The unified diff that Claude reads, within the character budget. `omitted`
+ * The unified diff that the agent reads, within the character budget. `omitted`
  * lists the text files that changed but whose diff is not in `text`, because
  * the API sent no patch for them or the budget ran out.
  */
@@ -169,22 +169,26 @@ export function buildDiff(files, budget = DIFF_BUDGET) {
 }
 
 /**
- * The final category of a pull request: the highest of Claude's suggestion and
- * the minimum categories that the policy findings set. Without an assessment,
- * or when Claude did not see the whole diff, the pull request needs at least
- * one human approval.
+ * The final category of a pull request: the highest of the agent's suggestion
+ * and the minimum categories that the policy findings set. Without an
+ * assessment, or when the agent did not see the whole diff, the pull request
+ * needs at least one human approval.
  */
 export function classify({ policyFindings, omitted, assessment }) {
   const findings = [...policyFindings];
 
   if (omitted.length > 0) {
-    findings.push({ category: 'amber', reason: 'Claude did not see the whole diff', files: omitted });
+    findings.push({ category: 'amber', reason: 'the agent did not see the whole diff', files: omitted });
   }
 
   if (!assessment) {
-    findings.push({ category: 'amber', reason: 'the Claude assessment is not available', files: [] });
+    findings.push({ category: 'amber', reason: 'the agent assessment is not available', files: [] });
   } else if (assessment.category === 'green' && DIMENSIONS.some(({ key }) => assessment[key].level !== 'low')) {
-    findings.push({ category: 'amber', reason: 'Claude suggested green but rated a dimension above low', files: [] });
+    findings.push({
+      category: 'amber',
+      reason: 'the agent suggested green but rated a dimension above low',
+      files: [],
+    });
   }
 
   const category = findings.map((finding) => finding.category).reduce(maxCategory, assessment?.category ?? 'green');
@@ -227,7 +231,8 @@ export function renderComment({ marker, result, assessment, headSha, runUrl }) {
 
   if (assessment) {
     const raised = category !== assessment.category ? ` The rules below raised it to **${category}**.` : '';
-    lines.push(`Claude suggested **${assessment.category}**.${raised} ${text(assessment.summary)}`, '');
+    const agent = `The agent (\`${text(assessment.model)}\`)`;
+    lines.push(`${agent} suggested **${assessment.category}**.${raised} ${text(assessment.summary)}`, '');
     lines.push('| Dimension | Risk | Reason |', '| --- | --- | --- |');
     for (const { key, title } of DIMENSIONS) {
       const { level, reason } = assessment[key];
@@ -235,7 +240,7 @@ export function renderComment({ marker, result, assessment, headSha, runUrl }) {
     }
     lines.push('', `> ${text(assessment.rationale)}`, '');
   } else {
-    lines.push(`The Claude assessment failed, see the [workflow run](${runUrl}).`, '');
+    lines.push(`The agent assessment failed, see the [workflow run](${runUrl}).`, '');
   }
 
   if (findings.length > 0) {

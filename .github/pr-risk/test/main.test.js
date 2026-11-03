@@ -133,7 +133,7 @@ describe('run', () => {
     });
 
     assert.deepEqual(github.calls[1][1].labels, ['risk: amber']);
-    assert.equal(core.failed, 'The Claude assessment failed: overloaded');
+    assert.equal(core.failed, 'The agent assessment failed: overloaded');
   });
 
   test('skips draft pull requests', async () => {

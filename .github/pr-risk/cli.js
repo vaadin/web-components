@@ -7,10 +7,12 @@
  *
  * Reads GitHub with GH_TOKEN or GITHUB_TOKEN when set; public repositories
  * also work without, at a lower rate limit. Claude assesses the pull request
- * when ANTHROPIC_API_KEY is set, which needs the SDK (`npm ci` in this
- * directory). Without the key, the label comes from the policy alone, as in a
+ * when ANTHROPIC_API_KEY is set, OpenAI when only OPENAI_API_KEY is set (with
+ * the model in OPENAI_MODEL, if set). Either needs the SDKs (`npm ci` in this
+ * directory). Without a key, the label comes from the policy alone, as in a
  * workflow run whose assessment failed.
  */
+import { providerPackage } from './assess.js';
 import { LABELS, run } from './main.js';
 
 const USAGE = 'Usage: node .github/pr-risk/cli.js https://github.com/<owner>/<repo>/pull/<number>';
@@ -104,11 +106,12 @@ async function main() {
     return;
   }
 
-  if (process.env.ANTHROPIC_API_KEY) {
+  const sdk = providerPackage(process.env);
+  if (sdk) {
     try {
-      await import('@anthropic-ai/sdk');
+      await import(sdk);
     } catch {
-      console.error('ANTHROPIC_API_KEY is set, but the SDK is missing. Run `npm ci` in .github/pr-risk first.');
+      console.error(`${sdk} is missing. Run \`npm ci\` in .github/pr-risk first.`);
       process.exitCode = 1;
       return;
     }

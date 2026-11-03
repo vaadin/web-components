@@ -1,7 +1,7 @@
 /**
  * The repository policy of the PR risk workflow (.github/workflows/pr-risk.yml).
- * Every rule that matches a pull request sets a minimum category for it. Claude
- * can suggest a higher category than the policy, never a lower one.
+ * Every rule that matches a pull request sets a minimum category for it. The
+ * agent can suggest a higher category than the policy, never a lower one.
  *
  * The workflow runs the policy of the base branch, so a pull request that edits
  * this file is classified by the policy it replaces.

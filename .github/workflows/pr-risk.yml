@@ -5,8 +5,10 @@ name: PR Risk
 #   review pass,
 # - `risk: amber`: needs one human approval,
 # - `risk: red`: needs expert review and a human owner for the decision.
-# Claude rates the impact, blast radius, uncertainty and reversibility of the
-# change and suggests a category. The repository policy in
+# An agent rates the impact, blast radius, uncertainty and reversibility of
+# the change and suggests a category: Claude when the ANTHROPIC_API_KEY secret
+# is set, OpenAI when only the OPENAI_API_KEY secret is set (with the model in
+# the OPENAI_MODEL variable, if set). The repository policy in
 # .github/pr-risk/policy.js sets a minimum category from the changed paths,
 # the added code, the title and the author, which the suggestion cannot go
 # below. One comment on the pull request explains the label.
@@ -17,7 +19,7 @@ name: PR Risk
 # Runs on pull_request_target, so that pull requests from forks get a label
 # too. The job never checks out or runs the code of the pull request: the
 # policy and the scripts come from the base branch, and the diff is only read
-# from the API, as untrusted text for Claude, which gets no tools.
+# from the API, as untrusted text for the agent, which gets no tools.
 on:
   pull_request_target:
     types: [opened, reopened, synchronize, ready_for_review, edited]
@@ -79,6 +81,8 @@ jobs:
         uses: actions/github-script@v9
         env:
           ANTHROPIC_API_KEY: ${{ secrets.ANTHROPIC_API_KEY }}
+          OPENAI_API_KEY: ${{ secrets.OPENAI_API_KEY }}
+          OPENAI_MODEL: ${{ vars.OPENAI_MODEL }}
           AUTHOR_IS_MEMBER: ${{ steps.author.outputs.member }}
         with:
           script: |

@@ -27,6 +27,7 @@ function assessment(category, levels = {}) {
     reversibility: rating(levels.reversibility ?? 'low'),
     category,
     rationale: 'Because.',
+    model: 'gpt-5.5',
   };
 }
 
@@ -207,10 +208,10 @@ describe('classify', () => {
   test('sets amber without an assessment', () => {
     const { category, findings } = classify({ policyFindings: [], omitted: [], assessment: null });
     assert.equal(category, 'amber');
-    assert.deepEqual(reasons(findings), ['amber: the Claude assessment is not available']);
+    assert.deepEqual(reasons(findings), ['amber: the agent assessment is not available']);
   });
 
-  test('sets amber when Claude did not see the whole diff', () => {
+  test('sets amber when the agent did not see the whole diff', () => {
     const { category, findings } = classify({
       policyFindings: [],
       omitted: ['huge.js'],
@@ -218,7 +219,7 @@ describe('classify', () => {
     });
     assert.equal(category, 'amber');
     assert.deepEqual(findings, [
-      { category: 'amber', reason: 'Claude did not see the whole diff', files: ['huge.js'] },
+      { category: 'amber', reason: 'the agent did not see the whole diff', files: ['huge.js'] },
     ]);
   });
 
@@ -253,7 +254,10 @@ describe('renderComment', () => {
     const findings = [{ category: 'red', reason: 'CI', files: ['.github/x.yml'] }];
     const body = renderComment({ ...base, result: { category: 'red', findings }, assessment: assessment('amber') });
     assert.ok(body.startsWith('<!-- m -->\n### 🔴 PR risk: red\n'));
-    assert.match(body, /Claude suggested \*\*amber\*\*\. The rules below raised it to \*\*red\*\*\./u);
+    assert.match(
+      body,
+      /The agent \(`gpt-5\.5`\) suggested \*\*amber\*\*\. The rules below raised it to \*\*red\*\*\./u,
+    );
     assert.match(body, /\| Blast radius \| 🟢 low \| rated low \|/u);
     assert.match(body, /- 🔴 \*\*red\*\*: CI\n {2}- `\.github\/x\.yml`/u);
     assert.match(body, /Classified at 0123456789 /u);
@@ -267,8 +271,8 @@ describe('renderComment', () => {
   });
 
   test('links the run when the assessment failed', () => {
-    const findings = [{ category: 'amber', reason: 'the Claude assessment is not available', files: [] }];
+    const findings = [{ category: 'amber', reason: 'the agent assessment is not available', files: [] }];
     const body = renderComment({ ...base, result: { category: 'amber', findings }, assessment: null });
-    assert.match(body, /The Claude assessment failed, see the \[workflow run\]\(https:\/\/example\.com\/run\)\./u);
+    assert.match(body, /The agent assessment failed, see the \[workflow run\]\(https:\/\/example\.com\/run\)\./u);
   });
 });

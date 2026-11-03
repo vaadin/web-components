@@ -91,14 +91,10 @@ export async function run({ github, context, core, env = process.env, assess = d
 
   let assessment = null;
   let failure = null;
-  if (env.ANTHROPIC_API_KEY) {
-    try {
-      assessment = await assess({ pr, files, diff });
-    } catch (error) {
-      failure = `The Claude assessment failed: ${error.message}`;
-    }
-  } else {
-    failure = 'ANTHROPIC_API_KEY is not set, so Claude did not assess the pull request';
+  try {
+    assessment = await assess({ pr, files, diff, env });
+  } catch (error) {
+    failure = `The agent assessment failed: ${error.message}`;
   }
 
   const result = classify({ policyFindings, omitted: diff.omitted, assessment });
