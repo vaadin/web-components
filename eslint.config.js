@@ -232,6 +232,7 @@ export default [
     files: [
       'scripts/**/*.js',
       '.github/claude/**/*.js',
+      '.github/pr-risk/**/*.js',
       '*.config.js',
       'wtr-utils.js',
       'custom-rules/**/*.js',
@@ -250,6 +251,12 @@ export default [
     rules: {
       'no-console': 'off',
       'preserve-caught-error': 'off',
+    },
+  },
+  {
+    files: ['.github/pr-risk/**/*.js'],
+    rules: {
+      camelcase: 'off', // The GitHub and Anthropic APIs use snake_case fields
     },
   },
   {

@@ -1,0 +1,86 @@
+name: PR Risk
+
+# Classifies a pull request against main by risk and labels it:
+# - `risk: green`: can merge without human approval once CI and the agent
+#   review pass,
+# - `risk: amber`: needs one human approval,
+# - `risk: red`: needs expert review and a human owner for the decision.
+# Claude rates the impact, blast radius, uncertainty and reversibility of the
+# change and suggests a category. The repository policy in
+# .github/pr-risk/policy.js sets a minimum category from the changed paths,
+# the added code, the title and the author, which the suggestion cannot go
+# below. One comment on the pull request explains the label.
+#
+# To see how a pull request would be classified, without changing it, run
+# `node .github/pr-risk/cli.js <pull request URL>`.
+#
+# Runs on pull_request_target, so that pull requests from forks get a label
+# too. The job never checks out or runs the code of the pull request: the
+# policy and the scripts come from the base branch, and the diff is only read
+# from the API, as untrusted text for Claude, which gets no tools.
+on:
+  pull_request_target:
+    types: [opened, reopened, synchronize, ready_for_review, edited]
+    branches: [main]
+
+permissions: {}
+
+jobs:
+  classify:
+    # Drafts are classified once they are ready for review. Of the edits, only
+    # a new title can change the category.
+    if: |
+      github.event.pull_request.draft == false &&
+      (github.event.action != 'edited' || github.event.changes.title)
+    # One run per pull request at a time; a new push queues instead of
+    # aborting a run that may be mid-labeling. Group is enforced on the job
+    # level, so that a skipped run does not cancel a queued run.
+    concurrency:
+      group: pr-risk-${{ github.event.pull_request.number }}
+      cancel-in-progress: false
+    runs-on: ubuntu-26.04
+    timeout-minutes: 15
+    permissions:
+      contents: read
+      issues: write
+      pull-requests: write
+    steps:
+      # The base branch, not the pull request
+      - name: Checkout
+        uses: actions/checkout@v7
+        with:
+          persist-credentials: false
+          sparse-checkout: .github/pr-risk
+
+      - name: Setup Node
+        uses: actions/setup-node@v6
+        with:
+          node-version: '24'
+
+      - name: Install dependencies
+        working-directory: .github/pr-risk
+        run: npm ci --ignore-scripts --no-audit --no-fund
+
+      # On pull_request_target events, private members of the organization
+      # have the author association CONTRIBUTOR, so check the membership
+      - name: Check org membership
+        id: author
+        env:
+          GH_TOKEN: ${{ secrets.VAADIN_BOT_TOKEN || github.token }}
+          AUTHOR: ${{ github.event.pull_request.user.login }}
+        run: |
+          if gh api "orgs/${{ github.repository_owner }}/members/$AUTHOR" --silent; then
+            echo "member=true" >> "$GITHUB_OUTPUT"
+          else
+            echo "member=false" >> "$GITHUB_OUTPUT"
+          fi
+
+      - name: Classify
+        uses: actions/github-script@v9
+        env:
+          ANTHROPIC_API_KEY: ${{ secrets.ANTHROPIC_API_KEY }}
+          AUTHOR_IS_MEMBER: ${{ steps.author.outputs.member }}
+        with:
+          script: |
+            const { run } = await import(`${process.env.GITHUB_WORKSPACE}/.github/pr-risk/main.js`);
+            await run({ github, context, core });
