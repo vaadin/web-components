@@ -26,16 +26,20 @@ jobs:
     # drafts, chore PRs, and known bots. The pre-filter allows CONTRIBUTOR
     # because on pull_request events the author_association of a private org
     # member is reported as CONTRIBUTOR; the org-membership API call in the job
-    # is what actually confirms access.
+    # is what actually confirms access. As in vaadin/docs, pull requests from
+    # forks are not reviewed: the pre-filter skips their pull request events,
+    # and the job skips a "/code-review" comment on one.
     if: |
       (github.event_name == 'issue_comment' &&
        github.event.issue.pull_request &&
        github.event.comment.body == '/code-review' &&
        contains(fromJSON('["OWNER", "MEMBER", "COLLABORATOR"]'), github.event.comment.author_association)) ||
       (github.event_name == 'pull_request' &&
+       !github.event.pull_request.head.repo.fork &&
        github.event.action == 'review_requested' &&
        github.event.requested_reviewer.login == 'vaadin-review-bot') ||
       (github.event_name == 'pull_request' &&
+       !github.event.pull_request.head.repo.fork &&
        contains(fromJSON('["opened", "ready_for_review"]'), github.event.action) &&
        github.event.pull_request.draft == false &&
        !contains(fromJSON('["dependabot[bot]", "vaadin-bot"]'), github.event.pull_request.user.login) &&
@@ -45,16 +49,23 @@ jobs:
     runs-on: ubuntu-26.04
     permissions:
       contents: read
+      pull-requests: read
     outputs:
       eligible: ${{ steps.access.outputs.eligible }}
     steps:
-      - name: Check org membership
+      - name: Check org membership and pull request origin
         id: access
         env:
           GH_TOKEN: ${{ secrets.VAADIN_REVIEW_BOT || github.token }}
           REQUESTER: ${{ github.event.sender.login }}
         run: |
-          if gh api "orgs/${{ github.repository_owner }}/members/$REQUESTER" --silent; then
+          # A comment event does not say where the pull request comes from
+          cross=$(gh pr view "$PR_NUMBER" --repo "${{ github.repository }}" \
+            --json isCrossRepository --jq .isCrossRepository || echo true)
+          if [ "$cross" != false ]; then
+            echo "Skipping a pull request from a fork."
+            echo "eligible=false" >> "$GITHUB_OUTPUT"
+          elif gh api "orgs/${{ github.repository_owner }}/members/$REQUESTER" --silent; then
             echo "eligible=true" >> "$GITHUB_OUTPUT"
           else
             echo "eligible=false" >> "$GITHUB_OUTPUT"
