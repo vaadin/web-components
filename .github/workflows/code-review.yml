@@ -78,7 +78,6 @@ jobs:
       contents: read
       issues: write
       pull-requests: write
-      id-token: write
     steps:
       - name: React to trigger
         env:
@@ -97,6 +96,8 @@ jobs:
         with:
           ref: refs/pull/${{ env.PR_NUMBER }}/head
           fetch-depth: 1
+          # The review action authenticates with its `github-token` input.
+          persist-credentials: false
 
       - name: Setup Node
         uses: actions/setup-node@v6
