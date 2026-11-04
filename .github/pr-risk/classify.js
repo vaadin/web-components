@@ -4,15 +4,7 @@
  * assessment into the final category, and render the PR comment.
  */
 import { matchesGlob } from 'node:path';
-import {
-  BREAKING_BODY,
-  BREAKING_TITLE,
-  CONTENT_PATHS,
-  CONTENT_RULES,
-  PATH_RULES,
-  SCREENSHOT_PATHS,
-  TRUSTED_ASSOCIATIONS,
-} from './policy.js';
+import { BREAKING_BODY, BREAKING_TITLE, CONTENT_RULES, policyFor, TRUSTED_ASSOCIATIONS } from './policy.js';
 
 /** From lowest to highest risk */
 export const CATEGORIES = ['green', 'amber', 'red'];
@@ -107,15 +99,21 @@ function changesCode(file) {
   return [...added, ...removed].some((line) => !COMMENT_LINE.test(line));
 }
 
-/**
- * The rules of the repository policy that match a pull request, each with the
- * minimum category it sets and the files that made it match.
- */
-export function evaluatePolicy({ title, body, authorTrusted, headTrusted, files }) {
-  const findings = [];
-  const shipped = files.filter((file) => matchesGlobs(file.filename, CONTENT_PATHS));
+function isShipped(path, policy) {
+  return matchesGlobs(path, policy.contentPaths) && !matchesGlobs(path, policy.testPaths);
+}
 
-  for (const rule of PATH_RULES) {
+/**
+ * The rules of the policy of the `repository` (`owner/name`) that match a pull
+ * request, each with the minimum category it sets and the files that made it
+ * match.
+ */
+export function evaluatePolicy({ repository, title, body, authorTrusted, headTrusted, files }) {
+  const policy = policyFor(repository);
+  const findings = [];
+  const shipped = files.filter((file) => isShipped(file.filename, policy));
+
+  for (const rule of policy.pathRules) {
     const matched = files.filter((file) => matchesAny(file, rule.paths) && (!rule.codeOnly || changesCode(file)));
     if (matched.length > 0) {
       findings.push({ category: rule.category, reason: rule.reason, files: matched.map((file) => file.filename) });
@@ -130,9 +128,7 @@ export function evaluatePolicy({ title, body, authorTrusted, headTrusted, files 
   }
 
   // The content rules only see the changed lines, not the rest of a file that moves in
-  const movedIn = shipped.filter(
-    (file) => file.previous_filename && !matchesGlobs(file.previous_filename, CONTENT_PATHS),
-  );
+  const movedIn = shipped.filter((file) => file.previous_filename && !isShipped(file.previous_filename, policy));
   if (movedIn.length > 0) {
     findings.push({
       category: 'amber',
@@ -185,10 +181,11 @@ function diffHeader(file) {
  * The unified diff that the agent reads, within the character budget. `omitted`
  * lists the changed files whose diff is not in `text`, because the API sent no
  * patch for them (binary files, files that git treats as binary, very large
- * diffs) or the budget ran out. Deleted files, pure renames and screenshots do
- * not count as omitted.
+ * diffs) or the budget ran out. Deleted files, pure renames and the
+ * screenshots of the `repository` do not count as omitted.
  */
-export function buildDiff(files, budget = DIFF_BUDGET) {
+export function buildDiff(files, { repository, budget = DIFF_BUDGET } = {}) {
+  const { screenshotPaths } = policyFor(repository);
   const ordered = [
     ...files.filter((file) => !LOCKFILE.test(file.filename)),
     ...files.filter((file) => LOCKFILE.test(file.filename)),
@@ -202,7 +199,7 @@ export function buildDiff(files, budget = DIFF_BUDGET) {
       const seen =
         file.status === 'removed' ||
         (file.status === 'renamed' && file.changes === 0) ||
-        matchesGlobs(file.filename, SCREENSHOT_PATHS);
+        matchesGlobs(file.filename, screenshotPaths);
       if (!seen) {
         omitted.push(file.filename);
       }

@@ -1,6 +1,7 @@
 import assert from 'node:assert/strict';
 import { describe, test } from 'node:test';
 import { assess, decisionQuestions, decisionToAssessment, providerPackage, validateAssessment } from '../assess.js';
+import { repositoryContext } from '../criteria.js';
 
 const VALID = {
   summary: 'Fixes a typo.',
@@ -82,7 +83,7 @@ describe('validateAssessment', () => {
 
 describe('decisionQuestions', () => {
   test('asks for a score per dimension, from low to high, and for the category', () => {
-    const questions = decisionQuestions();
+    const questions = decisionQuestions('The context.');
     assert.deepEqual(
       questions.map(({ name, type }) => `${type} ${name}`),
       ['score impact', 'score blast_radius', 'score uncertainty', 'score reversibility', 'choice category'],
@@ -95,6 +96,7 @@ describe('decisionQuestions', () => {
       questions[4].choices.map(({ value }) => value),
       ['green', 'amber', 'red'],
     );
+    assert.ok(questions.every(({ instructions }) => instructions.startsWith('The context.\n\n')));
   });
 });
 
@@ -134,5 +136,29 @@ describe('assess', () => {
     await assert.rejects(assess({ pr, files: [], diff: { text: '', omitted: [] }, env: {} }), {
       message: 'Neither OPENAI_API_KEY nor ANTHROPIC_API_KEY is set',
     });
+  });
+});
+
+describe('repositoryContext', () => {
+  test('describes this repository in its own words', () => {
+    const context = repositoryContext({ full_name: 'vaadin/web-components', description: 'Web components' });
+    assert.match(context, /^The pull request is to the Vaadin web components repository, a monorepo/u);
+    assert.doesNotMatch(context, /Web components/u);
+  });
+
+  test('describes other repositories by their GitHub name, description and language', () => {
+    const context = repositoryContext({
+      full_name: 'vaadin/flow-components',
+      description: 'Java counterpart of Vaadin Web Components',
+      language: 'Java',
+    });
+    assert.match(
+      context,
+      /^The pull request is to the vaadin\/flow-components repository on GitHub\. Java counterpart of Vaadin Web Components Its main language is Java\.\n\n/u,
+    );
+    assert.match(
+      repositoryContext({ full_name: 'a/b', description: null, language: null }),
+      /on GitHub\.\n\nThe pull/u,
+    );
   });
 });

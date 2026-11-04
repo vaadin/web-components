@@ -7,7 +7,7 @@
  * explains each rating.
  */
 import { CATEGORIES, DIMENSIONS } from './classify.js';
-import { CATEGORY_CRITERIA, CONTEXT, DIMENSION_CRITERIA } from './criteria.js';
+import { CATEGORY_CRITERIA, DIMENSION_CRITERIA, repositoryContext } from './criteria.js';
 
 // Deliberately hard-coded; each is a one-line edit
 // The only model that the Decisions API supports
@@ -102,23 +102,24 @@ export function validateAssessment(value) {
 
 /**
  * The questions for the Decisions API: a score per dimension, with the levels
- * in the order of LEVELS, and a choice of the category. The criteria go into
- * every question, apart from the untrusted pull request in the input.
+ * in the order of LEVELS, and a choice of the category. The `context` of the
+ * repository and the criteria go into every question, apart from the
+ * untrusted pull request in the input.
  */
-export function decisionQuestions() {
+export function decisionQuestions(context) {
   const dimensions = DIMENSIONS.map(({ key, title }) => {
     const { question, ...levels } = DIMENSION_CRITERIA[key];
     return {
       name: key,
       type: 'score',
-      instructions: `${CONTEXT}\n\nRate the ${title.toLowerCase()} of the pull request: ${question}`,
+      instructions: `${context}\n\nRate the ${title.toLowerCase()} of the pull request: ${question}`,
       levels: LEVELS.map((label) => ({ label, description: levels[label] ?? 'Between low and high.' })),
     };
   });
   const category = {
     name: 'category',
     type: 'choice',
-    instructions: `${CONTEXT}\n\n${CATEGORY_CRITERIA.question}`,
+    instructions: `${context}\n\n${CATEGORY_CRITERIA.question}`,
     choices: CATEGORY_CRITERIA.choices,
   };
   return [...dimensions, category];
@@ -159,21 +160,24 @@ export function decisionToAssessment(response) {
   return { ...validateAssessment(assessment), model: response.model };
 }
 
-const CLAUDE_PROMPT = [
-  'You classify pull requests by risk, so that the repository knows how much human review a pull request needs before it is merged.',
-  CONTEXT,
-  '## Categories',
-  ...CATEGORY_CRITERIA.choices.map(({ value, description }) => `**${value}**: ${description}`),
-  CATEGORY_CRITERIA.question,
-  '## Dimensions',
-  'Rate each dimension low, medium or high, where high is the riskier end, with one sentence of reason that names the code behind the rating:',
-  DIMENSIONS.map(({ key }) => {
-    const { question, low, high } = DIMENSION_CRITERIA[key];
-    return `- **${key}**: ${question} Low: ${low} High: ${high}`;
-  }).join('\n'),
-  '## Output',
-  'Respond with a summary of one sentence on what the pull request changes, the four ratings, the category, and a rationale of at most three sentences that a reviewer can check against the diff.',
-].join('\n\n');
+/** The system prompt for Claude, with the `context` of the repository */
+export function claudePrompt(context) {
+  return [
+    'You classify pull requests by risk, so that the repository knows how much human review a pull request needs before it is merged.',
+    context,
+    '## Categories',
+    ...CATEGORY_CRITERIA.choices.map(({ value, description }) => `**${value}**: ${description}`),
+    CATEGORY_CRITERIA.question,
+    '## Dimensions',
+    'Rate each dimension low, medium or high, where high is the riskier end, with one sentence of reason that names the code behind the rating:',
+    DIMENSIONS.map(({ key }) => {
+      const { question, low, high } = DIMENSION_CRITERIA[key];
+      return `- **${key}**: ${question} Low: ${low} High: ${high}`;
+    }).join('\n'),
+    '## Output',
+    'Respond with a summary of one sentence on what the pull request changes, the four ratings, the category, and a rationale of at most three sentences that a reviewer can check against the diff.',
+  ].join('\n\n');
+}
 
 /** The npm package of the provider that `assess` uses with these environment variables, or null without a key */
 export function providerPackage(env) {
@@ -186,19 +190,26 @@ export function providerPackage(env) {
 // The SDKs are installed only by the workflow (npm ci in this directory), so
 // that the policy and its tests run without them
 
-async function assessWithDecisions(content, apiKey) {
+/** The untrusted input of a pull request and the context of its repository */
+function promptParts({ pr, files, diff }) {
+  return { content: buildUserMessage({ pr, files, diff }), context: repositoryContext(pr.base.repo) };
+}
+
+async function assessWithDecisions(pullRequest, apiKey) {
+  const { content, context } = promptParts(pullRequest);
   const { default: OpenAI } = await import('openai');
 
   const client = new OpenAI({ apiKey, ...CLIENT_OPTIONS });
   const response = await client.decisions.create({
     model: DECISIONS_MODEL,
     input: [{ role: 'user', content }],
-    questions: decisionQuestions(),
+    questions: decisionQuestions(context),
   });
   return decisionToAssessment(response);
 }
 
-async function assessWithClaude(content, apiKey) {
+async function assessWithClaude(pullRequest, apiKey) {
+  const { content, context } = promptParts(pullRequest);
   const { default: Anthropic } = await import('@anthropic-ai/sdk');
   const { jsonSchemaOutputFormat } = await import('@anthropic-ai/sdk/helpers/json-schema');
 
@@ -213,7 +224,7 @@ async function assessWithClaude(content, apiKey) {
     betas: ['server-side-fallback-2026-07-01'],
     fallbacks: 'default',
     output_config: { effort: EFFORT, format: { type, schema } },
-    system: CLAUDE_PROMPT,
+    system: claudePrompt(context),
     messages: [{ role: 'user', content }],
   });
 
@@ -235,12 +246,11 @@ async function assessWithClaude(content, apiKey) {
  * assessment is never mistaken for one.
  */
 export function assess({ pr, files, diff, env = process.env }) {
-  const content = buildUserMessage({ pr, files, diff });
   if (env.OPENAI_API_KEY) {
-    return assessWithDecisions(content, env.OPENAI_API_KEY);
+    return assessWithDecisions({ pr, files, diff }, env.OPENAI_API_KEY);
   }
   if (env.ANTHROPIC_API_KEY) {
-    return assessWithClaude(content, env.ANTHROPIC_API_KEY);
+    return assessWithClaude({ pr, files, diff }, env.ANTHROPIC_API_KEY);
   }
   return Promise.reject(new Error('Neither OPENAI_API_KEY nor ANTHROPIC_API_KEY is set'));
 }

@@ -122,7 +122,8 @@ export async function run({
     labels = labels.filter((name) => name !== LABELS.green.name);
   }
 
-  const diff = buildDiff(files);
+  const repository = pr.base.repo.full_name;
+  const diff = buildDiff(files, { repository });
   const assessing = assess({ pr, files, diff, env }).then(
     (assessment) => ({ assessment, failure: null }),
     (error) => ({ assessment: null, failure: `The agent assessment failed: ${error.message}` }),
@@ -133,6 +134,7 @@ export async function run({
     isMember: await isMember(pr.user.login),
   });
   const policyFindings = evaluatePolicy({
+    repository,
     title: pr.title,
     body: pr.body,
     authorTrusted,

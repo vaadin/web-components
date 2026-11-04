@@ -1,7 +1,9 @@
 /**
  * Classifies a pull request from the command line the way the PR risk workflow
  * does, without changing the pull request. Prints the comment that the
- * workflow would post and the label that it would set.
+ * workflow would post and the label that it would set. Pull requests of any
+ * repository work: those without a part of their own in policy.js get the
+ * generic rules, and the agent learns about the repository from GitHub.
  *
  *   node .github/pr-risk/cli.js [--no-cache] https://github.com/vaadin/web-components/pull/13345
  *

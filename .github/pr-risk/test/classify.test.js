@@ -18,8 +18,19 @@ function reasons(findings) {
   return findings.map(({ category, reason }) => `${category}: ${reason}`);
 }
 
-function policy(files, { title = 'fix: change something', body = '', authorTrusted = true, headTrusted = true } = {}) {
-  return reasons(evaluatePolicy({ title, body, authorTrusted, headTrusted, files }));
+const WEB_COMPONENTS = 'vaadin/web-components';
+
+function policy(
+  files,
+  {
+    repository = WEB_COMPONENTS,
+    title = 'fix: change something',
+    body = '',
+    authorTrusted = true,
+    headTrusted = true,
+  } = {},
+) {
+  return reasons(evaluatePolicy({ repository, title, body, authorTrusted, headTrusted, files }));
 }
 
 function added(...lines) {
@@ -63,6 +74,20 @@ describe('evaluatePolicy', () => {
     }
   });
 
+  test('reports a generic rule and its additions for this repository as one finding', () => {
+    const files = [file('.github/workflows/verify.yml', '@@\n+a'), file('scripts/updateVersion.js', '@@\n+a')];
+    assert.deepEqual(
+      evaluatePolicy({ repository: WEB_COMPONENTS, title: 'chore: x', authorTrusted: true, headTrusted: true, files }),
+      [
+        {
+          category: 'red',
+          reason: 'CI, release and repository automation, or config that runs code',
+          files: ['.github/workflows/verify.yml', 'scripts/updateVersion.js'],
+        },
+      ],
+    );
+  });
+
   test('matches names that start with a dot', () => {
     assert.deepEqual(policy([file('.github/workflows/.x.yml', '@@\n+a')]), [AUTOMATION]);
     assert.deepEqual(policy([file('packages/markdown/src/.lib/purify.js', '@@\n+a')]), ['red: HTML sanitization']);
@@ -87,6 +112,7 @@ describe('evaluatePolicy', () => {
 
   test('lists the files that matched a rule', () => {
     const findings = evaluatePolicy({
+      repository: WEB_COMPONENTS,
       title: 'chore: bump',
       body: '',
       authorTrusted: true,
@@ -215,6 +241,34 @@ describe('evaluatePolicy', () => {
   });
 });
 
+describe('evaluatePolicy for other repositories', () => {
+  const FLOW = 'vaadin/flow-components';
+  const JAVA = 'vaadin-grid-flow-parent/vaadin-grid-flow/src/main/java/com/vaadin/flow/component/grid/Grid.java';
+  const other = (files) => policy(files, { repository: FLOW });
+
+  test('applies only the generic rules', () => {
+    const patch = '@@ -1 +1 @@\n-a\n+b';
+    assert.deepEqual(other([file('packages/upload/src/vaadin-upload-mixin.js', patch)]), []);
+    assert.deepEqual(other([file('scripts/release.sh', patch)]), []);
+    assert.deepEqual(other([file('.github/workflows/validation.yml', patch)]), [AUTOMATION]);
+    assert.deepEqual(other([file('vaadin-grid-flow-parent/pom.xml', patch)]), ['amber: dependencies']);
+  });
+
+  test('checks the content of all files but tests', () => {
+    const sink = added('getElement().setProperty("innerHTML", html);');
+    assert.deepEqual(other([file(JAVA, sink)]), [SINK]);
+    assert.deepEqual(other([file(JAVA.replace('/main/', '/test/'), sink)]), []);
+    assert.deepEqual(other([file('frontend/grid.test.js', sink)]), []);
+  });
+
+  test('sets amber for tests that move into shipped code', () => {
+    const moved = file(JAVA, undefined, { previous_filename: JAVA.replace('/main/', '/test/'), changes: 0 });
+    assert.deepEqual(other([moved]), [
+      'amber: moves files into shipped code, so the rules did not check all of their content',
+    ]);
+  });
+});
+
 describe('isTrustedAuthor', () => {
   test('trusts members by association or membership', () => {
     assert.equal(isTrustedAuthor({ authorAssociation: 'MEMBER', isMember: false }), true);
@@ -262,18 +316,25 @@ describe('buildDiff', () => {
   });
 
   test('does not omit screenshots, deleted files or pure renames', () => {
-    const { omitted } = buildDiff([
+    const files = [
       file('packages/grid/test/visual/lumo/screenshots/grid/baseline/x.png', undefined, { changes: 0 }),
       file('old.js', undefined, { status: 'removed', changes: 9000 }),
       file('moved.js', undefined, { status: 'renamed', previous_filename: 'old.js', changes: 0 }),
-    ]);
-    assert.deepEqual(omitted, []);
+    ];
+    assert.deepEqual(buildDiff(files, { repository: WEB_COMPONENTS }).omitted, []);
+  });
+
+  test('omits the screenshots of a repository without screenshot paths', () => {
+    const screenshot = file('packages/grid/test/visual/lumo/screenshots/grid/baseline/x.png', undefined, {
+      changes: 0,
+    });
+    assert.deepEqual(buildDiff([screenshot], { repository: 'other/repo' }).omitted, [screenshot.filename]);
   });
 
   test('omits the patches over the budget and puts lockfiles last', () => {
     const { text, omitted } = buildDiff(
       [file('yarn.lock', `@@\n+${'x'.repeat(50)}`), file('a.js', '@@\n+a'), file('b.js', `@@\n+${'b'.repeat(50)}`)],
-      100,
+      { budget: 100 },
     );
     assert.match(text, /a\.js/u);
     assert.doesNotMatch(text, /yarn\.lock/u);
