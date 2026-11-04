@@ -156,6 +156,12 @@ Tests should inspect user-observable outcome instead of internal implementation 
 
 Cover DOM structure with snapshots tests, instead of multiple hand-written assertions.
 
+When a change affects styling, cover it with visual tests in the component package's `test/visual/base`, `test/visual/lumo` or `test/visual/aura` folder for every affected style layer, even when the CSS lives in a theme package, instead of asserting computed styles in unit tests (good: `await visualDiff(div, 'disabled')`, bad: `expect(getComputedStyle(el).opacity).to.equal('0.5')`). A screenshot catches layout, clipping and paint issues that a computed value cannot. Add a screenshot for the specific state the change targets (e.g. hover, disabled, RTL) rather than relying on an existing one that does not exercise it.
+
+When JS logic depends on a style value (e.g. a component that reads a CSS custom property to compute its layout), cover it with unit tests that set the style value and assert the resulting outcome.
+
+When a style controls whether an element is shown or interactive (e.g. `display`, `visibility`, `pointer-events`), cover it with unit tests asserting the computed value instead of visual tests, since a screenshot cannot tell a hidden element from a missing one, or show whether an element receives pointer events.
+
 When covering new mixins or mixin behavior with tests, cover it once in the mixin's package with tests against a synthetic element, instead of duplicating tests for all components that implement the mixin.
 
 Tests that exercise the interaction of components from more than one package should be placed under `test/integration/`, never in a specific component package.
