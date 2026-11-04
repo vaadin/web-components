@@ -85,29 +85,52 @@ async function upsertComment(github, repo, pr, body) {
   }
 }
 
-export async function run({ github, context, core, env = process.env, assess = defaultAssess }) {
+/**
+ * Classifies the pull request of the event. The steps that do not depend on
+ * each other run at the same time, as each one waits on a network call.
+ * `isMember` tells whether the author is a member of the organization; the
+ * workflow checks it in an earlier step.
+ */
+export async function run({
+  github,
+  context,
+  core,
+  env = process.env,
+  assess = defaultAssess,
+  isMember = () => Promise.resolve(env.AUTHOR_IS_MEMBER === 'true'),
+}) {
   const repo = context.repo;
   const pullNumber = context.payload.pull_request.number;
   const runUrl = `${context.serverUrl}/${repo.owner}/${repo.repo}/actions/runs/${context.runId}`;
 
   // Read the pull request again: a run that waited in the queue would act on a stale event
-  const { data: pr } = await github.rest.pulls.get({ ...repo, pull_number: pullNumber });
+  const [{ data: pr }, files] = await Promise.all([
+    github.rest.pulls.get({ ...repo, pull_number: pullNumber }),
+    github.paginate(github.rest.pulls.listFiles, { ...repo, pull_number: pullNumber, per_page: 100 }),
+  ]);
   if (pr.state !== 'open' || pr.draft) {
     core.notice(`#${pullNumber} is closed or a draft, skipping`);
     return;
   }
 
-  // A green label must not stay on code that this run has not assessed yet
+  // A green label must not stay on code that this run has not assessed yet.
+  // The removal starts before the assessment and ends before the labels are set.
   let labels = pr.labels.map(({ name }) => name);
+  let greenRemoved = Promise.resolve();
   if (labels.includes(LABELS.green.name)) {
-    await removeLabel(github, repo, pr, LABELS.green.name);
+    greenRemoved = removeLabel(github, repo, pr, LABELS.green.name);
     labels = labels.filter((name) => name !== LABELS.green.name);
   }
 
-  const files = await github.paginate(github.rest.pulls.listFiles, { ...repo, pull_number: pullNumber, per_page: 100 });
+  const diff = buildDiff(files);
+  const assessing = assess({ pr, files, diff, env }).then(
+    (assessment) => ({ assessment, failure: null }),
+    (error) => ({ assessment: null, failure: `The agent assessment failed: ${error.message}` }),
+  );
+
   const authorTrusted = isTrustedAuthor({
     authorAssociation: pr.author_association,
-    isMember: env.AUTHOR_IS_MEMBER === 'true',
+    isMember: await isMember(pr.user.login),
   });
   const policyFindings = evaluatePolicy({
     title: pr.title,
@@ -116,15 +139,8 @@ export async function run({ github, context, core, env = process.env, assess = d
     headTrusted: isTrustedHead(pr),
     files,
   });
-  const diff = buildDiff(files);
 
-  let assessment = null;
-  let failure = null;
-  try {
-    assessment = await assess({ pr, files, diff, env });
-  } catch (error) {
-    failure = `The agent assessment failed: ${error.message}`;
-  }
+  const [{ assessment, failure }] = await Promise.all([assessing, greenRemoved]);
 
   const result = classify({ policyFindings, omitted: diff.omitted, assessment });
   const body = renderComment({ marker: MARKER, result, assessment, headSha: pr.head.sha, runUrl });

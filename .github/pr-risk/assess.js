@@ -1,16 +1,18 @@
 /**
  * The agent's risk assessment of a pull request: one model call that reads the
  * pull request as untrusted text, without tools, and returns the four
- * dimension ratings and a suggested category as structured output. Uses Claude
- * when ANTHROPIC_API_KEY is set, and OpenAI when only OPENAI_API_KEY is set.
+ * dimension ratings and a suggested category. Uses the OpenAI Decisions API
+ * when OPENAI_API_KEY is set, which answers in seconds with a probability for
+ * each rating, and Claude when only ANTHROPIC_API_KEY is set, which also
+ * explains each rating.
  */
-import fs from 'node:fs';
-import { CATEGORIES } from './classify.js';
+import { CATEGORIES, DIMENSIONS } from './classify.js';
+import { CATEGORY_CRITERIA, CONTEXT, DIMENSION_CRITERIA } from './criteria.js';
 
 // Deliberately hard-coded; each is a one-line edit
+// The only model that the Decisions API supports
+const DECISIONS_MODEL = 'gpt-6-luna';
 const CLAUDE_MODEL = 'claude-opus-5-5';
-// OPENAI_MODEL overrides it
-const OPENAI_MODEL = 'gpt-5.5';
 const EFFORT = 'medium';
 const MAX_TOKENS = 16000;
 
@@ -47,8 +49,6 @@ export const ASSESSMENT_SCHEMA = {
   additionalProperties: false,
 };
 
-const SYSTEM_PROMPT = fs.readFileSync(new URL('prompt.md', import.meta.url), 'utf-8');
-
 const STATUS_LETTERS = { added: 'A', removed: 'D', modified: 'M', renamed: 'R', copied: 'C', changed: 'T' };
 
 function fileLine(file) {
@@ -72,34 +72,131 @@ export function buildUserMessage({ pr, files, diff }) {
 }
 
 /**
- * The assessment, when it matches the schema. The API does not enforce every
- * part of the schema: the Anthropic SDK turns enums into descriptions, for
- * example. An off-schema category would otherwise reach the labels.
+ * The assessment, when it matches the schema. The APIs do not enforce every
+ * part of it: the Anthropic SDK turns enums into descriptions, for example. An
+ * off-schema category would otherwise reach the labels. The texts come only
+ * from Claude, the probabilities only from the Decisions API.
  */
 export function validateAssessment(value) {
-  const isText = (field) => typeof field === 'string';
-  const isRating = (rating) => LEVELS.includes(rating?.level) && isText(rating.reason);
+  const isOptionalText = (field) => field === undefined || typeof field === 'string';
+  const isOptionalProbabilities = (field) =>
+    field === undefined ||
+    (typeof field === 'object' &&
+      field !== null &&
+      Object.values(field).every(
+        (probability) => typeof probability === 'number' && probability >= 0 && probability <= 1,
+      ));
+  const isRating = (rating) =>
+    LEVELS.includes(rating?.level) && isOptionalText(rating.reason) && isOptionalProbabilities(rating.probabilities);
   const valid =
     CATEGORIES.includes(value?.category) &&
-    isText(value.summary) &&
-    isText(value.rationale) &&
-    [value.impact, value.blast_radius, value.uncertainty, value.reversibility].every(isRating);
+    isOptionalProbabilities(value.probabilities) &&
+    isOptionalText(value.summary) &&
+    isOptionalText(value.rationale) &&
+    DIMENSIONS.every(({ key }) => isRating(value[key]));
   if (!valid) {
     throw new Error('The assessment does not match the schema');
   }
   return value;
 }
 
+/**
+ * The questions for the Decisions API: a score per dimension, with the levels
+ * in the order of LEVELS, and a choice of the category. The criteria go into
+ * every question, apart from the untrusted pull request in the input.
+ */
+export function decisionQuestions() {
+  const dimensions = DIMENSIONS.map(({ key, title }) => {
+    const { question, ...levels } = DIMENSION_CRITERIA[key];
+    return {
+      name: key,
+      type: 'score',
+      instructions: `${CONTEXT}\n\nRate the ${title.toLowerCase()} of the pull request: ${question}`,
+      levels: LEVELS.map((label) => ({ label, description: levels[label] ?? 'Between low and high.' })),
+    };
+  });
+  const category = {
+    name: 'category',
+    type: 'choice',
+    instructions: `${CONTEXT}\n\n${CATEGORY_CRITERIA.question}`,
+    choices: CATEGORY_CRITERIA.choices,
+  };
+  return [...dimensions, category];
+}
+
+/** The probability of each level label or choice value of an answer */
+function probabilitiesOf(answer) {
+  return Object.fromEntries(
+    (answer?.probabilities ?? []).map(({ label, value, probability }) => [label ?? value, probability]),
+  );
+}
+
+/**
+ * The assessment in a Decisions API response. Each dimension gets its most
+ * likely level. The `score` of an answer is not used: it is the average of
+ * the level indexes, weighted by their probabilities.
+ */
+export function decisionToAssessment(response) {
+  const refused = response.answers.filter((answer) => answer.type === 'refusal');
+  if (refused.length > 0) {
+    throw new Error(`${response.model} declined to answer ${refused.map((answer) => answer.name).join(', ')}`);
+  }
+  const answers = Object.fromEntries(response.answers.map((answer) => [answer.name, answer]));
+  const ratings = DIMENSIONS.map(({ key }) => {
+    const probabilities = probabilitiesOf(answers[key]);
+    // A tie goes to the riskier level
+    const level = LEVELS.reduce(
+      (best, label) => (probabilities[label] >= (probabilities[best] ?? -1) ? label : best),
+      null,
+    );
+    return [key, { level, probabilities }];
+  });
+  const assessment = {
+    ...Object.fromEntries(ratings),
+    category: answers.category?.choice,
+    probabilities: probabilitiesOf(answers.category),
+  };
+  return { ...validateAssessment(assessment), model: response.model };
+}
+
+const CLAUDE_PROMPT = [
+  'You classify pull requests by risk, so that the repository knows how much human review a pull request needs before it is merged.',
+  CONTEXT,
+  '## Categories',
+  ...CATEGORY_CRITERIA.choices.map(({ value, description }) => `**${value}**: ${description}`),
+  CATEGORY_CRITERIA.question,
+  '## Dimensions',
+  'Rate each dimension low, medium or high, where high is the riskier end, with one sentence of reason that names the code behind the rating:',
+  DIMENSIONS.map(({ key }) => {
+    const { question, low, high } = DIMENSION_CRITERIA[key];
+    return `- **${key}**: ${question} Low: ${low} High: ${high}`;
+  }).join('\n'),
+  '## Output',
+  'Respond with a summary of one sentence on what the pull request changes, the four ratings, the category, and a rationale of at most three sentences that a reviewer can check against the diff.',
+].join('\n\n');
+
 /** The npm package of the provider that `assess` uses with these environment variables, or null without a key */
 export function providerPackage(env) {
-  if (env.ANTHROPIC_API_KEY) {
-    return '@anthropic-ai/sdk';
+  if (env.OPENAI_API_KEY) {
+    return 'openai';
   }
-  return env.OPENAI_API_KEY ? 'openai' : null;
+  return env.ANTHROPIC_API_KEY ? '@anthropic-ai/sdk' : null;
 }
 
 // The SDKs are installed only by the workflow (npm ci in this directory), so
 // that the policy and its tests run without them
+
+async function assessWithDecisions(content, apiKey) {
+  const { default: OpenAI } = await import('openai');
+
+  const client = new OpenAI({ apiKey, ...CLIENT_OPTIONS });
+  const response = await client.decisions.create({
+    model: DECISIONS_MODEL,
+    input: [{ role: 'user', content }],
+    questions: decisionQuestions(),
+  });
+  return decisionToAssessment(response);
+}
 
 async function assessWithClaude(content, apiKey) {
   const { default: Anthropic } = await import('@anthropic-ai/sdk');
@@ -116,7 +213,7 @@ async function assessWithClaude(content, apiKey) {
     betas: ['server-side-fallback-2026-07-01'],
     fallbacks: 'default',
     output_config: { effort: EFFORT, format: { type, schema } },
-    system: SYSTEM_PROMPT,
+    system: CLAUDE_PROMPT,
     messages: [{ role: 'user', content }],
   });
 
@@ -132,32 +229,6 @@ async function assessWithClaude(content, apiKey) {
   return { ...validateAssessment(JSON.parse(output.text)), model: response.model };
 }
 
-async function assessWithOpenAI(content, apiKey, model) {
-  const { default: OpenAI } = await import('openai');
-
-  const client = new OpenAI({ apiKey, ...CLIENT_OPTIONS });
-  const response = await client.responses.create({
-    model,
-    max_output_tokens: MAX_TOKENS,
-    reasoning: { effort: EFFORT },
-    text: { format: { type: 'json_schema', name: 'assessment', schema: ASSESSMENT_SCHEMA, strict: true } },
-    instructions: SYSTEM_PROMPT,
-    input: content,
-  });
-
-  if (response.status !== 'completed') {
-    const reason = response.incomplete_details?.reason;
-    throw new Error(`${response.model} stopped with ${response.status}${reason ? ` (${reason})` : ''}`);
-  }
-  const refusal = response.output
-    .flatMap((item) => (item.type === 'message' ? item.content : []))
-    .find((part) => part.type === 'refusal');
-  if (refusal) {
-    throw new Error(`${response.model} refused: ${refusal.refusal}`);
-  }
-  return { ...validateAssessment(JSON.parse(response.output_text)), model: response.model };
-}
-
 /**
  * The assessment with the `model` that made it. Throws when no API key is set,
  * or the call fails or ends without a valid assessment, so that a lost
@@ -165,11 +236,11 @@ async function assessWithOpenAI(content, apiKey, model) {
  */
 export function assess({ pr, files, diff, env = process.env }) {
   const content = buildUserMessage({ pr, files, diff });
+  if (env.OPENAI_API_KEY) {
+    return assessWithDecisions(content, env.OPENAI_API_KEY);
+  }
   if (env.ANTHROPIC_API_KEY) {
     return assessWithClaude(content, env.ANTHROPIC_API_KEY);
   }
-  if (env.OPENAI_API_KEY) {
-    return assessWithOpenAI(content, env.OPENAI_API_KEY, env.OPENAI_MODEL || OPENAI_MODEL);
-  }
-  return Promise.reject(new Error('Neither ANTHROPIC_API_KEY nor OPENAI_API_KEY is set'));
+  return Promise.reject(new Error('Neither OPENAI_API_KEY nor ANTHROPIC_API_KEY is set'));
 }

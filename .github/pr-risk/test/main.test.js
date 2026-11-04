@@ -157,6 +157,46 @@ describe('run', () => {
     assert.deepEqual(github.calls.find(([name]) => name === 'addLabels')[1].labels, ['risk: green']);
   });
 
+  test('finishes removing a green label before it sets the label again', async () => {
+    pr.labels = [{ name: 'risk: green' }];
+    const files = [{ filename: 'README.md', status: 'modified', changes: 2, patch: '@@\n-teh\n+the' }];
+    const github = createGithub({ pr, files });
+    github.rest.issues.removeLabel = (params) => {
+      github.calls.push(['removeLabel', params]);
+      return new Promise((resolve) => {
+        setTimeout(() => {
+          github.calls.push(['removeLabel done', params]);
+          resolve({ data: {} });
+        }, 20);
+      });
+    };
+    await run({ github, context, core: createCore(), env, assess: () => Promise.resolve(GREEN) });
+
+    const labelCalls = github.calls.map(([name]) => name).filter((name) => /Label/u.test(name));
+    assert.deepEqual(labelCalls, ['removeLabel', 'removeLabel done', 'createLabel', 'addLabels']);
+  });
+
+  test('asks whether the author is a member', async () => {
+    const files = [{ filename: 'README.md', status: 'modified', changes: 2, patch: '@@\n-teh\n+the' }];
+    const asked = [];
+    const isMember = (login) => {
+      asked.push(login);
+      return Promise.resolve(false);
+    };
+    const core = createCore();
+    await run({
+      github: createGithub({ pr, files }),
+      context,
+      core,
+      env,
+      assess: () => Promise.resolve(GREEN),
+      isMember,
+    });
+
+    assert.deepEqual(asked, ['dev']);
+    assert.equal(core.outputs.category, 'amber');
+  });
+
   test('reports the category as a check run on the head commit', async () => {
     const files = [{ filename: 'README.md', status: 'modified', changes: 2, patch: '@@\n-teh\n+the' }];
     const green = createGithub({ pr, files });

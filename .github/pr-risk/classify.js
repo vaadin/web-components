@@ -54,8 +54,15 @@ const MAX_LISTED_FINDING_FILES = 10;
 /** Characters of each model text in the comment */
 const MAX_TEXT = 1000;
 
+/** The probability that a green suggestion needs, when the agent reports one */
+export const GREEN_PROBABILITY = 0.8;
+
 export function maxCategory(a, b) {
   return CATEGORIES.indexOf(a) >= CATEGORIES.indexOf(b) ? a : b;
+}
+
+function percent(value) {
+  return `${Math.round(value * 100)}%`;
 }
 
 /** The added and removed lines of a unified diff patch, without the hunk headers */
@@ -238,6 +245,12 @@ export function classify({ policyFindings, omitted, assessment }) {
       reason: 'the agent suggested green but rated a dimension above low',
       files: [],
     });
+  } else if (assessment.category === 'green' && assessment.probabilities?.green < GREEN_PROBABILITY) {
+    findings.push({
+      category: 'amber',
+      reason: `the agent gives green a probability of only ${percent(assessment.probabilities.green)}`,
+      files: [],
+    });
   }
 
   const category = findings.map((finding) => finding.category).reduce(maxCategory, assessment?.category ?? 'green');
@@ -258,6 +271,13 @@ function text(value) {
 
 function cell(value) {
   return text(value).replace(/\|/gu, '\\|');
+}
+
+/** Probabilities such as `low 53%, medium 40%, high 7%`, in the order the agent gave them */
+function percentages(probabilities = {}) {
+  return Object.entries(probabilities)
+    .map(([value, probability]) => `${cell(value)} ${percent(probability)}`)
+    .join(', ');
 }
 
 function code(value) {
@@ -287,15 +307,24 @@ export function renderComment({ marker, result, assessment, headSha, runUrl }) {
   ];
 
   if (assessment) {
-    const raised = category !== assessment.category ? ` The rules below raised it to **${category}**.` : '';
     const agent = `The agent (${code(assessment.model)})`;
-    lines.push(`${agent} suggested **${assessment.category}**.${raised} ${text(assessment.summary)}`, '');
-    lines.push('| Dimension | Risk | Reason |', '| --- | --- | --- |');
+    const likely = assessment.probabilities ? ` (${percentages(assessment.probabilities)})` : '';
+    const raised = category !== assessment.category ? ` The rules below raised it to **${category}**.` : '';
+    const summary = assessment.summary === undefined ? '' : ` ${text(assessment.summary)}`;
+    lines.push(`${agent} suggested **${assessment.category}**${likely}.${raised}${summary}`, '');
+
+    // Claude explains each rating, the Decisions API gives the probability of each level
+    const explained = DIMENSIONS.every(({ key }) => assessment[key].reason !== undefined);
+    lines.push(`| Dimension | Risk | ${explained ? 'Reason' : 'Probabilities'} |`, '| --- | --- | --- |');
     for (const { key, title } of DIMENSIONS) {
-      const { level, reason } = assessment[key];
-      lines.push(`| ${title} | ${LEVEL_ICONS[level]} ${level} | ${cell(reason)} |`);
+      const { level, reason, probabilities } = assessment[key];
+      const note = explained ? cell(reason) : percentages(probabilities);
+      lines.push(`| ${title} | ${LEVEL_ICONS[level]} ${level} | ${note} |`);
     }
-    lines.push('', `> ${text(assessment.rationale)}`, '');
+    lines.push('');
+    if (assessment.rationale !== undefined) {
+      lines.push(`> ${text(assessment.rationale)}`, '');
+    }
   } else {
     lines.push(`The agent assessment failed, see the [workflow run](${runUrl}).`, '');
   }

@@ -329,6 +329,15 @@ describe('classify', () => {
     assert.equal(category, 'amber');
   });
 
+  test('sets amber for a green suggestion that the agent is not sure of', () => {
+    const unsure = { ...assessment('green'), probabilities: { green: 0.75, amber: 0.2, red: 0.05 } };
+    assert.deepEqual(reasons(classify({ policyFindings: [], omitted: [], assessment: unsure }).findings), [
+      'amber: the agent gives green a probability of only 75%',
+    ]);
+    const sure = { ...assessment('green'), probabilities: { green: 0.85, amber: 0.1, red: 0.05 } };
+    assert.equal(classify({ policyFindings: [], omitted: [], assessment: sure }).category, 'green');
+  });
+
   test('accepts an amber suggestion with a dimension above low', () => {
     assert.deepEqual(
       classify({ policyFindings: [], omitted: [], assessment: assessment('amber', { impact: 'medium' }) }),
@@ -358,6 +367,24 @@ describe('renderComment', () => {
     assert.match(body, /\| Blast radius \| 🟢 low \| rated low \|/u);
     assert.match(body, /- 🔴 \*\*red\*\*: CI\n {2}- `\.github\/x\.yml`/u);
     assert.match(body, /Classified at 0123456789 /u);
+  });
+
+  test('shows the probabilities when the agent gives no reasons', () => {
+    const level = (name, low, medium, high) => ({ level: name, probabilities: { low, medium, high } });
+    const decided = {
+      impact: level('low', 1, 0, 0),
+      blast_radius: level('medium', 0.2, 0.704, 0.096),
+      uncertainty: level('low', 0.9, 0.1, 0),
+      reversibility: level('high', 0, 0.4, 0.6),
+      category: 'amber',
+      probabilities: { green: 0.15, amber: 0.8, red: 0.05 },
+      model: 'gpt-6-luna',
+    };
+    const body = renderComment({ ...base, result: { category: 'amber', findings: [] }, assessment: decided });
+    assert.match(body, /The agent \(`gpt-6-luna`\) suggested \*\*amber\*\* \(green 15%, amber 80%, red 5%\)\.\n/u);
+    assert.match(body, /\| Dimension \| Risk \| Probabilities \|/u);
+    assert.match(body, /\| Blast radius \| 🟡 medium \| low 20%, medium 70%, high 10% \|/u);
+    assert.doesNotMatch(body, /undefined|^> /mu);
   });
 
   test('keeps model text from pinging users or breaking the table', () => {
