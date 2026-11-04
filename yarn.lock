@@ -414,16 +414,6 @@
   resolved "https://registry.yarnpkg.com/@blazediff/core/-/core-1.10.0.tgz#cad0666655ed0a81517e5cea68b4013fe8e44459"
   integrity sha512-AOQff0zgR7cGsZL+4E7hVkmujoPUpm0J9xzWGWZj5wCjd3gmxESXAPfKyuzs93VdpQNFhHlBhfOjrcZ+XTERtQ==
 
-"@cacheable/memory@^2.0.8":
-  version "2.0.8"
-  resolved "https://registry.yarnpkg.com/@cacheable/memory/-/memory-2.0.8.tgz#244b735e4d087c7826f2ce3ea45b57a56b272792"
-  integrity sha512-FvEb29x5wVwu/Kf93IWwsOOEuhHh6dYCJF3vcKLzXc0KXIW181AOzv6ceT4ZpBHDvAfG60eqb+ekmrnLHIy+jw==
-  dependencies:
-    "@cacheable/utils" "^2.4.0"
-    "@keyv/bigmap" "^1.3.1"
-    hookified "^1.15.1"
-    keyv "^5.6.0"
-
 "@cacheable/memory@^2.2.0":
   version "2.2.0"
   resolved "https://registry.yarnpkg.com/@cacheable/memory/-/memory-2.2.0.tgz#72aeb8b051f6d597d10ac8595b94ad8302bd2239"
@@ -432,14 +422,6 @@
     "@cacheable/utils" "^2.5.0"
     "@keyv/bigmap" "^1.3.1"
     hookified "^1.15.1"
-    keyv "^5.6.0"
-
-"@cacheable/utils@^2.4.0":
-  version "2.4.0"
-  resolved "https://registry.yarnpkg.com/@cacheable/utils/-/utils-2.4.0.tgz#923512395c037c74ed4c918e6ffa2f6b7407d472"
-  integrity sha512-PeMMsqjVq+bF0WBsxFBxr/WozBJiZKY0rUojuaCoIaKnEl3Ju1wfEwS+SV1DU/cSe8fqHIPiYJFif8T3MVt4cQ==
-  dependencies:
-    hashery "^1.5.0"
     keyv "^5.6.0"
 
 "@cacheable/utils@^2.5.0":
@@ -3555,17 +3537,6 @@ cache-content-type@^1.0.0:
     mime-types "^2.1.18"
     ylru "^1.2.0"
 
-cacheable@^2.3.2:
-  version "2.3.3"
-  resolved "https://registry.yarnpkg.com/cacheable/-/cacheable-2.3.3.tgz#abf80984137168486e3eb9b19fb7e42f22a0b1bc"
-  integrity sha512-iffYMX4zxKp54evOH27fm92hs+DeC1DhXmNVN8Tr94M/iZIV42dqTHSR2Ik4TOSPyOAwKr7Yu3rN9ALoLkbWyQ==
-  dependencies:
-    "@cacheable/memory" "^2.0.8"
-    "@cacheable/utils" "^2.4.0"
-    hookified "^1.15.0"
-    keyv "^5.6.0"
-    qified "^0.6.0"
-
 cacheable@^2.5.0:
   version "2.5.0"
   resolved "https://registry.yarnpkg.com/cacheable/-/cacheable-2.5.0.tgz#d142d41043e5a865f6053cc70ef4e3ad068bd5ce"
@@ -5374,19 +5345,12 @@ figures@^6.1.0:
   dependencies:
     is-unicode-supported "^2.0.0"
 
-"file-entry-cache@11.1.5 || >11.1.6 <12":
+"file-entry-cache@11.1.5 || >11.1.6 <12", file-entry-cache@^11.1.2:
   version "11.1.5"
   resolved "https://registry.yarnpkg.com/file-entry-cache/-/file-entry-cache-11.1.5.tgz#c8210eb055de63e68685ccfb6a017e386d4577d0"
   integrity sha512-+PFTHITI08JIGhnNpGNI8T8inUpgZfk3GNEqfT9R2zZV2iFXg3CvqzSl/uEhs7TSGujYRELEANyDvS8Fj7+S7Q==
   dependencies:
     flat-cache "^6.1.23"
-
-file-entry-cache@^11.1.2:
-  version "11.1.2"
-  resolved "https://registry.yarnpkg.com/file-entry-cache/-/file-entry-cache-11.1.2.tgz#5b2014aac2259b5591ae6fd7f6d1ed2153545abe"
-  integrity sha512-N2WFfK12gmrK1c1GXOqiAJ1tc5YE+R53zvQ+t5P8S5XhnmKYVB5eZEiLNZKDSmoG8wqqbF9EXYBBW/nef19log==
-  dependencies:
-    flat-cache "^6.1.20"
 
 filesize@^10.1.6:
   version "10.1.6"
@@ -5443,15 +5407,6 @@ find-yarn-workspace-root@^2.0.0:
   dependencies:
     micromatch "^4.0.2"
 
-flat-cache@^6.1.20:
-  version "6.1.20"
-  resolved "https://registry.yarnpkg.com/flat-cache/-/flat-cache-6.1.20.tgz#9db7bf5278c4ca29c92492dcb0c6a52a7017ff83"
-  integrity sha512-AhHYqwvN62NVLp4lObVXGVluiABTHapoB57EyegZVmazN+hhGhLTn3uZbOofoTw4DSDvVCadzzyChXhOAvy8uQ==
-  dependencies:
-    cacheable "^2.3.2"
-    flatted "^3.3.3"
-    hookified "^1.15.0"
-
 flat-cache@^6.1.23:
   version "6.1.23"
   resolved "https://registry.yarnpkg.com/flat-cache/-/flat-cache-6.1.23.tgz#735dc888c271868d7301b3bbb8edba5028afb61d"
@@ -5461,7 +5416,7 @@ flat-cache@^6.1.23:
     flatted "^3.4.2"
     hookified "^1.15.0"
 
-flatted@^3.3.3, flatted@^3.4.2, flatted@^3.4.4:
+flatted@^3.4.2, flatted@^3.4.4:
   version "3.4.4"
   resolved "https://registry.yarnpkg.com/flatted/-/flatted-3.4.4.tgz#aeeca2a506303f0cee61c59e6c9f2a88d2f29fc6"
   integrity sha512-5+ybhBZANEJxaH3X5evAFatUxLfEHSr7n6kYJ+1Qd0mUqr4eu9gIf6GDbWHf8RJijHrjjO8G+la14SlL2SeS1Q==
@@ -5859,14 +5814,7 @@ has-tostringtag@^1.0.2:
   dependencies:
     has-symbols "^1.0.3"
 
-hashery@^1.4.0, hashery@^1.5.0:
-  version "1.5.0"
-  resolved "https://registry.yarnpkg.com/hashery/-/hashery-1.5.0.tgz#f28a8068b8d08f5a40afd2a5515e4a1c8b84444a"
-  integrity sha512-nhQ6ExaOIqti2FDWoEMWARUqIKyjr2VcZzXShrI+A3zpeiuPWzx6iPftt44LhP74E5sW36B75N6VHbvRtpvO6Q==
-  dependencies:
-    hookified "^1.14.0"
-
-hashery@^1.5.1:
+hashery@^1.4.0, hashery@^1.5.1:
   version "1.5.1"
   resolved "https://registry.yarnpkg.com/hashery/-/hashery-1.5.1.tgz#4ba82ad54911ac617467870845d57a9fe508a400"
   integrity sha512-iZyKG96/JwPz1N55vj2Ie2vXbhu440zfUfJvSwEqEbeLluk7NnapfGqa7LH0mOsnDxTF85Mx8/dyR6HfqcbmbQ==
@@ -5902,7 +5850,7 @@ highcharts@12.2.0:
   resolved "https://registry.yarnpkg.com/highcharts/-/highcharts-12.2.0.tgz#264633af7e815f0f6291c0d570b1da12e323e9de"
   integrity sha512-UUN+osTP3aeGc4KmoMuWAjzpKif8GYHFozzYI4O8h1ILGof25M/ZGBpXLvgqf1z0LVh7N9eG7i0HnzMfjcR4nA==
 
-hookified@^1.14.0, hookified@^1.15.0, hookified@^1.15.1:
+hookified@^1.15.0, hookified@^1.15.1:
   version "1.15.1"
   resolved "https://registry.yarnpkg.com/hookified/-/hookified-1.15.1.tgz#b1fafeaa5489cdc29cb85546a8f837ed4ffbbcb6"
   integrity sha512-MvG/clsADq1GPM2KGo2nyfaWVyn9naPiXrqIe4jYjXNZQt238kWyOGrsyc/DmRAQ+Re6yeo6yX/yoNCG5KAEVg==
@@ -9034,13 +8982,6 @@ qified@^0.10.1:
   integrity sha512-+Owyggi9IxT1ePKGafcI87ubSmxol6smwJ+RAHDQlx9+9cPwFWDiKFFCPuWhr9ignlGpZ9vDQLw67N4dcTVFEA==
   dependencies:
     hookified "^2.1.1"
-
-qified@^0.6.0:
-  version "0.6.0"
-  resolved "https://registry.yarnpkg.com/qified/-/qified-0.6.0.tgz#a9c33f51fa37d03003065638bb7dff45d7a81297"
-  integrity sha512-tsSGN1x3h569ZSU1u6diwhltLyfUWDp3YbFHedapTmpBl0B3P6U3+Qptg7xu+v+1io1EwhdPyyRHYbEw0KN2FA==
-  dependencies:
-    hookified "^1.14.0"
 
 qs@^6.5.2:
   version "6.17.0"
