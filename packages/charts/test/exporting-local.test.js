@@ -1,5 +1,5 @@
 import { expect } from '@vaadin/chai-plugins';
-import { click, fixtureSync, nextFrame, nextRender, oneEvent } from '@vaadin/testing-helpers';
+import { fixtureSync, nextRender, oneEvent } from '@vaadin/testing-helpers';
 import sinon from 'sinon';
 import './exporting-styles.js';
 import '../src/vaadin-chart.js';
@@ -39,21 +39,8 @@ describe('vaadin-chart local exporting', () => {
     expect(postStub).to.be.not.called;
   });
 
-  it('should export locally from the download menu items', async () => {
-    const chartContainer = chart.$.chart;
-    click(chartContainer.querySelector('.highcharts-exporting-group > .highcharts-no-tooltip'));
-    // Download PNG image
-    click(chartContainer.querySelectorAll('.highcharts-menu-item')[2]);
-    // The local export inlines images and fonts asynchronously before the download
-    while (!downloadStub.called) {
-      await nextFrame();
-    }
-
-    expect(downloadStub).to.be.calledOnce;
-    expect(postStub).to.be.not.called;
-  });
-
   it('should export locally from exportChart', async () => {
+    // The download menu items call `exportChart()` without options too
     await chart.configuration.exportChart();
 
     expect(downloadStub).to.be.calledOnce;

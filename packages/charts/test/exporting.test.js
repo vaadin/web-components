@@ -305,33 +305,34 @@ describe('vaadin-chart exporting', () => {
       expect(document.body.hasAttribute(attributeName)).to.be.false;
     });
 
-    it('should remove the shadow styles from the body when the chart is reset during the export', async () => {
-      // An export that has started and will not fire `afterExport`, as the chart gets replaced
-      Highcharts.fireEvent(chart.configuration, 'beforeExport');
-      const style = chart.tempBodyStyle;
-      chart.updateConfiguration({ title: { text: 'Reset' } }, true);
-      await Promise.resolve();
+    ['beforeExport', 'beforePrint'].forEach((event) => {
+      // An export or print that has started and will not fire its after event, as the chart gets destroyed
+      it(`should remove the shadow styles from the body when the chart is reset after ${event}`, async () => {
+        Highcharts.fireEvent(chart.configuration, event);
+        const style = chart.tempBodyStyle;
+        chart.updateConfiguration({ title: { text: 'Reset' } }, true);
+        await Promise.resolve();
 
-      expect(style.isConnected).to.be.false;
-      expect(chart.tempBodyStyle).to.be.undefined;
-      expect(document.body.hasAttribute(attributeName)).to.be.false;
+        expect(style.isConnected).to.be.false;
+        expect(chart.tempBodyStyle).to.be.undefined;
+        expect(document.body.hasAttribute(attributeName)).to.be.false;
 
-      // Later exports clean up after themselves again
-      await chart.configuration.exporting.getSVGForExport({}, {});
-      expect(chart.tempBodyStyle).to.be.undefined;
-      expect(document.body.hasAttribute(attributeName)).to.be.false;
-    });
+        // Later exports clean up after themselves again
+        await chart.configuration.exporting.getSVGForExport({}, {});
+        expect(chart.tempBodyStyle).to.be.undefined;
+        expect(document.body.hasAttribute(attributeName)).to.be.false;
+      });
 
-    it('should remove the shadow styles from the body when the chart is detached during the export', async () => {
-      // An export that has started and will not fire `afterExport`, as the chart gets destroyed
-      Highcharts.fireEvent(chart.configuration, 'beforeExport');
-      const style = chart.tempBodyStyle;
-      chart.remove();
-      await Promise.resolve();
+      it(`should remove the shadow styles from the body when the chart is detached after ${event}`, async () => {
+        Highcharts.fireEvent(chart.configuration, event);
+        const style = chart.tempBodyStyle;
+        chart.remove();
+        await Promise.resolve();
 
-      expect(style.isConnected).to.be.false;
-      expect(chart.tempBodyStyle).to.be.undefined;
-      expect(document.body.hasAttribute(attributeName)).to.be.false;
+        expect(style.isConnected).to.be.false;
+        expect(chart.tempBodyStyle).to.be.undefined;
+        expect(document.body.hasAttribute(attributeName)).to.be.false;
+      });
     });
   });
 
