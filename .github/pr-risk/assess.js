@@ -1,10 +1,13 @@
 /**
  * The agent's risk assessment of a pull request: one model call that reads the
  * pull request as untrusted text, without tools, and returns the four
- * dimension ratings and a suggested category. Uses the OpenAI Decisions API
- * when OPENAI_API_KEY is set, which answers in seconds with a probability for
- * each rating, and Claude when only ANTHROPIC_API_KEY is set, which also
- * explains each rating.
+ * dimension ratings and a suggested category. Uses the first provider whose
+ * key is set:
+ * - OPENAI_API_KEY: the OpenAI Decisions API, which answers in seconds with a
+ *   probability for each rating,
+ * - ANTHROPIC_API_KEY: Claude, which also explains each rating,
+ * - OPENROUTER_API_KEY: a model on OpenRouter, OPENROUTER_MODEL or the
+ *   default below, which also explains each rating.
  */
 import { CATEGORIES, DIMENSIONS } from './classify.js';
 import { CATEGORY_CRITERIA, DIMENSION_CRITERIA, repositoryContext } from './criteria.js';
@@ -13,6 +16,9 @@ import { CATEGORY_CRITERIA, DIMENSION_CRITERIA, repositoryContext } from './crit
 // The only model that the Decisions API supports
 const DECISIONS_MODEL = 'gpt-6-luna';
 const CLAUDE_MODEL = 'claude-opus-5-5';
+// OPENROUTER_MODEL overrides it
+const OPENROUTER_MODEL = 'openai/gpt-6.1-sol';
+const OPENROUTER_URL = 'https://openrouter.ai/api/v1';
 const EFFORT = 'medium';
 const MAX_TOKENS = 16000;
 
@@ -160,8 +166,8 @@ export function decisionToAssessment(response) {
   return { ...validateAssessment(assessment), model: response.model };
 }
 
-/** The system prompt for Claude, with the `context` of the repository */
-export function claudePrompt(context) {
+/** The system prompt for the providers that explain their ratings, with the `context` of the repository */
+export function systemPrompt(context) {
   return [
     'You classify pull requests by risk, so that the repository knows how much human review a pull request needs before it is merged.',
     context,
@@ -184,7 +190,27 @@ export function providerPackage(env) {
   if (env.OPENAI_API_KEY) {
     return 'openai';
   }
-  return env.ANTHROPIC_API_KEY ? '@anthropic-ai/sdk' : null;
+  if (env.ANTHROPIC_API_KEY) {
+    return '@anthropic-ai/sdk';
+  }
+  // OpenRouter serves its models through the OpenAI chat completions API
+  return env.OPENROUTER_API_KEY ? 'openai' : null;
+}
+
+/** The assessment in a chat completion response of OpenRouter */
+export function chatToAssessment(response) {
+  const choice = response.choices?.[0];
+  if (!choice) {
+    throw new Error(`OpenRouter returned no answer${response.error ? `: ${response.error.message}` : ''}`);
+  }
+  if (choice.message?.refusal) {
+    throw new Error(`${response.model} refused: ${choice.message.refusal}`);
+  }
+  // Checked before parsing, so that a cut-off answer says so
+  if (choice.finish_reason !== 'stop') {
+    throw new Error(`${response.model} stopped with ${choice.finish_reason}`);
+  }
+  return { ...validateAssessment(JSON.parse(choice.message.content)), model: response.model };
 }
 
 // The SDKs are installed only by the workflow (npm ci in this directory), so
@@ -224,7 +250,7 @@ async function assessWithClaude(pullRequest, apiKey) {
     betas: ['server-side-fallback-2026-07-01'],
     fallbacks: 'default',
     output_config: { effort: EFFORT, format: { type, schema } },
-    system: claudePrompt(context),
+    system: systemPrompt(context),
     messages: [{ role: 'user', content }],
   });
 
@@ -240,6 +266,29 @@ async function assessWithClaude(pullRequest, apiKey) {
   return { ...validateAssessment(JSON.parse(output.text)), model: response.model };
 }
 
+async function assessWithOpenRouter(pullRequest, apiKey, model) {
+  const { content, context } = promptParts(pullRequest);
+  const { default: OpenAI } = await import('openai');
+
+  const client = new OpenAI({ apiKey, baseURL: OPENROUTER_URL, ...CLIENT_OPTIONS });
+  const response = await client.chat.completions.create({
+    model,
+    max_tokens: MAX_TOKENS,
+    reasoning: { effort: EFFORT },
+    response_format: {
+      type: 'json_schema',
+      json_schema: { name: 'assessment', strict: true, schema: ASSESSMENT_SCHEMA },
+    },
+    // Only route to providers that support the JSON schema
+    provider: { require_parameters: true },
+    messages: [
+      { role: 'system', content: systemPrompt(context) },
+      { role: 'user', content },
+    ],
+  });
+  return chatToAssessment(response);
+}
+
 /**
  * The assessment with the `model` that made it. Throws when no API key is set,
  * or the call fails or ends without a valid assessment, so that a lost
@@ -252,5 +301,9 @@ export function assess({ pr, files, diff, env = process.env }) {
   if (env.ANTHROPIC_API_KEY) {
     return assessWithClaude({ pr, files, diff }, env.ANTHROPIC_API_KEY);
   }
-  return Promise.reject(new Error('Neither OPENAI_API_KEY nor ANTHROPIC_API_KEY is set'));
+  if (env.OPENROUTER_API_KEY) {
+    const model = env.OPENROUTER_MODEL || OPENROUTER_MODEL;
+    return assessWithOpenRouter({ pr, files, diff }, env.OPENROUTER_API_KEY, model);
+  }
+  return Promise.reject(new Error('None of OPENAI_API_KEY, ANTHROPIC_API_KEY and OPENROUTER_API_KEY is set'));
 }

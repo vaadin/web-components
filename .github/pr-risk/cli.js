@@ -12,8 +12,9 @@
  * answers are cached for an hour in node_modules/.cache/pr-risk; a note says
  * when cached data was used, and --no-cache reads GitHub again. The agent's
  * assessment is never cached. The OpenAI Decisions API assesses
- * the pull request when OPENAI_API_KEY is set, Claude when only
- * ANTHROPIC_API_KEY is set. Either needs the SDKs (`npm ci` in this
+ * the pull request when OPENAI_API_KEY is set, else Claude when
+ * ANTHROPIC_API_KEY is set, else a model on OpenRouter when OPENROUTER_API_KEY
+ * is set (OPENROUTER_MODEL picks it). Each needs the SDKs (`npm ci` in this
  * directory). Without a key, the label comes from the policy alone, as in a
  * workflow run whose assessment failed.
  */

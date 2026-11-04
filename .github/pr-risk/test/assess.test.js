@@ -1,6 +1,13 @@
 import assert from 'node:assert/strict';
 import { describe, test } from 'node:test';
-import { assess, decisionQuestions, decisionToAssessment, providerPackage, validateAssessment } from '../assess.js';
+import {
+  assess,
+  chatToAssessment,
+  decisionQuestions,
+  decisionToAssessment,
+  providerPackage,
+  validateAssessment,
+} from '../assess.js';
 import { repositoryContext } from '../criteria.js';
 
 const VALID = {
@@ -123,9 +130,10 @@ describe('decisionToAssessment', () => {
 });
 
 describe('providerPackage', () => {
-  test('prefers OpenAI and falls back to Claude', () => {
-    assert.equal(providerPackage({ ANTHROPIC_API_KEY: 'a', OPENAI_API_KEY: 'o' }), 'openai');
-    assert.equal(providerPackage({ ANTHROPIC_API_KEY: 'a' }), '@anthropic-ai/sdk');
+  test('prefers OpenAI, then Claude, then OpenRouter', () => {
+    assert.equal(providerPackage({ ANTHROPIC_API_KEY: 'a', OPENAI_API_KEY: 'o', OPENROUTER_API_KEY: 'r' }), 'openai');
+    assert.equal(providerPackage({ ANTHROPIC_API_KEY: 'a', OPENROUTER_API_KEY: 'r' }), '@anthropic-ai/sdk');
+    assert.equal(providerPackage({ OPENROUTER_API_KEY: 'r' }), 'openai');
     assert.equal(providerPackage({}), null);
   });
 });
@@ -134,7 +142,7 @@ describe('assess', () => {
   test('fails without an API key', async () => {
     const pr = { title: 't', body: '' };
     await assert.rejects(assess({ pr, files: [], diff: { text: '', omitted: [] }, env: {} }), {
-      message: 'Neither OPENAI_API_KEY nor ANTHROPIC_API_KEY is set',
+      message: 'None of OPENAI_API_KEY, ANTHROPIC_API_KEY and OPENROUTER_API_KEY is set',
     });
   });
 });
@@ -160,5 +168,31 @@ describe('repositoryContext', () => {
       repositoryContext({ full_name: 'a/b', description: null, language: null }),
       /on GitHub\.\n\nThe pull/u,
     );
+  });
+});
+
+describe('chatToAssessment', () => {
+  function chat(choice) {
+    return { model: 'openai/gpt-6.1-sol', choices: [{ finish_reason: 'stop', ...choice }] };
+  }
+
+  test('parses the JSON answer and adds the model', () => {
+    const response = chat({ message: { role: 'assistant', content: JSON.stringify(VALID) } });
+    assert.deepEqual(chatToAssessment(response), { ...VALID, model: 'openai/gpt-6.1-sol' });
+  });
+
+  test('fails on a refusal, a cut-off answer, an answer outside the schema or an error', () => {
+    const cases = [
+      [chat({ message: { content: null, refusal: 'No.' } }), 'openai/gpt-6.1-sol refused: No.'],
+      [chat({ finish_reason: 'length', message: { content: '{"summ' } }), 'openai/gpt-6.1-sol stopped with length'],
+      [
+        chat({ message: { content: JSON.stringify({ ...VALID, category: 'none' }) } }),
+        'The assessment does not match the schema',
+      ],
+      [{ error: { message: 'No endpoints found' } }, 'OpenRouter returned no answer: No endpoints found'],
+    ];
+    for (const [response, message] of cases) {
+      assert.throws(() => chatToAssessment(response), { message });
+    }
   });
 });
