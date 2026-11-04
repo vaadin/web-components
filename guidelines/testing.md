@@ -92,7 +92,7 @@ Baseline screenshots are placed under `screenshots/{name}/baseline/`.
   component that reads a CSS custom property to compute its layout):
   set the style value and assert the resulting outcome.
 - **Use unit tests for styles that control whether an element is
-  shown or interactive** (`display`, `visibility`, `pointer-events`):
+  shown or interactive** (e.g. `display`, `visibility`, `pointer-events`):
   assert the computed value, since a screenshot can't tell a hidden
   element from a missing one, or show pointer event handling.
 - **Don't duplicate `field-base` coverage** — shared base styles
