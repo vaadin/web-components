@@ -158,7 +158,7 @@ Cover DOM structure with snapshots tests, instead of multiple hand-written asser
 
 When a change affects styling, cover it with visual tests in the component package's `test/visual/base`, `test/visual/lumo` or `test/visual/aura` folder for every affected style layer, even when the CSS lives in a theme package, instead of asserting computed styles in unit tests (good: `await visualDiff(div, 'disabled')`, bad: `expect(getComputedStyle(el).opacity).to.equal('0.5')`). A screenshot catches layout, clipping and paint issues that a computed value cannot. Add a screenshot for the specific state the change targets (e.g. hover, disabled, RTL) rather than relying on an existing one that does not exercise it.
 
-When JS logic depends on a style value (e.g. a component that reads a CSS custom property to compute its layout), cover it with unit tests that set the style value and assert the resulting outcome. For example, form-layout tests set `--vaadin-form-layout-label-width` and assert the resulting label width.
+When JS logic depends on a style value (e.g. a component that reads a CSS custom property to compute its layout), cover it with unit tests that set the style value and assert the resulting outcome. See the form-layout tests, which set spacing custom properties such as `--vaadin-form-layout-column-spacing` and assert the resulting item sizes.
 
 When covering new mixins or mixin behavior with tests, cover it once in the mixin's package with tests against a synthetic element, instead of duplicating tests for all components that implement the mixin.
 
