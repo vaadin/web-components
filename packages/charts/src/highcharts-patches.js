@@ -11,7 +11,7 @@ import Highcharts from 'highcharts/es-modules/masters/highstock.src.js';
 
 // TODO: Remove when upgrading Highcharts, see vaadin/web-components#12213
 
-const { Point, SVGElement } = Highcharts;
+const { AST, Point, SVGElement } = Highcharts;
 
 const RESERVED_KEYS = ['__proto__', 'constructor'];
 
@@ -40,5 +40,16 @@ SVGElement.prototype._defaultSetter = function (value, key, element) {
     defaultSetter.call(this, value, key, element);
   }
 };
+
+// Highcharts parses text markup in an inert document when `DOMParser` fails, e.g. while Chromium
+// is printing and the Trusted Types policy callback can no longer run. Under Trusted Types
+// enforcement that last step throws as well, so render no markup instead of failing the redraw.
+Highcharts.wrap(AST.prototype, 'parseMarkup', function (proceed, markup) {
+  try {
+    return proceed.call(this, markup);
+  } catch (_) {
+    return [];
+  }
+});
 
 /* eslint-enable @typescript-eslint/no-invalid-this, prefer-arrow-callback */

@@ -305,6 +305,23 @@ describe('vaadin-chart exporting', () => {
       expect(document.body.hasAttribute(attributeName)).to.be.false;
     });
 
+    it('should remove the shadow styles from the body when the chart is reset during the export', async () => {
+      // An export that has started and will not fire `afterExport`, as the chart gets replaced
+      Highcharts.fireEvent(chart.configuration, 'beforeExport');
+      const style = chart.tempBodyStyle;
+      chart.updateConfiguration({ title: { text: 'Reset' } }, true);
+      await Promise.resolve();
+
+      expect(style.isConnected).to.be.false;
+      expect(chart.tempBodyStyle).to.be.undefined;
+      expect(document.body.hasAttribute(attributeName)).to.be.false;
+
+      // Later exports clean up after themselves again
+      await chart.configuration.exporting.getSVGForExport({}, {});
+      expect(chart.tempBodyStyle).to.be.undefined;
+      expect(document.body.hasAttribute(attributeName)).to.be.false;
+    });
+
     it('should remove the shadow styles from the body when the chart is detached during the export', async () => {
       // An export that has started and will not fire `afterExport`, as the chart gets destroyed
       Highcharts.fireEvent(chart.configuration, 'beforeExport');

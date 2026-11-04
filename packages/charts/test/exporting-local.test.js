@@ -1,5 +1,5 @@
 import { expect } from '@vaadin/chai-plugins';
-import { click, fixtureSync, nextFrame, oneEvent } from '@vaadin/testing-helpers';
+import { click, fixtureSync, nextFrame, nextRender, oneEvent } from '@vaadin/testing-helpers';
 import sinon from 'sinon';
 import './exporting-styles.js';
 import '../src/vaadin-chart.js';
@@ -51,6 +51,23 @@ describe('vaadin-chart local exporting', () => {
 
     expect(downloadStub).to.be.calledOnce;
     expect(postStub).to.be.not.called;
+  });
+
+  it('should export locally from exportChart', async () => {
+    await chart.configuration.exportChart();
+
+    expect(downloadStub).to.be.calledOnce;
+    expect(postStub).to.be.not.called;
+  });
+
+  it('should post the export to the export server when the chart options set local to false', async () => {
+    chart.updateConfiguration({ exporting: { local: false } });
+    await nextRender();
+
+    await chart.configuration.exportChart();
+
+    expect(postStub).to.be.calledOnce;
+    expect(downloadStub).to.be.not.called;
   });
 
   it('should post the export to the export server when local is false', async () => {

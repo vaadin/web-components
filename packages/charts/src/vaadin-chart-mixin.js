@@ -868,11 +868,7 @@ export const ChartMixin = (superClass) =>
         }
 
         if (this.configuration) {
-          // Destroying the chart removes its event handlers, so a pending export would never fire
-          // `afterExport` to remove the styles it copied to the body
-          this.__pendingExports = 0;
-          cleanupExport(this);
-
+          this.__cancelExports();
           this.configuration.destroy();
           this.configuration = undefined;
 
@@ -889,8 +885,20 @@ export const ChartMixin = (superClass) =>
       });
     }
 
+    /**
+     * Destroying the chart removes its event handlers, so a pending export or print would never
+     * fire `afterExport` or `afterPrint` to remove the styles it copied to the body.
+     * @private
+     */
+    __cancelExports() {
+      this.__pendingExports = 0;
+      cleanupExport(this);
+    }
+
     /** @private */
     __resetChart() {
+      // Creating a chart in the same container destroys the previous one
+      this.__cancelExports();
       const initialOptions = { ...this.options, ...this._jsonConfigurationBuffer };
       this.__initChart(initialOptions);
       this._jsonConfigurationBuffer = null;

@@ -1,5 +1,6 @@
 import { expect } from '@vaadin/chai-plugins';
-import { fixtureSync, nextRender, oneEvent } from '@vaadin/testing-helpers';
+import { aTimeout, fixtureSync, nextRender, oneEvent } from '@vaadin/testing-helpers';
+import sinon from 'sinon';
 import '../src/vaadin-chart.js';
 import Highcharts from 'highcharts/es-modules/masters/highstock.src.js';
 
@@ -89,6 +90,9 @@ describe('vaadin-chart option values', () => {
       'vbscript:Text',
       'about.html',
       'tel:+123',
+      // Highcharts matches the allowed prefixes case-sensitively
+      'HTTPS://VAADIN.COM',
+      'ftp://vaadin.com',
     ].forEach((href) => {
       it(`should ignore unsupported credits links: ${JSON.stringify(href)}`, async () => {
         await setCreditsHref(href);
@@ -137,6 +141,49 @@ describe('vaadin-chart option values', () => {
       buttons.forEach((button) => {
         expect(button.hasAttribute('onmouseover')).to.be.false;
       });
+    });
+  });
+
+  describe('text markup parser failure', () => {
+    beforeEach(() => {
+      sinon.stub(DOMParser.prototype, 'parseFromString').throws(new Error('Unavailable'));
+    });
+
+    afterEach(() => {
+      DOMParser.prototype.parseFromString.restore();
+      delete window.chartMarkupSpy;
+    });
+
+    it('should parse markup when the default parser fails', () => {
+      const ast = new Highcharts.AST('<b>Text</b>');
+      expect(ast.nodes).to.have.lengthOf(1);
+      expect(ast.nodes[0].tagName).to.equal('b');
+      expect(ast.nodes[0].children[0].textContent).to.equal('Text');
+    });
+
+    it('should parse markup in an inert document when the default parser fails', async () => {
+      window.chartMarkupSpy = sinon.spy();
+      // eslint-disable-next-line no-new
+      new Highcharts.AST('<img src="data:image/png;base64,0" onerror="window.chartMarkupSpy()">');
+      await aTimeout(50);
+      expect(window.chartMarkupSpy).to.be.not.called;
+    });
+
+    it('should render no markup when the inert document rejects the markup too', () => {
+      // Like an `innerHTML` assignment under Trusted Types enforcement
+      const descriptor = Object.getOwnPropertyDescriptor(Element.prototype, 'innerHTML');
+      Object.defineProperty(Element.prototype, 'innerHTML', {
+        ...descriptor,
+        get: descriptor.get,
+        set() {
+          throw new TypeError('Requires TrustedHTML');
+        },
+      });
+      try {
+        expect(new Highcharts.AST('<b>Text</b>').nodes).to.be.empty;
+      } finally {
+        Object.defineProperty(Element.prototype, 'innerHTML', descriptor);
+      }
     });
   });
 

@@ -317,7 +317,7 @@ describe('vaadin-chart styling', () => {
       });
       points().forEach((point) => {
         expect(point.getAttribute('class')).to.equal('highcharts-point');
-        expect(point.getAttribute('fill')).to.not.equal('none');
+        expect(point.getAttribute('fill')).to.match(/^(#|rgb)/u);
       });
     });
 
@@ -325,7 +325,7 @@ describe('vaadin-chart styling', () => {
       await createChart({ minColor: '#ff0000', maxColor: '#0000ff' });
       points().forEach((point) => {
         expect(point.getAttribute('class')).to.equal('highcharts-point');
-        expect(point.getAttribute('fill')).to.not.equal('none');
+        expect(point.getAttribute('fill')).to.match(/^(#|rgb)/u);
       });
     });
     [true, false].forEach((styledMode) => {
@@ -354,6 +354,8 @@ describe('vaadin-chart styling', () => {
         const point = series.points[0].graphic.element.getBBox();
         expect(clip.x).to.be.at.most(point.x);
         expect(clip.y).to.be.at.most(point.y);
+        expect(clip.x + clip.width).to.be.at.least(point.x + point.width);
+        expect(clip.y + clip.height).to.be.at.least(point.y + point.height);
       });
     });
 
