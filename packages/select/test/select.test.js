@@ -21,24 +21,6 @@ import { html, render } from 'lit';
 describe('vaadin-select', () => {
   let select, valueButton;
 
-  it('closes the popup when disabled after opening', async () => {
-    const select = fixtureSync('<vaadin-select></vaadin-select>');
-    select.items = [
-      { label: 'Apple', value: 'apple' },
-      { label: 'Orange', value: 'orange' },
-    ];
-    select.value = 'apple';
-    await nextRender();
-    select.opened = true;
-    await nextRender();
-
-    select.disabled = true;
-    await nextRender();
-
-    expect(select.opened).to.be.false;
-    expect(select.value).to.equal('apple');
-  });
-
   describe('empty', () => {
     let select;
 
@@ -505,6 +487,16 @@ describe('vaadin-select', () => {
         select.focus();
         enterKeyDown(valueButton);
         await oneEvent(overlay, 'vaadin-overlay-open');
+      });
+
+      it('should close the overlay when disabled', async () => {
+        const value = select.value;
+        select.disabled = true;
+        await nextRender();
+
+        expect(select.opened).to.be.false;
+        expect(overlay.opened).to.be.false;
+        expect(select.value).to.equal(value);
       });
 
       it('should close the select on selecting the same value', async () => {
