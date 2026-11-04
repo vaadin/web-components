@@ -71,6 +71,7 @@ const ResizeMixinImplementation = (superclass) =>
 
           if (resizables.size === 0) {
             observer.unobserve(parent);
+            delete parent.resizables;
           }
         }
 
