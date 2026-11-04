@@ -131,11 +131,13 @@ jobs:
   dismiss-stale-approval:
     # A push makes the automatic approval of the review stale. Checks out no
     # code: the dismissal goes through the GitHub API only. Pull requests from
-    # forks are skipped, as they are never reviewed.
+    # forks are skipped, as they are never reviewed. Pushes by Dependabot are
+    # skipped, as its runs get no secrets and so no bot token.
     if: |
       github.event_name == 'pull_request' &&
       github.event.action == 'synchronize' &&
-      !github.event.pull_request.head.repo.fork
+      !github.event.pull_request.head.repo.fork &&
+      github.actor != 'dependabot[bot]'
     runs-on: ubuntu-26.04
     permissions: {}
     steps:
