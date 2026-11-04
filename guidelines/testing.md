@@ -91,10 +91,10 @@ Baseline screenshots are placed under `screenshots/{name}/baseline/`.
 - **Use unit tests when JS logic depends on a style value** (e.g. a
   component that reads a CSS custom property to compute its layout):
   set the style value and assert the resulting outcome.
-- **Use unit tests for styles that govern behavior** rather than
-  appearance (e.g. `pointer-events`, `user-select`, `touch-action`),
-  since a screenshot can't show them. Assert the resulting behavior,
-  or the computed value when that is impractical.
+- **Use unit tests for styles that control whether an element is
+  shown or interactive** (`display`, `visibility`, `pointer-events`):
+  assert the computed value, since a screenshot can't tell a hidden
+  element from a missing one, or show pointer event handling.
 - **Don't duplicate `field-base` coverage** — shared base styles
   (label, helper, error, focus ring, validity) already have visual
   tests in `field-base`. Per-component visual tests should focus on

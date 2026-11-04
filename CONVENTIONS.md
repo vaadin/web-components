@@ -160,7 +160,7 @@ When a change affects styling, cover it with visual tests in the component packa
 
 When JS logic depends on a style value (e.g. a component that reads a CSS custom property to compute its layout), cover it with unit tests that set the style value and assert the resulting outcome.
 
-When a style governs behavior rather than appearance (e.g. `pointer-events`, `user-select`, `touch-action`), cover it with unit tests instead of visual tests, since a screenshot cannot show it. Assert the resulting behavior (e.g. a click does not reach the element), or the computed value when that is impractical.
+When a style controls whether an element is shown or interactive (`display`, `visibility`, `pointer-events`), cover it with unit tests asserting the computed value instead of visual tests, since a screenshot cannot tell a hidden element from a missing one, or show whether an element receives pointer events.
 
 When covering new mixins or mixin behavior with tests, cover it once in the mixin's package with tests against a synthetic element, instead of duplicating tests for all components that implement the mixin.
 
