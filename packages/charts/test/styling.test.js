@@ -350,7 +350,10 @@ describe('vaadin-chart styling', () => {
         expect(chart.configuration.styledMode).to.equal(styledMode);
         const series = chart.configuration.series[0];
         const clipId = series.group.element.getAttribute('clip-path').match(/#([^)]+)/u)[1];
-        const clip = chart.$.chart.querySelector(`[id="${clipId}"] rect`).getBBox();
+        // Firefox returns an empty bounding box for a rect inside a clip path, so read its geometry
+        const rect = chart.$.chart.querySelector(`[id="${clipId}"] rect`);
+        const [x, y, width, height] = ['x', 'y', 'width', 'height'].map((name) => rect[name].baseVal.value);
+        const clip = { x, y, width, height };
         const point = series.points[0].graphic.element.getBBox();
         expect(clip.x).to.be.at.most(point.x);
         expect(clip.y).to.be.at.most(point.y);
