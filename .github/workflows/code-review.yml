@@ -116,9 +116,12 @@ jobs:
           node-version: '24'
 
       - name: Run code review
-        uses: vaadin/github-actions/code-review@main
+        uses: vaadin/github-actions/code-review@feat/risk-assessment
         with:
           anthropic-api-key: ${{ secrets.ANTHROPIC_API_KEY }}
           pr-number: ${{ env.PR_NUMBER }}
           github-token: ${{ secrets.VAADIN_REVIEW_BOT || github.token }}
           upload-execution-log: ${{ vars.CLAUDE_DEBUG }}
+          auto-approve: ${{ vars.CODE_REVIEW_AUTO_APPROVE }}
+          auto-approve-max-risk: low
+          auto-approve-types: chore, docs, test
