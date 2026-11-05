@@ -34,6 +34,7 @@ const DEFAULT_I18N = {
   link: 'Link',
   goToPage: 'Go to page {page}',
   externalLink: '{text} (opens in a new tab)',
+  download: 'Download',
 };
 
 /**
@@ -50,11 +51,30 @@ const DEFAULT_I18N = {
  * window.Vaadin.featureFlags.pdfViewerComponent = true;
  * ```
  *
- * ### Slots
+ * ### Customization
  *
- * Name              | Description
+ * You can add application controls to the toolbar by using `slot` names.
+ *
+ * Slot name         | Description
  * ------------------|-------------
- * `toolbar-actions` | Slot for application controls, e.g. buttons, at the end of the toolbar
+ * `toolbar-actions` | Application controls, e.g. buttons, at the end of the toolbar, before the download button.
+ *
+ * #### Example
+ *
+ * A custom button that replaces the download button:
+ *
+ * ```html
+ * <vaadin-pdf-viewer src="/files/report.pdf" download-button-hidden>
+ *   <vaadin-button slot="toolbar-actions">Save a copy</vaadin-button>
+ * </vaadin-pdf-viewer>
+ * ```
+ *
+ * ```js
+ * const viewer = document.querySelector('vaadin-pdf-viewer');
+ * viewer.querySelector('vaadin-button').addEventListener('click', () => {
+ *   viewer.download();
+ * });
+ * ```
  *
  * ### Styling
  *
@@ -163,7 +183,9 @@ class PdfViewer extends PdfViewerMixin(
    *   // Accessible name of a link without text to another page. {page} is replaced with the page number.
    *   goToPage: 'Go to page {page}',
    *   // Accessible name of a link that opens in a new tab. {text} is replaced with the text of the link, or its URL.
-   *   externalLink: '{text} (opens in a new tab)'
+   *   externalLink: '{text} (opens in a new tab)',
+   *   // Tooltip of the download button.
+   *   download: 'Download'
    * }
    * ```
    *

@@ -52,7 +52,11 @@ how to generate them.
 `PdfViewerMixin` composes one mixin for each concern. Each part of the state has one owner.
 
 - `PdfViewerDocumentMixin` loads `src`. It calls `_documentLoaded(details)` with the title, language and first
-  page, and `_documentUnloaded()`.
+  page, and `_documentUnloaded()`. Methods that need the document, e.g. `download()`, await
+  `_whenDocumentReady()`. It resolves once no document is loading, with the document or null.
+- `PdfViewerDownloadMixin` adds `download()`. It uses only the document mixin, so it comes right after it.
+  - A download keeps its data for a minute, also when the viewer is detached meanwhile. Some browsers fail a
+    download whose URL is released right after the click.
 - `PdfViewerRenderMixin` owns the page views, their sizes, the render queue and the device pixel ratio. It calls `_pageSizesChanged()` at most once per frame when pages get their own size.
 - `PdfViewerScrollMixin` owns the scale `_scale`, the anchor, the visible pages and `page`. It asks for
   rendering only with `_renderVisible()` and `_cancelRender()`. It gets the scale from `_getScaleForSize()`, which
@@ -70,10 +74,14 @@ how to generate them.
   each await that the page still has the same canvas, so a released page gets no layers.
 - `PdfViewerKeyboardMixin` handles the keyboard shortcuts.
 - `PdfViewerToolbarMixin` renders the header and the toolbar. Its controls are in the light DOM, so a theme
-  styles the page field like any other `vaadin-integer-field`. The element renders them before a marker comment,
-  so application children added later keep their place.
+  styles the page field like any other `vaadin-integer-field`. The `slotContent()` directive renders them, so
+  application children added later keep their place.
   - The header is a button in the shadow DOM that collapses and expands the toolbar. It shows `headerTitle`,
-    else `_getDocumentName()` of the document mixin.
+    else `_getDocumentName()` of the document mixin, the name that downloads also use.
+  - The controls call the methods of the inner mixins, for example `_scrollToPage()`, `_stepZoom()` and
+    `download()`.
+  - The download button is after `toolbar-actions`. To replace it, an application hides it with
+    `downloadButtonHidden` and adds its own button that calls `download()` to `toolbar-actions`.
 - The element applies `I18nMixin` and defines the default texts. The mixins read them from `__effectiveI18n`.
 - The element applies `FocusMixin` and owns the focus state. Listeners on the page area in its template set
   `focused` and `focus-ring`, as focus moving inside the shadow root does not reach listeners on the host.

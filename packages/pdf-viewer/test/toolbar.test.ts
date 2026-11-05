@@ -409,12 +409,28 @@ describe('toolbar', () => {
       expect(title.textContent).to.equal('Annual report');
     });
 
+    it('should show fileName instead of the file name of src', async () => {
+      viewer.src = fixtureUrl('multi-page.pdf');
+      viewer.fileName = 'report.pdf';
+      await nextFrame();
+      expect(title.textContent).to.equal('report.pdf');
+    });
+
     it('should show the file name from the Content-Disposition header instead of the file name of src', async () => {
       await loadFixtureFrom(viewer, new URL('/files/multi-page.pdf', location.href).href, {
         'Content-Disposition': 'inline; filename="report.pdf"',
       });
       await nextFrame();
       expect(title.textContent).to.equal('report.pdf');
+    });
+
+    it('should show fileName instead of the file name from the Content-Disposition header', async () => {
+      await loadFixtureFrom(viewer, new URL('/files/multi-page.pdf', location.href).href, {
+        'Content-Disposition': 'inline; filename="report.pdf"',
+      });
+      viewer.fileName = 'summary.pdf';
+      await nextFrame();
+      expect(title.textContent).to.equal('summary.pdf');
     });
 
     it('should not show the name of the previous document when the next one fails to load', async () => {
@@ -538,6 +554,15 @@ describe('toolbar', () => {
       viewer.toolbarCollapsed = true;
       await nextFrame();
       expect(approve.checkVisibility()).to.be.false;
+    });
+
+    it('should show slotted controls before the built-in download button', async () => {
+      const approve = createButton('Approve');
+      viewer.append(approve);
+      await nextFrame();
+      const download = viewer.querySelector<HTMLElement>('vaadin-pdf-viewer-button[icon="download"]')!;
+      expect(download.assignedSlot!.parentElement).to.equal(approve.assignedSlot!.parentElement);
+      expect(approve.getBoundingClientRect().right).to.be.at.most(download.getBoundingClientRect().left);
     });
 
     describe('child added after the first render', () => {

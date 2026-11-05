@@ -48,6 +48,18 @@ export const PdfViewerDocumentMixin = (superClass) =>
         },
 
         /**
+         * The name of the file that `download()` saves, used as given, which
+         * the header also shows. When not set, the name is the PDF file name
+         * from the `Content-Disposition` header of the response, else the PDF
+         * file name at the end of the path of `src`, else `document.pdf`.
+         *
+         * @attr {string} file-name
+         */
+        fileName: {
+          type: String,
+        },
+
+        /**
          * The number of pages in the loaded document, or 0 when no document
          * is loaded.
          */
@@ -83,6 +95,15 @@ export const PdfViewerDocumentMixin = (superClass) =>
     /** @type {import('./pdf-viewer-document-controller.js').PdfViewerDocumentDetails | null} */
     #details = null;
 
+    /** The `src` of the last update. A different `src` starts loading in the next update. */
+    #updatedSrc;
+
+    /**
+     * The resolve functions of `_whenDocumentReady()` calls that wait for the document.
+     * @type {Array<(pdfDocument: import('pdfjs-dist').PDFDocumentProxy | null) => void>}
+     */
+    #readyCallbacks = [];
+
     #documentController = new PdfViewerDocumentController(this, {
       onLoadStart: () => {
         this.__loading = true;
@@ -104,8 +125,11 @@ export const PdfViewerDocumentMixin = (superClass) =>
       super.updated(props);
 
       if (props.has('src')) {
+        this.#updatedSrc = this.src;
         this.#documentController.load();
       }
+
+      this.#resolveReadyCallbacks();
     }
 
     /**
@@ -115,6 +139,27 @@ export const PdfViewerDocumentMixin = (superClass) =>
      */
     get _pdfDocument() {
       return this.#pdfDocument;
+    }
+
+    /**
+     * Returns a promise for the document of `src`. It resolves once the
+     * document has loaded, also when `src` changes meanwhile, and right away
+     * when no document is loading. A `src` set later in the same task counts
+     * as loading. It resolves with null without a document, or when the
+     * viewer is not attached.
+     * @return {Promise<import('pdfjs-dist').PDFDocumentProxy | null>}
+     * @protected
+     */
+    _whenDocumentReady() {
+      if (!this.isConnected) {
+        return Promise.resolve(null);
+      }
+      return new Promise((resolve) => {
+        this.#readyCallbacks.push(resolve);
+        // Check once the calling code has run, as it may still set `src`. Detaching meanwhile
+        // keeps the document, as the document controller unloads it only after that check.
+        Promise.resolve().then(() => this.#resolveReadyCallbacks(this.#pdfDocument));
+      });
     }
 
     /**
@@ -135,14 +180,28 @@ export const PdfViewerDocumentMixin = (superClass) =>
     }
 
     /**
-     * Returns the name of the document: the PDF file name from the
-     * `Content-Disposition` header, else the PDF file name at the end of the
-     * path of `src`, else an empty string.
+     * Returns the name of the document: `fileName`, else the PDF file name
+     * from the `Content-Disposition` header, else the PDF file name at the
+     * end of the path of `src`, else an empty string.
      * @return {string}
      * @protected
      */
     _getDocumentName() {
-      return this.#details?.dispositionFileName || getFileNameFromUrl(this.src) || '';
+      return this.fileName || this.#details?.dispositionFileName || getFileNameFromUrl(this.src) || '';
+    }
+
+    /**
+     * Resolves the `_whenDocumentReady()` calls once no document is loading.
+     * @param {import('pdfjs-dist').PDFDocumentProxy | null} pdfDocument the document to resolve with
+     * @private
+     */
+    #resolveReadyCallbacks(pdfDocument = this.isConnected ? this.#pdfDocument : null) {
+      if (this.__loading || this.src !== this.#updatedSrc || !this.#readyCallbacks.length) {
+        return;
+      }
+      const callbacks = this.#readyCallbacks;
+      this.#readyCallbacks = [];
+      callbacks.forEach((resolve) => resolve(pdfDocument));
     }
 
     /** @private */
