@@ -31,8 +31,8 @@ how to generate them.
   batches of 10, and the layout updates once per frame. The pages fit the width of the current page to
   the viewer, as in pdf.js. The fit is computed again on resize and when page sizes load, not when the
   user scrolls to a page of another size.
-- The viewer renders the visible pages, starting with the page that has the largest part of its height in
-  view. Then it renders one page after and one page before them.
+- The viewer renders the visible pages, starting with the current page, see `page` below. Then it renders
+  one page after and one page before them.
 - Only one page renders at a time. A new canvas replaces the old one only when it is complete.
 - A page canvas has at most 2^24 pixels (about 16.8 million). Large pages render at a lower resolution.
 - All canvases together may use three times that (about 50.3 million pixels). Pages ahead of the view
@@ -41,8 +41,8 @@ how to generate them.
   while the canvases use more than the total budget.
 - When the device pixel ratio changes, the viewer renders the visible pages again at the new ratio.
 - A new `src` resets `page` to 1, unless the application sets `page` in the same update.
-- `page` follows the page that has the largest part of its height in view. A page set by the application
-  stays current until the user scrolls.
+- `page` follows the page with the largest part of it in view. A page taller than the view counts the part
+  of the view that it fills instead. A page set by the application stays current until the user scrolls.
 - On resize and zoom, the viewer keeps the same point of the current page at the top of the view.
 - The viewer fires an internal `render-idle` event when no page is left to render, once the page sizes are
   loaded. It is only intended for testing purposes and is not part of the public API.

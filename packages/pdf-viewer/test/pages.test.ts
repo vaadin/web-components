@@ -557,7 +557,7 @@ describe('pages', () => {
     });
   });
 
-  describe('short first and last pages', () => {
+  describe('short and tall pages', () => {
     beforeEach(async () => {
       await createViewer();
       await loadAndRender(
@@ -565,7 +565,7 @@ describe('pages', () => {
         createPdf([
           { content: '', mediaBox: [0, 0, 612, 100] },
           { content: '', mediaBox: [0, 0, 612, 792] },
-          { content: '', mediaBox: [0, 0, 612, 792] },
+          { content: '', mediaBox: [0, 0, 612, 2000] },
           { content: '', mediaBox: [0, 0, 612, 100] },
         ]),
       );
@@ -581,6 +581,12 @@ describe('pages', () => {
     it('should be the last page when scrolled to the bottom', async () => {
       await scrollTo(content.scrollHeight);
       expect(viewer.page).to.equal(4);
+    });
+
+    it('should keep a page taller than the view while it fills most of the view', async () => {
+      // Page 3 is three times taller than the view, page 4 shows 60% of it
+      await scrollTo(pages[3].offsetTop + pages[3].offsetHeight * 0.6 - content.clientHeight);
+      expect(viewer.page).to.equal(3);
     });
   });
 

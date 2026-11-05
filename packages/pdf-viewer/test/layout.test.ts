@@ -37,9 +37,20 @@ describe('layout', () => {
         { top: 0, height: 50 },
         { top: 60, height: 200 },
       ];
-      expect(getVisiblePages(2, (index) => bounds[index], 0, 160)).to.deep.equal([
+      expect(getVisiblePages(2, (index) => bounds[index], 0, 210)).to.deep.equal([
         { index: 0, height: 50, ratio: 1 },
-        { index: 1, height: 100, ratio: 0.5 },
+        { index: 1, height: 150, ratio: 0.75 },
+      ]);
+    });
+
+    it('should return the ratio of a page taller than the view to the view height', () => {
+      const bounds = [
+        { top: 0, height: 1600 },
+        { top: 1610, height: 200 },
+      ];
+      expect(getVisiblePages(2, (index) => bounds[index], 900, 1700)).to.deep.equal([
+        { index: 0, height: 700, ratio: 0.875 },
+        { index: 1, height: 90, ratio: 0.45 },
       ]);
     });
 

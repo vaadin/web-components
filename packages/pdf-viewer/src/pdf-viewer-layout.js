@@ -13,7 +13,8 @@
  * @typedef {Object} PdfViewerVisiblePage
  * @property {number} index The index of the page.
  * @property {number} height The height of the page that is inside the view.
- * @property {number} ratio The part of the page height that is inside the view, from 0 to 1.
+ * @property {number} ratio The visible height divided by the page height, or by
+ *   the view height for a page taller than the view, from 0 to 1.
  */
 
 /**
@@ -69,7 +70,9 @@ export function getVisiblePages(count, getBounds, viewTop, viewBottom) {
       break;
     }
     const visibleHeight = Math.min(viewBottom, top + height) - Math.max(viewTop, top);
-    visible.push({ index, height: visibleHeight, ratio: height > 0 ? visibleHeight / height : 0 });
+    // A page taller than the view can at most fill the view.
+    const maxHeight = Math.min(height, viewBottom - viewTop);
+    visible.push({ index, height: visibleHeight, ratio: maxHeight > 0 ? visibleHeight / maxHeight : 0 });
   }
   if (!visible.length) {
     visible.push({ index: low, height: 0, ratio: 0 });
@@ -78,8 +81,9 @@ export function getVisiblePages(count, getBounds, viewTop, viewBottom) {
 }
 
 /**
- * Returns the index of the page with the largest part of its height inside
- * the view. The first one wins a tie.
+ * Returns the index of the page with the largest visible ratio: a page shorter
+ * than the view counts the part of it in view, a taller page the part of the
+ * view it fills. The first one wins a tie.
  *
  * @param {PdfViewerVisiblePage[]} visible
  * @return {number}
