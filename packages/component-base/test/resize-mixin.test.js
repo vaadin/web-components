@@ -1,5 +1,5 @@
 import { expect } from '@vaadin/chai-plugins';
-import { aTimeout, defineLit, fixtureSync, nextFrame, nextResize } from '@vaadin/testing-helpers';
+import { aTimeout, defineLit, fixtureSync, nextFrame, nextRender, nextResize } from '@vaadin/testing-helpers';
 import sinon from 'sinon';
 import { PolylitMixin } from '../src/polylit-mixin.js';
 import { ResizeMixin } from '../src/resize-mixin.js';
@@ -68,6 +68,27 @@ describe('ResizeMixin', () => {
         parent.style.width = '100px';
         await nextResize(parent);
         expect(spy.calledOnce).to.be.true;
+      });
+
+      it('should notify parent element resize after re-attaching to the same parent', async () => {
+        parent.removeChild(element);
+        parent.appendChild(element);
+        // Wait for the initial resize after re-attaching.
+        await nextFrame();
+        await nextFrame();
+
+        const spy = sinon.spy(element, '_onResize');
+        parent.style.width = '100px';
+        await aTimeout(20);
+        expect(spy.calledOnce).to.be.true;
+      });
+
+      it('should not throw when detached with a pending parent resize', async () => {
+        parent.style.width = '100px';
+        // Detach before the deferred resize callback runs.
+        await nextRender();
+        parent.removeChild(element);
+        await aTimeout(0);
       });
 
       describe('multiple children', () => {
