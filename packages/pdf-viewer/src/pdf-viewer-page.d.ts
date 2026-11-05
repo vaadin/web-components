@@ -67,8 +67,6 @@ export declare class PdfViewerPage {
 
   renderTextLayer(): Promise<void>;
 
-  renderStructureLayer(): Promise<void>;
-
   renderLinkLayer(
     followLink: (annotation: PdfViewerLinkAnnotation) => void,
     optionalContentConfig?: Awaited<ReturnType<PDFDocumentProxy['getOptionalContentConfig']>>,
