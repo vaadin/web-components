@@ -1,5 +1,5 @@
 import { expect } from '@vaadin/chai-plugins';
-import { resetMouse, sendMouse } from '@vaadin/test-runner-commands';
+import { resetMouse, sendKeys, sendMouse } from '@vaadin/test-runner-commands';
 import { enterKeyDown, fixtureSync, mousedown, nextFrame, nextRender, tabKeyDown } from '@vaadin/testing-helpers';
 import sinon from 'sinon';
 import '../src/vaadin-message-input.js';
@@ -275,6 +275,102 @@ describe('message-input', () => {
 
       messageInput.value = 'foo';
       expect(customButton.disabled).to.be.false;
+    });
+  });
+
+  describe('submitDisabled', () => {
+    it('should set submitDisabled property to false by default', () => {
+      expect(messageInput.submitDisabled).to.be.false;
+    });
+
+    it('should set submitDisabled property from the attribute', async () => {
+      messageInput = fixtureSync('<vaadin-message-input submit-disabled></vaadin-message-input>');
+      await nextRender();
+      expect(messageInput.submitDisabled).to.be.true;
+    });
+
+    it('should disable the submit button when non-empty value is set', () => {
+      messageInput.submitDisabled = true;
+      messageInput.value = 'foo';
+      expect(button.disabled).to.be.true;
+    });
+
+    it('should disable a custom button when non-empty value is set', async () => {
+      const customButton = document.createElement('button');
+      customButton.setAttribute('slot', 'button');
+      button.replaceWith(customButton);
+      await nextFrame();
+
+      messageInput.submitDisabled = true;
+      messageInput.value = 'foo';
+      expect(customButton.disabled).to.be.true;
+    });
+
+    it('should not disable the text area', async () => {
+      messageInput.submitDisabled = true;
+      expect(textArea.disabled).to.be.false;
+
+      textArea.focus();
+      await sendKeys({ type: 'foo' });
+      expect(messageInput.value).to.equal('foo');
+    });
+
+    it('should not fire a submit event on Enter keydown', () => {
+      const spy = sinon.spy();
+      messageInput.addEventListener('submit', spy);
+      messageInput.submitDisabled = true;
+      textArea.value = 'foo';
+      enterKeyDown(textArea.inputElement);
+      expect(spy).to.be.not.called;
+      expect(messageInput.value).to.equal('foo');
+    });
+
+    it('should not add a line break on Enter press', async () => {
+      messageInput.submitDisabled = true;
+      textArea.focus();
+      await sendKeys({ type: 'foo' });
+      await sendKeys({ press: 'Enter' });
+      expect(messageInput.value).to.equal('foo');
+    });
+
+    it('should not fire a submit event on custom button click', async () => {
+      const customButton = document.createElement('div');
+      customButton.setAttribute('slot', 'button');
+      button.replaceWith(customButton);
+      await nextFrame();
+
+      const spy = sinon.spy();
+      messageInput.addEventListener('submit', spy);
+      messageInput.submitDisabled = true;
+      messageInput.value = 'foo';
+      customButton.click();
+      expect(spy).to.be.not.called;
+      expect(messageInput.value).to.equal('foo');
+    });
+
+    it('should enable the submit button with value when submitDisabled set to false', () => {
+      messageInput.submitDisabled = true;
+      messageInput.submitDisabled = false;
+      expect(button.disabled).to.be.true;
+
+      messageInput.submitDisabled = true;
+      messageInput.value = 'foo';
+      messageInput.submitDisabled = false;
+      expect(button.disabled).to.be.false;
+    });
+
+    it('should fire a submit event on Enter keydown when submitDisabled set to false', () => {
+      const spy = sinon.spy();
+      messageInput.addEventListener('submit', spy);
+      messageInput.submitDisabled = true;
+      textArea.value = 'foo';
+      enterKeyDown(textArea.inputElement);
+
+      messageInput.submitDisabled = false;
+      enterKeyDown(textArea.inputElement);
+      expect(spy).to.be.calledOnce;
+      expect(spy.firstCall.args[0].detail.value).to.equal('foo');
+      expect(messageInput.value).to.be.empty;
     });
   });
 
