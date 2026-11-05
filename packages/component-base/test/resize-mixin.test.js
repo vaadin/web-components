@@ -83,6 +83,19 @@ describe('ResizeMixin', () => {
         expect(spy.calledOnce).to.be.true;
       });
 
+      it('should not throw when detached with a pending parent resize', async () => {
+        parent.style.width = '100px';
+        // Detach after the mixin observer has queued the parent entry, before it runs.
+        await new Promise((resolve) => {
+          new ResizeObserver((_, observer) => {
+            observer.disconnect();
+            parent.removeChild(element);
+            resolve();
+          }).observe(parent);
+        });
+        await aTimeout(0);
+      });
+
       describe('multiple children', () => {
         let sibling, spy1, spy2;
 
