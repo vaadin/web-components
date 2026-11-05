@@ -1,5 +1,5 @@
 import { expect } from '@vaadin/chai-plugins';
-import { aTimeout, defineLit, fixtureSync, nextFrame, nextResize } from '@vaadin/testing-helpers';
+import { aTimeout, defineLit, fixtureSync, nextFrame, nextRender, nextResize } from '@vaadin/testing-helpers';
 import sinon from 'sinon';
 import { PolylitMixin } from '../src/polylit-mixin.js';
 import { ResizeMixin } from '../src/resize-mixin.js';
@@ -85,14 +85,9 @@ describe('ResizeMixin', () => {
 
       it('should not throw when detached with a pending parent resize', async () => {
         parent.style.width = '100px';
-        // Detach after the mixin observer has queued the parent entry, before it runs.
-        await new Promise((resolve) => {
-          new ResizeObserver((_, observer) => {
-            observer.disconnect();
-            parent.removeChild(element);
-            resolve();
-          }).observe(parent);
-        });
+        // Detach before the deferred resize callback runs.
+        await nextRender();
+        parent.removeChild(element);
         await aTimeout(0);
       });
 
