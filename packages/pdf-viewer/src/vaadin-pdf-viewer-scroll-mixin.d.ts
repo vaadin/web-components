@@ -21,7 +21,8 @@ export declare function PdfViewerScrollMixin<T extends Constructor<HTMLElement>>
 export declare class PdfViewerScrollMixinClass {
   /**
    * The current page, starting from 1. The viewer updates it while the
-   * user scrolls, to the page that takes up most of the visible area.
+   * user scrolls, to the page with the largest part of it in view, or,
+   * for a page taller than the view, the largest part of the view.
    * Setting it to another page scrolls to the start of that page.
    * Setting it to the current page does not scroll. A value that is not
    * a page of the document logs a warning and does not scroll. A set

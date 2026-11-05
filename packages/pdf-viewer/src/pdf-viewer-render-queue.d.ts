@@ -68,7 +68,7 @@ export declare class PdfViewerRenderQueue<TPage extends PdfViewerRenderQueuePage
    * Renders the visible pages, the most visible first, then the pages next to
    * them, and frees the canvases of pages that are far from the view.
    */
-  update(visible: Array<{ index: number; height: number }>): void;
+  update(visible: Array<{ index: number; ratio: number }>): void;
 
   /**
    * Stops rendering pages, e.g. when no page is visible. The page being rendered finishes.

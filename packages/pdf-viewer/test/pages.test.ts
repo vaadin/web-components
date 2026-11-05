@@ -49,6 +49,13 @@ describe('pages', () => {
     await nextRenderIdle(viewer);
   }
 
+  async function scrollWithoutRender(scrollTop: number) {
+    const scrolled = oneEvent(content, 'scroll');
+    content.scrollTop = scrollTop;
+    await scrolled;
+    await nextFrame();
+  }
+
   afterEach(() => {
     sinon.restore();
   });
@@ -221,10 +228,7 @@ describe('pages', () => {
 
       it('should restore the scroll position when shown again', async () => {
         const scrollTop = pages[2].offsetTop + 50;
-        const scrolled = oneEvent(content, 'scroll');
-        content.scrollTop = scrollTop;
-        await scrolled;
-        await nextFrame();
+        await scrollWithoutRender(scrollTop);
         viewer.hidden = true;
         await nextResize(viewer);
         viewer.hidden = false;
@@ -550,6 +554,39 @@ describe('pages', () => {
       const [portrait, landscape] = [...pages].map((page) => page.getBoundingClientRect());
       expect(portrait.height / portrait.width).to.be.closeTo(792 / 612, 0.01);
       expect(landscape.width / landscape.height).to.be.closeTo(792 / 612, 0.01);
+    });
+  });
+
+  describe('short and tall pages', () => {
+    beforeEach(async () => {
+      await createViewer();
+      await loadAndRender(
+        viewer,
+        createPdf([
+          { content: '', mediaBox: [0, 0, 612, 100] },
+          { content: '', mediaBox: [0, 0, 612, 792] },
+          { content: '', mediaBox: [0, 0, 612, 2000] },
+          { content: '', mediaBox: [0, 0, 612, 100] },
+        ]),
+      );
+    });
+
+    it('should be the first page when scrolled back to the top', async () => {
+      await scrollWithoutRender(50);
+      expect(viewer.page).to.equal(2);
+      await scrollWithoutRender(0);
+      expect(viewer.page).to.equal(1);
+    });
+
+    it('should be the last page when scrolled to the bottom', async () => {
+      await scrollTo(content.scrollHeight);
+      expect(viewer.page).to.equal(4);
+    });
+
+    it('should keep a page taller than the view while it fills most of the view', async () => {
+      // Page 3 is three times taller than the view, page 4 shows 60% of it
+      await scrollTo(pages[3].offsetTop + pages[3].offsetHeight * 0.6 - content.clientHeight);
+      expect(viewer.page).to.equal(3);
     });
   });
 
