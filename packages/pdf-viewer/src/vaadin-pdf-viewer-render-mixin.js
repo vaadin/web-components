@@ -139,8 +139,8 @@ export const PdfViewerRenderMixin = (superClass) =>
      * Renders the visible pages, the most visible first, then the pages next
      * to them, and frees the canvases of pages far from the view. Stops
      * rendering when no page is visible.
-     * @param {Array<{ index: number, height: number }>} visible the indexes of
-     *   the visible pages in document order, with their visible height
+     * @param {Array<{ index: number, ratio: number }>} visible the indexes of
+     *   the visible pages in document order, with the part of their height in view
      * @protected
      */
     _renderVisible(visible) {

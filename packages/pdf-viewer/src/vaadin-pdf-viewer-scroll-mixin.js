@@ -28,7 +28,7 @@ export const PdfViewerScrollMixin = (superClass) =>
       return {
         /**
          * The current page, starting from 1. The viewer updates it while the
-         * user scrolls, to the page that takes up most of the visible area.
+         * user scrolls, to the page that has the largest part of its height in view.
          * Setting it to another page scrolls to the start of that page.
          * Setting it to the current page does not scroll. A value that is not
          * a page of the document logs a warning and does not scroll. A set
@@ -54,7 +54,7 @@ export const PdfViewerScrollMixin = (superClass) =>
       };
     }
 
-    /** The index of the page that takes up most of the view, updated with the visible pages. */
+    /** The index of the page with the largest part of its height in view, updated with the visible pages. */
     #currentIndex = 0;
 
     /** The last page that the viewer set itself, to not scroll to it again. */

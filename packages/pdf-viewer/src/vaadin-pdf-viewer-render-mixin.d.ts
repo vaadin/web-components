@@ -44,7 +44,7 @@ export declare class PdfViewerRenderMixinClass {
    * to them, and frees the canvases of pages far from the view. Stops
    * rendering when no page is visible.
    */
-  protected _renderVisible(visible: Array<{ index: number; height: number }>): void;
+  protected _renderVisible(visible: Array<{ index: number; ratio: number }>): void;
 
   /**
    * Cancels rendering the page being rendered, e.g. before the pages get another size.

@@ -14,6 +14,8 @@ export type PdfViewerVisiblePage = {
   index: number;
   /** The height of the page that is inside the view. */
   height: number;
+  /** The part of the page height that is inside the view, from 0 to 1. */
+  ratio: number;
 };
 
 export type PdfViewerPageBox = {
@@ -36,7 +38,7 @@ export declare function getFitScale(availableWidth: number, pageWidth: number): 
 /**
  * Returns the pages that intersect the view, in document order. When no page
  * intersects it, returns the first page below the top of the view with a
- * visible height of 0.
+ * visible height and ratio of 0.
  */
 export declare function getVisiblePages(
   count: number,
@@ -46,8 +48,8 @@ export declare function getVisiblePages(
 ): PdfViewerVisiblePage[];
 
 /**
- * Returns the index of the page that takes up most of the view. The first
- * one wins a tie.
+ * Returns the index of the page with the largest part of its height inside
+ * the view. The first one wins a tie.
  */
 export declare function getMostVisibleIndex(visible: PdfViewerVisiblePage[]): number;
 

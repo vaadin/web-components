@@ -13,6 +13,7 @@
  * @typedef {Object} PdfViewerVisiblePage
  * @property {number} index The index of the page.
  * @property {number} height The height of the page that is inside the view.
+ * @property {number} ratio The part of the page height that is inside the view, from 0 to 1.
  */
 
 /**
@@ -38,7 +39,7 @@ export function getFitScale(availableWidth, pageWidth) {
 /**
  * Returns the pages that intersect the view, in document order. When no page
  * intersects it, returns the first page below the top of the view with a
- * visible height of 0.
+ * visible height and ratio of 0.
  *
  * @param {number} count the number of pages
  * @param {(index: number) => { top: number, height: number }} getBounds
@@ -67,23 +68,24 @@ export function getVisiblePages(count, getBounds, viewTop, viewBottom) {
     if (top >= viewBottom) {
       break;
     }
-    visible.push({ index, height: Math.min(viewBottom, top + height) - Math.max(viewTop, top) });
+    const visibleHeight = Math.min(viewBottom, top + height) - Math.max(viewTop, top);
+    visible.push({ index, height: visibleHeight, ratio: height > 0 ? visibleHeight / height : 0 });
   }
   if (!visible.length) {
-    visible.push({ index: low, height: 0 });
+    visible.push({ index: low, height: 0, ratio: 0 });
   }
   return visible;
 }
 
 /**
- * Returns the index of the page that takes up most of the view. The first
- * one wins a tie.
+ * Returns the index of the page with the largest part of its height inside
+ * the view. The first one wins a tie.
  *
  * @param {PdfViewerVisiblePage[]} visible
  * @return {number}
  */
 export function getMostVisibleIndex(visible) {
-  return visible.reduce((result, item) => (item.height > result.height ? item : result)).index;
+  return visible.reduce((result, item) => (item.ratio > result.ratio ? item : result)).index;
 }
 
 /**
