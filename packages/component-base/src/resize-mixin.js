@@ -51,7 +51,6 @@ const ResizeMixinImplementation = (superclass) =>
           parent.resizables = new Set();
         }
 
-        // The set stays on the parent after the last resizable detaches.
         if (parent.resizables.size === 0) {
           observer.observe(parent);
         }
