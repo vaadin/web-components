@@ -69,12 +69,13 @@ how to generate them.
   - Its `_zoomFactor` getter reads `_scale`, in units of the actual page size.
 - `PdfViewerTextLayerMixin` renders the text layer of each rendered page and sets the document language on the
   pages. A page loads its text each time it renders, as pdf.js' own viewer does.
-- `PdfViewerStructureMixin` renders the structure of each rendered page of a tagged PDF, after its text layer.
+  - The page renders the structure of a tagged PDF right after its text layer, as pdf.js' own viewer does.
+    The structure has no state of the viewer, so it has no mixin.
 - `PdfViewerLinksMixin` adds the links of each rendered page and follows internal links with `_scrollToPage()`.
   - The page adds the links to the structure or to the text once both the structure and the links have rendered.
-    The links mixin therefore needs the structure mixin, which marks a page without structure as rendered too.
+    A page without structure counts as rendered once its text layer has rendered.
 - After a page canvas renders, `PdfViewerRenderMixin` awaits `_renderPageLayers(page)`. Each override awaits
-  `super` first, so the layers render in the order of the mixins: text, then structure, then links.
+  `super` first, so the layers render in the order of the mixins: text and structure, then links.
 - The page view owns the DOM of a page: the canvas, the text layer, the structure and the link layer. Its methods
   check after each await that the page still has the same canvas or text layer, so a released page gets no layers.
 - `PdfViewerKeyboardMixin` handles the keyboard shortcuts.

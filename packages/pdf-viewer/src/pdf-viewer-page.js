@@ -294,8 +294,9 @@ export class PdfViewerPage {
 
   /**
    * Renders the text layer: transparent text on top of the canvas, which makes
-   * the text selectable and readable by assistive technology. When the layer
-   * exists, it is only resized to the current scale.
+   * the text selectable and readable by assistive technology, and then the
+   * structure of a tagged PDF page. When the layer exists, it is only resized
+   * to the current scale.
    *
    * @return {Promise<void>}
    */
@@ -342,25 +343,22 @@ export class PdfViewerPage {
       endOfContent.className = 'end-of-content';
       container.append(endOfContent);
       this.endOfContentElement = endOfContent;
+      // As in pdf.js, the structure renders right after the text layer, as its elements own the text.
+      await this.#renderStructureLayer();
     }
   }
 
   /**
-   * Renders the structure of a tagged PDF page for assistive technology,
-   * once the text layer has rendered, as its elements own the text.
-   *
-   * @return {Promise<void>}
+   * Renders the structure of a tagged PDF page for assistive technology.
+   * @private
    */
-  async renderStructureLayer() {
+  async #renderStructureLayer() {
     const textLayerElement = this.textLayerElement;
-    if (!this.endOfContentElement || this.#structureRendered) {
-      return;
-    }
     // The structure is optional. A page with a broken one is shown as untagged.
     this.#structTree ??= this.pdfPage.getStructTree().catch(() => null);
     const tree = await this.#structTree;
     // The page may have been released meanwhile.
-    if (this.textLayerElement !== textLayerElement || this.#structureRendered) {
+    if (this.textLayerElement !== textLayerElement) {
       return;
     }
     this.#structureRendered = true;

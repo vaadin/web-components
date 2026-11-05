@@ -16,7 +16,6 @@ import type { PdfViewerKeyboardMixinClass } from './vaadin-pdf-viewer-keyboard-m
 import type { PdfViewerLinksMixinClass } from './vaadin-pdf-viewer-links-mixin.js';
 import type { PdfViewerRenderMixinClass } from './vaadin-pdf-viewer-render-mixin.js';
 import type { PdfViewerScrollMixinClass } from './vaadin-pdf-viewer-scroll-mixin.js';
-import type { PdfViewerStructureMixinClass } from './vaadin-pdf-viewer-structure-mixin.js';
 import type { PdfViewerTextLayerMixinClass } from './vaadin-pdf-viewer-text-layer-mixin.js';
 import type { PdfViewerToolbarMixinClass } from './vaadin-pdf-viewer-toolbar-mixin.js';
 import type { PdfViewerZoomMixinClass } from './vaadin-pdf-viewer-zoom-mixin.js';
@@ -30,7 +29,6 @@ export declare function PdfViewerMixin<T extends Constructor<HTMLElement>>(
   Constructor<PdfViewerKeyboardMixinClass> &
   Constructor<KeyboardMixinClass> &
   Constructor<PdfViewerLinksMixinClass> &
-  Constructor<PdfViewerStructureMixinClass> &
   Constructor<PdfViewerTextLayerMixinClass> &
   Constructor<PdfViewerZoomMixinClass> &
   Constructor<PdfViewerScrollMixinClass> &
