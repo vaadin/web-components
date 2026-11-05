@@ -1133,17 +1133,21 @@ export const PdfViewerMixin = (superClass) =>
         if (offsetTop >= viewBottom) {
           break;
         }
-        visible.push({ index, height: Math.min(viewBottom, offsetTop + offsetHeight) - Math.max(viewTop, offsetTop) });
+        const height = Math.min(viewBottom, offsetTop + offsetHeight) - Math.max(viewTop, offsetTop);
+        // Compare pages by the part of them in view, so that a short page is not outweighed by a long
+        // one. A page taller than the view can at most fill the view.
+        const maxHeight = Math.min(offsetHeight, viewBottom - viewTop);
+        visible.push({ index, ratio: maxHeight > 0 ? height / maxHeight : 0 });
       }
       if (!visible.length) {
-        visible.push({ index: low, height: 0 });
+        visible.push({ index: low, ratio: 0 });
       }
 
       this.#updateCurrentPage(visible);
 
       const first = visible[0].index;
       const last = visible.at(-1).index;
-      const byVisibility = [...visible].sort((a, b) => b.height - a.height).map(({ index }) => pages[index]);
+      const byVisibility = [...visible].sort((a, b) => b.ratio - a.ratio).map(({ index }) => pages[index]);
       const ahead = [];
       for (let distance = 1; distance <= RENDER_AHEAD; distance++) {
         ahead.push(pages[last + distance], pages[first - distance]);
@@ -1157,8 +1161,8 @@ export const PdfViewerMixin = (superClass) =>
 
     /** @private */
     #updateCurrentPage(visible) {
-      // The page that takes up most of the view. The first one wins a tie.
-      const mostVisible = visible.reduce((result, item) => (item.height > result.height ? item : result));
+      // The page with the largest part in view. The first one wins a tie.
+      const mostVisible = visible.reduce((result, item) => (item.ratio > result.ratio ? item : result));
       this.#currentIndex = mostVisible.index;
 
       // Keep a page that was scrolled to as long as the view has not moved.

@@ -4,7 +4,7 @@ import sinon from 'sinon';
 import './enable-feature-flag.js';
 import '../vaadin-pdf-viewer.js';
 import type { PdfViewer } from '../vaadin-pdf-viewer.js';
-import { fixtureUrl, loadDocument, nextRenderIdle } from './helpers.js';
+import { createPdf, fixtureUrl, loadDocument, nextRenderIdle } from './helpers.js';
 
 const A4_RATIO = 842.88 / 595.92;
 
@@ -38,6 +38,14 @@ describe('pages', () => {
     getContent().scrollTop = scrollTop;
     // Scrolling in these tests always brings a page into view that still needs rendering
     await nextRenderIdle(viewer);
+  }
+
+  async function scrollWithoutRender(scrollTop: number) {
+    const content = getContent();
+    const scrolled = oneEvent(content, 'scroll');
+    content.scrollTop = scrollTop;
+    await scrolled;
+    await nextFrame();
   }
 
   async function createViewer(attributes = '') {
@@ -208,6 +216,47 @@ describe('pages', () => {
         const padding = parseFloat(getComputedStyle(getContent()).paddingLeft);
         expect(page.offsetWidth).to.be.closeTo(getContent().clientWidth - 2 * padding, 1);
       });
+    });
+  });
+
+  describe('short and tall pages', () => {
+    let url: string;
+
+    beforeEach(async () => {
+      await createViewer();
+      url = createPdf([
+        { content: '', mediaBox: [0, 0, 612, 100] },
+        { content: '', mediaBox: [0, 0, 612, 792] },
+        { content: '', mediaBox: [0, 0, 612, 2000] },
+        { content: '', mediaBox: [0, 0, 612, 100] },
+      ]);
+      const idle = nextRenderIdle(viewer);
+      viewer.src = url;
+      await idle;
+    });
+
+    afterEach(() => {
+      URL.revokeObjectURL(url);
+    });
+
+    it('should be the first page when scrolled back to the top', async () => {
+      await scrollWithoutRender(50);
+      expect(viewer.page).to.equal(2);
+      await scrollWithoutRender(0);
+      expect(viewer.page).to.equal(1);
+    });
+
+    it('should be the last page when scrolled to the bottom', async () => {
+      await scrollWithoutRender(getContent().scrollHeight);
+      expect(viewer.page).to.equal(4);
+    });
+
+    it('should keep a page taller than the view while it fills most of the view', async () => {
+      // Page 3 is several times taller than the view, page 4 shows 60% of it
+      const [, , tall, last] = getPages();
+      await scrollWithoutRender(last.offsetTop + last.offsetHeight * 0.6 - getContent().clientHeight);
+      expect(viewer.page).to.equal(3);
+      expect(tall.offsetHeight).to.be.above(getContent().clientHeight);
     });
   });
 
