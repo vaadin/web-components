@@ -4,7 +4,6 @@ export const snapshots = {};
 snapshots["vaadin-accordion-panel host default"] = 
 `<vaadin-accordion-panel>
   <vaadin-accordion-heading
-    aria-controls="content-vaadin-accordion-panel-0"
     id="summary-vaadin-accordion-panel-1"
     role="heading"
     slot="summary"
@@ -26,7 +25,6 @@ snapshots["vaadin-accordion-panel host default"] =
 snapshots["vaadin-accordion-panel host opened"] = 
 `<vaadin-accordion-panel opened="">
   <vaadin-accordion-heading
-    aria-controls="content-vaadin-accordion-panel-0"
     id="summary-vaadin-accordion-panel-1"
     opened=""
     role="heading"
@@ -49,7 +47,6 @@ snapshots["vaadin-accordion-panel host opened"] =
 snapshots["vaadin-accordion-panel host disabled"] = 
 `<vaadin-accordion-panel disabled="">
   <vaadin-accordion-heading
-    aria-controls="content-vaadin-accordion-panel-0"
     aria-disabled="true"
     disabled=""
     id="summary-vaadin-accordion-panel-1"
@@ -74,7 +71,6 @@ snapshots["vaadin-accordion-panel host disabled"] =
 snapshots["vaadin-accordion-panel host theme"] = 
 `<vaadin-accordion-panel theme="filled">
   <vaadin-accordion-heading
-    aria-controls="content-vaadin-accordion-panel-0"
     id="summary-vaadin-accordion-panel-1"
     role="heading"
     slot="summary"
