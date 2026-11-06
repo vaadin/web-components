@@ -82,7 +82,8 @@ export const PdfViewerMixin = (superClass) =>
 
         /**
          * The current page, starting from 1. The viewer updates it while the
-         * user scrolls, to the page that takes up most of the visible area.
+         * user scrolls, to the page with the largest part of it in view, or,
+         * for a page taller than the view, the largest part of the view.
          * Setting it scrolls to the start of that page.
          */
         page: {
@@ -185,7 +186,7 @@ export const PdfViewerMixin = (superClass) =>
     /** The scale of the pages in CSS pixels per PDF unit, or 0 before the pages are laid out. */
     #scale = 0;
 
-    /** The index of the page that takes up most of the view, updated with the visible pages. */
+    /** The index of the page with the largest part of it (or of the view) in view, updated with the visible pages. */
     #currentIndex = 0;
 
     /** The pages to render, in order of priority. */

@@ -25,7 +25,8 @@ export declare class PdfViewerMixinClass {
 
   /**
    * The current page, starting from 1. The viewer updates it while the
-   * user scrolls, to the page that takes up most of the visible area.
+   * user scrolls, to the page with the largest part of it in view, or,
+   * for a page taller than the view, the largest part of the view.
    * Setting it scrolls to the start of that page.
    */
   page: number;
