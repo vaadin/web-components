@@ -140,7 +140,11 @@ export const PdfViewerToolbarMixin = (superClass) =>
           .disabled="${!hasDocument || page <= 1}"
           @click="${this.#onPreviousPageClick}"
         >
-          <vaadin-tooltip slot="tooltip" aria-link-mode="aria-labelledby" .text="${i18n.previousPage}"></vaadin-tooltip>
+          <vaadin-tooltip
+            slot="tooltip"
+            .ariaLinkMode="${'aria-labelledby'}"
+            .text="${i18n.previousPage}"
+          ></vaadin-tooltip>
         </vaadin-pdf-viewer-button>
         <vaadin-pdf-viewer-button
           slot="toolbar-navigation"
@@ -149,7 +153,7 @@ export const PdfViewerToolbarMixin = (superClass) =>
           .disabled="${!hasDocument || page >= pageCount}"
           @click="${this.#onNextPageClick}"
         >
-          <vaadin-tooltip slot="tooltip" aria-link-mode="aria-labelledby" .text="${i18n.nextPage}"></vaadin-tooltip>
+          <vaadin-tooltip slot="tooltip" .ariaLinkMode="${'aria-labelledby'}" .text="${i18n.nextPage}"></vaadin-tooltip>
         </vaadin-pdf-viewer-button>
         <vaadin-integer-field
           slot="toolbar-navigation"
@@ -186,7 +190,7 @@ export const PdfViewerToolbarMixin = (superClass) =>
           .disabled="${!hasDocument || !getZoomOutLevel(zoomFactor)}"
           @click="${this.#onZoomOutClick}"
         >
-          <vaadin-tooltip slot="tooltip" aria-link-mode="aria-labelledby" .text="${i18n.zoomOut}"></vaadin-tooltip>
+          <vaadin-tooltip slot="tooltip" .ariaLinkMode="${'aria-labelledby'}" .text="${i18n.zoomOut}"></vaadin-tooltip>
         </vaadin-pdf-viewer-button>
         <vaadin-select
           slot="toolbar-zoom"
@@ -203,7 +207,7 @@ export const PdfViewerToolbarMixin = (superClass) =>
           .disabled="${!hasDocument || !getZoomInLevel(zoomFactor)}"
           @click="${this.#onZoomInClick}"
         >
-          <vaadin-tooltip slot="tooltip" aria-link-mode="aria-labelledby" .text="${i18n.zoomIn}"></vaadin-tooltip>
+          <vaadin-tooltip slot="tooltip" .ariaLinkMode="${'aria-labelledby'}" .text="${i18n.zoomIn}"></vaadin-tooltip>
         </vaadin-pdf-viewer-button>
       `;
     }
@@ -224,7 +228,7 @@ export const PdfViewerToolbarMixin = (superClass) =>
         >
           <vaadin-tooltip
             slot="tooltip"
-            aria-link-mode="aria-labelledby"
+            .ariaLinkMode="${'aria-labelledby'}"
             .text="${this.__effectiveI18n.download}"
           ></vaadin-tooltip>
         </vaadin-pdf-viewer-button>
