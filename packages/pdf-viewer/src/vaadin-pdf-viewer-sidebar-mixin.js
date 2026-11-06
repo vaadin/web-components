@@ -76,6 +76,18 @@ export const PdfViewerSidebarMixin = (superClass) =>
     }
 
     /**
+     * Override method from `PdfViewerRenderMixin` to give the thumbnails the
+     * size of their page, as the thumbnails can be created before the pages
+     * have their own size.
+     * @protected
+     * @override
+     */
+    _pageSizesChanged() {
+      super._pageSizesChanged();
+      this.#thumbnails.setAspectRatios(this.#getAspectRatios());
+    }
+
+    /**
      * Override method from `PdfViewerDocumentMixin` to remove the thumbnails
      * of the previous document.
      * @protected
@@ -128,8 +140,16 @@ export const PdfViewerSidebarMixin = (superClass) =>
 
     /** @private */
     #createThumbnails() {
-      const aspectRatios = this.__pages.map((page) => page.unscaledWidth / page.unscaledHeight);
-      this.#thumbnails.create(this._pdfDocument, aspectRatios);
+      this.#thumbnails.create(this._pdfDocument, this.#getAspectRatios());
+    }
+
+    /**
+     * Returns the width of each page divided by its height. Until the pages
+     * load their own size, they have the size of the first page.
+     * @private
+     */
+    #getAspectRatios() {
+      return this.__pages.map((page) => page.unscaledWidth / page.unscaledHeight);
     }
 
     /**

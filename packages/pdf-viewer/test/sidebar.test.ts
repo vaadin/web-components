@@ -10,6 +10,7 @@ import type { Tooltip } from '@vaadin/tooltip';
 import type { PdfViewerButton } from '../src/vaadin-pdf-viewer-button.js';
 import type { PdfViewer } from '../vaadin-pdf-viewer.js';
 import {
+  createPdf,
   createPdfUrl,
   fixtureUrl,
   getPdfDocumentPrototype,
@@ -205,6 +206,24 @@ describe('sidebar', () => {
       } else {
         delete (window as any).devicePixelRatio;
       }
+    }
+  });
+
+  it('should give the thumbnails the size of their page when the sidebar is open while the document loads', async () => {
+    // Many pages, so that the thumbnail of the last one is not rendered
+    const portrait = { content: '', mediaBox: [0, 0, 612, 792] as [number, number, number, number] };
+    const landscape = { content: '', mediaBox: [0, 0, 792, 612] as [number, number, number, number] };
+    const url = createPdf([...Array.from({ length: 30 }, () => portrait), landscape]);
+    try {
+      viewer.sidebarOpened = true;
+      await loadAndRender(viewer, url);
+      await nextFrame();
+      const last = getThumbnails()[30];
+      expect(last.querySelector('canvas')).to.be.null;
+      const { width, height } = last.querySelector('.thumbnail-image')!.getBoundingClientRect();
+      expect(width / height).to.be.closeTo(792 / 612, 0.01);
+    } finally {
+      URL.revokeObjectURL(url);
     }
   });
 
