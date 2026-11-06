@@ -69,7 +69,7 @@
         viewer.src = fileUrl;
       });
 
-      ['headerHidden', 'toolbarCollapsed', 'downloadButtonHidden'].forEach((prop) => {
+      ['headerHidden', 'toolbarCollapsed', 'findButtonHidden', 'downloadButtonHidden'].forEach((prop) => {
         document.getElementById(prop).addEventListener('checked-changed', (e) => {
           viewer[prop] = e.detail.value;
         });
@@ -160,6 +160,7 @@
         <vaadin-checkbox-group label="Options">
           <vaadin-checkbox id="headerHidden" value="headerHidden" label="Hide header"></vaadin-checkbox>
           <vaadin-checkbox id="toolbarCollapsed" value="toolbarCollapsed" label="Collapse toolbar"></vaadin-checkbox>
+          <vaadin-checkbox id="findButtonHidden" value="findButtonHidden" label="Hide find button"></vaadin-checkbox>
           <vaadin-checkbox
             id="downloadButtonHidden"
             value="downloadButtonHidden"

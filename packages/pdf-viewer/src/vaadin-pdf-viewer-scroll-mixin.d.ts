@@ -47,9 +47,11 @@ export declare class PdfViewerScrollMixinClass {
 
   /**
    * Scrolls the pages so that the given client rectangle is in the middle
-   * of the view, unless it is well inside the view already.
+   * of the view, unless it is well inside the view already. The top inset
+   * is the part of the view that something covers at the top, e.g. the
+   * find bar, at most half of the view.
    */
-  protected _scrollRectIntoView(rect: DOMRect): void;
+  protected _scrollRectIntoView(rect: DOMRect, options?: { topInset?: number }): void;
 
   /**
    * Returns the scale of the pages in CSS pixels per PDF unit for the given

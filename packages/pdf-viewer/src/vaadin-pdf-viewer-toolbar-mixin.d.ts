@@ -13,7 +13,7 @@ import type { TemplateResult } from 'lit';
 
 /**
  * A mixin that adds the header and the toolbar with the page navigation, the
- * zoom and the download button.
+ * zoom, and the find and download buttons.
  */
 export declare function PdfViewerToolbarMixin<T extends Constructor<HTMLElement>>(
   base: T,

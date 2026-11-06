@@ -77,9 +77,11 @@ how to generate them.
   - It scrolls to the current match with `_scrollRectIntoView()`. When the page of the match has not rendered,
     it goes to the page with `_scrollToPage()` first. A pending scroll to a match is dropped when `page` changes
     to another page.
+  - It renders the find button and the find bar with `_renderFindButton()` and `_renderFindBar()`. The toolbar
+    and the element template call them. It sits above the keyboard mixin, as it overrides `_onKeyDown()`.
 - `PdfViewerLinksMixin` adds the links of each rendered page and follows internal links with `_scrollToPage()`.
 - After a page canvas renders, `PdfViewerRenderMixin` awaits `_renderPageLayers(page)`. Each override awaits
-  `super` first, so the layers render in the order of the mixins: text, find, then links.
+  `super` first, so the layers render in the order of the mixins: text, links, then find.
 - The page view owns the DOM of a page: the canvas, the text layer, the link layer and the find layer. Its
   methods check after each await that the page still has the same canvas, so a released page gets no layers.
 - `PdfViewerKeyboardMixin` handles the keyboard shortcuts.
@@ -127,6 +129,16 @@ how to generate them.
   Of several calls in a row, only the last one runs.
 - A page without size, e.g. inside a hidden ancestor, gets its highlights once the viewer has a size again.
   The scroll to the current match waits for it too.
+- The find bar is over the top end of the pages, next to their scrollbar, as in the find of browsers.
+  - A match is scrolled into the part of the view below the find bar.
+  - A match at the top of the first page gets space above the pages, until the find bar closes.
+- `find()` opens the find bar without moving focus. `highlight()` leaves it closed and clears its text.
+- Typing in the find bar starts from the first match on or after the current page. Opening it again
+  continues from the match that was current when it closed.
+- Closing the find bar removes the highlights and selects the current match, so that a screen reader
+  continues from it. Focus returns to where it was, or to the pages when that element cannot take focus.
+- <kbd>Ctrl</kbd>+<kbd>F</kbd> or <kbd>Cmd</kbd>+<kbd>F</kbd> opens the find bar while focus is in the viewer.
+  While the find button is hidden, it opens the find of the browser.
 
 ## Install size
 

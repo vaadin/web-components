@@ -8,9 +8,57 @@
  * See https://vaadin.com/commercial-license-and-service-terms for the full
  * license.
  */
+import '@vaadin/component-base/src/styles/style-props.js';
 import { css } from 'lit';
 
 export const pdfViewerFindStyles = css`
+  /* Over the top end of the pages, next to the scrollbar, like the find of browsers */
+  [part='find-bar'] {
+    --_inset: var(--vaadin-gap-s);
+    position: absolute;
+    inset-block-start: var(--_inset);
+    inset-inline-end: calc(var(--_scrollbar-width, 0px) + var(--_inset));
+    z-index: 1;
+    display: flex;
+    flex-wrap: wrap;
+    align-items: center;
+    justify-content: flex-end;
+    gap: var(--vaadin-gap-xs);
+    box-sizing: border-box;
+    max-width: calc(100% - var(--_scrollbar-width, 0px) - 2 * var(--_inset));
+    padding: var(--vaadin-padding-xs);
+    border: 1px solid var(--vaadin-pdf-viewer-border-color, var(--vaadin-border-color-secondary));
+    border-radius: var(--vaadin-radius-m);
+    background: var(--vaadin-pdf-viewer-toolbar-background, var(--vaadin-background-color));
+    box-shadow: var(--vaadin-overlay-shadow, 0 8px 24px -4px rgba(0, 0, 0, 0.3));
+  }
+
+  [part='find-bar'][hidden] {
+    display: none;
+  }
+
+  /* Narrower in a narrow viewer, on a row of its own when the buttons don't fit next to it */
+  ::slotted(vaadin-text-field[slot='find-field']) {
+    flex: 1 1 min(100%, 10em);
+    width: 16em;
+    min-width: min(100%, 10em);
+    margin-block: 0;
+    padding-block: 0;
+  }
+
+  /* The buttons stay together when they wrap below the field */
+  .find-buttons {
+    display: flex;
+    flex: none;
+    align-items: center;
+    gap: var(--vaadin-gap-xs);
+  }
+
+  /* Space above the first page for a match that the find bar would cover otherwise */
+  #pages {
+    margin-block-start: var(--_find-space, 0);
+  }
+
   .find-layer {
     position: absolute;
     inset: 0;

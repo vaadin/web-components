@@ -48,9 +48,42 @@ export const pdfViewerButtonStyles = css`
     --_icon: var(--_vaadin-icon-download);
   }
 
+  :host([icon='find']) {
+    --_icon: var(--_vaadin-icon-search);
+  }
+
+  :host([icon='previous-match']) {
+    --_icon: var(--_vaadin-icon-chevron-down);
+  }
+
+  :host([icon='previous-match']) [part~='icon'] {
+    scale: 1 -1;
+  }
+
+  :host([icon='next-match']) {
+    --_icon: var(--_vaadin-icon-chevron-down);
+  }
+
+  :host([icon='close']) {
+    --_icon: var(--_vaadin-icon-cross);
+  }
+
+  /* The find button looks pressed while the find bar is open */
+  :host([aria-pressed='true']) {
+    background: var(--vaadin-background-container-strong);
+  }
+
   @media (forced-colors: active) {
+    :host([aria-pressed='true']) {
+      background: Highlight;
+    }
+
     [part~='icon'] {
       background: CanvasText;
+    }
+
+    :host([aria-pressed='true']) [part~='icon'] {
+      background: HighlightText;
     }
 
     :host([disabled]) [part~='icon'] {
