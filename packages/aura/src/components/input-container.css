@@ -1,6 +1,5 @@
 :where(:root),
-:where(:host),
-:where([theme]) {
+:where(:host) {
   --vaadin-input-field-error-color: var(--aura-red-text);
 }
 
