@@ -50,7 +50,21 @@ describe('zoom', () => {
       expect(Math.max(landscape.offsetWidth / width, landscape.offsetHeight / height)).to.be.closeTo(1, 0.01);
     });
 
+    it('should fit the whole landscape page with the automatic zoom', async () => {
+      await loadAndRender(viewer, portraitAndLandscape());
+      viewer.page = 2;
+      await nextRenderIdle(viewer);
+      viewer.style.height = '300px';
+      await nextResize(viewer);
+      await nextRenderIdle(viewer);
+      const { width, height } = getContentBoxSize(content);
+      const landscape = getPage(1);
+      expect(landscape.offsetHeight).to.be.at.most(height + 1);
+      expect(Math.max(landscape.offsetWidth / width, landscape.offsetHeight / height)).to.be.closeTo(1, 0.01);
+    });
+
     it('should fit the width of the current page with page-width', async () => {
+      viewer.zoom = 'page-width';
       await loadAndRender(viewer, portraitAndLandscape());
       viewer.page = 2;
       await nextRenderIdle(viewer);
@@ -90,8 +104,22 @@ describe('zoom', () => {
       pages = [...viewer.shadowRoot!.querySelectorAll<HTMLElement>('[part~="page"]')];
     });
 
-    it('should fit the page width by default', () => {
-      expect(viewer.zoom).to.equal('page-width');
+    it('should fit the page width with the automatic zoom by default', () => {
+      expect(viewer.zoom).to.equal('auto');
+      expect(pages[0].offsetWidth).to.be.closeTo(getContentBoxSize(content).width, 1);
+    });
+
+    it('should show the page at most at 125% with the automatic zoom in a wide viewer', async () => {
+      viewer.style.width = '1600px';
+      await nextResize(viewer);
+      await nextRenderIdle(viewer);
+      expect(pages[0].offsetWidth).to.be.closeTo(A4_WIDTH * 1.25, 1);
+    });
+
+    it('should fit the page width in a wide viewer with page-width', async () => {
+      viewer.style.width = '1600px';
+      viewer.zoom = 'page-width';
+      await nextRenderIdle(viewer);
       expect(pages[0].offsetWidth).to.be.closeTo(getContentBoxSize(content).width, 1);
     });
 
@@ -239,14 +267,14 @@ describe('zoom', () => {
           ['a symbol', Symbol('zoom')],
         ] as Array<[string, unknown]>
       ).forEach(([description, value]) => {
-        it(`should reset the zoom to page-width for ${description}`, async () => {
+        it(`should reset the zoom to auto for ${description}`, async () => {
           viewer.zoom = value as any;
           await nextRenderIdle(viewer);
           const page = pages[0];
           expect(page.offsetWidth).to.be.closeTo(getContentBoxSize(content).width, 1);
           expect(page.querySelector('canvas')!.width).to.be.greaterThan(0);
           expect(warnStub).to.be.calledOnce;
-          expect(viewer.zoom).to.equal('page-width');
+          expect(viewer.zoom).to.equal('auto');
         });
       });
     });

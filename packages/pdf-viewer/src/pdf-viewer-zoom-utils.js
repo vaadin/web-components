@@ -12,6 +12,9 @@
 /** CSS pixels per PDF unit at 100%: a PDF unit is 1/72 inch, a CSS pixel 1/96 inch. */
 export const PDF_TO_CSS_UNITS = 96 / 72;
 
+/** The largest zoom factor of the `auto` zoom, as in pdf.js. */
+export const MAX_AUTO_ZOOM = 1.25;
+
 /** The zoom levels of the zoom select, the zoom buttons and the zoom shortcuts. */
 export const ZOOM_LEVELS = [0.25, 0.5, 0.75, 1, 1.25, 1.5, 2, 3, 4];
 
@@ -46,13 +49,13 @@ export function formatZoom(zoom) {
 }
 
 /**
- * Whether the value is a supported `zoom`: `page-width`, `page-fit`, or a
- * finite positive number, also as a string.
+ * Whether the value is a supported `zoom`: `auto`, `page-width`, `page-fit`,
+ * or a finite positive number, also as a string.
  * @param {unknown} zoom
  * @return {boolean}
  */
 export function isValidZoom(zoom) {
-  if (zoom === 'page-width' || zoom === 'page-fit') {
+  if (zoom === 'auto' || zoom === 'page-width' || zoom === 'page-fit') {
     return true;
   }
   // Other types are not converted, as converting e.g. an object can throw.

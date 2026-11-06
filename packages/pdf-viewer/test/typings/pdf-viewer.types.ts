@@ -40,7 +40,7 @@ assertType<boolean>(viewer.downloadButtonHidden);
 assertType<number>(viewer.page);
 assertType<number>(viewer.pageCount);
 assertType<PdfViewerZoom>(viewer.zoom);
-assertType<'page-fit' | 'page-width' | number>(viewer.zoom);
+assertType<'auto' | 'page-fit' | 'page-width' | number>(viewer.zoom);
 assertType<PdfViewerI18n | undefined>(viewer.i18n);
 assertType<PdfViewerI18n>({ link: 'Link', goToPage: 'Go to page {page}', externalLink: '{text} (opens in a new tab)' });
 assertType<PdfViewerI18n>({ download: 'Download' });
