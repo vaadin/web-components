@@ -1,4 +1,4 @@
-import { nextFrame, oneEvent } from '@vaadin/testing-helpers';
+import { nextFrame, nextUpdate, oneEvent } from '@vaadin/testing-helpers';
 import sinon from 'sinon';
 import type { PDFDocumentProxy, PDFPageProxy } from 'pdfjs-dist';
 import { acquireWorker, loadPdfjs, releaseWorker } from '../src/pdfjs-loader.js';
@@ -243,4 +243,43 @@ export function createPdfUrl(pageCount: number): string {
       mediaBox: [0, 0, 612, 792],
     })),
   );
+}
+
+/**
+ * Holds the pages of all documents from the given page number on until
+ * released, e.g. to stop printing before them. Returns the function that
+ * releases them.
+ */
+export async function holdPages(fromPage: number): Promise<() => void> {
+  const prototype = await getPdfDocumentPrototype();
+  const { getPage } = prototype;
+  let release!: () => void;
+  const released = new Promise<void>((resolve) => {
+    release = resolve;
+  });
+  prototype.getPage = async function (this: PDFDocumentProxy, pageNumber: number) {
+    if (pageNumber >= fromPage) {
+      await released;
+    }
+    return getPage.call(this, pageNumber);
+  };
+  return () => {
+    prototype.getPage = getPage;
+    release();
+  };
+}
+
+/**
+ * Starts printing and waits until the progress shows. Printing stays in
+ * progress until the returned function releases the pages.
+ */
+export async function startPrint(viewer: PdfViewer): Promise<() => void> {
+  const release = await holdPages(1);
+  viewer.print();
+  const getProgressBar = () => viewer.querySelector<HTMLElement>('vaadin-progress-bar');
+  for (let i = 0; i < 50 && !getProgressBar(); i++) {
+    await nextFrame();
+  }
+  await nextUpdate(getProgressBar()!);
+  return release;
 }
