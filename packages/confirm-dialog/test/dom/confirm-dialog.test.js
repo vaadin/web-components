@@ -1,6 +1,7 @@
 import { expect } from '@vaadin/chai-plugins';
 import { fixtureSync, nextRender, nextUpdate, oneEvent } from '@vaadin/testing-helpers';
 import '../../src/vaadin-confirm-dialog.js';
+import { resetUniqueId } from '@vaadin/component-base/src/unique-id-utils.js';
 
 describe('vaadin-confirm-dialog', () => {
   let dialog, overlay;
@@ -12,6 +13,7 @@ describe('vaadin-confirm-dialog', () => {
   };
 
   beforeEach(async () => {
+    resetUniqueId();
     dialog = fixtureSync(`
       <vaadin-confirm-dialog header="Unsaved changes">
         Do you want to save or discard the changes?

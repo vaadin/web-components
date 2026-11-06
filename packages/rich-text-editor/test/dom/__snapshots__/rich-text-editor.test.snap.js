@@ -5,7 +5,7 @@ snapshots["vaadin-rich-text-editor host"] =
 `<vaadin-rich-text-editor>
   <vaadin-confirm-dialog
     aria-description=""
-    aria-label="Link address"
+    aria-labelledby="header-vaadin-confirm-dialog-3"
     aria-modal="true"
     cancel-button-visible=""
     reject-theme="error"
@@ -16,7 +16,7 @@ snapshots["vaadin-rich-text-editor host"] =
   >
     <vaadin-text-field style="width: 100%;">
       <label
-        for="input-vaadin-text-field-3"
+        for="input-vaadin-text-field-4"
         id="label-vaadin-text-field-0"
         slot="label"
       >
@@ -28,13 +28,14 @@ snapshots["vaadin-rich-text-editor host"] =
       >
       </div>
       <input
-        id="input-vaadin-text-field-3"
+        id="input-vaadin-text-field-4"
         slot="input"
         type="text"
       >
     </vaadin-text-field>
     <h3
       aria-level="1"
+      id="header-vaadin-confirm-dialog-3"
       slot="header"
     >
       Link address
@@ -424,7 +425,7 @@ snapshots["vaadin-rich-text-editor host"] =
     slot="tooltip"
   >
     <div
-      id="vaadin-tooltip-4"
+      id="vaadin-tooltip-5"
       role="tooltip"
       slot="overlay"
     >
