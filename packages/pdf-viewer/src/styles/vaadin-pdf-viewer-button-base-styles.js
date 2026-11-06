@@ -58,7 +58,7 @@ export const pdfViewerButtonStyles = css`
   }
 
   /* The sidebar button looks pressed while the sidebar is shown */
-  :host([aria-expanded='true']) {
+  :host([icon='sidebar'][aria-expanded='true']) {
     background: var(--vaadin-background-container-strong);
   }
 
@@ -71,11 +71,11 @@ export const pdfViewerButtonStyles = css`
       background: GrayText;
     }
 
-    :host([aria-expanded='true']) {
+    :host([icon='sidebar'][aria-expanded='true']) {
       background: Highlight;
     }
 
-    :host([aria-expanded='true']) [part~='icon'] {
+    :host([icon='sidebar'][aria-expanded='true']) [part~='icon'] {
       background: HighlightText;
     }
   }

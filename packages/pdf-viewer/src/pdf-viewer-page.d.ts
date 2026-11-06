@@ -18,6 +18,11 @@ import type { PdfViewerLinkAnnotation } from './pdf-viewer-links.js';
 export declare const MAX_CANVAS_PIXELS: number;
 
 /**
+ * Removes the canvas and frees its memory.
+ */
+export declare function freeCanvas(canvas: HTMLCanvasElement): void;
+
+/**
  * Manages the DOM of a single page of the document: a placeholder sized to
  * the page, and the canvas and the text and link layers the page is rendered
  * to once it is needed.

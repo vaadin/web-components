@@ -19,6 +19,17 @@ import { loadPdfjs } from './pdfjs-loader.js';
 export const MAX_CANVAS_PIXELS = 2 ** 24;
 
 /**
+ * Removes the canvas and frees its memory.
+ * @param {HTMLCanvasElement} canvas
+ */
+export function freeCanvas(canvas) {
+  // Shrinking the canvas frees its memory right away in Safari.
+  canvas.width = 0;
+  canvas.height = 0;
+  canvas.remove();
+}
+
+/**
  * Limits the clickable area of a link to the quadrilaterals of its annotation,
  * e.g. to the words of a link that wraps to the next line, as pdf.js does.
  * A link whose only quadrilateral is its rectangle gets no areas.
@@ -210,7 +221,7 @@ export class PdfViewerPage {
     try {
       await renderTask.promise;
     } catch (error) {
-      this.#freeCanvas(canvas);
+      freeCanvas(canvas);
       if (this.renderTask === renderTask) {
         this.renderTask = null;
       }
@@ -219,13 +230,13 @@ export class PdfViewerPage {
 
     // The page was released or rendered again meanwhile, drop this result.
     if (this.renderTask !== renderTask) {
-      this.#freeCanvas(canvas);
+      freeCanvas(canvas);
       return;
     }
     this.renderTask = null;
 
     if (this.canvas) {
-      this.#freeCanvas(this.canvas);
+      freeCanvas(this.canvas);
     }
     this.element.append(canvas);
     this.canvas = canvas;
@@ -418,16 +429,8 @@ export class PdfViewerPage {
     this.linkLayerElement = null;
     this.#linksRendered = false;
     if (this.canvas) {
-      this.#freeCanvas(this.canvas);
+      freeCanvas(this.canvas);
       this.canvas = null;
     }
-  }
-
-  /** @private */
-  #freeCanvas(canvas) {
-    // Shrinking the canvas frees its memory right away in Safari.
-    canvas.width = 0;
-    canvas.height = 0;
-    canvas.remove();
   }
 }

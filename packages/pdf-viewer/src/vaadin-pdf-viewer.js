@@ -38,7 +38,7 @@ const DEFAULT_I18N = {
   download: 'Download',
   sidebar: 'Sidebar',
   thumbnails: 'Page thumbnails',
-  pageLabel: 'Page {page}',
+  thumbnailLabel: 'Page {page}',
 };
 
 /**
@@ -90,7 +90,7 @@ const DEFAULT_I18N = {
  * `title`         | The title in the header.
  * `header-toggle` | The icon in the header that shows whether the toolbar is collapsed.
  * `toolbar`       | The toolbar above the pages.
- * `toolbar-group` | A group of related controls in the toolbar: navigation, zoom and actions.
+ * `toolbar-group` | A group of related controls in the toolbar: sidebar and navigation, zoom, and actions.
  * `sidebar`       | The sidebar next to the pages, see `sidebarOpened`.
  * `thumbnails`    | The scrollable list of page thumbnails in the sidebar.
  * `thumbnail`     | A page thumbnail. Also has the `current` part name for the current page.
@@ -208,7 +208,7 @@ class PdfViewer extends PdfViewerMixin(
    *   // Accessible name of the list of page thumbnails in the sidebar.
    *   thumbnails: 'Page thumbnails',
    *   // Accessible name of a page thumbnail. {page} is replaced with the page number.
-   *   pageLabel: 'Page {page}'
+   *   thumbnailLabel: 'Page {page}'
    * }
    * ```
    *
@@ -227,7 +227,7 @@ class PdfViewer extends PdfViewerMixin(
     return html`
       <div class="top-area" @focusin="${this.#onTopAreaFocusIn}">${this._renderToolbar()}</div>
       <div part="loader"></div>
-      <div class="main">
+      <div class="main-area">
         ${this._renderSidebar()}
         <div class="content-area">
           <div

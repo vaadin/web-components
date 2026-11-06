@@ -10,15 +10,14 @@
  */
 import { isKeyboardActive } from '@vaadin/a11y-base/src/focus-utils.js';
 import { issueWarning } from '@vaadin/component-base/src/warnings.js';
-
-/** The width of the thumbnail images in CSS pixels. */
-const THUMBNAIL_WIDTH = 96;
+import { freeCanvas } from './pdf-viewer-page.js';
 
 /**
  * @typedef {Object} PdfViewerThumbnail
  * @property {number} pageNumber
  * @property {HTMLElement} element
  * @property {HTMLCanvasElement | null} canvas
+ * @property {number} pixelRatio the device pixel ratio the canvas was rendered at
  * @property {import('pdfjs-dist').RenderTask | null} renderTask
  * @property {boolean} failed Whether rendering failed, so that it is not tried again until released.
  */
@@ -49,6 +48,9 @@ export class PdfViewerThumbnailsController {
   /** @type {IntersectionObserver | null} */
   #observer = null;
 
+  /** @type {MediaQueryList | null} */
+  #pixelRatioQuery = null;
+
   /** The accessible name of a thumbnail, with `{page}` for the page number. */
   #label = '';
 
@@ -60,8 +62,8 @@ export class PdfViewerThumbnailsController {
 
   /**
    * @param {HTMLElement} list the element to show the thumbnails in
-   * @param {{ onSelect: (pageNumber: number) => void }} callbacks
-   *   `onSelect`: called when the user chooses a thumbnail with a click, Enter or Space.
+   * @param {Object} callbacks
+   * @param {(pageNumber: number) => void} callbacks.onSelect called when the user chooses a thumbnail with a click, Enter or Space
    */
   constructor(list, { onSelect }) {
     this.#list = list;
@@ -74,6 +76,7 @@ export class PdfViewerThumbnailsController {
   hostConnected() {
     if (this.#thumbnails.length) {
       this.#observe();
+      this.#watchPixelRatio();
     }
   }
 
@@ -81,6 +84,7 @@ export class PdfViewerThumbnailsController {
   hostDisconnected() {
     this.#observer?.disconnect();
     this.#observer = null;
+    this.#unwatchPixelRatio();
     // The observer adds the visible thumbnails again when the host is attached.
     this.#visibleThumbnails.clear();
   }
@@ -89,15 +93,14 @@ export class PdfViewerThumbnailsController {
    * Creates a thumbnail for each page of the document, unless the list has
    * them already. They render once `show()` is called.
    * @param {import('pdfjs-dist').PDFDocumentProxy} pdfDocument
-   * @param {number} pageCount
-   * @param {number} aspectRatio the width of the first page divided by its height, for the thumbnails that are not rendered
+   * @param {number[]} aspectRatios the width of each page divided by its height, for the thumbnails that are not rendered
    */
-  create(pdfDocument, pageCount, aspectRatio) {
+  create(pdfDocument, aspectRatios) {
     if (this.#thumbnails.length) {
       return;
     }
     this.#pdfDocument = pdfDocument;
-    this.#thumbnails = Array.from({ length: pageCount }, (_, index) => {
+    this.#thumbnails = aspectRatios.map((aspectRatio, index) => {
       const element = document.createElement('div');
       element.setAttribute('role', 'option');
       element.setAttribute('part', 'thumbnail');
@@ -113,10 +116,11 @@ export class PdfViewerThumbnailsController {
       label.textContent = String(index + 1);
       element.append(image, label);
 
-      return { pageNumber: index + 1, element, canvas: null, renderTask: null, failed: false };
+      return { pageNumber: index + 1, element, canvas: null, pixelRatio: 0, renderTask: null, failed: false };
     });
     this.#list.replaceChildren(...this.#thumbnails.map((thumbnail) => thumbnail.element));
     this.#updateLabels();
+    this.#watchPixelRatio();
   }
 
   /**
@@ -141,16 +145,14 @@ export class PdfViewerThumbnailsController {
   setPage(page, scrollIntoView) {
     this.#page = page;
     const current = this.#thumbnails[page - 1];
-    this.#thumbnails.forEach(({ element }) => {
-      const isCurrent = element === current?.element;
-      // Only the current page is marked, so that screen readers do not say "not selected" for every page.
-      if (isCurrent) {
-        element.setAttribute('aria-selected', 'true');
-      } else {
-        element.removeAttribute('aria-selected');
-      }
-      element.part.toggle('current', isCurrent);
-    });
+    // Only the current page is marked, so that screen readers do not say "not selected" for every page.
+    const previous = this.#list.querySelector('[aria-selected]');
+    if (previous !== current?.element) {
+      previous?.removeAttribute('aria-selected');
+      previous?.part.remove('current');
+      current?.element.setAttribute('aria-selected', 'true');
+      current?.element.part.add('current');
+    }
 
     // The focused thumbnail stays the tab stop while the user is in the list. A page out of range keeps the tab stop.
     const tabStop =
@@ -181,6 +183,7 @@ export class PdfViewerThumbnailsController {
   clear() {
     this.#observer?.disconnect();
     this.#observer = null;
+    this.#unwatchPixelRatio();
     this.#thumbnails.forEach((thumbnail) => this.#release(thumbnail));
     this.#thumbnails = [];
     this.#visibleThumbnails.clear();
@@ -205,6 +208,27 @@ export class PdfViewerThumbnailsController {
     });
     this.#thumbnails.forEach(({ element }) => this.#observer.observe(element));
   }
+
+  /** @private */
+  #watchPixelRatio() {
+    this.#unwatchPixelRatio();
+    this.#pixelRatioQuery = window.matchMedia(`(resolution: ${window.devicePixelRatio || 1}dppx)`);
+    this.#pixelRatioQuery.addEventListener('change', this.#onPixelRatioChange);
+  }
+
+  /** @private */
+  #unwatchPixelRatio() {
+    this.#pixelRatioQuery?.removeEventListener('change', this.#onPixelRatioChange);
+    this.#pixelRatioQuery = null;
+  }
+
+  /** @private */
+  #onPixelRatioChange = () => {
+    // The query only matches the previous ratio, so watch the new one.
+    this.#watchPixelRatio();
+    // Render the visible thumbnails again at the new ratio.
+    this.#renderNext();
+  };
 
   /** @private */
   #onIntersection(entries) {
@@ -244,15 +268,22 @@ export class PdfViewerThumbnailsController {
     if (this.#isRendering || !pdfDocument || !this.#list.checkVisibility()) {
       return;
     }
+    const pixelRatio = window.devicePixelRatio || 1;
     const listRect = this.#list.getBoundingClientRect();
     const middle = listRect.top + listRect.height / 2;
-    const getDistance = ({ element }) => {
-      const rect = element.getBoundingClientRect();
-      return Math.abs(rect.top + rect.height / 2 - middle);
-    };
-    const thumbnail = [...this.#visibleThumbnails]
-      .filter((item) => !item.canvas && !item.failed)
-      .sort((a, b) => getDistance(a) - getDistance(b))[0];
+    let thumbnail = null;
+    let minDistance = Infinity;
+    this.#visibleThumbnails.forEach((item) => {
+      if (item.failed || (item.canvas && item.pixelRatio === pixelRatio)) {
+        return;
+      }
+      const rect = item.element.getBoundingClientRect();
+      const distance = Math.abs(rect.top + rect.height / 2 - middle);
+      if (distance < minDistance) {
+        minDistance = distance;
+        thumbnail = item;
+      }
+    });
     if (!thumbnail) {
       return;
     }
@@ -262,13 +293,13 @@ export class PdfViewerThumbnailsController {
       .catch((error) => {
         thumbnail.renderTask = null;
         // A released thumbnail cancels its rendering. A failed one stays empty.
-        if (error && error.name === 'RenderingCancelledException') {
+        if (error?.name === 'RenderingCancelledException') {
           return;
         }
         thumbnail.failed = true;
         if (this.#pdfDocument === pdfDocument) {
           issueWarning(
-            `Failed to render the thumbnail of page ${thumbnail.pageNumber} of the PDF document: ${error.message}`,
+            `Failed to render the thumbnail of page ${thumbnail.pageNumber} of the PDF document: ${error?.message}`,
           );
         }
       })
@@ -281,10 +312,13 @@ export class PdfViewerThumbnailsController {
 
   /** @private */
   async #render(thumbnail, pdfDocument) {
+    const image = thumbnail.element.querySelector('.thumbnail-image');
+    // The styles set the width of the image, the canvas matches it.
+    const width = image.offsetWidth;
     const pdfPage = await pdfDocument.getPage(thumbnail.pageNumber);
     const unscaled = pdfPage.getViewport({ scale: 1 });
-    const outputScale = window.devicePixelRatio || 1;
-    const viewport = pdfPage.getViewport({ scale: (THUMBNAIL_WIDTH / unscaled.width) * outputScale });
+    const pixelRatio = window.devicePixelRatio || 1;
+    const viewport = pdfPage.getViewport({ scale: (width / unscaled.width) * pixelRatio });
     // Released or replaced by another document meanwhile
     if (this.#pdfDocument !== pdfDocument || !this.#visibleThumbnails.has(thumbnail)) {
       return;
@@ -294,16 +328,23 @@ export class PdfViewerThumbnailsController {
     canvas.width = Math.floor(viewport.width);
     canvas.height = Math.floor(viewport.height);
     thumbnail.renderTask = pdfPage.render({ canvas, viewport });
-    await thumbnail.renderTask.promise;
+    try {
+      await thumbnail.renderTask.promise;
+    } catch (error) {
+      freeCanvas(canvas);
+      throw error;
+    }
     thumbnail.renderTask = null;
     if (this.#pdfDocument === pdfDocument && this.#visibleThumbnails.has(thumbnail)) {
-      const image = thumbnail.element.querySelector('.thumbnail-image');
+      if (thumbnail.canvas) {
+        freeCanvas(thumbnail.canvas);
+      }
       image.style.aspectRatio = `${unscaled.width} / ${unscaled.height}`;
       image.replaceChildren(canvas);
       thumbnail.canvas = canvas;
+      thumbnail.pixelRatio = pixelRatio;
     } else {
-      canvas.width = 0;
-      canvas.height = 0;
+      freeCanvas(canvas);
     }
   }
 
@@ -313,10 +354,7 @@ export class PdfViewerThumbnailsController {
     thumbnail.renderTask?.cancel();
     thumbnail.renderTask = null;
     if (thumbnail.canvas) {
-      // Frees the memory of the canvas right away, which Safari limits.
-      thumbnail.canvas.width = 0;
-      thumbnail.canvas.height = 0;
-      thumbnail.canvas.remove();
+      freeCanvas(thumbnail.canvas);
       thumbnail.canvas = null;
     }
   }
@@ -338,14 +376,16 @@ export class PdfViewerThumbnailsController {
    * @private
    */
   #setTabStop(element) {
-    this.#thumbnails.forEach((thumbnail) => {
-      thumbnail.element.setAttribute('tabindex', thumbnail.element === element ? '0' : '-1');
-    });
+    const previous = this.#getTabStop();
+    if (previous !== element) {
+      previous?.setAttribute('tabindex', '-1');
+      element.setAttribute('tabindex', '0');
+    }
   }
 
   /** @private */
   #getTabStop() {
-    return this.#thumbnails.find(({ element }) => element.getAttribute('tabindex') === '0')?.element;
+    return this.#list.querySelector('[tabindex="0"]');
   }
 
   /** @private */
@@ -370,7 +410,8 @@ export class PdfViewerThumbnailsController {
    */
   #onKeyDown(event) {
     const focused = this.#getFocusedThumbnail();
-    if (!focused) {
+    // Key combinations are left to the browser and assistive technology.
+    if (!focused || event.ctrlKey || event.metaKey || event.altKey || event.shiftKey) {
       return;
     }
     const index = Number(focused.dataset.page) - 1;

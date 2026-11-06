@@ -64,7 +64,7 @@ export const PdfViewerSidebarMixin = (superClass) =>
       super.updated(props);
 
       if (props.has('__effectiveI18n')) {
-        this.#thumbnails.setLabel(this.__effectiveI18n.pageLabel);
+        this.#thumbnails.setLabel(this.__effectiveI18n.thumbnailLabel);
       }
 
       if ((props.has('pageCount') || props.has('sidebarOpened')) && this.sidebarOpened && this.pageCount) {
@@ -112,7 +112,7 @@ export const PdfViewerSidebarMixin = (superClass) =>
      * @protected
      */
     _renderSidebar() {
-      // The list is no tab stop of its own, which Firefox makes of a scrollable element.
+      // The list has tabindex="-1", so that Firefox does not make the scrollable list a tab stop.
       return html`
         <div id="sidebar" part="sidebar" ?hidden="${!this.sidebarOpened}">
           <div
@@ -128,8 +128,8 @@ export const PdfViewerSidebarMixin = (superClass) =>
 
     /** @private */
     #createThumbnails() {
-      const [firstPage] = this.__pages;
-      this.#thumbnails.create(this._pdfDocument, this.pageCount, firstPage.unscaledWidth / firstPage.unscaledHeight);
+      const aspectRatios = this.__pages.map((page) => page.unscaledWidth / page.unscaledHeight);
+      this.#thumbnails.create(this._pdfDocument, aspectRatios);
     }
 
     /**

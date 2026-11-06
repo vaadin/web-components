@@ -79,6 +79,7 @@ export const pdfViewerSidebarStyles = css`
 
   .thumbnail-image {
     width: 96px;
+    /* pdf.js draws text wrong in an RTL canvas */
     direction: ltr;
     background: var(--vaadin-pdf-viewer-page-background, #fff);
     box-shadow: var(--vaadin-pdf-viewer-page-shadow, 0 0 0 1px var(--vaadin-border-color-secondary));
