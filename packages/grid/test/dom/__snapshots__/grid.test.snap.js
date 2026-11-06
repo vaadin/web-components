@@ -2878,10 +2878,7 @@ snapshots["vaadin-grid column text align default"] =
   <vaadin-grid-cell-content slot="vaadin-grid-footer-cell-content-0-67">
     Footer
   </vaadin-grid-cell-content>
-  <vaadin-grid-cell-content
-    slot="vaadin-grid-sizer-cell-content-66"
-    style="text-align: right;"
-  >
+  <vaadin-grid-cell-content slot="vaadin-grid-sizer-cell-content-66">
   </vaadin-grid-cell-content>
   <vaadin-grid-cell-content slot="vaadin-grid-sizer-cell-content-67">
   </vaadin-grid-cell-content>
