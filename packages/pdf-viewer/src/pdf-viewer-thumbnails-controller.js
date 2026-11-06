@@ -171,6 +171,17 @@ export class PdfViewerThumbnailsController {
   }
 
   /**
+   * Gives each thumbnail the aspect ratio of its page, e.g. once the pages
+   * have loaded their own size.
+   * @param {number[]} aspectRatios the width of each page divided by its height
+   */
+  setAspectRatios(aspectRatios) {
+    this.#thumbnails.forEach(({ element }, index) => {
+      element.querySelector('.thumbnail-image').style.aspectRatio = String(aspectRatios[index]);
+    });
+  }
+
+  /**
    * Sets the accessible name of the thumbnails.
    * @param {string} label the name, with `{page}` for the page number
    */
