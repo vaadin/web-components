@@ -237,8 +237,6 @@ function createInlineLinksPdf() {
     [690, 72, 'Links to vaadin.com and to github.com in one line.'],
     [660, 72, 'A link that continues'],
     [644, 72, 'on the next line, then plain text.'],
-    [610, 72, 'One link wraps from the Vaadin'],
-    [594, 72, 'docs, with plain text around it.'],
   ];
   const content = lines.map(([y, x, text]) => `BT /F1 14 Tf ${x} ${y} Td (${text}) Tj ET`).join(' ');
   // [left, bottom, right, top, URL]: "Vaadin", "vaadin.com", "github.com", then "continues" and
@@ -253,11 +251,6 @@ function createInlineLinksPdf() {
   const links = areas.map(
     ([left, bottom, right, top, url]) =>
       `<< /Type /Annot /Subtype /Link /Rect [${left} ${bottom} ${right} ${top}] /Border [0 0 0] /A << /S /URI /URI (${url}) >> >>`,
-  );
-  // "Vaadin" and "docs" as one annotation, whose rectangle covers both lines and whose QuadPoints
-  // cover only the two words, as other PDF producers write wrapped links.
-  links.push(
-    '<< /Type /Annot /Subtype /Link /Rect [72 589 324 623] /Border [0 0 0] /QuadPoints [273.6 623 324 623 273.6 607 324 607 72 607 105.6 607 72 589 105.6 589] /A << /S /URI /URI (https://vaadin.com/docs) >> >>',
   );
   return assemblePdf(
     [

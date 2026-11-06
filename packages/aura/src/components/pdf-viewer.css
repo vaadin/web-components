@@ -1,0 +1,45 @@
+:where(:root),
+:where(:host) {
+  --vaadin-pdf-viewer-page-shadow: var(--aura-shadow-s);
+  /* The pages are white also in the dark color scheme. The chroma is limited
+     to stay in the sRGB gamut, which the highlights are blended in. */
+  --vaadin-pdf-viewer-match-background: oklch(from var(--aura-yellow) l min(c, 0.17) h / 0.6);
+  --vaadin-pdf-viewer-current-match-background: oklch(from var(--aura-accent-color-light) l min(c, 0.17) h / 0.5);
+  --vaadin-pdf-viewer-current-match-outline-color: var(--aura-accent-color-light);
+}
+
+/* Neutral toolbar buttons, like the drawer toggle */
+vaadin-pdf-viewer-button {
+  --aura-accent-color-light: var(--aura-neutral);
+  --aura-accent-color-dark: var(--aura-neutral);
+}
+
+/* The zoom controls look like one Aura field */
+vaadin-pdf-viewer::part(zoom-controls) {
+  background: var(--aura-surface-color);
+  --aura-surface-level: 4;
+  --aura-surface-opacity: 0.7;
+  background-clip: padding-box;
+  box-shadow: var(--aura-shadow-xs);
+}
+
+vaadin-pdf-viewer::part(zoom-controls disabled) {
+  background: var(--vaadin-input-field-disabled-background, var(--vaadin-background-container));
+  box-shadow: none;
+}
+
+vaadin-pdf-viewer > vaadin-select[slot]::part(input-field) {
+  box-shadow: none;
+}
+
+/* The find bar looks like an Aura overlay */
+vaadin-pdf-viewer::part(find-bar) {
+  border-color: transparent;
+  border-radius: var(--vaadin-radius-l);
+  background: var(--aura-surface-color);
+  --aura-surface-level: 4;
+  --aura-surface-opacity: var(--aura-overlay-surface-opacity);
+  box-shadow: var(--aura-overlay-outline-shadow), var(--aura-overlay-shadow);
+  -webkit-backdrop-filter: var(--aura-overlay-backdrop-filter);
+  backdrop-filter: var(--aura-overlay-backdrop-filter);
+}

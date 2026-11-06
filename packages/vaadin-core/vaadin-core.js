@@ -20,6 +20,7 @@ import '@vaadin/context-menu/vaadin-context-menu-item.js';
 import '@vaadin/context-menu/vaadin-context-menu-list-box.js';
 import '@vaadin/custom-field';
 import '@vaadin/date-picker';
+import '@vaadin/date-picker/vaadin-date-range-picker.js';
 import '@vaadin/date-time-picker';
 import '@vaadin/details';
 import '@vaadin/details/vaadin-details-summary.js';

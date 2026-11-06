@@ -102,6 +102,34 @@
       0 0 0 calc(var(--_focus-ring-width) + 1px) var(--_focus-ring-color);
   }
 
+  /* Range */
+
+  [part~='in-range'] {
+    --_range-band: var(
+      --vaadin-date-picker-date-in-range-background,
+      color-mix(in srgb, var(--lumo-primary-color) 10%, transparent)
+    );
+    --_range-edge: var(--vaadin-date-picker-date-in-range-border-color, var(--_selection-color));
+    --_range-band-height: 100%;
+    border-radius: 0;
+  }
+
+  [part~='in-range']::after {
+    border-radius: var(--vaadin-date-picker-date-border-radius, var(--lumo-border-radius-m));
+  }
+
+  [part~='range-editing'] {
+    color: var(--vaadin-date-picker-date-range-editing-color, var(--lumo-body-text-color));
+  }
+
+  [part~='range-editing']::after,
+  [part~='range-editing']:hover::after {
+    background: var(
+      --vaadin-date-picker-date-range-editing-background,
+      color-mix(in srgb, var(--_selection-color) 35%, var(--lumo-base-color))
+    );
+  }
+
   :host(:not([focused])) [part~='date'][part~='focused']::after {
     animation: vaadin-date-picker-month-calendar-focus-date 1.4s infinite;
   }

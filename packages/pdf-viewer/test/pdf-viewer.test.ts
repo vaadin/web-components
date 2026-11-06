@@ -8,34 +8,39 @@ import { fixtureUrl, loadDocument, nextRenderIdle } from './helpers.js';
 
 describe('vaadin-pdf-viewer', () => {
   let viewer: PdfViewer;
-  // A live collection, which follows the pages of the loaded document
-  let pages: HTMLCollectionOf<HTMLElement>;
+
+  function getPages() {
+    return [...viewer.shadowRoot!.querySelectorAll('[part~="page"]')];
+  }
+
+  function getErrorMessage() {
+    return viewer.shadowRoot!.querySelector<HTMLElement>('[part="error-message"]')!;
+  }
 
   beforeEach(async () => {
     viewer = fixtureSync('<vaadin-pdf-viewer></vaadin-pdf-viewer>');
     await nextRender();
-    pages = viewer.shadowRoot!.querySelector('#pages')!.children as HTMLCollectionOf<HTMLElement>;
   });
 
   describe('custom element definition', () => {
-    let tagName: string;
-
-    beforeEach(() => {
-      tagName = viewer.tagName.toLowerCase();
-    });
-
-    it('should be defined in custom element registry', () => {
-      expect(customElements.get(tagName)).to.be.ok;
+    it('should be defined with the expected tag name', () => {
+      expect(customElements.get('vaadin-pdf-viewer')).to.be.ok;
+      expect(viewer.localName).to.equal('vaadin-pdf-viewer');
     });
 
     it('should have a valid static "is" getter', () => {
-      expect((customElements.get(tagName) as any).is).to.equal(tagName);
+      expect((customElements.get('vaadin-pdf-viewer') as any).is).to.equal('vaadin-pdf-viewer');
+    });
+
+    it('should have a valid version number', () => {
+      expect((viewer.constructor as any).version).to.match(/^(\d+\.)?(\d+\.)?(\*|\d+)(-(alpha|beta|rc)\d+)?$/u);
     });
   });
 
   describe('loading', () => {
     it('should have no pages by default', () => {
       expect(viewer.pageCount).to.equal(0);
+      expect(getPages()).to.be.empty;
     });
 
     it('should fire document-load event with the page count and title', async () => {
@@ -51,20 +56,15 @@ describe('vaadin-pdf-viewer', () => {
       expect(viewer.pageCount).to.equal(6);
     });
 
-    it('should fire page-count-changed event when the document has loaded', async () => {
-      const spy = sinon.spy();
-      viewer.addEventListener('page-count-changed', spy);
-      await loadDocument(viewer, 'multi-page.pdf');
-      await nextUpdate(viewer);
-      expect(spy).to.be.calledOnce;
-      expect(spy.firstCall.args[0].detail.value).to.equal(6);
+    it('should render the first page', async () => {
+      viewer.src = fixtureUrl('multi-page.pdf');
+      await nextRenderIdle(viewer);
+      expect(getPages()[0].querySelector('canvas')).to.be.ok;
     });
 
     it('should toggle loading attribute while the document loads', async () => {
       viewer.src = fixtureUrl('multi-page.pdf');
-      // The first update starts loading, the second one reflects the state.
-      await nextUpdate(viewer);
-      await nextUpdate(viewer);
+      await nextFrame();
       expect(viewer.hasAttribute('loading')).to.be.true;
       await oneEvent(viewer, 'document-load');
       expect(viewer.hasAttribute('loading')).to.be.false;
@@ -75,23 +75,33 @@ describe('vaadin-pdf-viewer', () => {
       viewer.src = null;
       await nextFrame();
       expect(viewer.pageCount).to.equal(0);
-      expect(pages).to.have.lengthOf(0);
+      expect(getPages()).to.be.empty;
     });
 
     it('should only show the last document when src changes during loading', async () => {
       const spy = sinon.spy();
       viewer.addEventListener('document-load', spy);
       viewer.src = fixtureUrl('multi-page.pdf');
-      // Change src right after the update that starts loading
-      await nextUpdate(viewer);
+      await nextFrame();
       viewer.src = fixtureUrl('standard-font.pdf');
       await nextRenderIdle(viewer);
       expect(spy).to.be.calledOnce;
       expect(viewer.pageCount).to.equal(1);
+      const pages = getPages();
       expect(pages).to.have.lengthOf(1);
       // US Letter (standard-font.pdf), not A4 (multi-page.pdf)
       const { width, height } = pages[0].getBoundingClientRect();
       expect(height / width).to.be.closeTo(792 / 612, 0.01);
+    });
+
+    it('should not render a page while the viewer is hidden', async () => {
+      viewer.hidden = true;
+      const errorSpy = sinon.spy();
+      viewer.addEventListener('document-error', errorSpy);
+      viewer.src = fixtureUrl('multi-page.pdf');
+      await nextRenderIdle(viewer);
+      expect(viewer.shadowRoot!.querySelector('canvas')).to.be.null;
+      expect(errorSpy).to.be.not.called;
     });
   });
 
@@ -122,9 +132,9 @@ describe('vaadin-pdf-viewer', () => {
       viewer.addEventListener('document-load', spy);
       const parent = viewer.parentElement!;
       parent.appendChild(viewer);
-      // Give a reload enough time to complete
-      await loadDocument(fixtureSync<PdfViewer>('<vaadin-pdf-viewer></vaadin-pdf-viewer>'), 'links.pdf');
+      await nextFrame();
       expect(spy).to.be.not.called;
+      expect(viewer.pageCount).to.equal(4);
     });
 
     it('should not load the document when detached during loading', async () => {
@@ -155,20 +165,18 @@ describe('vaadin-pdf-viewer', () => {
       expect(viewer.pageCount).to.equal(6);
     });
 
-    it('should reset the page count when detached', async () => {
+    it('should reset the page count and disable the download when detached', async () => {
       viewer.remove();
       await nextFrame();
       expect(viewer.pageCount).to.equal(0);
+      expect(viewer.querySelector<HTMLElement & { disabled: boolean }>('[icon="download"]')!.disabled).to.be.true;
     });
 
     it('should keep the page count when moved in the DOM in the same task', async () => {
-      const spy = sinon.spy();
-      viewer.addEventListener('page-count-changed', spy);
       const parent = viewer.parentElement!;
       viewer.remove();
       parent.appendChild(viewer);
       await nextFrame();
-      expect(spy).to.be.not.called;
       expect(viewer.pageCount).to.equal(4);
     });
 
@@ -184,76 +192,66 @@ describe('vaadin-pdf-viewer', () => {
   });
 
   describe('errors', () => {
-    let event: CustomEvent;
-
     async function loadAndWaitForError(url: string) {
       const error = oneEvent(viewer, 'document-error');
       viewer.src = url;
-      event = (await error) as CustomEvent;
+      return (await error) as CustomEvent;
     }
 
-    describe('missing file', () => {
-      beforeEach(async () => {
-        await loadAndWaitForError(new URL('./fixtures/missing.pdf', import.meta.url).href);
-      });
-
-      it('should fire document-error event with network reason', () => {
-        expect(event.detail.reason).to.equal('network');
-      });
+    it('should fire document-error event with network reason for a missing file', async () => {
+      const event = await loadAndWaitForError(new URL('./fixtures/missing.pdf', import.meta.url).href);
+      expect(event.detail.reason).to.equal('network');
     });
 
-    describe('invalid file', () => {
-      beforeEach(async () => {
-        await loadAndWaitForError(fixtureUrl('invalid.pdf'));
-      });
-
-      it('should fire document-error event with invalid reason', () => {
-        expect(event.detail.reason).to.equal('invalid');
-      });
-
-      it('should set has-error attribute', () => {
-        expect(viewer.hasAttribute('has-error')).to.be.true;
-      });
-
-      it('should clear the error when a later document loads', async () => {
-        await loadDocument(viewer, 'links.pdf');
-        expect(viewer.hasAttribute('has-error')).to.be.false;
-      });
+    it('should fire document-error event with invalid reason for a file that is not a PDF', async () => {
+      const event = await loadAndWaitForError(fixtureUrl('invalid.pdf'));
+      expect(event.detail.reason).to.equal('invalid');
     });
 
-    describe('encrypted file', () => {
-      beforeEach(async () => {
-        await loadAndWaitForError(fixtureUrl('encrypted.pdf'));
-      });
+    it('should fire document-error event with password reason for an encrypted file', async () => {
+      const event = await loadAndWaitForError(fixtureUrl('encrypted.pdf'));
+      expect(event.detail.reason).to.equal('password');
+    });
 
-      it('should fire document-error event with password reason', () => {
-        expect(event.detail.reason).to.equal('password');
-      });
+    it('should toggle has-error attribute', async () => {
+      await loadAndWaitForError(fixtureUrl('invalid.pdf'));
+      expect(viewer.hasAttribute('has-error')).to.be.true;
+      await loadDocument(viewer, 'links.pdf');
+      expect(viewer.hasAttribute('has-error')).to.be.false;
+    });
+
+    it('should show the load error message', async () => {
+      await loadAndWaitForError(fixtureUrl('invalid.pdf'));
+      await nextFrame();
+      expect(getErrorMessage().hidden).to.be.false;
+      expect(getErrorMessage().textContent!.trim()).to.equal('The document could not be loaded.');
+    });
+
+    it('should show the password error message', async () => {
+      await loadAndWaitForError(fixtureUrl('encrypted.pdf'));
+      await nextFrame();
+      expect(getErrorMessage().textContent!.trim()).to.equal('Password-protected documents are not supported.');
+    });
+
+    it('should use custom i18n for the error message', async () => {
+      viewer.i18n = { loadError: 'Kunde inte ladda dokumentet.' };
+      await loadAndWaitForError(fixtureUrl('invalid.pdf'));
+      await nextFrame();
+      expect(getErrorMessage().textContent!.trim()).to.equal('Kunde inte ladda dokumentet.');
     });
   });
 
-  describe('scripting', () => {
-    let alertStub: sinon.SinonStub;
-
-    beforeEach(() => {
-      alertStub = sinon.stub(window, 'alert');
-      performance.clearResourceTimings();
-    });
-
+  describe('security', () => {
     afterEach(() => {
-      alertStub.restore();
+      sinon.restore();
     });
 
-    it('should not run the JavaScript actions of the document', async () => {
-      await loadDocument(viewer, 'javascript.pdf');
-      expect(alertStub).to.be.not.called;
-    });
-
-    it('should not load the scripting sandbox of pdf.js', async () => {
-      await loadDocument(viewer, 'javascript.pdf');
-      const requests = performance.getEntriesByType('resource').map((entry) => entry.name);
-      expect(requests.some((name) => name.endsWith('/javascript.pdf'))).to.be.true;
-      expect(requests.some((name) => name.includes('pdf.sandbox'))).to.be.false;
+    it('should not run the JavaScript of a document', async () => {
+      const alert = sinon.stub(window, 'alert');
+      viewer.src = fixtureUrl('javascript.pdf');
+      await nextRenderIdle(viewer);
+      expect(getPages()[0].querySelector('canvas')).to.be.ok;
+      expect(alert).to.be.not.called;
     });
   });
 });

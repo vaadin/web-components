@@ -1,17 +1,14 @@
 import { nextFrame, oneEvent } from '@vaadin/testing-helpers';
-import sinon from 'sinon';
-import type { PDFDocumentProxy, PDFPageProxy } from 'pdfjs-dist';
-import { acquireWorker, loadPdfjs, releaseWorker } from '../src/pdfjs-loader.js';
 import type { PdfViewer } from '../vaadin-pdf-viewer.js';
 
 export type Fixture =
   | 'encrypted.pdf'
+  | 'inline-links.pdf'
   | 'invalid.pdf'
   | 'javascript.pdf'
   | 'links.pdf'
   | 'multi-page.pdf'
   | 'outline.pdf'
-  | 'rotated.pdf'
   | 'standard-font.pdf'
   | 'tagged.pdf'
   | 'unsafe-links.pdf';
@@ -37,67 +34,6 @@ export async function nextRenderIdle(viewer: PdfViewer): Promise<void> {
 }
 
 /**
- * Sets the `src` of the viewer and waits until the document has loaded and
- * the viewer has rendered the pages it shows.
- */
-export async function loadAndRender(viewer: PdfViewer, src: string): Promise<void> {
-  const idle = nextRenderIdle(viewer);
-  const loaded = oneEvent(viewer, 'document-load');
-  viewer.src = src;
-  await loaded;
-  await idle;
-}
-
-/**
- * Sets the `src` of the viewer to a URL that serves `multi-page.pdf` with
- * extra response headers, and waits until the document has loaded. Stubs
- * `fetch` until then.
- */
-export async function loadFixtureFrom(
-  viewer: PdfViewer,
-  url: string,
-  headers: Record<string, string> = {},
-): Promise<void> {
-  const fetch = window.fetch;
-  const stub = sinon.stub(window, 'fetch').callsFake(async (input, init) => {
-    if (String(input) !== url) {
-      return fetch(input, init);
-    }
-    const response = await fetch(fixtureUrl('multi-page.pdf'), init);
-    const responseHeaders = new Headers(response.headers);
-    Object.entries(headers).forEach(([name, value]) => responseHeaders.set(name, value));
-    return new Response(response.body, { status: response.status, headers: responseHeaders });
-  });
-  try {
-    const loaded = oneEvent(viewer, 'document-load');
-    viewer.src = url;
-    await loaded;
-  } finally {
-    stub.restore();
-  }
-}
-
-/**
- * Returns the size of the content area of the viewer without its padding.
- */
-export function getContentBoxSize(content: HTMLElement): { width: number; height: number } {
-  const style = getComputedStyle(content);
-  return {
-    width: content.clientWidth - parseFloat(style.paddingLeft) - parseFloat(style.paddingRight),
-    height: content.clientHeight - parseFloat(style.paddingTop) - parseFloat(style.paddingBottom),
-  };
-}
-
-/**
- * Returns the horizontal middle of the visible content area in viewport
- * coordinates. It leaves out a vertical scrollbar, which is on the left in
- * RTL, where `clientLeft` includes it.
- */
-export function getViewCenter(content: HTMLElement): number {
-  return content.getBoundingClientRect().left + content.clientLeft + content.clientWidth / 2;
-}
-
-/**
  * Waits until a scroll, which can be animated, has settled.
  */
 export async function scrollSettled(element: HTMLElement): Promise<void> {
@@ -111,55 +47,14 @@ export async function scrollSettled(element: HTMLElement): Promise<void> {
 }
 
 /**
- * Returns the prototype of an object of a pdf.js document loaded for that,
- * which is the prototype of the same objects of the documents of the viewer.
+ * Waits until the current find match is highlighted and the viewer has
+ * finished scrolling to it, which is animated when its page is rendered.
  */
-async function getPrototype<T>(read: (pdfDocument: PDFDocumentProxy) => Promise<T> | T): Promise<T> {
-  const pdfjs = await loadPdfjs();
-  const handle = acquireWorker(pdfjs);
-  const task = pdfjs.getDocument({ url: fixtureUrl('multi-page.pdf'), worker: handle.worker! });
-  try {
-    return Object.getPrototypeOf(await read(await task.promise));
-  } finally {
-    await task.destroy();
-    releaseWorker(handle);
+export async function currentMatchShown(viewer: PdfViewer): Promise<void> {
+  for (let i = 0; i < 50 && !viewer.shadowRoot!.querySelector('.find-match.current'); i++) {
+    await nextFrame();
   }
-}
-
-/**
- * Returns the prototype of the documents of pdf.js, including the documents of the viewer.
- */
-export function getPdfDocumentPrototype(): Promise<PDFDocumentProxy> {
-  return getPrototype((pdfDocument) => pdfDocument);
-}
-
-/**
- * Returns the prototype of the pages of every pdf.js document, including the documents of the viewer.
- */
-export function getPdfPagePrototype(): Promise<PDFPageProxy> {
-  return getPrototype((pdfDocument) => pdfDocument.getPage(1));
-}
-
-/**
- * Makes the text of the given page fail to load once, with the given message.
- * `sinon.restore()` undoes it.
- */
-export async function failTextOnce(pageNumber: number, message = 'Broken text'): Promise<void> {
-  const prototype = await getPdfPagePrototype();
-  const streamTextContent = prototype.streamTextContent;
-  let failed = false;
-  function fakeStreamTextContent(this: PDFPageProxy, ...args: Parameters<PDFPageProxy['streamTextContent']>) {
-    if (this.pageNumber === pageNumber && !failed) {
-      failed = true;
-      return new ReadableStream({
-        start(controller) {
-          controller.error(new Error(message));
-        },
-      });
-    }
-    return streamTextContent.apply(this, args);
-  }
-  sinon.stub(prototype, 'streamTextContent').callsFake(fakeStreamTextContent);
+  await scrollSettled(viewer.shadowRoot!.querySelector<HTMLElement>('[part="content"]')!);
 }
 
 /**
@@ -178,30 +73,15 @@ export type PdfPage = {
 
 /**
  * Creates a PDF with the given pages in memory, and returns an object URL for it.
- * `dests` is the content of the named destinations dictionary, `lang` the language of the document.
- * `layers` are the optional content groups, objects 5 and up in their order, e.g. `/OC 5 0 R`.
+ * `dests` is the content of the dictionary of named destinations, e.g. `/name [0 /Fit]`.
  */
-export function createPdf(
-  pages: PdfPage[],
-  {
-    dests = '',
-    lang = '',
-    layers = [],
-  }: { dests?: string; lang?: string; layers?: Array<{ name: string; visible: boolean }> } = {},
-): string {
-  const layerRefs = layers.map((_, index) => `${index + 5} 0 R`);
-  const hiddenLayerRefs = layerRefs.filter((_, index) => !layers[index].visible);
-  const ocProperties = layers.length
-    ? ` /OCProperties << /OCGs [${layerRefs.join(' ')}] /D << /OFF [${hiddenLayerRefs.join(' ')}] >> >>`
-    : '';
-  // Object 1 is the catalog, 2 the page tree, 3 and 4 the fonts, then the layers, then each page,
-  // its content and its annotations.
+export function createPdf(pages: PdfPage[], { dests = '' } = {}): string {
+  // Object 1 is the catalog, 2 the page tree, 3 and 4 the fonts, then the page, its content and its annotations.
   const objects = [
-    `<< /Type /Catalog /Pages 2 0 R${dests ? ` /Dests << ${dests} >>` : ''}${lang ? ` /Lang (${lang})` : ''}${ocProperties} >>`,
+    `<< /Type /Catalog /Pages 2 0 R${dests ? ` /Dests << ${dests} >>` : ''} >>`,
     '',
     '<< /Type /Font /Subtype /Type1 /BaseFont /Helvetica >>',
     '<< /Type /Font /Subtype /Type1 /BaseFont /Courier >>',
-    ...layers.map(({ name }) => `<< /Type /OCG /Name (${name}) >>`),
   ];
   const pageIds: number[] = [];
   pages.forEach(({ content, rotate = 0, annotations = [], mediaBox = [0, 0, 595, 842] }) => {
@@ -243,4 +123,14 @@ export function createPdfUrl(pageCount: number): string {
       mediaBox: [0, 0, 612, 792],
     })),
   );
+}
+
+/**
+ * Waits a frame at a time until the condition holds, for at most the given
+ * number of frames.
+ */
+export async function untilFrame(condition: () => unknown, maxFrames = 50): Promise<void> {
+  for (let i = 0; i < maxFrames && !condition(); i++) {
+    await nextFrame();
+  }
 }

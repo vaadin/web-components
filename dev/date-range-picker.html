@@ -1,0 +1,190 @@
+<!doctype html>
+<html lang="en">
+  <head>
+    <meta charset="UTF-8" />
+    <meta http-equiv="X-UA-Compatible" content="IE=edge" />
+    <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+    <title>Date Range Picker (prototype)</title>
+    <script type="module" src="./common.js"></script>
+    <style>
+      .notes {
+        max-width: 42rem;
+        font-size: 0.875rem;
+      }
+
+      output {
+        display: block;
+        margin-top: 0.5rem;
+        font:
+          0.8125rem/1.4 ui-monospace,
+          monospace;
+        white-space: pre-wrap;
+      }
+
+      /* Optional band edges, for comparing a higher-contrast range band */
+      .band-edges vaadin-month-calendar::part(in-range) {
+        --vaadin-date-picker-date-in-range-border-width: 2px;
+      }
+    </style>
+  </head>
+  <body>
+    <h1 class="heading">Date Range Picker — clickable prototype</h1>
+
+    <div class="notes">
+      <p>One field with a start and an end input that share a single calendar overlay:</p>
+      <ul>
+        <li>Clicking anywhere in the field picks the whole range: the start, then the end.</li>
+        <li>Moving to the end input with the keyboard, then opening the calendar, edits only the end.</li>
+        <li>
+          While picking a range for the first time, hovering or focusing a date previews the range that picking it would
+          select. When editing an existing range, the range stays on display and the hovered date is only hinted at with
+          a dashed outline.
+        </li>
+        <li>
+          The input whose date a pick sets is highlighted. In the calendar, the date being edited has a lighter fill
+          than the other end of the range.
+        </li>
+        <li>
+          With a mouse, drag across dates to select the whole range at once, which closes the overlay like picking the
+          end does.
+        </li>
+        <li>
+          Drag a picked start to move it, then pick the end. Drag the start or end of a range to move it: the overlay
+          stays open for further adjustments, close it with Escape or by clicking outside.
+        </li>
+        <li>Escape and clicking outside close the overlay and keep what was picked, such as a start without an end.</li>
+        <li>Cancel restores the range from when the overlay was opened.</li>
+        <li>The clear button, or Escape with the overlay closed, clears both dates.</li>
+      </ul>
+    </div>
+
+    <label class="notes">
+      <input type="checkbox" id="single-input" />
+      Single input: show the range in one text field, such as "3/10/2026 – 3/15/2026"
+    </label>
+    <br />
+    <label class="notes">
+      <input type="checkbox" id="separate-date-picking" />
+      Previous behavior: clicking the start or end input picks only that date
+    </label>
+    <br />
+    <label class="notes">
+      <input type="checkbox" id="band-edges" />
+      Show edges along the range band (higher contrast)
+    </label>
+
+    <h2 class="heading">Basic</h2>
+    <section class="section">
+      <vaadin-date-range-picker
+        id="basic"
+        label="Trip dates"
+        helper-text="Pick departure and return"
+        start-placeholder="Departure"
+        end-placeholder="Return"
+        clear-button-visible
+      ></vaadin-date-range-picker>
+    </section>
+    <output id="basic-log"></output>
+
+    <h2 class="heading">Pre-filled, min/max and disabled weekends</h2>
+    <section class="section">
+      <vaadin-date-range-picker
+        id="constrained"
+        label="Report period"
+        helper-text="Weekends are disabled, but a range can span them"
+      ></vaadin-date-range-picker>
+    </section>
+
+    <h2 class="heading">Required, with validation messages</h2>
+    <section class="section">
+      <vaadin-date-range-picker id="required" label="Stay" required clear-button-visible></vaadin-date-range-picker>
+    </section>
+
+    <h2 class="heading">Narrow (e.g. Grid filter)</h2>
+    <section class="section">
+      <vaadin-date-range-picker id="narrow" style="width: 14em" theme="small"></vaadin-date-range-picker>
+    </section>
+
+    <h2 class="heading">Disabled and read-only</h2>
+    <section class="section">
+      <vaadin-date-range-picker id="disabled" label="Disabled" disabled></vaadin-date-range-picker>
+      <vaadin-date-range-picker id="readonly" label="Read-only" readonly></vaadin-date-range-picker>
+    </section>
+
+    <script type="module">
+      import '@vaadin/date-picker/vaadin-date-range-picker.js';
+
+      document.querySelector('#single-input').addEventListener('change', (event) => {
+        document.querySelectorAll('vaadin-date-range-picker').forEach((picker) => {
+          picker.singleInput = event.target.checked;
+        });
+      });
+
+      document.querySelector('#separate-date-picking').addEventListener('change', (event) => {
+        document.querySelectorAll('vaadin-date-range-picker').forEach((picker) => {
+          picker.separateDatePicking = event.target.checked;
+        });
+      });
+
+      document.querySelector('#band-edges').addEventListener('change', (event) => {
+        document.documentElement.classList.toggle('band-edges', event.target.checked);
+      });
+
+      const toISO = (date) => {
+        const d = new Date(date);
+        d.setMinutes(d.getMinutes() - d.getTimezoneOffset());
+        return d.toISOString().slice(0, 10);
+      };
+      const addDays = (days) => {
+        const d = new Date();
+        d.setDate(d.getDate() + days);
+        return toISO(d);
+      };
+
+      // Basic: log values and change events
+      const basic = document.querySelector('#basic');
+      const log = document.querySelector('#basic-log');
+      const printValue = (event) => {
+        log.textContent = `startValue: "${basic.startValue}"  endValue: "${basic.endValue}"  (last event: ${event ? event.type : '-'})`;
+      };
+      ['change', 'start-value-changed', 'end-value-changed'].forEach((type) => basic.addEventListener(type, printValue));
+      printValue();
+
+      // Pre-filled with constraints
+      const constrained = document.querySelector('#constrained');
+      constrained.min = addDays(-60);
+      constrained.max = addDays(60);
+      // Start on the next Monday and end on the Friday of the following week
+      const toMonday = (8 - new Date().getDay()) % 7 || 7;
+      constrained.startValue = addDays(toMonday);
+      constrained.endValue = addDays(toMonday + 11);
+      constrained.isDateDisabled = (date) => {
+        const day = new Date(date.year, date.month, date.day).getDay();
+        return day === 0 || day === 6;
+      };
+
+      // Required: the application sets the error message based on the state
+      const required = document.querySelector('#required');
+      required.addEventListener('validated', () => {
+        const start = required.startValue;
+        const end = required.endValue;
+        const [startInput, endInput] = required.querySelectorAll('input');
+        const unparsable = (startInput.value && !start) || (endInput.value && !end);
+        if (unparsable) {
+          required.errorMessage = 'Enter a valid date';
+        } else if (!start || !end) {
+          required.errorMessage = 'Enter both a start and an end date';
+        } else if (start > end) {
+          required.errorMessage = "End date can't be before start date";
+        } else {
+          required.errorMessage = '';
+        }
+      });
+
+      document.querySelector('#disabled').startValue = addDays(0);
+      document.querySelector('#disabled').endValue = addDays(4);
+      document.querySelector('#readonly').startValue = addDays(0);
+      document.querySelector('#readonly').endValue = addDays(4);
+    </script>
+  </body>
+</html>

@@ -16,7 +16,6 @@ import { DirMixin } from '@vaadin/component-base/src/dir-mixin.js';
 import { PolylitMixin } from '@vaadin/component-base/src/polylit-mixin.js';
 import { TooltipController } from '@vaadin/component-base/src/tooltip-controller.js';
 import { LumoInjectionMixin } from '@vaadin/vaadin-themable-mixin/lumo-injection-mixin.js';
-import { pdfViewerIcons } from './styles/vaadin-pdf-viewer-base-icons.js';
 import { pdfViewerButtonStyles } from './styles/vaadin-pdf-viewer-button-base-styles.js';
 
 /**
@@ -38,10 +37,14 @@ class PdfViewerButton extends ButtonMixin(DirMixin(PolylitMixin(LumoInjectionMix
   }
 
   static get styles() {
-    return [buttonStyles, pdfViewerIcons, pdfViewerButtonStyles];
+    return [buttonStyles, pdfViewerButtonStyles];
   }
 
-  /** @protected */
+  /**
+   * Override method from `LitElement` to render the icon of the button.
+   * @protected
+   * @override
+   */
   render() {
     return html`
       <div class="vaadin-button-container" role="presentation">
@@ -51,17 +54,16 @@ class PdfViewerButton extends ButtonMixin(DirMixin(PolylitMixin(LumoInjectionMix
     `;
   }
 
-  /** @protected */
+  /**
+   * Override method from `PolylitMixin` to show a tooltip slotted into the button for it.
+   * @protected
+   * @override
+   */
   ready() {
     super.ready();
 
     this._tooltipController = new TooltipController(this);
     this.addController(this._tooltipController);
-  }
-
-  /** @override */
-  __shouldAllowFocusWhenDisabled() {
-    return true;
   }
 }
 

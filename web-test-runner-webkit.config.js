@@ -1,6 +1,6 @@
 import { playwrightLauncher } from '@web/test-runner-playwright';
 import devServerConfig from './web-dev-server.config.js';
-import { createUnitTestsConfig } from './wtr-utils.js';
+import { accessibilityTreePlugin, createUnitTestsConfig, touchEmulationPlugin } from './wtr-utils.js';
 
 const unitTestsConfig = createUnitTestsConfig({
   browsers: [playwrightLauncher({ product: 'webkit' })],
@@ -9,4 +9,5 @@ const unitTestsConfig = createUnitTestsConfig({
 export default {
   ...unitTestsConfig,
   ...devServerConfig,
+  plugins: [...devServerConfig.plugins, accessibilityTreePlugin(), touchEmulationPlugin()],
 };

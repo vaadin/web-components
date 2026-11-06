@@ -22,6 +22,7 @@
 @import './custom-field.css';
 @import './dashboard.css';
 @import './date-picker.css';
+@import './date-range-picker.css';
 @import './date-time-picker.css';
 @import './details-summary.css';
 @import './details.css';
@@ -56,6 +57,7 @@
 @import './number-field.css';
 @import './overlay.css';
 @import './password-field.css';
+@import './pdf-viewer.css';
 @import './popover.css';
 @import './progress-bar.css';
 @import './radio-button.css';
