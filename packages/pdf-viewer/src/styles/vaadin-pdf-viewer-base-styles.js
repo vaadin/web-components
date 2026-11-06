@@ -36,11 +36,17 @@ const pdfViewerBaseStyles = css`
     scroll-padding: calc(var(--vaadin-focus-ring-width) * 2 + 2px);
   }
 
-  .content-area {
-    position: relative;
+  .main {
     display: flex;
     flex: 1 1 0;
     min-height: 40%;
+  }
+
+  .content-area {
+    position: relative;
+    display: flex;
+    flex: 1 1 auto;
+    min-width: 0;
   }
 
   [part='content'] {
