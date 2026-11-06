@@ -18,10 +18,10 @@ import { slotContent } from '@vaadin/component-base/src/directives/slot-content.
 import { formatZoom, getZoomInLevel, getZoomOutLevel, ZOOM_LEVELS } from './pdf-viewer-zoom-utils.js';
 
 /**
- * A mixin that adds the header and the toolbar with the page navigation, the
- * zoom and the download button. The controls of the toolbar are Vaadin
- * components, rendered into the light DOM so that themes can style them like
- * any other instance of these components.
+ * A mixin that adds the header and the toolbar with the sidebar button, the
+ * page navigation, the zoom and the download button. The controls of the
+ * toolbar are Vaadin components, rendered into the light DOM so that themes
+ * can style them like any other instance of these components.
  */
 export const PdfViewerToolbarMixin = (superClass) =>
   class PdfViewerToolbarMixinClass extends superClass {
@@ -109,6 +109,7 @@ export const PdfViewerToolbarMixin = (superClass) =>
         </button>
         <div id="toolbar" part="toolbar" ?hidden="${collapsed}">
           <div part="toolbar-group">
+            <slot name="toolbar-sidebar" ${slotContent(this._renderSidebarButton())}></slot>
             <slot name="toolbar-navigation" ${slotContent(this._renderNavigationControls())}></slot>
           </div>
           <div part="toolbar-group">
