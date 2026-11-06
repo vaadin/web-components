@@ -767,6 +767,10 @@ export const ChartMixin = (superClass) =>
         }
 
         if (this.configuration) {
+          // Destroying the chart removes its event handlers, so a pending print would never fire
+          // `afterPrint` to remove the styles it copied to the body
+          cleanupExport(this);
+
           this.configuration.destroy();
           this.configuration = undefined;
 
