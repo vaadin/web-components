@@ -4,8 +4,8 @@ export const snapshots = {};
 snapshots["vaadin-pdf-viewer host default"] = 
 `<vaadin-pdf-viewer>
   <vaadin-pdf-viewer-button
-    aria-describedby="vaadin-tooltip-0"
     aria-disabled="true"
+    aria-labelledby="vaadin-tooltip-0"
     disabled=""
     has-tooltip=""
     icon="previous-page"
@@ -17,8 +17,8 @@ snapshots["vaadin-pdf-viewer host default"] =
   >
   </vaadin-pdf-viewer-button>
   <vaadin-pdf-viewer-button
-    aria-describedby="vaadin-tooltip-1"
     aria-disabled="true"
+    aria-labelledby="vaadin-tooltip-1"
     disabled=""
     has-tooltip=""
     icon="next-page"
@@ -63,8 +63,8 @@ snapshots["vaadin-pdf-viewer host default"] =
     >
   </vaadin-integer-field>
   <vaadin-pdf-viewer-button
-    aria-describedby="vaadin-tooltip-6"
     aria-disabled="true"
+    aria-labelledby="vaadin-tooltip-6"
     disabled=""
     has-tooltip=""
     icon="zoom-out"
@@ -84,8 +84,8 @@ snapshots["vaadin-pdf-viewer host default"] =
   >
   </vaadin-select>
   <vaadin-pdf-viewer-button
-    aria-describedby="vaadin-tooltip-10"
     aria-disabled="true"
+    aria-labelledby="vaadin-tooltip-10"
     disabled=""
     has-tooltip=""
     icon="zoom-in"
@@ -97,8 +97,8 @@ snapshots["vaadin-pdf-viewer host default"] =
   >
   </vaadin-pdf-viewer-button>
   <vaadin-pdf-viewer-button
-    aria-describedby="vaadin-tooltip-12"
     aria-disabled="true"
+    aria-labelledby="vaadin-tooltip-12"
     disabled=""
     has-tooltip=""
     icon="download"
@@ -116,8 +116,8 @@ snapshots["vaadin-pdf-viewer host default"] =
 snapshots["vaadin-pdf-viewer host document"] = 
 `<vaadin-pdf-viewer>
   <vaadin-pdf-viewer-button
-    aria-describedby="vaadin-tooltip-0"
     aria-disabled="true"
+    aria-labelledby="vaadin-tooltip-0"
     disabled=""
     has-tooltip=""
     icon="previous-page"
@@ -129,7 +129,7 @@ snapshots["vaadin-pdf-viewer host document"] =
   >
   </vaadin-pdf-viewer-button>
   <vaadin-pdf-viewer-button
-    aria-describedby="vaadin-tooltip-1"
+    aria-labelledby="vaadin-tooltip-1"
     has-tooltip=""
     icon="next-page"
     role="button"
@@ -173,7 +173,7 @@ snapshots["vaadin-pdf-viewer host document"] =
     >
   </vaadin-integer-field>
   <vaadin-pdf-viewer-button
-    aria-describedby="vaadin-tooltip-6"
+    aria-labelledby="vaadin-tooltip-6"
     has-tooltip=""
     icon="zoom-out"
     role="button"
@@ -190,7 +190,7 @@ snapshots["vaadin-pdf-viewer host document"] =
   >
   </vaadin-select>
   <vaadin-pdf-viewer-button
-    aria-describedby="vaadin-tooltip-10"
+    aria-labelledby="vaadin-tooltip-10"
     has-tooltip=""
     icon="zoom-in"
     role="button"
@@ -201,7 +201,7 @@ snapshots["vaadin-pdf-viewer host document"] =
   >
   </vaadin-pdf-viewer-button>
   <vaadin-pdf-viewer-button
-    aria-describedby="vaadin-tooltip-12"
+    aria-labelledby="vaadin-tooltip-12"
     has-tooltip=""
     icon="download"
     role="button"
