@@ -78,6 +78,11 @@ describe('TooltipController', () => {
       expect(tooltip.ariaTarget).to.equal(input);
     });
 
+    it('should update tooltip ariaLinkMode using controller setAriaLinkMode method', () => {
+      controller.setAriaLinkMode('aria-labelledby');
+      expect(tooltip.ariaLinkMode).to.equal('aria-labelledby');
+    });
+
     it('should delegate open to the tooltip state controller', () => {
       tooltip._stateController = { open: sinon.spy(), close: sinon.spy() };
       controller.open({ hover: true });
@@ -167,6 +172,15 @@ describe('TooltipController', () => {
       await nextFrame();
 
       expect(tooltip._position).to.eql('top-start');
+    });
+
+    it('should update lazy tooltip ariaLinkMode using controller setAriaLinkMode method', async () => {
+      controller.setAriaLinkMode('aria-labelledby');
+
+      host.appendChild(tooltip);
+      await nextFrame();
+
+      expect(tooltip.ariaLinkMode).to.equal('aria-labelledby');
     });
 
     it('should fire tooltip-changed event when the tooltip is added', async () => {

@@ -33,6 +33,12 @@ export class TooltipController extends SlotController {
   ariaTarget: HTMLElement | HTMLElement[];
 
   /**
+   * Which ARIA attribute is used to link the tooltip
+   * content with the ARIA target element(s).
+   */
+  ariaLinkMode: 'aria-describedby' | 'aria-labelledby' | 'none';
+
+  /**
    * Object with properties passed to `generator`
    * function to be used for generating tooltip text.
    */
@@ -59,6 +65,12 @@ export class TooltipController extends SlotController {
    * via `aria-describedby` attribute used by screen readers.
    */
   setAriaTarget(ariaTarget: HTMLElement | HTMLElement[]): void;
+
+  /**
+   * Set which ARIA attribute is used to link the tooltip
+   * content with the ARIA target element(s).
+   */
+  setAriaLinkMode(ariaLinkMode: 'aria-describedby' | 'aria-labelledby' | 'none'): void;
 
   /**
    * Set a context object to be used by generator.

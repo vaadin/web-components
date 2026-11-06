@@ -30,6 +30,10 @@ export class TooltipController extends SlotController {
       tooltipNode.ariaTarget = this.ariaTarget;
     }
 
+    if (this.ariaLinkMode !== undefined) {
+      tooltipNode.ariaLinkMode = this.ariaLinkMode;
+    }
+
     if (this.context !== undefined) {
       tooltipNode.context = this.context;
     }
@@ -79,6 +83,20 @@ export class TooltipController extends SlotController {
     const tooltipNode = this.node;
     if (tooltipNode) {
       tooltipNode.ariaTarget = ariaTarget;
+    }
+  }
+
+  /**
+   * Set which ARIA attribute is used to link the tooltip
+   * content with the ARIA target element(s).
+   * @param {string} ariaLinkMode
+   */
+  setAriaLinkMode(ariaLinkMode) {
+    this.ariaLinkMode = ariaLinkMode;
+
+    const tooltipNode = this.node;
+    if (tooltipNode) {
+      tooltipNode.ariaLinkMode = ariaLinkMode;
     }
   }
 
