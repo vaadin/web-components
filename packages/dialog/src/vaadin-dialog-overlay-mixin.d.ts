@@ -20,17 +20,6 @@ export declare function DialogOverlayMixin<T extends Constructor<HTMLElement>>(
 
 export declare class DialogOverlayMixinClass {
   /**
-   * String used for rendering a dialog title.
-   * @attr {string} header-title
-   */
-  headerTitle: string;
-
-  /**
-   * The ARIA heading level of the title.
-   */
-  headingLevel: number | null | undefined;
-
-  /**
    * Whether to keep the overlay within the viewport.
    */
   keepInViewport: boolean;
