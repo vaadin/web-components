@@ -82,7 +82,8 @@ how to generate them.
     `download()`.
   - Each icon button is named after its tooltip text: its `vaadin-tooltip` has the `ariaLinkMode` property set to
     `aria-labelledby`. A new button needs the same, and no `aria-label`. Bind the property, not the
-    `aria-link-mode` attribute: it is not a real ARIA attribute, so a11y checkers such as axe (`aria-valid-attr`) flag it in the DOM.
+    `aria-link-mode` attribute: it is not a real ARIA attribute, so a11y checkers such as axe (`aria-valid-attr`)
+    flag it in the DOM.
   - The download button is after `toolbar-actions`. To replace it, an application hides it with
     `downloadButtonHidden` and adds its own button that calls `download()` to `toolbar-actions`.
 - The element applies `I18nMixin` and defines the default texts. The mixins read them from `__effectiveI18n`.
