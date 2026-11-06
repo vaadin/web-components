@@ -243,10 +243,10 @@ describe('print', () => {
       release = await holdPages(1);
       const printed = viewer.print();
       await progressShown();
-      expect(getProgress().hidden).to.be.false;
+      expect(getProgress().checkVisibility()).to.be.true;
       release();
       await printed;
-      expect(getProgress().hidden).to.be.true;
+      expect(getProgress().checkVisibility()).to.be.false;
       expect(getProgressBar()).to.be.null;
     });
 
