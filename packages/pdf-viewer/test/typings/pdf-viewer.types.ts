@@ -39,6 +39,7 @@ assertType<string | null | undefined>(viewer.headerTitle);
 assertType<boolean>(viewer.toolbarCollapsed);
 assertType<string | null | undefined>(viewer.fileName);
 assertType<boolean>(viewer.downloadButtonHidden);
+assertType<boolean>(viewer.findButtonHidden);
 assertType<number>(viewer.page);
 assertType<number>(viewer.pageCount);
 assertType<PdfViewerZoom>(viewer.zoom);
@@ -46,6 +47,14 @@ assertType<'page-fit' | 'page-width' | number>(viewer.zoom);
 assertType<PdfViewerI18n | undefined>(viewer.i18n);
 assertType<PdfViewerI18n>({ link: 'Link', goToPage: 'Go to page {page}', externalLink: '{text} (opens in a new tab)' });
 assertType<PdfViewerI18n>({ download: 'Download' });
+assertType<PdfViewerI18n>({
+  find: 'Find in document',
+  previousMatch: 'Previous match',
+  nextMatch: 'Next match',
+  closeFind: 'Close find',
+  findResult: '{current} of {total}',
+  findNoMatches: 'No matches',
+});
 
 // Methods
 assertType<() => void>(viewer.download);

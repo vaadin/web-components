@@ -36,6 +36,12 @@ const DEFAULT_I18N = {
   goToPage: 'Go to page {page}',
   externalLink: '{text} (opens in a new tab)',
   download: 'Download',
+  find: 'Find in document',
+  previousMatch: 'Previous match',
+  nextMatch: 'Next match',
+  closeFind: 'Close find',
+  findResult: '{current} of {total}',
+  findNoMatches: 'No matches',
 };
 
 /**
@@ -58,7 +64,7 @@ const DEFAULT_I18N = {
  *
  * Slot name         | Description
  * ------------------|-------------
- * `toolbar-actions` | Application controls, e.g. buttons, at the end of the toolbar, before the download button.
+ * `toolbar-actions` | Application controls, e.g. buttons, at the end of the toolbar, before the find and download buttons.
  *
  * #### Example
  *
@@ -91,6 +97,7 @@ const DEFAULT_I18N = {
  * `content`       | The scrollable area that contains the pages.
  * `page`          | A page of the document.
  * `loader`        | The loading indicator shown while the document loads.
+ * `find-bar`      | The bar with the controls for finding text, shown over the top end of the pages.
  *
  * The following state attributes are available for styling:
  *
@@ -123,7 +130,7 @@ const DEFAULT_I18N = {
  *
  * @fires {CustomEvent} document-error - Fired when the document could not be loaded.
  * @fires {CustomEvent} document-load - Fired when the document has loaded.
- * @fires {CustomEvent} find-result - Fired when `find()` has searched the document.
+ * @fires {CustomEvent} find-result - Fired when finding text, with `find()` or in the find bar, has gone through the document.
  * @fires {CustomEvent} page-changed - Fired when the `page` property changes.
  * @fires {CustomEvent} page-count-changed - Fired when the `pageCount` property changes.
  * @fires {CustomEvent} toolbar-collapsed-changed - Fired when the `toolbarCollapsed` property changes.
@@ -195,7 +202,19 @@ class PdfViewer extends PdfViewerMixin(
    *   // Accessible name of a link that opens in a new tab. {text} is replaced with the text of the link, or its URL.
    *   externalLink: '{text} (opens in a new tab)',
    *   // Tooltip of the download button.
-   *   download: 'Download'
+   *   download: 'Download',
+   *   // Tooltip of the find button, and accessible name and placeholder of the find field.
+   *   find: 'Find in document',
+   *   // Tooltip of the button of the find bar that goes to the previous match.
+   *   previousMatch: 'Previous match',
+   *   // Tooltip of the button of the find bar that goes to the next match.
+   *   nextMatch: 'Next match',
+   *   // Tooltip of the button that closes the find bar.
+   *   closeFind: 'Close find',
+   *   // Shown in the find field. {current} and {total} are replaced with the number of the current match and the number of matches.
+   *   findResult: '{current} of {total}',
+   *   // Shown in the find field when the text is not found.
+   *   findNoMatches: 'No matches'
    * }
    * ```
    *
@@ -224,6 +243,7 @@ class PdfViewer extends PdfViewerMixin(
         >
           <div id="pages"></div>
         </div>
+        ${this._renderFindBar()}
       </div>
     `;
   }

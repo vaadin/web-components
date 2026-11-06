@@ -19,9 +19,9 @@ import { formatZoom, getZoomInLevel, getZoomOutLevel, ZOOM_LEVELS } from './pdf-
 
 /**
  * A mixin that adds the header and the toolbar with the page navigation, the
- * zoom and the download button. The controls of the toolbar are Vaadin
- * components, rendered into the light DOM so that themes can style them like
- * any other instance of these components.
+ * zoom, and the find and download buttons. The controls of the toolbar are
+ * Vaadin components, rendered into the light DOM so that themes can style them
+ * like any other instance of these components.
  */
 export const PdfViewerToolbarMixin = (superClass) =>
   class PdfViewerToolbarMixinClass extends superClass {
@@ -117,6 +117,7 @@ export const PdfViewerToolbarMixin = (superClass) =>
           </div>
           <div part="toolbar-group">
             <slot name="toolbar-actions"></slot>
+            <slot name="toolbar-find" ${slotContent(this._renderFindButton())}></slot>
             <slot name="toolbar-download" ${slotContent(this._renderDownloadButton())}></slot>
           </div>
         </div>

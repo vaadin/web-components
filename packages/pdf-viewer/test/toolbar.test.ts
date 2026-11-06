@@ -556,13 +556,15 @@ describe('toolbar', () => {
       expect(approve.checkVisibility()).to.be.false;
     });
 
-    it('should show slotted controls before the built-in download button', async () => {
+    it('should show slotted controls before the built-in find and download buttons', async () => {
       const approve = createButton('Approve');
       viewer.append(approve);
       await nextFrame();
+      const find = viewer.querySelector<HTMLElement>('vaadin-pdf-viewer-button[icon="find"]')!;
       const download = viewer.querySelector<HTMLElement>('vaadin-pdf-viewer-button[icon="download"]')!;
-      expect(download.assignedSlot!.parentElement).to.equal(approve.assignedSlot!.parentElement);
-      expect(approve.getBoundingClientRect().right).to.be.at.most(download.getBoundingClientRect().left);
+      expect(find.assignedSlot!.parentElement).to.equal(approve.assignedSlot!.parentElement);
+      expect(approve.getBoundingClientRect().right).to.be.at.most(find.getBoundingClientRect().left);
+      expect(find.getBoundingClientRect().right).to.be.at.most(download.getBoundingClientRect().left);
     });
 
     describe('child added after the first render', () => {

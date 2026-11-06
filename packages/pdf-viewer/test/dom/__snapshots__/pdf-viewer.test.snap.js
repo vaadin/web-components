@@ -99,6 +99,20 @@ snapshots["vaadin-pdf-viewer host default"] =
   <vaadin-pdf-viewer-button
     aria-describedby="vaadin-tooltip-12"
     aria-disabled="true"
+    aria-pressed="false"
+    disabled=""
+    has-tooltip=""
+    icon="find"
+    role="button"
+    slot="toolbar-find"
+    style="--_vaadin-button-disabled-pointer-events: auto;"
+    tabindex="0"
+    theme="tertiary icon"
+  >
+  </vaadin-pdf-viewer-button>
+  <vaadin-pdf-viewer-button
+    aria-describedby="vaadin-tooltip-13"
+    aria-disabled="true"
     disabled=""
     has-tooltip=""
     icon="download"
@@ -202,6 +216,18 @@ snapshots["vaadin-pdf-viewer host document"] =
   </vaadin-pdf-viewer-button>
   <vaadin-pdf-viewer-button
     aria-describedby="vaadin-tooltip-12"
+    aria-pressed="false"
+    has-tooltip=""
+    icon="find"
+    role="button"
+    slot="toolbar-find"
+    style="--_vaadin-button-disabled-pointer-events: auto;"
+    tabindex="0"
+    theme="tertiary icon"
+  >
+  </vaadin-pdf-viewer-button>
+  <vaadin-pdf-viewer-button
+    aria-describedby="vaadin-tooltip-13"
     has-tooltip=""
     icon="download"
     role="button"
@@ -214,6 +240,185 @@ snapshots["vaadin-pdf-viewer host document"] =
 </vaadin-pdf-viewer>
 `;
 /* end snapshot vaadin-pdf-viewer host document */
+
+snapshots["vaadin-pdf-viewer host find bar"] = 
+`<vaadin-pdf-viewer>
+  <vaadin-pdf-viewer-button
+    aria-describedby="vaadin-tooltip-0"
+    aria-disabled="true"
+    disabled=""
+    has-tooltip=""
+    icon="previous-page"
+    role="button"
+    slot="toolbar-navigation"
+    style="--_vaadin-button-disabled-pointer-events: auto;"
+    tabindex="0"
+    theme="tertiary icon"
+  >
+  </vaadin-pdf-viewer-button>
+  <vaadin-pdf-viewer-button
+    aria-describedby="vaadin-tooltip-1"
+    has-tooltip=""
+    icon="next-page"
+    role="button"
+    slot="toolbar-navigation"
+    style="--_vaadin-button-disabled-pointer-events: auto;"
+    tabindex="0"
+    theme="tertiary icon"
+  >
+  </vaadin-pdf-viewer-button>
+  <vaadin-integer-field
+    has-value=""
+    max="6"
+    min="1"
+    slot="toolbar-navigation"
+    style="--_page-digits:1;"
+    theme="align-right"
+  >
+    <span slot="suffix">
+      / 6
+    </span>
+    <label
+      for="input-vaadin-integer-field-5"
+      id="label-vaadin-integer-field-2"
+      slot="label"
+    >
+    </label>
+    <div
+      hidden=""
+      id="error-message-vaadin-integer-field-4"
+      slot="error-message"
+    >
+    </div>
+    <input
+      id="input-vaadin-integer-field-5"
+      max="6"
+      min="1"
+      slot="input"
+      step="any"
+      tabindex="0"
+      type="number"
+    >
+  </vaadin-integer-field>
+  <vaadin-pdf-viewer-button
+    aria-describedby="vaadin-tooltip-6"
+    has-tooltip=""
+    icon="zoom-out"
+    role="button"
+    slot="toolbar-zoom"
+    style="--_vaadin-button-disabled-pointer-events: auto;"
+    tabindex="0"
+    theme="tertiary icon"
+  >
+  </vaadin-pdf-viewer-button>
+  <vaadin-select
+    has-value=""
+    slot="toolbar-zoom"
+    theme="align-center"
+  >
+  </vaadin-select>
+  <vaadin-pdf-viewer-button
+    aria-describedby="vaadin-tooltip-10"
+    has-tooltip=""
+    icon="zoom-in"
+    role="button"
+    slot="toolbar-zoom"
+    style="--_vaadin-button-disabled-pointer-events: auto;"
+    tabindex="0"
+    theme="tertiary icon"
+  >
+  </vaadin-pdf-viewer-button>
+  <vaadin-pdf-viewer-button
+    aria-describedby="vaadin-tooltip-12"
+    aria-pressed="true"
+    has-tooltip=""
+    icon="find"
+    role="button"
+    slot="toolbar-find"
+    style="--_vaadin-button-disabled-pointer-events: auto;"
+    tabindex="0"
+    theme="tertiary icon"
+  >
+  </vaadin-pdf-viewer-button>
+  <vaadin-pdf-viewer-button
+    aria-describedby="vaadin-tooltip-13"
+    has-tooltip=""
+    icon="download"
+    role="button"
+    slot="toolbar-download"
+    style="--_vaadin-button-disabled-pointer-events: auto;"
+    tabindex="0"
+    theme="tertiary icon"
+  >
+  </vaadin-pdf-viewer-button>
+  <vaadin-text-field
+    accessible-name="Find in document"
+    has-value=""
+    placeholder="Find in document"
+    slot="find-field"
+  >
+    <span
+      dir="auto"
+      slot="suffix"
+    >
+      1 of 12
+    </span>
+    <label
+      for="input-vaadin-text-field-17"
+      id="label-vaadin-text-field-14"
+      slot="label"
+    >
+    </label>
+    <div
+      hidden=""
+      id="error-message-vaadin-text-field-16"
+      slot="error-message"
+    >
+    </div>
+    <input
+      aria-label="Find in document"
+      id="input-vaadin-text-field-17"
+      placeholder="Find in document"
+      slot="input"
+      type="text"
+    >
+  </vaadin-text-field>
+  <vaadin-pdf-viewer-button
+    aria-describedby="vaadin-tooltip-18"
+    has-tooltip=""
+    icon="previous-match"
+    role="button"
+    slot="find-buttons"
+    style="--_vaadin-button-disabled-pointer-events: auto;"
+    tabindex="0"
+    theme="tertiary icon"
+  >
+  </vaadin-pdf-viewer-button>
+  <vaadin-pdf-viewer-button
+    aria-describedby="vaadin-tooltip-19"
+    has-tooltip=""
+    icon="next-match"
+    role="button"
+    slot="find-buttons"
+    style="--_vaadin-button-disabled-pointer-events: auto;"
+    tabindex="0"
+    theme="tertiary icon"
+  >
+  </vaadin-pdf-viewer-button>
+  <vaadin-pdf-viewer-button
+    aria-describedby="vaadin-tooltip-20"
+    has-tooltip=""
+    icon="close"
+    role="button"
+    slot="find-buttons"
+    style="--_vaadin-button-disabled-pointer-events: auto;"
+    tabindex="0"
+    theme="tertiary icon"
+  >
+  </vaadin-pdf-viewer-button>
+</vaadin-pdf-viewer>
+`;
+/* end snapshot vaadin-pdf-viewer host find bar */
 
 snapshots["vaadin-pdf-viewer shadow default"] = 
 `<div class="top-area">
@@ -247,6 +452,8 @@ snapshots["vaadin-pdf-viewer shadow default"] =
     <div part="toolbar-group">
       <slot name="toolbar-actions">
       </slot>
+      <slot name="toolbar-find">
+      </slot>
       <slot name="toolbar-download">
       </slot>
     </div>
@@ -261,6 +468,19 @@ snapshots["vaadin-pdf-viewer shadow default"] =
     tabindex="-1"
   >
     <div id="pages">
+    </div>
+  </div>
+  <div
+    aria-label="Find in document"
+    hidden=""
+    part="find-bar"
+    role="search"
+  >
+    <slot name="find-field">
+    </slot>
+    <div class="find-buttons">
+      <slot name="find-buttons">
+      </slot>
     </div>
   </div>
 </div>
@@ -299,6 +519,8 @@ snapshots["vaadin-pdf-viewer shadow document"] =
     <div part="toolbar-group">
       <slot name="toolbar-actions">
       </slot>
+      <slot name="toolbar-find">
+      </slot>
       <slot name="toolbar-download">
       </slot>
     </div>
@@ -411,6 +633,19 @@ snapshots["vaadin-pdf-viewer shadow document"] =
       </div>
       <div part="page">
       </div>
+    </div>
+  </div>
+  <div
+    aria-label="Find in document"
+    hidden=""
+    part="find-bar"
+    role="search"
+  >
+    <slot name="find-field">
+    </slot>
+    <div class="find-buttons">
+      <slot name="find-buttons">
+      </slot>
     </div>
   </div>
 </div>
@@ -449,6 +684,8 @@ snapshots["vaadin-pdf-viewer shadow header title"] =
     <div part="toolbar-group">
       <slot name="toolbar-actions">
       </slot>
+      <slot name="toolbar-find">
+      </slot>
       <slot name="toolbar-download">
       </slot>
     </div>
@@ -561,6 +798,19 @@ snapshots["vaadin-pdf-viewer shadow header title"] =
       </div>
       <div part="page">
       </div>
+    </div>
+  </div>
+  <div
+    aria-label="Find in document"
+    hidden=""
+    part="find-bar"
+    role="search"
+  >
+    <slot name="find-field">
+    </slot>
+    <div class="find-buttons">
+      <slot name="find-buttons">
+      </slot>
     </div>
   </div>
 </div>
@@ -600,6 +850,8 @@ snapshots["vaadin-pdf-viewer shadow header hidden"] =
     <div part="toolbar-group">
       <slot name="toolbar-actions">
       </slot>
+      <slot name="toolbar-find">
+      </slot>
       <slot name="toolbar-download">
       </slot>
     </div>
@@ -712,6 +964,19 @@ snapshots["vaadin-pdf-viewer shadow header hidden"] =
       </div>
       <div part="page">
       </div>
+    </div>
+  </div>
+  <div
+    aria-label="Find in document"
+    hidden=""
+    part="find-bar"
+    role="search"
+  >
+    <slot name="find-field">
+    </slot>
+    <div class="find-buttons">
+      <slot name="find-buttons">
+      </slot>
     </div>
   </div>
 </div>
@@ -751,6 +1016,8 @@ snapshots["vaadin-pdf-viewer shadow toolbar collapsed"] =
     <div part="toolbar-group">
       <slot name="toolbar-actions">
       </slot>
+      <slot name="toolbar-find">
+      </slot>
       <slot name="toolbar-download">
       </slot>
     </div>
@@ -865,9 +1132,187 @@ snapshots["vaadin-pdf-viewer shadow toolbar collapsed"] =
       </div>
     </div>
   </div>
+  <div
+    aria-label="Find in document"
+    hidden=""
+    part="find-bar"
+    role="search"
+  >
+    <slot name="find-field">
+    </slot>
+    <div class="find-buttons">
+      <slot name="find-buttons">
+      </slot>
+    </div>
+  </div>
 </div>
 `;
 /* end snapshot vaadin-pdf-viewer shadow toolbar collapsed */
+
+snapshots["vaadin-pdf-viewer shadow find bar"] = 
+`<div class="top-area">
+  <button
+    aria-controls="toolbar"
+    aria-expanded="true"
+    part="header"
+  >
+    <span
+      dir="auto"
+      part="title"
+      title="multi-page.pdf"
+    >
+      multi-page.pdf
+    </span>
+    <span part="header-toggle">
+    </span>
+  </button>
+  <div
+    id="toolbar"
+    part="toolbar"
+  >
+    <div part="toolbar-group">
+      <slot name="toolbar-navigation">
+      </slot>
+    </div>
+    <div part="toolbar-group">
+      <slot name="toolbar-zoom">
+      </slot>
+    </div>
+    <div part="toolbar-group">
+      <slot name="toolbar-actions">
+      </slot>
+      <slot name="toolbar-find">
+      </slot>
+      <slot name="toolbar-download">
+      </slot>
+    </div>
+  </div>
+</div>
+<div part="loader">
+</div>
+<div class="content-area">
+  <div
+    id="content"
+    part="content"
+    tabindex="0"
+  >
+    <div id="pages">
+      <div part="page">
+        <canvas aria-hidden="true">
+        </canvas>
+        <div
+          class="text-layer"
+          data-main-rotation="0"
+        >
+          <span
+            dir="ltr"
+            role="presentation"
+          >
+            Page 1
+          </span>
+          <br role="presentation">
+          <span
+            dir="ltr"
+            role="presentation"
+          >
+            The quick brown fox jumps over the lazy dog. Pack my box with five dozen
+          </span>
+          <br role="presentation">
+          <span
+            dir="ltr"
+            role="presentation"
+          >
+            liquor jugs. How vexingly quick daft zebras jump. Sphinx of black quartz,
+          </span>
+          <br role="presentation">
+          <span
+            dir="ltr"
+            role="presentation"
+          >
+            judge my vow.
+          </span>
+          <br role="presentation">
+          <span
+            dir="ltr"
+            role="presentation"
+          >
+            Unique word on this page: marker1.
+          </span>
+          <div class="end-of-content">
+          </div>
+        </div>
+      </div>
+      <div part="page">
+        <canvas aria-hidden="true">
+        </canvas>
+        <div
+          class="text-layer"
+          data-main-rotation="0"
+        >
+          <span
+            dir="ltr"
+            role="presentation"
+          >
+            Page 2
+          </span>
+          <br role="presentation">
+          <span
+            dir="ltr"
+            role="presentation"
+          >
+            The quick brown fox jumps over the lazy dog. Pack my box with five dozen
+          </span>
+          <br role="presentation">
+          <span
+            dir="ltr"
+            role="presentation"
+          >
+            liquor jugs. How vexingly quick daft zebras jump. Sphinx of black quartz,
+          </span>
+          <br role="presentation">
+          <span
+            dir="ltr"
+            role="presentation"
+          >
+            judge my vow.
+          </span>
+          <br role="presentation">
+          <span
+            dir="ltr"
+            role="presentation"
+          >
+            Unique word on this page: marker2.
+          </span>
+          <div class="end-of-content">
+          </div>
+        </div>
+      </div>
+      <div part="page">
+      </div>
+      <div part="page">
+      </div>
+      <div part="page">
+      </div>
+      <div part="page">
+      </div>
+    </div>
+  </div>
+  <div
+    aria-label="Find in document"
+    hidden=""
+    part="find-bar"
+    role="search"
+  >
+    <slot name="find-field">
+    </slot>
+    <div class="find-buttons">
+      <slot name="find-buttons">
+      </slot>
+    </div>
+  </div>
+</div>
+`;
+/* end snapshot vaadin-pdf-viewer shadow find bar */
 
 snapshots["vaadin-pdf-viewer page tagged"] = 
 `<div part="page">

@@ -198,17 +198,21 @@ export const PdfViewerScrollMixin = (superClass) =>
 
     /**
      * Scrolls the pages so that the given client rectangle is in the middle
-     * of the view, unless it is well inside the view already.
+     * of the view, unless it is well inside the view already. The top inset
+     * is the part of the view that something covers at the top, e.g. the
+     * find bar, at most half of the view.
      * @param {DOMRect} rect
+     * @param {{ topInset?: number }} [options]
      * @protected
      */
-    _scrollRectIntoView(rect) {
+    _scrollRectIntoView(rect, { topInset = 0 } = {}) {
       const { content } = this.$;
       const box = content.getBoundingClientRect();
+      const inset = Math.min(topInset, content.clientHeight / 2);
       // The client area, without the scrollbar on the left in RTL.
-      const top = box.top + content.clientTop;
+      const top = box.top + content.clientTop + inset;
       const left = box.left + content.clientLeft;
-      const height = content.clientHeight;
+      const height = content.clientHeight - inset;
       const width = content.clientWidth;
       // Also scroll when the rectangle is close to an edge, where it is easy to miss.
       const margin = Math.min(64, height / 4);
