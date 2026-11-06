@@ -43,7 +43,21 @@ export function inflateFunctions(config) {
   });
 }
 
-export function prepareExport(chart) {
+// Charts in styled mode that are being exported. Exports can overlap, as an export waits for the
+// chart copy to render, so the body keeps the `styled-mode` attribute until the last one is done.
+const styledModeExports = new Set();
+
+/**
+ * Copies the shadow styles of the chart to the body for a print or an export. Exports of the same
+ * chart can overlap, so they are counted, and the styles stay until the last one is cleaned up.
+ */
+export function prepareExport(chart, isExport = false) {
+  if (isExport) {
+    chart.__pendingExports = (chart.__pendingExports || 0) + 1;
+  } else {
+    chart.__printing = true;
+  }
+
   // Guard against another print 'before print' event coming before
   // the 'after print' event.
   if (!chart.tempBodyStyle) {
@@ -74,16 +88,24 @@ export function prepareExport(chart) {
     chart.tempBodyStyle.textContent = effectiveCss;
     document.body.appendChild(chart.tempBodyStyle);
     if (chart.__styledMode) {
+      styledModeExports.add(chart);
       document.body.toggleAttribute('styled-mode', true);
     }
   }
 }
 
-export function cleanupExport(chart) {
-  if (chart.tempBodyStyle) {
+export function cleanupExport(chart, isExport = false) {
+  if (isExport) {
+    chart.__pendingExports = Math.max((chart.__pendingExports || 0) - 1, 0);
+  } else {
+    chart.__printing = false;
+  }
+
+  if (chart.tempBodyStyle && !chart.__pendingExports && !chart.__printing) {
     document.body.removeChild(chart.tempBodyStyle);
     delete chart.tempBodyStyle;
-    if (chart.__styledMode) {
+    styledModeExports.delete(chart);
+    if (chart.__styledMode && styledModeExports.size === 0) {
       document.body.removeAttribute('styled-mode');
     }
   }
