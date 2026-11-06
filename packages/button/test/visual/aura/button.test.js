@@ -79,6 +79,15 @@ describe('button', () => {
     });
   });
 
+  describe('size', () => {
+    ['small', 'large'].forEach((size) => {
+      it(size, async () => {
+        element.setAttribute('theme', size);
+        await visualDiff(div, `size-${size}`);
+      });
+    });
+  });
+
   describe('accent', () => {
     ['neutral', 'green', 'yellow', 'purple', 'orange', 'blue', 'red'].forEach((color) => {
       it(color, async () => {

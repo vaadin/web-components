@@ -113,11 +113,11 @@ describe('notification card animation styles', () => {
     });
 
     describe('prefers-reduced-motion', () => {
-      before(async () => {
+      beforeEach(async () => {
         await emulateMedia({ reducedMotion: 'reduce' });
       });
 
-      after(async () => {
+      afterEach(async () => {
         await emulateMedia({ reducedMotion: 'no-preference' });
       });
 

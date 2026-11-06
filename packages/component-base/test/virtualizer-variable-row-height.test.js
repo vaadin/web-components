@@ -228,7 +228,8 @@ describe('virtualizer - variable row height - large variance', () => {
     await fixItemPositioningTimeout();
     const targetScrollTop = scrollTarget.scrollHeight - scrollTarget.offsetHeight;
 
-    expect(scrollTarget.scrollTop).to.equal(targetScrollTop);
+    // Firefox clamps to a fractional scroll end, while `scrollHeight` is rounded
+    expect(scrollTarget.scrollTop).to.be.closeTo(targetScrollTop, 1);
   });
 
   it('should allow scrolling to start', async () => {
