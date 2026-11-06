@@ -29,6 +29,9 @@ export interface PdfViewerI18n {
   goToPage?: string;
   externalLink?: string;
   download?: string;
+  sidebar?: string;
+  thumbnails?: string;
+  thumbnailLabel?: string;
 }
 
 /**
@@ -52,6 +55,11 @@ export type PdfViewerPageChangedEvent = CustomEvent<{ value: number }>;
 export type PdfViewerPageCountChangedEvent = CustomEvent<{ value: number }>;
 
 /**
+ * Fired when the `sidebarOpened` property changes.
+ */
+export type PdfViewerSidebarOpenedChangedEvent = CustomEvent<{ value: boolean }>;
+
+/**
  * Fired when the `toolbarCollapsed` property changes.
  */
 export type PdfViewerToolbarCollapsedChangedEvent = CustomEvent<{ value: boolean }>;
@@ -69,6 +77,8 @@ export interface PdfViewerCustomEventMap {
   'page-changed': PdfViewerPageChangedEvent;
 
   'page-count-changed': PdfViewerPageCountChangedEvent;
+
+  'sidebar-opened-changed': PdfViewerSidebarOpenedChangedEvent;
 
   'toolbar-collapsed-changed': PdfViewerToolbarCollapsedChangedEvent;
 
@@ -126,19 +136,23 @@ export interface PdfViewerEventMap extends HTMLElementEventMap, PdfViewerCustomE
  * `title`         | The title in the header.
  * `header-toggle` | The icon in the header that shows whether the toolbar is collapsed.
  * `toolbar`       | The toolbar above the pages.
- * `toolbar-group` | A group of related controls in the toolbar: navigation, zoom and actions.
+ * `toolbar-group` | A group of related controls in the toolbar: sidebar and navigation, zoom, and actions.
+ * `sidebar`       | The sidebar next to the pages, see `sidebarOpened`.
+ * `thumbnails`    | The scrollable list of page thumbnails in the sidebar.
+ * `thumbnail`     | A page thumbnail. Also has the `current` part name for the current page.
  * `content`       | The scrollable area that contains the pages.
  * `page`          | A page of the document.
  * `loader`        | The loading indicator shown while the document loads.
  *
  * The following state attributes are available for styling:
  *
- * Attribute    | Description
- * -------------|------------
- * `loading`    | Set while the document is loading.
- * `has-error`  | Set when the document could not be loaded.
- * `focused`    | Set when the page area is focused.
- * `focus-ring` | Set when the page area is focused using the keyboard.
+ * Attribute        | Description
+ * -----------------|------------
+ * `loading`        | Set while the document is loading.
+ * `has-error`      | Set when the document could not be loaded.
+ * `focused`        | Set when the page area is focused.
+ * `focus-ring`     | Set when the page area is focused using the keyboard.
+ * `sidebar-opened` | Set when the sidebar is shown.
  *
  * The following custom CSS properties are available for styling:
  *
@@ -151,6 +165,8 @@ export interface PdfViewerEventMap extends HTMLElementEventMap, PdfViewerCustomE
  * | `--vaadin-pdf-viewer-page-background`     |
  * | `--vaadin-pdf-viewer-page-gap`            |
  * | `--vaadin-pdf-viewer-page-shadow`         |
+ * | `--vaadin-pdf-viewer-sidebar-background`  |
+ * | `--vaadin-pdf-viewer-sidebar-width`       |
  * | `--vaadin-pdf-viewer-text-color`          |
  * | `--vaadin-pdf-viewer-toolbar-background`  |
  * | `--vaadin-pdf-viewer-toolbar-gap`         |
@@ -162,6 +178,7 @@ export interface PdfViewerEventMap extends HTMLElementEventMap, PdfViewerCustomE
  * @fires {CustomEvent} document-load - Fired when the document has loaded.
  * @fires {CustomEvent} page-changed - Fired when the `page` property changes.
  * @fires {CustomEvent} page-count-changed - Fired when the `pageCount` property changes.
+ * @fires {CustomEvent} sidebar-opened-changed - Fired when the `sidebarOpened` property changes.
  * @fires {CustomEvent} toolbar-collapsed-changed - Fired when the `toolbarCollapsed` property changes.
  * @fires {CustomEvent} zoom-changed - Fired when the `zoom` property changes.
  */
@@ -202,7 +219,13 @@ declare class PdfViewer extends PdfViewerMixin(
    *   // Accessible name of a link that opens in a new tab. {text} is replaced with the text of the link, or its URL.
    *   externalLink: '{text} (opens in a new tab)',
    *   // Tooltip of the download button.
-   *   download: 'Download'
+   *   download: 'Download',
+   *   // Tooltip of the button that shows and hides the sidebar.
+   *   sidebar: 'Sidebar',
+   *   // Accessible name of the list of page thumbnails in the sidebar.
+   *   thumbnails: 'Page thumbnails',
+   *   // Accessible name of a page thumbnail. {page} is replaced with the page number.
+   *   thumbnailLabel: 'Page {page}'
    * }
    * ```
    */
