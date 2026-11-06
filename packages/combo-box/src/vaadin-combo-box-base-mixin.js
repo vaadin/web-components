@@ -812,7 +812,9 @@ export const ComboBoxBaseMixin = (superClass) =>
       }
 
       if (!this.opened) {
-        this._commitValue();
+        // Use `_closeOrCommit()` so that components with a data provider
+        // wait for the pending request to complete before committing.
+        this._closeOrCommit();
       } else if (!this._overlayOpened) {
         // Combo-box is opened, but overlay is not visible -> custom value was entered.
         // Make sure we close here as there won't be an "outside click" in this case.
