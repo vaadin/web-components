@@ -289,7 +289,7 @@ snapshots["vaadin-pdf-viewer shadow default"] =
   role="progressbar"
 >
 </div>
-<div class="main">
+<div class="main-area">
   <div
     hidden=""
     id="sidebar"
@@ -367,7 +367,7 @@ snapshots["vaadin-pdf-viewer shadow document"] =
   role="progressbar"
 >
 </div>
-<div class="main">
+<div class="main-area">
   <div
     hidden=""
     id="sidebar"
@@ -567,7 +567,7 @@ snapshots["vaadin-pdf-viewer shadow header title"] =
   role="progressbar"
 >
 </div>
-<div class="main">
+<div class="main-area">
   <div
     hidden=""
     id="sidebar"
@@ -768,7 +768,7 @@ snapshots["vaadin-pdf-viewer shadow header hidden"] =
   role="progressbar"
 >
 </div>
-<div class="main">
+<div class="main-area">
   <div
     hidden=""
     id="sidebar"
@@ -969,7 +969,7 @@ snapshots["vaadin-pdf-viewer shadow toolbar collapsed"] =
   role="progressbar"
 >
 </div>
-<div class="main">
+<div class="main-area">
   <div
     hidden=""
     id="sidebar"

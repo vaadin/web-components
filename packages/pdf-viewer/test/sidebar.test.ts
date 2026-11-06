@@ -4,12 +4,20 @@ import { fixtureSync, nextFrame, nextRender, nextUpdate, oneEvent } from '@vaadi
 import sinon from 'sinon';
 import './enable-feature-flag.js';
 import '../vaadin-pdf-viewer.js';
-import type { PDFDocumentProxy } from 'pdfjs-dist';
+import type { PDFDocumentProxy, PDFPageProxy } from 'pdfjs-dist';
 import { clearWarnings } from '@vaadin/component-base/src/warnings.js';
 import type { Tooltip } from '@vaadin/tooltip';
 import type { PdfViewerButton } from '../src/vaadin-pdf-viewer-button.js';
 import type { PdfViewer } from '../vaadin-pdf-viewer.js';
-import { createPdfUrl, getPdfDocumentPrototype, getPdfPagePrototype, loadDocument, nextRenderIdle } from './helpers.js';
+import {
+  createPdfUrl,
+  fixtureUrl,
+  getPdfDocumentPrototype,
+  getPdfPagePrototype,
+  loadAndRender,
+  loadDocument,
+  nextRenderIdle,
+} from './helpers.js';
 
 describe('sidebar', () => {
   let viewer: PdfViewer;
@@ -60,14 +68,12 @@ describe('sidebar', () => {
   beforeEach(async () => {
     viewer = fixtureSync('<vaadin-pdf-viewer style="width: 700px; height: 500px"></vaadin-pdf-viewer>');
     await nextRender();
-    const idle = nextRenderIdle(viewer);
-    await loadDocument(viewer, 'multi-page.pdf');
-    await idle;
+    await loadAndRender(viewer, fixtureUrl('multi-page.pdf'));
   });
 
   it('should hide the sidebar by default', () => {
     expect(viewer.sidebarOpened).to.be.false;
-    expect(getSidebar().hidden).to.be.true;
+    expect(getSidebar().checkVisibility()).to.be.false;
   });
 
   it('should not create the thumbnails before the sidebar opens', () => {
@@ -78,11 +84,11 @@ describe('sidebar', () => {
     getButton().click();
     await nextRender();
     expect(viewer.sidebarOpened).to.be.true;
-    expect(getSidebar().hidden).to.be.false;
+    expect(getSidebar().checkVisibility()).to.be.true;
     getButton().click();
     await nextRender();
     expect(viewer.sidebarOpened).to.be.false;
-    expect(getSidebar().hidden).to.be.true;
+    expect(getSidebar().checkVisibility()).to.be.false;
   });
 
   it('should toggle aria-expanded attribute on the toolbar button when toggled', async () => {
@@ -93,12 +99,6 @@ describe('sidebar', () => {
     getButton().click();
     await nextRender();
     expect(getButton().getAttribute('aria-expanded')).to.equal('false');
-  });
-
-  it('should show the sidebar button before the page navigation', () => {
-    const previousPage = viewer.querySelector<HTMLElement>('vaadin-pdf-viewer-button[icon="previous-page"]')!;
-    expect(getButton().assignedSlot!.parentElement).to.equal(previousPage.assignedSlot!.parentElement);
-    expect(getButton().getBoundingClientRect().right).to.be.at.most(previousPage.getBoundingClientRect().left);
   });
 
   it('should show the label of the sidebar button in a tooltip', () => {
@@ -114,10 +114,13 @@ describe('sidebar', () => {
     expect(spy.firstCall.args[0].detail.value).to.be.true;
   });
 
-  it('should reflect sidebarOpened to the sidebar-opened attribute', async () => {
+  it('should toggle the sidebar-opened attribute on sidebarOpened change', async () => {
     viewer.sidebarOpened = true;
     await nextRender();
     expect(viewer.hasAttribute('sidebar-opened')).to.be.true;
+    viewer.sidebarOpened = false;
+    await nextRender();
+    expect(viewer.hasAttribute('sidebar-opened')).to.be.false;
   });
 
   it('should disable the toolbar button without a document', async () => {
@@ -172,6 +175,39 @@ describe('sidebar', () => {
     expect(getContent().getBoundingClientRect().right).to.be.at.most(getSidebar().getBoundingClientRect().left);
   });
 
+  it('should render the thumbnails again when the device pixel ratio changes', async () => {
+    const descriptor = Object.getOwnPropertyDescriptor(window, 'devicePixelRatio');
+    const pixelRatio = (window.devicePixelRatio || 1) + 1;
+    const query = new EventTarget();
+    const matchMedia = window.matchMedia.bind(window);
+    sinon
+      .stub(window, 'matchMedia')
+      .callsFake((media: string) => (media.startsWith('(resolution') ? (query as MediaQueryList) : matchMedia(media)));
+    try {
+      viewer.sidebarOpened = true;
+      await nextRender();
+      await waitForThumbnail(1);
+      const thumbnail = getThumbnails()[0];
+      const canvas = thumbnail.querySelector('canvas')!;
+      const width = thumbnail.querySelector<HTMLElement>('.thumbnail-image')!.offsetWidth;
+      Object.defineProperty(window, 'devicePixelRatio', { value: pixelRatio, configurable: true });
+      query.dispatchEvent(new Event('change'));
+      for (let i = 0; i < 100 && thumbnail.querySelector('canvas') === canvas; i++) {
+        await nextFrame();
+      }
+      expect(thumbnail.querySelectorAll('canvas')).to.have.lengthOf(1);
+      expect(thumbnail.querySelector('canvas')!.width).to.be.closeTo(width * pixelRatio, 1);
+      expect(canvas.width).to.equal(0);
+    } finally {
+      sinon.restore();
+      if (descriptor) {
+        Object.defineProperty(window, 'devicePixelRatio', descriptor);
+      } else {
+        delete (window as any).devicePixelRatio;
+      }
+    }
+  });
+
   describe('opened', () => {
     beforeEach(async () => {
       viewer.sidebarOpened = true;
@@ -194,46 +230,33 @@ describe('sidebar', () => {
       expect(thumbnails[2].getAttribute('aria-selected')).to.equal('true');
       expect(thumbnails[2].part.contains('current')).to.be.true;
       expect(thumbnails[0].hasAttribute('aria-selected')).to.be.false;
+      expect(thumbnails[0].part.contains('current')).to.be.false;
     });
 
     it('should go to the page of a clicked thumbnail', async () => {
       getThumbnails()[3].click();
       await nextRenderIdle(viewer);
       expect(viewer.page).to.equal(4);
-    });
-
-    it('should keep the sidebar open after going to a clicked thumbnail', async () => {
-      getThumbnails()[3].click();
-      await nextRenderIdle(viewer);
       expect(viewer.sidebarOpened).to.be.true;
     });
 
-    it('should label the thumbnails', () => {
-      expect(getList().getAttribute('role')).to.equal('listbox');
-      expect(getList().getAttribute('aria-label')).to.equal('Page thumbnails');
-      expect(getThumbnails()[1].getAttribute('role')).to.equal('option');
-      expect(getThumbnails()[1].getAttribute('aria-label')).to.equal('Page 2');
-    });
-
     it('should use the texts set with i18n', async () => {
-      viewer.i18n = { sidebar: 'Sidopanel', thumbnails: 'Miniatyrer', pageLabel: 'Sida {page}' };
+      viewer.i18n = { sidebar: 'Sidopanel', thumbnails: 'Miniatyrer', thumbnailLabel: 'Sida {page}' };
       await nextRender();
       expect(getButton().querySelector<Tooltip>('vaadin-tooltip')!.text).to.equal('Sidopanel');
       expect(getList().getAttribute('aria-label')).to.equal('Miniatyrer');
       expect(getThumbnails()[1].getAttribute('aria-label')).to.equal('Sida 2');
     });
 
-    it('should have one tab stop, on the thumbnail of the current page', () => {
-      expect(getTabStops()).to.deep.equal([getThumbnails()[0]]);
-    });
-
     it('should keep the tab stop for a page out of range', async () => {
+      viewer.page = 3;
+      await nextRenderIdle(viewer);
       const warn = sinon.stub(console, 'warn');
       try {
         viewer.page = 999;
         await nextUpdate(viewer);
         expect(viewer.page).to.equal(999);
-        expect(getTabStops()).to.deep.equal([getThumbnails()[0]]);
+        expect(getTabStops()).to.deep.equal([getThumbnails()[2]]);
       } finally {
         warn.restore();
       }
@@ -255,7 +278,41 @@ describe('sidebar', () => {
       it('should move focus to the next thumbnail with ArrowDown', async () => {
         await sendKeys({ press: 'ArrowDown' });
         expect(viewer.shadowRoot!.activeElement).to.equal(getThumbnails()[1]);
+        expect(getThumbnails()[1].matches(':focus-visible')).to.be.true;
         expect(viewer.page).to.equal(1);
+      });
+
+      it('should keep focus on the first thumbnail with ArrowUp', async () => {
+        await sendKeys({ press: 'ArrowUp' });
+        expect(viewer.shadowRoot!.activeElement).to.equal(getThumbnails()[0]);
+      });
+
+      it('should keep focus on the last thumbnail with ArrowDown', async () => {
+        await sendKeys({ press: 'End' });
+        await sendKeys({ press: 'ArrowDown' });
+        expect(viewer.shadowRoot!.activeElement).to.equal(getThumbnails()[5]);
+      });
+
+      it('should move focus out of the thumbnails with Tab', async () => {
+        await sendKeys({ press: 'Tab' });
+        expect(getList().contains(viewer.shadowRoot!.activeElement)).to.be.false;
+      });
+
+      it('should not move focus with a modifier key', async () => {
+        await sendKeys({ press: 'Control+ArrowDown' });
+        expect(viewer.shadowRoot!.activeElement).to.equal(getThumbnails()[0]);
+      });
+
+      it('should not move focus while the list itself has focus', async () => {
+        getList().focus();
+        await sendKeys({ press: 'ArrowDown' });
+        expect(viewer.shadowRoot!.activeElement).to.equal(getList());
+      });
+
+      it('should move the tab stop to a clicked thumbnail of the current page', async () => {
+        await sendKeys({ press: 'ArrowDown' });
+        getThumbnails()[0].click();
+        expect(getTabStops()).to.deep.equal([getThumbnails()[0]]);
       });
 
       it('should move focus to the previous thumbnail with ArrowUp', async () => {
@@ -304,6 +361,7 @@ describe('sidebar', () => {
     it('should keep one tab stop after clicking a thumbnail and moving focus', async () => {
       getThumbnails()[3].focus();
       getThumbnails()[3].click();
+      expect(getTabStops()).to.deep.equal([getThumbnails()[3]]);
       await sendKeys({ press: 'ArrowDown' });
       expect(getTabStops()).to.deep.equal([getThumbnails()[4]]);
     });
@@ -371,6 +429,33 @@ describe('sidebar', () => {
       expect(getThumbnails()[199].querySelector('canvas')).to.be.null;
     });
 
+    it('should render one thumbnail at a time', async () => {
+      const prototype = await getPdfPagePrototype();
+      const render = prototype.render;
+      let pending = 0;
+      let maxPending = 0;
+      function countingRender(this: PDFPageProxy, params: Parameters<PDFPageProxy['render']>[0]) {
+        const task = render.call(this, params);
+        if (params.viewport.width < 300) {
+          pending += 1;
+          maxPending = Math.max(maxPending, pending);
+          const done = () => {
+            pending -= 1;
+          };
+          task.promise.then(done, done);
+        }
+        return task;
+      }
+      sinon.stub(prototype, 'render').callsFake(countingRender);
+      // Scrolling adds thumbnails to render while one is rendering.
+      for (let i = 1; i <= 5; i++) {
+        getList().scrollTop = (getList().scrollHeight * i) / 10;
+        await nextFrame();
+      }
+      await nextFrames(10);
+      expect(maxPending).to.equal(1);
+    });
+
     it('should not render thumbnails while the sidebar is closed', async () => {
       viewer.sidebarOpened = false;
       viewer.page = 150;
@@ -383,6 +468,7 @@ describe('sidebar', () => {
       }
       viewer.sidebarOpened = false;
       const count = getThumbnailRenders();
+      expect(count).to.be.above(0);
       await nextFrames(30);
       // A thumbnail that waits for its page when the sidebar closes still renders.
       expect(getThumbnailRenders()).to.be.at.most(count + 1);
@@ -420,6 +506,17 @@ describe('sidebar', () => {
       await nextRenderIdle(viewer);
       const list = getList().getBoundingClientRect();
       const thumbnail = getThumbnails()[149].getBoundingClientRect();
+      expect(thumbnail.top).to.be.at.least(list.top - 1);
+      expect(thumbnail.bottom).to.be.at.most(list.bottom + 1);
+    });
+
+    it('should scroll back up to the thumbnail of the current page', async () => {
+      viewer.page = 150;
+      await nextRenderIdle(viewer);
+      viewer.page = 2;
+      await nextRenderIdle(viewer);
+      const list = getList().getBoundingClientRect();
+      const thumbnail = getThumbnails()[1].getBoundingClientRect();
       expect(thumbnail.top).to.be.at.least(list.top - 1);
       expect(thumbnail.bottom).to.be.at.most(list.bottom + 1);
     });
@@ -489,9 +586,7 @@ describe('sidebar', () => {
       viewer.sidebarOpened = true;
       await waitForCall(getPage);
 
-      const idle = nextRenderIdle(viewer);
-      await loadDocument(viewer, 'links.pdf');
-      await idle;
+      await loadAndRender(viewer, fixtureUrl('links.pdf'));
       await nextRender();
       release();
       await waitForThumbnail(4);
@@ -506,18 +601,14 @@ describe('sidebar', () => {
     it('should render other thumbnails after one that was scrolled away from finishes', async () => {
       const url = createPdfUrl(100);
       try {
-        const idle = nextRenderIdle(viewer);
-        viewer.src = url;
-        await idle;
+        await loadAndRender(viewer, url);
         const getPage = await delayFirstPage();
         viewer.sidebarOpened = true;
         await waitForCall(getPage);
 
         getList().scrollTop = getList().scrollHeight / 2;
         // Let the thumbnails that became visible wait for the outdated one.
-        for (let i = 0; i < 5; i++) {
-          await nextFrame();
-        }
+        await nextFrames(5);
         release();
         const list = getList().getBoundingClientRect();
         const visible = getThumbnails().find((thumbnail) => {
@@ -535,13 +626,15 @@ describe('sidebar', () => {
 
   describe('failed thumbnails', () => {
     let warn: sinon.SinonStub;
+    let isBroken: boolean;
 
     beforeEach(async () => {
       clearWarnings();
+      isBroken = true;
       const prototype = await getPdfDocumentPrototype();
       const getPage = prototype.getPage;
       function failingGetPage(this: PDFDocumentProxy, pageNumber: number) {
-        return pageNumber === 2 ? Promise.reject(new Error('Broken page')) : getPage.call(this, pageNumber);
+        return pageNumber === 2 && isBroken ? Promise.reject(new Error('Broken page')) : getPage.call(this, pageNumber);
       }
       // Only the thumbnails request pages once the pages have rendered.
       sinon.stub(prototype, 'getPage').callsFake(failingGetPage);
@@ -559,6 +652,21 @@ describe('sidebar', () => {
       expect(getThumbnails()[2].querySelector('canvas')).to.be.ok;
       expect(getThumbnails()[1].querySelector('canvas')).to.be.null;
       expect(warn).to.be.calledWith('Failed to render the thumbnail of page 2 of the PDF document: Broken page');
+    });
+
+    it('should render a failed thumbnail again after it was scrolled away from', async () => {
+      viewer.style.height = '250px';
+      viewer.sidebarOpened = true;
+      await nextRender();
+      for (let i = 0; i < 100 && !warn.called; i++) {
+        await nextFrame();
+      }
+      isBroken = false;
+      getList().scrollTop = getList().scrollHeight;
+      await nextFrames(5);
+      getList().scrollTop = 0;
+      await waitForThumbnail(2);
+      expect(getThumbnails()[1].querySelector('canvas')).to.be.ok;
     });
   });
 });

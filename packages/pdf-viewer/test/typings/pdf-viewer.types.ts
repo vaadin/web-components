@@ -48,7 +48,7 @@ assertType<'page-fit' | 'page-width' | number>(viewer.zoom);
 assertType<PdfViewerI18n | undefined>(viewer.i18n);
 assertType<PdfViewerI18n>({ link: 'Link', goToPage: 'Go to page {page}', externalLink: '{text} (opens in a new tab)' });
 assertType<PdfViewerI18n>({ download: 'Download' });
-assertType<PdfViewerI18n>({ sidebar: 'Sidebar', thumbnails: 'Page thumbnails', pageLabel: 'Page {page}' });
+assertType<PdfViewerI18n>({ sidebar: 'Sidebar', thumbnails: 'Page thumbnails', thumbnailLabel: 'Page {page}' });
 
 // Methods
 assertType<() => void>(viewer.download);

@@ -35,7 +35,7 @@ export interface PdfViewerI18n {
   download?: string;
   sidebar?: string;
   thumbnails?: string;
-  pageLabel?: string;
+  thumbnailLabel?: string;
 }
 
 /**
@@ -140,7 +140,7 @@ export interface PdfViewerEventMap extends HTMLElementEventMap, PdfViewerCustomE
  * `title`         | The title in the header.
  * `header-toggle` | The icon in the header that shows whether the toolbar is collapsed.
  * `toolbar`       | The toolbar above the pages.
- * `toolbar-group` | A group of related controls in the toolbar: navigation, zoom and actions.
+ * `toolbar-group` | A group of related controls in the toolbar: sidebar and navigation, zoom, and actions.
  * `sidebar`       | The sidebar next to the pages, see `sidebarOpened`.
  * `thumbnails`    | The scrollable list of page thumbnails in the sidebar.
  * `thumbnail`     | A page thumbnail. Also has the `current` part name for the current page.
@@ -237,7 +237,7 @@ declare class PdfViewer extends PdfViewerMixin(
    *   // Accessible name of the list of page thumbnails in the sidebar.
    *   thumbnails: 'Page thumbnails',
    *   // Accessible name of a page thumbnail. {page} is replaced with the page number.
-   *   pageLabel: 'Page {page}'
+   *   thumbnailLabel: 'Page {page}'
    * }
    * ```
    */

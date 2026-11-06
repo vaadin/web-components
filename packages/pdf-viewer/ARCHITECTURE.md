@@ -78,7 +78,7 @@ how to generate them.
 - `PdfViewerSidebarMixin` adds `sidebarOpened`, the sidebar button and the sidebar next to the pages.
   - `PdfViewerThumbnailsController` fills the sidebar with a thumbnail for each page. It renders the thumbnails
     near the visible part of the list one at a time, apart from the render queue of the pages.
-  - A thumbnail can render at the same time as a page. pdf.js renders thumbnails only while no page waits.
+  - A thumbnail can render at the same time as a page. The pdf.js viewer renders thumbnails only while no page waits.
   - The thumbnails are created when the sidebar first opens for a document, so a closed sidebar costs nothing.
   - Rendering stops while the sidebar is hidden. When it shows again, the thumbnails that left the view are released.
 - `PdfViewerToolbarMixin` renders the header and the toolbar. Its controls are in the light DOM, so a theme
