@@ -331,6 +331,7 @@ snapshots["vaadin-avatar-group opened overlay"] =
   no-vertical-overlap=""
   opened=""
   popover="manual"
+  role="none"
   start-aligned=""
   top-aligned=""
 >

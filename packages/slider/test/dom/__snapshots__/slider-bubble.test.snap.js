@@ -14,6 +14,7 @@ snapshots["vaadin-slider-bubble shadow"] =
   modeless=""
   no-vertical-overlap=""
   popover="manual"
+  role="none"
   vertical-align="bottom"
 >
   <slot>

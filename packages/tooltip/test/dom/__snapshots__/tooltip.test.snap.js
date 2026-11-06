@@ -22,6 +22,7 @@ snapshots["vaadin-tooltip default"] =
   no-vertical-overlap=""
   popover="manual"
   position="bottom"
+  role="none"
 >
   <slot name="overlay">
   </slot>
@@ -38,6 +39,7 @@ snapshots["vaadin-tooltip top-start"] =
   no-vertical-overlap=""
   popover="manual"
   position="top-start"
+  role="none"
 >
   <slot name="overlay">
   </slot>
@@ -54,6 +56,7 @@ snapshots["vaadin-tooltip top"] =
   no-vertical-overlap=""
   popover="manual"
   position="top"
+  role="none"
 >
   <slot name="overlay">
   </slot>
@@ -70,6 +73,7 @@ snapshots["vaadin-tooltip top-end"] =
   no-vertical-overlap=""
   popover="manual"
   position="top-end"
+  role="none"
 >
   <slot name="overlay">
   </slot>
@@ -86,6 +90,7 @@ snapshots["vaadin-tooltip bottom-start"] =
   no-vertical-overlap=""
   popover="manual"
   position="bottom-start"
+  role="none"
 >
   <slot name="overlay">
   </slot>
@@ -102,6 +107,7 @@ snapshots["vaadin-tooltip bottom"] =
   no-vertical-overlap=""
   popover="manual"
   position="bottom"
+  role="none"
 >
   <slot name="overlay">
   </slot>
@@ -118,6 +124,7 @@ snapshots["vaadin-tooltip bottom-end"] =
   no-vertical-overlap=""
   popover="manual"
   position="bottom-end"
+  role="none"
 >
   <slot name="overlay">
   </slot>
@@ -134,6 +141,7 @@ snapshots["vaadin-tooltip start-top"] =
   no-horizontal-overlap=""
   popover="manual"
   position="start-top"
+  role="none"
 >
   <slot name="overlay">
   </slot>
@@ -150,6 +158,7 @@ snapshots["vaadin-tooltip start"] =
   no-horizontal-overlap=""
   popover="manual"
   position="start"
+  role="none"
 >
   <slot name="overlay">
   </slot>
@@ -166,6 +175,7 @@ snapshots["vaadin-tooltip start-bottom"] =
   no-horizontal-overlap=""
   popover="manual"
   position="start-bottom"
+  role="none"
 >
   <slot name="overlay">
   </slot>
@@ -182,6 +192,7 @@ snapshots["vaadin-tooltip end-top"] =
   no-horizontal-overlap=""
   popover="manual"
   position="end-top"
+  role="none"
 >
   <slot name="overlay">
   </slot>
@@ -198,6 +209,7 @@ snapshots["vaadin-tooltip end"] =
   no-horizontal-overlap=""
   popover="manual"
   position="end"
+  role="none"
 >
   <slot name="overlay">
   </slot>
@@ -214,6 +226,7 @@ snapshots["vaadin-tooltip end-bottom"] =
   no-horizontal-overlap=""
   popover="manual"
   position="end-bottom"
+  role="none"
 >
   <slot name="overlay">
   </slot>
@@ -231,6 +244,7 @@ snapshots["vaadin-tooltip opened overlay"] =
   opened=""
   popover="manual"
   position="bottom"
+  role="none"
 >
   <slot name="overlay">
   </slot>

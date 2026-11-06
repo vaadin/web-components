@@ -383,6 +383,7 @@ snapshots["vaadin-login-overlay shadow default"] =
   id="overlay"
   opened=""
   popover="manual"
+  role="none"
   with-backdrop=""
 >
   <slot
