@@ -86,9 +86,10 @@ export const dialogOverlayBase = css`
     flex-wrap: nowrap;
   }
 
-  ::slotted([slot='header-content']),
-  ::slotted([slot='title']),
-  ::slotted([slot='footer']) {
+  ::slotted(div[slot='header-content']),
+  ::slotted(div[slot='footer']),
+  ::slotted(vaadin-dialog-content[slot]),
+  ::slotted([slot='title']) {
     display: contents;
   }
 
