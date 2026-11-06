@@ -162,15 +162,15 @@ class PdfViewer extends PdfViewerMixin(
    *
    * ```
    * {
-   *   // Tooltip of the previous page button, and accessible name of a link to the previous page.
+   *   // Tooltip and accessible name of the previous page button, and accessible name of a link to the previous page.
    *   previousPage: 'Previous page',
-   *   // Tooltip of the next page button, and accessible name of a link to the next page.
+   *   // Tooltip and accessible name of the next page button, and accessible name of a link to the next page.
    *   nextPage: 'Next page',
    *   // Error shown for a page that does not exist. {pageCount} is replaced with the page count.
    *   pageError: 'Enter 1–{pageCount}',
-   *   // Tooltip of the zoom in button.
+   *   // Tooltip and accessible name of the zoom in button.
    *   zoomIn: 'Zoom in',
-   *   // Tooltip of the zoom out button.
+   *   // Tooltip and accessible name of the zoom out button.
    *   zoomOut: 'Zoom out',
    *   // Zoom select item that fits the page width to the viewer.
    *   pageWidth: 'Page width',
@@ -184,7 +184,7 @@ class PdfViewer extends PdfViewerMixin(
    *   goToPage: 'Go to page {page}',
    *   // Accessible name of a link that opens in a new tab. {text} is replaced with the text of the link, or its URL.
    *   externalLink: '{text} (opens in a new tab)',
-   *   // Tooltip of the download button.
+   *   // Tooltip and accessible name of the download button.
    *   download: 'Download'
    * }
    * ```
