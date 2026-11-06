@@ -84,6 +84,16 @@ describe('badge', () => {
     });
   });
 
+  describe('size', () => {
+    ['small', 'large'].forEach((size) => {
+      it(size, async () => {
+        element.textContent = 'Badge';
+        element.setAttribute('theme', size);
+        await visualDiff(div, `size-${size}`);
+      });
+    });
+  });
+
   ['success', 'error', 'warning', 'dot'].forEach((variant) => {
     describe(variant, () => {
       it(variant, async () => {
