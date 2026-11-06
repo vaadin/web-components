@@ -95,6 +95,10 @@ export type DialogEventMap = DialogCustomEventMap & HTMLElementEventMap;
  * `header-content` | Slot for the header content
  * `footer`         | Slot for the footer content
  *
+ * A `<div>` slotted into `header-content` or `footer` is rendered with `display: contents`,
+ * so its children are laid out directly in the header or footer. Any other element, such as
+ * a `<vaadin-button>`, is rendered as a single item with its own box.
+ *
  * #### Renderer (deprecated)
  *
  * The content of the dialog can also be populated by using the renderer callback functions,
