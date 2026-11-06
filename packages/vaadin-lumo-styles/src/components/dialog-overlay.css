@@ -40,8 +40,14 @@
   ::slotted([slot='header-content']),
   ::slotted([slot='title']),
   ::slotted([slot='footer']) {
-    display: contents;
     pointer-events: auto;
+  }
+
+  ::slotted(div[slot='header-content']),
+  ::slotted(div[slot='footer']),
+  ::slotted(vaadin-dialog-content[slot]),
+  ::slotted([slot='title']) {
+    display: contents;
   }
 
   ::slotted([slot='title']) {
