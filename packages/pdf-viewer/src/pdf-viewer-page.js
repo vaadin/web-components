@@ -9,6 +9,7 @@
  * license.
  */
 import { createLink } from './pdf-viewer-links.js';
+import { PdfViewerStructureLayer } from './pdf-viewer-structure-layer.js';
 import { addLinksToText, ANNOTATION_ID_PREFIX, compareAnnotationPositions } from './pdf-viewer-text-accessibility.js';
 import { loadPdfjs } from './pdfjs-loader.js';
 
@@ -62,12 +63,25 @@ function addLinkAreas(link, { rect: [left, bottom, right, top], quadPoints }) {
 
 /**
  * Manages the DOM of a single page of the document: a placeholder sized to
- * the page, and the canvas and the text and link layers the page is rendered
- * to once it is needed.
+ * the page, and the canvas, the text layer, the structure and the link layer
+ * the page is rendered to once it is needed.
  */
 export class PdfViewerPage {
   /** Set once the links of the current canvas are rendered, also when the page has none. */
   #linksRendered = false;
+
+  /** Set once the structure of the current text layer is rendered, also when the page has none. */
+  #structureRendered = false;
+
+  /**
+   * The structure tree of the page, or null without one, kept to not ask the worker again
+   * when the page renders again, as pdf.js does.
+   * @type {Promise<object | null> | null}
+   */
+  #structTree = null;
+
+  /** @type {PdfViewerStructureLayer | null} */
+  #structureLayer = null;
 
   /**
    * @param {number} pageNumber
@@ -269,8 +283,9 @@ export class PdfViewerPage {
 
   /**
    * Renders the text layer: transparent text on top of the canvas, which makes
-   * the text selectable and readable by assistive technology. When the layer
-   * exists, it is only resized to the current scale.
+   * the text selectable and readable by assistive technology, and then the
+   * structure of a tagged PDF page. When the layer exists, it is only resized
+   * to the current scale.
    *
    * @return {Promise<void>}
    */
@@ -318,7 +333,42 @@ export class PdfViewerPage {
       endOfContent.className = 'end-of-content';
       container.append(endOfContent);
       this.endOfContentElement = endOfContent;
-      this.#addLinksToText();
+      // As in pdf.js, the structure renders right after the text layer, as its elements own the text.
+      await this.#renderStructureLayer();
+    }
+  }
+
+  /**
+   * Renders the structure of a tagged PDF page for assistive technology.
+   * @private
+   */
+  async #renderStructureLayer() {
+    const textLayerElement = this.textLayerElement;
+    // The structure is optional. A page with a broken one is shown as untagged.
+    this.#structTree ??= this.pdfPage.getStructTree().catch(() => null);
+    const tree = await this.#structTree;
+    // The page may have been released meanwhile.
+    if (this.textLayerElement !== textLayerElement) {
+      return;
+    }
+    this.#structureRendered = true;
+    const structureLayer = tree && this.#createStructureLayer(tree, textLayerElement);
+    if (structureLayer) {
+      this.#structureLayer = structureLayer;
+      textLayerElement.before(structureLayer.element);
+    }
+    this.#addLinksToContent();
+  }
+
+  /** @private */
+  #createStructureLayer(tree, textLayerElement) {
+    try {
+      const structureLayer = new PdfViewerStructureLayer(tree, this.pageNumber);
+      structureLayer.updateTextLayer(textLayerElement);
+      return structureLayer;
+    } catch {
+      // As in pdf.js, a structure that fails to render does not break the other layers.
+      return null;
     }
   }
 
@@ -382,20 +432,56 @@ export class PdfViewerPage {
     if (links.length) {
       this.element.append(layer);
       this.linkLayerElement = layer;
-      this.#addLinksToText();
     }
+    this.#addLinksToContent();
     return links;
   }
 
   /**
-   * Adds the links to the text, for assistive technology, once both the text
-   * layer and the link layer have rendered, in either order.
+   * Adds the links to the structure or to the text, for assistive technology,
+   * once both the structure and the link layer have rendered, in either
+   * order. As in pdf.js, the structure owns its links, and the other links
+   * are added to the text before them. Annotations of the structure that have
+   * no link, e.g. on a hidden layer, are removed from it. The links mixin
+   * names the links, see `getLinkAlt()`.
    * @private
    */
-  #addLinksToText() {
-    if (this.endOfContentElement && this.linkLayerElement) {
-      addLinksToText(this.textLayer.textDivs, [...this.linkLayerElement.children]);
+  #addLinksToContent() {
+    if (!this.#structureRendered || !this.#linksRendered) {
+      return;
     }
+    const links = [...(this.linkLayerElement?.children ?? [])];
+    const structureLayer = this.#structureLayer;
+    if (structureLayer) {
+      // Annotations that the viewer leaves out, so that no link of the structure stays without its link.
+      const linkIds = new Set(links.map((link) => link.id));
+      [...structureLayer.annotationIds]
+        .filter((id) => !linkIds.has(id))
+        .forEach((id) => structureLayer.removeAnnotation(id));
+      links.forEach((link) => {
+        structureLayer.getAriaAttributes(link.id)?.forEach((value, name) => {
+          if (name !== 'aria-label') {
+            link.setAttribute(name, value);
+          }
+        });
+      });
+    }
+    const textLinks = links.filter((link) => !structureLayer?.annotationIds.has(link.id));
+    // Comparing the positions of the text forces a layout, which a page without links does not need.
+    if (textLinks.length) {
+      addLinksToText(this.textLayer.textDivs, textLinks);
+    }
+  }
+
+  /**
+   * Returns the alternative text that the structure of a tagged PDF gives a
+   * link of this page, to name the link with, as in pdf.js.
+   *
+   * @param {HTMLElement} link
+   * @return {string | undefined}
+   */
+  getLinkAlt(link) {
+    return this.#structureLayer?.getAriaAttributes(link.id)?.get('aria-label');
   }
 
   /** Cancels a pending render. */
@@ -406,7 +492,7 @@ export class PdfViewerPage {
     }
   }
 
-  /** Cancels a pending render and frees the canvas memory and the text and link layers. */
+  /** Cancels a pending render and frees the canvas memory, the layers and the structure. */
   release() {
     this.cancel();
     this.textLayer?.cancel();
@@ -414,6 +500,9 @@ export class PdfViewerPage {
     this.textLayerElement?.remove();
     this.textLayerElement = null;
     this.endOfContentElement = null;
+    this.#structureLayer?.element.remove();
+    this.#structureLayer = null;
+    this.#structureRendered = false;
     this.linkLayerElement?.remove();
     this.linkLayerElement = null;
     this.#linksRendered = false;

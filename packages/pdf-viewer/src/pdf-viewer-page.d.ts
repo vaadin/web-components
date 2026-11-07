@@ -19,8 +19,8 @@ export declare const MAX_CANVAS_PIXELS: number;
 
 /**
  * Manages the DOM of a single page of the document: a placeholder sized to
- * the page, and the canvas and the text and link layers the page is rendered
- * to once it is needed.
+ * the page, and the canvas, the text layer, the structure and the link layer
+ * the page is rendered to once it is needed.
  */
 export declare class PdfViewerPage {
   constructor(pageNumber: number, size: { width: number; height: number });
@@ -71,6 +71,8 @@ export declare class PdfViewerPage {
     followLink: (annotation: PdfViewerLinkAnnotation) => void,
     optionalContentConfig?: Awaited<ReturnType<PDFDocumentProxy['getOptionalContentConfig']>>,
   ): Promise<Array<{ link: HTMLAnchorElement; annotation: PdfViewerLinkAnnotation }>>;
+
+  getLinkAlt(link: HTMLElement): string | undefined;
 
   cancel(): void;
 

@@ -39,6 +39,14 @@ export const pdfViewerPageStyles = css`
     height: 100%;
   }
 
+  /* The structure of tagged PDFs, for assistive technology only */
+  .struct-tree {
+    position: absolute;
+    inset: 0;
+    contain: strict;
+    pointer-events: none;
+  }
+
   .link-layer {
     position: absolute;
     inset: 0;
