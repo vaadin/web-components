@@ -61,17 +61,27 @@ how to generate them.
 - `PdfViewerScrollMixin` owns the scale `_scale`, the anchor, the visible pages and `page`. It asks for
   rendering only with `_renderVisible()` and `_cancelRender()`. It gets the scale from `_getScaleForSize()`, which
   fits the width of the current page by default.
+  - `_scrollRectIntoView()` centers a rectangle in the view, unless it is well inside the view. It jumps,
+    as pdf.js does for a match.
 - `PdfViewerZoomMixin` owns `zoom`. It writes no render or scroll state:
   - It overrides `_getScaleForSize()` to return the scale for `zoom`.
   - It calls `_refreshLayout()` when `zoom` changes.
   - Its `_zoomFactor` getter reads `_scale`, in units of the actual page size.
 - `PdfViewerTextLayerMixin` renders the text layer of each rendered page and sets the document language on the
   pages. A page loads its text each time it renders, as pdf.js' own viewer does.
+- `PdfViewerFindMixin` owns the matches. It loads the text of each page once per document into a private map.
+  The text layer loads its own text. Text that fails to load is loaded again by the next search.
+  - Its `_renderPageLayers()` override highlights the matches with `page.renderFindLayer()` once the text
+    layer has rendered. A page gets highlights only when it has `endOfContentElement`, as the text layer
+    of a page is set before it has rendered.
+  - It scrolls to the current match with `_scrollRectIntoView()`. When the page of the match has not rendered,
+    it goes to the page with `_scrollToPage()` first. A pending scroll to a match is dropped when `page` changes
+    to another page.
 - `PdfViewerLinksMixin` adds the links of each rendered page and follows internal links with `_scrollToPage()`.
 - After a page canvas renders, `PdfViewerRenderMixin` awaits `_renderPageLayers(page)`. Each override awaits
-  `super` first, so the layers render in the order of the mixins: text, then links.
-- The page view owns the DOM of a page: the canvas, the text layer and the link layer. Its methods check after
-  each await that the page still has the same canvas, so a released page gets no layers.
+  `super` first, so the layers render in the order of the mixins: text, find, then links.
+- The page view owns the DOM of a page: the canvas, the text layer, the link layer and the find layer. Its
+  methods check after each await that the page still has the same canvas, so a released page gets no layers.
 - `PdfViewerKeyboardMixin` handles the keyboard shortcuts.
 - `PdfViewerToolbarMixin` renders the header and the toolbar. Its controls are in the light DOM, so a theme
   styles the page field like any other `vaadin-integer-field`. The `slotContent()` directive renders them, so
@@ -109,6 +119,18 @@ how to generate them.
 - A link that wraps to the next line is clickable only on its words, which the `QuadPoints` of the annotation
   give. Its focus ring goes around these words.
 - When a focused link loses its page, focus moves to the page area.
+
+## Find
+
+- Matching ignores case, ligatures, differences in white space and the diacritics of Latin, Greek and
+  Cyrillic letters. Marks of other scripts make another letter, so matching keeps them.
+- The highlights are in a layer under the text layer. They are positioned in percent of the page, so they
+  stay in place on zoom.
+- A page that loses its canvas also loses its highlights. It gets them back when it renders again.
+- `find()` and `highlight()` wait while the document loads. They do nothing when the viewer is not attached.
+  Of several calls in a row, only the last one runs.
+- A page without size, e.g. inside a hidden ancestor, gets its highlights once the viewer has a size again.
+  The scroll to the current match waits for it too.
 
 ## Install size
 
