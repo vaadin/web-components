@@ -3,22 +3,20 @@
  * Copyright (c) 2023 - 2026 Vaadin Ltd.
  * This program is available under Apache License Version 2.0, available at https://vaadin.com/license/
  */
-import { SlotController } from '@vaadin/component-base/src/slot-controller.js';
+import { InternalSlotController } from '@vaadin/component-base/src/internal-slot-controller.js';
 
 /**
  * A controller to manage the value button element.
  */
-export class ButtonController extends SlotController {
+export class ButtonController extends InternalSlotController {
   constructor(host) {
-    super(host, 'value', 'vaadin-select-value-button', {
-      initializer: (button, host) => {
-        host._setFocusElement(button);
-        host.ariaTarget = button;
-        host.stateTarget = button;
+    super(host, 'value', 'vaadin-select-value-button', (button, host) => {
+      host._setFocusElement(button);
+      host.ariaTarget = button;
+      host.stateTarget = button;
 
-        button.setAttribute('role', 'combobox');
-        button.setAttribute('aria-haspopup', 'listbox');
-      },
+      button.setAttribute('role', 'combobox');
+      button.setAttribute('aria-haspopup', 'listbox');
     });
   }
 }
