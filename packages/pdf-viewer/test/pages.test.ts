@@ -345,7 +345,7 @@ describe('pages', () => {
   describe('memory', () => {
     beforeEach(async () => {
       // Pages so wide that each canvas has the most pixels a canvas may have
-      await createViewer('', 'width: 4000px; height: 400px');
+      await createViewer('zoom="page-width"', 'width: 4000px; height: 400px');
       await loadAndRender(viewer, createPdfUrl(200));
     });
 

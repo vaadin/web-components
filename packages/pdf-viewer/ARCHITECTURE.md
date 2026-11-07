@@ -28,9 +28,9 @@ how to generate them.
 ## Rendering
 
 - After load, each page gets a placeholder with the size of the first page. The other page sizes load in
-  batches of 10, and the layout updates once per frame. The pages fit the width of the current page to
-  the viewer, as in pdf.js. The fit is computed again on resize and when page sizes load, not when the
-  user scrolls to a page of another size.
+  batches of 10, and the layout updates once per frame. The default `auto` zoom fits the width of the
+  current page to the viewer, at most at 125%, and fits a landscape page whole, as in pdf.js. The fit is
+  computed again on resize and when page sizes load, not when the user scrolls to a page of another size.
 - The viewer renders the visible pages, starting with the current page, see `page` below. Then it renders
   one page after and one page before them.
 - Only one page renders at a time. A new canvas replaces the old one only when it is complete.
@@ -59,10 +59,10 @@ how to generate them.
     download whose URL is released right after the click.
 - `PdfViewerRenderMixin` owns the page views, their sizes, the render queue and the device pixel ratio. It calls `_pageSizesChanged()` at most once per frame when pages get their own size.
 - `PdfViewerScrollMixin` owns the scale `_scale`, the anchor, the visible pages and `page`. It asks for
-  rendering only with `_renderVisible()` and `_cancelRender()`. It gets the scale from `_getScaleForSize()`, which
-  fits the width of the current page by default.
+  rendering only with `_renderVisible()` and `_cancelRender()`. It gets the scale from `_getScaleForSize()`. Its
+  own implementation fits the width of the current page, which the zoom mixin uses for `page-width`.
 - `PdfViewerZoomMixin` owns `zoom`. It writes no render or scroll state:
-  - It overrides `_getScaleForSize()` to return the scale for `zoom`.
+  - It overrides `_getScaleForSize()` to return the scale for `zoom`, `auto` by default.
   - It calls `_refreshLayout()` when `zoom` changes.
   - Its `_zoomFactor` getter reads `_scale`, in units of the actual page size.
 - `PdfViewerTextLayerMixin` renders the text layer of each rendered page and sets the document language on the

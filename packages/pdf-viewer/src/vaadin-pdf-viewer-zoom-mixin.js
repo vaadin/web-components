@@ -10,7 +10,13 @@
  */
 import { issueWarning } from '@vaadin/component-base/src/warnings.js';
 import { getFitScale } from './pdf-viewer-layout.js';
-import { getZoomInLevel, getZoomOutLevel, isValidZoom, PDF_TO_CSS_UNITS } from './pdf-viewer-zoom-utils.js';
+import {
+  getZoomInLevel,
+  getZoomOutLevel,
+  isValidZoom,
+  MAX_AUTO_ZOOM,
+  PDF_TO_CSS_UNITS,
+} from './pdf-viewer-zoom-utils.js';
 
 /**
  * A mixin that scales the pages to the `zoom` level.
@@ -21,7 +27,10 @@ export const PdfViewerZoomMixin = (superClass) =>
       return {
         /**
          * The zoom level of the pages:
-         * - `page-width` (default) fits the width of the current page to the viewer.
+         * - `auto` (default) fits the width of the current page to the viewer, but
+         *   shows it at most at 125%, so that the text stays readable in a wide
+         *   viewer. A landscape page fits whole into the viewer.
+         * - `page-width` fits the width of the current page to the viewer.
          * - `page-fit` fits the whole current page into the viewer.
          * - A number scales the pages relative to their actual size, e.g. `1` for 100%.
          *
@@ -29,12 +38,12 @@ export const PdfViewerZoomMixin = (superClass) =>
          * resizes and when the page gets its own size. Scrolling to a page of
          * another size keeps the scale.
          *
-         * An invalid value logs a warning and is replaced with `page-width`.
+         * An invalid value logs a warning and is replaced with `auto`.
          *
          * @type {string | number}
          */
         zoom: {
-          value: 'page-width',
+          value: 'auto',
           notify: true,
           // Numbers set as attribute, e.g. zoom="1.5", become numbers.
           converter: {
@@ -63,8 +72,8 @@ export const PdfViewerZoomMixin = (superClass) =>
       if (props.has('zoom') && !isValidZoom(zoom)) {
         // Only show strings and numbers, as converting other values to a string can throw.
         const value = typeof zoom === 'string' || typeof zoom === 'number' ? zoom : typeof zoom;
-        issueWarning(`Invalid zoom value "${value}" for <vaadin-pdf-viewer>, using "page-width" instead.`);
-        this.zoom = 'page-width';
+        issueWarning(`Invalid zoom value "${value}" for <vaadin-pdf-viewer>, using "auto" instead.`);
+        this.zoom = 'auto';
       }
     }
 
@@ -90,11 +99,11 @@ export const PdfViewerZoomMixin = (superClass) =>
     }
 
     /**
-     * Sets the zoom back to `page-width`.
+     * Sets the zoom back to `auto`.
      * @protected
      */
     _resetZoom() {
-      this.zoom = 'page-width';
+      this.zoom = 'auto';
     }
 
     /**
@@ -108,12 +117,20 @@ export const PdfViewerZoomMixin = (superClass) =>
      */
     _getScaleForSize(width, height, page) {
       const { zoom } = this;
+      const widthScale = super._getScaleForSize(width, height, page);
       if (zoom === 'page-width') {
-        return super._getScaleForSize(width, height, page);
+        return widthScale;
       }
 
+      const fitScale = Math.min(widthScale, getFitScale(height, page.unscaledHeight));
       if (zoom === 'page-fit') {
-        return Math.min(super._getScaleForSize(width, height, page), getFitScale(height, page.unscaledHeight));
+        return fitScale;
+      }
+
+      if (zoom === 'auto') {
+        // As in pdf.js: a landscape page fits whole, as the width alone would hide its bottom.
+        const isLandscape = page.unscaledWidth > page.unscaledHeight;
+        return Math.min(isLandscape ? fitScale : widthScale, MAX_AUTO_ZOOM * PDF_TO_CSS_UNITS);
       }
 
       return Number(zoom) * PDF_TO_CSS_UNITS;

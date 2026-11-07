@@ -22,6 +22,7 @@ export interface PdfViewerI18n {
   pageError?: string;
   zoomIn?: string;
   zoomOut?: string;
+  automaticZoom?: string;
   pageWidth?: string;
   pageFit?: string;
   document?: string;
@@ -189,6 +190,8 @@ declare class PdfViewer extends PdfViewerMixin(
    *   zoomIn: 'Zoom in',
    *   // Tooltip and accessible name of the zoom out button.
    *   zoomOut: 'Zoom out',
+   *   // Zoom select item that fits the page width to the viewer, at most at 125%, or a landscape page whole.
+   *   automaticZoom: 'Automatic zoom',
    *   // Zoom select item that fits the page width to the viewer.
    *   pageWidth: 'Page width',
    *   // Zoom select item that fits the whole page into the viewer.

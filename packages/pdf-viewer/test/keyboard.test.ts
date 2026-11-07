@@ -117,10 +117,10 @@ describe('keyboard', () => {
         expect(viewer.zoom).to.equal(1.5);
       });
 
-      it('should reset the zoom to page-width with Ctrl+0', async () => {
+      it('should reset the zoom to auto with Ctrl+0', async () => {
         content.focus();
         await sendKeys({ press: 'Control+Digit0' });
-        expect(viewer.zoom).to.equal('page-width');
+        expect(viewer.zoom).to.equal('auto');
       });
 
       it('should zoom in with Ctrl and numpad +', async () => {
@@ -135,10 +135,10 @@ describe('keyboard', () => {
         expect(viewer.zoom).to.equal(1.5);
       });
 
-      it('should reset the zoom to page-width with Ctrl and numpad 0', async () => {
+      it('should reset the zoom to auto with Ctrl and numpad 0', async () => {
         content.focus();
         await sendKeys({ press: 'Control+Numpad0' });
-        expect(viewer.zoom).to.equal('page-width');
+        expect(viewer.zoom).to.equal('auto');
       });
 
       it('should zoom with Ctrl+= from a toolbar button', async () => {

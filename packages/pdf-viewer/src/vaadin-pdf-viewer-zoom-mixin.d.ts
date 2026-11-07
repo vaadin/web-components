@@ -10,7 +10,7 @@
  */
 import type { Constructor } from '@open-wc/dedupe-mixin';
 
-export type PdfViewerZoom = 'page-fit' | 'page-width' | number;
+export type PdfViewerZoom = 'auto' | 'page-fit' | 'page-width' | number;
 
 /**
  * A mixin that scales the pages to the `zoom` level.
@@ -22,7 +22,10 @@ export declare function PdfViewerZoomMixin<T extends Constructor<HTMLElement>>(
 export declare class PdfViewerZoomMixinClass {
   /**
    * The zoom level of the pages:
-   * - `page-width` (default) fits the width of the current page to the viewer.
+   * - `auto` (default) fits the width of the current page to the viewer, but
+   *   shows it at most at 125%, so that the text stays readable in a wide
+   *   viewer. A landscape page fits whole into the viewer.
+   * - `page-width` fits the width of the current page to the viewer.
    * - `page-fit` fits the whole current page into the viewer.
    * - A number scales the pages relative to their actual size, e.g. `1` for 100%.
    *
@@ -30,7 +33,7 @@ export declare class PdfViewerZoomMixinClass {
    * resizes and when the page gets its own size. Scrolling to a page of
    * another size keeps the scale.
    *
-   * An invalid value logs a warning and is replaced with `page-width`.
+   * An invalid value logs a warning and is replaced with `auto`.
    */
   zoom: PdfViewerZoom;
 
@@ -46,7 +49,7 @@ export declare class PdfViewerZoomMixinClass {
   protected _stepZoom(direction: -1 | 1): void;
 
   /**
-   * Sets the zoom back to `page-width`.
+   * Sets the zoom back to `auto`.
    */
   protected _resetZoom(): void;
 }

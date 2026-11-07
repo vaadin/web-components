@@ -276,7 +276,7 @@ describe('toolbar', () => {
     }
 
     it('should show the zoom in the zoom select', () => {
-      expect(zoomSelect.value).to.equal('page-width');
+      expect(zoomSelect.value).to.equal('auto');
     });
 
     it('should show a zoom that is not one of the levels', async () => {
@@ -322,7 +322,7 @@ describe('toolbar', () => {
     });
 
     it('should zoom in from a fit zoom to the next level above its scale', async () => {
-      // 600px wide, so page-width is between 50% and 75%
+      // 600px wide, so the automatic zoom fits the page width, between 50% and 75%
       zoomInButton.click();
       await nextRenderIdle(viewer);
       expect(viewer.zoom).to.equal(0.75);
@@ -352,10 +352,16 @@ describe('toolbar', () => {
     });
 
     it('should use the zoom texts set with i18n', async () => {
-      viewer.i18n = { zoomIn: 'Größer', pageWidth: 'Seitenbreite', pageFit: 'Ganze Seite' };
+      viewer.i18n = {
+        zoomIn: 'Größer',
+        automaticZoom: 'Automatisch',
+        pageWidth: 'Seitenbreite',
+        pageFit: 'Ganze Seite',
+      };
       await nextFrame();
       expect(zoomInButton.querySelector<Tooltip>('vaadin-tooltip')!.text).to.equal('Größer');
       expect(zoomOutButton.querySelector<Tooltip>('vaadin-tooltip')!.text).to.equal('Zoom out');
+      expect(getItemLabel('auto')).to.equal('Automatisch');
       expect(getItemLabel('page-width')).to.equal('Seitenbreite');
       expect(getItemLabel('page-fit')).to.equal('Ganze Seite');
     });

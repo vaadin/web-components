@@ -28,6 +28,7 @@ const DEFAULT_I18N = {
   pageError: 'Enter 1–{pageCount}',
   zoomIn: 'Zoom in',
   zoomOut: 'Zoom out',
+  automaticZoom: 'Automatic zoom',
   pageWidth: 'Page width',
   pageFit: 'Page fit',
   document: 'PDF document',
@@ -172,6 +173,8 @@ class PdfViewer extends PdfViewerMixin(
    *   zoomIn: 'Zoom in',
    *   // Tooltip and accessible name of the zoom out button.
    *   zoomOut: 'Zoom out',
+   *   // Zoom select item that fits the page width to the viewer, at most at 125%, or a landscape page whole.
+   *   automaticZoom: 'Automatic zoom',
    *   // Zoom select item that fits the page width to the viewer.
    *   pageWidth: 'Page width',
    *   // Zoom select item that fits the whole page into the viewer.

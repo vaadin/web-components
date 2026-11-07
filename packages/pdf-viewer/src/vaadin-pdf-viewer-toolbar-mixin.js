@@ -304,6 +304,7 @@ export const PdfViewerToolbarMixin = (superClass) =>
     #getZoomItems() {
       const i18n = this.__effectiveI18n;
       const items = [
+        { label: i18n.automaticZoom, value: 'auto' },
         { label: i18n.pageWidth, value: 'page-width' },
         { label: i18n.pageFit, value: 'page-fit' },
         ...ZOOM_LEVELS.map((level) => ({ label: formatZoom(level), value: String(level) })),
@@ -330,6 +331,6 @@ export const PdfViewerToolbarMixin = (superClass) =>
       // The change is internal to the viewer. Applications listen to `zoom-changed`.
       event.stopPropagation();
       const { value } = event.target;
-      this.zoom = value === 'page-width' || value === 'page-fit' ? value : Number(value);
+      this.zoom = value === 'auto' || value === 'page-width' || value === 'page-fit' ? value : Number(value);
     }
   };

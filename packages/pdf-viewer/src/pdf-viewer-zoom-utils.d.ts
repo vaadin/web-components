@@ -12,6 +12,9 @@
 /** CSS pixels per PDF unit at 100%: a PDF unit is 1/72 inch, a CSS pixel 1/96 inch. */
 export const PDF_TO_CSS_UNITS: number;
 
+/** The largest zoom factor of the `auto` zoom, as in pdf.js. */
+export const MAX_AUTO_ZOOM: number;
+
 /** The zoom levels of the zoom select, the zoom buttons and the zoom shortcuts. */
 export const ZOOM_LEVELS: number[];
 
@@ -31,7 +34,7 @@ export function getZoomOutLevel(zoomFactor: number): number | undefined;
 export function formatZoom(zoom: number): string;
 
 /**
- * Whether the value is a supported `zoom`: `page-width`, `page-fit`, or a
- * finite positive number, also as a string.
+ * Whether the value is a supported `zoom`: `auto`, `page-width`, `page-fit`,
+ * or a finite positive number, also as a string.
  */
 export function isValidZoom(zoom: unknown): boolean;
