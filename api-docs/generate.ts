@@ -55,6 +55,9 @@ function renderElement(element: any) {
       const propertyType = typeContext.getMemberType(prop.name);
       mdContent += `### ${prop.name}\n\n`;
       mdContent += `**Type:** \`${propertyType}\`\n\n`;
+      if (prop.default !== undefined) {
+        mdContent += `**Default:** \`${prop.default}\`\n\n`;
+      }
       mdContent += `${sanitizeDescription(prop.description)}\n\n`;
       mdContent += renderRelatedTypes(typeContext, propertyType);
     });

@@ -2,6 +2,7 @@ import fs from 'node:fs';
 import { byName } from './lib/cem-helpers.js';
 import { classPrivacyPlugin } from './plugins/class-privacy.js';
 import { inheritancePlugin } from './plugins/inheritance.js';
+import { propertyDefaultsPlugin } from './plugins/property-defaults.js';
 import { publicApiPlugin } from './plugins/public-api.js';
 import { readonlyPlugin } from './plugins/readonly.js';
 
@@ -16,5 +17,5 @@ export default {
       .sort(byName)
       .map((file) => ts.createSourceFile(file, fs.readFileSync(file, 'utf-8'), ts.ScriptTarget.ES2015, true));
   },
-  plugins: [inheritancePlugin(), classPrivacyPlugin(), readonlyPlugin(), publicApiPlugin()],
+  plugins: [inheritancePlugin(), classPrivacyPlugin(), readonlyPlugin(), propertyDefaultsPlugin(), publicApiPlugin()],
 };
