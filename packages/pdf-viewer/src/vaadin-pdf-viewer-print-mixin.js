@@ -64,30 +64,11 @@ export const PdfViewerPrintMixin = (superClass) =>
      */
     #printFrame = null;
 
-    /**
-     * The element that had focus when printing started.
-     * @type {HTMLElement | null}
-     */
-    #returnFocus = null;
-
-    /** Set when focus returns to where it was before printing, after the next update. */
-    #restoreFocusPending = false;
-
     /** @protected */
     disconnectedCallback() {
       super.disconnectedCallback();
 
       this.#cancelPrint();
-    }
-
-    /** @protected */
-    updated(props) {
-      super.updated(props);
-
-      if (this.#restoreFocusPending) {
-        this.#restoreFocusPending = false;
-        this.#restoreFocus();
-      }
     }
 
     /**
@@ -132,7 +113,7 @@ export const PdfViewerPrintMixin = (superClass) =>
       this.#printFrame?.remove();
       const printFrame = new PdfViewerPrintFrame();
       this.#printFrame = printFrame;
-      this.#returnFocus = getFocusedElement();
+      const returnFocus = getFocusedElement();
       this._printing = true;
 
       try {
@@ -140,16 +121,19 @@ export const PdfViewerPrintMixin = (superClass) =>
         if (printFrame.removed) {
           return;
         }
-        this.#stopPrinting();
+        this._printing = false;
         printFrame.print();
-        await this.updateComplete;
       } catch (error) {
         // Rendering fails when printing stops meanwhile.
-        if (!printFrame.removed) {
-          this.#cancelPrint();
-          issueWarning(`Failed to print the PDF document: ${error.message}`);
+        if (printFrame.removed) {
+          return;
         }
+        this.#cancelPrint();
+        issueWarning(`Failed to print the PDF document: ${error.message}`);
       }
+      // Wait until the print button is enabled again.
+      await this.updateComplete;
+      this.#restoreFocus(returnFocus);
     }
 
     /**
@@ -159,40 +143,27 @@ export const PdfViewerPrintMixin = (superClass) =>
     #cancelPrint() {
       this.#printFrame?.remove();
       this.#printFrame = null;
-      if (this._printing) {
-        this.#stopPrinting();
-      }
-    }
-
-    /**
-     * Hides the loader, and returns focus after the next update.
-     * @private
-     */
-    #stopPrinting() {
       this._printing = false;
-      this.#restoreFocusPending = true;
     }
 
     /**
      * Returns focus to where it was before printing, when it has been lost
      * meanwhile. Moves focus to the pages instead when it was in the viewer
      * and that element is gone.
+     * @param {HTMLElement | null} returnFocus the element that had focus when printing started
      * @private
      */
-    #restoreFocus() {
-      const returnFocus = this.#returnFocus;
-      this.#returnFocus = null;
+    #restoreFocus(returnFocus) {
       const active = getFocusedElement();
-      // Focus is lost when on nothing, or on an element that is gone or hidden.
-      const isLost = !active || !active.isConnected || !active.checkVisibility();
+      // Focus is lost when on nothing, or on a hidden element.
+      const isLost = !active || !active.checkVisibility();
       if (!isLost || !this.isConnected) {
         return;
       }
 
       const options = { focusVisible: isKeyboardActive() };
-      if (returnFocus && returnFocus.isConnected && !returnFocus.disabled && returnFocus.checkVisibility()) {
-        returnFocus.focus(options);
-      }
+      // Does nothing when the element is gone or hidden.
+      returnFocus?.focus(options);
       if (getFocusedElement() !== returnFocus && isInside(this, returnFocus) && this.pageCount) {
         this.$.content.focus(options);
       }
