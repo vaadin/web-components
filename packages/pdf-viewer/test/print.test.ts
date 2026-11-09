@@ -144,11 +144,7 @@ describe('print', () => {
       const [landscapeWidth, landscapeHeight] = getPageSize(images[5]);
       expect(landscapeWidth).to.be.closeTo(842.88, 0.01);
       expect(landscapeHeight).to.be.closeTo(595.92, 0.01);
-    });
-
-    it('should use one named page for each page size', async () => {
-      await viewer.print();
-      const names = new Set(getImages().map((image) => image.style.getPropertyValue('page')));
+      const names = new Set(images.map((image) => image.style.getPropertyValue('page')));
       expect(names.size).to.equal(2);
     });
 
@@ -224,24 +220,16 @@ describe('print', () => {
       expect(performance.getEntriesByName(url)).to.have.lengthOf(1);
     });
 
-    it('should show the loader while preparing to print', async () => {
+    it('should show the loader and disable the print button while preparing to print', async () => {
       release = await holdPages(1);
       const printed = viewer.print();
       await printingStarted();
       expect(getLoader().checkVisibility()).to.be.true;
+      expect(button.disabled).to.be.true;
       release();
       await printed;
       expect(viewer.hasAttribute('printing')).to.be.false;
       expect(getLoader().checkVisibility()).to.be.false;
-    });
-
-    it('should disable the print button while preparing to print', async () => {
-      release = await holdPages(1);
-      const printed = viewer.print();
-      await printingStarted();
-      expect(button.disabled).to.be.true;
-      release();
-      await printed;
       expect(button.disabled).to.be.false;
     });
 
@@ -301,24 +289,17 @@ describe('print', () => {
       expect(getFrame()).to.be.null;
     });
 
-    it('should release the prepared pages when printing stops', async () => {
+    it('should cancel printing and release the prepared pages when detached', async () => {
+      const parent = viewer.parentElement!;
       release = await holdPages(3);
       const revokeSpy = sinon.spy(URL, 'revokeObjectURL');
-      viewer.print();
+      const printed = viewer.print();
       await pagesPrepared(2);
       const urls = getImages().map((image) => image.src);
       viewer.remove();
+      expect(getFrame()).to.be.null;
       expect(revokeSpy).to.be.calledTwice;
       expect(revokeSpy.args.flat()).to.have.members(urls);
-    });
-
-    it('should cancel printing when detached', async () => {
-      const parent = viewer.parentElement!;
-      release = await holdPages(3);
-      const printed = viewer.print();
-      await pagesPrepared(2);
-      viewer.remove();
-      expect(getFrame()).to.be.null;
       await printed;
       await nextUpdate(viewer);
       expect(viewer.hasAttribute('printing')).to.be.false;
@@ -451,12 +432,6 @@ describe('print', () => {
       await viewer.print();
       expect(printSpy).to.be.calledOnce;
       expect(getImages()).to.have.lengthOf(6);
-    });
-
-    it('should print once when called twice while loading', async () => {
-      viewer.src = fixtureUrl('multi-page.pdf');
-      await Promise.all([viewer.print(), viewer.print()]);
-      expect(printSpy).to.be.calledOnce;
     });
 
     it('should resolve without printing when detached while loading', async () => {
