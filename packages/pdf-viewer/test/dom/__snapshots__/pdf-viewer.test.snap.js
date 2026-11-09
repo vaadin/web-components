@@ -53,6 +53,7 @@ snapshots["vaadin-pdf-viewer host default"] =
     >
     </div>
     <input
+      aria-label="Page"
       disabled=""
       id="input-vaadin-integer-field-5"
       max="1"
@@ -163,6 +164,7 @@ snapshots["vaadin-pdf-viewer host document"] =
     >
     </div>
     <input
+      aria-label="Page"
       id="input-vaadin-integer-field-5"
       max="6"
       min="1"
@@ -224,6 +226,7 @@ snapshots["vaadin-pdf-viewer shadow default"] =
   >
     <span
       dir="auto"
+      id="title"
       part="title"
       title="PDF document"
     >
@@ -235,6 +238,7 @@ snapshots["vaadin-pdf-viewer shadow default"] =
   <div
     id="toolbar"
     part="toolbar"
+    role="toolbar"
   >
     <div part="toolbar-group">
       <slot name="toolbar-navigation">
@@ -252,12 +256,19 @@ snapshots["vaadin-pdf-viewer shadow default"] =
     </div>
   </div>
 </div>
-<div part="loader">
+<div
+  aria-label="Loading"
+  part="loader"
+  role="progressbar"
+>
 </div>
 <div class="content-area">
   <div
+    aria-busy="false"
+    aria-labelledby="title"
     id="content"
     part="content"
+    role="region"
     tabindex="-1"
   >
     <div id="pages">
@@ -276,6 +287,7 @@ snapshots["vaadin-pdf-viewer shadow document"] =
   >
     <span
       dir="auto"
+      id="title"
       part="title"
       title="multi-page.pdf"
     >
@@ -287,6 +299,7 @@ snapshots["vaadin-pdf-viewer shadow document"] =
   <div
     id="toolbar"
     part="toolbar"
+    role="toolbar"
   >
     <div part="toolbar-group">
       <slot name="toolbar-navigation">
@@ -304,16 +317,27 @@ snapshots["vaadin-pdf-viewer shadow document"] =
     </div>
   </div>
 </div>
-<div part="loader">
+<div
+  aria-label="Loading"
+  part="loader"
+  role="progressbar"
+>
 </div>
 <div class="content-area">
   <div
+    aria-busy="false"
+    aria-labelledby="title"
     id="content"
     part="content"
+    role="region"
     tabindex="0"
   >
     <div id="pages">
-      <div part="page">
+      <div
+        aria-label="Page 1"
+        part="page"
+        role="region"
+      >
         <canvas aria-hidden="true">
         </canvas>
         <div
@@ -358,7 +382,11 @@ snapshots["vaadin-pdf-viewer shadow document"] =
           </div>
         </div>
       </div>
-      <div part="page">
+      <div
+        aria-label="Page 2"
+        part="page"
+        role="region"
+      >
         <canvas aria-hidden="true">
         </canvas>
         <div
@@ -403,13 +431,29 @@ snapshots["vaadin-pdf-viewer shadow document"] =
           </div>
         </div>
       </div>
-      <div part="page">
+      <div
+        aria-label="Page 3"
+        part="page"
+        role="region"
+      >
       </div>
-      <div part="page">
+      <div
+        aria-label="Page 4"
+        part="page"
+        role="region"
+      >
       </div>
-      <div part="page">
+      <div
+        aria-label="Page 5"
+        part="page"
+        role="region"
+      >
       </div>
-      <div part="page">
+      <div
+        aria-label="Page 6"
+        part="page"
+        role="region"
+      >
       </div>
     </div>
   </div>
@@ -426,6 +470,7 @@ snapshots["vaadin-pdf-viewer shadow header title"] =
   >
     <span
       dir="auto"
+      id="title"
       part="title"
       title="Annual report"
     >
@@ -437,6 +482,7 @@ snapshots["vaadin-pdf-viewer shadow header title"] =
   <div
     id="toolbar"
     part="toolbar"
+    role="toolbar"
   >
     <div part="toolbar-group">
       <slot name="toolbar-navigation">
@@ -454,16 +500,27 @@ snapshots["vaadin-pdf-viewer shadow header title"] =
     </div>
   </div>
 </div>
-<div part="loader">
+<div
+  aria-label="Loading"
+  part="loader"
+  role="progressbar"
+>
 </div>
 <div class="content-area">
   <div
+    aria-busy="false"
+    aria-labelledby="title"
     id="content"
     part="content"
+    role="region"
     tabindex="0"
   >
     <div id="pages">
-      <div part="page">
+      <div
+        aria-label="Page 1"
+        part="page"
+        role="region"
+      >
         <canvas aria-hidden="true">
         </canvas>
         <div
@@ -508,7 +565,11 @@ snapshots["vaadin-pdf-viewer shadow header title"] =
           </div>
         </div>
       </div>
-      <div part="page">
+      <div
+        aria-label="Page 2"
+        part="page"
+        role="region"
+      >
         <canvas aria-hidden="true">
         </canvas>
         <div
@@ -553,13 +614,29 @@ snapshots["vaadin-pdf-viewer shadow header title"] =
           </div>
         </div>
       </div>
-      <div part="page">
+      <div
+        aria-label="Page 3"
+        part="page"
+        role="region"
+      >
       </div>
-      <div part="page">
+      <div
+        aria-label="Page 4"
+        part="page"
+        role="region"
+      >
       </div>
-      <div part="page">
+      <div
+        aria-label="Page 5"
+        part="page"
+        role="region"
+      >
       </div>
-      <div part="page">
+      <div
+        aria-label="Page 6"
+        part="page"
+        role="region"
+      >
       </div>
     </div>
   </div>
@@ -577,6 +654,7 @@ snapshots["vaadin-pdf-viewer shadow header hidden"] =
   >
     <span
       dir="auto"
+      id="title"
       part="title"
       title="multi-page.pdf"
     >
@@ -588,6 +666,7 @@ snapshots["vaadin-pdf-viewer shadow header hidden"] =
   <div
     id="toolbar"
     part="toolbar"
+    role="toolbar"
   >
     <div part="toolbar-group">
       <slot name="toolbar-navigation">
@@ -605,16 +684,27 @@ snapshots["vaadin-pdf-viewer shadow header hidden"] =
     </div>
   </div>
 </div>
-<div part="loader">
+<div
+  aria-label="Loading"
+  part="loader"
+  role="progressbar"
+>
 </div>
 <div class="content-area">
   <div
+    aria-busy="false"
+    aria-labelledby="title"
     id="content"
     part="content"
+    role="region"
     tabindex="0"
   >
     <div id="pages">
-      <div part="page">
+      <div
+        aria-label="Page 1"
+        part="page"
+        role="region"
+      >
         <canvas aria-hidden="true">
         </canvas>
         <div
@@ -659,7 +749,11 @@ snapshots["vaadin-pdf-viewer shadow header hidden"] =
           </div>
         </div>
       </div>
-      <div part="page">
+      <div
+        aria-label="Page 2"
+        part="page"
+        role="region"
+      >
         <canvas aria-hidden="true">
         </canvas>
         <div
@@ -704,13 +798,29 @@ snapshots["vaadin-pdf-viewer shadow header hidden"] =
           </div>
         </div>
       </div>
-      <div part="page">
+      <div
+        aria-label="Page 3"
+        part="page"
+        role="region"
+      >
       </div>
-      <div part="page">
+      <div
+        aria-label="Page 4"
+        part="page"
+        role="region"
+      >
       </div>
-      <div part="page">
+      <div
+        aria-label="Page 5"
+        part="page"
+        role="region"
+      >
       </div>
-      <div part="page">
+      <div
+        aria-label="Page 6"
+        part="page"
+        role="region"
+      >
       </div>
     </div>
   </div>
@@ -727,6 +837,7 @@ snapshots["vaadin-pdf-viewer shadow toolbar collapsed"] =
   >
     <span
       dir="auto"
+      id="title"
       part="title"
       title="multi-page.pdf"
     >
@@ -739,6 +850,7 @@ snapshots["vaadin-pdf-viewer shadow toolbar collapsed"] =
     hidden=""
     id="toolbar"
     part="toolbar"
+    role="toolbar"
   >
     <div part="toolbar-group">
       <slot name="toolbar-navigation">
@@ -756,16 +868,27 @@ snapshots["vaadin-pdf-viewer shadow toolbar collapsed"] =
     </div>
   </div>
 </div>
-<div part="loader">
+<div
+  aria-label="Loading"
+  part="loader"
+  role="progressbar"
+>
 </div>
 <div class="content-area">
   <div
+    aria-busy="false"
+    aria-labelledby="title"
     id="content"
     part="content"
+    role="region"
     tabindex="0"
   >
     <div id="pages">
-      <div part="page">
+      <div
+        aria-label="Page 1"
+        part="page"
+        role="region"
+      >
         <canvas aria-hidden="true">
         </canvas>
         <div
@@ -810,7 +933,11 @@ snapshots["vaadin-pdf-viewer shadow toolbar collapsed"] =
           </div>
         </div>
       </div>
-      <div part="page">
+      <div
+        aria-label="Page 2"
+        part="page"
+        role="region"
+      >
         <canvas aria-hidden="true">
         </canvas>
         <div
@@ -855,13 +982,29 @@ snapshots["vaadin-pdf-viewer shadow toolbar collapsed"] =
           </div>
         </div>
       </div>
-      <div part="page">
+      <div
+        aria-label="Page 3"
+        part="page"
+        role="region"
+      >
       </div>
-      <div part="page">
+      <div
+        aria-label="Page 4"
+        part="page"
+        role="region"
+      >
       </div>
-      <div part="page">
+      <div
+        aria-label="Page 5"
+        part="page"
+        role="region"
+      >
       </div>
-      <div part="page">
+      <div
+        aria-label="Page 6"
+        part="page"
+        role="region"
+      >
       </div>
     </div>
   </div>
@@ -870,7 +1013,11 @@ snapshots["vaadin-pdf-viewer shadow toolbar collapsed"] =
 /* end snapshot vaadin-pdf-viewer shadow toolbar collapsed */
 
 snapshots["vaadin-pdf-viewer page tagged"] = 
-`<div part="page">
+`<div
+  aria-label="Page 1"
+  part="page"
+  role="region"
+>
   <canvas aria-hidden="true">
   </canvas>
   <div
@@ -1127,7 +1274,11 @@ snapshots["vaadin-pdf-viewer page tagged"] =
 /* end snapshot vaadin-pdf-viewer page tagged */
 
 snapshots["vaadin-pdf-viewer page links"] = 
-`<div part="page">
+`<div
+  aria-label="Page 1"
+  part="page"
+  role="region"
+>
   <canvas aria-hidden="true">
   </canvas>
   <div

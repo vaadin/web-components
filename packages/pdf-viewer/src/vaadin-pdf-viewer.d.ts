@@ -19,12 +19,16 @@ export type { PdfViewerZoom } from './vaadin-pdf-viewer-zoom-mixin.js';
 export interface PdfViewerI18n {
   previousPage?: string;
   nextPage?: string;
+  page?: string;
   pageError?: string;
   zoomIn?: string;
   zoomOut?: string;
+  zoom?: string;
   pageWidth?: string;
   pageFit?: string;
   document?: string;
+  pageLabel?: string;
+  loading?: string;
   link?: string;
   goToPage?: string;
   externalLink?: string;
