@@ -361,6 +361,9 @@ export const GridSelectionColumnBaseMixin = (superClass) =>
 
     /** @private */
     __onGridItemActivate(e) {
+      if (e.target !== this._grid) {
+        return;
+      }
       const item = e.detail.model?.item;
       if (this.autoSelect && item) {
         this.__toggleItem(item);

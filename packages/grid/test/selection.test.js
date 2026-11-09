@@ -345,6 +345,30 @@ describe('multi selection column', () => {
     expect(spy).to.have.returned([]);
   });
 
+  it('should not select the item when a cell of a grid nested in row details is clicked', async () => {
+    grid.rowDetailsRenderer = (root) => {
+      if (!root.firstElementChild) {
+        root.innerHTML = `
+          <vaadin-grid all-rows-visible>
+            <vaadin-grid-column path="name"></vaadin-grid-column>
+          </vaadin-grid>
+        `;
+        root.firstElementChild.items = [{ name: 'Nested 0' }];
+      }
+    };
+    grid.openItemDetails(grid.items[0]);
+    flushGrid(grid);
+    await nextFrame();
+
+    const nestedGrid = grid.querySelector('vaadin-grid');
+    flushGrid(nestedGrid);
+    await nextFrame();
+
+    getBodyCellContent(nestedGrid, 0, 0).click();
+    expect(nestedGrid.activeItem).to.equal(nestedGrid.items[0]);
+    expect(grid.selectedItems).to.eql([]);
+  });
+
   it('should add the item to selectedItems on selection column cell Space key', async () => {
     const cell = getRowCells(rows[1])[0];
     cell.focus();
