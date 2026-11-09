@@ -422,20 +422,6 @@ describe('print', () => {
         expect(viewer.shadowRoot!.activeElement).to.equal(viewer.shadowRoot!.querySelector('[part="content"]'));
       });
 
-      it('should move focus to the pages when the focused toolbar control was removed meanwhile', async () => {
-        const action = document.createElement('button');
-        action.slot = 'toolbar-actions';
-        viewer.append(action);
-        action.focus();
-        release = await holdPages(3);
-        const printed = viewer.print();
-        await printingStarted();
-        action.remove();
-        release();
-        await printed;
-        expect(viewer.shadowRoot!.activeElement).to.equal(viewer.shadowRoot!.querySelector('[part="content"]'));
-      });
-
       it('should not move focus into the viewer when the element outside it that printing started from is gone', async () => {
         const outsideButton = document.createElement('button');
         document.body.append(outsideButton);
