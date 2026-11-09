@@ -8,7 +8,7 @@
  * See https://vaadin.com/commercial-license-and-service-terms for the full
  * license.
  */
-import { getDeepActiveElement, isKeyboardActive } from '@vaadin/a11y-base/src/focus-utils.js';
+import { getDeepActiveElement, isElementHidden, isKeyboardActive } from '@vaadin/a11y-base/src/focus-utils.js';
 import { issueWarning } from '@vaadin/component-base/src/warnings.js';
 import { PdfViewerPrintFrame } from './pdf-viewer-print-frame.js';
 
@@ -80,7 +80,8 @@ export const PdfViewerPrintMixin = (superClass) =>
      * print is prepared already. The returned promise resolves when the print
      * dialog closes, or when printing stops because the viewer is detached or
      * another document loads. In browsers whose print dialog does not block
-     * the page, it resolves once the dialog opens.
+     * the page, it resolves once the dialog opens. The promise never rejects.
+     * A failed print logs a warning.
      *
      * @return {Promise<void>}
      */
@@ -113,7 +114,8 @@ export const PdfViewerPrintMixin = (superClass) =>
       this.#printFrame?.remove();
       const printFrame = new PdfViewerPrintFrame();
       this.#printFrame = printFrame;
-      const returnFocus = getFocusedElement();
+      const focused = getFocusedElement();
+      const focusedInViewer = isInside(this, focused) ? focused : null;
       this._printing = true;
 
       try {
@@ -131,9 +133,9 @@ export const PdfViewerPrintMixin = (superClass) =>
         this.#cancelPrint();
         issueWarning(`Failed to print the PDF document: ${error.message}`);
       }
-      // Wait until the print button is enabled again.
+      // Resolve once the `printing` state is removed.
       await this.updateComplete;
-      this.#restoreFocus(returnFocus);
+      this.#restoreFocus(focusedInViewer);
     }
 
     /**
@@ -147,25 +149,17 @@ export const PdfViewerPrintMixin = (superClass) =>
     }
 
     /**
-     * Returns focus to where it was before printing, when it has been lost
-     * meanwhile. Moves focus to the pages instead when it was in the viewer
-     * and that element is gone.
-     * @param {HTMLElement | null} returnFocus the element that had focus when printing started
+     * Moves focus to the pages when the element in the viewer that had focus
+     * when printing started is gone or hidden, and focus has not moved to
+     * another element meanwhile.
+     * @param {HTMLElement | null} focusedInViewer the element in the viewer that had focus when printing started
      * @private
      */
-    #restoreFocus(returnFocus) {
+    #restoreFocus(focusedInViewer) {
       const active = getFocusedElement();
-      // Focus is lost when on nothing, or on a hidden element.
-      const isLost = !active || !active.checkVisibility();
-      if (!isLost || !this.isConnected) {
-        return;
-      }
-
-      const options = { focusVisible: isKeyboardActive() };
-      // Does nothing when the element is gone or hidden.
-      returnFocus?.focus(options);
-      if (getFocusedElement() !== returnFocus && isInside(this, returnFocus) && this.pageCount) {
-        this.$.content.focus(options);
+      const isLost = !active || isElementHidden(active);
+      if (isLost && focusedInViewer && isElementHidden(focusedInViewer) && this.isConnected) {
+        this.focus({ preventScroll: true, focusVisible: isKeyboardActive() });
       }
     }
   };

@@ -28,7 +28,8 @@ export declare class PdfViewerPrintMixinClass {
    * print is prepared already. The returned promise resolves when the print
    * dialog closes, or when printing stops because the viewer is detached or
    * another document loads. In browsers whose print dialog does not block
-   * the page, it resolves once the dialog opens.
+   * the page, it resolves once the dialog opens. The promise never rejects.
+   * A failed print logs a warning.
    */
   print(): Promise<void>;
 

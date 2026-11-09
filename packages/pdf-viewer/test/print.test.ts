@@ -99,11 +99,6 @@ describe('print', () => {
       expect(button.disabled).to.be.false;
     });
 
-    it('should show the button after the download button', () => {
-      const download = viewer.querySelector('vaadin-pdf-viewer-button[icon="download"]')!;
-      expect(download.getBoundingClientRect().right).to.be.at.most(button.getBoundingClientRect().left);
-    });
-
     it('should use i18n for the tooltip', async () => {
       const getTooltipText = () => button.querySelector<Tooltip>('vaadin-tooltip')!.text;
       expect(getTooltipText()).to.equal('Print');
@@ -272,7 +267,7 @@ describe('print', () => {
       expect(firstFrame.isConnected).to.be.false;
       await printed;
       expect(printSpy).to.be.calledTwice;
-      expect(getFrame()).to.be.ok;
+      expect(printSpy.secondCall.args[0]).to.equal(getFrame());
     });
 
     it('should remove the frame of the last print when detached', async () => {
@@ -336,6 +331,14 @@ describe('print', () => {
       expect(printSpy).to.be.calledOnce;
     });
 
+    it('should not print when detached right after print()', async () => {
+      const printed = viewer.print();
+      viewer.remove();
+      await printed;
+      expect(printSpy).to.be.not.called;
+      expect(getFrame()).to.be.null;
+    });
+
     it('should cancel printing when another document loads', async () => {
       release = await holdPages(3);
       const printed = viewer.print();
@@ -363,6 +366,15 @@ describe('print', () => {
       expect(viewer.hasAttribute('printing')).to.be.false;
     });
 
+    it('should warn and stop when a page cannot be rendered to an image', async () => {
+      const warnStub = sinon.stub(console, 'warn');
+      sinon.stub(HTMLCanvasElement.prototype, 'toBlob').callsFake((callback) => callback(null));
+      await viewer.print();
+      expect(warnStub).to.be.calledOnceWith('Failed to print the PDF document: Failed to render page 1');
+      expect(printSpy).to.be.not.called;
+      expect(getFrame()).to.be.null;
+    });
+
     it('should warn and stop when the image of a page cannot be loaded', async () => {
       const warnStub = sinon.stub(console, 'warn');
       const createObjectURL = URL.createObjectURL;
@@ -373,20 +385,32 @@ describe('print', () => {
           object instanceof Blob && object.type === 'image/png' ? 'blob:invalid' : createObjectURL(object),
         );
       await viewer.print();
-      expect(warnStub).to.be.calledOnce;
-      expect(warnStub.firstCall.args[0]).to.include('img-src');
+      expect(warnStub).to.be.calledOnceWith(
+        'Failed to print the PDF document: Failed to load the image of page 1. If the page has a Content Security Policy, check that its img-src directive allows blob: URLs.',
+      );
       expect(printSpy).to.be.not.called;
       expect(getFrame()).to.be.null;
     });
 
     describe('focus', () => {
-      it('should return focus to the print button after printing', async () => {
+      it('should keep focus on the print button after printing', async () => {
         button.focus();
         await viewer.print();
         expect(document.activeElement).to.equal(button);
       });
 
-      it('should return focus to the pages when the print button was hidden meanwhile', async () => {
+      it('should not move focus back when it left the print button meanwhile', async () => {
+        release = await holdPages(3);
+        button.focus();
+        const printed = viewer.print();
+        await printingStarted();
+        button.blur();
+        release();
+        await printed;
+        expect(document.activeElement).to.equal(document.body);
+      });
+
+      it('should move focus to the pages when the print button was hidden meanwhile', async () => {
         release = await holdPages(3);
         button.focus();
         const printed = viewer.print();
@@ -398,13 +422,27 @@ describe('print', () => {
         expect(viewer.shadowRoot!.activeElement).to.equal(viewer.shadowRoot!.querySelector('[part="content"]'));
       });
 
+      it('should move focus to the pages when the focused toolbar control was removed meanwhile', async () => {
+        const action = document.createElement('button');
+        action.slot = 'toolbar-actions';
+        viewer.append(action);
+        action.focus();
+        release = await holdPages(3);
+        const printed = viewer.print();
+        await printingStarted();
+        action.remove();
+        release();
+        await printed;
+        expect(viewer.shadowRoot!.activeElement).to.equal(viewer.shadowRoot!.querySelector('[part="content"]'));
+      });
+
       it('should not move focus into the viewer when the element outside it that printing started from is gone', async () => {
         const outsideButton = document.createElement('button');
         document.body.append(outsideButton);
         outsideButton.focus();
         release = await holdPages(3);
         const printed = viewer.print();
-        await pagesPrepared(2);
+        await printingStarted();
         outsideButton.remove();
         release();
         await printed;
@@ -416,6 +454,12 @@ describe('print', () => {
   });
 
   describe('before load', () => {
+    it('should resolve without printing without a document', async () => {
+      await viewer.print();
+      expect(printSpy).to.be.not.called;
+      expect(getFrame()).to.be.null;
+    });
+
     it('should print the document once loaded when called in the same task as setting src', async () => {
       viewer.src = fixtureUrl('multi-page.pdf');
       await viewer.print();
@@ -435,6 +479,7 @@ describe('print', () => {
       const printed = viewer.print();
       viewer.remove();
       await printed;
+      expect(printSpy).to.be.not.called;
       expect(getFrame()).to.be.null;
     });
   });

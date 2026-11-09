@@ -13,7 +13,6 @@ import { MAX_CANVAS_PIXELS } from './pdf-viewer-page.js';
 /** The resolution that pages are printed at. PDF units are 1/72 inch. */
 const PRINT_DPI = 150;
 
-/** The styles of the print document. */
 const PRINT_STYLES = `
   @page { margin: 0; }
   html, body { margin: 0; padding: 0; }
@@ -68,7 +67,6 @@ export class PdfViewerPrintFrame {
     this.#frame = frame;
   }
 
-  /** Whether the frame has been removed. */
   get removed() {
     return this.#removed;
   }
@@ -121,7 +119,7 @@ export class PdfViewerPrintFrame {
 
     // PDF units are points, so this is the paper size of the page.
     const { width, height } = pdfPage.getViewport({ scale: 1 });
-    // Large pages get a lower resolution, as browsers limit the canvas size.
+    // Large pages get a lower resolution, as large canvases use too much memory.
     const scale = Math.min(PRINT_DPI / 72, Math.sqrt(MAX_CANVAS_PIXELS / (width * height)));
     const viewport = pdfPage.getViewport({ scale });
     const canvas = document.createElement('canvas');
@@ -141,7 +139,7 @@ export class PdfViewerPrintFrame {
       canvas.height = 0;
     }
     if (!blob) {
-      throw new Error(`Failed to print page ${pageNumber}`);
+      throw new Error(`Failed to render page ${pageNumber}`);
     }
     if (this.#removed) {
       return;

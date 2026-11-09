@@ -119,7 +119,7 @@ how to generate them.
   the browser for the frame. Downloading the PDF and printing it in another tab would leave the page.
 - Pages render one at a time at 150 DPI, with the print intent of pdf.js. The print intent selects
   the annotations and the optional content that the document prints.
-- Large pages render at a lower resolution, as a canvas has at most 2^24 pixels.
+- Large pages render at a lower resolution, as large canvases use too much memory.
 - The images have `blob:` URLs, as in the viewer of pdf.js. A Content Security Policy must allow them
   in its `img-src` directive. An image that fails to load stops printing with a warning.
 - Printing waits until each image has loaded, as the viewer of pdf.js does. It does not decode the
