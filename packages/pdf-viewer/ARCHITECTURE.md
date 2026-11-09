@@ -57,6 +57,8 @@ how to generate them.
 - `PdfViewerDownloadMixin` adds `download()`. It uses only the document mixin, so it comes right after it.
   - A download keeps its data for a minute, also when the viewer is detached meanwhile. Some browsers fail a
     download whose URL is released right after the click.
+- `PdfViewerPrintMixin` adds `print()` and comes after the download mixin. While the pages are prepared, it
+  sets the `printing` state attribute, which shows the loader.
 - `PdfViewerRenderMixin` owns the page views, their sizes, the render queue and the device pixel ratio. It calls `_pageSizesChanged()` at most once per frame when pages get their own size.
 - `PdfViewerScrollMixin` owns the scale `_scale`, the anchor, the visible pages and `page`. It asks for
   rendering only with `_renderVisible()` and `_cancelRender()`. It gets the scale from `_getScaleForSize()`, which
@@ -78,14 +80,15 @@ how to generate them.
   application children added later keep their place.
   - The header is a button in the shadow DOM that collapses and expands the toolbar. It shows `headerTitle`,
     else `_getDocumentName()` of the document mixin, the name that downloads also use.
-  - The controls call the methods of the inner mixins, for example `_scrollToPage()`, `_stepZoom()` and
-    `download()`.
+  - The controls call the methods of the inner mixins, for example `_scrollToPage()`, `_stepZoom()`,
+    `download()` and `print()`.
   - Each icon button is named after its tooltip text: its `vaadin-tooltip` has the `ariaLinkMode` property set to
     `aria-labelledby`. A new button needs the same, and no `aria-label`. Bind the property, not the
     `aria-link-mode` attribute: it is not a real ARIA attribute, so a11y checkers such as axe (`aria-valid-attr`)
     flag it in the DOM.
-  - The download button is after `toolbar-actions`. To replace it, an application hides it with
-    `downloadButtonHidden` and adds its own button that calls `download()` to `toolbar-actions`.
+  - The download and print buttons are after `toolbar-actions`. To replace one, an application hides it with
+    `downloadButtonHidden` or `printButtonHidden`. It adds its own button that calls `download()` or `print()`
+    to `toolbar-actions`.
 - The element applies `I18nMixin` and defines the default texts. The mixins read them from `__effectiveI18n`.
 - The element applies `FocusMixin` and owns the focus state. Listeners on the page area in its template set
   `focused` and `focus-ring`, as focus moving inside the shadow root does not reach listeners on the host.
@@ -109,6 +112,22 @@ how to generate them.
 - A link that wraps to the next line is clickable only on its words, which the `QuadPoints` of the annotation
   give. Its focus ring goes around these words.
 - When a focused link loses its page, focus moves to the page area.
+
+## Printing
+
+- `print()` renders each page as a PNG image into an off-screen frame, then opens the print dialog of
+  the browser for the frame. Downloading the PDF and printing it in another tab would leave the page.
+- Pages render one at a time at 150 DPI, with the print intent of pdf.js. The print intent selects
+  the annotations and the optional content that the document prints.
+- Large pages render at a lower resolution, as a canvas has at most 2^24 pixels.
+- The images have `blob:` URLs, as in the viewer of pdf.js. A Content Security Policy must allow them
+  in its `img-src` directive. An image that fails to load stops printing with a warning.
+- Printing waits until each image has loaded, as the viewer of pdf.js does. It does not decode the
+  images, which would hold the pixels of every page in memory at once.
+- Each image has a named `@page` rule with the size of its PDF page, so each page prints on paper of
+  its own size.
+- The frame and the images are released after printing, on a new `src` and on detach. Printing then
+  stops without waiting for the page that is loading.
 
 ## Install size
 

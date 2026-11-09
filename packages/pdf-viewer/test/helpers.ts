@@ -244,3 +244,27 @@ export function createPdfUrl(pageCount: number): string {
     })),
   );
 }
+
+/**
+ * Holds the pages of all documents from the given page number on until
+ * released, e.g. to stop printing before them. Returns the function that
+ * releases them.
+ */
+export async function holdPages(fromPage: number): Promise<() => void> {
+  const prototype = await getPdfDocumentPrototype();
+  const { getPage } = prototype;
+  let release!: () => void;
+  const released = new Promise<void>((resolve) => {
+    release = resolve;
+  });
+  prototype.getPage = async function (this: PDFDocumentProxy, pageNumber: number) {
+    if (pageNumber >= fromPage) {
+      await released;
+    }
+    return getPage.call(this, pageNumber);
+  };
+  return () => {
+    prototype.getPage = getPage;
+    release();
+  };
+}

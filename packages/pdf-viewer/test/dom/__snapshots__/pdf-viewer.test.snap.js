@@ -109,6 +109,19 @@ snapshots["vaadin-pdf-viewer host default"] =
     theme="tertiary icon"
   >
   </vaadin-pdf-viewer-button>
+  <vaadin-pdf-viewer-button
+    aria-disabled="true"
+    aria-labelledby="vaadin-tooltip-13"
+    disabled=""
+    has-tooltip=""
+    icon="print"
+    role="button"
+    slot="toolbar-print"
+    style="--_vaadin-button-disabled-pointer-events: auto;"
+    tabindex="0"
+    theme="tertiary icon"
+  >
+  </vaadin-pdf-viewer-button>
 </vaadin-pdf-viewer>
 `;
 /* end snapshot vaadin-pdf-viewer host default */
@@ -211,6 +224,17 @@ snapshots["vaadin-pdf-viewer host document"] =
     theme="tertiary icon"
   >
   </vaadin-pdf-viewer-button>
+  <vaadin-pdf-viewer-button
+    aria-labelledby="vaadin-tooltip-13"
+    has-tooltip=""
+    icon="print"
+    role="button"
+    slot="toolbar-print"
+    style="--_vaadin-button-disabled-pointer-events: auto;"
+    tabindex="0"
+    theme="tertiary icon"
+  >
+  </vaadin-pdf-viewer-button>
 </vaadin-pdf-viewer>
 `;
 /* end snapshot vaadin-pdf-viewer host document */
@@ -248,6 +272,8 @@ snapshots["vaadin-pdf-viewer shadow default"] =
       <slot name="toolbar-actions">
       </slot>
       <slot name="toolbar-download">
+      </slot>
+      <slot name="toolbar-print">
       </slot>
     </div>
   </div>
@@ -300,6 +326,8 @@ snapshots["vaadin-pdf-viewer shadow document"] =
       <slot name="toolbar-actions">
       </slot>
       <slot name="toolbar-download">
+      </slot>
+      <slot name="toolbar-print">
       </slot>
     </div>
   </div>
@@ -450,6 +478,8 @@ snapshots["vaadin-pdf-viewer shadow header title"] =
       <slot name="toolbar-actions">
       </slot>
       <slot name="toolbar-download">
+      </slot>
+      <slot name="toolbar-print">
       </slot>
     </div>
   </div>
@@ -602,6 +632,8 @@ snapshots["vaadin-pdf-viewer shadow header hidden"] =
       </slot>
       <slot name="toolbar-download">
       </slot>
+      <slot name="toolbar-print">
+      </slot>
     </div>
   </div>
 </div>
@@ -752,6 +784,8 @@ snapshots["vaadin-pdf-viewer shadow toolbar collapsed"] =
       <slot name="toolbar-actions">
       </slot>
       <slot name="toolbar-download">
+      </slot>
+      <slot name="toolbar-print">
       </slot>
     </div>
   </div>

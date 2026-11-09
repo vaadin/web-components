@@ -71,6 +71,10 @@ const pdfViewerBaseStyles = css`
     inset: 0;
     margin: auto;
   }
+
+  :host([printing]) [part~='loader'] {
+    display: block;
+  }
 `;
 
 export const pdfViewerStyles = [loaderStyles, pdfViewerBaseStyles];

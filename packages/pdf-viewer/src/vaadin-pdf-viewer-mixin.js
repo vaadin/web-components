@@ -12,6 +12,7 @@ import { PdfViewerDocumentMixin } from './vaadin-pdf-viewer-document-mixin.js';
 import { PdfViewerDownloadMixin } from './vaadin-pdf-viewer-download-mixin.js';
 import { PdfViewerKeyboardMixin } from './vaadin-pdf-viewer-keyboard-mixin.js';
 import { PdfViewerLinksMixin } from './vaadin-pdf-viewer-links-mixin.js';
+import { PdfViewerPrintMixin } from './vaadin-pdf-viewer-print-mixin.js';
 import { PdfViewerRenderMixin } from './vaadin-pdf-viewer-render-mixin.js';
 import { PdfViewerScrollMixin } from './vaadin-pdf-viewer-scroll-mixin.js';
 import { PdfViewerTextLayerMixin } from './vaadin-pdf-viewer-text-layer-mixin.js';
@@ -27,7 +28,9 @@ export const PdfViewerMixin = (superClass) =>
       PdfViewerLinksMixin(
         PdfViewerTextLayerMixin(
           PdfViewerZoomMixin(
-            PdfViewerScrollMixin(PdfViewerRenderMixin(PdfViewerDownloadMixin(PdfViewerDocumentMixin(superClass)))),
+            PdfViewerScrollMixin(
+              PdfViewerRenderMixin(PdfViewerPrintMixin(PdfViewerDownloadMixin(PdfViewerDocumentMixin(superClass)))),
+            ),
           ),
         ),
       ),

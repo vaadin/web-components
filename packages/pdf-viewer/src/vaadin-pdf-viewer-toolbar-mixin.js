@@ -19,9 +19,9 @@ import { formatZoom, getZoomInLevel, getZoomOutLevel, ZOOM_LEVELS } from './pdf-
 
 /**
  * A mixin that adds the header and the toolbar with the page navigation, the
- * zoom and the download button. The controls of the toolbar are Vaadin
- * components, rendered into the light DOM so that themes can style them like
- * any other instance of these components.
+ * zoom, and the download and print buttons. The controls of the toolbar are
+ * Vaadin components, rendered into the light DOM so that themes can style them
+ * like any other instance of these components.
  */
 export const PdfViewerToolbarMixin = (superClass) =>
   class PdfViewerToolbarMixinClass extends superClass {
@@ -74,6 +74,17 @@ export const PdfViewerToolbarMixin = (superClass) =>
           type: Boolean,
           value: false,
         },
+
+        /**
+         * Whether the button that prints the document is hidden from the
+         * toolbar. The `print()` method works also while it is hidden.
+         *
+         * @attr {boolean} print-button-hidden
+         */
+        printButtonHidden: {
+          type: Boolean,
+          value: false,
+        },
       };
     }
 
@@ -118,6 +129,7 @@ export const PdfViewerToolbarMixin = (superClass) =>
           <div part="toolbar-group">
             <slot name="toolbar-actions"></slot>
             <slot name="toolbar-download" ${slotContent(this._renderDownloadButton())}></slot>
+            <slot name="toolbar-print" ${slotContent(this._renderPrintButton())}></slot>
           </div>
         </div>
       `;
@@ -235,6 +247,29 @@ export const PdfViewerToolbarMixin = (superClass) =>
       `;
     }
 
+    /**
+     * Returns the template of the print button in the `toolbar-print` slot.
+     * @protected
+     */
+    _renderPrintButton() {
+      return html`
+        <vaadin-pdf-viewer-button
+          slot="toolbar-print"
+          icon="print"
+          theme="tertiary icon"
+          ?hidden="${this.printButtonHidden}"
+          .disabled="${!this.pageCount || this._printing}"
+          @click="${this.#onPrintClick}"
+        >
+          <vaadin-tooltip
+            slot="tooltip"
+            .ariaLinkMode="${'aria-labelledby'}"
+            .text="${this.__effectiveI18n.print}"
+          ></vaadin-tooltip>
+        </vaadin-pdf-viewer-button>
+      `;
+    }
+
     /** @private */
     #onHeaderClick() {
       this.toolbarCollapsed = !this.toolbarCollapsed;
@@ -248,6 +283,11 @@ export const PdfViewerToolbarMixin = (superClass) =>
     /** @private */
     #onDownloadClick() {
       this.download();
+    }
+
+    /** @private */
+    #onPrintClick() {
+      this.print();
     }
 
     /** @private */
