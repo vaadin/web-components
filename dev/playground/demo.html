@@ -1,0 +1,221 @@
+<!doctype html>
+<html lang="en" class="aura-accent-neutral">
+  <head>
+    <meta charset="UTF-8" />
+    <meta http-equiv="X-UA-Compatible" content="IE=edge" />
+    <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+    <title>Breadcrumbs</title>
+    <script type="module" src="../common.js"></script>
+
+    <script type="module">
+      import '@vaadin/breadcrumbs';
+      import '@vaadin/icon';
+      import '@vaadin/button';
+      import '@vaadin/card';
+      import '@vaadin/vertical-layout';
+      import '@vaadin/horizontal-layout';
+      import '@vaadin/scroller';
+      import '@vaadin/grid/all-imports';
+    </script>
+
+    <style>
+      html {
+        --view-padding-inline: var(--vaadin-padding-xl);
+        --view-padding-block: var(--vaadin-padding-xl);
+        --view-gap: var(--vaadin-padding-xl);
+      }
+
+      .view {
+        display: grid;
+        place-content: center;
+        border: 1px solid var(--vaadin-border-color-secondary);
+        border-radius: var(--vaadin-radius-l);
+        background-color: var(--aura-surface-color);
+        padding-block: var(--view-padding-block);
+        gap: var(--view-gap) var(--view-padding-block);
+        grid-template-columns: 0 minmax(0, var(--view-max-width, 100%)) 0;
+
+        > * {
+          grid-column: 2;
+        }
+
+        > [theme~="no-border"] {
+          grid-column: 1 / -1;
+        }
+
+        vaadin-grid[theme~="no-border"] {
+          &::part(first-column-cell) {
+            /* TODO needs a dedicated custom property for inline-start */
+            --vaadin-grid-cell-padding: var(--vaadin-padding-block-container) var(--vaadin-padding-inline-container) var(--vaadin-padding-block-container) var(--view-padding-inline);
+          }
+
+          &::part(last-column-cell) {
+            /* TODO needs a dedicated custom property for inline-start */
+            --vaadin-grid-cell-padding: var(--vaadin-padding-block-container) var(--view-padding-inline) var(--vaadin-padding-block-container) var(--vaadin-padding-inline-container);
+          }
+        }
+      }
+
+      :is(vaadin-horizontal-layout, vaadin-vertical-layout) > p {
+        margin-block: 0;
+      }
+
+      .text-secondary {
+        color: var(--vaadin-text-color-secondary);
+      }
+
+      .text-success {
+        color: var(--aura-green-text);
+      }
+
+      .text-warning {
+        color: var(--aura-yellow-text);
+      }
+
+      vaadin-icon:is([theme~="boxed"], [theme~="boxed-filled"]) {
+        padding: var(--vaadin-padding-m);
+        box-sizing: content-box;
+        border-radius: var(--vaadin-radius-s);
+        border: 1px solid var(--aura-accent-border-color);
+        background-color: var(--aura-accent-surface);
+        color: var(--aura-accent-text-color);
+      }
+
+      vaadin-icon[theme~="boxed-filled"] {
+        background-color: var(--aura-accent-color);
+        color: var(--aura-accent-contrast-color);
+      }
+
+      vaadin-horizontal-layout[theme~="wrap-balance"] {
+        flex-wrap: balance;
+      }
+
+      vaadin-horizontal-layout[theme~="stretch-items"] > * {
+        flex: 1 1 14rem; /* TODO how to define min-width */
+      }
+
+      .kpi {
+        font-size: 2rem;
+        line-height: 1.75rem;
+        font-weight: var(--aura-font-weight-semibold);
+      }
+    </style>
+  </head>
+
+  <body>
+    <section class="view">
+
+      <vaadin-horizontal-layout theme="spacing wrap">
+        <vaadin-vertical-layout style="flex: 1"> <!-- TODO this makes for a smaller layout shift - but what is the rule when this gets added? -->
+          <vaadin-breadcrumbs theme="xlarge">
+            <vaadin-breadcrumbs-item path="/">People</vaadin-breadcrumbs-item>
+            <vaadin-breadcrumbs-item role="heading" aria-level="1">Directory</vaadin-breadcrumbs-item>
+          </vaadin-breadcrumbs>
+          <p class="text-secondary">Find teammates, understand the shape of your organization, and stay connected</p>
+        </vaadin-vertical-layout>
+        <vaadin-button slot="end">
+          Add Person
+        </vaadin-button>
+      </vaadin-horizontal-layout>
+
+      <vaadin-horizontal-layout style="width: 100%;" theme="spacing wrap-balance stretch-items">
+        <vaadin-card theme="elevated" class="v-success">
+          <vaadin-icon slot="media" theme="boxed" src="../assets/lucide-icons/users.svg"></vaadin-icon>
+          <div slot="title">Total People</div>
+          <div slot="subtitle">
+            <span class="text-success">+6 this month</span>
+          </div>
+          <div class="kpi">248</div>
+        </vaadin-card>
+        <vaadin-card theme="elevated" class="aura-accent-neutral">
+          <vaadin-icon slot="media" theme="boxed" src="../assets/lucide-icons/shuffle.svg"></vaadin-icon>
+          <div slot="title">Away Today</div>
+          <div slot="subtitle">5 back this week</div>
+          <div class="kpi">12</div>
+        </vaadin-card>
+        <vaadin-card theme="elevated" class="aura-accent-neutral">
+          <vaadin-icon slot="media" theme="boxed" src="../assets/lucide-icons/home.svg"></vaadin-icon>
+          <div slot="title">Work Remotely</div>
+          <div slot="subtitle">Across 14 countries</div>
+          <div class="kpi">68%</div>
+        </vaadin-card>
+        <vaadin-card theme="elevated" class="v-warning">
+          <vaadin-icon slot="media" theme="boxed" src="../assets/lucide-icons/file-text.svg"></vaadin-icon>
+          <div slot="title">Open Roles</div>
+          <div slot="subtitle">
+            <span class="text-warning">3 priority hires</span>
+          </div>
+          <div class="kpi">9</div>
+        </vaadin-card>
+      </vaadin-horizontal-layout>
+
+      <vaadin-horizontal-layout theme="spacing wrap">
+        <vaadin-vertical-layout style="flex: 1">
+          <!-- TODO this makes for a smaller layout shift - but what is the rule when this gets added? -->
+          <h3>Team Members</h3>
+          <p class="text-secondary">248 people across 8 departments</p>
+        </vaadin-vertical-layout>
+        <vaadin-button slot="end" theme="tertiary">
+          Export
+        </vaadin-button>
+      </vaadin-horizontal-layout>
+
+      <vaadin-grid item-id-path="id" theme="no-border">
+        <vaadin-grid-selection-column></vaadin-grid-selection-column>
+
+        <vaadin-grid-column-group header="Personal Information">
+          <vaadin-grid-tree-column path="name" header="Name"></vaadin-grid-tree-column>
+          <vaadin-grid-sort-column path="email" header="Email"></vaadin-grid-sort-column>
+        </vaadin-grid-column-group>
+
+        <vaadin-grid-column-group header="Contact Information">
+          <vaadin-grid-filter-column path="address" header="Address"></vaadin-grid-filter-column>
+          <vaadin-grid-sort-column path="city" header="City"></vaadin-grid-sort-column>
+          <vaadin-grid-sort-column path="country" header="Country" text-align="end"></vaadin-grid-sort-column>
+        </vaadin-grid-column-group>
+
+        <span slot="empty-state">No items.</span>
+      </vaadin-grid>
+    </section>
+
+
+    <script>
+      const createItem = (id, children) => ({
+        name: `First Lastname ${id}`,
+        email: `first.lastname${id}@example.com`,
+        address: `${id} Main Street`,
+        city: `City ${id}`,
+        country: `Country ${id}`,
+        children,
+        id,
+      });
+
+      // Generate sample data
+      const generateItems = (count) => {
+        return Array.from({ length: count }, (_, i) => createItem(i + 1, i % 3 === 0));
+      };
+
+      const generateDataProvider = (rootLevelSize) => {
+        return ({ parentItem, page, pageSize }, cb) => {
+          if (!parentItem) {
+            const rootItems = generateItems(rootLevelSize);
+            const offset = page * pageSize;
+            cb(rootItems.slice(offset, offset + pageSize), rootItems.length);
+          } else {
+            const childId = parentItem.id + '-1';
+            const childItem = createItem(childId, parentItem.children);
+            cb([childItem], 1);
+          }
+        };
+      };
+
+      // Setup grid and controls
+      const grid = document.querySelector('vaadin-grid');
+      const selectionColumn = grid.querySelector('vaadin-grid-selection-column');
+      const treeColumn = grid.querySelector('vaadin-grid-tree-column');
+
+      // Initialize grid with data
+      grid.dataProvider = generateDataProvider(100);
+    </script>
+  </body>
+</html>

@@ -1,0 +1,134 @@
+<!doctype html>
+<html lang="en">
+  <head>
+    <meta charset="UTF-8" />
+    <meta http-equiv="X-UA-Compatible" content="IE=edge" />
+    <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+    <title>Side Nav</title>
+    <script type="module" src="../common.js"></script>
+
+    <script type="module">
+      import '@vaadin/app-layout';
+      import '@vaadin/app-layout/vaadin-drawer-toggle.js';
+      import '@vaadin/button';
+      import '@vaadin/icon';
+      import '@vaadin/side-nav';
+
+      // Fake navigation: prevent actual navigation, update 'current' item manually
+      document.querySelector('vaadin-side-nav').addEventListener('click', (e) => {
+        const link = e.composedPath().find((el) => el.localName === 'a');
+        if (link) {
+          e.preventDefault();
+          if (link.href) {
+            document.querySelectorAll('vaadin-side-nav-item').forEach((item) => item.removeAttribute('current'));
+            const navItem = e.composedPath().find((el) => el.localName === 'vaadin-side-nav-item');
+            navItem.setAttribute('current', '');
+          }
+        }
+      });
+    </script>
+
+    <style>
+      body {
+        margin: 0;
+      }
+
+      vaadin-side-nav {
+        &::part(children) {
+          display: grid;
+          grid-template-columns: auto auto;
+          gap: 0;
+          position: relative;
+        }
+      }
+
+      vaadin-side-nav > vaadin-side-nav-item {
+        display: contents;
+
+        &::part(content) {
+          grid-column: 1;
+          width: 1lh;
+        }
+
+        &::part(toggle-button) {
+          display: none;
+        }
+
+        &::part(children) {
+          grid-column: 2;
+          grid-row: 1 / span 999;
+          /* position: absolute; */
+          --_level: -2;
+        }
+      }
+    </style>
+  </head>
+
+  <body>
+    <vaadin-app-layout>
+      <vaadin-drawer-toggle slot="navbar"></vaadin-drawer-toggle>
+      <h2 slot="navbar">HR app</h2>
+
+      <vaadin-side-nav slot="drawer">
+        <vaadin-side-nav-item path="/home" current>
+          <vaadin-icon slot="prefix" src="../assets/lucide-icons/home.svg"></vaadin-icon>
+          Home
+        </vaadin-side-nav-item>
+
+        <vaadin-side-nav-item>
+          <vaadin-icon slot="prefix" src="../assets/lucide-icons/users.svg"></vaadin-icon>
+          People
+          <vaadin-side-nav-item path="/people/directory" slot="children">Directory</vaadin-side-nav-item>
+          <vaadin-side-nav-item path="/people/org-chart" slot="children">Org Chart</vaadin-side-nav-item>
+          <vaadin-side-nav-item path="/people/time-off" slot="children">Time Off</vaadin-side-nav-item>
+          <vaadin-side-nav-item path="/people/onboarding" slot="children">Onboarding</vaadin-side-nav-item>
+          <vaadin-side-nav-item path="/people/benefits" slot="children">Benefits</vaadin-side-nav-item>
+          <vaadin-side-nav-item path="/people/compensation" slot="children">Compensation</vaadin-side-nav-item>
+        </vaadin-side-nav-item>
+
+        <vaadin-side-nav-item>
+          <vaadin-icon slot="prefix" src="../assets/lucide-icons/calendar.svg"></vaadin-icon>
+          Payroll
+          <vaadin-side-nav-item path="/payroll/cycles" slot="children">Cycles</vaadin-side-nav-item>
+          <vaadin-side-nav-item path="/payroll/anytime-pay" slot="children">Anytime Pay</vaadin-side-nav-item>
+          <vaadin-side-nav-item path="/payroll/tax-documents" slot="children">Tax Documents</vaadin-side-nav-item>
+          <vaadin-side-nav-item path="/payroll/reports" slot="children">Payroll Reports</vaadin-side-nav-item>
+          <vaadin-side-nav-item path="/payroll/general-ledger" slot="children">General Ledger</vaadin-side-nav-item>
+        </vaadin-side-nav-item>
+
+        <vaadin-side-nav-item>
+          <vaadin-icon slot="prefix" src="../assets/lucide-icons/chart-pie.svg"></vaadin-icon>
+          Finance
+          <vaadin-side-nav-item path="/finance/overview" slot="children">Overview</vaadin-side-nav-item>
+          <vaadin-side-nav-item path="/finance/pay" slot="children">Pay</vaadin-side-nav-item>
+          <vaadin-side-nav-item path="/finance/balances" slot="children">Balances</vaadin-side-nav-item>
+          <vaadin-side-nav-item path="/finance/payment-history" slot="children">Payment History</vaadin-side-nav-item>
+          <vaadin-side-nav-item path="/finance/billing" slot="children">Billing</vaadin-side-nav-item>
+          <vaadin-side-nav-item path="/finance/expenses" slot="children">Expenses</vaadin-side-nav-item>
+          <vaadin-side-nav-item path="/finance/contractor-adjustments" slot="children">
+            Contractor Adjustments
+          </vaadin-side-nav-item>
+        </vaadin-side-nav-item>
+
+        <vaadin-side-nav-item>
+          <vaadin-icon slot="prefix" src="../assets/lucide-icons/messages-square.svg"></vaadin-icon>
+          Engage
+          <vaadin-side-nav-item path="/engage/hub" slot="children">Hub</vaadin-side-nav-item>
+          <vaadin-side-nav-item path="/engage/reviews" slot="children">Reviews</vaadin-side-nav-item>
+          <vaadin-side-nav-item path="/engage/goals" slot="children">Goals</vaadin-side-nav-item>
+          <vaadin-side-nav-item path="/engage/learning" slot="children">Learning</vaadin-side-nav-item>
+          <vaadin-side-nav-item path="/engage/career" slot="children">Career</vaadin-side-nav-item>
+          <vaadin-side-nav-item path="/engage/development" slot="children">Development</vaadin-side-nav-item>
+          <vaadin-side-nav-item path="/engage/surveys" slot="children">Surveys</vaadin-side-nav-item>
+          <vaadin-side-nav-item path="/engage/templates" slot="children">Templates</vaadin-side-nav-item>
+        </vaadin-side-nav-item>
+      </vaadin-side-nav>
+
+      <section>
+        <h2 class="heading">Content</h2>
+        <vaadin-side-nav-item path="/dev/playground/side-nav.html" current>Directory</vaadin-side-nav-item>
+        <vaadin-button>Button</vaadin-button>
+      </section>
+    </vaadin-app-layout>
+  </body>
+</html>
