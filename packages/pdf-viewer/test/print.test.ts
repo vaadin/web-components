@@ -6,6 +6,7 @@ import '../vaadin-pdf-viewer.js';
 import type { PDFPageProxy } from 'pdfjs-dist';
 import { clearWarnings } from '@vaadin/component-base/src/warnings.js';
 import type { Tooltip } from '@vaadin/tooltip';
+import type { PdfViewerButton } from '../src/vaadin-pdf-viewer-button.js';
 import type { PdfViewer } from '../vaadin-pdf-viewer.js';
 import {
   createPdf,
@@ -18,14 +19,11 @@ import {
 
 describe('print', () => {
   let viewer: PdfViewer;
+  let button: PdfViewerButton;
   let observer: MutationObserver;
   /** Called with the print frame instead of opening the print dialog. */
   let printSpy: sinon.SinonSpy;
   let release: (() => void) | undefined;
-
-  function getButton() {
-    return viewer.querySelector<HTMLElement & { disabled: boolean }>('vaadin-pdf-viewer-button[icon="print"]');
-  }
 
   function getFrame() {
     return document.body.querySelector<HTMLIFrameElement>(':scope > iframe');
@@ -64,7 +62,7 @@ describe('print', () => {
   }
 
   beforeEach(async () => {
-    // The warnings are issued once per page, so that each test sees its own.
+    // Each test sees its own warnings.
     clearWarnings();
     printSpy = sinon.spy();
     // Replace the print dialog of each print frame as soon as the frame is added.
@@ -80,6 +78,7 @@ describe('print', () => {
     observer.observe(document.body, { childList: true });
     viewer = fixtureSync('<vaadin-pdf-viewer style="width: 600px; height: 400px"></vaadin-pdf-viewer>');
     await nextRender();
+    button = viewer.querySelector('vaadin-pdf-viewer-button[icon="print"]')!;
   });
 
   afterEach(() => {
@@ -91,22 +90,22 @@ describe('print', () => {
 
   describe('button', () => {
     it('should disable the button without document', () => {
-      expect(getButton()!.disabled).to.be.true;
+      expect(button.disabled).to.be.true;
     });
 
     it('should enable the button when the document has loaded', async () => {
       await loadDocument(viewer, 'multi-page.pdf');
       await nextUpdate(viewer);
-      expect(getButton()!.disabled).to.be.false;
+      expect(button.disabled).to.be.false;
     });
 
     it('should show the button after the download button', () => {
       const download = viewer.querySelector('vaadin-pdf-viewer-button[icon="download"]')!;
-      expect(download.getBoundingClientRect().right).to.be.at.most(getButton()!.getBoundingClientRect().left);
+      expect(download.getBoundingClientRect().right).to.be.at.most(button.getBoundingClientRect().left);
     });
 
     it('should use i18n for the tooltip', async () => {
-      const getTooltipText = () => getButton()!.querySelector<Tooltip>('vaadin-tooltip')!.text;
+      const getTooltipText = () => button.querySelector<Tooltip>('vaadin-tooltip')!.text;
       expect(getTooltipText()).to.equal('Print');
       viewer.i18n = { print: 'Tulosta' };
       await nextUpdate(viewer);
@@ -116,17 +115,17 @@ describe('print', () => {
     it('should toggle the button on printButtonHidden change', async () => {
       viewer.printButtonHidden = true;
       await nextUpdate(viewer);
-      expect(getButton()!.checkVisibility()).to.be.false;
+      expect(button.checkVisibility()).to.be.false;
       viewer.printButtonHidden = false;
       await nextUpdate(viewer);
-      expect(getButton()!.checkVisibility()).to.be.true;
+      expect(button.checkVisibility()).to.be.true;
     });
 
     it('should hide the button with the attribute', async () => {
       viewer.setAttribute('print-button-hidden', '');
       await nextUpdate(viewer);
       expect(viewer.printButtonHidden).to.be.true;
-      expect(getButton()!.checkVisibility()).to.be.false;
+      expect(button.checkVisibility()).to.be.false;
     });
   });
 
@@ -205,7 +204,7 @@ describe('print', () => {
     });
 
     it('should print on button click', async () => {
-      getButton()!.click();
+      button.click();
       await pagesPrepared(6);
       for (let i = 0; i < 50 && !printSpy.called; i++) {
         await nextFrame();
@@ -245,10 +244,10 @@ describe('print', () => {
       release = await holdPages(1);
       const printed = viewer.print();
       await printingStarted();
-      expect(getButton()!.disabled).to.be.true;
+      expect(button.disabled).to.be.true;
       release();
       await printed;
-      expect(getButton()!.disabled).to.be.false;
+      expect(button.disabled).to.be.false;
     });
 
     it('should not print again while preparing to print', async () => {
@@ -382,14 +381,14 @@ describe('print', () => {
 
     describe('focus', () => {
       it('should return focus to the print button after printing', async () => {
-        getButton()!.focus();
+        button.focus();
         await viewer.print();
-        expect(document.activeElement).to.equal(getButton());
+        expect(document.activeElement).to.equal(button);
       });
 
       it('should return focus to the pages when the print button was hidden meanwhile', async () => {
         release = await holdPages(3);
-        getButton()!.focus();
+        button.focus();
         const printed = viewer.print();
         await printingStarted();
         viewer.printButtonHidden = true;
@@ -400,13 +399,13 @@ describe('print', () => {
       });
 
       it('should not move focus into the viewer when the element outside it that printing started from is gone', async () => {
-        const button = document.createElement('button');
-        document.body.append(button);
-        button.focus();
+        const outsideButton = document.createElement('button');
+        document.body.append(outsideButton);
+        outsideButton.focus();
         release = await holdPages(3);
         const printed = viewer.print();
         await pagesPrepared(2);
-        button.remove();
+        outsideButton.remove();
         release();
         await printed;
         await nextUpdate(viewer);
@@ -415,14 +414,14 @@ describe('print', () => {
       });
 
       it('should keep focus on an element outside the viewer when printing from it', async () => {
-        const button = document.createElement('button');
-        document.body.append(button);
+        const outsideButton = document.createElement('button');
+        document.body.append(outsideButton);
         try {
-          button.focus();
+          outsideButton.focus();
           await viewer.print();
-          expect(document.activeElement).to.equal(button);
+          expect(document.activeElement).to.equal(outsideButton);
         } finally {
-          button.remove();
+          outsideButton.remove();
         }
       });
     });
