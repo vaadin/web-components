@@ -93,7 +93,6 @@ export class PdfViewerPrintFrame {
   print() {
     const frameWindow = this.#frame.contentWindow;
     frameWindow.addEventListener('afterprint', () => this.remove(), { once: true });
-    frameWindow.focus();
     frameWindow.print();
   }
 

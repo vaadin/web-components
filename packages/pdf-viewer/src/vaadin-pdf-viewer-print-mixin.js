@@ -175,28 +175,20 @@ export const PdfViewerPrintMixin = (superClass) =>
 
     /**
      * Returns focus to where it was before printing, when it has been lost
-     * meanwhile, e.g. to the print frame. Moves focus to
-     * the pages instead when it was in the viewer and that element is gone.
+     * meanwhile. Moves focus to the pages instead when it was in the viewer
+     * and that element is gone.
      * @private
      */
     #restoreFocus() {
       const returnFocus = this.#returnFocus;
       this.#returnFocus = null;
       const active = getFocusedElement();
-      // Focus is lost when on nothing, on the print frame, or on an element that is gone or hidden.
-      const isLost = !active || active.localName === 'iframe' || !active.isConnected || !active.checkVisibility();
+      // Focus is lost when on nothing, or on an element that is gone or hidden.
+      const isLost = !active || !active.isConnected || !active.checkVisibility();
       if (!isLost || !this.isConnected) {
         return;
       }
 
-      // Firefox keeps the element that was focused before the print frame as the
-      // focused element of this window, and does not focus it again until the
-      // window itself has focus. Newer versions also keep focus in the print
-      // frame until the frame is blurred.
-      if (active?.localName === 'iframe') {
-        active.blur();
-      }
-      window.focus();
       const options = { focusVisible: isKeyboardActive() };
       if (returnFocus && returnFocus.isConnected && !returnFocus.disabled && returnFocus.checkVisibility()) {
         returnFocus.focus(options);
