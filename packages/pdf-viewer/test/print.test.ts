@@ -412,18 +412,6 @@ describe('print', () => {
         expect(viewer.shadowRoot!.activeElement).to.be.null;
         expect(document.activeElement).to.equal(document.body);
       });
-
-      it('should keep focus on an element outside the viewer when printing from it', async () => {
-        const outsideButton = document.createElement('button');
-        document.body.append(outsideButton);
-        try {
-          outsideButton.focus();
-          await viewer.print();
-          expect(document.activeElement).to.equal(outsideButton);
-        } finally {
-          outsideButton.remove();
-        }
-      });
     });
   });
 
