@@ -9,6 +9,7 @@ import type { Tooltip } from '@vaadin/tooltip';
 import type { PdfViewerButton } from '../src/vaadin-pdf-viewer-button.js';
 import type { PdfViewer } from '../vaadin-pdf-viewer.js';
 import {
+  A4_PAGE_SIZE,
   createPdf,
   fixtureUrl,
   getPdfDocumentPrototype,
@@ -135,15 +136,15 @@ describe('print', () => {
       expect(printSpy).to.be.calledOnceWith(getFrame());
       const images = getImages();
       expect(images).to.have.lengthOf(6);
-      expect(parseFloat(images[0].style.width)).to.be.closeTo(595.92, 0.01);
-      expect(parseFloat(images[0].style.height)).to.be.closeTo(842.88, 0.01);
-      expect(parseFloat(images[5].style.width)).to.be.closeTo(842.88, 0.01);
+      expect(parseFloat(images[0].style.width)).to.be.closeTo(A4_PAGE_SIZE.width, 0.01);
+      expect(parseFloat(images[0].style.height)).to.be.closeTo(A4_PAGE_SIZE.height, 0.01);
+      expect(parseFloat(images[5].style.width)).to.be.closeTo(A4_PAGE_SIZE.height, 0.01);
       const [width, height] = getPageSize(images[0]);
-      expect(width).to.be.closeTo(595.92, 0.01);
-      expect(height).to.be.closeTo(842.88, 0.01);
+      expect(width).to.be.closeTo(A4_PAGE_SIZE.width, 0.01);
+      expect(height).to.be.closeTo(A4_PAGE_SIZE.height, 0.01);
       const [landscapeWidth, landscapeHeight] = getPageSize(images[5]);
-      expect(landscapeWidth).to.be.closeTo(842.88, 0.01);
-      expect(landscapeHeight).to.be.closeTo(595.92, 0.01);
+      expect(landscapeWidth).to.be.closeTo(A4_PAGE_SIZE.height, 0.01);
+      expect(landscapeHeight).to.be.closeTo(A4_PAGE_SIZE.width, 0.01);
       const names = new Set(images.map((image) => image.style.getPropertyValue('page')));
       expect(names.size).to.equal(2);
     });
@@ -151,8 +152,8 @@ describe('print', () => {
     it('should print the pages at 150 DPI', async () => {
       await viewer.print();
       const [image] = getImages();
-      expect(image.naturalWidth).to.equal(Math.floor((595.92 * 150) / 72));
-      expect(image.naturalHeight).to.equal(Math.floor((842.88 * 150) / 72));
+      expect(image.naturalWidth).to.equal(Math.floor((A4_PAGE_SIZE.width * 150) / 72));
+      expect(image.naturalHeight).to.equal(Math.floor((A4_PAGE_SIZE.height * 150) / 72));
     });
 
     it('should print a large page at a lower resolution', async () => {

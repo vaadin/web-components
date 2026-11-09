@@ -20,6 +20,9 @@ export function fixtureUrl(name: Fixture): string {
   return new URL(`./fixtures/${name}`, import.meta.url).href;
 }
 
+/** The page size in points of the fixtures that Chromium prints as A4, see `generate-fixtures.js`. */
+export const A4_PAGE_SIZE = { width: 595.92, height: 842.88 };
+
 /**
  * Sets the `src` of the viewer and waits until the document has loaded.
  */
