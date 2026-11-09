@@ -1341,6 +1341,16 @@ describe('multi selection column', () => {
         assertEvent({ item: grid.items[0], selected: false, shiftKey: false });
       });
 
+      it('should fire the event when toggling an item with Space on a focused row', async () => {
+        rows[0].focus();
+
+        await sendKeys({ press: 'Space' });
+        assertEvent({ item: grid.items[0], selected: true, shiftKey: false });
+
+        await sendKeys({ press: 'Space' });
+        assertEvent({ item: grid.items[0], selected: false, shiftKey: false });
+      });
+
       it('should fire the event when toggling an item with Shift + Space', async () => {
         getRowCells(rows[0])[1].focus();
 
