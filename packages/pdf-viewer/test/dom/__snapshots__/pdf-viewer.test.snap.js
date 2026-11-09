@@ -4,9 +4,9 @@ export const snapshots = {};
 snapshots["vaadin-pdf-viewer host default"] = 
 `<vaadin-pdf-viewer>
   <vaadin-pdf-viewer-button
-    aria-describedby="vaadin-tooltip-0"
     aria-disabled="true"
     aria-expanded="false"
+    aria-labelledby="vaadin-tooltip-0"
     disabled=""
     has-tooltip=""
     icon="sidebar"
@@ -131,8 +131,8 @@ snapshots["vaadin-pdf-viewer host default"] =
 snapshots["vaadin-pdf-viewer host document"] = 
 `<vaadin-pdf-viewer>
   <vaadin-pdf-viewer-button
-    aria-describedby="vaadin-tooltip-0"
     aria-expanded="false"
+    aria-labelledby="vaadin-tooltip-0"
     has-tooltip=""
     icon="sidebar"
     role="button"

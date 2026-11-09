@@ -114,7 +114,11 @@ export const PdfViewerSidebarMixin = (superClass) =>
           .disabled="${!this.pageCount && !this.sidebarOpened}"
           @click="${this.#onSidebarButtonClick}"
         >
-          <vaadin-tooltip slot="tooltip" .text="${this.__effectiveI18n.sidebar}"></vaadin-tooltip>
+          <vaadin-tooltip
+            slot="tooltip"
+            .ariaLinkMode="${'aria-labelledby'}"
+            .text="${this.__effectiveI18n.sidebar}"
+          ></vaadin-tooltip>
         </vaadin-pdf-viewer-button>
       `;
     }

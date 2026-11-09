@@ -52,12 +52,10 @@ export const pdfViewerButtonStyles = css`
     --_icon: var(--_vaadin-icon-sidebar);
   }
 
-  /* The sidebar is at the start, on the right in RTL */
   :host([icon='sidebar']:dir(rtl)) [part~='icon'] {
     scale: -1 1;
   }
 
-  /* The sidebar button looks pressed while the sidebar is shown */
   :host([icon='sidebar'][aria-expanded='true']) {
     background: var(--vaadin-background-container-strong);
   }
