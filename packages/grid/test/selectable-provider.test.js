@@ -123,6 +123,38 @@ describe('selectable-provider', () => {
       expect(grid.selectedItems.length).to.equal(9);
     });
 
+    describe('auto-select with replaced items', () => {
+      function createItems(selectable) {
+        return Array.from({ length: 10 }, (_, i) => ({ index: i, name: `item ${i}`, selectable }));
+      }
+
+      beforeEach(() => {
+        selectionColumn.autoSelect = true;
+        grid.itemIdPath = 'index';
+        grid.isItemSelectable = (item) => item.selectable;
+      });
+
+      it('should not deselect active row on click when it became non-selectable', () => {
+        grid.items = createItems(true);
+        getBodyCellContent(grid, 0, 1).click();
+        expect(grid.selectedItems.map((item) => item.index)).to.eql([0]);
+
+        grid.items = createItems(false);
+        getBodyCellContent(grid, 0, 1).click();
+        expect(grid.selectedItems.map((item) => item.index)).to.eql([0]);
+      });
+
+      it('should select active row on first click when it became selectable', () => {
+        grid.items = createItems(false);
+        getBodyCellContent(grid, 0, 1).click();
+        expect(grid.selectedItems).to.be.empty;
+
+        grid.items = createItems(true);
+        getBodyCellContent(grid, 0, 1).click();
+        expect(grid.selectedItems.map((item) => item.index)).to.eql([0]);
+      });
+    });
+
     it('should prevent selection when pressing space on cell', async () => {
       // prevents selection for non-selectable items
       getBodyCell(grid, 0, 0).focus();

@@ -324,6 +324,27 @@ describe('multi selection column', () => {
     expect(grid.selectedItems).to.eql([]);
   });
 
+  it('should not toggle the item in selectedItems when activeItem is set programmatically', () => {
+    grid.activeItem = grid.items[1];
+    expect(grid.selectedItems).to.eql([]);
+
+    grid.selectItem(grid.items[1]);
+    grid.activeItem = null;
+    expect(grid.selectedItems).to.eql([grid.items[1]]);
+  });
+
+  it('should update selectedItems before active-item-changed is fired on row click', () => {
+    const spy = sinon.spy(() => grid.selectedItems);
+    grid.addEventListener('active-item-changed', spy);
+
+    const cell = getRowCells(rows[1])[1];
+    cell.click();
+    expect(spy).to.have.returned([grid.items[1]]);
+
+    cell.click();
+    expect(spy).to.have.returned([]);
+  });
+
   it('should add the item to selectedItems on selection column cell Space key', async () => {
     const cell = getRowCells(rows[1])[0];
     cell.focus();
