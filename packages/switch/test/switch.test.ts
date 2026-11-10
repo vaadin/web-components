@@ -62,13 +62,20 @@ describe('vaadin-switch', () => {
       expect(inputRect.height).to.be.at.least(partRect.height);
     });
 
-    it('should cover the empty space next to the label with the input', async () => {
-      element.label = 'Label';
-      element.style.width = '400px';
-      await nextRender();
-      const labelRect = element.querySelector('label')!.getBoundingClientRect();
-      const y = labelRect.top + labelRect.height / 2;
-      expect(document.elementFromPoint(element.getBoundingClientRect().right - 10, y)).to.equal(input);
+    [undefined, 'reverse'].forEach((theme) => {
+      it(`should cover the empty space next to the label with the input${theme ? ` in ${theme} theme` : ''}`, async () => {
+        element.label = 'Label';
+        element.style.width = '400px';
+        if (theme) {
+          element.setAttribute('theme', theme);
+        }
+        await nextRender();
+        const label = element.querySelector('label')!;
+        const labelRect = label.getBoundingClientRect();
+        const hostRect = element.getBoundingClientRect();
+        const y = labelRect.top + labelRect.height / 2;
+        expect(document.elementFromPoint(hostRect.left + hostRect.width / 2, y)).to.equal(input);
+      });
     });
   });
 });

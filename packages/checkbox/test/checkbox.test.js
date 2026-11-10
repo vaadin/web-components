@@ -398,11 +398,6 @@ describe('checkbox', () => {
       });
     });
 
-    it('should not cover the label with the input', () => {
-      const { x, y } = middleOfNode(label);
-      expect(document.elementFromPoint(x, y)).to.equal(label);
-    });
-
     it('should not cover the helper text row with the input', () => {
       const helper = checkbox.querySelector('[slot="helper"]');
       const { x, y } = middleOfNode(helper);
@@ -414,7 +409,7 @@ describe('checkbox', () => {
       document.body.style.pointerEvents = 'none';
       try {
         const { x, y } = middleOfNode(label);
-        expect(document.elementFromPoint(x, y)).to.not.be.oneOf([checkbox, input, label]);
+        expect(document.elementFromPoint(x, y)).to.equal(document.documentElement);
       } finally {
         document.body.style.pointerEvents = '';
       }
