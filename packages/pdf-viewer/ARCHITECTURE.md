@@ -108,10 +108,13 @@ how to generate them.
 
 - The text layer of pdf.js puts transparent text over the canvas. Users can select it, and screen readers
   read it.
-- Pages that lose their canvas also lose their text and link layers. Screen readers therefore reach only
-  the text near the view.
-- Links are in their own layer over the text layer. Each link is named after the text it covers, or
-  after its URL or the page it goes to.
+- Pages that lose their canvas also lose their text layer, structure and link layer. Screen readers
+  therefore reach only the text near the view.
+- Links are in their own layer over the text layer. Each link is named after the first of these that it has:
+  - the alternative text that the structure gives it
+  - the text it covers
+  - the text it owns in the structure
+  - its URL, or the page it goes to
 - Only `http:`, `https:` and `mailto:` links open, in a new tab without access to the viewer.
 - Links on layers that the document hides are left out, as in pdf.js.
 - A link that wraps to the next line is clickable only on its words, which the `QuadPoints` of the annotation

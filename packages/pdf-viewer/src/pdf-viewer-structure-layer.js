@@ -344,7 +344,7 @@ export class PdfViewerStructureLayer {
     }
     if (canOwn(node)) {
       element.setAttribute('aria-owns', node.id);
-      // Unlike in pdf.js, not all annotations of the tree, as lists and tables skip their direct content.
+      // Unlike in pdf.js, collects only the annotations that an element owns, as lists and tables skip their direct content.
       if (node.type === 'annotation') {
         this.annotationIds.add(node.id);
       }

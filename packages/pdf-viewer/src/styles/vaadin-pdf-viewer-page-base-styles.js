@@ -39,7 +39,7 @@ export const pdfViewerPageStyles = css`
     height: 100%;
   }
 
-  /* The structure of tagged PDFs in the canvas, as in pdf.js */
+  /* As in pdf.js, the tree in the canvas takes no layout */
   .struct-tree {
     contain: strict;
   }

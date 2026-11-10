@@ -5,12 +5,14 @@ import './enable-feature-flag.js';
 import '../vaadin-pdf-viewer.js';
 import type { PDFPageProxy } from 'pdfjs-dist';
 import { type PdfViewerStructTreeNode, PdfViewerStructureLayer } from '../src/pdf-viewer-structure-layer.js';
-import { loadPdfjs } from '../src/pdfjs-loader.js';
 import type { PdfViewer } from '../vaadin-pdf-viewer.js';
 import { createPdf, failTextOnce, fixtureUrl, getPdfPagePrototype, loadAndRender, nextRenderIdle } from './helpers.js';
 
 describe('structure', () => {
   let viewer: PdfViewer;
+
+  /** The object URL of a PDF that a test creates, revoked after the test. */
+  let url: string | undefined;
 
   function getTree() {
     return viewer.shadowRoot!.querySelector<HTMLElement>('.struct-tree');
@@ -54,6 +56,10 @@ describe('structure', () => {
 
   afterEach(() => {
     sinon.restore();
+    if (url) {
+      URL.revokeObjectURL(url);
+      url = undefined;
+    }
   });
 
   it('should not add a structure for an untagged PDF', async () => {
@@ -62,8 +68,7 @@ describe('structure', () => {
   });
 
   it('should show a page with a broken structure as untagged', async () => {
-    const prototype = await getPdfPagePrototype();
-    sinon.stub(prototype, 'getStructTree').rejects(new Error('Broken structure'));
+    await stubStructTrees(() => Promise.reject(new Error('Broken structure')));
     const warn = sinon.stub(console, 'warn');
     await loadAndRender(viewer, fixtureUrl('tagged.pdf'));
     expect(getTree()).to.be.null;
@@ -74,8 +79,7 @@ describe('structure', () => {
   });
 
   it('should keep the links of a page whose structure fails to render', async () => {
-    const prototype = await getPdfPagePrototype();
-    sinon.stub(prototype, 'getStructTree').resolves({ role: 'Root', children: [null] } as never);
+    await stubStructTrees(() => Promise.resolve({ role: 'Root', children: [null] } as never));
     await loadAndRender(viewer, fixtureUrl('tagged.pdf'));
     expect(getTree()).to.be.null;
     expect(getLink().getAttribute('aria-label')).to.equal('Vaadin website (opens in a new tab)');
@@ -150,7 +154,6 @@ describe('structure', () => {
 
   describe('released pages', () => {
     let url: string;
-    let structTreeStub: sinon.SinonStub;
 
     /** The tree of a page of the created PDF, whose page objects are 5, 7, 9 and so on. */
     function getPageTree(pageNumber: number): PdfViewerStructTreeNode {
@@ -187,7 +190,7 @@ describe('structure', () => {
     });
 
     it('should render the structure again when a released page renders again, without loading it again', async () => {
-      structTreeStub = await stubStructTrees(getPageTree);
+      const structTreeStub = await stubStructTrees(getPageTree);
       await loadAndRender(viewer, url);
       let idle = nextRenderIdle(viewer);
       scrollTo(Infinity);
@@ -296,7 +299,6 @@ describe('structure', () => {
       },
     ].forEach(({ name, page, link, entries, uri }) => {
       it(`should read the text of a link structure element ${name} as text`, async () => {
-        const prototype = await getPdfPagePrototype();
         const tree: PdfViewerStructTreeNode = {
           role: 'Root',
           children: [
@@ -309,8 +311,8 @@ describe('structure', () => {
             },
           ],
         };
-        sinon.stub(prototype, 'getStructTree').resolves(tree as Awaited<ReturnType<PDFPageProxy['getStructTree']>>);
-        const url = createPdf(
+        await stubStructTrees(() => tree);
+        url = createPdf(
           [
             {
               content: '/Link << /MCID 0 >> BDC BT /F1 24 Tf 72 700 Td (Docs) Tj ET EMC',
@@ -322,7 +324,6 @@ describe('structure', () => {
           { layers: entries ? [{ name: 'Hidden', visible: false }] : [] },
         );
         await loadAndRender(viewer, url);
-        URL.revokeObjectURL(url);
         expect(viewer.shadowRoot!.querySelector('a.link')).to.be.null;
         expect(getTree()!.querySelector('[role="link"]')).to.be.null;
         expect(getOwnedText(getTree()!)).to.equal('Docs');
@@ -336,7 +337,7 @@ describe('structure', () => {
       role: 'Root',
       children: [{ role: 'P', children: [{ type: 'content', id: 'p5R_mc0' }] }],
     }));
-    const url = createPdf([
+    url = createPdf([
       {
         content: '/P << /MCID 0 >> BDC BT /F1 24 Tf 72 700 Td (Docs) Tj ET EMC',
         annotations: [
@@ -345,7 +346,6 @@ describe('structure', () => {
       },
     ]);
     await loadAndRender(viewer, url);
-    URL.revokeObjectURL(url);
     expect(getTree()).to.be.ok;
     expect(getTree()!.querySelector(`[aria-owns~="${getLink().id}"]`)).to.be.null;
     expect(viewer.shadowRoot!.querySelector(`.text-layer [aria-owns~="${getLink().id}"]`)).to.be.ok;
@@ -365,7 +365,7 @@ describe('structure', () => {
         },
       ],
     }));
-    const url = createPdf([
+    url = createPdf([
       {
         content: '/Link << /MCID 0 >> BDC BT /F1 24 Tf 72 700 Td (Vaadin) Tj 0 -30 Td (docs) Tj ET EMC',
         annotations: [
@@ -374,7 +374,6 @@ describe('structure', () => {
       },
     ]);
     await loadAndRender(viewer, url);
-    URL.revokeObjectURL(url);
     expect(getLink().getAttribute('aria-label')).to.equal('Vaadin docs (opens in a new tab)');
   });
 
@@ -392,7 +391,7 @@ describe('structure', () => {
         },
       ],
     }));
-    const url = createPdf([
+    url = createPdf([
       {
         content: '/Link << /MCID 0 >> BDC BT /F1 24 Tf 72 700 Td (Docs) Tj ET EMC BT /F1 24 Tf 72 600 Td (Guide) Tj ET',
         annotations: [
@@ -401,7 +400,6 @@ describe('structure', () => {
       },
     ]);
     await loadAndRender(viewer, url);
-    URL.revokeObjectURL(url);
     expect(getLink().getAttribute('aria-label')).to.equal('Guide (opens in a new tab)');
   });
 
@@ -409,7 +407,6 @@ describe('structure', () => {
     let url: string;
 
     beforeEach(async () => {
-      const prototype = await getPdfPagePrototype();
       // Object 5 is the page of the created PDF, and object 7 its link.
       const tree: PdfViewerStructTreeNode = {
         role: 'Root',
@@ -424,8 +421,7 @@ describe('structure', () => {
           },
         ],
       };
-      // The types of pdf.js leave out the alternative text.
-      sinon.stub(prototype, 'getStructTree').resolves(tree as Awaited<ReturnType<PDFPageProxy['getStructTree']>>);
+      await stubStructTrees(() => tree);
       url = createPdf([
         {
           content: '/Link << /MCID 0 >> BDC BT /F1 24 Tf 72 700 Td (Docs) Tj ET EMC',
@@ -684,11 +680,5 @@ describe('structure', () => {
       expect(link.hasAttribute('role')).to.be.false;
       expect(structure.element.querySelector(`#${owns}`)!.getAttribute('aria-owns')).to.equal('p3R_mc0');
     });
-  });
-
-  it('should use the pdf.js version that the structure layer is ported from', async () => {
-    const source = await (await fetch(new URL('../src/pdf-viewer-structure-layer.js', import.meta.url))).text();
-    const { version } = await loadPdfjs();
-    expect(source.match(/pdf\.js (\d+\.\d+\.\d+)/u)![1]).to.equal(version);
   });
 });

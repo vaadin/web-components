@@ -12,6 +12,16 @@ import { isKeyboardActive } from '@vaadin/a11y-base/src/focus-utils.js';
 import { getLinkLabel, resolveDestination } from './pdf-viewer-links.js';
 
 /**
+ * Returns the text with its whitespace collapsed to single spaces, without
+ * leading and trailing whitespace.
+ * @param {string | undefined} text
+ * @return {string | undefined}
+ */
+function collapseWhitespace(text) {
+  return text?.replace(/\s+/gu, ' ').trim();
+}
+
+/**
  * A mixin that adds the links of the rendered pages, and goes to the
  * destinations of internal links.
  */
@@ -57,7 +67,7 @@ export const PdfViewerLinksMixin = (superClass) =>
       await Promise.all(
         links.map(async ({ link, annotation }) => {
           // As in pdf.js, the text that the link covers, which the worker finds for each link.
-          const text = (annotation.overlaidText ?? '').replace(/\s+/gu, ' ').trim();
+          const text = collapseWhitespace(annotation.overlaidText ?? '');
           let targetPage = null;
           if (!text && !annotation.url) {
             const target = await this.#resolveDestination(annotation);
@@ -80,8 +90,8 @@ export const PdfViewerLinksMixin = (superClass) =>
     #nameLinksByStructure(page) {
       [...(page.linkLayerElement?.children ?? [])].forEach((link) => {
         const parts = this.#linkLabels.get(link);
-        const alt = page.getLinkAlt(link)?.replace(/\s+/gu, ' ').trim();
-        const structureText = page.getLinkText(link)?.replace(/\s+/gu, ' ').trim();
+        const alt = collapseWhitespace(page.getLinkAlt(link));
+        const structureText = collapseWhitespace(page.getLinkText(link));
         if (parts && (alt || structureText) && (parts.alt !== alt || parts.structureText !== structureText)) {
           Object.assign(parts, { alt, structureText });
           this.#updateLinkLabel(link);

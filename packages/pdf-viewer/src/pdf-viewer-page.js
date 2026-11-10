@@ -74,8 +74,8 @@ export class PdfViewerPage {
   #structureRendered = false;
 
   /**
-   * The structure tree of the page, or null without one, kept to not ask the worker again
-   * when the page renders again, as pdf.js does.
+   * A promise of the structure tree of the page, which resolves to null without one. Kept
+   * between renders, so that the page does not ask the worker again, as in pdf.js.
    * @type {Promise<object | null> | null}
    */
   #structTree = null;

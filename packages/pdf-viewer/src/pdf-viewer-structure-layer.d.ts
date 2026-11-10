@@ -38,7 +38,7 @@ export declare class PdfViewerStructureLayer {
   constructor(tree: PdfViewerStructTreeNode, pageNumber: number);
 
   /** The ids of the annotations that elements of the structure own. */
-  readonly annotationIds: Set<string>;
+  readonly annotationIds: ReadonlySet<string>;
 
   readonly element: HTMLElement;
 
