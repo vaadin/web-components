@@ -374,50 +374,10 @@ describe('print', () => {
       expect(getFrame()).to.be.null;
     });
 
-    describe('focus', () => {
-      it('should keep focus on the print button after printing', async () => {
-        button.focus();
-        await viewer.print();
-        expect(document.activeElement).to.equal(button);
-      });
-
-      it('should not move focus back when it left the print button meanwhile', async () => {
-        release = await holdPages(3);
-        button.focus();
-        const printed = viewer.print();
-        await printingStarted();
-        button.blur();
-        release();
-        await printed;
-        expect(document.activeElement).to.equal(document.body);
-      });
-
-      it('should move focus to the pages when the print button was hidden meanwhile', async () => {
-        release = await holdPages(3);
-        button.focus();
-        const printed = viewer.print();
-        await printingStarted();
-        viewer.printButtonHidden = true;
-        release();
-        await printed;
-        await nextUpdate(viewer);
-        expect(viewer.shadowRoot!.activeElement).to.equal(viewer.shadowRoot!.querySelector('[part="content"]'));
-      });
-
-      it('should not move focus into the viewer when the element outside it that printing started from is gone', async () => {
-        const outsideButton = document.createElement('button');
-        document.body.append(outsideButton);
-        outsideButton.focus();
-        release = await holdPages(3);
-        const printed = viewer.print();
-        await printingStarted();
-        outsideButton.remove();
-        release();
-        await printed;
-        await nextUpdate(viewer);
-        expect(viewer.shadowRoot!.activeElement).to.be.null;
-        expect(document.activeElement).to.equal(document.body);
-      });
+    it('should keep focus on the print button after printing', async () => {
+      button.focus();
+      await viewer.print();
+      expect(document.activeElement).to.equal(button);
     });
   });
 

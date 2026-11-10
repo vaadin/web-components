@@ -8,34 +8,8 @@
  * See https://vaadin.com/commercial-license-and-service-terms for the full
  * license.
  */
-import { getDeepActiveElement, isElementHidden, isKeyboardActive } from '@vaadin/a11y-base/src/focus-utils.js';
 import { issueWarning } from '@vaadin/component-base/src/warnings.js';
 import { PdfViewerPrintFrame } from './pdf-viewer-print-frame.js';
-
-/**
- * Returns the focused element, also inside shadow roots, or null when
- * nothing is focused.
- * @return {HTMLElement | null}
- */
-function getFocusedElement() {
-  const active = getDeepActiveElement();
-  return active !== document.body ? active : null;
-}
-
-/**
- * Returns whether the element is inside the host, also inside shadow roots.
- * @param {HTMLElement} host
- * @param {Node | null} element
- * @return {boolean}
- */
-function isInside(host, element) {
-  for (let node = element; node; node = node.parentNode || node.host) {
-    if (node === host) {
-      return true;
-    }
-  }
-  return false;
-}
 
 /**
  * A mixin that adds printing the document. The toolbar has a button that
@@ -114,8 +88,6 @@ export const PdfViewerPrintMixin = (superClass) =>
       this.#printFrame?.remove();
       const printFrame = new PdfViewerPrintFrame();
       this.#printFrame = printFrame;
-      const focused = getFocusedElement();
-      const focusedInViewer = isInside(this, focused) ? focused : null;
       this._printing = true;
 
       try {
@@ -135,7 +107,6 @@ export const PdfViewerPrintMixin = (superClass) =>
       }
       // Resolve once the `printing` state is removed.
       await this.updateComplete;
-      this.#restoreFocus(focusedInViewer);
     }
 
     /**
@@ -146,20 +117,5 @@ export const PdfViewerPrintMixin = (superClass) =>
       this.#printFrame?.remove();
       this.#printFrame = null;
       this._printing = false;
-    }
-
-    /**
-     * Moves focus to the pages when the element in the viewer that had focus
-     * when printing started is gone or hidden, and focus has not moved to
-     * another element meanwhile.
-     * @param {HTMLElement | null} focusedInViewer the element in the viewer that had focus when printing started
-     * @private
-     */
-    #restoreFocus(focusedInViewer) {
-      const active = getFocusedElement();
-      const isLost = !active || isElementHidden(active);
-      if (isLost && focusedInViewer && isElementHidden(focusedInViewer) && this.isConnected) {
-        this.focus({ preventScroll: true, focusVisible: isKeyboardActive() });
-      }
     }
   };
