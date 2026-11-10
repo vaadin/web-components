@@ -33,7 +33,7 @@ export const PdfViewerKeyboardMixin = (superClass) =>
       const path = event.composedPath();
       const target = path[0];
       if ((key === 'Home' || key === 'End') && path.includes(this.$.content)) {
-        this._scrollToPage(key === 'Home' ? 1 : this.pageCount);
+        this._goToPage(key === 'Home' ? 1 : this.pageCount);
       } else if (target.matches('input, textarea') || target.isContentEditable) {
         // Text fields keep the browser zoom, which low vision users may rely on.
         return;

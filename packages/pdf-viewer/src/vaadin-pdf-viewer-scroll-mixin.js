@@ -130,7 +130,7 @@ export const PdfViewerScrollMixin = (superClass) =>
       }
 
       if (props.has('page') && this.page !== this.#scrolledPage && this.__pages.length) {
-        this._scrollToPage(this.page);
+        this.#scrollToPage(this.page);
       }
     }
 
@@ -152,8 +152,10 @@ export const PdfViewerScrollMixin = (superClass) =>
     }
 
     /**
-     * Scrolls to the start of the given page, or to an offset on it, and
-     * makes it the current page, also when it is the current page already.
+     * Goes to the start of the given page, or to an offset on it, when the
+     * user asks for it, e.g. with the toolbar, a key or a link. It makes the
+     * page the current page, also when it is the current page already. A
+     * `page` that the application sets does not come here.
      * @param {number} page
      * @param {{ left: number, top: number }} [offset] the offset from the top
      *   left corner of the page in CSS pixels. Without it, the padding above
@@ -162,7 +164,17 @@ export const PdfViewerScrollMixin = (superClass) =>
      *   kept, and the offset is dropped.
      * @protected
      */
-    _scrollToPage(page, offset) {
+    _goToPage(page, offset) {
+      this.#scrollToPage(page, offset);
+    }
+
+    /**
+     * Scrolls to the given page and makes it the current page, see `_goToPage()`.
+     * @param {number} page
+     * @param {{ left: number, top: number }} [offset]
+     * @private
+     */
+    #scrollToPage(page, offset) {
       if (!this.#hasLayout() || this._scale <= 0) {
         // Scroll once the pages can be laid out.
         this.#pendingPage = page;
@@ -288,7 +300,7 @@ export const PdfViewerScrollMixin = (superClass) =>
      */
     #scrollToPendingPage() {
       if (this.#pendingPage) {
-        this._scrollToPage(this.#pendingPage);
+        this.#scrollToPage(this.#pendingPage);
       } else {
         this.#updateVisiblePages();
       }

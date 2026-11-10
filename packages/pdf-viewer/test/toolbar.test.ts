@@ -111,6 +111,17 @@ describe('toolbar', () => {
       expect(viewer.page).to.equal(2);
     });
 
+    it('should treat a page that the user goes to as navigation, but not a page that the application sets', async () => {
+      // Feature mixins override this protected method to react to user navigation.
+      const goToPage = sinon.spy(viewer as unknown as { _goToPage(page: number): void }, '_goToPage');
+      viewer.page = 3;
+      await nextRenderIdle(viewer);
+      expect(goToPage).to.be.not.called;
+      nextButton.click();
+      await nextRenderIdle(viewer);
+      expect(goToPage).to.be.calledOnceWith(4);
+    });
+
     it('should go to the previous page when clicking previous page', async () => {
       viewer.page = 3;
       await nextRenderIdle(viewer);
