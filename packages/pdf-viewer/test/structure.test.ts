@@ -79,6 +79,21 @@ describe('structure', () => {
     expect(viewer.shadowRoot!.querySelector(`.text-layer [aria-owns~="${getLink().id}"]`)).to.be.ok;
   });
 
+  it('should show the structure elements that are blocks in HTML as blocks, so screen readers start lines at them', async () => {
+    await stubStructTrees(() => ({
+      role: 'Root',
+      children: [
+        { role: 'H1', children: [] },
+        { role: 'P', children: [{ role: 'Strong', children: [] }] },
+      ],
+    }));
+    await loadAndRender(viewer, fixtureUrl('tagged.pdf'));
+    const tree = getTree()!;
+    expect(getComputedStyle(tree.querySelector('[role="heading"]')!).display).to.equal('block');
+    expect(getComputedStyle(tree.querySelector('[role="paragraph"]')!).display).to.equal('block');
+    expect(getComputedStyle(tree.querySelector('[role="strong"]')!).display).to.equal('inline');
+  });
+
   describe('tagged', () => {
     beforeEach(async () => {
       await loadAndRender(viewer, fixtureUrl('tagged.pdf'));

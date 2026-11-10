@@ -120,6 +120,8 @@ how to generate them.
   canvas of the page gets the tree.
 - Outside of the canvas, VoiceOver in Safari skips the elements of the tree. They then have the size of an
   empty span, not the size of the text that they own.
+- Elements of the tree that are blocks in HTML, such as headings and paragraphs, have `display: block`.
+  NVDA starts a new line at them. Otherwise, it reads a heading and the next paragraph as one line.
 - The structure owns the text elements in marked content, not the marked content itself. Marked content has
   `display: contents`, and Chrome ignores `aria-owns` of such elements. Artifacts, such as page numbers, stay hidden.
 - The links mixin names all links. It uses the alternative text that the structure gives a link, as in pdf.js.
