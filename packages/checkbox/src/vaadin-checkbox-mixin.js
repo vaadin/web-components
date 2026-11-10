@@ -59,8 +59,6 @@ export const CheckboxMixin = (superclass) =>
 
       this._boundOnInputClick = this._onInputClick.bind(this);
 
-      this.addEventListener('click', this.__onClick.bind(this));
-
       /**
        * Set the string "on" as the default value for the checkbox following the HTML specification:
        * https://html.spec.whatwg.org/multipage/input.html#dom-input-value-default-on
@@ -131,9 +129,7 @@ export const CheckboxMixin = (superclass) =>
       const [target] = event.composedPath();
 
       const togglesChecked =
-        target === this.inputElement ||
-        this.__isEmptySpaceEvent(event) ||
-        (this._labelNode?.contains(target) && !target.closest('a'));
+        target === this.inputElement || (this._labelNode?.contains(target) && !target.closest('a'));
 
       if (this.readonly || !togglesChecked) {
         return false;
@@ -211,40 +207,6 @@ export const CheckboxMixin = (superclass) =>
     _checkedChanged(checked, oldChecked) {
       if (checked || oldChecked) {
         this._requestValidation();
-      }
-    }
-
-    /**
-     * Returns true if the event targets the empty space next to the label or
-     * the required indicator. Clicks on these toggle the checked state, so
-     * that the space next to the label is clickable like the label itself.
-     * Depending on the theme, the empty space is either the label part or
-     * the container element around the parts. As the container spans all
-     * rows, only the part of it that is in the label row counts.
-     * @param {MouseEvent} event
-     * @return {boolean}
-     * @private
-     */
-    __isEmptySpaceEvent(event) {
-      const [target] = event.composedPath();
-      if (target.getRootNode() !== this.shadowRoot) {
-        return false;
-      }
-
-      if (target.matches('[class$="-container"]')) {
-        // Gesture events used by ActiveMixin provide the coordinates in `detail`
-        const y = event.clientY ?? event.detail?.y;
-        const labelRect = this.shadowRoot.querySelector('[part~="label"]').getBoundingClientRect();
-        return y >= labelRect.top && y < labelRect.bottom;
-      }
-
-      return !!target.closest('[part~="label"]');
-    }
-
-    /** @private */
-    __onClick(event) {
-      if (this.__isEmptySpaceEvent(event)) {
-        this.inputElement.click();
       }
     }
   };

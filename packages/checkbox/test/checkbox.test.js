@@ -58,84 +58,6 @@ describe('checkbox', () => {
       expect(checkbox.checked).to.be.false;
     });
 
-    ['[part="required-indicator"]', '[part="label"]'].forEach((selector) => {
-      it(`should toggle checked property on ${selector} click`, () => {
-        const element = checkbox.shadowRoot.querySelector(selector);
-        element.click();
-        expect(checkbox.checked).to.be.true;
-
-        element.click();
-        expect(checkbox.checked).to.be.false;
-      });
-    });
-
-    it('should toggle checked property on click on the empty space next to the label', () => {
-      checkbox.style.width = '400px';
-      const rect = checkbox.getBoundingClientRect();
-      // Not using sendMouse, which in WebKit moves the starting point of Tab navigation in later tests
-      const target = checkbox.shadowRoot.elementFromPoint(rect.right - 10, rect.top + rect.height / 2);
-      expect(target.getAttribute('part')).to.equal('label');
-      target.click();
-      expect(checkbox.checked).to.be.true;
-    });
-
-    // In themes where the label part doesn't stretch, the container is the empty space next to the label
-    describe('container click', () => {
-      let container;
-
-      function dispatchOnContainerAt(type, element) {
-        const rect = element.getBoundingClientRect();
-        const clientY = rect.top + rect.height / 2;
-        container.dispatchEvent(new MouseEvent(type, { bubbles: true, composed: true, clientY }));
-      }
-
-      beforeEach(async () => {
-        checkbox.helperText = 'Helper';
-        await nextFrame();
-        container = checkbox.shadowRoot.querySelector('.vaadin-checkbox-container');
-      });
-
-      afterEach(() => {
-        mouseup(checkbox);
-      });
-
-      it('should toggle checked property on container click in the label row', () => {
-        dispatchOnContainerAt('click', checkbox.shadowRoot.querySelector('[part="label"]'));
-        expect(checkbox.checked).to.be.true;
-      });
-
-      it('should not toggle checked property on container click in the helper row', () => {
-        dispatchOnContainerAt('click', checkbox.shadowRoot.querySelector('[part="helper-text"]'));
-        expect(checkbox.checked).to.be.false;
-      });
-
-      it('should set active attribute on container mousedown in the label row', () => {
-        dispatchOnContainerAt('mousedown', checkbox.shadowRoot.querySelector('[part="label"]'));
-        expect(checkbox.hasAttribute('active')).to.be.true;
-      });
-
-      it('should not set active attribute on container mousedown in the helper row', () => {
-        dispatchOnContainerAt('mousedown', checkbox.shadowRoot.querySelector('[part="helper-text"]'));
-        expect(checkbox.hasAttribute('active')).to.be.false;
-      });
-    });
-
-    ['helper-text', 'error-message'].forEach((part) => {
-      it(`should not toggle checked property on click on the ${part} part`, () => {
-        checkbox.shadowRoot.querySelector(`[part="${part}"]`).click();
-        expect(checkbox.checked).to.be.false;
-      });
-    });
-
-    it('should not toggle checked property on click on a label part of a slotted component', () => {
-      const helper = document.createElement('div');
-      helper.slot = 'helper';
-      helper.attachShadow({ mode: 'open' }).innerHTML = '<div part="label">Helper</div>';
-      checkbox.appendChild(helper);
-      helper.shadowRoot.firstElementChild.click();
-      expect(checkbox.checked).to.be.false;
-    });
-
     it('should not toggle checked property on label link click', () => {
       link.click();
       expect(checkbox.checked).to.be.false;
@@ -214,13 +136,6 @@ describe('checkbox', () => {
         expect(checkbox.checked).to.be.false;
       });
 
-      it('should not toggle checked property on label part click when readonly', async () => {
-        checkbox.readonly = true;
-        await nextUpdate(checkbox);
-        checkbox.shadowRoot.querySelector('[part="label"]').click();
-        expect(checkbox.checked).to.be.false;
-      });
-
       it('should update input aria-readonly on readonly property change', async () => {
         checkbox.readonly = true;
         await nextUpdate(checkbox);
@@ -238,7 +153,7 @@ describe('checkbox', () => {
       });
 
       it('should focus on input click when not focused yet', async () => {
-        await sendMouseToElement({ type: 'click', element: input });
+        await sendMouseToElement({ type: 'click', element: checkbox.shadowRoot.querySelector('[part="checkbox"]') });
         expect(checkbox.hasAttribute('focused')).to.be.true;
       });
 
@@ -246,7 +161,7 @@ describe('checkbox', () => {
         const spy = sinon.spy();
         checkbox.addEventListener('focusout', spy);
         input.focus();
-        await sendMouseToElement({ type: 'click', element: input });
+        await sendMouseToElement({ type: 'click', element: checkbox.shadowRoot.querySelector('[part="checkbox"]') });
         expect(spy).to.be.not.called;
       });
     });
@@ -305,20 +220,6 @@ describe('checkbox', () => {
         await nextFrame();
         mousedown(checkbox.querySelector('[slot="error-message"]'));
         expect(checkbox.hasAttribute('active')).to.be.false;
-      });
-
-      ['required-indicator', 'label'].forEach((part) => {
-        it(`should set active attribute on ${part} part mousedown`, () => {
-          mousedown(checkbox.shadowRoot.querySelector(`[part="${part}"]`));
-          expect(checkbox.hasAttribute('active')).to.be.true;
-        });
-      });
-
-      ['helper-text', 'error-message'].forEach((part) => {
-        it(`should not set active attribute on ${part} part mousedown`, () => {
-          mousedown(checkbox.shadowRoot.querySelector(`[part="${part}"]`));
-          expect(checkbox.hasAttribute('active')).to.be.false;
-        });
       });
 
       it('should not set active attribute when clicking empty space below the checkbox', () => {
@@ -429,6 +330,55 @@ describe('checkbox', () => {
       const partRect = checkbox.shadowRoot.querySelector("[part='checkbox']").getBoundingClientRect();
       expect(inputRect.width).to.be.at.least(partRect.width);
       expect(inputRect.height).to.be.at.least(partRect.height);
+    });
+
+    it('should make the slotted input at least 24px high', () => {
+      expect(input.getBoundingClientRect().height).to.be.at.least(24);
+    });
+  });
+
+  describe('click target', () => {
+    let label;
+
+    function getCenter(element) {
+      const rect = element.getBoundingClientRect();
+      return [rect.left + rect.width / 2, rect.top + rect.height / 2];
+    }
+
+    beforeEach(async () => {
+      checkbox = fixtureSync(`
+        <vaadin-checkbox required helper-text="Helper" style="width: 400px">
+          <label slot="label">Label</label>
+        </vaadin-checkbox>
+      `);
+      await nextRender();
+      input = checkbox.inputElement;
+      label = checkbox.querySelector('label');
+    });
+
+    ['default', 'reverse'].forEach((theme) => {
+      it(`should cover the empty space next to the label with the input in ${theme} theme`, async () => {
+        checkbox.setAttribute('theme', theme);
+        await nextRender();
+        const [x] = getCenter(checkbox);
+        const [, y] = getCenter(label);
+        expect(document.elementFromPoint(x, y)).to.equal(input);
+      });
+    });
+
+    it('should cover the required indicator with the input', () => {
+      const indicator = checkbox.shadowRoot.querySelector('[part="required-indicator"]');
+      expect(document.elementFromPoint(...getCenter(indicator))).to.equal(input);
+    });
+
+    it('should not cover the label with the input', () => {
+      expect(document.elementFromPoint(...getCenter(label))).to.equal(label);
+    });
+
+    it('should not cover the helper text row with the input', () => {
+      const rect = checkbox.getBoundingClientRect();
+      const [, y] = getCenter(checkbox.querySelector('[slot="helper"]'));
+      expect(document.elementFromPoint(rect.left + 2, y)).to.not.equal(input);
     });
   });
 });

@@ -27,16 +27,6 @@ describe('vaadin-switch', () => {
     });
   });
 
-  describe('toggle', () => {
-    ['required-indicator', 'label'].forEach((part) => {
-      it(`should toggle checked property on ${part} part click`, () => {
-        const partElement = element.shadowRoot!.querySelector(`[part="${part}"]`) as HTMLElement;
-        partElement.click();
-        expect(element.checked).to.be.true;
-      });
-    });
-  });
-
   describe('input styles', () => {
     let input: HTMLInputElement;
 
@@ -70,6 +60,17 @@ describe('vaadin-switch', () => {
       const partRect = element.shadowRoot!.querySelector("[part='switch']")!.getBoundingClientRect();
       expect(inputRect.width).to.be.at.least(partRect.width);
       expect(inputRect.height).to.be.at.least(partRect.height);
+    });
+
+    it('should cover the empty space next to the label and the required indicator with the input', async () => {
+      element.label = 'Label';
+      element.required = true;
+      element.style.width = '400px';
+      await nextRender();
+      const indicatorRect = element.shadowRoot!.querySelector('[part="required-indicator"]')!.getBoundingClientRect();
+      const y = indicatorRect.top + indicatorRect.height / 2;
+      expect(document.elementFromPoint(indicatorRect.left + indicatorRect.width / 2, y)).to.equal(input);
+      expect(document.elementFromPoint(element.getBoundingClientRect().right - 10, y)).to.equal(input);
     });
   });
 });
