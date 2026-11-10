@@ -332,8 +332,10 @@ describe('checkbox', () => {
       expect(inputRect.height).to.be.at.least(partRect.height);
     });
 
-    it('should make the slotted input at least 24px high', () => {
-      expect(input.getBoundingClientRect().height).to.be.at.least(24);
+    it('should make the slotted input at least 24px wide and high', () => {
+      const rect = input.getBoundingClientRect();
+      expect(rect.width).to.be.at.least(24);
+      expect(rect.height).to.be.at.least(24);
     });
   });
 

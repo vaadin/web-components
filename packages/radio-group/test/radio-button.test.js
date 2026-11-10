@@ -317,7 +317,7 @@ describe('radio-button', () => {
       const labelRect = label.getBoundingClientRect();
       const partRect = radio.shadowRoot.querySelector("[part='radio']").getBoundingClientRect();
       const y = labelRect.top + labelRect.height / 2;
-      // The label stretches over the row, except for the gap next to the radio part
+      // Empty space between the label text and the radio part
       expect(document.elementFromPoint(labelRect.left + 5, y)).to.equal(label);
       expect(document.elementFromPoint((labelRect.right + partRect.left) / 2, y)).to.equal(input);
     });

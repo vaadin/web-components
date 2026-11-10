@@ -43,6 +43,7 @@ describe('checkbox with Lumo', () => {
   it('should not let the label receive pointer events when disabled', async () => {
     checkbox.disabled = true;
     await nextRender();
+    expect(getComputedStyle(label).pointerEvents).to.equal('none');
     expect(document.elementFromPoint(...getCenter(label))).to.not.be.oneOf([checkbox, input, label]);
   });
 
