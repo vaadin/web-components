@@ -88,8 +88,6 @@
 
   :host([disabled]) ::slotted(label) {
     color: inherit;
-    /* Override pointer-events: auto from the checkable-field mixin */
-    pointer-events: none;
   }
 
   :host([disabled]) [part='radio'] {

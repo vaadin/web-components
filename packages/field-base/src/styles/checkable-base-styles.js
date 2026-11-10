@@ -92,14 +92,14 @@ export const checkable = (part, propName = part) => css`
     margin: 0 !important;
   }
 
-  /* Let clicks next to the label text and on the required indicator reach the input */
+  /* Size the label part to its content, so that clicks next to it reach the input */
   [part='label'] {
-    pointer-events: none;
+    justify-self: start;
   }
 
+  /* Keep the label above the input, so that links in it can be clicked */
   ::slotted(label) {
     position: relative;
-    pointer-events: auto;
   }
 
   /* Control container (checkbox, radio button) */

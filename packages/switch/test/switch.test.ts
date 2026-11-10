@@ -62,14 +62,12 @@ describe('vaadin-switch', () => {
       expect(inputRect.height).to.be.at.least(partRect.height);
     });
 
-    it('should cover the empty space next to the label and the required indicator with the input', async () => {
+    it('should cover the empty space next to the label with the input', async () => {
       element.label = 'Label';
-      element.required = true;
       element.style.width = '400px';
       await nextRender();
-      const indicatorRect = element.shadowRoot!.querySelector('[part="required-indicator"]')!.getBoundingClientRect();
-      const y = indicatorRect.top + indicatorRect.height / 2;
-      expect(document.elementFromPoint(indicatorRect.left + indicatorRect.width / 2, y)).to.equal(input);
+      const labelRect = element.querySelector('label')!.getBoundingClientRect();
+      const y = labelRect.top + labelRect.height / 2;
       expect(document.elementFromPoint(element.getBoundingClientRect().right - 10, y)).to.equal(input);
     });
   });

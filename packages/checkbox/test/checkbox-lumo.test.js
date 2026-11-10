@@ -34,12 +34,6 @@ describe('checkbox with Lumo', () => {
     expect(document.elementFromPoint(...getCenter(label))).to.equal(label);
   });
 
-  it('should let clicks on the required indicator reach the input or the label', () => {
-    // In Lumo, the indicator overlaps the padding of the label
-    const indicator = checkbox.shadowRoot.querySelector('[part="required-indicator"]');
-    expect(document.elementFromPoint(...getCenter(indicator))).to.be.oneOf([input, label]);
-  });
-
   it('should not let the label receive pointer events when disabled', async () => {
     checkbox.disabled = true;
     await nextRender();

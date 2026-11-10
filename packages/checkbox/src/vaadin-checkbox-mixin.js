@@ -129,7 +129,9 @@ export const CheckboxMixin = (superclass) =>
       const [target] = event.composedPath();
 
       const togglesChecked =
-        target === this.inputElement || (this._labelNode?.contains(target) && !target.closest('a'));
+        target === this.inputElement ||
+        target.part.contains('required-indicator') ||
+        (this._labelNode?.contains(target) && !target.closest('a'));
 
       if (this.readonly || !togglesChecked) {
         return false;
@@ -208,5 +210,10 @@ export const CheckboxMixin = (superclass) =>
       if (checked || oldChecked) {
         this._requestValidation();
       }
+    }
+
+    /** @private */
+    _onRequiredIndicatorClick() {
+      this._labelNode?.click();
     }
   };

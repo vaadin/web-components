@@ -1,5 +1,5 @@
 import { expect } from '@vaadin/chai-plugins';
-import { resetMouse, sendKeys, sendMouseToElement } from '@vaadin/test-runner-commands';
+import { resetMouse, sendKeys, sendMouse, sendMouseToElement } from '@vaadin/test-runner-commands';
 import { fixtureSync, mousedown, mouseup, nextFrame, nextRender, nextUpdate } from '@vaadin/testing-helpers';
 import sinon from 'sinon';
 import '../src/vaadin-checkbox.js';
@@ -55,6 +55,15 @@ describe('checkbox', () => {
       expect(checkbox.checked).to.be.true;
 
       label.click();
+      expect(checkbox.checked).to.be.false;
+    });
+
+    it('should toggle checked property on required indicator click', () => {
+      const indicator = checkbox.shadowRoot.querySelector('[part="required-indicator"]');
+      indicator.click();
+      expect(checkbox.checked).to.be.true;
+
+      indicator.click();
       expect(checkbox.checked).to.be.false;
     });
 
@@ -222,6 +231,11 @@ describe('checkbox', () => {
         expect(checkbox.hasAttribute('active')).to.be.false;
       });
 
+      it('should set active attribute on required indicator mousedown', () => {
+        mousedown(checkbox.shadowRoot.querySelector('[part="required-indicator"]'));
+        expect(checkbox.hasAttribute('active')).to.be.true;
+      });
+
       it('should not set active attribute when clicking empty space below the checkbox', () => {
         mousedown(checkbox);
         expect(checkbox.hasAttribute('active')).to.be.false;
@@ -370,11 +384,6 @@ describe('checkbox', () => {
       });
     });
 
-    it('should cover the required indicator with the input', () => {
-      const indicator = checkbox.shadowRoot.querySelector('[part="required-indicator"]');
-      expect(document.elementFromPoint(...getCenter(indicator))).to.equal(input);
-    });
-
     it('should not cover the label with the input', () => {
       expect(document.elementFromPoint(...getCenter(label))).to.equal(label);
     });
@@ -386,6 +395,38 @@ describe('checkbox', () => {
       const rect = checkbox.getBoundingClientRect();
       const [, y] = getCenter(helper);
       expect(document.elementFromPoint(rect.left + 2, y)).to.not.equal(input);
+    });
+
+    it('should not let the label receive pointer events when an ancestor disables them', () => {
+      // Modal overlays set pointer-events: none on the body
+      document.body.style.pointerEvents = 'none';
+      try {
+        expect(document.elementFromPoint(...getCenter(label))).to.not.be.oneOf([checkbox, input, label]);
+      } finally {
+        document.body.style.pointerEvents = '';
+      }
+    });
+
+    // Placed last, as a real mouse click in WebKit moves the starting point of Tab navigation in later tests
+    describe('real mouse', () => {
+      afterEach(async () => {
+        await resetMouse();
+      });
+
+      it('should toggle checked property and set active attribute on mouse press on the empty space next to the label', async () => {
+        const spy = sinon.spy();
+        checkbox.addEventListener('click', spy);
+        const [x] = getCenter(checkbox);
+        const [, y] = getCenter(label);
+        await sendMouse({ type: 'move', position: [Math.round(x), Math.round(y)] });
+        await sendMouse({ type: 'down' });
+        expect(checkbox.hasAttribute('active')).to.be.true;
+
+        await sendMouse({ type: 'up' });
+        expect(checkbox.hasAttribute('active')).to.be.false;
+        expect(checkbox.checked).to.be.true;
+        expect(spy).to.be.calledOnce;
+      });
     });
   });
 });

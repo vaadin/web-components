@@ -128,7 +128,7 @@ class Checkbox extends CheckboxMixin(ElementMixin(ThemableMixin(PolylitMixin(Lum
         <slot name="input"></slot>
         <div part="label">
           <slot name="label"></slot>
-          <div part="required-indicator"></div>
+          <div part="required-indicator" @click="${this._onRequiredIndicatorClick}"></div>
         </div>
         <div part="helper-text">
           <slot name="helper"></slot>
