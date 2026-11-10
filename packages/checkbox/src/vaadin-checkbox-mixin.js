@@ -215,19 +215,21 @@ export const CheckboxMixin = (superclass) =>
     }
 
     /**
-     * Returns true if the target is an element in the shadow DOM that has no
-     * click behavior of its own, such as the empty space next to the label
-     * or the required indicator. Clicks on these toggle the checked state,
-     * so that the space next to the label is clickable like the label itself.
-     * Helper text and error message are excluded.
+     * Returns true if the target is the empty space next to the label or the
+     * required indicator. Clicks on these toggle the checked state, so that
+     * the space next to the label is clickable like the label itself.
+     * Depending on the theme, the empty space is either the label part or
+     * the container element around the parts.
      * @param {EventTarget} target
      * @return {boolean}
      * @private
      */
     __isEmptySpaceTarget(target) {
-      return (
-        target.getRootNode() === this.shadowRoot && !target.closest('[part~="helper-text"], [part~="error-message"]')
-      );
+      if (target.getRootNode() !== this.shadowRoot) {
+        return false;
+      }
+
+      return target.matches('[class$="-container"]') || !!target.closest('[part~="label"]');
     }
 
     /** @private */

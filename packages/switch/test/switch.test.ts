@@ -27,6 +27,16 @@ describe('vaadin-switch', () => {
     });
   });
 
+  describe('toggle', () => {
+    ['required-indicator', 'label'].forEach((part) => {
+      it(`should toggle checked property on ${part} part click`, () => {
+        const partElement = element.shadowRoot!.querySelector(`[part="${part}"]`) as HTMLElement;
+        partElement.click();
+        expect(element.checked).to.be.true;
+      });
+    });
+  });
+
   describe('input styles', () => {
     let input: HTMLInputElement;
 

@@ -37,6 +37,10 @@ describe('checkbox', () => {
       link = label.children[0];
     });
 
+    afterEach(async () => {
+      await resetMouse();
+    });
+
     it('should have display: none when hidden', () => {
       checkbox.setAttribute('hidden', '');
       expect(getComputedStyle(checkbox).display).to.equal('none');
@@ -58,13 +62,16 @@ describe('checkbox', () => {
       expect(checkbox.checked).to.be.false;
     });
 
-    it('should toggle checked property on required indicator click', () => {
-      const indicator = checkbox.shadowRoot.querySelector('[part="required-indicator"]');
-      indicator.click();
-      expect(checkbox.checked).to.be.true;
+    // The container is the empty space next to the label in themes where the label part doesn't stretch
+    ['[part="required-indicator"]', '[part="label"]', '.vaadin-checkbox-container'].forEach((selector) => {
+      it(`should toggle checked property on ${selector} click`, () => {
+        const element = checkbox.shadowRoot.querySelector(selector);
+        element.click();
+        expect(checkbox.checked).to.be.true;
 
-      indicator.click();
-      expect(checkbox.checked).to.be.false;
+        element.click();
+        expect(checkbox.checked).to.be.false;
+      });
     });
 
     it('should toggle checked property on click on the empty space next to the label', async () => {
@@ -74,7 +81,6 @@ describe('checkbox', () => {
         type: 'click',
         position: [Math.floor(rect.right - 10), Math.floor(rect.top + rect.height / 2)],
       });
-      await resetMouse();
       expect(checkbox.checked).to.be.true;
     });
 
@@ -172,6 +178,13 @@ describe('checkbox', () => {
         expect(checkbox.checked).to.be.false;
       });
 
+      it('should not toggle checked property on label part click when readonly', async () => {
+        checkbox.readonly = true;
+        await nextUpdate(checkbox);
+        checkbox.shadowRoot.querySelector('[part="label"]').click();
+        expect(checkbox.checked).to.be.false;
+      });
+
       it('should update input aria-readonly on readonly property change', async () => {
         checkbox.readonly = true;
         await nextUpdate(checkbox);
@@ -258,14 +271,18 @@ describe('checkbox', () => {
         expect(checkbox.hasAttribute('active')).to.be.false;
       });
 
-      it('should set active attribute on required indicator mousedown', () => {
-        mousedown(checkbox.shadowRoot.querySelector('[part="required-indicator"]'));
-        expect(checkbox.hasAttribute('active')).to.be.true;
+      ['required-indicator', 'label'].forEach((part) => {
+        it(`should set active attribute on ${part} part mousedown`, () => {
+          mousedown(checkbox.shadowRoot.querySelector(`[part="${part}"]`));
+          expect(checkbox.hasAttribute('active')).to.be.true;
+        });
       });
 
-      it('should set active attribute when clicking empty space next to the label', () => {
-        mousedown(checkbox.shadowRoot.querySelector('[part="label"]'));
-        expect(checkbox.hasAttribute('active')).to.be.true;
+      ['helper-text', 'error-message'].forEach((part) => {
+        it(`should not set active attribute on ${part} part mousedown`, () => {
+          mousedown(checkbox.shadowRoot.querySelector(`[part="${part}"]`));
+          expect(checkbox.hasAttribute('active')).to.be.false;
+        });
       });
 
       it('should not set active attribute when clicking empty space below the checkbox', () => {
