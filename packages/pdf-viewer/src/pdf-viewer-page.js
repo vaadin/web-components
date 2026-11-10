@@ -244,7 +244,8 @@ export class PdfViewerPage {
     if (this.canvas) {
       this.#freeCanvas(this.canvas);
     }
-    this.element.append(canvas);
+    // First, as the structure in the canvas comes before the other layers in reading order.
+    this.element.prepend(canvas);
     if (this.#structureLayer) {
       canvas.append(this.#structureLayer.element);
     }
@@ -493,7 +494,7 @@ export class PdfViewerPage {
    * @return {string | undefined}
    */
   getLinkAlt(link) {
-    return this.#structureLayer?.getAriaAttributes(link.id)?.get('aria-label');
+    return this.#structureLayer?.getLinkAlt(link.id);
   }
 
   /**

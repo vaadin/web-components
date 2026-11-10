@@ -121,6 +121,8 @@ describe('structure', () => {
       expect(getPage(1).querySelector('canvas')).to.not.equal(canvas);
       expect(getTree()).to.equal(tree);
       expect(tree.parentElement).to.equal(getPage(1).querySelector('canvas'));
+      // Before the text layer, in reading order.
+      expect(getPage(1).firstElementChild).to.equal(tree.parentElement);
     });
 
     it('should give a link the text of its structure element, which is no second link', () => {
@@ -337,7 +339,7 @@ describe('structure', () => {
     expect(viewer.shadowRoot!.querySelector(`.text-layer [aria-owns~="${getLink().id}"]`)).to.be.ok;
   });
 
-  it('should name a link that covers no text by the text that it owns in the structure', async () => {
+  it('should name a link that covers no text by the text that it owns in the structure, with its lines apart', async () => {
     // Object 5 is the page of the created PDF, and object 7 its link, which is below the text.
     await stubStructTrees(() => ({
       role: 'Root',
@@ -353,7 +355,7 @@ describe('structure', () => {
     }));
     const url = createPdf([
       {
-        content: '/Link << /MCID 0 >> BDC BT /F1 24 Tf 72 700 Td (Docs) Tj ET EMC',
+        content: '/Link << /MCID 0 >> BDC BT /F1 24 Tf 72 700 Td (Vaadin) Tj 0 -30 Td (docs) Tj ET EMC',
         annotations: [
           '<< /Type /Annot /Subtype /Link /Rect [72 600 130 608] /Border [0 0 0] /A << /S /URI /URI (https://vaadin.com/docs) >> >>',
         ],
@@ -361,8 +363,7 @@ describe('structure', () => {
     ]);
     await loadAndRender(viewer, url);
     URL.revokeObjectURL(url);
-    expect(getOwnedText(getLink())).to.equal('Docs');
-    expect(getLink().getAttribute('aria-label')).to.equal('Docs (opens in a new tab)');
+    expect(getLink().getAttribute('aria-label')).to.equal('Vaadin docs (opens in a new tab)');
   });
 
   describe('alternative text of links', () => {
@@ -544,10 +545,26 @@ describe('structure', () => {
       expect(structure.annotationIds).to.be.empty;
     });
 
+    it('should not add an image for a figure with a link, which its alternative text names', () => {
+      const structure = create([
+        {
+          role: 'Figure',
+          alt: 'Chart',
+          children: [
+            { type: 'content', id: 'p3R_mc0' },
+            { type: 'annotation', id: 'pdfjs_internal_id_5R' },
+          ],
+        },
+      ]);
+      expect(structure.element.querySelector('[role="img"]')).to.be.null;
+      expect(structure.getLinkAlt('pdfjs_internal_id_5R')).to.equal('Chart');
+    });
+
     it('should keep the role of a link structure element until a link takes its place', () => {
       const structure = create([
         {
           role: 'Link',
+          alt: 'Docs',
           children: [
             { type: 'content', id: 'p3R_mc0' },
             { type: 'annotation', id: 'pdfjs_internal_id_5R' },
@@ -555,7 +572,8 @@ describe('structure', () => {
         },
       ]);
       const link = structure.element.querySelector('[role="link"]')!;
-      expect(link).to.be.ok;
+      expect(structure.getLinkAlt('pdfjs_internal_id_5R')).to.equal('Docs');
+      expect(link.getAttribute('role')).to.equal('link');
       const owns = structure.getAriaAttributes('pdfjs_internal_id_5R')!.get('aria-owns')!;
       expect(link.hasAttribute('role')).to.be.false;
       expect(structure.element.querySelector(`#${owns}`)!.getAttribute('aria-owns')).to.equal('p3R_mc0');

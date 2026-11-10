@@ -213,6 +213,18 @@ export class PdfViewerStructureLayer {
   }
 
   /**
+   * Returns the alternative text that the structure gives the link of an
+   * annotation. Unlike `getAriaAttributes()`, it does not hand the content
+   * of the `Link` structure element over to the link.
+   *
+   * @param {string} annotationId
+   * @return {string | undefined}
+   */
+  getLinkAlt(annotationId) {
+    return this.#annotationAttributes.get(annotationId)?.get('aria-label');
+  }
+
+  /**
    * Returns the text that the `Link` structure element of an annotation
    * owns, which the link of the annotation owns in its place. Needs the text
    * layer, see `updateTextLayer()`.
@@ -272,12 +284,34 @@ export class PdfViewerStructureLayer {
       }
     });
 
+    if (this.#pendingLinkOwnership.size) {
+      this.#keepLinkTexts(textLayerElement);
+    }
+  }
+
+  /**
+   * Keeps the text that the `Link` structure element of each annotation
+   * owns, with a space between its lines, as the text layer has a line break
+   * between them instead.
+   * @param {HTMLElement} textLayerElement
+   * @private
+   */
+  #keepLinkTexts(textLayerElement) {
+    const lineStarts = new Set();
+    let afterLineBreak = false;
+    textLayerElement.querySelectorAll('br, span:not(.markedContent)').forEach((element) => {
+      if (afterLineBreak && element.localName !== 'br') {
+        lineStarts.add(element);
+      }
+      afterLineBreak = element.localName === 'br';
+    });
     this.#pendingLinkOwnership.forEach(({ ids }, annotationId) => {
       const text = ids
         .map((id) => this.element.querySelector(`#${id}`))
         .flatMap((element) => [element, ...element.querySelectorAll('[aria-owns]')])
         .flatMap((owner) => (owner.getAttribute('aria-owns') ?? '').split(' ').filter(Boolean))
-        .map((id) => textLayerElement.querySelector(`#${id}`)?.textContent ?? '')
+        .map((id) => textLayerElement.querySelector(`#${id}`))
+        .map((element) => (element ? `${lineStarts.has(element) ? ' ' : ''}${element.textContent}` : ''))
         .join('');
       this.#linkTexts.set(annotationId, text);
     });
@@ -350,7 +384,8 @@ export class PdfViewerStructureLayer {
     this.#setAttributes(node, element);
 
     // An image with the alternative text, as a figure that owns no text has no content to read.
-    if (node.role === 'Figure' && node.alt) {
+    // Not for a figure with a link, which the alternative text names instead.
+    if (node.role === 'Figure' && node.alt && !node.children?.some((child) => child.type === 'annotation')) {
       element.removeAttribute('aria-label');
       const image = document.createElement('span');
       image.setAttribute('role', 'img');

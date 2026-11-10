@@ -60,6 +60,13 @@ export declare class PdfViewerStructureLayer {
   getAriaAttributes(annotationId: string): Map<string, string> | undefined;
 
   /**
+   * Returns the alternative text that the structure gives the link of an
+   * annotation. Unlike `getAriaAttributes()`, it does not hand the content
+   * of the `Link` structure element over to the link.
+   */
+  getLinkAlt(annotationId: string): string | undefined;
+
+  /**
    * Returns the text that the `Link` structure element of an annotation
    * owns, which the link of the annotation owns in its place. Needs the text
    * layer, see `updateTextLayer()`.
