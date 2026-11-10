@@ -117,8 +117,9 @@ how to generate them.
 
 - `print()` renders each page as a PNG image into an off-screen frame, then opens the print dialog of
   the browser for the frame. Downloading the PDF and printing it in another tab would leave the page.
-- Pages render one at a time at 150 DPI, with the print intent of pdf.js. The print intent selects
+- Pages render one at a time at 300 DPI, with the print intent of pdf.js. The print intent selects
   the annotations and the optional content that the document prints.
+- The viewer of pdf.js prints at 150 DPI by default. At that resolution, text and thin lines print with soft edges.
 - Large pages render at a lower resolution, as large canvases use too much memory.
 - The images have `blob:` URLs, as in the viewer of pdf.js. A Content Security Policy must allow them
   in its `img-src` directive. An image that fails to load stops printing with a warning.

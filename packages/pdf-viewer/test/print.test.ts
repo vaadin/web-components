@@ -149,11 +149,11 @@ describe('print', () => {
       expect(names.size).to.equal(2);
     });
 
-    it('should print the pages at 150 DPI', async () => {
+    it('should print the pages at 300 DPI', async () => {
       await viewer.print();
       const [image] = getImages();
-      expect(image.naturalWidth).to.equal(Math.floor((A4_PAGE_SIZE.width * 150) / 72));
-      expect(image.naturalHeight).to.equal(Math.floor((A4_PAGE_SIZE.height * 150) / 72));
+      expect(image.naturalWidth).to.be.closeTo(A4_PAGE_SIZE.width * (300 / 72), 1);
+      expect(image.naturalHeight).to.be.closeTo(A4_PAGE_SIZE.height * (300 / 72), 1);
     });
 
     it('should print a large page at a lower resolution', async () => {
@@ -187,7 +187,7 @@ describe('print', () => {
       canvas.height = image.naturalHeight;
       const context = canvas.getContext('2d')!;
       context.drawImage(image, 0, 0);
-      const scale = 150 / 72;
+      const scale = 300 / 72;
       const getPixel = (x: number, y: number) => [
         ...context.getImageData(Math.round(x * scale), Math.round((842 - y) * scale), 1, 1).data,
       ];

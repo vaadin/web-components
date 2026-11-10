@@ -11,7 +11,7 @@
 import { MAX_CANVAS_PIXELS } from './pdf-viewer-page.js';
 
 /** The resolution that pages are printed at. PDF units are 1/72 inch. */
-const PRINT_DPI = 150;
+const PRINT_DPI = 300;
 
 const PRINT_STYLES = `
   @page { margin: 0; }
