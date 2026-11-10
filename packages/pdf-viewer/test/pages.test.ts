@@ -120,6 +120,8 @@ describe('pages', () => {
         const pageNumbers = cleanup.thisValues.map((pdfPage: PDFPageProxy) => pdfPage.pageNumber);
         expect(pageNumbers).to.include(1);
         expect(pageNumbers).to.not.include(6);
+        // cleanup() returns false when pdf.js only defers freeing, e.g. while a render is in progress
+        expect(cleanup.returnValues[pageNumbers.indexOf(1)]).to.be.true;
       });
 
       it('should render the canvas at the device pixel ratio', () => {
