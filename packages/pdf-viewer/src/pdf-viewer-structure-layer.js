@@ -171,6 +171,12 @@ export class PdfViewerStructureLayer {
   /** @type {Map<string, { element: HTMLElement, ids: string[] }>} */
   #pendingLinkOwnership = new Map();
 
+  /**
+   * The text that the `Link` structure element of each annotation owns, by the annotation id.
+   * @type {Map<string, string>}
+   */
+  #linkTexts = new Map();
+
   #idPrefix;
 
   #linkTextId = 0;
@@ -207,6 +213,18 @@ export class PdfViewerStructureLayer {
   }
 
   /**
+   * Returns the text that the `Link` structure element of an annotation
+   * owns, which the link of the annotation owns in its place. Needs the text
+   * layer, see `updateTextLayer()`.
+   *
+   * @param {string} annotationId
+   * @return {string | undefined}
+   */
+  getLinkText(annotationId) {
+    return this.#linkTexts.get(annotationId);
+  }
+
+  /**
    * Removes an annotation that has no element, e.g. a link on a hidden layer
    * or with a URL that the viewer does not open. A `Link` structure element
    * of the annotation loses its role, so that its text is read as text.
@@ -227,7 +245,8 @@ export class PdfViewerStructureLayer {
    * layer, rather than the marked content itself. Chrome leaves out the
    * elements that `aria-owns` refers to when they have `display: contents`,
    * as marked content has. Needs the rendered text layer, as the
-   * `updateTextLayer()` of pdf.js does.
+   * `updateTextLayer()` of pdf.js does. Also keeps the text of the links, see
+   * `getLinkText()`.
    *
    * @param {HTMLElement} textLayerElement
    */
@@ -251,6 +270,16 @@ export class PdfViewerStructureLayer {
       } else {
         owner.removeAttribute('aria-owns');
       }
+    });
+
+    this.#pendingLinkOwnership.forEach(({ ids }, annotationId) => {
+      const text = ids
+        .map((id) => this.element.querySelector(`#${id}`))
+        .flatMap((element) => [element, ...element.querySelectorAll('[aria-owns]')])
+        .flatMap((owner) => (owner.getAttribute('aria-owns') ?? '').split(' ').filter(Boolean))
+        .map((id) => textLayerElement.querySelector(`#${id}`)?.textContent ?? '')
+        .join('');
+      this.#linkTexts.set(annotationId, text);
     });
   }
 

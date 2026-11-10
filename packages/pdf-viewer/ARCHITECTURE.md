@@ -125,6 +125,8 @@ how to generate them.
 - The structure owns the text elements in marked content, not the marked content itself. Marked content has
   `display: contents`, and Chrome ignores `aria-owns` of such elements. Artifacts, such as page numbers, stay hidden.
 - The links mixin names all links. It uses the alternative text that the structure gives a link, as in pdf.js.
+- A link that covers no text, such as a thin link in a table of contents, gets the text that it owns in the
+  structure as its name. In pdf.js, this text names such a link, as pdf.js gives it no name.
 - As in pdf.js, a link of the structure owns the text of its structure element. Other links are added to the
   text before them, so screen readers read them in the order of the text.
 - A link of the structure without a link element, e.g. on a hidden layer, loses its role. Its text is read as text.

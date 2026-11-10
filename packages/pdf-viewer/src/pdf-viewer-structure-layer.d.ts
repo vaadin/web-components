@@ -47,7 +47,8 @@ export declare class PdfViewerStructureLayer {
    * layer, rather than the marked content itself. Chrome leaves out the
    * elements that `aria-owns` refers to when they have `display: contents`,
    * as marked content has. Needs the rendered text layer, as the
-   * `updateTextLayer()` of pdf.js does.
+   * `updateTextLayer()` of pdf.js does. Also keeps the text of the links, see
+   * `getLinkText()`.
    */
   updateTextLayer(textLayerElement: HTMLElement): void;
 
@@ -57,6 +58,13 @@ export declare class PdfViewerStructureLayer {
    * element, which then loses its role, as the link takes its place.
    */
   getAriaAttributes(annotationId: string): Map<string, string> | undefined;
+
+  /**
+   * Returns the text that the `Link` structure element of an annotation
+   * owns, which the link of the annotation owns in its place. Needs the text
+   * layer, see `updateTextLayer()`.
+   */
+  getLinkText(annotationId: string): string | undefined;
 
   /**
    * Removes an annotation that has no element, e.g. a link on a hidden layer

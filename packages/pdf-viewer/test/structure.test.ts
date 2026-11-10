@@ -337,6 +337,34 @@ describe('structure', () => {
     expect(viewer.shadowRoot!.querySelector(`.text-layer [aria-owns~="${getLink().id}"]`)).to.be.ok;
   });
 
+  it('should name a link that covers no text by the text that it owns in the structure', async () => {
+    // Object 5 is the page of the created PDF, and object 7 its link, which is below the text.
+    await stubStructTrees(() => ({
+      role: 'Root',
+      children: [
+        {
+          role: 'Link',
+          children: [
+            { type: 'content', id: 'p5R_mc0' },
+            { type: 'annotation', id: 'pdfjs_internal_id_7R' },
+          ],
+        },
+      ],
+    }));
+    const url = createPdf([
+      {
+        content: '/Link << /MCID 0 >> BDC BT /F1 24 Tf 72 700 Td (Docs) Tj ET EMC',
+        annotations: [
+          '<< /Type /Annot /Subtype /Link /Rect [72 600 130 608] /Border [0 0 0] /A << /S /URI /URI (https://vaadin.com/docs) >> >>',
+        ],
+      },
+    ]);
+    await loadAndRender(viewer, url);
+    URL.revokeObjectURL(url);
+    expect(getOwnedText(getLink())).to.equal('Docs');
+    expect(getLink().getAttribute('aria-label')).to.equal('Docs (opens in a new tab)');
+  });
+
   describe('alternative text of links', () => {
     let url: string;
 

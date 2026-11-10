@@ -496,6 +496,17 @@ export class PdfViewerPage {
     return this.#structureLayer?.getAriaAttributes(link.id)?.get('aria-label');
   }
 
+  /**
+   * Returns the text that a link of this page owns in the structure of a
+   * tagged PDF, to name a link that covers no text with.
+   *
+   * @param {HTMLElement} link
+   * @return {string | undefined}
+   */
+  getLinkText(link) {
+    return this.#structureLayer?.getLinkText(link.id);
+  }
+
   cancel() {
     if (this.renderTask) {
       this.renderTask.cancel();

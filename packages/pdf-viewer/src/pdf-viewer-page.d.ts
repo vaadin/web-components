@@ -76,6 +76,8 @@ export declare class PdfViewerPage {
 
   getLinkAlt(link: HTMLElement): string | undefined;
 
+  getLinkText(link: HTMLElement): string | undefined;
+
   cancel(): void;
 
   release(): void;
