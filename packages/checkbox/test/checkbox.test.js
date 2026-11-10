@@ -58,8 +58,7 @@ describe('checkbox', () => {
       expect(checkbox.checked).to.be.false;
     });
 
-    // The container is the empty space next to the label in themes where the label part doesn't stretch
-    ['[part="required-indicator"]', '[part="label"]', '.vaadin-checkbox-container'].forEach((selector) => {
+    ['[part="required-indicator"]', '[part="label"]'].forEach((selector) => {
       it(`should toggle checked property on ${selector} click`, () => {
         const element = checkbox.shadowRoot.querySelector(selector);
         element.click();
@@ -75,8 +74,36 @@ describe('checkbox', () => {
       const rect = checkbox.getBoundingClientRect();
       // Not using sendMouse, which in WebKit moves the starting point of Tab navigation in later tests
       const target = checkbox.shadowRoot.elementFromPoint(rect.right - 10, rect.top + rect.height / 2);
+      expect(target.getAttribute('part')).to.equal('label');
       target.click();
       expect(checkbox.checked).to.be.true;
+    });
+
+    // In themes where the label part doesn't stretch, the container is the empty space next to the label
+    describe('container click', () => {
+      let container;
+
+      function clickContainerAt(element) {
+        const rect = element.getBoundingClientRect();
+        const clientY = rect.top + rect.height / 2;
+        container.dispatchEvent(new MouseEvent('click', { bubbles: true, composed: true, clientY }));
+      }
+
+      beforeEach(async () => {
+        checkbox.helperText = 'Helper';
+        await nextFrame();
+        container = checkbox.shadowRoot.querySelector('.vaadin-checkbox-container');
+      });
+
+      it('should toggle checked property on container click in the label row', () => {
+        clickContainerAt(checkbox.shadowRoot.querySelector('[part="label"]'));
+        expect(checkbox.checked).to.be.true;
+      });
+
+      it('should not toggle checked property on container click in the helper row', () => {
+        clickContainerAt(checkbox.shadowRoot.querySelector('[part="helper-text"]'));
+        expect(checkbox.checked).to.be.false;
+      });
     });
 
     ['helper-text', 'error-message'].forEach((part) => {
