@@ -3,6 +3,7 @@ import { fixtureSync, nextFrame, nextRender, nextResize, oneEvent } from '@vaadi
 import sinon from 'sinon';
 import './enable-feature-flag.js';
 import '../vaadin-pdf-viewer.js';
+import type { PDFPageProxy } from 'pdfjs-dist';
 import type { PdfViewer } from '../vaadin-pdf-viewer.js';
 import { createPdf, fixtureUrl, loadDocument, nextRenderIdle } from './helpers.js';
 
@@ -90,6 +91,18 @@ describe('pages', () => {
       it('should release pages that are scrolled far out of view', async () => {
         await scrollTo(getContent().scrollHeight);
         expect(getRenderedPageNumbers()).to.not.include(1);
+      });
+
+      it('should free the pdf.js data of a released page', async () => {
+        const pdfPage: PDFPageProxy = (viewer as any)._getPageView(1).pdfPage;
+        const cleanup = sinon.spy(Object.getPrototypeOf(pdfPage), 'cleanup');
+        await scrollTo(getContent().scrollHeight);
+        cleanup.restore();
+        const pageNumbers = cleanup.thisValues.map((page: PDFPageProxy) => page.pageNumber);
+        expect(pageNumbers).to.include(1);
+        expect(pageNumbers).to.not.include(6);
+        // cleanup() returns false when pdf.js only defers freeing, e.g. while a render is in progress
+        expect(cleanup.returnValues[pageNumbers.indexOf(1)]).to.be.true;
       });
 
       it('should render the canvas at the device pixel ratio', () => {

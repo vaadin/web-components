@@ -442,7 +442,7 @@ export class PdfViewerPage {
     }
   }
 
-  /** Cancels a pending render and frees the canvas memory and the text and link layers. */
+  /** Cancels a pending render and frees the canvas memory, the text and link layers and the pdf.js page data. */
   release() {
     this.cancel();
     this.textLayer?.cancel();
@@ -460,6 +460,8 @@ export class PdfViewerPage {
     }
     this.renderedScale = 0;
     this.renderedOutputScale = 0;
+    // As in pdf.js, frees the data that the page keeps after rendering, e.g. its decoded images.
+    this.pdfPage?.cleanup();
   }
 
   /** @private */
