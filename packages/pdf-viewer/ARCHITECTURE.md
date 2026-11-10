@@ -71,6 +71,8 @@ how to generate them.
   pages. A page loads its text each time it renders, as pdf.js' own viewer does.
   - The page renders the structure of a tagged PDF right after its text layer, as pdf.js' own viewer does.
     The structure has no state of the viewer, so it has no mixin.
+  - Unlike in pdf.js, `renderTextLayer()` waits for the structure. The links mixin names the links by the
+    structure right after their layer renders, so `render-idle` comes once the links have their final names.
 - `PdfViewerLinksMixin` adds the links of each rendered page and follows internal links with `_scrollToPage()`.
   - The page adds the links to the structure or to the text once both the structure and the links have rendered.
     A page without structure counts as rendered once its text layer has rendered.
