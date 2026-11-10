@@ -64,9 +64,13 @@ describe('structure', () => {
   it('should show a page with a broken structure as untagged', async () => {
     const prototype = await getPdfPagePrototype();
     sinon.stub(prototype, 'getStructTree').rejects(new Error('Broken structure'));
+    const warn = sinon.stub(console, 'warn');
     await loadAndRender(viewer, fixtureUrl('tagged.pdf'));
     expect(getTree()).to.be.null;
     expect(viewer.shadowRoot!.querySelector('.text-layer')).to.be.ok;
+    // The link is read in the flow of the text, as on an untagged page.
+    expect(viewer.shadowRoot!.querySelector(`.text-layer [aria-owns~="${getLink().id}"]`)).to.be.ok;
+    expect(warn).to.be.not.called;
   });
 
   it('should keep the links of a page whose structure fails to render', async () => {
@@ -84,7 +88,13 @@ describe('structure', () => {
       role: 'Root',
       children: [
         { role: 'H1', children: [] },
-        { role: 'P', children: [{ role: 'Strong', children: [] }] },
+        {
+          role: 'P',
+          children: [
+            { role: 'Strong', children: [] },
+            { role: 'NonStruct', children: [] },
+          ],
+        },
       ],
     }));
     await loadAndRender(viewer, fixtureUrl('tagged.pdf'));
@@ -92,6 +102,7 @@ describe('structure', () => {
     expect(getComputedStyle(tree.querySelector('[role="heading"]')!).display).to.equal('block');
     expect(getComputedStyle(tree.querySelector('[role="paragraph"]')!).display).to.equal('block');
     expect(getComputedStyle(tree.querySelector('[role="strong"]')!).display).to.equal('inline');
+    expect(getComputedStyle(tree.querySelector('[role="none"]')!).display).to.equal('inline');
   });
 
   describe('tagged', () => {
@@ -184,7 +195,7 @@ describe('structure', () => {
       idle = nextRenderIdle(viewer);
       scrollTo(0);
       await idle;
-      expect(getPage(1).querySelector('.struct-tree')).to.be.ok;
+      expect(getPage(1).querySelectorAll('.struct-tree')).to.have.lengthOf(1);
       const pageNumbers = structTreeStub.thisValues.map((pdfPage: PDFPageProxy) => pdfPage.pageNumber);
       expect(pageNumbers.filter((pageNumber) => pageNumber === 1)).to.have.lengthOf(1);
     });
@@ -206,6 +217,7 @@ describe('structure', () => {
       for (let i = 0; i < 50 && !getPage(1).querySelector('.text-layer'); i++) {
         await nextFrame();
       }
+      expect(getPage(1).querySelector('.text-layer')).to.be.ok;
       // Released while its structure loads.
       scrollTo(Infinity);
       for (let i = 0; i < 50 && getPage(1).querySelector('.text-layer'); i++) {
@@ -217,7 +229,7 @@ describe('structure', () => {
       const idle = nextRenderIdle(viewer);
       scrollTo(0);
       await idle;
-      expect(getPage(1).querySelector('.struct-tree')).to.be.ok;
+      expect(getPage(1).querySelectorAll('.struct-tree')).to.have.lengthOf(1);
     });
   });
 
@@ -366,6 +378,33 @@ describe('structure', () => {
     expect(getLink().getAttribute('aria-label')).to.equal('Vaadin docs (opens in a new tab)');
   });
 
+  it('should name a link by the text that it covers rather than by the text that it owns in the structure', async () => {
+    // Object 5 is the page of the created PDF, and object 7 its link, which covers the text without structure.
+    await stubStructTrees(() => ({
+      role: 'Root',
+      children: [
+        {
+          role: 'Link',
+          children: [
+            { type: 'content', id: 'p5R_mc0' },
+            { type: 'annotation', id: 'pdfjs_internal_id_7R' },
+          ],
+        },
+      ],
+    }));
+    const url = createPdf([
+      {
+        content: '/Link << /MCID 0 >> BDC BT /F1 24 Tf 72 700 Td (Docs) Tj ET EMC BT /F1 24 Tf 72 600 Td (Guide) Tj ET',
+        annotations: [
+          '<< /Type /Annot /Subtype /Link /Rect [72 590 160 620] /Border [0 0 0] /A << /S /URI /URI (https://vaadin.com/docs) >> >>',
+        ],
+      },
+    ]);
+    await loadAndRender(viewer, url);
+    URL.revokeObjectURL(url);
+    expect(getLink().getAttribute('aria-label')).to.equal('Guide (opens in a new tab)');
+  });
+
   describe('alternative text of links', () => {
     let url: string;
 
@@ -489,11 +528,78 @@ describe('structure', () => {
       expect(element.querySelector('[role="rowheader"]')).to.be.ok;
     });
 
+    it('should expose headers by their scope', () => {
+      const header = (scope: 'Column' | 'Row') => ({
+        role: 'TH',
+        scope,
+        children: [{ type: 'content', id: 'p3R_mc0' }],
+      });
+      const { element } = create([
+        {
+          role: 'Table',
+          children: [
+            { role: 'TR', children: [header('Row')] },
+            { role: 'TBody', children: [{ role: 'TR', children: [header('Column')] }] },
+          ],
+        },
+      ]);
+      const roles = [...element.querySelectorAll('[role="row"] > *')].map((cell) => cell.getAttribute('role'));
+      expect(roles).to.deep.equal(['rowheader', 'columnheader']);
+    });
+
+    it('should expose a caption only as the caption of a table or a figure', () => {
+      const caption = { role: 'Caption', children: [{ type: 'content', id: 'p3R_mc0' }] };
+      const { element } = create([
+        { role: 'Table', children: [caption] },
+        { role: 'Figure', children: [caption] },
+        { role: 'P', children: [caption] },
+      ]);
+      const roles = [...element.querySelectorAll('[aria-owns="p3R_mc0"]')].map((owner) => owner.getAttribute('role'));
+      expect(roles).to.deep.equal(['caption', 'caption', null]);
+    });
+
+    it('should not own content directly in a list or a row, which have only items or cells', () => {
+      const { element } = create([
+        {
+          role: 'L',
+          children: [
+            { type: 'content', id: 'p3R_mc0' },
+            { role: 'LI', children: [] },
+          ],
+        },
+        {
+          role: 'Table',
+          children: [
+            {
+              role: 'TR',
+              children: [
+                { type: 'content', id: 'p3R_mc1' },
+                { role: 'TD', children: [] },
+              ],
+            },
+          ],
+        },
+      ]);
+      expect(element.querySelector('[aria-owns]')).to.be.null;
+    });
+
     it('should not name a paragraph with its alternative text', () => {
       const { element } = create([{ role: 'P', alt: 'Note', children: [{ type: 'content', id: 'p3R_mc0' }] }]);
       const paragraph = element.querySelector('[role="paragraph"]')!;
       expect(paragraph.hasAttribute('aria-label')).to.be.false;
       expect(paragraph.getAttribute('aria-description')).to.equal('Note');
+    });
+
+    it('should describe an element without a role by its alternative text, but not an element without semantics', () => {
+      const { element } = create([
+        { role: 'Span', alt: 'Note', children: [{ type: 'content', id: 'p3R_mc0' }] },
+        { role: 'NonStruct', alt: 'Hidden', children: [{ type: 'content', id: 'p3R_mc1' }] },
+      ]);
+      const [span, nonStruct] = element.children;
+      expect(span.getAttribute('aria-description')).to.equal('Note');
+      expect(nonStruct.getAttribute('role')).to.equal('none');
+      expect(nonStruct.hasAttribute('aria-description')).to.be.false;
+      expect(nonStruct.hasAttribute('aria-label')).to.be.false;
     });
 
     it('should own the text in marked content, and in nested marked content once, without artifacts', () => {
