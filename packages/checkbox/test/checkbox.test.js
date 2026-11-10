@@ -83,10 +83,10 @@ describe('checkbox', () => {
     describe('container click', () => {
       let container;
 
-      function clickContainerAt(element) {
+      function dispatchOnContainerAt(type, element) {
         const rect = element.getBoundingClientRect();
         const clientY = rect.top + rect.height / 2;
-        container.dispatchEvent(new MouseEvent('click', { bubbles: true, composed: true, clientY }));
+        container.dispatchEvent(new MouseEvent(type, { bubbles: true, composed: true, clientY }));
       }
 
       beforeEach(async () => {
@@ -95,14 +95,28 @@ describe('checkbox', () => {
         container = checkbox.shadowRoot.querySelector('.vaadin-checkbox-container');
       });
 
+      afterEach(() => {
+        mouseup(checkbox);
+      });
+
       it('should toggle checked property on container click in the label row', () => {
-        clickContainerAt(checkbox.shadowRoot.querySelector('[part="label"]'));
+        dispatchOnContainerAt('click', checkbox.shadowRoot.querySelector('[part="label"]'));
         expect(checkbox.checked).to.be.true;
       });
 
       it('should not toggle checked property on container click in the helper row', () => {
-        clickContainerAt(checkbox.shadowRoot.querySelector('[part="helper-text"]'));
+        dispatchOnContainerAt('click', checkbox.shadowRoot.querySelector('[part="helper-text"]'));
         expect(checkbox.checked).to.be.false;
+      });
+
+      it('should set active attribute on container mousedown in the label row', () => {
+        dispatchOnContainerAt('mousedown', checkbox.shadowRoot.querySelector('[part="label"]'));
+        expect(checkbox.hasAttribute('active')).to.be.true;
+      });
+
+      it('should not set active attribute on container mousedown in the helper row', () => {
+        dispatchOnContainerAt('mousedown', checkbox.shadowRoot.querySelector('[part="helper-text"]'));
+        expect(checkbox.hasAttribute('active')).to.be.false;
       });
     });
 

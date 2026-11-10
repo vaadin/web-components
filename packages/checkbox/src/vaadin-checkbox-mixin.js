@@ -232,8 +232,10 @@ export const CheckboxMixin = (superclass) =>
       }
 
       if (target.matches('[class$="-container"]')) {
-        const labelRect = this.shadowRoot.querySelector('[part="label"]').getBoundingClientRect();
-        return event.clientY >= labelRect.top && event.clientY < labelRect.bottom;
+        // Gesture events used by ActiveMixin provide the coordinates in `detail`
+        const y = event.clientY ?? event.detail?.y;
+        const labelRect = this.shadowRoot.querySelector('[part~="label"]').getBoundingClientRect();
+        return y >= labelRect.top && y < labelRect.bottom;
       }
 
       return !!target.closest('[part~="label"]');
