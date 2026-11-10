@@ -39,6 +39,8 @@ how to generate them.
   render only while one more full canvas fits.
 - A page more than one page away from the view loses its canvas. A page outside the view also loses it
   while the canvases use more than the total budget.
+- A page that loses its canvas also frees the data that pdf.js keeps after rendering it, such as its
+  decoded images, as in the pdf.js viewer.
 - When the device pixel ratio changes, the viewer renders the visible pages again at the new ratio.
 - A new `src` resets `page` to 1, unless the application sets `page` in the same update.
 - `page` follows the page with the largest part of it in view. A page taller than the view counts the part
