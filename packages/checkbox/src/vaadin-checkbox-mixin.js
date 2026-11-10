@@ -59,6 +59,8 @@ export const CheckboxMixin = (superclass) =>
 
       this._boundOnInputClick = this._onInputClick.bind(this);
 
+      this.addEventListener('click', this.__onClick.bind(this));
+
       /**
        * Set the string "on" as the default value for the checkbox following the HTML specification:
        * https://html.spec.whatwg.org/multipage/input.html#dom-input-value-default-on
@@ -130,7 +132,7 @@ export const CheckboxMixin = (superclass) =>
 
       const togglesChecked =
         target === this.inputElement ||
-        target.part.contains('required-indicator') ||
+        this.__isEmptySpaceTarget(target) ||
         (this._labelNode?.contains(target) && !target.closest('a'));
 
       if (this.readonly || !togglesChecked) {
@@ -212,8 +214,27 @@ export const CheckboxMixin = (superclass) =>
       }
     }
 
+    /**
+     * Returns true if the target is an element in the shadow DOM that has no
+     * click behavior of its own, such as the empty space next to the label
+     * or the required indicator. Clicks on these toggle the checked state,
+     * so that the space next to the label is clickable like the label itself.
+     * Helper text and error message are excluded.
+     * @param {EventTarget} target
+     * @return {boolean}
+     * @private
+     */
+    __isEmptySpaceTarget(target) {
+      return (
+        target.getRootNode() === this.shadowRoot && !target.closest('[part~="helper-text"], [part~="error-message"]')
+      );
+    }
+
     /** @private */
-    _onRequiredIndicatorClick() {
-      this._labelNode?.click();
+    __onClick(event) {
+      const [target] = event.composedPath();
+      if (this.__isEmptySpaceTarget(target)) {
+        this.inputElement.click();
+      }
     }
   };

@@ -118,7 +118,7 @@ class Switch extends CheckboxMixin(ElementMixin(PolylitMixin(LumoInjectionMixin(
         <slot name="input"></slot>
         <div part="label">
           <slot name="label"></slot>
-          <div part="required-indicator" @click="${this._onRequiredIndicatorClick}"></div>
+          <div part="required-indicator"></div>
         </div>
         <div part="helper-text">
           <slot name="helper"></slot>

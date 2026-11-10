@@ -1,5 +1,5 @@
 import { expect } from '@vaadin/chai-plugins';
-import { resetMouse, sendKeys, sendMouseToElement } from '@vaadin/test-runner-commands';
+import { resetMouse, sendKeys, sendMouse, sendMouseToElement } from '@vaadin/test-runner-commands';
 import { fixtureSync, mousedown, mouseup, nextFrame, nextRender, nextUpdate } from '@vaadin/testing-helpers';
 import sinon from 'sinon';
 import '../src/vaadin-checkbox.js';
@@ -64,6 +64,33 @@ describe('checkbox', () => {
       expect(checkbox.checked).to.be.true;
 
       indicator.click();
+      expect(checkbox.checked).to.be.false;
+    });
+
+    it('should toggle checked property on click on the empty space next to the label', async () => {
+      checkbox.style.width = '400px';
+      const rect = checkbox.getBoundingClientRect();
+      await sendMouse({
+        type: 'click',
+        position: [Math.floor(rect.right - 10), Math.floor(rect.top + rect.height / 2)],
+      });
+      await resetMouse();
+      expect(checkbox.checked).to.be.true;
+    });
+
+    ['helper-text', 'error-message'].forEach((part) => {
+      it(`should not toggle checked property on click on the ${part} part`, () => {
+        checkbox.shadowRoot.querySelector(`[part="${part}"]`).click();
+        expect(checkbox.checked).to.be.false;
+      });
+    });
+
+    it('should not toggle checked property on click on a label part of a slotted component', () => {
+      const helper = document.createElement('div');
+      helper.slot = 'helper';
+      helper.attachShadow({ mode: 'open' }).innerHTML = '<div part="label">Helper</div>';
+      checkbox.appendChild(helper);
+      helper.shadowRoot.firstElementChild.click();
       expect(checkbox.checked).to.be.false;
     });
 
@@ -236,9 +263,9 @@ describe('checkbox', () => {
         expect(checkbox.hasAttribute('active')).to.be.true;
       });
 
-      it('should not set active attribute when clicking empty space next to the label', () => {
+      it('should set active attribute when clicking empty space next to the label', () => {
         mousedown(checkbox.shadowRoot.querySelector('[part="label"]'));
-        expect(checkbox.hasAttribute('active')).to.be.false;
+        expect(checkbox.hasAttribute('active')).to.be.true;
       });
 
       it('should not set active attribute when clicking empty space below the checkbox', () => {
