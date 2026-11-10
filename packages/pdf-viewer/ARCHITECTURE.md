@@ -114,8 +114,12 @@ how to generate them.
 - Links on layers that the document hides are left out, as in pdf.js.
 - A link that wraps to the next line is clickable only on its words, which the `QuadPoints` of the annotation
   give. Its focus ring goes around these words.
-- Tagged PDFs have a structure of headings, lists, tables and figures. As in pdf.js, a hidden element tree
-  exposes it to screen readers. Its elements own the text layer elements with `aria-owns`.
+- Tagged PDFs have a structure of headings, lists, tables and figures. As in pdf.js, an element tree in the
+  canvas exposes it to screen readers. Its elements own the text layer elements with `aria-owns`.
+- The canvas has the `presentation` role, so that its content stays visible to screen readers. Each new
+  canvas of the page gets the tree.
+- Outside of the canvas, VoiceOver in Safari skips the elements of the tree. They then have the size of an
+  empty span, not the size of the text that they own.
 - The structure owns the text elements in marked content, not the marked content itself. Marked content has
   `display: contents`, and Chrome ignores `aria-owns` of such elements. Artifacts, such as page numbers, stay hidden.
 - The links mixin names all links. It uses the alternative text that the structure gives a link, as in pdf.js.

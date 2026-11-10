@@ -96,10 +96,16 @@ describe('structure', () => {
       });
     });
 
-    it('should keep the structure in the page before the text layer', () => {
-      const page = viewer.shadowRoot!.querySelector('[part="page"]')!;
-      expect(getTree()!.parentElement).to.equal(page);
-      expect(getTree()!.nextElementSibling).to.equal(page.querySelector('.text-layer'));
+    it('should keep the structure in the canvas, also when the page renders again', async () => {
+      const tree = getTree()!;
+      const canvas = getPage(1).querySelector('canvas');
+      expect(tree.parentElement).to.equal(canvas);
+      const idle = nextRenderIdle(viewer);
+      viewer.zoom = 2;
+      await idle;
+      expect(getPage(1).querySelector('canvas')).to.not.equal(canvas);
+      expect(getTree()).to.equal(tree);
+      expect(tree.parentElement).to.equal(getPage(1).querySelector('canvas'));
     });
 
     it('should give a link the text of its structure element, which is no second link', () => {

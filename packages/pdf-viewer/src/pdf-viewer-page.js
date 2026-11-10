@@ -212,7 +212,8 @@ export class PdfViewerPage {
     const outputScale = Math.min(pixelRatio, Math.sqrt(MAX_CANVAS_PIXELS / (viewport.width * viewport.height)));
 
     const canvas = document.createElement('canvas');
-    canvas.setAttribute('aria-hidden', 'true');
+    // Not hidden, as it holds the structure of a tagged PDF.
+    canvas.setAttribute('role', 'presentation');
     canvas.width = Math.floor(viewport.width * outputScale);
     canvas.height = Math.floor(viewport.height * outputScale);
 
@@ -244,6 +245,9 @@ export class PdfViewerPage {
       this.#freeCanvas(this.canvas);
     }
     this.element.append(canvas);
+    if (this.#structureLayer) {
+      canvas.append(this.#structureLayer.element);
+    }
     this.canvas = canvas;
     this.renderedScale = scale;
     this.renderedPixelRatio = pixelRatio;
@@ -365,7 +369,9 @@ export class PdfViewerPage {
     const structureLayer = tree && this.#createStructureLayer(tree, textLayerElement);
     if (structureLayer) {
       this.#structureLayer = structureLayer;
-      textLayerElement.before(structureLayer.element);
+      // Fallback content of the canvas, as in pdf.js. Outside of it, VoiceOver in Safari skips
+      // the elements, which then have the size of an empty span instead of the size of their text.
+      this.canvas.append(structureLayer.element);
     }
     this.#addLinksToContent();
   }
@@ -505,7 +511,6 @@ export class PdfViewerPage {
     this.textLayerElement?.remove();
     this.textLayerElement = null;
     this.endOfContentElement = null;
-    this.#structureLayer?.element.remove();
     this.#structureLayer = null;
     this.#structureRendered = false;
     this.linkLayerElement?.remove();

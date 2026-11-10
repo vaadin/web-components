@@ -157,10 +157,9 @@ function getRole(node, parents) {
  * headings, lists, tables and figures with alternative text, adapted from
  * `StructTreeLayerBuilder` of pdf.js. Its elements own the elements of the
  * text layer and the links with `aria-owns`, so these must be in the same
- * DOM tree. Unlike in pdf.js, the tree is not in the canvas, which is hidden
- * from assistive technology and replaced on each render. There is no MathML,
- * no references to table headers, no table summaries and no positions of
- * figures.
+ * DOM tree. As in pdf.js, the page puts the tree in its canvas. There is no
+ * MathML, no references to table headers, no table summaries and no
+ * positions of figures.
  */
 export class PdfViewerStructureLayer {
   /** The ids of the annotations that elements of the structure own. */

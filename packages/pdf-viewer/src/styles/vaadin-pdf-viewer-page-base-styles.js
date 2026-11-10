@@ -39,12 +39,9 @@ export const pdfViewerPageStyles = css`
     height: 100%;
   }
 
-  /* The structure of tagged PDFs, for assistive technology only */
+  /* The structure of tagged PDFs in the canvas, as in pdf.js */
   .struct-tree {
-    position: absolute;
-    inset: 0;
     contain: strict;
-    pointer-events: none;
   }
 
   .link-layer {
