@@ -1,6 +1,14 @@
 import { expect } from '@vaadin/chai-plugins';
 import { resetMouse, sendKeys, sendMouse, sendMouseToElement } from '@vaadin/test-runner-commands';
-import { fixtureSync, mousedown, mouseup, nextFrame, nextRender, nextUpdate } from '@vaadin/testing-helpers';
+import {
+  fixtureSync,
+  middleOfNode,
+  mousedown,
+  mouseup,
+  nextFrame,
+  nextRender,
+  nextUpdate,
+} from '@vaadin/testing-helpers';
 import sinon from 'sinon';
 import '../src/vaadin-checkbox.js';
 
@@ -68,8 +76,8 @@ describe('checkbox', () => {
     });
 
     it('should not cover the label link with the input', () => {
-      const rect = link.getBoundingClientRect();
-      expect(document.elementFromPoint(rect.left + rect.width / 2, rect.top + rect.height / 2)).to.equal(link);
+      const { x, y } = middleOfNode(link);
+      expect(document.elementFromPoint(x, y)).to.equal(link);
     });
 
     it('should not toggle checked property on label link click', () => {
@@ -367,11 +375,6 @@ describe('checkbox', () => {
   describe('click target', () => {
     let label;
 
-    function getCenter(element) {
-      const rect = element.getBoundingClientRect();
-      return [rect.left + rect.width / 2, rect.top + rect.height / 2];
-    }
-
     beforeEach(async () => {
       checkbox = fixtureSync(`
         <vaadin-checkbox required helper-text="Helper" style="width: 400px">
@@ -389,26 +392,29 @@ describe('checkbox', () => {
           checkbox.setAttribute('theme', theme);
           await nextRender();
         }
-        const [x] = getCenter(checkbox);
-        const [, y] = getCenter(label);
+        const { x } = middleOfNode(checkbox);
+        const { y } = middleOfNode(label);
         expect(document.elementFromPoint(x, y)).to.equal(input);
       });
     });
 
     it('should not cover the label with the input', () => {
-      expect(document.elementFromPoint(...getCenter(label))).to.equal(label);
+      const { x, y } = middleOfNode(label);
+      expect(document.elementFromPoint(x, y)).to.equal(label);
     });
 
     it('should not cover the helper text row with the input', () => {
       const helper = checkbox.querySelector('[slot="helper"]');
-      expect(document.elementFromPoint(...getCenter(helper))).to.equal(helper);
+      const { x, y } = middleOfNode(helper);
+      expect(document.elementFromPoint(x, y)).to.equal(helper);
     });
 
     it('should not let the label receive pointer events when an ancestor disables them', () => {
       // Modal overlays set pointer-events: none on the body
       document.body.style.pointerEvents = 'none';
       try {
-        expect(document.elementFromPoint(...getCenter(label))).to.not.be.oneOf([checkbox, input, label]);
+        const { x, y } = middleOfNode(label);
+        expect(document.elementFromPoint(x, y)).to.not.be.oneOf([checkbox, input, label]);
       } finally {
         document.body.style.pointerEvents = '';
       }
@@ -423,8 +429,8 @@ describe('checkbox', () => {
       it('should toggle checked property and set active attribute on mouse press on the empty space next to the label', async () => {
         const spy = sinon.spy();
         checkbox.addEventListener('click', spy);
-        const [x] = getCenter(checkbox);
-        const [, y] = getCenter(label);
+        const { x } = middleOfNode(checkbox);
+        const { y } = middleOfNode(label);
         await sendMouse({ type: 'move', position: [Math.round(x), Math.round(y)] });
         await sendMouse({ type: 'down' });
         expect(checkbox.hasAttribute('active')).to.be.true;
