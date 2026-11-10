@@ -1,5 +1,5 @@
 import { expect } from '@vaadin/chai-plugins';
-import { resetMouse, sendKeys, sendMouse, sendMouseToElement } from '@vaadin/test-runner-commands';
+import { resetMouse, sendKeys, sendMouseToElement } from '@vaadin/test-runner-commands';
 import { fixtureSync, mousedown, mouseup, nextFrame, nextRender, nextUpdate } from '@vaadin/testing-helpers';
 import sinon from 'sinon';
 import '../src/vaadin-checkbox.js';
@@ -37,10 +37,6 @@ describe('checkbox', () => {
       link = label.children[0];
     });
 
-    afterEach(async () => {
-      await resetMouse();
-    });
-
     it('should have display: none when hidden', () => {
       checkbox.setAttribute('hidden', '');
       expect(getComputedStyle(checkbox).display).to.equal('none');
@@ -74,13 +70,12 @@ describe('checkbox', () => {
       });
     });
 
-    it('should toggle checked property on click on the empty space next to the label', async () => {
+    it('should toggle checked property on click on the empty space next to the label', () => {
       checkbox.style.width = '400px';
       const rect = checkbox.getBoundingClientRect();
-      await sendMouse({
-        type: 'click',
-        position: [Math.floor(rect.right - 10), Math.floor(rect.top + rect.height / 2)],
-      });
+      // Not using sendMouse, which in WebKit moves the starting point of Tab navigation in later tests
+      const target = checkbox.shadowRoot.elementFromPoint(rect.right - 10, rect.top + rect.height / 2);
+      target.click();
       expect(checkbox.checked).to.be.true;
     });
 
