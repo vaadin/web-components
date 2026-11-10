@@ -152,12 +152,12 @@ describe('checkbox', () => {
         await resetMouse();
       });
 
-      it('should focus on input click when not focused yet', async () => {
+      it('should focus on checkbox part click when not focused yet', async () => {
         await sendMouseToElement({ type: 'click', element: checkbox.shadowRoot.querySelector('[part="checkbox"]') });
         expect(checkbox.hasAttribute('focused')).to.be.true;
       });
 
-      it('should keep focus on input click when already focused', async () => {
+      it('should keep focus on checkbox part click when already focused', async () => {
         const spy = sinon.spy();
         checkbox.addEventListener('focusout', spy);
         input.focus();

@@ -40,6 +40,12 @@ describe('checkbox with Lumo', () => {
     expect(document.elementFromPoint(...getCenter(indicator))).to.be.oneOf([input, label]);
   });
 
+  it('should not let the label receive pointer events when disabled', async () => {
+    checkbox.disabled = true;
+    await nextRender();
+    expect(document.elementFromPoint(...getCenter(label))).to.not.be.oneOf([checkbox, input, label]);
+  });
+
   it('should not cover the helper text row with the input', () => {
     const helper = checkbox.querySelector('[slot="helper"]');
     expect(document.elementFromPoint(...getCenter(helper))).to.equal(helper);
