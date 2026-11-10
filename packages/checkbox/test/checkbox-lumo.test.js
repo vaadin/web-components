@@ -34,9 +34,18 @@ describe('checkbox with Lumo', () => {
     expect(document.elementFromPoint(...getCenter(label))).to.equal(label);
   });
 
+  it('should let clicks on the required indicator reach the input or the label', () => {
+    // In Lumo, the indicator overlaps the padding of the label
+    const indicator = checkbox.shadowRoot.querySelector('[part="required-indicator"]');
+    expect(document.elementFromPoint(...getCenter(indicator))).to.be.oneOf([input, label]);
+  });
+
   it('should not cover the helper text row with the input', () => {
+    const helper = checkbox.querySelector('[slot="helper"]');
+    expect(document.elementFromPoint(...getCenter(helper))).to.equal(helper);
+
     const rect = checkbox.getBoundingClientRect();
-    const [, y] = getCenter(checkbox.querySelector('[slot="helper"]'));
+    const [, y] = getCenter(helper);
     expect(document.elementFromPoint(rect.left + 2, y)).to.not.equal(input);
   });
 });

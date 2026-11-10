@@ -356,10 +356,12 @@ describe('checkbox', () => {
       label = checkbox.querySelector('label');
     });
 
-    ['default', 'reverse'].forEach((theme) => {
-      it(`should cover the empty space next to the label with the input in ${theme} theme`, async () => {
-        checkbox.setAttribute('theme', theme);
-        await nextRender();
+    [undefined, 'reverse'].forEach((theme) => {
+      it(`should cover the empty space next to the label with the input${theme ? ` in ${theme} theme` : ''}`, async () => {
+        if (theme) {
+          checkbox.setAttribute('theme', theme);
+          await nextRender();
+        }
         const [x] = getCenter(checkbox);
         const [, y] = getCenter(label);
         expect(document.elementFromPoint(x, y)).to.equal(input);
@@ -376,8 +378,11 @@ describe('checkbox', () => {
     });
 
     it('should not cover the helper text row with the input', () => {
+      const helper = checkbox.querySelector('[slot="helper"]');
+      expect(document.elementFromPoint(...getCenter(helper))).to.equal(helper);
+
       const rect = checkbox.getBoundingClientRect();
-      const [, y] = getCenter(checkbox.querySelector('[slot="helper"]'));
+      const [, y] = getCenter(helper);
       expect(document.elementFromPoint(rect.left + 2, y)).to.not.equal(input);
     });
   });

@@ -307,5 +307,19 @@ describe('radio-button', () => {
       expect(inputRect.width).to.be.at.least(partRect.width);
       expect(inputRect.height).to.be.at.least(partRect.height);
     });
+
+    it('should cover the empty space next to the label with the input in reverse theme', async () => {
+      radio.label = 'Label';
+      radio.setAttribute('theme', 'reverse');
+      radio.style.width = '400px';
+      await nextRender();
+      const label = radio.querySelector('label');
+      const labelRect = label.getBoundingClientRect();
+      const partRect = radio.shadowRoot.querySelector("[part='radio']").getBoundingClientRect();
+      const y = labelRect.top + labelRect.height / 2;
+      // The label stretches over the row, except for the gap next to the radio part
+      expect(document.elementFromPoint(labelRect.left + 5, y)).to.equal(label);
+      expect(document.elementFromPoint((labelRect.right + partRect.left) / 2, y)).to.equal(input);
+    });
   });
 });
