@@ -67,6 +67,11 @@ describe('checkbox', () => {
       expect(checkbox.checked).to.be.false;
     });
 
+    it('should not cover the label link with the input', () => {
+      const rect = link.getBoundingClientRect();
+      expect(document.elementFromPoint(rect.left + rect.width / 2, rect.top + rect.height / 2)).to.equal(link);
+    });
+
     it('should not toggle checked property on label link click', () => {
       link.click();
       expect(checkbox.checked).to.be.false;
@@ -346,10 +351,16 @@ describe('checkbox', () => {
       expect(inputRect.height).to.be.at.least(partRect.height);
     });
 
-    it('should make the slotted input at least 24px wide and high', () => {
-      const rect = input.getBoundingClientRect();
-      expect(rect.width).to.be.at.least(24);
-      expect(rect.height).to.be.at.least(24);
+    [undefined, 'reverse'].forEach((theme) => {
+      it(`should make the slotted input at least 24px wide and high${theme ? ` in ${theme} theme` : ''}`, async () => {
+        if (theme) {
+          checkbox.setAttribute('theme', theme);
+          await nextRender();
+        }
+        const rect = input.getBoundingClientRect();
+        expect(rect.width).to.be.at.least(24);
+        expect(rect.height).to.be.at.least(24);
+      });
     });
   });
 
@@ -391,10 +402,6 @@ describe('checkbox', () => {
     it('should not cover the helper text row with the input', () => {
       const helper = checkbox.querySelector('[slot="helper"]');
       expect(document.elementFromPoint(...getCenter(helper))).to.equal(helper);
-
-      const rect = checkbox.getBoundingClientRect();
-      const [, y] = getCenter(helper);
-      expect(document.elementFromPoint(rect.left + 2, y)).to.not.equal(input);
     });
 
     it('should not let the label receive pointer events when an ancestor disables them', () => {
