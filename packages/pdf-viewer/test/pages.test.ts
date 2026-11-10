@@ -3,6 +3,7 @@ import { fixtureSync, nextFrame, nextRender, nextResize, oneEvent } from '@vaadi
 import sinon from 'sinon';
 import './enable-feature-flag.js';
 import '../vaadin-pdf-viewer.js';
+import type { PDFPageProxy } from 'pdfjs-dist';
 import { clearWarnings } from '@vaadin/component-base/src/warnings.js';
 import type { PdfViewer } from '../vaadin-pdf-viewer.js';
 import {
@@ -10,6 +11,7 @@ import {
   createPdfUrl,
   fixtureUrl,
   getContentBoxSize,
+  getPdfPagePrototype,
   getViewCenter,
   loadAndRender,
   loadDocument,
@@ -110,6 +112,14 @@ describe('pages', () => {
         expect(canvas.isConnected).to.be.false;
         expect(canvas.width).to.equal(0);
         expect(canvas.height).to.equal(0);
+      });
+
+      it('should free the pdf.js data of a released page', async () => {
+        const cleanup = sinon.spy(await getPdfPagePrototype(), 'cleanup');
+        await scrollTo(content.scrollHeight);
+        const pageNumbers = cleanup.thisValues.map((pdfPage: PDFPageProxy) => pdfPage.pageNumber);
+        expect(pageNumbers).to.include(1);
+        expect(pageNumbers).to.not.include(6);
       });
 
       it('should render the canvas at the device pixel ratio', () => {

@@ -256,6 +256,8 @@ export const PdfViewerRenderMixin = (superClass) =>
         this.$.content.focus({ preventScroll: true, focusVisible: isKeyboardActive() });
       }
       page.release();
+      // As in pdf.js, frees the data that the page keeps after rendering, e.g. its decoded images.
+      page.pdfPage?.cleanup();
     }
 
     /**
