@@ -60,7 +60,7 @@ export const GridSelectionColumnBaseMixin = (superClass) =>
         },
 
         /**
-         * When true, the active item gets automatically selected.
+         * When true, activating a row by click or keyboard toggles its selection.
          * @attr {boolean} auto-select
          */
         autoSelect: {
@@ -112,7 +112,7 @@ export const GridSelectionColumnBaseMixin = (superClass) =>
       this.__onCellContentClick = this.__onCellContentClick.bind(this);
       this.__onCellContentMouseDown = this.__onCellContentMouseDown.bind(this);
       this.__onGridInteraction = this.__onGridInteraction.bind(this);
-      this.__onGridActiveItemChanged = this.__onGridActiveItemChanged.bind(this);
+      this.__onGridItemActivate = this.__onGridItemActivate.bind(this);
       this.__onGridTouchStart = this.__onGridTouchStart.bind(this);
       this.__onSelectRowCheckboxChange = this.__onSelectRowCheckboxChange.bind(this);
       this.__onSelectAllCheckboxChange = this.__onSelectAllCheckboxChange.bind(this);
@@ -125,7 +125,8 @@ export const GridSelectionColumnBaseMixin = (superClass) =>
         this._grid.addEventListener('keyup', this.__onGridInteraction);
         this._grid.addEventListener('keydown', this.__onGridInteraction, { capture: true });
         this._grid.addEventListener('mousedown', this.__onGridInteraction);
-        this._grid.addEventListener('active-item-changed', this.__onGridActiveItemChanged);
+        this._grid.addEventListener('cell-activate', this.__onGridItemActivate, { capture: true });
+        this._grid.addEventListener('row-activate', this.__onGridItemActivate, { capture: true });
         this._grid.addEventListener('touchstart', this.__onGridTouchStart);
       }
     }
@@ -137,7 +138,8 @@ export const GridSelectionColumnBaseMixin = (superClass) =>
         this._grid.removeEventListener('keyup', this.__onGridInteraction);
         this._grid.removeEventListener('keydown', this.__onGridInteraction, { capture: true });
         this._grid.removeEventListener('mousedown', this.__onGridInteraction);
-        this._grid.removeEventListener('active-item-changed', this.__onGridActiveItemChanged);
+        this._grid.removeEventListener('cell-activate', this.__onGridItemActivate, { capture: true });
+        this._grid.removeEventListener('row-activate', this.__onGridItemActivate, { capture: true });
         this._grid.removeEventListener('touchstart', this.__onGridTouchStart);
       }
     }
@@ -358,15 +360,14 @@ export const GridSelectionColumnBaseMixin = (superClass) =>
     }
 
     /** @private */
-    __onGridActiveItemChanged(e) {
-      const activeItem = e.detail.value;
-      if (this.autoSelect) {
-        const item = activeItem || this.__previousActiveItem;
-        if (item) {
-          this.__toggleItem(item);
-        }
+    __onGridItemActivate(e) {
+      if (e.target !== this._grid) {
+        return;
       }
-      this.__previousActiveItem = activeItem;
+      const item = e.detail.model?.item;
+      if (this.autoSelect && item) {
+        this.__toggleItem(item);
+      }
     }
 
     /** @private */
