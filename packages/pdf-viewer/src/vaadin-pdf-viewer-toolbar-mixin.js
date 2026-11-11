@@ -77,7 +77,6 @@ export const PdfViewerToolbarMixin = (superClass) =>
       };
     }
 
-    /** The items of the zoom select, built again only when `zoom` or the texts change. */
     #zoomItems = [];
 
     /** @protected */
@@ -257,11 +256,7 @@ export const PdfViewerToolbarMixin = (superClass) =>
       this._scrollToPage(this.page + 1);
     }
 
-    /**
-     * Returns the value of the page field, which is empty without a document.
-     * @return {string}
-     * @private
-     */
+    /** @private */
     #getPageFieldValue() {
       return this.pageCount ? String(this.page) : '';
     }
@@ -296,11 +291,7 @@ export const PdfViewerToolbarMixin = (superClass) =>
       }
     }
 
-    /**
-     * Returns the items of the zoom select: the fit zooms, the zoom levels,
-     * and a zoom set by the application that is not one of the levels.
-     * @private
-     */
+    /** @private */
     #getZoomItems() {
       const i18n = this.__effectiveI18n;
       const items = [

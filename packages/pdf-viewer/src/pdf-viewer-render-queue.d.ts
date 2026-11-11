@@ -53,8 +53,7 @@ export declare class PdfViewerRenderQueue<TPage extends PdfViewerRenderQueuePage
   constructor(options: PdfViewerRenderQueueOptions<TPage>);
 
   /**
-   * Sets the pages of the document, e.g. when another document loads, and
-   * forgets the page being rendered.
+   * Sets the pages of the document, and forgets the page being rendered.
    */
   setPages(pages: TPage[]): void;
 
@@ -71,12 +70,12 @@ export declare class PdfViewerRenderQueue<TPage extends PdfViewerRenderQueuePage
   update(visible: Array<{ index: number; ratio: number }>): void;
 
   /**
-   * Stops rendering pages, e.g. when no page is visible. The page being rendered finishes.
+   * Stops rendering pages. The page being rendered finishes.
    */
   clear(): void;
 
   /**
-   * Cancels rendering the page being rendered, e.g. when its size changes.
+   * Cancels rendering the page being rendered.
    */
   cancel(): void;
 

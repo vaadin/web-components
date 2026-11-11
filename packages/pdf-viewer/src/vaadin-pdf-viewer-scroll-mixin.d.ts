@@ -49,8 +49,7 @@ export declare class PdfViewerScrollMixinClass {
    * Scrolls to the start of the given page, or to an offset on it in CSS
    * pixels from the top left corner of the page, and makes it the current
    * page, also when it is the current page already. While the pages have no
-   * layout, e.g. in a hidden viewer, only the page is kept, and the offset
-   * is dropped.
+   * layout, only the page is kept, and the offset is dropped.
    */
   protected _scrollToPage(page: number, offset?: { left: number; top: number }): void;
 
@@ -65,9 +64,8 @@ export declare class PdfViewerScrollMixinClass {
   ): number;
 
   /**
-   * Lays out the pages again, e.g. after a change of the size or of the
-   * scale, and scrolls to a page that was set while the pages could not be
-   * laid out.
+   * Lays out the pages again, and scrolls to a page that was set while the
+   * pages could not be laid out.
    */
   protected _refreshLayout(): void;
 }

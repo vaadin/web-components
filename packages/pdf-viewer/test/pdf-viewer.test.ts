@@ -93,7 +93,7 @@ describe('vaadin-pdf-viewer', () => {
       const spy = sinon.spy();
       viewer.addEventListener('document-load', spy);
       viewer.src = fixtureUrl('multi-page.pdf');
-      // Change src right after the update that starts loading
+      // The update that starts loading
       await nextUpdate(viewer);
       viewer.src = fixtureUrl('standard-font.pdf');
       await nextRenderIdle(viewer);
@@ -143,7 +143,7 @@ describe('vaadin-pdf-viewer', () => {
       viewer.addEventListener('document-load', spy);
       const parent = viewer.parentElement!;
       viewer.src = fixtureUrl('multi-page.pdf');
-      // Detach right after the update that starts loading
+      // The update that starts loading
       await nextUpdate(viewer);
       viewer.remove();
       // Give an outdated load enough time to complete

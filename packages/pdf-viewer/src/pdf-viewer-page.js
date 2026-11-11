@@ -20,7 +20,7 @@ export const MAX_CANVAS_PIXELS = 2 ** 24;
 
 /**
  * Limits the clickable area of a link to the quadrilaterals of its annotation,
- * e.g. to the words of a link that wraps to the next line, as pdf.js does.
+ * such as the words of a link that wraps to the next line, as pdf.js does.
  * A link whose only quadrilateral is its rectangle gets no areas.
  *
  * @param {HTMLAnchorElement} link
@@ -246,11 +246,11 @@ export class PdfViewerPage {
 
   /**
    * Returns the offset in CSS pixels from the top left corner of the page to
-   * a position given in PDF units from the bottom left corner of the unrotated
-   * page, as in link destinations. With the opposite corner of a rectangle,
-   * the offset goes to the top left corner of the rectangle on the rotated
-   * page. A missing coordinate, or one outside the page, gives an offset of 0
-   * on the axis that it is on after the rotation of the page. Needs the page
+   * a position in PDF units from the bottom left corner of the unrotated page,
+   * as in link destinations. With the opposite corner of a rectangle, the
+   * offset goes to the top left corner of the rectangle on the rotated page.
+   * A missing coordinate, or one outside the page, gives an offset of 0 on
+   * the axis that it is on after the rotation of the page. Needs the page
    * of the document, see `setPdfPage()`.
    *
    * @param {number | undefined} x
@@ -324,7 +324,7 @@ export class PdfViewerPage {
     }
 
     if (this.textLayer === textLayer) {
-      // Extends the selection to the end of the page while selecting, see the styles.
+      // Extends the selection to the end of the page while selecting.
       const endOfContent = document.createElement('div');
       endOfContent.className = 'end-of-content';
       container.append(endOfContent);
@@ -334,14 +334,11 @@ export class PdfViewerPage {
   }
 
   /**
-   * Renders the link layer: the links of the page, positioned relative to the
-   * page size so that they need no update when the scale changes. Like the
-   * text layer, the layer has the size of the page without its rotation, and
-   * is rotated with the page. The links are in reading order, as in pdf.js,
-   * also for the Tab key. Links on hidden layers of the document are left
-   * out. A page without links gets no layer. Returns the links with their
-   * annotations, or no links when they are rendered already or the page was
-   * released meanwhile.
+   * Renders the links of the page in reading order, positioned relative to the
+   * page size so that they need no update when the scale changes. Links on
+   * hidden layers of the document are left out, and a page without links gets
+   * no layer. Returns the links with their annotations, or none when they are
+   * rendered already or the page was released meanwhile.
    *
    * @param {(annotation: object) => void} followLink called when an internal link is clicked
    * @param {{ isVisible: (group: object) => boolean }} [optionalContentConfig] the visible layers
@@ -370,7 +367,6 @@ export class PdfViewerPage {
 
     // A copy, as pdf.js returns the same annotations to each call.
     [...annotations].sort(compareAnnotationPositions).forEach((annotation) => {
-      // As in pdf.js, which hides the links on hidden layers.
       if (annotation.oc && optionalContentConfig?.isVisible(annotation.oc) === false) {
         return;
       }
@@ -409,7 +405,6 @@ export class PdfViewerPage {
     }
   }
 
-  /** Cancels a pending render. */
   cancel() {
     if (this.renderTask) {
       this.renderTask.cancel();

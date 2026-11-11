@@ -67,8 +67,7 @@ export class PdfViewerRenderQueue {
   }
 
   /**
-   * Sets the pages of the document, e.g. when another document loads, and
-   * forgets the page being rendered.
+   * Sets the pages of the document, and forgets the page being rendered.
    * @param {PdfViewerRenderQueuePage[]} pages
    */
   setPages(pages) {
@@ -110,7 +109,7 @@ export class PdfViewerRenderQueue {
   }
 
   /**
-   * Stops rendering pages, e.g. when no page is visible. The page being rendered finishes.
+   * Stops rendering pages. The page being rendered finishes.
    */
   clear() {
     this.#queue = [];
@@ -119,7 +118,7 @@ export class PdfViewerRenderQueue {
   }
 
   /**
-   * Cancels rendering the page being rendered, e.g. when its size changes.
+   * Cancels rendering the page being rendered.
    */
   cancel() {
     this.#renderingPage?.cancel();

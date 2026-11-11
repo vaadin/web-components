@@ -21,7 +21,7 @@ describe('layout', () => {
   });
 
   describe('visible pages', () => {
-    // Pages of 100px with a gap of 10px: page 0 at 0, page 1 at 110, page 2 at 220...
+    // Pages of 100px with a gap of 10px
     const getBounds = (index: number) => ({ top: index * 110, height: 100 });
 
     it('should return the pages that intersect the view with their visible height and ratio', () => {
@@ -108,12 +108,11 @@ describe('layout', () => {
     });
 
     it('should scroll the same point of a wide page to the middle of the view', () => {
-      // The point at 25% of the page is at 50 + 0.25 * 800 = 250, the view middle at 200
       expect(getAnchorScrollLeftDelta({ x: 0.25 }, { center: 200, width: 400 }, { left: 50, width: 800 })).to.equal(50);
     });
 
     it('should work with a page that starts left of the viewport', () => {
-      // E.g. in RTL, where the page is scrolled to its right edge
+      // The page is scrolled to its right edge, as in RTL
       expect(getAnchorScrollLeftDelta({ x: 0.75 }, { center: 200, width: 400 }, { left: -400, width: 800 })).to.equal(
         0,
       );

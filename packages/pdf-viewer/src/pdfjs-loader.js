@@ -19,7 +19,7 @@ let pdfjsPromise;
  */
 export function loadPdfjs() {
   pdfjsPromise ||= import('pdfjs-dist/legacy/build/pdf.mjs').catch((error) => {
-    // Allow trying again, e.g. after a network error while loading the chunk.
+    // Allow trying again after a failed load.
     pdfjsPromise = null;
     throw error;
   });
