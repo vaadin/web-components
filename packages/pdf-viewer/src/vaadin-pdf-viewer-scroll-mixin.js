@@ -155,12 +155,13 @@ export const PdfViewerScrollMixin = (superClass) =>
     /**
      * Scrolls to the start of the given page and makes it the current page,
      * also when it is the current page already. A value that is not a page
-     * of the document logs a warning and does not scroll. Does nothing
-     * while no document is loaded.
+     * of the document logs a warning and does not scroll. In a hidden
+     * viewer, it scrolls and updates `page` once the viewer is shown. Does
+     * nothing without a document, or when the viewer is not attached.
      * @param {number} page the page, starting from 1
      */
     scrollToPage(page) {
-      if (this.__pages.length) {
+      if (this.isConnected && this.__pages.length) {
         this.#scrollPageIntoView(page);
       }
     }

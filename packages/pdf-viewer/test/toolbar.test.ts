@@ -116,10 +116,12 @@ describe('toolbar', () => {
       const goToPage = sinon.spy(viewer as unknown as { _goToPage(page: number): void }, '_goToPage');
       viewer.page = 3;
       await nextRenderIdle(viewer);
+      viewer.scrollToPage(2);
+      await nextRenderIdle(viewer);
       expect(goToPage).to.be.not.called;
       nextButton.click();
       await nextRenderIdle(viewer);
-      expect(goToPage).to.be.calledOnceWith(4);
+      expect(goToPage).to.be.calledOnceWith(3);
     });
 
     it('should go to the previous page when clicking previous page', async () => {

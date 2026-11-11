@@ -215,6 +215,17 @@ describe('pages', () => {
         expect(stub.firstCall.args[0]).to.include('The page 10 is out of range');
       });
 
+      it('should not scroll with scrollToPage() while detached, or when attached again', async () => {
+        const parent = viewer.parentElement!;
+        viewer.remove();
+        viewer.scrollToPage(4);
+        parent.appendChild(viewer);
+        await nextResize(viewer);
+        await nextFrame();
+        expect(viewer.page).to.equal(1);
+        expect(content.scrollTop).to.equal(0);
+      });
+
       it('should reset the page when src changes', async () => {
         await scrollTo(content.scrollHeight);
         await loadDocument(viewer, 'links.pdf');
