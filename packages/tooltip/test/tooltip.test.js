@@ -1,6 +1,7 @@
 import { expect } from '@vaadin/chai-plugins';
 import {
   aTimeout,
+  defineCE,
   escKeyDown,
   fixtureSync,
   focusin,
@@ -539,8 +540,59 @@ describe('vaadin-tooltip', () => {
       await nextUpdate(tooltip);
       expect(overlay.opened).to.be.true;
 
-      // Fully visible
+      // Scrolled while hovered
       target.scrollIntoView({ block: 'center' });
+      await waitForIntersectionObserver();
+      expect(overlay.opened).to.be.false;
+    });
+
+    it('should not close overlay opened on keyboard focus when the hovered target is scrolled', async () => {
+      tabKeyDown(target);
+      target.focus();
+      mouseenter(target);
+      await nextUpdate(tooltip);
+
+      target.scrollIntoView({ block: 'center' });
+      await waitForIntersectionObserver();
+      expect(overlay.opened).to.be.true;
+    });
+
+    it('should not close overlay opened on hover when the target itself is scrolled', async () => {
+      target.style.overflow = 'auto';
+      target.innerHTML = '<div style="height: 200px;"></div>';
+      target.scrollIntoView({ block: 'center' });
+      await waitForIntersectionObserver();
+      mouseenter(target);
+      await nextUpdate(tooltip);
+
+      target.scrollTop = 50;
+      await waitForIntersectionObserver();
+      expect(overlay.opened).to.be.true;
+    });
+
+    it('should close overlay opened on hover when a shadow DOM container of the target is scrolled', async () => {
+      const tag = defineCE(
+        class extends HTMLElement {
+          constructor() {
+            super();
+            this.attachShadow({ mode: 'open' });
+            this.shadowRoot.innerHTML = `
+              <div style="height: 100px; overflow: auto;">
+                <slot></slot>
+                <div style="height: 200px;"></div>
+              </div>
+            `;
+          }
+        },
+      );
+      const host = fixtureSync(`<${tag}><div style="height: 50px;"></div></${tag}>`);
+      tooltip.target = host.firstElementChild;
+      await waitForIntersectionObserver();
+      mouseenter(tooltip.target);
+      await nextUpdate(tooltip);
+      expect(overlay.opened).to.be.true;
+
+      host.shadowRoot.firstElementChild.scrollTop = 20;
       await waitForIntersectionObserver();
       expect(overlay.opened).to.be.false;
     });

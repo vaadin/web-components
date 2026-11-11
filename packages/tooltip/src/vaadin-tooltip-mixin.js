@@ -675,6 +675,11 @@ export const TooltipMixin = (superClass) =>
 
     /** @private */
     __onScroll(event) {
+      if (this.manual) {
+        this.__removeScrollListeners();
+        return;
+      }
+
       // Scrolling moves the target away from the pointer, so it ends hovering.
       // Ignore scrolling inside the target, which does not move it.
       if (event.target === this.target || !isFlattenedAncestor(event.target, this.target)) {
