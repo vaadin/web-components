@@ -44,6 +44,7 @@ describe('toolbar', () => {
     expect(previousButton.disabled).to.be.true;
     expect(nextButton.disabled).to.be.true;
     expect(pageField.disabled).to.be.true;
+    expect(pageField.value).to.equal('');
     expect(zoomOutButton.disabled).to.be.true;
     expect(zoomInButton.disabled).to.be.true;
     expect(zoomSelect.disabled).to.be.true;
