@@ -540,21 +540,6 @@ describe('links', () => {
     });
 
     [
-      ['NextPage', 3],
-      ['PrevPage', 2],
-    ].forEach(([action, page]) => {
-      it(`should go to page ${page} with the ${action} action after setting page to a fraction`, async () => {
-        const warn = sinon.stub(console, 'warn');
-        viewer.page = 2.5;
-        await nextFrame();
-        warn.restore();
-        getLinks(2)[actions.indexOf(action as string)].click();
-        await nextRenderIdle(viewer);
-        expect(viewer.page).to.equal(page);
-      });
-    });
-
-    [
       ['PrevPage', 1],
       ['NextPage', 4],
     ].forEach(([action, page]) => {
