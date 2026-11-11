@@ -22,7 +22,7 @@ import { pdfViewerButtonStyles } from './styles/vaadin-pdf-viewer-button-base-st
 /**
  * An element used internally by `<vaadin-pdf-viewer>`. Not intended to be used separately.
  *
- * An icon-only button of the PDF viewer toolbar. The `icon` attribute selects the icon.
+ * An icon-only toolbar button with the icon set by the `icon` attribute.
  *
  * @customElement vaadin-pdf-viewer-button
  * @extends HTMLElement

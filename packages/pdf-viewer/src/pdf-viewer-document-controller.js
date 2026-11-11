@@ -98,8 +98,7 @@ export class PdfViewerDocumentController {
   }
 
   /**
-   * Drops the current document and loads the one of the host's `src`.
-   * A detached host does not hold on to a document. It loads it once attached.
+   * Drops the current document and loads the one of the host's `src`, or waits until the host is attached.
    */
   load() {
     this.#loadId += 1;

@@ -11,17 +11,8 @@
 import type { PDFDocumentProxy, PDFPageProxy, RenderTask, TextLayer } from 'pdfjs-dist';
 import type { PdfViewerLinkAnnotation } from './pdf-viewer-links.js';
 
-/**
- * The maximum number of pixels of a page canvas. Larger canvases use too much
- * memory, especially on iOS, so pages are rendered at a lower resolution instead.
- */
 export declare const MAX_CANVAS_PIXELS: number;
 
-/**
- * Manages the DOM of a single page of the document: a placeholder sized to
- * the page, and the canvas and the text and link layers the page is rendered
- * to once it is needed.
- */
 export declare class PdfViewerPage {
   constructor(pageNumber: number, size: { width: number; height: number });
 
@@ -41,13 +32,10 @@ export declare class PdfViewerPage {
   renderedScale: number;
   renderedPixelRatio: number;
 
-  /** The width of the page in CSS pixels at the current scale. */
   readonly width: number;
 
-  /** The height of the page in CSS pixels at the current scale. */
   readonly height: number;
 
-  /** The number of canvas pixels this page uses. */
   readonly canvasPixels: number;
 
   isRendered(pixelRatio: number): boolean;

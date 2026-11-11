@@ -12,10 +12,7 @@ import { createLink } from './pdf-viewer-links.js';
 import { addLinksToText, ANNOTATION_ID_PREFIX, compareAnnotationPositions } from './pdf-viewer-text-accessibility.js';
 import { loadPdfjs } from './pdfjs-loader.js';
 
-/**
- * The maximum number of pixels of a page canvas. Larger canvases use too much
- * memory, especially on iOS, so pages are rendered at a lower resolution instead.
- */
+/** Larger canvases use too much memory, especially on iOS, so pages render at a lower resolution. */
 export const MAX_CANVAS_PIXELS = 2 ** 24;
 
 /**
@@ -61,9 +58,8 @@ function addLinkAreas(link, { rect: [left, bottom, right, top], quadPoints }) {
 }
 
 /**
- * Manages the DOM of a single page of the document: a placeholder sized to
- * the page, and the canvas and the text and link layers the page is rendered
- * to once it is needed.
+ * Manages the DOM of one page: a placeholder, then the canvas, text layer and link layer, following
+ * `PDFPageView` of pdf.js.
  */
 export class PdfViewerPage {
   /** Set once the links of the current canvas are rendered, also when the page has none. */
@@ -71,8 +67,7 @@ export class PdfViewerPage {
 
   /**
    * @param {number} pageNumber
-   * @param {{ width: number, height: number }} size the estimated size of the page
-   *   in PDF units, used until the page itself has loaded
+   * @param {{ width: number, height: number }} size the estimated size in PDF units, until the page loads
    */
   constructor(pageNumber, size) {
     this.pageNumber = pageNumber;
@@ -80,7 +75,7 @@ export class PdfViewerPage {
     /** @type {import('pdfjs-dist').PDFPageProxy | null} */
     this.pdfPage = null;
 
-    /** The size of the page in PDF units, at scale 1. */
+    /** The size of the page in PDF units. */
     this.unscaledWidth = size.width;
     this.unscaledHeight = size.height;
 
@@ -128,12 +123,14 @@ export class PdfViewerPage {
     return this.unscaledHeight * this.scale;
   }
 
-  /** The number of canvas pixels this page uses. */
   get canvasPixels() {
     return this.canvas ? this.canvas.width * this.canvas.height : 0;
   }
 
-  /** Whether the canvas shows the page at the current scale and the given device pixel ratio. */
+  /**
+   * @param {number} pixelRatio the device pixel ratio
+   * @return {boolean}
+   */
   isRendered(pixelRatio) {
     return !!this.canvas && this.renderedScale === this.scale && this.renderedPixelRatio === pixelRatio;
   }
@@ -160,8 +157,7 @@ export class PdfViewerPage {
   }
 
   /**
-   * Resizes the page placeholder. An existing canvas is stretched to the new
-   * size until the page is rendered again.
+   * Resizes the page, which stretches an existing canvas until the page renders again.
    *
    * @param {number} scale
    */
@@ -174,8 +170,7 @@ export class PdfViewerPage {
   }
 
   /**
-   * Sizes the text layer with the page, also before the page renders again
-   * at the new scale. The text layer of pdf.js reads this property.
+   * Sizes the text layer of pdf.js with the page, also before the page renders again.
    * @private
    */
   #updateTextScale() {
@@ -183,9 +178,7 @@ export class PdfViewerPage {
   }
 
   /**
-   * Renders the page at the current scale. The new canvas replaces the old one
-   * only when rendering has finished, to avoid showing an empty page meanwhile.
-   * Requires the page to be set with `setPdfPage()`.
+   * Renders the page at the current scale, keeping the old canvas until the new one is ready.
    *
    * @param {number} pixelRatio the device pixel ratio
    * @return {Promise<void>}
@@ -235,29 +228,20 @@ export class PdfViewerPage {
     this.renderedPixelRatio = pixelRatio;
   }
 
-  /**
-   * Sets the accessible name of the page.
-   *
-   * @param {string} label
-   */
+  /** @param {string} label */
   setLabel(label) {
     this.element.setAttribute('aria-label', label);
   }
 
   /**
-   * Returns the offset in CSS pixels from the top left corner of the page to
-   * a position given in PDF units from the bottom left corner of the unrotated
-   * page, as in link destinations. With the opposite corner of a rectangle,
-   * the offset goes to the top left corner of the rectangle on the rotated
-   * page. A missing coordinate, or one outside the page, gives an offset of 0
-   * on the axis that it is on after the rotation of the page. Needs the page
-   * of the document, see `setPdfPage()`.
+   * Converts a point in PDF units, as in link destinations, to an offset in CSS pixels from the top left
+   * corner of the page.
    *
    * @param {number | undefined} x
    * @param {number | undefined} y
-   * @param {number | undefined} [x2] the opposite corner of a rectangle
+   * @param {number | undefined} [x2] the opposite corner of a rectangle, to get its top left corner
    * @param {number | undefined} [y2]
-   * @return {{ left: number, top: number }}
+   * @return {{ left: number, top: number }} 0 on an axis with a missing coordinate or one outside the page
    */
   getOffset(x, y, x2 = x, y2 = y) {
     const viewport = this.pdfPage.getViewport({ scale: this.scale });
@@ -279,9 +263,8 @@ export class PdfViewerPage {
   }
 
   /**
-   * Renders the text layer: transparent text on top of the canvas, which makes
-   * the text selectable and readable by assistive technology. When the layer
-   * exists, it is only resized to the current scale.
+   * Renders the text layer that makes the text selectable and readable by assistive technology, or resizes
+   * an existing one.
    *
    * @return {Promise<void>}
    */
@@ -334,18 +317,12 @@ export class PdfViewerPage {
   }
 
   /**
-   * Renders the link layer: the links of the page, positioned relative to the
-   * page size so that they need no update when the scale changes. Like the
-   * text layer, the layer has the size of the page without its rotation, and
-   * is rotated with the page. The links are in reading order, as in pdf.js,
-   * also for the Tab key. Links on hidden layers of the document are left
-   * out. A page without links gets no layer. Returns the links with their
-   * annotations, or no links when they are rendered already or the page was
-   * released meanwhile.
+   * Renders the links of the page in reading order, sized relative to the page so that they need no update on zoom.
    *
    * @param {(annotation: object) => void} followLink called when an internal link is clicked
    * @param {{ isVisible: (group: object) => boolean }} [optionalContentConfig] the visible layers
-   * @return {Promise<Array<{ link: HTMLAnchorElement, annotation: object }>>}
+   * @return {Promise<Array<{ link: HTMLAnchorElement, annotation: object }>>} empty when the links are
+   *   rendered already or the page was released
    */
   async renderLinkLayer(followLink, optionalContentConfig) {
     const canvas = this.canvas;
@@ -399,8 +376,7 @@ export class PdfViewerPage {
   }
 
   /**
-   * Adds the links to the text, for assistive technology, once both the text
-   * layer and the link layer have rendered, in either order.
+   * Adds the links to the text for assistive technology once both layers have rendered, in either order.
    * @private
    */
   #addLinksToText() {
@@ -409,7 +385,6 @@ export class PdfViewerPage {
     }
   }
 
-  /** Cancels a pending render. */
   cancel() {
     if (this.renderTask) {
       this.renderTask.cancel();
@@ -417,7 +392,6 @@ export class PdfViewerPage {
     }
   }
 
-  /** Cancels a pending render and frees the canvas memory and the text and link layers. */
   release() {
     this.cancel();
     this.textLayer?.cancel();

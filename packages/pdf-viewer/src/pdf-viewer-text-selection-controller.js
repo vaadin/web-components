@@ -28,10 +28,7 @@
  */
 import { isFirefox } from '@vaadin/component-base/src/browser-utils.js';
 
-/**
- * Whether the browser keeps a selection from jumping over empty space by
- * itself. pdf.js finds that Firefox and Chromium 148 and later do.
- */
+/** Whether the browser itself keeps a selection from jumping over empty space. */
 const keepsSelectionInPlace = (() => {
   if (isFirefox) {
     return true;
@@ -85,12 +82,8 @@ function reset({ textLayerElement, endOfContentElement }) {
 }
 
 /**
- * Keeps the selection of text from jumping over empty space, adapted from
- * `TextLayerBuilder` of pdf.js. While text in a text layer is selected, its
- * end-of-content element covers the page. Other browsers than Firefox and
- * Chromium 148 and later would then extend the selection to all the text
- * before that element. So it is moved next to the text where the selection
- * changes, which limits a jump to at most that text element.
+ * Keeps the selection from jumping over empty space by moving the end-of-content element next to where the selection
+ * changes, adapted from `TextLayerBuilder` of pdf.js.
  */
 export class PdfViewerTextSelectionController {
   /** @type {AbortController | null} */

@@ -27,10 +27,9 @@ export const PdfViewerScrollMixin = (superClass) =>
     static get properties() {
       return {
         /**
-         * The current page, starting from 1. The viewer updates it while the
-         * user scrolls, to the page with the largest part of it in view, or,
-         * for a page taller than the view, the largest part of the view.
-         * A page scrolled to stays current until the user scrolls. A new
+         * The current page, starting from 1, updated while the user scrolls.
+         *
+         * A page scrolled to stays current until the user scrolls, and a new
          * `src` resets it to 1. Use `scrollToPage()` to go to another page.
          * @type {number}
          */
@@ -54,7 +53,6 @@ export const PdfViewerScrollMixin = (superClass) =>
       };
     }
 
-    /** The index of the current page, see `getMostVisibleIndex()`, updated with the visible pages. */
     #currentIndex = 0;
 
     /**
@@ -63,7 +61,6 @@ export const PdfViewerScrollMixin = (superClass) =>
      */
     #pinnedPage = null;
 
-    /** The scroll position set when scrolling to the pinned page. */
     #pinnedScrollTop = 0;
 
     /** A page to scroll to once the pages can be laid out. */
@@ -77,8 +74,8 @@ export const PdfViewerScrollMixin = (superClass) =>
     #hadLayout = false;
 
     /**
-     * Observes the page area, as the toolbar changes its size too. Reacts in
-     * a task of its own, as `ResizeMixin` does.
+     * Observes the page area, which the toolbar resizes too, and reacts in a
+     * separate task as `ResizeMixin` does.
      */
     #resizeObserver = new ResizeObserver(() => {
       setTimeout(() => {
@@ -144,13 +141,12 @@ export const PdfViewerScrollMixin = (superClass) =>
     }
 
     /**
-     * Scrolls to the start of the given page and makes it the current page,
-     * also when it is the current page already. A value that is not a page
-     * of the document logs a warning and does not scroll.
+     * Scrolls to the start of the given page and makes it the current page.
      *
      * Right after setting `src`, it scrolls once the document has loaded, and
      * in a hidden viewer, once the viewer is shown. Does nothing without a
-     * document or when the viewer is not attached.
+     * document, when the viewer is not attached, or with a warning for a
+     * value that is not a page of the document.
      * @param {number} page the page, starting from 1
      */
     scrollToPage(page) {
@@ -166,10 +162,7 @@ export const PdfViewerScrollMixin = (superClass) =>
      * makes it the current page, also when it is the current page already.
      * @param {number} page
      * @param {{ left: number, top: number }} [offset] the offset from the top
-     *   left corner of the page in CSS pixels. Without it, the padding above
-     *   the page shows too, and the horizontal scroll position stays. While
-     *   the pages have no layout, e.g. in a hidden viewer, only the page is
-     *   kept, and the offset is dropped.
+     *   left corner of the page in CSS pixels, dropped while the pages have no layout
      * @protected
      */
     _scrollToPage(page, offset) {
@@ -253,8 +246,7 @@ export const PdfViewerScrollMixin = (superClass) =>
     }
 
     /**
-     * Returns the scale of the pages in CSS pixels per PDF unit for the given
-     * available size: the scale that fits the width of the current page.
+     * Returns the scale that fits the width of the current page to the available width.
      * @param {number} width
      * @param {number} _height
      * @param {PdfViewerPage} page the current page
@@ -266,8 +258,7 @@ export const PdfViewerScrollMixin = (superClass) =>
     }
 
     /**
-     * Returns the scale for the current page and the available size, or 0
-     * when the pages cannot be laid out.
+     * @return {number} the scale for the current page, or 0 when the pages cannot be laid out
      * @private
      */
     #computeScale() {
@@ -279,9 +270,8 @@ export const PdfViewerScrollMixin = (superClass) =>
     }
 
     /**
-     * Lays out the pages again, e.g. after a change of the size or of the
-     * scale, and scrolls to a page that was set while the pages could not be
-     * laid out.
+     * Lays out the pages again and scrolls to a page that was set while the
+     * pages could not be laid out.
      * @protected
      */
     _refreshLayout() {
@@ -294,8 +284,7 @@ export const PdfViewerScrollMixin = (superClass) =>
     }
 
     /**
-     * Scrolls to a page that was set before the pages could be laid out, or
-     * else updates the visible pages.
+     * Scrolls to the pending page, or else updates the visible pages.
      * @private
      */
     #scrollToPendingPage() {
@@ -307,8 +296,7 @@ export const PdfViewerScrollMixin = (superClass) =>
     }
 
     /**
-     * Whether the viewer has a size, so that pages can be laid out. It has
-     * none e.g. inside a hidden tab.
+     * Whether the viewer has a size, which it lacks while hidden.
      * @private
      */
     #hasLayout() {
@@ -317,9 +305,8 @@ export const PdfViewerScrollMixin = (superClass) =>
     }
 
     /**
-     * Returns the size that pages can use inside the scrollable content area.
-     * The height includes a horizontal scrollbar, which the current scale may
-     * cause, so that a scale that fits the page height does not depend on it.
+     * Returns the size for the pages, with a height that includes a horizontal
+     * scrollbar so that fitting the page height does not depend on the scale.
      * @private
      */
     #getAvailableSize() {
@@ -334,8 +321,7 @@ export const PdfViewerScrollMixin = (superClass) =>
     }
 
     /**
-     * Resizes the pages to the given scale, keeping the same point of the
-     * current page at the top of the view, then renders what is visible.
+     * Resizes the pages, keeping the same point of the current page at the top of the view.
      * @private
      */
     #applyScale(scale) {
@@ -381,8 +367,7 @@ export const PdfViewerScrollMixin = (superClass) =>
     }
 
     /**
-     * Scrolls so that the anchor point of the page is at the top of the view
-     * again. A page that fits the width of the view is centered.
+     * Scrolls the anchor point of the page back to the top of the view.
      * @private
      */
     #restoreAnchor({ page, viewX, ...anchor }) {
@@ -413,8 +398,7 @@ export const PdfViewerScrollMixin = (superClass) =>
     }
 
     /**
-     * Finds the visible pages, updates the current page, and renders the
-     * pages that are visible or about to become visible.
+     * Updates the current page and renders the visible pages.
      * @private
      */
     #updateVisiblePages() {

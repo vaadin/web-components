@@ -27,10 +27,7 @@
  * limitations under the License.
  */
 
-/**
- * The prefix of the ids of annotation elements, as in pdf.js. The structure
- * tree of a tagged PDF refers to its link annotations by these ids.
- */
+/** The structure tree that pdf.js builds for a tagged PDF refers to link annotations by ids with this prefix. */
 export const ANNOTATION_ID_PREFIX = 'pdfjs_internal_id_';
 
 /**

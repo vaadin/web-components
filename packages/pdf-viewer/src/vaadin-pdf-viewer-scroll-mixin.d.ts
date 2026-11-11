@@ -20,10 +20,9 @@ export declare function PdfViewerScrollMixin<T extends Constructor<HTMLElement>>
 
 export declare class PdfViewerScrollMixinClass {
   /**
-   * The current page, starting from 1. The viewer updates it while the
-   * user scrolls, to the page with the largest part of it in view, or,
-   * for a page taller than the view, the largest part of the view.
-   * A page scrolled to stays current until the user scrolls. A new
+   * The current page, starting from 1, updated while the user scrolls.
+   *
+   * A page scrolled to stays current until the user scrolls, and a new
    * `src` resets it to 1. Use `scrollToPage()` to go to another page.
    */
   readonly page: number;
@@ -35,28 +34,26 @@ export declare class PdfViewerScrollMixinClass {
   protected _scale: number;
 
   /**
-   * Scrolls to the start of the given page and makes it the current page,
-   * also when it is the current page already. A value that is not a page
-   * of the document logs a warning and does not scroll.
+   * Scrolls to the start of the given page and makes it the current page.
    *
    * Right after setting `src`, it scrolls once the document has loaded, and
    * in a hidden viewer, once the viewer is shown. Does nothing without a
-   * document or when the viewer is not attached.
+   * document, when the viewer is not attached, or with a warning for a
+   * value that is not a page of the document.
    */
   scrollToPage(page: number): void;
 
   /**
-   * Scrolls to the start of the given page, or to an offset on it in CSS
-   * pixels from the top left corner of the page, and makes it the current
-   * page, also when it is the current page already. While the pages have no
-   * layout, e.g. in a hidden viewer, only the page is kept, and the offset
-   * is dropped.
+   * Scrolls to the start of the given page, or to an offset on it, and
+   * makes it the current page, also when it is the current page already.
+   * @param offset the offset from the top left corner of the page in CSS
+   *   pixels, dropped while the pages have no layout
    */
   protected _scrollToPage(page: number, offset?: { left: number; top: number }): void;
 
   /**
-   * Returns the scale of the pages in CSS pixels per PDF unit for the given
-   * available size: the scale that fits the width of the current page.
+   * Returns the scale that fits the width of the current page to the available width.
+   * @param page the current page
    */
   protected _getScaleForSize(
     width: number,
@@ -65,9 +62,8 @@ export declare class PdfViewerScrollMixinClass {
   ): number;
 
   /**
-   * Lays out the pages again, e.g. after a change of the size or of the
-   * scale, and scrolls to a page that was set while the pages could not be
-   * laid out.
+   * Lays out the pages again and scrolls to a page that was set while the
+   * pages could not be laid out.
    */
   protected _refreshLayout(): void;
 }

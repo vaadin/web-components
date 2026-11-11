@@ -11,7 +11,7 @@
 import { issueWarning } from '@vaadin/component-base/src/warnings.js';
 
 /**
- * A page that the queue can render. `PdfViewerPage` implements it.
+ * A page that the queue can render, implemented by `PdfViewerPage`.
  * @typedef {Object} PdfViewerRenderQueuePage
  * @property {number} pageNumber The number of the page, starting from 1.
  * @property {number} canvasPixels The number of canvas pixels the page uses.
@@ -24,7 +24,7 @@ import { issueWarning } from '@vaadin/component-base/src/warnings.js';
 /**
  * @typedef {Object} PdfViewerRenderQueueOptions
  * @property {(page: PdfViewerRenderQueuePage, pixelRatio: number) => Promise<void>} renderPage
- *   Renders a page at the given device pixel ratio. The returned promise never rejects.
+ *   Renders a page at the given device pixel ratio, with a promise that never rejects.
  * @property {(page: PdfViewerRenderQueuePage) => void} releasePage Frees the canvas of a page.
  * @property {() => void} onIdle Called when no page is left to render.
  * @property {number} renderAhead The number of pages before and after the
@@ -67,8 +67,7 @@ export class PdfViewerRenderQueue {
   }
 
   /**
-   * Sets the pages of the document, e.g. when another document loads, and
-   * forgets the page being rendered.
+   * Sets the pages of the document and forgets the page being rendered.
    * @param {PdfViewerRenderQueuePage[]} pages
    */
   setPages(pages) {
@@ -79,8 +78,7 @@ export class PdfViewerRenderQueue {
   }
 
   /**
-   * Sets the device pixel ratio to render at. Pages rendered at another
-   * ratio render again when they are next in the queue.
+   * Sets the device pixel ratio that the next renders use.
    * @param {number} pixelRatio
    */
   setPixelRatio(pixelRatio) {
@@ -89,7 +87,7 @@ export class PdfViewerRenderQueue {
 
   /**
    * Renders the visible pages, the most visible first, then the pages next to
-   * them, and frees the canvases of pages that are far from the view.
+   * them, and frees the canvases of pages far from the view.
    * @param {Array<{ index: number, ratio: number }>} visible the indexes of the
    *   visible pages in document order, with the part of their height in view
    */
@@ -110,7 +108,7 @@ export class PdfViewerRenderQueue {
   }
 
   /**
-   * Stops rendering pages, e.g. when no page is visible. The page being rendered finishes.
+   * Stops rendering pages after the page being rendered.
    */
   clear() {
     this.#queue = [];
@@ -119,7 +117,7 @@ export class PdfViewerRenderQueue {
   }
 
   /**
-   * Cancels rendering the page being rendered, e.g. when its size changes.
+   * Cancels rendering the page being rendered.
    */
   cancel() {
     this.#renderingPage?.cancel();

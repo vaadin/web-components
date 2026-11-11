@@ -19,9 +19,7 @@ import { formatZoom, getZoomInLevel, getZoomOutLevel, ZOOM_LEVELS } from './pdf-
 
 /**
  * A mixin that adds the header and the toolbar with the page navigation, the
- * zoom and the download button. The controls of the toolbar are Vaadin
- * components, rendered into the light DOM so that themes can style them like
- * any other instance of these components.
+ * zoom and the download button.
  */
 export const PdfViewerToolbarMixin = (superClass) =>
   class PdfViewerToolbarMixinClass extends superClass {
@@ -77,7 +75,7 @@ export const PdfViewerToolbarMixin = (superClass) =>
       };
     }
 
-    /** The items of the zoom select, built again only when `zoom` or the texts change. */
+    /** @private */
     #zoomItems = [];
 
     /** @protected */
@@ -267,9 +265,7 @@ export const PdfViewerToolbarMixin = (superClass) =>
     }
 
     /**
-     * Goes to the entered page. The field validates the entry against `min`
-     * and `max` and keeps a page that does not exist with its error message.
-     * An empty field shows the current page again.
+     * Keeps an invalid entry in the field so that the field shows its error message.
      * @private
      */
     #onPageFieldChange(event) {
@@ -296,11 +292,7 @@ export const PdfViewerToolbarMixin = (superClass) =>
       }
     }
 
-    /**
-     * Returns the items of the zoom select: the fit zooms, the zoom levels,
-     * and a zoom set by the application that is not one of the levels.
-     * @private
-     */
+    /** @private */
     #getZoomItems() {
       const i18n = this.__effectiveI18n;
       const items = [

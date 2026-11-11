@@ -11,8 +11,7 @@
 import type { Constructor } from '@open-wc/dedupe-mixin';
 
 /**
- * A mixin that adds downloading the document. The toolbar has a button that
- * calls `download()`.
+ * A mixin that adds downloading the document.
  */
 export declare function PdfViewerDownloadMixin<T extends Constructor<HTMLElement>>(
   base: T,
@@ -20,14 +19,10 @@ export declare function PdfViewerDownloadMixin<T extends Constructor<HTMLElement
 
 export declare class PdfViewerDownloadMixinClass {
   /**
-   * Downloads the document. The file has the original bytes of the
-   * document, so the viewer does not request it again, and signatures stay
-   * intact. The file name is `fileName` when set, else the name from the
-   * response or `src`, see `fileName`.
-   * While the document loads, it is downloaded once loaded. When `src`
-   * changes meanwhile, also in the same task, the new document is
-   * downloaded. Does nothing without a document, or when the viewer is not
-   * attached.
+   * Downloads the document with its original bytes, under the file name described in `fileName`.
+   *
+   * A document that is loading is downloaded once it has loaded. Does
+   * nothing without a document, or when the viewer is not attached.
    */
   download(): void;
 }

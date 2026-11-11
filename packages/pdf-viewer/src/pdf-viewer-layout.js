@@ -11,7 +11,7 @@
 
 /**
  * @typedef {Object} PdfViewerVisiblePage
- * @property {number} index The index of the page.
+ * @property {number} index
  * @property {number} height The height of the page that is inside the view.
  * @property {number} ratio The visible height divided by the page height, or by
  *   the view height for a page taller than the view, from 0 to 1.
@@ -20,9 +20,9 @@
 /**
  * @typedef {Object} PdfViewerPageBox
  * @property {number} top The top of the page in the scrollable content.
- * @property {number} height The height of the page.
+ * @property {number} height
  * @property {number} left The left edge of the page in the viewport.
- * @property {number} width The width of the page.
+ * @property {number} width
  */
 
 /**

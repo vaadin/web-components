@@ -8,7 +8,6 @@
  * See https://vaadin.com/commercial-license-and-service-terms for the full
  * license.
  */
-/** The named actions of internal links that the viewer supports. */
 const SUPPORTED_LINK_ACTIONS = ['FirstPage', 'LastPage', 'NextPage', 'PrevPage'];
 
 /**
@@ -17,13 +16,11 @@ const SUPPORTED_LINK_ACTIONS = ['FirstPage', 'LastPage', 'NextPage', 'PrevPage']
  */
 const RELATIVE_ACTION_NAMES = { NextPage: 'nextPage', PrevPage: 'previousPage' };
 
-/** The protocols of external links that the viewer opens. Links with other URLs are left out. */
 const ALLOWED_LINK_PROTOCOLS = ['http:', 'https:', 'mailto:'];
 
 /**
- * The indexes of the left and top coordinates in the explicit destinations
- * that have them, by destination type, e.g. `[page, { name: 'XYZ' }, left, top, zoom]`.
- * The rectangle of `FitR` also has its right and bottom coordinates.
+ * The indexes of the coordinates in an explicit destination, such as `[page, { name: 'XYZ' }, left, top, zoom]`,
+ * by destination type.
  */
 const DESTINATION_POSITION_INDEXES = {
   XYZ: { left: 2, top: 3 },

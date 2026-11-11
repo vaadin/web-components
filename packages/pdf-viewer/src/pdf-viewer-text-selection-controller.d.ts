@@ -11,15 +11,8 @@
 import type { ReactiveController } from 'lit';
 import type { PdfViewerPage } from './pdf-viewer-page.js';
 
-/**
- * Returns the ranges of the selection with their boundaries inside the given shadow root.
- */
 export declare function getSelectionRanges(root: ShadowRoot): Range[];
 
-/**
- * Keeps the selection of text from jumping over empty space, adapted from
- * `TextLayerBuilder` of pdf.js.
- */
 export declare class PdfViewerTextSelectionController implements ReactiveController {
   constructor(host: HTMLElement, getPages: () => PdfViewerPage[]);
 

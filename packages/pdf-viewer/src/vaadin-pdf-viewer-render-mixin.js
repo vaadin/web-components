@@ -29,7 +29,7 @@ export const PdfViewerRenderMixin = (superClass) =>
      */
     __pages = [];
 
-    /** Whether all pages have their own size. The layout is not final before. */
+    /** Whether all pages have their own size, so that the layout is final. */
     #pageSizesLoaded = true;
 
     #pageSizesFrame = 0;
@@ -72,10 +72,8 @@ export const PdfViewerRenderMixin = (superClass) =>
     }
 
     /**
-     * Override method from `PdfViewerDocumentMixin` to create one page view
-     * per page. All pages start with the size of the first page, and get
-     * their own size as they load in the background. This shows the document
-     * without waiting for every page of a long document.
+     * Override method from `PdfViewerDocumentMixin` to create the page views,
+     * sized as the first page until each page loads its own size.
      * @protected
      * @override
      */
@@ -146,8 +144,7 @@ export const PdfViewerRenderMixin = (superClass) =>
 
     /**
      * Renders the layers over the canvas of a page that has just rendered,
-     * e.g. the text layer. Overrides await `super` first, so that the layers
-     * render in the order of the mixins.
+     * where overrides await `super` first to keep the mixin order.
      * @param {PdfViewerPage} _page
      * @return {Promise<void>}
      * @protected
@@ -157,8 +154,7 @@ export const PdfViewerRenderMixin = (superClass) =>
     }
 
     /**
-     * Renders the visible pages, the most visible first, then the pages next
-     * to them, and frees the canvases of pages far from the view. Stops
+     * Renders the visible pages and the pages next to them, or stops
      * rendering when no page is visible.
      * @param {Array<{ index: number, ratio: number }>} visible the indexes of
      *   the visible pages in document order, with the part of their height in view
@@ -173,7 +169,7 @@ export const PdfViewerRenderMixin = (superClass) =>
     }
 
     /**
-     * Cancels rendering the page being rendered, e.g. before the pages get another size.
+     * Cancels rendering the page being rendered.
      * @protected
      */
     _cancelRender() {
@@ -207,10 +203,9 @@ export const PdfViewerRenderMixin = (superClass) =>
     }
 
     /**
-     * Loads the page of the document for a page view that has none yet, and
-     * sizes the page view. Rejects when the page fails to load.
+     * Loads the PDF page of a page view that has none yet, and sizes the page view.
      * @param {PdfViewerPage} page
-     * @return {Promise<void>}
+     * @return {Promise<void>} rejects when the page fails to load
      * @protected
      */
     async _loadPdfPage(page) {
@@ -282,8 +277,7 @@ export const PdfViewerRenderMixin = (superClass) =>
     }
 
     /**
-     * Fires `render-idle` when no page is left to render. Only intended for
-     * testing purposes, tests wait for it.
+     * Fires `render-idle`, which tests wait for, when no page is left to render.
      * @private
      */
     #notifyIdle() {

@@ -251,9 +251,7 @@ class PdfViewer extends PdfViewerMixin(
   }
 
   /**
-   * Override method from `FocusMixin` to ignore focus events on the host.
-   * Focus moving inside the shadow root does not reach the host, e.g. from
-   * the page area to a link in a page, so the page area handles them.
+   * Override method from `FocusMixin` to ignore focus events on the host, since the page area handles them.
    * @param {FocusEvent} _event
    * @return {boolean}
    * @protected
@@ -264,10 +262,7 @@ class PdfViewer extends PdfViewerMixin(
   }
 
   /**
-   * Scrolls the header and the toolbar so that a control focused with the
-   * keyboard is visible with its focus ring. Browsers scroll only the focused
-   * element into view, e.g. the input of a field, and WebKit does not scroll
-   * an element that is partly visible already.
+   * Scrolls the whole control focused with the keyboard into view, since browsers scroll only the focused element.
    * @private
    */
   #onTopAreaFocusIn(event) {

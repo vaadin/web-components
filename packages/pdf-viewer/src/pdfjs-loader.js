@@ -27,9 +27,6 @@ export function loadPdfjs() {
 }
 
 /**
- * The worker shared by all viewers on the page, with the number of documents
- * that use it.
- *
  * @typedef {{ worker: import('pdfjs-dist').PDFWorker | null, port: Worker, failed: Promise<never> | null, users: number }} WorkerHandle
  * @type {WorkerHandle | null}
  */

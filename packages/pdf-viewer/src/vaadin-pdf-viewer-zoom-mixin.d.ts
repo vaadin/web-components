@@ -26,11 +26,9 @@ export declare class PdfViewerZoomMixinClass {
    * - `page-fit` fits the whole current page into the viewer.
    * - A number scales the pages relative to their actual size, e.g. `1` for 100%.
    *
-   * The fit follows the current page when the zoom is set, when the viewer
-   * resizes and when the page gets its own size. Scrolling to a page of
-   * another size keeps the scale.
-   *
-   * An invalid value logs a warning and is replaced with `page-width`.
+   * The fit follows the current page when the zoom is set and when the
+   * viewer resizes, not when scrolling to a page of another size. An
+   * invalid value logs a warning and is replaced with `page-width`.
    */
   zoom: PdfViewerZoom;
 

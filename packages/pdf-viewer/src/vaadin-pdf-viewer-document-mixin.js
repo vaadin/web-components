@@ -95,7 +95,7 @@ export const PdfViewerDocumentMixin = (superClass) =>
     /** @type {import('./pdf-viewer-document-controller.js').PdfViewerDocumentDetails | null} */
     #details = null;
 
-    /** The `src` of the last update. A different `src` starts loading in the next update. */
+    /** The `src` of the last update, so that a newer `src` counts as loading. */
     #updatedSrc;
 
     /**
@@ -142,11 +142,8 @@ export const PdfViewerDocumentMixin = (superClass) =>
     }
 
     /**
-     * Returns a promise for the document of `src`. It resolves once the
-     * document has loaded, also when `src` changes meanwhile, and right away
-     * when no document is loading. A `src` set later in the same task counts
-     * as loading. It resolves with null without a document, or when the
-     * viewer is not attached.
+     * Returns a promise that resolves with the document of `src` once no document
+     * is loading, or with null when detached.
      * @return {Promise<import('pdfjs-dist').PDFDocumentProxy | null>}
      * @protected
      */
@@ -172,7 +169,7 @@ export const PdfViewerDocumentMixin = (superClass) =>
     }
 
     /**
-     * Called when the document is unloaded, e.g. before another one loads.
+     * Called when the document is unloaded.
      * @protected
      */
     _documentUnloaded() {
@@ -180,9 +177,7 @@ export const PdfViewerDocumentMixin = (superClass) =>
     }
 
     /**
-     * Returns the name of the document: `fileName`, else the PDF file name
-     * from the `Content-Disposition` header, else the PDF file name at the
-     * end of the path of `src`, else an empty string.
+     * Returns `fileName`, else the PDF file name from the `Content-Disposition` header or `src`, else an empty string.
      * @return {string}
      * @protected
      */
