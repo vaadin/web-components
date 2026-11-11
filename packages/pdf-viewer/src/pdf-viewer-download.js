@@ -14,8 +14,8 @@ const RELEASE_DELAY = 60000;
 /**
  * Downloads a loaded document as a file with the bytes that pdf.js loaded,
  * which also works for documents from other origins. The data is released
- * after a delay, as some browsers fail a download whose URL is released right
- * after the click.
+ * after a delay, also when the viewer is detached meanwhile, as some browsers
+ * fail a download whose URL is released right after the click.
  *
  * @param {import('pdfjs-dist').PDFDocumentProxy} pdfDocument
  * @param {string} fileName

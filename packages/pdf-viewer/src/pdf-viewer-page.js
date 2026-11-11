@@ -248,7 +248,8 @@ export class PdfViewerPage {
    * a position in PDF units from the bottom left corner of the unrotated page,
    * as in link destinations. With the opposite corner of a rectangle, the
    * offset goes to the top left corner of the rectangle on the rotated page.
-   * A missing coordinate, or one outside the page, gives an offset of 0.
+   * A missing coordinate, or one outside the page, gives an offset of 0 on
+   * the axis that it is on after the rotation of the page.
    *
    * @param {number | undefined} x
    * @param {number | undefined} y

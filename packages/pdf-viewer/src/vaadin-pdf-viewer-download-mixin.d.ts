@@ -21,7 +21,7 @@ export declare function PdfViewerDownloadMixin<T extends Constructor<HTMLElement
 export declare class PdfViewerDownloadMixinClass {
   /**
    * Downloads the document with its original bytes, without requesting it
-   * again, under the name described in `fileName`. While the document
+   * again, so signatures stay intact. The file name is described in `fileName`. While the document
    * loads, it is downloaded once loaded, also when `src` changes meanwhile.
    * Does nothing without a document, or when the viewer is not attached.
    */
