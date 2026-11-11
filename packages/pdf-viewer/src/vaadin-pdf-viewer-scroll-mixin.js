@@ -419,7 +419,7 @@ export const PdfViewerScrollMixin = (superClass) =>
       const mostVisibleIndex = getMostVisibleIndex(visible);
       this.#currentIndex = mostVisibleIndex;
 
-      // Keep a scrolled-to page while the view has not moved, as the last page may not reach the top.
+      // Keep a scrolled-to page while the view has not moved, as a page near the end may not reach the top.
       const pinned = this.#pinnedPage;
       if (pinned !== null && Math.abs(this.$.content.scrollTop - this.#pinnedScrollTop) < 1) {
         this.#currentIndex = pinned - 1;
