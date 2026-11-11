@@ -40,10 +40,9 @@ export declare class PdfViewerScrollMixinClass {
   /**
    * Scrolls to the start of the given page.
    *
-   * While the document of `src` loads, also right after setting `src`, it
-   * scrolls once the document has loaded. In a hidden viewer, it scrolls and
-   * updates `page` once the viewer is shown. Does nothing without a document,
-   * or when the viewer is not attached.
+   * Right after setting `src`, it scrolls once the document has loaded, and
+   * in a hidden viewer, once the viewer is shown. Does nothing without a
+   * document or when the viewer is not attached.
    */
   scrollToPage(page: number): void;
 
