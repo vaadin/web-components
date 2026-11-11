@@ -86,7 +86,7 @@ export class PdfViewerPage {
 
     this.element = document.createElement('div');
     this.element.setAttribute('part', 'page');
-    this.element.setAttribute('role', 'region');
+    this.element.setAttribute('role', 'group');
 
     /** @type {number} */
     this.scale = 0;

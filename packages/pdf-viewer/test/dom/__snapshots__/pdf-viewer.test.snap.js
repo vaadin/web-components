@@ -336,7 +336,7 @@ snapshots["vaadin-pdf-viewer shadow document"] =
       <div
         aria-label="Page 1"
         part="page"
-        role="region"
+        role="group"
       >
         <canvas aria-hidden="true">
         </canvas>
@@ -385,7 +385,7 @@ snapshots["vaadin-pdf-viewer shadow document"] =
       <div
         aria-label="Page 2"
         part="page"
-        role="region"
+        role="group"
       >
         <canvas aria-hidden="true">
         </canvas>
@@ -434,25 +434,25 @@ snapshots["vaadin-pdf-viewer shadow document"] =
       <div
         aria-label="Page 3"
         part="page"
-        role="region"
+        role="group"
       >
       </div>
       <div
         aria-label="Page 4"
         part="page"
-        role="region"
+        role="group"
       >
       </div>
       <div
         aria-label="Page 5"
         part="page"
-        role="region"
+        role="group"
       >
       </div>
       <div
         aria-label="Page 6"
         part="page"
-        role="region"
+        role="group"
       >
       </div>
     </div>
@@ -519,7 +519,7 @@ snapshots["vaadin-pdf-viewer shadow header title"] =
       <div
         aria-label="Page 1"
         part="page"
-        role="region"
+        role="group"
       >
         <canvas aria-hidden="true">
         </canvas>
@@ -568,7 +568,7 @@ snapshots["vaadin-pdf-viewer shadow header title"] =
       <div
         aria-label="Page 2"
         part="page"
-        role="region"
+        role="group"
       >
         <canvas aria-hidden="true">
         </canvas>
@@ -617,25 +617,25 @@ snapshots["vaadin-pdf-viewer shadow header title"] =
       <div
         aria-label="Page 3"
         part="page"
-        role="region"
+        role="group"
       >
       </div>
       <div
         aria-label="Page 4"
         part="page"
-        role="region"
+        role="group"
       >
       </div>
       <div
         aria-label="Page 5"
         part="page"
-        role="region"
+        role="group"
       >
       </div>
       <div
         aria-label="Page 6"
         part="page"
-        role="region"
+        role="group"
       >
       </div>
     </div>
@@ -703,7 +703,7 @@ snapshots["vaadin-pdf-viewer shadow header hidden"] =
       <div
         aria-label="Page 1"
         part="page"
-        role="region"
+        role="group"
       >
         <canvas aria-hidden="true">
         </canvas>
@@ -752,7 +752,7 @@ snapshots["vaadin-pdf-viewer shadow header hidden"] =
       <div
         aria-label="Page 2"
         part="page"
-        role="region"
+        role="group"
       >
         <canvas aria-hidden="true">
         </canvas>
@@ -801,25 +801,25 @@ snapshots["vaadin-pdf-viewer shadow header hidden"] =
       <div
         aria-label="Page 3"
         part="page"
-        role="region"
+        role="group"
       >
       </div>
       <div
         aria-label="Page 4"
         part="page"
-        role="region"
+        role="group"
       >
       </div>
       <div
         aria-label="Page 5"
         part="page"
-        role="region"
+        role="group"
       >
       </div>
       <div
         aria-label="Page 6"
         part="page"
-        role="region"
+        role="group"
       >
       </div>
     </div>
@@ -887,7 +887,7 @@ snapshots["vaadin-pdf-viewer shadow toolbar collapsed"] =
       <div
         aria-label="Page 1"
         part="page"
-        role="region"
+        role="group"
       >
         <canvas aria-hidden="true">
         </canvas>
@@ -936,7 +936,7 @@ snapshots["vaadin-pdf-viewer shadow toolbar collapsed"] =
       <div
         aria-label="Page 2"
         part="page"
-        role="region"
+        role="group"
       >
         <canvas aria-hidden="true">
         </canvas>
@@ -985,25 +985,25 @@ snapshots["vaadin-pdf-viewer shadow toolbar collapsed"] =
       <div
         aria-label="Page 3"
         part="page"
-        role="region"
+        role="group"
       >
       </div>
       <div
         aria-label="Page 4"
         part="page"
-        role="region"
+        role="group"
       >
       </div>
       <div
         aria-label="Page 5"
         part="page"
-        role="region"
+        role="group"
       >
       </div>
       <div
         aria-label="Page 6"
         part="page"
-        role="region"
+        role="group"
       >
       </div>
     </div>
@@ -1016,7 +1016,7 @@ snapshots["vaadin-pdf-viewer page tagged"] =
 `<div
   aria-label="Page 1"
   part="page"
-  role="region"
+  role="group"
 >
   <canvas aria-hidden="true">
   </canvas>
@@ -1277,7 +1277,7 @@ snapshots["vaadin-pdf-viewer page links"] =
 `<div
   aria-label="Page 1"
   part="page"
-  role="region"
+  role="group"
 >
   <canvas aria-hidden="true">
   </canvas>
