@@ -122,20 +122,9 @@ describe('pages', () => {
         expect(pages[0].querySelector('canvas')!.getAttribute('aria-hidden')).to.equal('true');
       });
 
-      it('should make a rendered page a region with a name', () => {
+      it('should make each page a region with a name, also when it is not rendered', () => {
         expect(pages[0].getAttribute('role')).to.equal('region');
         expect(pages[0].getAttribute('aria-label')).to.equal('Page 1');
-      });
-
-      it('should not set a role or a name on a page that is not rendered', () => {
-        expect(pages[5].hasAttribute('role')).to.be.false;
-        expect(pages[5].hasAttribute('aria-label')).to.be.false;
-      });
-
-      it('should remove the role and the name from a released page', async () => {
-        await scrollTo(content.scrollHeight);
-        expect(pages[0].hasAttribute('role')).to.be.false;
-        expect(pages[0].hasAttribute('aria-label')).to.be.false;
         expect(pages[5].getAttribute('role')).to.equal('region');
         expect(pages[5].getAttribute('aria-label')).to.equal('Page 6');
       });
@@ -143,9 +132,7 @@ describe('pages', () => {
       it('should use the page name set with i18n', async () => {
         viewer.i18n = { pageLabel: 'Seite {page}' };
         await nextFrame();
-        expect(pages[0].getAttribute('aria-label')).to.equal('Seite 1');
-        await scrollTo(content.scrollHeight);
-        expect(pages[5].getAttribute('aria-label')).to.equal('Seite 6');
+        expect(pages[2].getAttribute('aria-label')).to.equal('Seite 3');
       });
     });
 

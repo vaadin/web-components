@@ -429,13 +429,29 @@ snapshots["vaadin-pdf-viewer shadow document"] =
           </div>
         </div>
       </div>
-      <div part="page">
+      <div
+        aria-label="Page 3"
+        part="page"
+        role="region"
+      >
       </div>
-      <div part="page">
+      <div
+        aria-label="Page 4"
+        part="page"
+        role="region"
+      >
       </div>
-      <div part="page">
+      <div
+        aria-label="Page 5"
+        part="page"
+        role="region"
+      >
       </div>
-      <div part="page">
+      <div
+        aria-label="Page 6"
+        part="page"
+        role="region"
+      >
       </div>
     </div>
   </div>
@@ -595,13 +611,29 @@ snapshots["vaadin-pdf-viewer shadow header title"] =
           </div>
         </div>
       </div>
-      <div part="page">
+      <div
+        aria-label="Page 3"
+        part="page"
+        role="region"
+      >
       </div>
-      <div part="page">
+      <div
+        aria-label="Page 4"
+        part="page"
+        role="region"
+      >
       </div>
-      <div part="page">
+      <div
+        aria-label="Page 5"
+        part="page"
+        role="region"
+      >
       </div>
-      <div part="page">
+      <div
+        aria-label="Page 6"
+        part="page"
+        role="region"
+      >
       </div>
     </div>
   </div>
@@ -762,13 +794,29 @@ snapshots["vaadin-pdf-viewer shadow header hidden"] =
           </div>
         </div>
       </div>
-      <div part="page">
+      <div
+        aria-label="Page 3"
+        part="page"
+        role="region"
+      >
       </div>
-      <div part="page">
+      <div
+        aria-label="Page 4"
+        part="page"
+        role="region"
+      >
       </div>
-      <div part="page">
+      <div
+        aria-label="Page 5"
+        part="page"
+        role="region"
+      >
       </div>
-      <div part="page">
+      <div
+        aria-label="Page 6"
+        part="page"
+        role="region"
+      >
       </div>
     </div>
   </div>
@@ -929,13 +977,29 @@ snapshots["vaadin-pdf-viewer shadow toolbar collapsed"] =
           </div>
         </div>
       </div>
-      <div part="page">
+      <div
+        aria-label="Page 3"
+        part="page"
+        role="region"
+      >
       </div>
-      <div part="page">
+      <div
+        aria-label="Page 4"
+        part="page"
+        role="region"
+      >
       </div>
-      <div part="page">
+      <div
+        aria-label="Page 5"
+        part="page"
+        role="region"
+      >
       </div>
-      <div part="page">
+      <div
+        aria-label="Page 6"
+        part="page"
+        role="region"
+      >
       </div>
     </div>
   </div>
