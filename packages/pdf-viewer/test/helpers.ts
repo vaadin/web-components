@@ -1,4 +1,4 @@
-import { nextFrame, oneEvent } from '@vaadin/testing-helpers';
+import { nextFrame, nextResize, oneEvent } from '@vaadin/testing-helpers';
 import sinon from 'sinon';
 import type { PDFDocumentProxy, PDFPageProxy } from 'pdfjs-dist';
 import { acquireWorker, loadPdfjs, releaseWorker } from '../src/pdfjs-loader.js';
@@ -138,6 +138,16 @@ export function getPdfDocumentPrototype(): Promise<PDFDocumentProxy> {
  */
 export function getPdfPagePrototype(): Promise<PDFPageProxy> {
   return getPrototype((pdfDocument) => pdfDocument.getPage(1));
+}
+
+/**
+ * Makes the viewer wider, and waits until it has rendered its pages for the new size.
+ */
+export async function resizeViewer(viewer: PdfViewer): Promise<void> {
+  const idle = nextRenderIdle(viewer);
+  viewer.style.width = '900px';
+  await nextResize(viewer);
+  await idle;
 }
 
 /**

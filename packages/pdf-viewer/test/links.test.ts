@@ -1,10 +1,10 @@
 import { expect } from '@vaadin/chai-plugins';
 import { resetMouse, sendKeys, sendMouse } from '@vaadin/test-runner-commands';
-import { fixtureSync, nextFrame, nextRender, nextResize, nextUpdate } from '@vaadin/testing-helpers';
+import { fixtureSync, nextFrame, nextRender, nextUpdate } from '@vaadin/testing-helpers';
 import sinon from 'sinon';
 import './enable-feature-flag.js';
 import '../vaadin-pdf-viewer.js';
-import type { PDFDocumentProxy } from 'pdfjs-dist';
+import type { PDFDocumentProxy, PDFPageProxy } from 'pdfjs-dist';
 import { getDeepActiveElement } from '@vaadin/a11y-base/src/focus-utils.js';
 import { getSelectionRanges } from '../src/pdf-viewer-text-selection-controller.js';
 import type { PdfViewer } from '../vaadin-pdf-viewer.js';
@@ -15,9 +15,11 @@ import {
   type Fixture,
   fixtureUrl,
   getPdfDocumentPrototype,
+  getPdfPagePrototype,
   loadAndRender,
   nextRenderIdle,
   type PdfPage,
+  resizeViewer,
   scrollSettled,
 } from './helpers.js';
 
@@ -190,11 +192,33 @@ describe('links', () => {
       expect(warnings.some((message) => message.startsWith('Failed to render page'))).to.be.false;
       expect(pages[0].querySelector('canvas')).to.be.ok;
       expect(getLinks(1)).to.be.empty;
-      const idle = nextRenderIdle(viewer);
-      viewer.style.width = '900px';
-      await nextResize(viewer);
-      await idle;
+      await resizeViewer(viewer);
       expect(getLinks(1)).to.have.lengthOf(2);
+    });
+
+    it('should not warn when the links of a page fail after the document changes', async () => {
+      const prototype = await getPdfPagePrototype();
+      const getAnnotations = prototype.getAnnotations;
+      let rejectLinks: ((error: Error) => void) | undefined;
+      const linksRequested = new Promise<void>((resolve) => {
+        function fakeGetAnnotations(this: PDFPageProxy, ...args: Parameters<PDFPageProxy['getAnnotations']>) {
+          if (rejectLinks) {
+            return getAnnotations.apply(this, args);
+          }
+          resolve();
+          return new Promise<never>((_, reject) => {
+            rejectLinks = reject;
+          });
+        }
+        sinon.stub(prototype, 'getAnnotations').callsFake(fakeGetAnnotations);
+      });
+      const warn = sinon.stub(console, 'warn');
+      viewer.src = fixtureUrl('links.pdf');
+      await linksRequested;
+      await load('multi-page.pdf');
+      rejectLinks!(new Error('Links of a released page'));
+      await nextFrame();
+      expect(warn).to.be.not.called;
     });
 
     it('should place the link of a rotated page over its text', async () => {
