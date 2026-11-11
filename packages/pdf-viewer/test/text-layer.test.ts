@@ -30,7 +30,6 @@ describe('text layer', () => {
     return pages[pageNumber - 1].querySelector<HTMLElement>('.text-layer');
   }
 
-  /** Makes the viewer wider, which renders the pages again at a larger scale. */
   async function load(name: Fixture) {
     await loadAndRender(viewer, fixtureUrl(name));
   }
