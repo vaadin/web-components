@@ -142,6 +142,14 @@ describe('structure', () => {
 
     it('should give a link the text of its structure element, which is no second link', () => {
       expect(getOwnedText(getLink())).to.equal('Vaadin website');
+      // Chrome ignores aria-owns of an element that a link owns, so the link owns the text itself.
+      getLink()
+        .getAttribute('aria-owns')!
+        .split(' ')
+        .forEach((id) => {
+          expect(viewer.shadowRoot!.getElementById(id)!.closest('.text-layer')).to.be.ok;
+          expect(getTree()!.querySelector(`[aria-owns~="${id}"]`)).to.be.null;
+        });
       expect(getLink().getAttribute('aria-label')).to.equal('Vaadin website (opens in a new tab)');
       expect(getTree()!.querySelector('[role="link"]')).to.be.null;
     });
@@ -678,7 +686,8 @@ describe('structure', () => {
       expect(link.getAttribute('role')).to.equal('link');
       const owns = structure.getAriaAttributes('pdfjs_internal_id_5R')!.get('aria-owns')!;
       expect(link.hasAttribute('role')).to.be.false;
-      expect(structure.element.querySelector(`#${owns}`)!.getAttribute('aria-owns')).to.equal('p3R_mc0');
+      expect(owns).to.equal('p3R_mc0');
+      expect(structure.element.querySelector('[aria-owns="p3R_mc0"]')).to.be.null;
     });
   });
 });

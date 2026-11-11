@@ -193,7 +193,7 @@ export class PdfViewerStructureLayer {
 
   /**
    * Returns the ARIA attributes of the link element of an annotation. As in
-   * pdf.js, a link of a `Link` structure element owns the content of that
+   * pdf.js, a link of a `Link` structure element owns the text of that
    * element, which then loses its role, as the link takes its place.
    *
    * @param {string} annotationId
@@ -204,8 +204,12 @@ export class PdfViewerStructureLayer {
     if (ownership) {
       const { element, ids } = ownership;
       element.removeAttribute('role');
-      if (ids.length) {
-        this.#getAnnotationAttributes(annotationId).set('aria-owns', ids.join(' '));
+      // Unlike in pdf.js, the link owns the text itself, as Chrome ignores aria-owns of an element that a link owns.
+      const owners = this.#getLinkContentOwners(ids);
+      const textIds = owners.flatMap((owner) => owner.getAttribute('aria-owns').split(' '));
+      owners.forEach((owner) => owner.removeAttribute('aria-owns'));
+      if (textIds.length) {
+        this.#getAnnotationAttributes(annotationId).set('aria-owns', textIds.join(' '));
       }
       this.#pendingLinkOwnership.delete(annotationId);
     }
@@ -306,15 +310,26 @@ export class PdfViewerStructureLayer {
       afterLineBreak = element.localName === 'br';
     });
     this.#pendingLinkOwnership.forEach(({ ids }, annotationId) => {
-      const text = ids
-        .map((id) => this.element.querySelector(`#${id}`))
-        .flatMap((element) => [element, ...element.querySelectorAll('[aria-owns]')])
-        .flatMap((owner) => (owner.getAttribute('aria-owns') ?? '').split(' ').filter(Boolean))
+      const text = this.#getLinkContentOwners(ids)
+        .flatMap((owner) => owner.getAttribute('aria-owns').split(' '))
         .map((id) => textLayerElement.querySelector(`#${id}`))
         .map((element) => (element ? `${lineStarts.has(element) ? ' ' : ''}${element.textContent}` : ''))
         .join('');
       this.#linkTexts.set(annotationId, text);
     });
+  }
+
+  /**
+   * Returns the elements that own the text of a `Link` structure element, in document order.
+   * @param {string[]} ids the ids of the children of the `Link` structure element
+   * @return {HTMLElement[]}
+   * @private
+   */
+  #getLinkContentOwners(ids) {
+    return ids
+      .map((id) => this.element.querySelector(`#${id}`))
+      .flatMap((element) => [element, ...element.querySelectorAll('[aria-owns]')])
+      .filter((owner) => owner.getAttribute('aria-owns'));
   }
 
   /** @private */
