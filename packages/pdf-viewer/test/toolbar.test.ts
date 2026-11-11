@@ -100,7 +100,7 @@ describe('toolbar', () => {
     });
 
     it('should update the page field when the page changes', async () => {
-      viewer.page = 3;
+      viewer.scrollToPage(3);
       await nextRenderIdle(viewer);
       expect(pageField.value).to.equal('3');
     });
@@ -112,7 +112,7 @@ describe('toolbar', () => {
     });
 
     it('should go to the previous page when clicking previous page', async () => {
-      viewer.page = 3;
+      viewer.scrollToPage(3);
       await nextRenderIdle(viewer);
       previousButton.click();
       await nextRenderIdle(viewer);
@@ -140,14 +140,14 @@ describe('toolbar', () => {
 
     it('should toggle disabled on previous page button on the first page', async () => {
       expect(previousButton.disabled).to.be.true;
-      viewer.page = 2;
+      viewer.scrollToPage(2);
       await nextRenderIdle(viewer);
       expect(previousButton.disabled).to.be.false;
     });
 
     it('should toggle disabled on next page button on the last page', async () => {
       expect(nextButton.disabled).to.be.false;
-      viewer.page = 6;
+      viewer.scrollToPage(6);
       await nextRenderIdle(viewer);
       expect(nextButton.disabled).to.be.true;
     });
@@ -179,35 +179,8 @@ describe('toolbar', () => {
       expect(spy).to.be.not.called;
     });
 
-    describe('invalid page', () => {
-      let warnStub: sinon.SinonStub;
-
-      beforeEach(() => {
-        warnStub = sinon.stub(console, 'warn');
-      });
-
-      afterEach(() => {
-        warnStub.restore();
-      });
-
-      it('should leave the page field empty for a page out of range', async () => {
-        viewer.page = 10;
-        await nextFrame();
-        expect(pageField.value).to.equal('');
-        expect(pageField.invalid).to.be.false;
-      });
-
-      it('should go to the last page from a page above the page count', async () => {
-        viewer.page = 10;
-        await nextRenderIdle(viewer);
-        previousButton.click();
-        await nextRenderIdle(viewer);
-        expect(viewer.page).to.equal(6);
-      });
-    });
-
     it('should keep focus on the next page button when it gets disabled', async () => {
-      viewer.page = 5;
+      viewer.scrollToPage(5);
       await nextRenderIdle(viewer);
       nextButton.focus();
       await sendKeys({ press: 'Enter' });
@@ -239,7 +212,7 @@ describe('toolbar', () => {
       });
 
       it('should show the current page again when the page changes', async () => {
-        viewer.page = 3;
+        viewer.scrollToPage(3);
         await nextRenderIdle(viewer);
         expect(pageField.value).to.equal('3');
         expect(pageField.invalid).to.be.false;
@@ -289,7 +262,7 @@ describe('toolbar', () => {
 
     it('should keep the zoom items when the page changes', async () => {
       const { items } = zoomSelect;
-      viewer.page = 3;
+      viewer.scrollToPage(3);
       await nextRenderIdle(viewer);
       expect(zoomSelect.items).to.equal(items);
     });
@@ -577,7 +550,7 @@ describe('toolbar', () => {
       });
 
       it('should keep the child when the toolbar renders again', async () => {
-        viewer.page = 2;
+        viewer.scrollToPage(2);
         await nextRenderIdle(viewer);
         expect(approve.parentElement).to.equal(viewer);
         expect(approve.checkVisibility()).to.be.true;

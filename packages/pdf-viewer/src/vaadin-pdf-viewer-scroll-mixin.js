@@ -30,16 +30,15 @@ export const PdfViewerScrollMixin = (superClass) =>
          * The current page, starting from 1. The viewer updates it while the
          * user scrolls, to the page with the largest part of it in view, or,
          * for a page taller than the view, the largest part of the view.
-         * Setting it to another page scrolls to the start of that page.
-         * Setting it to the current page does not scroll, see `scrollToPage()`.
-         * A value that is not a page of the document logs a warning and does
-         * not scroll. A set value stays as it is until the user scrolls. A new
-         * `src` resets it to 1, unless `page` is set in the same update.
+         * A page scrolled to stays current until the user scrolls. A new
+         * `src` resets it to 1. Use `scrollToPage()` to go to another page.
+         * @type {number}
          */
         page: {
           type: Number,
           value: 1,
           notify: true,
+          readOnly: true,
         },
 
         /**
@@ -57,9 +56,6 @@ export const PdfViewerScrollMixin = (superClass) =>
 
     /** The index of the current page, see `getMostVisibleIndex()`, updated with the visible pages. */
     #currentIndex = 0;
-
-    /** The last page that the viewer set itself, to not scroll to it again. */
-    #scrolledPage = 1;
 
     /**
      * A page that was scrolled to, kept as the current page until the user scrolls.
@@ -124,13 +120,9 @@ export const PdfViewerScrollMixin = (superClass) =>
     updated(props) {
       super.updated(props);
 
-      // A new document starts from the first page, unless a page is set together with it.
-      if (props.has('src') && !props.has('page')) {
-        this.#setPageFromViewer(1);
-      }
-
-      if (props.has('page') && this.page !== this.#scrolledPage && this.__pages.length) {
-        this._scrollToPage(this.page);
+      // A new document starts from the first page.
+      if (props.has('src')) {
+        this._setPage(1);
       }
     }
 
@@ -152,7 +144,9 @@ export const PdfViewerScrollMixin = (superClass) =>
     }
 
     /**
-     * Scrolls to the start of the given page.
+     * Scrolls to the start of the given page and makes it the current page,
+     * also when it is the current page already. A value that is not a page
+     * of the document logs a warning and does not scroll.
      *
      * Right after setting `src`, it scrolls once the document has loaded, and
      * in a hidden viewer, once the viewer is shown. Does nothing without a
@@ -187,27 +181,29 @@ export const PdfViewerScrollMixin = (superClass) =>
       }
       this.#pendingPage = 0;
 
-      const { content } = this.$;
-      if (!this.#isPage(page)) {
+      if (!Number.isInteger(page) || page < 1 || page > this.__pages.length) {
         issueWarning(
           `The page ${page} is out of range for <vaadin-pdf-viewer>, the document has ${this.__pages.length} pages.`,
         );
-      } else {
-        const pageView = this.__pages[page - 1];
-        if (offset) {
-          content.scrollTop = pageView.element.offsetTop + offset.top;
-          // Not offsetLeft, which Chromium measures from behind the scrollbar on the left in RTL.
-          const view = content.getBoundingClientRect();
-          const box = pageView.element.getBoundingClientRect();
-          content.scrollLeft += box.left + offset.left - (view.left + content.clientLeft);
-        } else {
-          content.scrollTop =
-            pageView.element.offsetTop - Number.parseFloat(getComputedStyle(content).paddingBlockStart);
-        }
-        this.#setPageFromViewer(page);
+        // The visible pages may not be rendered yet, e.g. when the page was pending.
+        this.#updateVisiblePages();
+        return;
       }
 
-      // Keep the page as set until the user scrolls, also when it is out of range.
+      const { content } = this.$;
+      const pageView = this.__pages[page - 1];
+      if (offset) {
+        content.scrollTop = pageView.element.offsetTop + offset.top;
+        // Not offsetLeft, which Chromium measures from behind the scrollbar on the left in RTL.
+        const view = content.getBoundingClientRect();
+        const box = pageView.element.getBoundingClientRect();
+        content.scrollLeft += box.left + offset.left - (view.left + content.clientLeft);
+      } else {
+        content.scrollTop = pageView.element.offsetTop - Number.parseFloat(getComputedStyle(content).paddingBlockStart);
+      }
+      this._setPage(page);
+
+      // Keep the page until the user scrolls.
       this.#pinnedPage = page;
       this.#pinnedScrollTop = content.scrollTop;
       this.#updateVisiblePages();
@@ -308,20 +304,6 @@ export const PdfViewerScrollMixin = (superClass) =>
       } else {
         this.#updateVisiblePages();
       }
-    }
-
-    /**
-     * Sets the current page without scrolling to it.
-     * @private
-     */
-    #setPageFromViewer(page) {
-      this.#scrolledPage = page;
-      this.page = page;
-    }
-
-    /** @private */
-    #isPage(page) {
-      return Number.isInteger(page) && page >= 1 && page <= this.__pages.length;
     }
 
     /**
@@ -466,16 +448,14 @@ export const PdfViewerScrollMixin = (superClass) =>
       // E.g. the last page cannot always be scrolled to the top of the view.
       const pinned = this.#pinnedPage;
       if (pinned !== null && Math.abs(this.$.content.scrollTop - this.#pinnedScrollTop) < 1) {
-        if (this.#isPage(pinned)) {
-          this.#currentIndex = pinned - 1;
-        }
+        this.#currentIndex = pinned - 1;
         return;
       }
       this.#pinnedPage = null;
 
       const page = mostVisibleIndex + 1;
       if (page !== this.page) {
-        this.#setPageFromViewer(page);
+        this._setPage(page);
       }
     }
   };

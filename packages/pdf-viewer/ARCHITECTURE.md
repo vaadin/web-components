@@ -42,9 +42,9 @@ how to generate them.
 - A page that loses its canvas also frees the data that pdf.js keeps after rendering it, such as its
   decoded images, as in the pdf.js viewer.
 - When the device pixel ratio changes, the viewer renders the visible pages again at the new ratio.
-- A new `src` resets `page` to 1, unless the application sets `page` in the same update.
+- `page` is read-only. A new `src` resets it to 1. The application goes to a page with `scrollToPage()`.
 - `page` follows the page with the largest part of it in view. A page taller than the view counts the part
-  of the view that it fills instead. A page set by the application stays current until the user scrolls.
+  of the view that it fills instead. A page scrolled to stays current until the user scrolls.
 - On resize and zoom, the viewer keeps the same point of the current page at the top of the view.
 - The viewer fires an internal `render-idle` event when no page is left to render, once the page sizes are
   loaded. It is only intended for testing purposes and is not part of the public API.
