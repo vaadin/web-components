@@ -558,15 +558,12 @@ describe('vaadin-tooltip', () => {
     });
 
     it('should not close overlay opened on hover when the target itself is scrolled', async () => {
-      target.style.overflow = 'auto';
-      target.innerHTML = '<div style="height: 200px;"></div>';
       target.scrollIntoView({ block: 'center' });
       await waitForIntersectionObserver();
       mouseenter(target);
       await nextUpdate(tooltip);
 
-      target.scrollTop = 50;
-      await waitForIntersectionObserver();
+      target.dispatchEvent(new Event('scroll'));
       expect(overlay.opened).to.be.true;
     });
 
