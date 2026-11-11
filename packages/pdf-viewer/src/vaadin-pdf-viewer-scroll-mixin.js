@@ -188,7 +188,7 @@ export const PdfViewerScrollMixin = (superClass) =>
       this.#pendingPage = 0;
 
       const { content } = this.$;
-      if (!Number.isInteger(page) || page < 1 || page > this.__pages.length) {
+      if (!this.#isPage(page)) {
         issueWarning(
           `The page ${page} is out of range for <vaadin-pdf-viewer>, the document has ${this.__pages.length} pages.`,
         );
@@ -317,6 +317,11 @@ export const PdfViewerScrollMixin = (superClass) =>
     #setPageFromViewer(page) {
       this.#scrolledPage = page;
       this.page = page;
+    }
+
+    /** @private */
+    #isPage(page) {
+      return Number.isInteger(page) && page >= 1 && page <= this.__pages.length;
     }
 
     /**
@@ -461,7 +466,7 @@ export const PdfViewerScrollMixin = (superClass) =>
       // E.g. the last page cannot always be scrolled to the top of the view.
       const pinned = this.#pinnedPage;
       if (pinned !== null && Math.abs(this.$.content.scrollTop - this.#pinnedScrollTop) < 1) {
-        if (pinned >= 1 && pinned <= this.__pages.length) {
+        if (this.#isPage(pinned)) {
           this.#currentIndex = pinned - 1;
         }
         return;

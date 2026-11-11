@@ -211,6 +211,14 @@ describe('pages', () => {
         });
       });
 
+      it('should fit the pages to a new width after setting page to a fraction', async () => {
+        viewer.page = 2.5;
+        await nextFrame();
+        viewer.style.width = '600px';
+        await nextResize(viewer);
+        expect(pages[0].offsetWidth).to.be.closeTo(getContentBoxSize(content).width, 1);
+      });
+
       it('should scroll to the start of the page with scrollToPage()', async () => {
         const spy = sinon.spy();
         viewer.addEventListener('page-changed', spy);
