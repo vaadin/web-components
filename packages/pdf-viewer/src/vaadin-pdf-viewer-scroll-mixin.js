@@ -73,6 +73,12 @@ export const PdfViewerScrollMixin = (superClass) =>
     /** A page to scroll to once the pages can be laid out. */
     #pendingPage = 0;
 
+    /**
+     * A page that `scrollToPage()` asked for while the document of `src` was loading.
+     * @type {{ page: number, src: string | null | undefined } | null}
+     */
+    #requestedPage = null;
+
     #scrollFrame = 0;
 
     /** The scroll position while the viewer had a size, to restore it when shown again. */
@@ -154,12 +160,19 @@ export const PdfViewerScrollMixin = (superClass) =>
     /**
      * Scrolls to the start of the given page.
      *
-     * In a hidden viewer, it scrolls and updates `page` once the viewer is
-     * shown. Does nothing without a document, or when the viewer is not attached.
+     * While the document of `src` loads, also right after setting `src`, it
+     * scrolls once the document has loaded. In a hidden viewer, it scrolls and
+     * updates `page` once the viewer is shown. Does nothing without a document,
+     * or when the viewer is not attached.
      * @param {number} page the page, starting from 1
      */
     scrollToPage(page) {
-      if (this.isConnected && this.__pages.length) {
+      if (!this.isConnected) {
+        return;
+      }
+      if (this.__isDocumentLoading()) {
+        this.#requestedPage = { page, src: this.src };
+      } else if (this.__pages.length) {
         this._scrollToPage(page);
       }
     }
@@ -218,7 +231,10 @@ export const PdfViewerScrollMixin = (superClass) =>
     _documentLoaded(details) {
       super._documentLoaded(details);
 
-      this.#pendingPage = this.page;
+      // A page requested for an earlier `src` does not apply to this document.
+      const request = this.#requestedPage;
+      this.#requestedPage = null;
+      this.#pendingPage = request && request.src === this.src ? request.page : this.page;
       this._refreshLayout();
     }
 

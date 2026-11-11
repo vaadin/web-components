@@ -163,6 +163,16 @@ export const PdfViewerDocumentMixin = (superClass) =>
     }
 
     /**
+     * Whether the document of `src` is loading, also when `src` was set in
+     * this task and has not started loading yet.
+     * @return {boolean}
+     * @protected
+     */
+    __isDocumentLoading() {
+      return this.__loading || this.src !== this.#updatedSrc;
+    }
+
+    /**
      * Called when a document has loaded, before `document-load` is fired.
      * @param {import('./pdf-viewer-document-controller.js').PdfViewerDocumentDetails} _details
      * @protected
@@ -196,7 +206,7 @@ export const PdfViewerDocumentMixin = (superClass) =>
      * @private
      */
     #resolveReadyCallbacks(pdfDocument = this.isConnected ? this.#pdfDocument : null) {
-      if (this.__loading || this.src !== this.#updatedSrc || !this.#readyCallbacks.length) {
+      if (this.__isDocumentLoading() || !this.#readyCallbacks.length) {
         return;
       }
       const callbacks = this.#readyCallbacks;

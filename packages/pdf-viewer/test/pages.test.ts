@@ -226,6 +226,18 @@ describe('pages', () => {
         expect(content.scrollTop).to.equal(0);
       });
 
+      it('should open a new document at the page of scrollToPage() after setting src', async () => {
+        await scrollTo(pages[1].offsetTop);
+        const scrollTop = content.scrollTop;
+        viewer.src = fixtureUrl('links.pdf');
+        viewer.scrollToPage(3);
+        // The previous document does not scroll
+        expect(content.scrollTop).to.equal(scrollTop);
+        await oneEvent(viewer, 'document-load');
+        expect(viewer.page).to.equal(3);
+        expect(getPageTop(3)).to.be.closeTo(getPaddingTop(), 1);
+      });
+
       it('should reset the page when src changes', async () => {
         await scrollTo(content.scrollHeight);
         await loadDocument(viewer, 'links.pdf');
@@ -519,7 +531,24 @@ describe('pages', () => {
       expect(getPageTop(3)).to.be.closeTo(getPaddingTop(), 1);
     });
 
-    it('should not scroll or warn with scrollToPage() before loading', async () => {
+    it('should scroll to the page of scrollToPage() after setting src once loaded', async () => {
+      viewer.src = fixtureUrl('multi-page.pdf');
+      viewer.scrollToPage(3);
+      await oneEvent(viewer, 'document-load');
+      expect(viewer.page).to.equal(3);
+      expect(getPageTop(3)).to.be.closeTo(getPaddingTop(), 1);
+    });
+
+    it('should drop a scrollToPage() request when src changes again', async () => {
+      viewer.src = fixtureUrl('multi-page.pdf');
+      viewer.scrollToPage(3);
+      viewer.src = fixtureUrl('links.pdf');
+      await oneEvent(viewer, 'document-load');
+      expect(viewer.page).to.equal(1);
+      expect(content.scrollTop).to.equal(0);
+    });
+
+    it('should not scroll or warn with scrollToPage() before src is set', async () => {
       const stub = sinon.stub(console, 'warn');
       viewer.scrollToPage(3);
       viewer.src = fixtureUrl('multi-page.pdf');
