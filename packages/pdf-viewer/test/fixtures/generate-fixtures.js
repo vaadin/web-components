@@ -4,7 +4,7 @@
  *   node packages/pdf-viewer/test/fixtures/generate-fixtures.js
  *
  * Most fixtures are printed from HTML with Playwright's Chromium, which embeds
- * the fonts and can write tagged PDFs. See README.md.
+ * the fonts and can write tagged PDFs with an outline. See README.md.
  */
 import { readFileSync, writeFileSync } from 'node:fs';
 import { dirname, join } from 'node:path';
@@ -69,6 +69,31 @@ const fixtures = {
       </section>
       <section class="page"><p>Page 3</p></section>
       <section class="page"><p>Page 4</p></section>
+    `,
+  },
+  'outline.pdf': {
+    tagged: true,
+    outline: true,
+    html: `
+      <title>Outline fixture</title>
+      <style>${baseStyles}</style>
+      <section class="page">
+        <h1>Chapter 1</h1>
+        <h2>Section 1.1</h2>
+        <p>${paragraph}</p>
+        <h2>Section 1.2</h2>
+        <h3>Section 1.2.1</h3>
+        <p>${paragraph}</p>
+      </section>
+      <section class="page">
+        <h1>Chapter 2</h1>
+        <p>${paragraph}</p>
+      </section>
+      <section class="page">
+        <h1>Chapter 3</h1>
+        <h2>Section 3.1</h2>
+        <p>${paragraph}</p>
+      </section>
     `,
   },
   'tagged.pdf': {
@@ -176,6 +201,32 @@ function createRotatedPdf() {
 }
 
 /**
+ * Builds a PDF with a link annotation to a URL that the viewer must not open,
+ * next to links to other protocols that it allows.
+ */
+function createUnsafeLinksPdf() {
+  // pdf.js blocks only the `javascript:` URL. It allows `https:`, `ftp:` and `tel:` by default.
+  // eslint-disable-next-line no-script-url
+  const urls = ['https://vaadin.com/', 'javascript:alert(1)', 'ftp://example.com/', 'tel:123456'];
+  const content = urls.map((url, index) => `BT /F1 14 Tf 72 ${720 - index * 40} Td (${url}) Tj ET`).join(' ');
+  const links = urls.map(
+    (url, index) =>
+      `<< /Type /Annot /Subtype /Link /Rect [72 ${715 - index * 40} 300 ${735 - index * 40}] /Border [0 0 0] /A << /S /URI /URI (${url}) >> >>`,
+  );
+  return assemblePdf(
+    [
+      '<< /Type /Catalog /Pages 2 0 R >>',
+      '<< /Type /Pages /Kids [3 0 R] /Count 1 >>',
+      `<< /Type /Page /Parent 2 0 R /MediaBox [0 0 612 792] /Resources << /Font << /F1 5 0 R >> >> /Contents 4 0 R /Annots [${links.map((_, index) => `${index + 6} 0 R`).join(' ')}] >>`,
+      `<< /Length ${content.length} >>\nstream\n${content}\nendstream`,
+      '<< /Type /Font /Subtype /Type1 /BaseFont /Helvetica /Encoding /WinAnsiEncoding >>',
+      ...links,
+    ],
+    '',
+  );
+}
+
+/**
  * Builds a PDF with links that cover only part of a line, several links in one
  * line, and a link over two lines, in a monospace font so that the link areas
  * match the words exactly. A character of Courier at 14pt is 8.4pt wide.
@@ -252,7 +303,7 @@ function normalizePdf(pdf) {
 
 const browser = await chromium.launch();
 const page = await browser.newPage();
-for (const [name, { html, tagged = false }] of Object.entries(fixtures)) {
+for (const [name, { html, tagged = false, outline = false }] of Object.entries(fixtures)) {
   await page.setContent(`<!doctype html><html lang="en">${html}</html>`);
   await page.evaluate(() => document.fonts.ready);
   const pdf = await page.pdf({
@@ -260,6 +311,7 @@ for (const [name, { html, tagged = false }] of Object.entries(fixtures)) {
     printBackground: true,
     margin: { top: '20mm', bottom: '20mm', left: '20mm', right: '20mm' },
     tagged,
+    outline,
   });
   writeFileSync(join(dir, name), normalizePdf(pdf.toString('latin1')), 'latin1');
 }
@@ -267,6 +319,7 @@ await browser.close();
 
 writeFileSync(join(dir, 'encrypted.pdf'), createEncryptedPdf(), 'latin1');
 writeFileSync(join(dir, 'standard-font.pdf'), createStandardFontPdf(), 'latin1');
+writeFileSync(join(dir, 'unsafe-links.pdf'), createUnsafeLinksPdf(), 'latin1');
 writeFileSync(join(dir, 'inline-links.pdf'), createInlineLinksPdf(), 'latin1');
 writeFileSync(join(dir, 'javascript.pdf'), createJavaScriptPdf(), 'latin1');
 writeFileSync(join(dir, 'rotated.pdf'), createRotatedPdf(), 'latin1');
