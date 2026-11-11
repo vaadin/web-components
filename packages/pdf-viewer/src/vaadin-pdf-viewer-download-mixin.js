@@ -48,7 +48,13 @@ export const PdfViewerDownloadMixin = (superClass) =>
       });
     }
 
-    /** @private */
+    /**
+     * Returns the name to save the document under: `fileName` as given,
+     * else the name of the document, else `document`, with `.pdf` added
+     * when missing.
+     * @return {string}
+     * @private
+     */
     #getDownloadFileName() {
       if (this.fileName) {
         return this.fileName;

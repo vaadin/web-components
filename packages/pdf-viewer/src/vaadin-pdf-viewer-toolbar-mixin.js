@@ -261,7 +261,12 @@ export const PdfViewerToolbarMixin = (superClass) =>
       return this.pageCount ? String(this.page) : '';
     }
 
-    /** @private */
+    /**
+     * Goes to the entered page. The field validates the entry against `min`
+     * and `max` and keeps a page that does not exist with its error message.
+     * An empty field shows the current page again.
+     * @private
+     */
     #onPageFieldChange(event) {
       // The change is internal to the viewer. Applications listen to `page-changed`.
       event.stopPropagation();

@@ -250,7 +250,8 @@ export class PdfViewerPage {
    * as in link destinations. With the opposite corner of a rectangle, the
    * offset goes to the top left corner of the rectangle on the rotated page.
    * A missing coordinate, or one outside the page, gives an offset of 0 on
-   * the axis that it is on after the rotation of the page.
+   * the axis that it is on after the rotation of the page. Needs the page
+   * of the document, see `setPdfPage()`.
    *
    * @param {number | undefined} x
    * @param {number | undefined} y

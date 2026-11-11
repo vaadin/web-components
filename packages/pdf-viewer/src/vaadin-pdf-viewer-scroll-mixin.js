@@ -294,7 +294,11 @@ export const PdfViewerScrollMixin = (superClass) =>
       }
     }
 
-    /** @private */
+    /**
+     * Whether the viewer has a size, so that pages can be laid out. It has
+     * none e.g. inside a hidden tab.
+     * @private
+     */
     #hasLayout() {
       const { content } = this.$;
       return content.clientWidth > 0 && content.clientHeight > 0;
