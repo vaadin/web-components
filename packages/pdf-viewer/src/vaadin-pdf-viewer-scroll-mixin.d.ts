@@ -24,7 +24,8 @@ export declare class PdfViewerScrollMixinClass {
    * user scrolls, to the page with the largest part of it in view, or,
    * for a page taller than the view, the largest part of the view.
    * Setting it to another page scrolls to the start of that page.
-   * Setting it to the current page does not scroll. A value that is not
+   * Setting it to the current page does not scroll, use `scrollToPage()`
+   * for that. A value that is not
    * a page of the document logs a warning and does not scroll. A set
    * value stays as it is until the user scrolls. A new `src` resets it
    * to 1, unless `page` is set in the same update.
@@ -38,11 +39,19 @@ export declare class PdfViewerScrollMixinClass {
   protected _scale: number;
 
   /**
+   * Scrolls to the start of the given page and makes it the current page,
+   * also when it is the current page already. A value that is not a page
+   * of the document logs a warning and does not scroll. Does nothing
+   * while no document is loaded.
+   */
+  scrollToPage(page: number): void;
+
+  /**
    * Goes to the start of the given page, or to an offset on it in CSS
    * pixels from the top left corner of the page, when the user asks for it,
    * e.g. with the toolbar, a key or a link. It makes the page the current
    * page, also when it is the current page already. A `page` that the
-   * application sets does not come here. While the pages have no layout,
+   * application sets, or its `scrollToPage()` call, does not come here. While the pages have no layout,
    * e.g. in a hidden viewer, only the page is kept, and the offset is
    * dropped.
    */

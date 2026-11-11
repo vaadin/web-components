@@ -31,7 +31,8 @@ export const PdfViewerScrollMixin = (superClass) =>
          * user scrolls, to the page with the largest part of it in view, or,
          * for a page taller than the view, the largest part of the view.
          * Setting it to another page scrolls to the start of that page.
-         * Setting it to the current page does not scroll. A value that is not
+         * Setting it to the current page does not scroll, use `scrollToPage()`
+         * for that. A value that is not
          * a page of the document logs a warning and does not scroll. A set
          * value stays as it is until the user scrolls. A new `src` resets it
          * to 1, unless `page` is set in the same update.
@@ -130,7 +131,7 @@ export const PdfViewerScrollMixin = (superClass) =>
       }
 
       if (props.has('page') && this.page !== this.#scrolledPage && this.__pages.length) {
-        this.#scrollToPage(this.page);
+        this.#scrollPageIntoView(this.page);
       }
     }
 
@@ -152,10 +153,24 @@ export const PdfViewerScrollMixin = (superClass) =>
     }
 
     /**
+     * Scrolls to the start of the given page and makes it the current page,
+     * also when it is the current page already. A value that is not a page
+     * of the document logs a warning and does not scroll. Does nothing
+     * while no document is loaded.
+     * @param {number} page the page, starting from 1
+     */
+    scrollToPage(page) {
+      if (this.__pages.length) {
+        this.#scrollPageIntoView(page);
+      }
+    }
+
+    /**
      * Goes to the start of the given page, or to an offset on it, when the
      * user asks for it, e.g. with the toolbar, a key or a link. It makes the
      * page the current page, also when it is the current page already. A
-     * `page` that the application sets does not come here.
+     * `page` that the application sets, or its `scrollToPage()` call, does
+     * not come here.
      * @param {number} page
      * @param {{ left: number, top: number }} [offset] the offset from the top
      *   left corner of the page in CSS pixels. Without it, the padding above
@@ -165,7 +180,7 @@ export const PdfViewerScrollMixin = (superClass) =>
      * @protected
      */
     _goToPage(page, offset) {
-      this.#scrollToPage(page, offset);
+      this.#scrollPageIntoView(page, offset);
     }
 
     /**
@@ -174,7 +189,7 @@ export const PdfViewerScrollMixin = (superClass) =>
      * @param {{ left: number, top: number }} [offset]
      * @private
      */
-    #scrollToPage(page, offset) {
+    #scrollPageIntoView(page, offset) {
       if (!this.#hasLayout() || this._scale <= 0) {
         // Scroll once the pages can be laid out.
         this.#pendingPage = page;
@@ -300,7 +315,7 @@ export const PdfViewerScrollMixin = (superClass) =>
      */
     #scrollToPendingPage() {
       if (this.#pendingPage) {
-        this.#scrollToPage(this.#pendingPage);
+        this.#scrollPageIntoView(this.#pendingPage);
       } else {
         this.#updateVisiblePages();
       }

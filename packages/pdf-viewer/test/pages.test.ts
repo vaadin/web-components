@@ -186,6 +186,35 @@ describe('pages', () => {
         });
       });
 
+      it('should scroll to the start of the page with scrollToPage()', async () => {
+        const spy = sinon.spy();
+        viewer.addEventListener('page-changed', spy);
+        viewer.scrollToPage(4);
+        await nextRenderIdle(viewer);
+        expect(getPageTop(4)).to.be.closeTo(getPaddingTop(), 1);
+        expect(viewer.page).to.equal(4);
+        expect(spy).to.be.calledOnce;
+        expect(spy.firstCall.args[0].detail.value).to.equal(4);
+      });
+
+      it('should scroll back to the start of the current page with scrollToPage()', async () => {
+        await scrollTo(pages[1].offsetTop + 50);
+        expect(viewer.page).to.equal(2);
+        viewer.scrollToPage(2);
+        expect(getPageTop(2)).to.be.closeTo(getPaddingTop(), 1);
+        expect(viewer.page).to.equal(2);
+      });
+
+      it('should warn and not scroll with scrollToPage() for a page out of range', () => {
+        clearWarnings();
+        const stub = sinon.stub(console, 'warn');
+        viewer.scrollToPage(10);
+        expect(content.scrollTop).to.equal(0);
+        expect(viewer.page).to.equal(1);
+        expect(stub).to.be.calledOnce;
+        expect(stub.firstCall.args[0]).to.include('The page 10 is out of range');
+      });
+
       it('should reset the page when src changes', async () => {
         await scrollTo(content.scrollHeight);
         await loadDocument(viewer, 'links.pdf');
@@ -234,6 +263,16 @@ describe('pages', () => {
         viewer.hidden = false;
         await nextResize(viewer);
         expect(content.scrollTop).to.be.closeTo(scrollTop, 1);
+      });
+
+      it('should scroll to a page of scrollToPage() while hidden when shown again', async () => {
+        viewer.hidden = true;
+        await nextResize(viewer);
+        viewer.scrollToPage(2);
+        viewer.hidden = false;
+        await nextResize(viewer);
+        expect(viewer.page).to.equal(2);
+        expect(getPageTop(2)).to.be.closeTo(getPaddingTop(), 1);
       });
 
       it('should scroll to a page set while hidden when shown again', async () => {
@@ -467,6 +506,16 @@ describe('pages', () => {
       await oneEvent(viewer, 'document-load');
       expect(viewer.page).to.equal(3);
       expect(getPageTop(3)).to.be.closeTo(getPaddingTop(), 1);
+    });
+
+    it('should not scroll or warn with scrollToPage() before loading', async () => {
+      const stub = sinon.stub(console, 'warn');
+      viewer.scrollToPage(3);
+      viewer.src = fixtureUrl('multi-page.pdf');
+      await oneEvent(viewer, 'document-load');
+      expect(viewer.page).to.equal(1);
+      expect(content.scrollTop).to.equal(0);
+      expect(stub).to.be.not.called;
     });
 
     it('should render the first pages for a page out of range', async () => {
