@@ -201,14 +201,16 @@ describe('pages', () => {
         await scrollTo(pages[1].offsetTop + 50);
         expect(viewer.page).to.equal(2);
         viewer.scrollToPage(2);
+        await nextFrame();
         expect(getPageTop(2)).to.be.closeTo(getPaddingTop(), 1);
         expect(viewer.page).to.equal(2);
       });
 
-      it('should warn and not scroll with scrollToPage() for a page out of range', () => {
+      it('should warn and not scroll with scrollToPage() for a page out of range', async () => {
         clearWarnings();
         const stub = sinon.stub(console, 'warn');
         viewer.scrollToPage(10);
+        await nextFrame();
         expect(content.scrollTop).to.equal(0);
         expect(viewer.page).to.equal(1);
         expect(stub).to.be.calledOnce;
@@ -234,6 +236,7 @@ describe('pages', () => {
         // The previous document does not scroll
         expect(content.scrollTop).to.equal(scrollTop);
         await oneEvent(viewer, 'document-load');
+        await nextFrame();
         expect(viewer.page).to.equal(3);
         expect(getPageTop(3)).to.be.closeTo(getPaddingTop(), 1);
       });
@@ -535,22 +538,25 @@ describe('pages', () => {
       viewer.src = fixtureUrl('multi-page.pdf');
       viewer.scrollToPage(3);
       await oneEvent(viewer, 'document-load');
+      await nextFrame();
       expect(viewer.page).to.equal(3);
       expect(getPageTop(3)).to.be.closeTo(getPaddingTop(), 1);
     });
 
-    it('should drop a scrollToPage() request when src changes again', async () => {
+    it('should scroll the new document with scrollToPage() when src changes again', async () => {
       viewer.src = fixtureUrl('multi-page.pdf');
       viewer.scrollToPage(3);
       viewer.src = fixtureUrl('links.pdf');
       await oneEvent(viewer, 'document-load');
-      expect(viewer.page).to.equal(1);
-      expect(content.scrollTop).to.equal(0);
+      await nextFrame();
+      expect(viewer.page).to.equal(3);
+      expect(getPageTop(3)).to.be.closeTo(getPaddingTop(), 1);
     });
 
-    it('should not scroll or warn with scrollToPage() before src is set', async () => {
+    it('should not scroll or warn with scrollToPage() without src', async () => {
       const stub = sinon.stub(console, 'warn');
       viewer.scrollToPage(3);
+      await nextFrame();
       viewer.src = fixtureUrl('multi-page.pdf');
       await oneEvent(viewer, 'document-load');
       expect(viewer.page).to.equal(1);
