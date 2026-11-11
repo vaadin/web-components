@@ -171,8 +171,8 @@ export class PdfViewerTextSelectionController {
     }
 
     const ranges = getSelectionRanges(this.host.shadowRoot);
-    // As in later versions of pdf.js, the collapsed range of a click whose `selectionchange` comes after
-    // `pointerup` does not mark the text layer, as that would keep the links from being clicked.
+    // The collapsed range of a click whose `selectionchange` comes after `pointerup` does not mark the text layer,
+    // as that would keep the links from being clicked.
     const activeRanges = ranges.filter((range) => !range.collapsed || this.#isPointerDown);
     const activePages = pages.filter((page) =>
       activeRanges.some((range) => range.intersectsNode(page.textLayerElement)),
@@ -185,8 +185,7 @@ export class PdfViewerTextSelectionController {
       }
     });
 
-    // Unlike in pdf.js, which handles the text layers of all viewers together,
-    // only a selection in the text layers of this viewer moves their elements.
+    // Only a selection in the text layers of this viewer moves their elements.
     if (!activePages.length) {
       this.#prevRange = null;
       return;

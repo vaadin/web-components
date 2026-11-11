@@ -51,7 +51,7 @@ export const PdfViewerLinksMixin = (superClass) =>
     async #nameLinks(links) {
       await Promise.all(
         links.map(async ({ link, annotation }) => {
-          // As in pdf.js, the text that the link covers, which the worker finds for each link.
+          // The pdf.js worker finds the text that each link covers.
           const text = (annotation.overlaidText ?? '').replace(/\s+/gu, ' ').trim();
           let targetPage = null;
           if (!text && !annotation.url) {
@@ -100,8 +100,8 @@ export const PdfViewerLinksMixin = (superClass) =>
       const page = this.__pages[target.page - 1];
       const hasPosition = target.left !== undefined || target.top !== undefined;
       if (hasPosition) {
-        // The position depends on the size and the rotation of the page. A page that
-        // fails to load reports the error when it is rendered, and is scrolled to its start.
+        // The position needs the size and rotation of the page, and a page that fails to load
+        // reports the error when rendered.
         await this._loadPdfPage(page).catch(() => {});
         if (this._pdfDocument !== pdfDocument) {
           return;

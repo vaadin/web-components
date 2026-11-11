@@ -34,7 +34,6 @@ export const PdfViewerZoomMixin = (superClass) =>
         zoom: {
           value: 'page-width',
           notify: true,
-          // Numbers set as attribute, e.g. zoom="1.5", become numbers.
           converter: {
             fromAttribute: (value) =>
               value !== null && value.trim() !== '' && !Number.isNaN(Number(value)) ? Number(value) : value,
@@ -59,7 +58,7 @@ export const PdfViewerZoomMixin = (superClass) =>
 
       const { zoom } = this;
       if (props.has('zoom') && !isValidZoom(zoom)) {
-        // Only show strings and numbers, as converting other values to a string can throw.
+        // Converting other values to a string can throw.
         const value = typeof zoom === 'string' || typeof zoom === 'number' ? zoom : typeof zoom;
         issueWarning(`Invalid zoom value "${value}" for <vaadin-pdf-viewer>, using "page-width" instead.`);
         this.zoom = 'page-width';

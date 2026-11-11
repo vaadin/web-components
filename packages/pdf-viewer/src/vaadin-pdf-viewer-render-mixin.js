@@ -90,7 +90,6 @@ export const PdfViewerRenderMixin = (superClass) =>
       this.#updatePageLabels();
       this.$.pages.replaceChildren(...this.__pages.map((page) => page.element));
       this.#renderQueue.setPages(this.__pages);
-      // `render-idle` waits for the page sizes, see #notifyIdle().
       this.#pageSizesLoaded = this.__pages.length === 1;
       if (!this.#pageSizesLoaded) {
         const pdfDocument = this._pdfDocument;
@@ -185,8 +184,7 @@ export const PdfViewerRenderMixin = (superClass) =>
         return;
       }
       const pages = this.__pages.slice(1);
-      // Request a few pages at a time, so that requests for pages to
-      // render do not wait behind the requests for all page sizes.
+      // Batch the requests, so that pages to render do not wait behind all page sizes.
       for (let start = 0; start < pages.length; start += PAGE_SIZE_BATCH) {
         const batch = pages.slice(start, start + PAGE_SIZE_BATCH);
         // A page that fails to load reports the error when it is rendered.
@@ -272,7 +270,7 @@ export const PdfViewerRenderMixin = (superClass) =>
         this.$.content.focus({ preventScroll: true, focusVisible: isKeyboardActive() });
       }
       page.release();
-      // As in pdf.js, frees the data that the page keeps after rendering, e.g. its decoded images.
+      // Frees the data, such as decoded images, that the page keeps after rendering.
       page.pdfPage?.cleanup();
     }
 
@@ -281,7 +279,6 @@ export const PdfViewerRenderMixin = (superClass) =>
      * @private
      */
     #notifyIdle() {
-      // The layout is not final while pages get their own sizes.
       if (this.__pages.length && this.#pageSizesLoaded) {
         /** @internal to not document it in CEM */
         this.dispatchEvent(new CustomEvent('render-idle'));

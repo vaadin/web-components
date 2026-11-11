@@ -25,8 +25,7 @@ export const pdfViewerPageStyles = css`
     flex: none;
     /* pdf.js draws text wrong in an RTL canvas */
     direction: ltr;
-    /* pdf.js rounds the size of page layers down to these steps.
-       1px keeps the text within a pixel of the canvas, as in pdf.js. */
+    /* 1px steps keep the pdf.js layers within a pixel of the canvas */
     --scale-round-x: 1px;
     --scale-round-y: 1px;
     background: var(--vaadin-pdf-viewer-page-background, #fff);
@@ -64,7 +63,7 @@ export const pdfViewerPageStyles = css`
     pointer-events: auto;
   }
 
-  /* Keeps the selection in the text while dragging over links, as in pdf.js */
+  /* Keeps the selection in the text while dragging over links */
   [part='page']:has(> .text-layer.selecting) :is(.link, .link-area) {
     pointer-events: none;
   }
@@ -85,7 +84,7 @@ export const pdfViewerPageStyles = css`
       outline: 1px solid CanvasText;
     }
 
-    /* The canvas keeps its colors, so links are outlined as in pdf.js */
+    /* The canvas keeps its colors, so links are outlined */
     .link:not(:has(> .link-area)),
     .link-area {
       outline: 1.5px solid LinkText;

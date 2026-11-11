@@ -8,6 +8,5 @@
  * See https://vaadin.com/commercial-license-and-service-terms for the full
  * license.
  */
-// Entry point of the pdf.js worker. Loaded as a module worker by the viewer, see `pdfjs-loader.js`.
-// The import has side effects only: pdf.js sets up its message handler when it runs inside a worker.
+// Entry point of the pdf.js module worker, where the import sets up the pdf.js message handler.
 import 'pdfjs-dist/legacy/build/pdf.worker.mjs';

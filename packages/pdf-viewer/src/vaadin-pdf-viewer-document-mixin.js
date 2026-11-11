@@ -153,8 +153,8 @@ export const PdfViewerDocumentMixin = (superClass) =>
       }
       return new Promise((resolve) => {
         this.#readyCallbacks.push(resolve);
-        // Check once the calling code has run, as it may still set `src`. Detaching meanwhile
-        // keeps the document, as the document controller unloads it only after that check.
+        // Check once the calling code has run, as it may still set `src`,
+        // and keep the document if that code detaches the viewer.
         Promise.resolve().then(() => this.#resolveReadyCallbacks(this.#pdfDocument));
       });
     }

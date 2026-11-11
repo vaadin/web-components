@@ -81,7 +81,6 @@ export class PdfViewerPage {
 
     this.element = document.createElement('div');
     this.element.setAttribute('part', 'page');
-    // As in pdf.js, each page is a region with a name.
     this.element.setAttribute('role', 'region');
 
     /** @type {number} */
@@ -285,8 +284,7 @@ export class PdfViewerPage {
     container.className = 'text-layer';
     this.element.append(container);
 
-    // As in the viewer of pdf.js, the text layer reads the stream itself. `getTextContent()`
-    // iterates the stream with `for await`, which Safari 26 and earlier do not support.
+    // `getTextContent()` iterates the stream with `for await`, which Safari 26 and earlier do not support.
     const textLayer = new TextLayer({
       textContentSource: this.pdfPage.streamTextContent({ includeMarkedContent: true }),
       container,
@@ -307,7 +305,7 @@ export class PdfViewerPage {
     }
 
     if (this.textLayer === textLayer) {
-      // Extends the selection to the end of the page while selecting, see the styles.
+      // Extends the selection to the end of the page while selecting.
       const endOfContent = document.createElement('div');
       endOfContent.className = 'end-of-content';
       container.append(endOfContent);
@@ -347,7 +345,7 @@ export class PdfViewerPage {
 
     // A copy, as pdf.js returns the same annotations to each call.
     [...annotations].sort(compareAnnotationPositions).forEach((annotation) => {
-      // As in pdf.js, which hides the links on hidden layers.
+      // Leaves out the links on hidden layers of the document.
       if (annotation.oc && optionalContentConfig?.isVisible(annotation.oc) === false) {
         return;
       }

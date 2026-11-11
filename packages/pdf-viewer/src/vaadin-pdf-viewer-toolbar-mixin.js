@@ -93,7 +93,7 @@ export const PdfViewerToolbarMixin = (superClass) =>
      */
     _renderToolbar() {
       const title = this.headerTitle || this._getDocumentName() || this.__effectiveI18n.document;
-      // The toolbar collapses only while the header, which expands it, is shown.
+      // The header expands the toolbar, so the toolbar cannot collapse without it.
       const collapsed = this.toolbarCollapsed && !this.headerHidden;
       return html`
         <button
@@ -269,7 +269,7 @@ export const PdfViewerToolbarMixin = (superClass) =>
      * @private
      */
     #onPageFieldChange(event) {
-      // The change is internal to the viewer. Applications listen to `page-changed`.
+      // Hide the field change from applications, which listen to `page-changed`.
       event.stopPropagation();
       const field = event.target;
       if (field.value === '') {
@@ -319,7 +319,7 @@ export const PdfViewerToolbarMixin = (superClass) =>
 
     /** @private */
     #onZoomSelectChange(event) {
-      // The change is internal to the viewer. Applications listen to `zoom-changed`.
+      // Hide the select change from applications, which listen to `zoom-changed`.
       event.stopPropagation();
       const { value } = event.target;
       this.zoom = value === 'page-width' || value === 'page-fit' ? value : Number(value);

@@ -133,7 +133,7 @@ export class PdfViewerDocumentController {
       worker: this.#workerHandle.worker,
       // One request for the whole file, so that the server sends the document once.
       disableRange: true,
-      // Security: no XFA forms. Scripting (pdf.sandbox) is never loaded either.
+      // Disable XFA forms for security, like scripting (pdf.sandbox), which the viewer never loads.
       enableXfa: false,
     });
 
@@ -170,8 +170,7 @@ export class PdfViewerDocumentController {
     this.#loadingTask = null;
     this.#workerHandle = null;
     if (loadingTask) {
-      // Destroying the loading task also destroys its document. Release
-      // the worker only afterwards, as destroying talks to the worker.
+      // Release the worker only after destroying the loading task, which talks to the worker.
       loadingTask
         .destroy()
         .finally(() => releaseWorker(workerHandle))
