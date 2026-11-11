@@ -12,8 +12,6 @@
 export type PdfViewerVisiblePage = {
   /** The index of the page. */
   index: number;
-  /** The height of the page that is inside the view. */
-  height: number;
   /**
    * The visible height divided by the page height, or by the view height for
    * a page taller than the view, from 0 to 1.
@@ -41,7 +39,7 @@ export declare function getFitScale(availableWidth: number, pageWidth: number): 
 /**
  * Returns the pages that intersect the view, in document order. When no page
  * intersects it, returns the first page below the top of the view with a
- * visible height and ratio of 0.
+ * ratio of 0.
  */
 export declare function getVisiblePages(
   count: number,
