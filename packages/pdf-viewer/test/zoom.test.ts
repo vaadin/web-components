@@ -6,7 +6,6 @@ import '../vaadin-pdf-viewer.js';
 import type { PdfViewer } from '../vaadin-pdf-viewer.js';
 import { createPdf, fixtureUrl, getContentBoxSize, getViewCenter, loadAndRender, nextRenderIdle } from './helpers.js';
 
-/** The width of an A4 page at 100% in CSS pixels */
 const A4_WIDTH = (595.92 * 96) / 72;
 
 describe('zoom', () => {
@@ -151,12 +150,10 @@ describe('zoom', () => {
     });
 
     it('should keep the same part of the current page in view when zooming', async () => {
-      // How far the top of the view is down the page, relative to the page height
       const getScrollRatio = (page: HTMLElement) => (content.scrollTop - page.offsetTop) / page.offsetHeight;
 
       viewer.scrollToPage(3);
       await nextRenderIdle(viewer);
-      // Scroll to the middle of page 3
       content.scrollTop += pages[2].offsetHeight / 2;
       // Let the viewer handle the scroll
       await nextFrame();

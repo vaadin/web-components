@@ -592,9 +592,7 @@ describe('toolbar', () => {
     });
 
     it('should scroll each control into view when focused with the keyboard', async () => {
-      // The header and the toolbar scroll, so that some controls are out of view
       expect(topArea.scrollHeight).to.be.greaterThan(topArea.clientHeight);
-      // Go backwards from the pages through all toolbar controls.
       content.focus();
       await sendKeys({ press: 'Shift+Tab' });
       const visited = new Set<HTMLElement>();
@@ -607,16 +605,14 @@ describe('toolbar', () => {
         visited.add(control);
         const name = control.getAttribute('icon') ?? control.localName;
         const rect = control.getBoundingClientRect();
-        // Visible in the header and the toolbar, which are inside the viewer
         const areaRect = topArea.getBoundingClientRect();
         const viewerRect = viewer.getBoundingClientRect();
         const top = Math.max(areaRect.top, viewerRect.top);
         const bottom = Math.min(areaRect.bottom, viewerRect.bottom);
-        // With room for the focus ring around the control. The header has it inside.
+        // Leave room for the focus ring, which the header draws inside.
         const room = control === header ? 0 : 3;
         expect(rect.top, name).to.be.at.least(top + room);
         expect(rect.bottom, name).to.be.at.most(bottom - room);
-        // The viewer itself does not scroll, which would move the toolbar or the pages out of view.
         expect(viewer.scrollTop, name).to.equal(0);
         await sendKeys({ press: 'Shift+Tab' });
       }

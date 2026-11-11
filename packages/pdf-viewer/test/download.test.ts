@@ -24,10 +24,6 @@ describe('download', () => {
     return viewer.querySelector<HTMLElement & { disabled: boolean }>('vaadin-pdf-viewer-button[icon="download"]');
   }
 
-  /**
-   * Returns a promise for the next download, with the link that starts it
-   * and the data that it saves.
-   */
   function nextDownload() {
     return new Promise<{ link: HTMLAnchorElement; blob: Blob }>((resolve) => {
       function fakeClick(this: HTMLAnchorElement) {
@@ -320,12 +316,11 @@ describe('download', () => {
 
     describe('while reading the file', () => {
       let release: () => void;
-      /** Resolves when the viewer starts reading the bytes. */
+      // Resolves when the viewer starts reading the bytes.
       let reading: Promise<void>;
 
       beforeEach(async () => {
-        // Delay the bytes of the documents until released, then return those of the
-        // loaded document, also when it is unloaded meanwhile.
+        // Hold the bytes until `release()`, then return them also when the document is unloaded meanwhile.
         const data = await getOriginal();
         const released = new Promise<void>((resolve) => {
           release = resolve;
@@ -375,7 +370,7 @@ describe('download', () => {
   });
 
   describe('before load', () => {
-    /** Called when a download reads the bytes, before the link is clicked. */
+    // Called when a download reads the bytes, before the link is clicked.
     let getDataSpy: sinon.SinonSpy;
 
     beforeEach(async () => {

@@ -120,7 +120,7 @@ describe('pages', () => {
         const pageNumbers = cleanup.thisValues.map((pdfPage: PDFPageProxy) => pdfPage.pageNumber);
         expect(pageNumbers).to.include(1);
         expect(pageNumbers).to.not.include(6);
-        // cleanup() returns false when pdf.js only defers freeing, e.g. while a render is in progress
+        // cleanup() returns false when pdf.js only defers freeing the page
         expect(cleanup.returnValues[pageNumbers.indexOf(1)]).to.be.true;
       });
 
@@ -184,7 +184,6 @@ describe('pages', () => {
       it('should follow the most visible page again after scrolling from a page scrolled to', async () => {
         viewer.scrollToPage(4);
         await nextRenderIdle(viewer);
-        // Scroll until only a small part of page 4 is visible
         await scrollTo(pages[4].offsetTop - 30);
         expect(viewer.page).to.equal(5);
       });
@@ -247,7 +246,6 @@ describe('pages', () => {
         const scrollTop = content.scrollTop;
         viewer.src = fixtureUrl('links.pdf');
         viewer.scrollToPage(3);
-        // The previous document does not scroll
         expect(content.scrollTop).to.equal(scrollTop);
         await oneEvent(viewer, 'document-load');
         await nextFrame();
@@ -322,7 +320,6 @@ describe('pages', () => {
         await nextResize(viewer);
         await nextFrame();
         expect(viewer.page).to.equal(3);
-        // The point at the top of the view keeps its place relative to the page size
         expect(getPageTop(3)).to.be.within(getPaddingTop(), 2 * getPaddingTop());
       });
 
@@ -349,7 +346,6 @@ describe('pages', () => {
         const stub = sinon.stub(console, 'warn');
         viewer.src = fixtureUrl('links.pdf');
         await oneEvent(viewer, 'document-load');
-        // Rendering of the first page is in progress
         expect(pages[0].querySelector('canvas')).to.be.null;
         const idle = nextRenderIdle(viewer);
         viewer.style.width = '600px';
@@ -384,7 +380,6 @@ describe('pages', () => {
     });
 
     it('should render the most visible page first, then the other visible pages, then one page ahead on each side', async () => {
-      // The end of page 9 and most of page 10 are visible
       await scrollTo(pages[9].offsetTop - 100);
       expect(rendered).to.deep.equal([10, 9, 11, 8]);
     });
@@ -487,7 +482,7 @@ describe('pages', () => {
     beforeEach(async () => {
       await createViewer();
       const getContext = HTMLCanvasElement.prototype.getContext;
-      // The canvas of a page gets an opaque context, the context of a page fails to be created
+      // Page canvases request an opaque context, which fails here
       function fakeGetContext(this: HTMLCanvasElement, type: string, options?: { alpha?: boolean }) {
         return options && options.alpha === false ? null : getContext.call(this, type, options);
       }
@@ -669,7 +664,7 @@ describe('pages', () => {
     });
 
     it('should keep a page taller than the view while it fills most of the view', async () => {
-      // Page 3 is three times taller than the view, page 4 shows 60% of it
+      // Page 3 is three times taller than the view, and page 4 shows 60% of it
       await scrollTo(pages[3].offsetTop + pages[3].offsetHeight * 0.6 - content.clientHeight);
       expect(viewer.page).to.equal(3);
     });
