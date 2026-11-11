@@ -130,7 +130,7 @@ export const PdfViewerScrollMixin = (superClass) =>
       }
 
       if (props.has('page') && this.page !== this.#scrolledPage && this.__pages.length) {
-        this.#scrollPageIntoView(this.page);
+        this._scrollToPage(this.page);
       }
     }
 
@@ -160,14 +160,13 @@ export const PdfViewerScrollMixin = (superClass) =>
      */
     scrollToPage(page) {
       if (this.isConnected && this.__pages.length) {
-        this.#scrollPageIntoView(page);
+        this._scrollToPage(page);
       }
     }
 
     /**
-     * Goes to the given page when the user asks for it, e.g. with the toolbar,
-     * a key or a link. Setting `page` and `scrollToPage()` do not call it, so
-     * that an override reacts to the user alone.
+     * Scrolls to the start of the given page, or to an offset on it, and
+     * makes it the current page, also when it is the current page already.
      * @param {number} page
      * @param {{ left: number, top: number }} [offset] the offset from the top
      *   left corner of the page in CSS pixels. Without it, the padding above
@@ -176,18 +175,7 @@ export const PdfViewerScrollMixin = (superClass) =>
      *   kept, and the offset is dropped.
      * @protected
      */
-    _goToPage(page, offset) {
-      this.#scrollPageIntoView(page, offset);
-    }
-
-    /**
-     * Scrolls to the start of the given page, or to an offset on it, and
-     * makes it the current page, also when it is the current page already.
-     * @param {number} page
-     * @param {{ left: number, top: number }} [offset]
-     * @private
-     */
-    #scrollPageIntoView(page, offset) {
+    _scrollToPage(page, offset) {
       if (!this.#hasLayout() || this._scale <= 0) {
         // Scroll once the pages can be laid out.
         this.#pendingPage = page;
@@ -313,7 +301,7 @@ export const PdfViewerScrollMixin = (superClass) =>
      */
     #scrollToPendingPage() {
       if (this.#pendingPage) {
-        this.#scrollPageIntoView(this.#pendingPage);
+        this._scrollToPage(this.#pendingPage);
       } else {
         this.#updateVisiblePages();
       }

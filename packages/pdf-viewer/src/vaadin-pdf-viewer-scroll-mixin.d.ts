@@ -46,13 +46,13 @@ export declare class PdfViewerScrollMixinClass {
   scrollToPage(page: number): void;
 
   /**
-   * Goes to the given page when the user asks for it, e.g. with the toolbar,
-   * a key or a link. Setting `page` and `scrollToPage()` do not call it, so
-   * that an override reacts to the user alone. The offset is in CSS pixels
-   * from the top left corner of the page. While the pages have no layout,
-   * e.g. in a hidden viewer, the offset is dropped.
+   * Scrolls to the start of the given page, or to an offset on it in CSS
+   * pixels from the top left corner of the page, and makes it the current
+   * page, also when it is the current page already. While the pages have no
+   * layout, e.g. in a hidden viewer, only the page is kept, and the offset
+   * is dropped.
    */
-  protected _goToPage(page: number, offset?: { left: number; top: number }): void;
+  protected _scrollToPage(page: number, offset?: { left: number; top: number }): void;
 
   /**
    * Returns the scale of the pages in CSS pixels per PDF unit for the given

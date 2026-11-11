@@ -119,7 +119,7 @@ export const PdfViewerLinksMixin = (superClass) =>
       }
       const offset =
         hasPosition && page.pdfPage ? page.getOffset(target.left, target.top, target.right, target.bottom) : undefined;
-      this._goToPage(target.page, offset);
+      this._scrollToPage(target.page, offset);
       this.$.content.focus({ preventScroll: true, focusVisible: isKeyboardActive() });
     }
   };

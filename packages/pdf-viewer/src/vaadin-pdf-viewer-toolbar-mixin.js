@@ -242,7 +242,7 @@ export const PdfViewerToolbarMixin = (superClass) =>
 
     /** @private */
     #onPreviousPageClick() {
-      this._goToPage(Math.min(this.page, this.pageCount + 1) - 1);
+      this._scrollToPage(Math.min(this.page, this.pageCount + 1) - 1);
     }
 
     /** @private */
@@ -252,7 +252,7 @@ export const PdfViewerToolbarMixin = (superClass) =>
 
     /** @private */
     #onNextPageClick() {
-      this._goToPage(Math.max(this.page, 0) + 1);
+      this._scrollToPage(Math.max(this.page, 0) + 1);
     }
 
     /**
@@ -279,7 +279,7 @@ export const PdfViewerToolbarMixin = (superClass) =>
       if (field.value === '') {
         field.value = this.#getPageFieldValue();
       } else if (!field.invalid) {
-        this._goToPage(Number(field.value));
+        this._scrollToPage(Number(field.value));
       }
     }
 

@@ -61,15 +61,13 @@ how to generate them.
 - `PdfViewerScrollMixin` owns the scale `_scale`, the anchor, the visible pages and `page`. It asks for
   rendering only with `_renderVisible()` and `_cancelRender()`. It gets the scale from `_getScaleForSize()`, which
   fits the width of the current page by default.
-  - `_goToPage()` is for user navigation only: the toolbar, the keys and the links call it. Setting `page` and
-    `scrollToPage()` scroll without it, so that an override reacts to the user alone.
 - `PdfViewerZoomMixin` owns `zoom`. It writes no render or scroll state:
   - It overrides `_getScaleForSize()` to return the scale for `zoom`.
   - It calls `_refreshLayout()` when `zoom` changes.
   - Its `_zoomFactor` getter reads `_scale`, in units of the actual page size.
 - `PdfViewerTextLayerMixin` renders the text layer of each rendered page and sets the document language on the
   pages. A page loads its text each time it renders, as pdf.js' own viewer does.
-- `PdfViewerLinksMixin` adds the links of each rendered page and follows internal links with `_goToPage()`.
+- `PdfViewerLinksMixin` adds the links of each rendered page and follows internal links with `_scrollToPage()`.
 - After a page canvas renders, `PdfViewerRenderMixin` awaits `_renderPageLayers(page)`. Each override awaits
   `super` first, so the layers render in the order of the mixins: text, then links.
 - The page view owns the DOM of a page: the canvas, the text layer and the link layer. Its methods check after
@@ -80,7 +78,7 @@ how to generate them.
   application children added later keep their place.
   - The header is a button in the shadow DOM that collapses and expands the toolbar. It shows `headerTitle`,
     else `_getDocumentName()` of the document mixin, the name that downloads also use.
-  - The controls call the methods of the inner mixins, for example `_goToPage()`, `_stepZoom()` and
+  - The controls call the methods of the inner mixins, for example `_scrollToPage()`, `_stepZoom()` and
     `download()`.
   - Each icon button is named after its tooltip text: its `vaadin-tooltip` has the `ariaLinkMode` property set to
     `aria-labelledby`. A new button needs the same, and no `aria-label`. Bind the property, not the
