@@ -131,7 +131,7 @@ export const PdfViewerRenderMixin = (superClass) =>
     #updatePageLabels() {
       const { pageLabel } = this.__effectiveI18n;
       this.__pages.forEach((page) => {
-        page.element.setAttribute('aria-label', pageLabel.replace('{page}', page.pageNumber));
+        page.setLabel(pageLabel.replace('{page}', page.pageNumber));
       });
     }
 

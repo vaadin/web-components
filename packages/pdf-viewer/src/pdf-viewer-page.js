@@ -69,6 +69,9 @@ export class PdfViewerPage {
   /** Set once the links of the current canvas are rendered, also when the page has none. */
   #linksRendered = false;
 
+  /** The accessible name of the page, see `setLabel()`. */
+  #label = '';
+
   /**
    * @param {number} pageNumber
    * @param {{ width: number, height: number }} size the estimated size of the page
@@ -86,7 +89,6 @@ export class PdfViewerPage {
 
     this.element = document.createElement('div');
     this.element.setAttribute('part', 'page');
-    this.element.setAttribute('role', 'group');
 
     /** @type {number} */
     this.scale = 0;
@@ -232,6 +234,30 @@ export class PdfViewerPage {
     this.canvas = canvas;
     this.renderedScale = scale;
     this.renderedPixelRatio = pixelRatio;
+    this.#updateRole();
+  }
+
+  /**
+   * Sets the accessible name of the page. The page has it, and the `region`
+   * role, only while it is rendered, so that screen readers do not list the
+   * pages with no content.
+   *
+   * @param {string} label
+   */
+  setLabel(label) {
+    this.#label = label;
+    this.#updateRole();
+  }
+
+  /** @private */
+  #updateRole() {
+    if (this.canvas) {
+      this.element.setAttribute('role', 'region');
+      this.element.setAttribute('aria-label', this.#label);
+    } else {
+      this.element.removeAttribute('role');
+      this.element.removeAttribute('aria-label');
+    }
   }
 
   /**
@@ -422,6 +448,7 @@ export class PdfViewerPage {
       this.#freeCanvas(this.canvas);
       this.canvas = null;
     }
+    this.#updateRole();
   }
 
   /** @private */
