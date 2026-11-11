@@ -549,6 +549,29 @@ describe('vaadin-tooltip', () => {
       await waitForIntersectionObserver();
       expect(overlay.opened).to.be.false;
     });
+
+    it('should close overlay opened on hover when the container is scrolled', async () => {
+      target.scrollIntoView({ block: 'center' });
+      await waitForIntersectionObserver();
+      mouseenter(target);
+      await nextUpdate(tooltip);
+      expect(overlay.opened).to.be.true;
+
+      // Target is still partially visible
+      container.scrollTop += 120;
+      await waitForIntersectionObserver();
+      expect(overlay.opened).to.be.false;
+    });
+
+    it('should not open overlay after hover delay when the target was scrolled out', async () => {
+      tooltip.hoverDelay = 50;
+      mouseenter(target);
+
+      container.scrollTop = 0;
+      await waitForIntersectionObserver();
+      await aTimeout(50);
+      expect(overlay.opened).to.be.false;
+    });
   });
 
   describe('shouldShow', () => {
