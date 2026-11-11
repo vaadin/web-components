@@ -108,7 +108,7 @@ export const PdfViewerToolbarMixin = (superClass) =>
           <span id="title" part="title" dir="auto" title="${title}">${title}</span>
           <span part="header-toggle"></span>
         </button>
-        <div id="toolbar" part="toolbar" role="toolbar" ?hidden="${collapsed}">
+        <div id="toolbar" part="toolbar" ?hidden="${collapsed}">
           <div part="toolbar-group">
             <slot name="toolbar-navigation" ${slotContent(this._renderNavigationControls())}></slot>
           </div>

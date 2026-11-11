@@ -238,7 +238,6 @@ snapshots["vaadin-pdf-viewer shadow default"] =
   <div
     id="toolbar"
     part="toolbar"
-    role="toolbar"
   >
     <div part="toolbar-group">
       <slot name="toolbar-navigation">
@@ -299,7 +298,6 @@ snapshots["vaadin-pdf-viewer shadow document"] =
   <div
     id="toolbar"
     part="toolbar"
-    role="toolbar"
   >
     <div part="toolbar-group">
       <slot name="toolbar-navigation">
@@ -482,7 +480,6 @@ snapshots["vaadin-pdf-viewer shadow header title"] =
   <div
     id="toolbar"
     part="toolbar"
-    role="toolbar"
   >
     <div part="toolbar-group">
       <slot name="toolbar-navigation">
@@ -666,7 +663,6 @@ snapshots["vaadin-pdf-viewer shadow header hidden"] =
   <div
     id="toolbar"
     part="toolbar"
-    role="toolbar"
   >
     <div part="toolbar-group">
       <slot name="toolbar-navigation">
@@ -850,7 +846,6 @@ snapshots["vaadin-pdf-viewer shadow toolbar collapsed"] =
     hidden=""
     id="toolbar"
     part="toolbar"
-    role="toolbar"
   >
     <div part="toolbar-group">
       <slot name="toolbar-navigation">
