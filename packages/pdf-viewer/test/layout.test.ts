@@ -65,7 +65,7 @@ describe('layout', () => {
       ]);
     });
 
-    it('should return the next page with height 0 when the view only shows a gap', () => {
+    it('should return the next page with a ratio of 0 when the view only shows a gap', () => {
       expect(getVisiblePages(10, getBounds, 212, 218)).to.deep.equal([{ index: 2, ratio: 0 }]);
     });
 
