@@ -559,15 +559,33 @@ describe('vaadin-tooltip', () => {
       expect(overlay.opened).to.be.true;
     });
 
-    it('should open overlay on hover of a new target after the target was changed while hovered', async () => {
+    it('should close overlay on scroll while waiting for the hide delay after mouseleave', async () => {
+      tooltip.hideDelay = 500;
+      target.scrollIntoView({ block: 'center' });
+      await waitForIntersectionObserver();
       mouseenter(target);
-      const newTarget = fixtureSync('<div>New target</div>');
-      tooltip.target = newTarget;
+      await nextUpdate(tooltip);
+
+      mouseleave(target);
+      container.scrollTop += 20;
+      await waitForIntersectionObserver();
+      expect(overlay.opened).to.be.false;
+    });
+
+    it('should not re-open overlay when the target is scrolled out and back in after hover', async () => {
+      target.scrollIntoView({ block: 'center' });
+      await waitForIntersectionObserver();
+      mouseenter(target);
+      await nextUpdate(tooltip);
+
+      // Fully hidden
+      container.scrollTop = 0;
       await waitForIntersectionObserver();
 
-      mouseenter(newTarget);
-      await nextUpdate(tooltip);
-      expect(overlay.opened).to.be.true;
+      // Visible again
+      target.scrollIntoView({ block: 'center' });
+      await waitForIntersectionObserver();
+      expect(overlay.opened).to.be.false;
     });
 
     it('should not close overlay opened on keyboard focus when the hovered target is scrolled', async () => {

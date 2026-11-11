@@ -47,7 +47,8 @@ export declare class TooltipMixinClass {
   /**
    * The delay in milliseconds before the tooltip
    * is closed on losing hover, when not in manual mode.
-   * On blur, the tooltip is closed immediately.
+   * On blur, and when an ancestor of the target is scrolled,
+   * the tooltip is closed immediately.
    * @attr {number} hide-delay
    */
   hideDelay: number;

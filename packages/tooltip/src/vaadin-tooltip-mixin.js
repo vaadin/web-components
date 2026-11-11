@@ -266,7 +266,8 @@ export const TooltipMixin = (superClass) =>
         /**
          * The delay in milliseconds before the tooltip
          * is closed on losing hover, when not in manual mode.
-         * On blur, the tooltip is closed immediately.
+         * On blur, and when an ancestor of the target is scrolled,
+         * the tooltip is closed immediately.
          * @attr {number} hide-delay
          */
         hideDelay: {
@@ -460,6 +461,10 @@ export const TooltipMixin = (superClass) =>
         document.addEventListener('keydown', this.__onKeyDown, true);
       } else if (oldOpened) {
         document.removeEventListener('keydown', this.__onKeyDown, true);
+
+        if (!this.__hoverInside) {
+          this.__removeScrollListeners();
+        }
       }
     }
 
@@ -647,7 +652,12 @@ export const TooltipMixin = (superClass) =>
       }
 
       this.__hoverInside = false;
-      this.__removeScrollListeners();
+
+      // Keep listening while the tooltip waits for the hide delay,
+      // so that scrolling closes it instead of moving it with the target.
+      if (!this.opened) {
+        this.__removeScrollListeners();
+      }
 
       if (!this.__focusInside) {
         this._stateController.close();
@@ -682,7 +692,7 @@ export const TooltipMixin = (superClass) =>
 
       // Scrolling moves the target away from the pointer, so it ends hovering.
       // Ignore scrolling inside the target, which does not move it.
-      if (event.target === this.target || !isFlattenedAncestor(event.target, this.target)) {
+      if (!isFlattenedAncestor(event.target, this.target)) {
         return;
       }
 

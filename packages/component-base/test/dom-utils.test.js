@@ -116,8 +116,8 @@ describe('dom-utils', () => {
       child = host.querySelector('span');
     });
 
-    it('should return true for the node itself', () => {
-      expect(isFlattenedAncestor(child, child)).to.be.true;
+    it('should return false for the node itself', () => {
+      expect(isFlattenedAncestor(child, child)).to.be.false;
     });
 
     it('should return true for a shadow DOM element the node is slotted into', () => {

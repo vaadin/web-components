@@ -78,19 +78,21 @@ export function getClosestElement(selector, node) {
 }
 
 /**
- * Returns true if the given `node` is the `ancestor` itself or its descendant
+ * Returns true if the given `ancestor` is an ancestor of the `node`
  * in the flattened tree, which includes slotted nodes and shadow DOM trees.
+ * Returns false when both are the same node.
  *
  * @param {Node} ancestor
  * @param {Node} node
  * @return {boolean}
  */
 export function isFlattenedAncestor(ancestor, node) {
-  while (node) {
-    if (node === ancestor) {
+  let parent = node;
+  while (parent) {
+    parent = parent.assignedSlot || parent.parentNode || parent.host;
+    if (parent === ancestor) {
       return true;
     }
-    node = node.assignedSlot || node.parentNode || node.host;
   }
   return false;
 }

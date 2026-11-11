@@ -1,5 +1,5 @@
 import { expect } from '@vaadin/chai-plugins';
-import { fixtureSync, nextFrame, nextRender, nextUpdate } from '@vaadin/testing-helpers';
+import { fixtureSync, mousedown, nextFrame, nextRender, nextUpdate } from '@vaadin/testing-helpers';
 import sinon from 'sinon';
 import { html, render } from 'lit';
 import { Tooltip } from '../src/vaadin-tooltip.js';
@@ -72,6 +72,22 @@ describe('tooltip target', () => {
       tooltip.remove();
 
       expect(target.hasAttribute('aria-describedby')).to.be.false;
+    });
+
+    it('should open overlay on hover of a new target after the target was changed while hovered', async () => {
+      tooltip.text = 'Test';
+      tooltip.target = target;
+      await nextUpdate(tooltip);
+      mouseenter(target);
+      mousedown(target);
+
+      const newTarget = fixtureSync('<div>New target</div>');
+      tooltip.target = newTarget;
+      await nextUpdate(tooltip);
+
+      mouseenter(newTarget);
+      await nextUpdate(tooltip);
+      expect(overlay.opened).to.be.true;
     });
 
     it('should restore aria-describedby when the tooltip is reattached', async () => {
