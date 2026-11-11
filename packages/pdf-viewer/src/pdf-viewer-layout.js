@@ -12,7 +12,6 @@
 /**
  * @typedef {Object} PdfViewerVisiblePage
  * @property {number} index The index of the page.
- * @property {number} height The height of the page that is inside the view.
  * @property {number} ratio The visible height divided by the page height, or by
  *   the view height for a page taller than the view, from 0 to 1.
  */
@@ -40,7 +39,7 @@ export function getFitScale(availableWidth, pageWidth) {
 /**
  * Returns the pages that intersect the view, in document order. When no page
  * intersects it, returns the first page below the top of the view with a
- * visible height and ratio of 0.
+ * ratio of 0.
  *
  * @param {number} count the number of pages
  * @param {(index: number) => { top: number, height: number }} getBounds
@@ -72,10 +71,10 @@ export function getVisiblePages(count, getBounds, viewTop, viewBottom) {
     const visibleHeight = Math.min(viewBottom, top + height) - Math.max(viewTop, top);
     // A page taller than the view can at most fill the view.
     const maxHeight = Math.min(height, viewBottom - viewTop);
-    visible.push({ index, height: visibleHeight, ratio: maxHeight > 0 ? visibleHeight / maxHeight : 0 });
+    visible.push({ index, ratio: maxHeight > 0 ? visibleHeight / maxHeight : 0 });
   }
   if (!visible.length) {
-    visible.push({ index: low, height: 0, ratio: 0 });
+    visible.push({ index: low, ratio: 0 });
   }
   return visible;
 }
