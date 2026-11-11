@@ -47,7 +47,7 @@ describe('Grid', () => {
     columnElementName: string,
     assertions: { expectedColumnCount: number; expectedCellCount: number },
   ) {
-    return vi.waitFor(async () => {
+    return vi.waitFor(() => {
       const grid = document.querySelector('vaadin-grid, vaadin-grid-pro')!;
       expect(grid).to.exist;
 
@@ -349,7 +349,7 @@ describe('Grid', () => {
         const indexInLevel = page * pageSize + i;
 
         return {
-          name: `${parentItem ? parentItem.name + '-' : ''}${indexInLevel}`,
+          name: `${parentItem ? `${parentItem.name}-` : ''}${indexInLevel}`,
           children: true,
         };
       });

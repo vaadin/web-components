@@ -19,7 +19,7 @@ export default function createComponentWithOrderedProps<P extends {}, E extends 
     }
 
     for (const name of names) {
-      if (props.hasOwnProperty(name)) {
+      if (Object.hasOwn(props, name)) {
         orderedProps[name] = props[name];
       }
     }

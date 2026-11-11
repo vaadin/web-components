@@ -12,9 +12,10 @@ import '@vaadin/confirm-dialog/src/vaadin-confirm-dialog.js';
 import './vaadin-crud-dialog.js';
 import './vaadin-crud-grid.js';
 import './vaadin-crud-form.js';
-import { html, LitElement, nothing, render } from 'lit';
+import { html, LitElement, nothing } from 'lit';
 import { ifDefined } from 'lit/directives/if-defined.js';
 import { defineCustomElement } from '@vaadin/component-base/src/define.js';
+import { slotContent } from '@vaadin/component-base/src/directives/slot-content.js';
 import { ElementMixin } from '@vaadin/component-base/src/element-mixin.js';
 import { PolylitMixin } from '@vaadin/component-base/src/polylit-mixin.js';
 import { LumoInjectionMixin } from '@vaadin/vaadin-themable-mixin/lumo-injection-mixin.js';
@@ -277,54 +278,44 @@ class Crud extends CrudMixin(ElementMixin(ThemableMixin(PolylitMixin(LumoInjecti
           : nothing
       }
 
-      <slot name="confirm-cancel"></slot>
+      <slot name="confirm-cancel" ${slotContent(this.__renderConfirmCancelDialog())}></slot>
 
-      <slot name="confirm-delete"></slot>
+      <slot name="confirm-delete" ${slotContent(this.__renderConfirmDeleteDialog())}></slot>
     `;
   }
 
-  /**
-   * Override update to render slotted overlays into light DOM after rendering shadow DOM.
-   * @param changedProperties
-   * @protected
-   */
-  update(changedProperties) {
-    super.update(changedProperties);
-
-    this.__renderSlottedOverlays();
+  /** @private */
+  __renderConfirmCancelDialog() {
+    return html`
+      <vaadin-confirm-dialog
+        theme="${ifDefined(this._theme)}"
+        slot="confirm-cancel"
+        @confirm="${this.__confirmCancel}"
+        cancel-button-visible
+        .confirmText="${this.__effectiveI18n.confirm.cancel.button.confirm}"
+        .cancelText="${this.__effectiveI18n.confirm.cancel.button.dismiss}"
+        .header="${this.__effectiveI18n.confirm.cancel.title}"
+        .message="${this.__effectiveI18n.confirm.cancel.content}"
+        confirm-theme="primary"
+      ></vaadin-confirm-dialog>
+    `;
   }
 
   /** @private */
-  __renderSlottedOverlays() {
-    render(
-      html`
-        <vaadin-confirm-dialog
-          theme="${ifDefined(this._theme)}"
-          slot="confirm-cancel"
-          @confirm="${this.__confirmCancel}"
-          cancel-button-visible
-          .confirmText="${this.__effectiveI18n.confirm.cancel.button.confirm}"
-          .cancelText="${this.__effectiveI18n.confirm.cancel.button.dismiss}"
-          .header="${this.__effectiveI18n.confirm.cancel.title}"
-          .message="${this.__effectiveI18n.confirm.cancel.content}"
-          confirm-theme="primary"
-        ></vaadin-confirm-dialog>
-
-        <vaadin-confirm-dialog
-          theme="${ifDefined(this._theme)}"
-          slot="confirm-delete"
-          @confirm="${this.__confirmDelete}"
-          cancel-button-visible
-          .confirmText="${this.__effectiveI18n.confirm.delete.button.confirm}"
-          .cancelText="${this.__effectiveI18n.confirm.delete.button.dismiss}"
-          .header="${this.__effectiveI18n.confirm.delete.title}"
-          .message="${this.__effectiveI18n.confirm.delete.content}"
-          confirm-theme="primary error"
-        ></vaadin-confirm-dialog>
-      `,
-      this,
-      { host: this },
-    );
+  __renderConfirmDeleteDialog() {
+    return html`
+      <vaadin-confirm-dialog
+        theme="${ifDefined(this._theme)}"
+        slot="confirm-delete"
+        @confirm="${this.__confirmDelete}"
+        cancel-button-visible
+        .confirmText="${this.__effectiveI18n.confirm.delete.button.confirm}"
+        .cancelText="${this.__effectiveI18n.confirm.delete.button.dismiss}"
+        .header="${this.__effectiveI18n.confirm.delete.title}"
+        .message="${this.__effectiveI18n.confirm.delete.content}"
+        confirm-theme="primary error"
+      ></vaadin-confirm-dialog>
+    `;
   }
 }
 

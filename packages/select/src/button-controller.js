@@ -16,6 +16,7 @@ export class ButtonController extends SlotController {
         host.ariaTarget = button;
         host.stateTarget = button;
 
+        button.setAttribute('role', 'combobox');
         button.setAttribute('aria-haspopup', 'listbox');
       },
     });

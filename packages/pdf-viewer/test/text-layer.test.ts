@@ -4,16 +4,15 @@ import { fixtureSync, nextFrame, nextRender, nextResize, nextUpdate } from '@vaa
 import sinon from 'sinon';
 import './enable-feature-flag.js';
 import '../vaadin-pdf-viewer.js';
-import type { PDFPageProxy } from 'pdfjs-dist';
 import { isSafari } from '@vaadin/component-base/src/browser-utils.js';
 import { getSelectionRanges } from '../src/pdf-viewer-text-selection-controller.js';
 import { loadPdfjs } from '../src/pdfjs-loader.js';
 import type { PdfViewer } from '../vaadin-pdf-viewer.js';
 import {
   createPdf,
+  failTextOnce,
   type Fixture,
   fixtureUrl,
-  getPdfPagePrototype,
   loadAndRender,
   nextRenderIdle,
   type PdfPage,
@@ -126,20 +125,7 @@ describe('text layer', () => {
   });
 
   it('should keep the canvas of a page whose text fails to load, and load the text again later', async () => {
-    const pdfPagePrototype = await getPdfPagePrototype();
-    const streamTextContent = pdfPagePrototype.streamTextContent;
-    let failed = false;
-    sinon.stub(pdfPagePrototype, 'streamTextContent').callsFake(function (this: PDFPageProxy, ...args) {
-      if (this.pageNumber === 1 && !failed) {
-        failed = true;
-        return new ReadableStream({
-          start(controller) {
-            controller.error(new Error('Broken text'));
-          },
-        });
-      }
-      return streamTextContent.apply(this, args);
-    });
+    await failTextOnce(1);
     const warn = sinon.stub(console, 'warn');
     await load('multi-page.pdf');
     expect(getTextLayer(1)).to.be.null;

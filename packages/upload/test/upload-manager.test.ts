@@ -2595,13 +2595,13 @@ describe('UploadManager', () => {
 
       let activeUploads = 0;
       const onUploadComplete = () => {
-        activeUploads--;
+        activeUploads -= 1;
       };
 
       setMockXhr(manager, {
         status: 200,
         onSend(xhr) {
-          activeUploads++;
+          activeUploads += 1;
           if (xhr.upload.onloadstart) {
             xhr.upload.onloadstart();
           }
@@ -2641,13 +2641,13 @@ describe('UploadManager', () => {
 
       const state = { activeUploads: 0, maxConcurrentSeen: 0 };
       const onUploadComplete = () => {
-        state.activeUploads--;
+        state.activeUploads -= 1;
       };
 
       setMockXhr(manager, {
         status: 200,
         onSend(xhr) {
-          state.activeUploads++;
+          state.activeUploads += 1;
           state.maxConcurrentSeen = Math.max(state.maxConcurrentSeen, state.activeUploads);
           if (xhr.upload.onloadstart) {
             xhr.upload.onloadstart();
@@ -2742,7 +2742,7 @@ describe('UploadManager', () => {
       let uploadStarted = false;
 
       manager.addEventListener('upload-before', (e) => {
-        preventCount++;
+        preventCount += 1;
         if (preventCount === 1) {
           // Prevent first attempt
           e.preventDefault();

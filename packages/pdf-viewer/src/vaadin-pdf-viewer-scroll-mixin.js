@@ -28,12 +28,13 @@ export const PdfViewerScrollMixin = (superClass) =>
       return {
         /**
          * The current page, starting from 1. The viewer updates it while the
-         * user scrolls, to the page that takes up most of the visible area.
+         * user scrolls, to the page with the largest part of it in view, or,
+         * for a page taller than the view, the largest part of the view.
          * Setting it to another page scrolls to the start of that page.
-         * Setting it to the current page does not scroll. A value that is not
-         * a page of the document logs a warning and does not scroll. A set
-         * value stays as it is until the user scrolls. A new `src` resets it
-         * to 1, unless `page` is set in the same update.
+         * Setting it to the current page does not scroll, see `scrollToPage()`.
+         * A value that is not a page of the document logs a warning and does
+         * not scroll. A set value stays as it is until the user scrolls. A new
+         * `src` resets it to 1, unless `page` is set in the same update.
          */
         page: {
           type: Number,
@@ -54,7 +55,7 @@ export const PdfViewerScrollMixin = (superClass) =>
       };
     }
 
-    /** The index of the page that takes up most of the view, updated with the visible pages. */
+    /** The index of the current page, see `getMostVisibleIndex()`, updated with the visible pages. */
     #currentIndex = 0;
 
     /** The last page that the viewer set itself, to not scroll to it again. */
@@ -151,12 +152,33 @@ export const PdfViewerScrollMixin = (superClass) =>
     }
 
     /**
-     * Scrolls to the start of the given page and makes it the current page,
-     * also when it is the current page already.
+     * Scrolls to the start of the given page.
+     *
+     * Right after setting `src`, it scrolls once the document has loaded, and
+     * in a hidden viewer, once the viewer is shown. Does nothing without a
+     * document or when the viewer is not attached.
+     * @param {number} page the page, starting from 1
+     */
+    scrollToPage(page) {
+      this._whenDocumentReady().then((pdfDocument) => {
+        if (pdfDocument) {
+          this._scrollToPage(page);
+        }
+      });
+    }
+
+    /**
+     * Scrolls to the start of the given page, or to an offset on it, and
+     * makes it the current page, also when it is the current page already.
      * @param {number} page
+     * @param {{ left: number, top: number }} [offset] the offset from the top
+     *   left corner of the page in CSS pixels. Without it, the padding above
+     *   the page shows too, and the horizontal scroll position stays. While
+     *   the pages have no layout, e.g. in a hidden viewer, only the page is
+     *   kept, and the offset is dropped.
      * @protected
      */
-    _scrollToPage(page) {
+    _scrollToPage(page, offset) {
       if (!this.#hasLayout() || this._scale <= 0) {
         // Scroll once the pages can be laid out.
         this.#pendingPage = page;
@@ -172,7 +194,16 @@ export const PdfViewerScrollMixin = (superClass) =>
         );
       } else {
         const pageView = this.__pages[page - 1];
-        content.scrollTop = pageView.element.offsetTop - Number.parseFloat(getComputedStyle(content).paddingBlockStart);
+        if (offset) {
+          content.scrollTop = pageView.element.offsetTop + offset.top;
+          // Not offsetLeft, which Chromium measures from behind the scrollbar on the left in RTL.
+          const view = content.getBoundingClientRect();
+          const box = pageView.element.getBoundingClientRect();
+          content.scrollLeft += box.left + offset.left - (view.left + content.clientLeft);
+        } else {
+          content.scrollTop =
+            pageView.element.offsetTop - Number.parseFloat(getComputedStyle(content).paddingBlockStart);
+        }
         this.#setPageFromViewer(page);
       }
 

@@ -4,6 +4,7 @@ import { fixtureSync, nextFrame, nextRender, nextResize, oneEvent } from '@vaadi
 import sinon from 'sinon';
 import './enable-feature-flag.js';
 import '../vaadin-pdf-viewer.js';
+import { getDeepActiveElement } from '@vaadin/a11y-base/src/focus-utils.js';
 import type { IntegerField } from '@vaadin/integer-field';
 import type { Select } from '@vaadin/select';
 import type { SelectItem } from '@vaadin/select/src/vaadin-select-item.js';
@@ -128,11 +129,12 @@ describe('toolbar', () => {
     });
 
     it('should use the texts set with i18n', async () => {
-      viewer.i18n = { nextPage: 'Next', pageError: 'Max. {pageCount}' };
+      viewer.i18n = { nextPage: 'Next', page: 'Seite', pageError: 'Max. {pageCount}' };
       await enterPage('999');
       await nextFrame();
       expect(nextButton.querySelector<Tooltip>('vaadin-tooltip')!.text).to.equal('Next');
       expect(previousButton.querySelector<Tooltip>('vaadin-tooltip')!.text).to.equal('Previous page');
+      expect(pageField.accessibleName).to.equal('Seite');
       expect(pageField.errorMessage).to.equal('Max. 6');
     });
 
@@ -351,10 +353,11 @@ describe('toolbar', () => {
     });
 
     it('should use the zoom texts set with i18n', async () => {
-      viewer.i18n = { zoomIn: 'Größer', pageWidth: 'Seitenbreite', pageFit: 'Ganze Seite' };
+      viewer.i18n = { zoomIn: 'Größer', zoom: 'Vergrößerung', pageWidth: 'Seitenbreite', pageFit: 'Ganze Seite' };
       await nextFrame();
       expect(zoomInButton.querySelector<Tooltip>('vaadin-tooltip')!.text).to.equal('Größer');
       expect(zoomOutButton.querySelector<Tooltip>('vaadin-tooltip')!.text).to.equal('Zoom out');
+      expect(zoomSelect.accessibleName).to.equal('Vergrößerung');
       expect(getItemLabel('page-width')).to.equal('Seitenbreite');
       expect(getItemLabel('page-fit')).to.equal('Ganze Seite');
     });
@@ -408,12 +411,28 @@ describe('toolbar', () => {
       expect(title.textContent).to.equal('Annual report');
     });
 
+    it('should show fileName instead of the file name of src', async () => {
+      viewer.src = fixtureUrl('multi-page.pdf');
+      viewer.fileName = 'report.pdf';
+      await nextFrame();
+      expect(title.textContent).to.equal('report.pdf');
+    });
+
     it('should show the file name from the Content-Disposition header instead of the file name of src', async () => {
       await loadFixtureFrom(viewer, new URL('/files/multi-page.pdf', location.href).href, {
         'Content-Disposition': 'inline; filename="report.pdf"',
       });
       await nextFrame();
       expect(title.textContent).to.equal('report.pdf');
+    });
+
+    it('should show fileName instead of the file name from the Content-Disposition header', async () => {
+      await loadFixtureFrom(viewer, new URL('/files/multi-page.pdf', location.href).href, {
+        'Content-Disposition': 'inline; filename="report.pdf"',
+      });
+      viewer.fileName = 'summary.pdf';
+      await nextFrame();
+      expect(title.textContent).to.equal('summary.pdf');
     });
 
     it('should not show the name of the previous document when the next one fails to load', async () => {
@@ -539,6 +558,15 @@ describe('toolbar', () => {
       expect(approve.checkVisibility()).to.be.false;
     });
 
+    it('should show slotted controls before the built-in download button', async () => {
+      const approve = createButton('Approve');
+      viewer.append(approve);
+      await nextFrame();
+      const download = viewer.querySelector<HTMLElement>('vaadin-pdf-viewer-button[icon="download"]')!;
+      expect(download.assignedSlot!.parentElement).to.equal(approve.assignedSlot!.parentElement);
+      expect(approve.getBoundingClientRect().right).to.be.at.most(download.getBoundingClientRect().left);
+    });
+
     describe('child added after the first render', () => {
       let approve: HTMLButtonElement;
 
@@ -597,7 +625,7 @@ describe('toolbar', () => {
       await sendKeys({ press: 'Shift+Tab' });
       const visited = new Set<HTMLElement>();
       for (let i = 0; i < 10; i++) {
-        const active = viewer.shadowRoot!.activeElement ?? document.activeElement!;
+        const active = getDeepActiveElement();
         const control = [header, ...getControls()].find((element) => element === active || element.contains(active));
         if (!control) {
           break;

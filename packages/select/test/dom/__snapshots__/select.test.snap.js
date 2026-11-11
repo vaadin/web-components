@@ -6,6 +6,7 @@ snapshots["vaadin-select host default"] =
   <div slot="overlay">
     <vaadin-select-list-box
       aria-orientation="vertical"
+      id="vaadin-select-list-box-3"
       role="listbox"
     >
       <vaadin-select-item
@@ -38,16 +39,11 @@ snapshots["vaadin-select host default"] =
   <vaadin-select-value-button
     aria-expanded="false"
     aria-haspopup="listbox"
-    role="button"
+    role="combobox"
     slot="value"
     tabindex="0"
   >
   </vaadin-select-value-button>
-  <label
-    id="label-vaadin-select-4"
-    slot="sr-label"
-  >
-  </label>
 </vaadin-select>
 `;
 /* end snapshot vaadin-select host default */
@@ -57,6 +53,7 @@ snapshots["vaadin-select host label"] =
   <div slot="overlay">
     <vaadin-select-list-box
       aria-orientation="vertical"
+      id="vaadin-select-list-box-3"
       role="listbox"
     >
       <vaadin-select-item
@@ -91,16 +88,11 @@ snapshots["vaadin-select host label"] =
     aria-expanded="false"
     aria-haspopup="listbox"
     aria-labelledby="label-vaadin-select-0"
-    role="button"
+    role="combobox"
     slot="value"
     tabindex="0"
   >
   </vaadin-select-value-button>
-  <label
-    id="label-vaadin-select-4"
-    slot="sr-label"
-  >
-  </label>
 </vaadin-select>
 `;
 /* end snapshot vaadin-select host label */
@@ -110,6 +102,7 @@ snapshots["vaadin-select host placeholder"] =
   <div slot="overlay">
     <vaadin-select-list-box
       aria-orientation="vertical"
+      id="vaadin-select-list-box-3"
       role="listbox"
     >
       <vaadin-select-item
@@ -142,21 +135,15 @@ snapshots["vaadin-select host placeholder"] =
   <vaadin-select-value-button
     aria-expanded="false"
     aria-haspopup="listbox"
-    aria-labelledby="value-vaadin-select-3"
     placeholder=""
-    role="button"
+    role="combobox"
     slot="value"
     tabindex="0"
   >
-    <vaadin-select-item id="value-vaadin-select-3">
+    <vaadin-select-item>
       Placeholder
     </vaadin-select-item>
   </vaadin-select-value-button>
-  <label
-    id="label-vaadin-select-4"
-    slot="sr-label"
-  >
-  </label>
 </vaadin-select>
 `;
 /* end snapshot vaadin-select host placeholder */
@@ -169,6 +156,7 @@ snapshots["vaadin-select host disabled"] =
   <div slot="overlay">
     <vaadin-select-list-box
       aria-orientation="vertical"
+      id="vaadin-select-list-box-3"
       role="listbox"
     >
       <vaadin-select-item
@@ -203,16 +191,11 @@ snapshots["vaadin-select host disabled"] =
     aria-expanded="false"
     aria-haspopup="listbox"
     disabled=""
-    role="button"
+    role="combobox"
     slot="value"
     tabindex="-1"
   >
   </vaadin-select-value-button>
-  <label
-    id="label-vaadin-select-4"
-    slot="sr-label"
-  >
-  </label>
 </vaadin-select>
 `;
 /* end snapshot vaadin-select host disabled */
@@ -222,6 +205,7 @@ snapshots["vaadin-select host required"] =
   <div slot="overlay">
     <vaadin-select-list-box
       aria-orientation="vertical"
+      id="vaadin-select-list-box-3"
       role="listbox"
     >
       <vaadin-select-item
@@ -255,25 +239,69 @@ snapshots["vaadin-select host required"] =
     aria-expanded="false"
     aria-haspopup="listbox"
     aria-required="true"
-    role="button"
+    role="combobox"
     slot="value"
     tabindex="0"
   >
   </vaadin-select-value-button>
-  <label
-    id="label-vaadin-select-4"
-    slot="sr-label"
-  >
-  </label>
 </vaadin-select>
 `;
 /* end snapshot vaadin-select host required */
+
+snapshots["vaadin-select host readonly"] = 
+`<vaadin-select readonly="">
+  <div slot="overlay">
+    <vaadin-select-list-box
+      aria-orientation="vertical"
+      id="vaadin-select-list-box-3"
+      role="listbox"
+    >
+      <vaadin-select-item
+        aria-selected="false"
+        role="option"
+        tabindex="0"
+      >
+        Option 1
+      </vaadin-select-item>
+      <vaadin-select-item
+        aria-selected="false"
+        role="option"
+        tabindex="-1"
+      >
+        Option 2
+      </vaadin-select-item>
+    </vaadin-select-list-box>
+  </div>
+  <label
+    id="label-vaadin-select-0"
+    slot="label"
+  >
+  </label>
+  <div
+    hidden=""
+    id="error-message-vaadin-select-2"
+    slot="error-message"
+  >
+  </div>
+  <vaadin-select-value-button
+    aria-expanded="false"
+    aria-haspopup="listbox"
+    aria-readonly="true"
+    role="combobox"
+    slot="value"
+    tabindex="0"
+  >
+  </vaadin-select-value-button>
+</vaadin-select>
+`;
+/* end snapshot vaadin-select host readonly */
 
 snapshots["vaadin-select host value"] = 
 `<vaadin-select has-value="">
   <div slot="overlay">
     <vaadin-select-list-box
       aria-orientation="vertical"
+      id="vaadin-select-list-box-3"
       role="listbox"
       selected="0"
     >
@@ -308,20 +336,14 @@ snapshots["vaadin-select host value"] =
   <vaadin-select-value-button
     aria-expanded="false"
     aria-haspopup="listbox"
-    aria-labelledby="value-vaadin-select-3"
-    role="button"
+    role="combobox"
     slot="value"
     tabindex="0"
   >
-    <vaadin-select-item id="value-vaadin-select-3">
+    <vaadin-select-item>
       Option 1
     </vaadin-select-item>
   </vaadin-select-value-button>
-  <label
-    id="label-vaadin-select-4"
-    slot="sr-label"
-  >
-  </label>
 </vaadin-select>
 `;
 /* end snapshot vaadin-select host value */
@@ -331,6 +353,7 @@ snapshots["vaadin-select host helper"] =
   <div slot="overlay">
     <vaadin-select-list-box
       aria-orientation="vertical"
+      id="vaadin-select-list-box-3"
       role="listbox"
     >
       <vaadin-select-item
@@ -364,16 +387,11 @@ snapshots["vaadin-select host helper"] =
     aria-describedby="helper-vaadin-select-1"
     aria-expanded="false"
     aria-haspopup="listbox"
-    role="button"
+    role="combobox"
     slot="value"
     tabindex="0"
   >
   </vaadin-select-value-button>
-  <label
-    id="label-vaadin-select-4"
-    slot="sr-label"
-  >
-  </label>
   <div
     id="helper-vaadin-select-1"
     slot="helper"
@@ -392,6 +410,7 @@ snapshots["vaadin-select host phone"] =
   <div slot="overlay">
     <vaadin-select-list-box
       aria-orientation="vertical"
+      id="vaadin-select-list-box-3"
       role="listbox"
     >
       <vaadin-select-item
@@ -424,16 +443,11 @@ snapshots["vaadin-select host phone"] =
   <vaadin-select-value-button
     aria-expanded="false"
     aria-haspopup="listbox"
-    role="button"
+    role="combobox"
     slot="value"
     tabindex="0"
   >
   </vaadin-select-value-button>
-  <label
-    id="label-vaadin-select-4"
-    slot="sr-label"
-  >
-  </label>
 </vaadin-select>
 `;
 /* end snapshot vaadin-select host phone */
@@ -446,6 +460,7 @@ snapshots["vaadin-select host error"] =
   <div slot="overlay">
     <vaadin-select-list-box
       aria-orientation="vertical"
+      id="vaadin-select-list-box-3"
       role="listbox"
     >
       <vaadin-select-item
@@ -481,16 +496,11 @@ snapshots["vaadin-select host error"] =
     aria-haspopup="listbox"
     aria-invalid="true"
     invalid=""
-    role="button"
+    role="combobox"
     slot="value"
     tabindex="0"
   >
   </vaadin-select-value-button>
-  <label
-    id="label-vaadin-select-4"
-    slot="sr-label"
-  >
-  </label>
 </vaadin-select>
 `;
 /* end snapshot vaadin-select host error */
@@ -500,6 +510,7 @@ snapshots["vaadin-select host accessibleDescriptionRef"] =
   <div slot="overlay">
     <vaadin-select-list-box
       aria-orientation="vertical"
+      id="vaadin-select-list-box-3"
       role="listbox"
     >
       <vaadin-select-item
@@ -533,16 +544,11 @@ snapshots["vaadin-select host accessibleDescriptionRef"] =
     aria-describedby="accessible-description-ref-0"
     aria-expanded="false"
     aria-haspopup="listbox"
-    role="button"
+    role="combobox"
     slot="value"
     tabindex="0"
   >
   </vaadin-select-value-button>
-  <label
-    id="label-vaadin-select-4"
-    slot="sr-label"
-  >
-  </label>
 </vaadin-select>
 `;
 /* end snapshot vaadin-select host accessibleDescriptionRef */
@@ -556,6 +562,7 @@ snapshots["vaadin-select host opened default"] =
   <div slot="overlay">
     <vaadin-select-list-box
       aria-orientation="vertical"
+      id="vaadin-select-list-box-3"
       role="listbox"
     >
       <vaadin-select-item
@@ -587,18 +594,14 @@ snapshots["vaadin-select host opened default"] =
   >
   </div>
   <vaadin-select-value-button
+    aria-controls="vaadin-select-list-box-3"
     aria-expanded="true"
     aria-haspopup="listbox"
-    role="button"
+    role="combobox"
     slot="value"
     tabindex="0"
   >
   </vaadin-select-value-button>
-  <label
-    id="label-vaadin-select-4"
-    slot="sr-label"
-  >
-  </label>
 </vaadin-select>
 `;
 /* end snapshot vaadin-select host opened default */
@@ -663,10 +666,6 @@ snapshots["vaadin-select shadow default"] =
 </vaadin-select-overlay>
 <slot name="tooltip">
 </slot>
-<div class="sr-only">
-  <slot name="sr-label">
-  </slot>
-</div>
 `;
 /* end snapshot vaadin-select shadow default */
 
@@ -718,10 +717,6 @@ snapshots["vaadin-select shadow disabled"] =
 </vaadin-select-overlay>
 <slot name="tooltip">
 </slot>
-<div class="sr-only">
-  <slot name="sr-label">
-  </slot>
-</div>
 `;
 /* end snapshot vaadin-select shadow disabled */
 
@@ -773,10 +768,6 @@ snapshots["vaadin-select shadow readonly"] =
 </vaadin-select-overlay>
 <slot name="tooltip">
 </slot>
-<div class="sr-only">
-  <slot name="sr-label">
-  </slot>
-</div>
 `;
 /* end snapshot vaadin-select shadow readonly */
 
@@ -828,10 +819,6 @@ snapshots["vaadin-select shadow invalid"] =
 </vaadin-select-overlay>
 <slot name="tooltip">
 </slot>
-<div class="sr-only">
-  <slot name="sr-label">
-  </slot>
-</div>
 `;
 /* end snapshot vaadin-select shadow invalid */
 
@@ -884,10 +871,6 @@ snapshots["vaadin-select shadow theme"] =
 </vaadin-select-overlay>
 <slot name="tooltip">
 </slot>
-<div class="sr-only">
-  <slot name="sr-label">
-  </slot>
-</div>
 `;
 /* end snapshot vaadin-select shadow theme */
 

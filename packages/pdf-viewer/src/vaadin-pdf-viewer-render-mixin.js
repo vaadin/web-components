@@ -8,6 +8,7 @@
  * See https://vaadin.com/commercial-license-and-service-terms for the full
  * license.
  */
+import { isKeyboardActive } from '@vaadin/a11y-base/src/focus-utils.js';
 import { issueWarning } from '@vaadin/component-base/src/warnings.js';
 import { MAX_CANVAS_PIXELS, PdfViewerPage } from './pdf-viewer-page.js';
 import { PdfViewerRenderQueue } from './pdf-viewer-render-queue.js';
@@ -38,7 +39,7 @@ export const PdfViewerRenderMixin = (superClass) =>
 
     #renderQueue = new PdfViewerRenderQueue({
       renderPage: (page, pixelRatio) => this.#renderPage(page, pixelRatio),
-      releasePage: (page) => page.release(),
+      releasePage: (page) => this.#releasePage(page),
       onIdle: () => this.#notifyIdle(),
       renderAhead: 1,
       keepRendered: 1,
@@ -61,6 +62,15 @@ export const PdfViewerRenderMixin = (superClass) =>
       this.#unwatchPixelRatio();
     }
 
+    /** @protected */
+    updated(props) {
+      super.updated(props);
+
+      if (props.has('__effectiveI18n')) {
+        this.#updatePageLabels();
+      }
+    }
+
     /**
      * Override method from `PdfViewerDocumentMixin` to create one page view
      * per page. All pages start with the size of the first page, and get
@@ -79,6 +89,7 @@ export const PdfViewerRenderMixin = (superClass) =>
         (_, index) => new PdfViewerPage(index + 1, size),
       );
       this.__pages[0].setPdfPage(firstPage);
+      this.#updatePageLabels();
       this.$.pages.replaceChildren(...this.__pages.map((page) => page.element));
       this.#renderQueue.setPages(this.__pages);
       // `render-idle` waits for the page sizes, see #notifyIdle().
@@ -114,6 +125,17 @@ export const PdfViewerRenderMixin = (superClass) =>
     }
 
     /**
+     * Sets the accessible names of the pages.
+     * @private
+     */
+    #updatePageLabels() {
+      const { pageLabel } = this.__effectiveI18n;
+      this.__pages.forEach((page) => {
+        page.setLabel(pageLabel.replace('{page}', page.pageNumber));
+      });
+    }
+
+    /**
      * Called at most once per frame when pages got their own size, which
      * differs from the estimate.
      * @protected
@@ -138,8 +160,8 @@ export const PdfViewerRenderMixin = (superClass) =>
      * Renders the visible pages, the most visible first, then the pages next
      * to them, and frees the canvases of pages far from the view. Stops
      * rendering when no page is visible.
-     * @param {Array<{ index: number, height: number }>} visible the indexes of
-     *   the visible pages in document order, with their visible height
+     * @param {Array<{ index: number, ratio: number }>} visible the indexes of
+     *   the visible pages in document order, with the part of their height in view
      * @protected
      */
     _renderVisible(visible) {
@@ -172,15 +194,7 @@ export const PdfViewerRenderMixin = (superClass) =>
       for (let start = 0; start < pages.length; start += PAGE_SIZE_BATCH) {
         const batch = pages.slice(start, start + PAGE_SIZE_BATCH);
         // A page that fails to load reports the error when it is rendered.
-        await Promise.allSettled(
-          batch.map((page) =>
-            pdfDocument.getPage(page.pageNumber).then((pdfPage) => {
-              if (this._pdfDocument === pdfDocument && !page.pdfPage) {
-                this.#setPdfPage(page, pdfPage);
-              }
-            }),
-          ),
-        );
+        await Promise.allSettled(batch.map((page) => this._loadPdfPage(page)));
         if (this._pdfDocument !== pdfDocument) {
           return;
         }
@@ -189,6 +203,24 @@ export const PdfViewerRenderMixin = (superClass) =>
       // Notify about being idle, unless a size change will render again.
       if (!this.#pageSizesFrame) {
         this.#renderQueue.renderNext();
+      }
+    }
+
+    /**
+     * Loads the page of the document for a page view that has none yet, and
+     * sizes the page view. Rejects when the page fails to load.
+     * @param {PdfViewerPage} page
+     * @return {Promise<void>}
+     * @protected
+     */
+    async _loadPdfPage(page) {
+      const pdfDocument = this._pdfDocument;
+      if (page.pdfPage || !pdfDocument) {
+        return;
+      }
+      const pdfPage = await pdfDocument.getPage(page.pageNumber);
+      if (this._pdfDocument === pdfDocument && !page.pdfPage) {
+        this.#setPdfPage(page, pdfPage);
       }
     }
 
@@ -216,12 +248,9 @@ export const PdfViewerRenderMixin = (superClass) =>
     async #renderPage(page, pixelRatio) {
       const pdfDocument = this._pdfDocument;
       try {
-        if (!page.pdfPage) {
-          const pdfPage = await pdfDocument.getPage(page.pageNumber);
-          if (this._pdfDocument !== pdfDocument) {
-            return;
-          }
-          this.#setPdfPage(page, pdfPage);
+        await this._loadPdfPage(page);
+        if (this._pdfDocument !== pdfDocument) {
+          return;
         }
         await page.render(pixelRatio);
         // The page may have been released or rendered again meanwhile.
@@ -236,6 +265,20 @@ export const PdfViewerRenderMixin = (superClass) =>
           issueWarning(`Failed to render page ${page.pageNumber} of the PDF document: ${error.message}`);
         }
       }
+    }
+
+    /**
+     * Releases a page, moving focus from inside the page to the pages, so
+     * that keyboard users stay in the viewer.
+     * @private
+     */
+    #releasePage(page) {
+      if (page.element.contains(this.shadowRoot.activeElement)) {
+        this.$.content.focus({ preventScroll: true, focusVisible: isKeyboardActive() });
+      }
+      page.release();
+      // As in pdf.js, frees the data that the page keeps after rendering, e.g. its decoded images.
+      page.pdfPage?.cleanup();
     }
 
     /**

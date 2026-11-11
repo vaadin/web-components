@@ -35,12 +35,13 @@ async function generateCss() {
   );
 
   const entryPointCss = (await readFile(resolve(themePackage, 'utility.css'), 'utf8')).replace(
-    /@import\s+['"]([^'"]+)['"];/g,
+    /@import\s+['"]([^'"]+)['"];/gu,
     (_match, path: string) => `@import './utilities/${toModuleName(path)}';`,
   );
   await writeFile(resolve(outputDir, 'Utility.module.css'), entryPointCss, 'utf8');
 }
 
+/* eslint-disable require-unicode-regexp -- esbuild runs filters as Go regexps, which reject the u flag */
 const fixImports: Plugin = {
   name: 'add-imports',
   setup(build) {
@@ -76,6 +77,7 @@ const fixImports: Plugin = {
     });
   },
 };
+/* eslint-enable require-unicode-regexp */
 
 async function detectEntryPoints(patterns: string[], ignore: string[] = []) {
   return (
@@ -100,7 +102,7 @@ async function bundle() {
     outdir: fileURLToPath(packageURL),
     sourcemap: 'linked',
     sourcesContent: true,
-    target: 'es2021',
+    target: 'es2023',
     tsconfig: fileURLToPath(new URL('./tsconfig.build.json', packageURL)),
   } as const;
 

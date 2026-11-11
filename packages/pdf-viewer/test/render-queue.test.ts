@@ -33,10 +33,11 @@ describe('render queue', () => {
 
   function createQueue(options: Partial<PdfViewerRenderQueueOptions<FakePage>> = {}) {
     queue = new PdfViewerRenderQueue<FakePage>({
-      async renderPage(page, pixelRatio) {
+      renderPage(page, pixelRatio) {
         rendered.push(page.pageNumber);
         page.canvasPixels = PAGE_PIXELS;
         page.renderedPixelRatio = pixelRatio;
+        return Promise.resolve();
       },
       releasePage(page) {
         released.push(page.pageNumber);
@@ -54,11 +55,11 @@ describe('render queue', () => {
     queue.setPages(pages);
   }
 
-  async function update(...visible: Array<[index: number, height: number]>) {
+  async function update(...visible: Array<[index: number, ratio: number]>) {
     const idle = new Promise<void>((resolve) => {
       resolveIdle = resolve;
     });
-    queue.update(visible.map(([index, height]) => ({ index, height })));
+    queue.update(visible.map(([index, ratio]) => ({ index, ratio })));
     await idle;
   }
 
@@ -74,25 +75,25 @@ describe('render queue', () => {
     });
 
     it('should render the most visible page first, then the other visible pages, then one page ahead on each side', async () => {
-      await update([3, 50], [4, 300], [5, 100]);
+      await update([3, 0.2], [4, 1], [5, 0.5]);
       expect(rendered).to.deep.equal([5, 6, 4, 7, 3]);
     });
 
     it('should not render a page again', async () => {
-      await update([3, 100]);
+      await update([3, 1]);
       rendered = [];
-      await update([4, 100]);
+      await update([4, 1]);
       expect(rendered).to.deep.equal([6]);
     });
 
     it('should not render a page that failed to render', async () => {
       pages[3].renderFailed = true;
-      await update([3, 100]);
+      await update([3, 1]);
       expect(rendered).to.deep.equal([5, 3]);
     });
 
     it('should render the pages again at a new pixel ratio', async () => {
-      await update([3, 100]);
+      await update([3, 1]);
       rendered = [];
       const idle = new Promise<void>((resolve) => {
         resolveIdle = resolve;
@@ -108,8 +109,8 @@ describe('render queue', () => {
       const renderPage = sinon.stub().returns(new Promise(() => {}));
       createQueue({ renderPage });
       queue.update([
-        { index: 3, height: 100 },
-        { index: 4, height: 100 },
+        { index: 3, ratio: 1 },
+        { index: 4, ratio: 1 },
       ]);
       await Promise.resolve();
       expect(renderPage).to.be.calledOnce;
@@ -117,7 +118,7 @@ describe('render queue', () => {
 
     it('should cancel the page being rendered', () => {
       createQueue({ renderPage: () => new Promise(() => {}) });
-      queue.update([{ index: 3, height: 100 }]);
+      queue.update([{ index: 3, ratio: 1 }]);
       queue.cancel();
       expect(pages[3].cancel).to.be.calledOnce;
     });
@@ -132,8 +133,8 @@ describe('render queue', () => {
       );
       createQueue({ renderPage });
       queue.update([
-        { index: 3, height: 100 },
-        { index: 4, height: 100 },
+        { index: 3, ratio: 1 },
+        { index: 4, ratio: 1 },
       ]);
       queue.clear();
       finishRender();
@@ -147,28 +148,28 @@ describe('render queue', () => {
   describe('memory', () => {
     it('should release pages that are more than one page away from the view', async () => {
       createQueue();
-      await update([3, 100]);
-      await update([5, 100]);
+      await update([3, 1]);
+      await update([5, 1]);
       expect(released).to.have.members([3, 4]);
     });
 
     it('should not render pages ahead when one more canvas does not fit the budget', async () => {
       createQueue({ maxTotalPixels: 2.5 * PAGE_PIXELS });
-      await update([3, 100], [4, 100]);
+      await update([3, 1], [4, 1]);
       expect(rendered).to.deep.equal([4, 5]);
     });
 
     it('should render all visible pages also over the budget', async () => {
       createQueue({ maxTotalPixels: PAGE_PIXELS });
-      await update([3, 100], [4, 100], [5, 100]);
+      await update([3, 1], [4, 1], [5, 1]);
       expect(rendered).to.have.members([4, 5, 6]);
     });
 
     it('should release pages next to the view while over the budget', async () => {
       createQueue({ maxTotalPixels: 1.5 * PAGE_PIXELS, keepRendered: 5 });
-      await update([3, 100], [4, 100]);
+      await update([3, 1], [4, 1]);
       released = [];
-      await update([4, 100]);
+      await update([4, 1]);
       expect(released).to.deep.equal([4]);
     });
   });

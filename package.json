@@ -56,16 +56,16 @@
     "@web/test-runner-playwright": "^1.0.0",
     "@web/test-runner-visual-regression": "^1.0.1",
     "esbuild": "^0.28.1",
-    "eslint": "^10.8.1",
-    "eslint-config-vaadin": "^1.0.0-beta.7",
-    "eslint-plugin-html": "^8.1.4",
+    "eslint": "^10.14.0",
+    "eslint-config-vaadin": "^1.0.0-beta.8",
+    "eslint-plugin-html": "^8.2.1",
     "eslint-plugin-no-only-tests": "^3.4.0",
-    "eslint-plugin-prettier": "^5.5.6",
+    "eslint-plugin-prettier": "^5.5.7",
     "eslint-plugin-simple-import-sort": "^12.1.1",
-    "glob": "^13.0.0",
+    "glob": "^14.0.2",
     "globals": "^16.5.0",
     "husky": "^9.1.4",
-    "lerna": "10.1.1",
+    "lerna": "10.1.2",
     "lint-staged": "^16.4.0",
     "npm-run-all": "^4.1.5",
     "patch-package": "^8.0.1",
@@ -81,7 +81,7 @@
     "typescript": "^6.0.3"
   },
   "resolutions": {
-    "playwright": "1.64.1"
+    "playwright": "1.65.0"
   },
   "lint-staged": {
     "*.{js,ts,tsx}": [

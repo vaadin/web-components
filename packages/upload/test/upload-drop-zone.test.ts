@@ -375,7 +375,7 @@ describe('vaadin-upload-drop-zone', () => {
       expect(dropZone.maxFilesReached).to.be.false;
     });
 
-    it('should remove listener when disconnected from DOM', async () => {
+    it('should remove listener when disconnected from DOM', () => {
       dropZone.manager = uploadManager;
       uploadManager.maxFiles = 2;
 

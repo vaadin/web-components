@@ -1,5 +1,6 @@
 import { expect } from '@vaadin/chai-plugins';
-import { arrowLeft, arrowRight, aTimeout, fixtureSync } from '@vaadin/testing-helpers';
+import { sendKeys } from '@vaadin/test-runner-commands';
+import { arrowLeft, arrowRight, aTimeout, fixtureSync, nextFrame } from '@vaadin/testing-helpers';
 import sinon from 'sinon';
 import './grid-test-styles.js';
 import '../src/vaadin-grid.js';
@@ -99,5 +100,51 @@ describe('keyboard navigation - focus button mode', () => {
   it('should not create a focusable div with role="button" inside the header cell', () => {
     const headerCell = getHeaderCell(grid, 0);
     expect(headerCell.firstElementChild.localName).to.equal('slot');
+  });
+});
+
+describe('keyboard navigation - focus button mode - horizontal scroll', () => {
+  let lastGlobalFocusable;
+
+  beforeEach(async () => {
+    const wrapper = fixtureSync(`
+      <div>
+        <vaadin-grid style="width: 200px"></vaadin-grid>
+        <input id="last-global-focusable" />
+      </div>
+    `);
+    [grid, lastGlobalFocusable] = wrapper.children;
+
+    ['a', 'b', 'c', 'd'].forEach((path) => {
+      const column = document.createElement('vaadin-grid-column');
+      column.path = path;
+      column.width = '100px';
+      column.flexGrow = 0;
+      column._focusButtonMode = true;
+      grid.appendChild(column);
+    });
+
+    grid.items = [{ a: 'a', b: 'b', c: 'c', d: 'd' }];
+    flushGrid(grid);
+    await nextFrame();
+
+    // Scroll so that the third column is the first visible one
+    grid.$.table.scrollLeft = 250;
+    await nextFrame();
+  });
+
+  it('should focus the first visible body cell on Shift+Tab when the focusable cell is scrolled out', async () => {
+    lastGlobalFocusable.focus();
+    await sendKeys({ press: 'Shift+Tab' });
+
+    expect(grid.shadowRoot.activeElement).to.equal(getRowCell(0, 2)._focusButton);
+  });
+
+  it('should focus the focusable body cell on Shift+Tab when it is inside the viewport', async () => {
+    getRowCell(0, 3).focus();
+    lastGlobalFocusable.focus();
+    await sendKeys({ press: 'Shift+Tab' });
+
+    expect(grid.shadowRoot.activeElement).to.equal(getRowCell(0, 3)._focusButton);
   });
 });

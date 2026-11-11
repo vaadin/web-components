@@ -8,7 +8,9 @@ export async function until<T = boolean>(predicate: () => T, timeout = 1500): Pr
     if (Date.now() - start > timeout) {
       throw new Error(`Condition not met within ${timeout} ms: ${predicate}`);
     }
-    await new Promise((r) => setTimeout(r, 10));
+    await new Promise((r) => {
+      setTimeout(r, 10);
+    });
   }
   return predicate()!;
 }

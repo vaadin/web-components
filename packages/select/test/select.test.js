@@ -272,6 +272,14 @@ describe('vaadin-select', () => {
         expect(item.hasAttribute('aria-selected')).to.be.false;
       });
 
+      it('should not copy the selected item id to the value item clone', async () => {
+        menu.items[6].id = 'item-id';
+        menu.selected = 6;
+        await nextUpdate(select);
+        expect(valueButton.firstElementChild.hasAttribute('id')).to.be.false;
+        expect(document.querySelectorAll('#item-id')).to.have.lengthOf(1);
+      });
+
       it('should not set selected attributes on the selected disabled item clone', async () => {
         menu.selected = 5;
         await nextUpdate(select);

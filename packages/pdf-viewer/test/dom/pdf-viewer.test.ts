@@ -75,5 +75,12 @@ describe('vaadin-pdf-viewer', () => {
       const page = viewer.shadowRoot!.querySelector('[part="page"]')!;
       await expect(page).dom.to.equalSnapshot({ ignoreAttributes });
     });
+
+    it('links', async () => {
+      viewer.src = fixtureUrl('links.pdf');
+      await nextRenderIdle(viewer);
+      const page = viewer.shadowRoot!.querySelector('[part="page"]')!;
+      await expect(page).dom.to.equalSnapshot({ ignoreAttributes });
+    });
   });
 });
