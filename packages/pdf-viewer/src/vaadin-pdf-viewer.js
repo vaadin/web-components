@@ -25,12 +25,16 @@ import { PdfViewerMixin } from './vaadin-pdf-viewer-mixin.js';
 const DEFAULT_I18N = {
   previousPage: 'Previous page',
   nextPage: 'Next page',
+  page: 'Page',
   pageError: 'Enter 1–{pageCount}',
   zoomIn: 'Zoom in',
   zoomOut: 'Zoom out',
+  zoom: 'Zoom',
   pageWidth: 'Page width',
   pageFit: 'Page fit',
   document: 'PDF document',
+  pageLabel: 'Page {page}',
+  loading: 'Loading',
   link: 'Link',
   goToPage: 'Go to page {page}',
   externalLink: '{text} (opens in a new tab)',
@@ -166,18 +170,26 @@ class PdfViewer extends PdfViewerMixin(
    *   previousPage: 'Previous page',
    *   // Tooltip and accessible name of the next page button, and accessible name of a link to the next page.
    *   nextPage: 'Next page',
+   *   // Accessible name of the page field.
+   *   page: 'Page',
    *   // Error shown for a page that does not exist. {pageCount} is replaced with the page count.
    *   pageError: 'Enter 1–{pageCount}',
    *   // Tooltip and accessible name of the zoom in button.
    *   zoomIn: 'Zoom in',
    *   // Tooltip and accessible name of the zoom out button.
    *   zoomOut: 'Zoom out',
+   *   // Accessible name of the zoom select.
+   *   zoom: 'Zoom',
    *   // Zoom select item that fits the page width to the viewer.
    *   pageWidth: 'Page width',
    *   // Zoom select item that fits the whole page into the viewer.
    *   pageFit: 'Page fit',
    *   // Title of the header for a document without a file name.
    *   document: 'PDF document',
+   *   // Accessible name of a page. {page} is replaced with the page number.
+   *   pageLabel: 'Page {page}',
+   *   // Accessible name of the loading indicator.
+   *   loading: 'Loading',
    *   // Accessible name of a link without text whose destination is unknown.
    *   link: 'Link',
    *   // Accessible name of a link without text to another page. {page} is replaced with the page number.
@@ -203,11 +215,14 @@ class PdfViewer extends PdfViewerMixin(
   render() {
     return html`
       <div class="top-area" @focusin="${this.#onTopAreaFocusIn}">${this._renderToolbar()}</div>
-      <div part="loader"></div>
+      <div part="loader" role="progressbar" aria-label="${this.__effectiveI18n.loading}"></div>
       <div class="content-area">
         <div
           id="content"
           part="content"
+          role="region"
+          aria-labelledby="title"
+          aria-busy="${this.__loading ? 'true' : 'false'}"
           tabindex="${this.pageCount ? '0' : '-1'}"
           @focusin="${this.#onContentFocusIn}"
           @focusout="${this.#onContentFocusOut}"

@@ -129,11 +129,12 @@ describe('toolbar', () => {
     });
 
     it('should use the texts set with i18n', async () => {
-      viewer.i18n = { nextPage: 'Next', pageError: 'Max. {pageCount}' };
+      viewer.i18n = { nextPage: 'Next', page: 'Seite', pageError: 'Max. {pageCount}' };
       await enterPage('999');
       await nextFrame();
       expect(nextButton.querySelector<Tooltip>('vaadin-tooltip')!.text).to.equal('Next');
       expect(previousButton.querySelector<Tooltip>('vaadin-tooltip')!.text).to.equal('Previous page');
+      expect(pageField.accessibleName).to.equal('Seite');
       expect(pageField.errorMessage).to.equal('Max. 6');
     });
 
@@ -352,10 +353,11 @@ describe('toolbar', () => {
     });
 
     it('should use the zoom texts set with i18n', async () => {
-      viewer.i18n = { zoomIn: 'Größer', pageWidth: 'Seitenbreite', pageFit: 'Ganze Seite' };
+      viewer.i18n = { zoomIn: 'Größer', zoom: 'Vergrößerung', pageWidth: 'Seitenbreite', pageFit: 'Ganze Seite' };
       await nextFrame();
       expect(zoomInButton.querySelector<Tooltip>('vaadin-tooltip')!.text).to.equal('Größer');
       expect(zoomOutButton.querySelector<Tooltip>('vaadin-tooltip')!.text).to.equal('Zoom out');
+      expect(zoomSelect.accessibleName).to.equal('Vergrößerung');
       expect(getItemLabel('page-width')).to.equal('Seitenbreite');
       expect(getItemLabel('page-fit')).to.equal('Ganze Seite');
     });

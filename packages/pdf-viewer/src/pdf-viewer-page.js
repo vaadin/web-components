@@ -86,6 +86,8 @@ export class PdfViewerPage {
 
     this.element = document.createElement('div');
     this.element.setAttribute('part', 'page');
+    // As in pdf.js, each page is a region with a name.
+    this.element.setAttribute('role', 'region');
 
     /** @type {number} */
     this.scale = 0;
@@ -231,6 +233,15 @@ export class PdfViewerPage {
     this.canvas = canvas;
     this.renderedScale = scale;
     this.renderedPixelRatio = pixelRatio;
+  }
+
+  /**
+   * Sets the accessible name of the page.
+   *
+   * @param {string} label
+   */
+  setLabel(label) {
+    this.element.setAttribute('aria-label', label);
   }
 
   /**

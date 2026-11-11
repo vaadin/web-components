@@ -105,7 +105,7 @@ export const PdfViewerToolbarMixin = (superClass) =>
           ?hidden="${this.headerHidden}"
           @click="${this.#onHeaderClick}"
         >
-          <span part="title" dir="auto" title="${title}">${title}</span>
+          <span id="title" part="title" dir="auto" title="${title}">${title}</span>
           <span part="header-toggle"></span>
         </button>
         <div id="toolbar" part="toolbar" ?hidden="${collapsed}">
@@ -162,6 +162,7 @@ export const PdfViewerToolbarMixin = (superClass) =>
           min="1"
           max="${pageCount || 1}"
           .value="${this.#getPageFieldValue()}"
+          .accessibleName="${i18n.page}"
           .errorMessage="${i18n.pageError.replace('{pageCount}', pageCount)}"
           .disabled="${!hasDocument}"
           @change="${this.#onPageFieldChange}"
@@ -197,6 +198,7 @@ export const PdfViewerToolbarMixin = (superClass) =>
           theme="align-center"
           .items="${this.#zoomItems}"
           .value="${String(this.zoom)}"
+          .accessibleName="${i18n.zoom}"
           .disabled="${!hasDocument}"
           @change="${this.#onZoomSelectChange}"
         ></vaadin-select>

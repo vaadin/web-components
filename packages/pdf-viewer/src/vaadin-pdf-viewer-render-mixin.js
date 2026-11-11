@@ -62,6 +62,15 @@ export const PdfViewerRenderMixin = (superClass) =>
       this.#unwatchPixelRatio();
     }
 
+    /** @protected */
+    updated(props) {
+      super.updated(props);
+
+      if (props.has('__effectiveI18n')) {
+        this.#updatePageLabels();
+      }
+    }
+
     /**
      * Override method from `PdfViewerDocumentMixin` to create one page view
      * per page. All pages start with the size of the first page, and get
@@ -80,6 +89,7 @@ export const PdfViewerRenderMixin = (superClass) =>
         (_, index) => new PdfViewerPage(index + 1, size),
       );
       this.__pages[0].setPdfPage(firstPage);
+      this.#updatePageLabels();
       this.$.pages.replaceChildren(...this.__pages.map((page) => page.element));
       this.#renderQueue.setPages(this.__pages);
       // `render-idle` waits for the page sizes, see #notifyIdle().
@@ -112,6 +122,17 @@ export const PdfViewerRenderMixin = (superClass) =>
       cancelAnimationFrame(this.#pageSizesFrame);
       this.#pageSizesFrame = 0;
       this.$.pages.replaceChildren();
+    }
+
+    /**
+     * Sets the accessible names of the pages.
+     * @private
+     */
+    #updatePageLabels() {
+      const { pageLabel } = this.__effectiveI18n;
+      this.__pages.forEach((page) => {
+        page.setLabel(pageLabel.replace('{page}', page.pageNumber));
+      });
     }
 
     /**

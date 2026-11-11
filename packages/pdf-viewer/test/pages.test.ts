@@ -133,6 +133,19 @@ describe('pages', () => {
       it('should hide the canvas from assistive technology', () => {
         expect(pages[0].querySelector('canvas')!.getAttribute('aria-hidden')).to.equal('true');
       });
+
+      it('should make each page a region with a name, also when it is not rendered', () => {
+        expect(pages[0].getAttribute('role')).to.equal('region');
+        expect(pages[0].getAttribute('aria-label')).to.equal('Page 1');
+        expect(pages[5].getAttribute('role')).to.equal('region');
+        expect(pages[5].getAttribute('aria-label')).to.equal('Page 6');
+      });
+
+      it('should use the page name set with i18n', async () => {
+        viewer.i18n = { pageLabel: 'Seite {page}' };
+        await nextFrame();
+        expect(pages[2].getAttribute('aria-label')).to.equal('Seite 3');
+      });
     });
 
     describe('current page', () => {

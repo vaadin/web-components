@@ -58,6 +58,8 @@ export declare class PdfViewerPage {
 
   render(pixelRatio: number): Promise<void>;
 
+  setLabel(label: string): void;
+
   getOffset(
     x: number | undefined,
     y: number | undefined,

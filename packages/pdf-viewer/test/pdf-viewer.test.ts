@@ -70,6 +70,17 @@ describe('vaadin-pdf-viewer', () => {
       expect(viewer.hasAttribute('loading')).to.be.false;
     });
 
+    it('should mark the content busy while the document loads', async () => {
+      const content = viewer.shadowRoot!.querySelector('[part="content"]')!;
+      viewer.src = fixtureUrl('multi-page.pdf');
+      await nextUpdate(viewer);
+      await nextUpdate(viewer);
+      expect(content.getAttribute('aria-busy')).to.equal('true');
+      await oneEvent(viewer, 'document-load');
+      await nextUpdate(viewer);
+      expect(content.getAttribute('aria-busy')).to.equal('false');
+    });
+
     it('should clear the document when src is removed', async () => {
       await loadDocument(viewer, 'multi-page.pdf');
       viewer.src = null;

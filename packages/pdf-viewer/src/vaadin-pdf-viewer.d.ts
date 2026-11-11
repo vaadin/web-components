@@ -19,12 +19,16 @@ export type { PdfViewerZoom } from './vaadin-pdf-viewer-zoom-mixin.js';
 export interface PdfViewerI18n {
   previousPage?: string;
   nextPage?: string;
+  page?: string;
   pageError?: string;
   zoomIn?: string;
   zoomOut?: string;
+  zoom?: string;
   pageWidth?: string;
   pageFit?: string;
   document?: string;
+  pageLabel?: string;
+  loading?: string;
   link?: string;
   goToPage?: string;
   externalLink?: string;
@@ -183,18 +187,26 @@ declare class PdfViewer extends PdfViewerMixin(
    *   previousPage: 'Previous page',
    *   // Tooltip and accessible name of the next page button, and accessible name of a link to the next page.
    *   nextPage: 'Next page',
+   *   // Accessible name of the page field.
+   *   page: 'Page',
    *   // Error shown for a page that does not exist. {pageCount} is replaced with the page count.
    *   pageError: 'Enter 1–{pageCount}',
    *   // Tooltip and accessible name of the zoom in button.
    *   zoomIn: 'Zoom in',
    *   // Tooltip and accessible name of the zoom out button.
    *   zoomOut: 'Zoom out',
+   *   // Accessible name of the zoom select.
+   *   zoom: 'Zoom',
    *   // Zoom select item that fits the page width to the viewer.
    *   pageWidth: 'Page width',
    *   // Zoom select item that fits the whole page into the viewer.
    *   pageFit: 'Page fit',
    *   // Title of the header for a document without a file name.
    *   document: 'PDF document',
+   *   // Accessible name of a page. {page} is replaced with the page number.
+   *   pageLabel: 'Page {page}',
+   *   // Accessible name of the loading indicator.
+   *   loading: 'Loading',
    *   // Accessible name of a link without text whose destination is unknown.
    *   link: 'Link',
    *   // Accessible name of a link without text to another page. {page} is replaced with the page number.
