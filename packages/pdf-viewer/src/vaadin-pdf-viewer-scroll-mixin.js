@@ -31,10 +31,10 @@ export const PdfViewerScrollMixin = (superClass) =>
          * user scrolls, to the page with the largest part of it in view, or,
          * for a page taller than the view, the largest part of the view.
          * Setting it to another page scrolls to the start of that page.
-         * Setting it to the current page does not scroll. A value that is not
-         * a page of the document logs a warning and does not scroll. A set
-         * value stays as it is until the user scrolls. A new `src` resets it
-         * to 1, unless `page` is set in the same update.
+         * Setting it to the current page does not scroll, see `scrollToPage()`.
+         * A value that is not a page of the document logs a warning and does
+         * not scroll. A set value stays as it is until the user scrolls. A new
+         * `src` resets it to 1, unless `page` is set in the same update.
          */
         page: {
           type: Number,
@@ -149,6 +149,22 @@ export const PdfViewerScrollMixin = (superClass) =>
       this.#hadLayout = hasLayout;
 
       this._refreshLayout();
+    }
+
+    /**
+     * Scrolls to the start of the given page.
+     *
+     * Right after setting `src`, it scrolls once the document has loaded, and
+     * in a hidden viewer, once the viewer is shown. Does nothing without a
+     * document or when the viewer is not attached.
+     * @param {number} page the page, starting from 1
+     */
+    scrollToPage(page) {
+      this._whenDocumentReady().then((pdfDocument) => {
+        if (pdfDocument) {
+          this._scrollToPage(page);
+        }
+      });
     }
 
     /**
