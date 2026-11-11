@@ -218,7 +218,7 @@ describe('links', () => {
       await load('multi-page.pdf');
       rejectLinks!(new Error('Links of a released page'));
       await nextFrame();
-      expect(warn).to.be.not.called;
+      expect(warn.args).to.deep.equal([]);
     });
 
     it('should place the link of a rotated page over its text', async () => {
