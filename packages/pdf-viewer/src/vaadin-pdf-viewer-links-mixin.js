@@ -84,8 +84,7 @@ export const PdfViewerLinksMixin = (superClass) =>
 
     /**
      * Returns the page and the position on the page that an internal link
-     * points to, or null when it cannot be resolved.
-     * @return {Promise<{ page: number, left?: number, top?: number, right?: number, bottom?: number } | null>}
+     * points to, or null when it cannot be resolved, see `resolveDestination()`.
      * @private
      */
     #resolveDestination(destination) {
