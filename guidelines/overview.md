@@ -29,6 +29,7 @@ For repository-level commands (install, start, lint, test) see `CLAUDE.md`.
 | [Component Implementation](component-implementation.md) | Building the element class: mixins, properties, lifecycle hooks, controllers. |
 | [Common packages](common-packages.md)                   | Reusing shared mixins, controllers, and utilities before reinventing them.    |
 | [Documenting](documenting.md)                           | Authoring JSDoc for proper API docs generation.                               |
+| [Comments](comments.md)                                 | Writing code comments and the JSDoc of internal code.                         |
 | [TypeScript](typescript.md)                             | Authoring Typescript definitions.                                             |
 | [DOM](dom.md)                                           | Designing a component's DOM surface — parts, attributes, slots.               |
 | [Events](events.md)                                     | Dispatching and documenting component events.                                 |

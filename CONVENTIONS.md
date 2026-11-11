@@ -118,9 +118,35 @@ When adding files under `packages/`, `dev/`, or `test/`, name files using dash-c
 
 The React packages under `packages/react-components*/` are an exception. Component files use the PascalCase component name (`Button.ts`, `GridColumn.tsx`), because the file name is the published import specifier (`@vaadin/react-components/Button.js`). Hooks and utilities use camelCase (`useRenderer.ts`, `createComponent.ts`).
 
+## Comments
+
+On code that is not part of the public API, comment only on what the code cannot state, such as why a workaround is needed. Rename, extract or return early instead of restating the code.
+
+Limit a comment on code that is not part of the public API to one sentence, no longer than the code that it describes. Docblock tags such as `@private`, `@override`, `@param` and `@return` do not count. The standard "An element used internally by ..." class JSDoc is exempt.
+
+Do not write a comment that narrates or justifies the change, such as `previously`, `moved from`, `as requested` or `per review`.
+
+Do not write a comment that records what was tried, ruled out or verified.
+
+Do not reference line numbers, links to lines, process codes such as `AC-3`, or review threads in a comment.
+
+Do not add section banners or decorative comments.
+
+Write one comment for each reason, not one on each function that shares it. Give each workaround for a third-party library its own comment at the code that it changes.
+
+Link an issue by its full URL, not by the `#1234` shorthand.
+
+Link each `TODO` comment to an open issue.
+
+In test spec files, write no JSDoc. Use `//` only for a fixture or environment fact that the code cannot state, such as why the test uses fake timers.
+
+Write no prose in the `.d.ts` of a module that is not part of the public API.
+
 ## JSDoc
 
 Documentation / JSDoc should describe the public contract and behavior, not internal implementation details on how the behavior is achieved.
+
+Limit the JSDoc of a public property or method to one summary sentence. Add at most one short paragraph for a caveat that the signature cannot state. A code block or a list that shows a value shape or callback arguments is not a paragraph.
 
 The class JSDoc of a public component must carry `@customElement {tag}` and `@extends HTMLElement`. CEM does not pick up the tag name from `defineCustomElement()`, and without `@extends` the inherited LitElement API ends up in the generated docs.
 
@@ -130,7 +156,7 @@ Every shadow part, state attribute, and CSS custom property that is part of the 
 
 Every member that is not part of the public API must have a visibility JSDoc tag, such as `/** @private */` or `/** @protected */`. This includes overrides for custom code as well as overrides for lifecycle methods (e.g. `render()`, `ready()`, `updated()`).
 
-When a method overrides or implements a method declared in a mixin or base class, tag it with `@override` in JSDoc plus a leading "Override method from `<BaseMixin>` to ..." that explains what the override does differently.
+When a method overrides or implements a method declared in a mixin or base class, tag it with `@override` in JSDoc. Add one leading sentence "Override method from `<BaseMixin>` to ..." that explains what the override does differently.
 
 Module-level constants or utility functions do not need to be tagged with `@private` in JSDoc or named with a `__` prefix. Just not exporting them is sufficient.
 
@@ -146,7 +172,7 @@ Deprecations must not change behavior and test coverage for deprecated API must 
 
 When adding a public property, method, or config-object option to a `.js` module, it must also be declared in the sibling hand-maintained `.d.ts`. The declaration belongs in the `.d.ts` of the same module that implements it — a mixin's property goes in the mixin's `.d.ts`, not the element's, and a controller option goes in that controller's config type.
 
-Any change in JSDoc descriptions in `.js` modules needs to be synced to the sibling hand-maintained `.d.ts` module.
+Any change in JSDoc descriptions in `.js` modules that are part of the public API needs to be synced to the sibling hand-maintained `.d.ts` module.
 
 Do not carry over `@type` annotations from `.js` modules into `.d.ts` modules, the TypeScript type signature already states what the type is.
 
