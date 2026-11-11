@@ -27,9 +27,9 @@ export declare class PdfViewerRenderMixinClass {
   protected _pageSizesChanged(): void;
 
   /**
-   * Renders the layers over the canvas of a page that has just rendered,
-   * e.g. the text layer. Overrides await `super` first, so that the layers
-   * render in the order of the mixins.
+   * Renders the layers over the canvas of a page that has just rendered.
+   * Overrides await `super` first, so that the layers render in the order
+   * of the mixins.
    */
   protected _renderPageLayers(page: PdfViewerPage): Promise<void>;
 
@@ -47,7 +47,7 @@ export declare class PdfViewerRenderMixinClass {
   protected _renderVisible(visible: Array<{ index: number; ratio: number }>): void;
 
   /**
-   * Cancels rendering the page being rendered, e.g. before the pages get another size.
+   * Cancels rendering the page being rendered.
    */
   protected _cancelRender(): void;
 }

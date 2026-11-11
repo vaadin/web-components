@@ -54,7 +54,6 @@ export const PdfViewerScrollMixin = (superClass) =>
       };
     }
 
-    /** The index of the current page, see `getMostVisibleIndex()`, updated with the visible pages. */
     #currentIndex = 0;
 
     /**
@@ -63,7 +62,6 @@ export const PdfViewerScrollMixin = (superClass) =>
      */
     #pinnedPage = null;
 
-    /** The scroll position set when scrolling to the pinned page. */
     #pinnedScrollTop = 0;
 
     /** A page to scroll to once the pages can be laid out. */
@@ -71,7 +69,7 @@ export const PdfViewerScrollMixin = (superClass) =>
 
     #scrollFrame = 0;
 
-    /** The scroll position while the viewer had a size, to restore it when shown again. */
+    /** The scroll position to restore when a hidden viewer is shown again. */
     #savedScroll = { top: 0, left: 0 };
 
     #hadLayout = false;
@@ -126,13 +124,9 @@ export const PdfViewerScrollMixin = (superClass) =>
       }
     }
 
-    /**
-     * Fits the pages to the new size of the page area.
-     * @private
-     */
+    /** @private */
     #onResize() {
-      // Hiding the viewer (e.g. in an inactive tab) resets its scroll position.
-      // A page set while hidden wins over it, see _refreshLayout().
+      // Hiding the viewer resets its scroll position. A page set while hidden wins over it.
       const hasLayout = this.#hasLayout();
       if (hasLayout && !this.#hadLayout) {
         this.$.content.scrollTop = this.#savedScroll.top;
@@ -168,8 +162,7 @@ export const PdfViewerScrollMixin = (superClass) =>
      * @param {{ left: number, top: number }} [offset] the offset from the top
      *   left corner of the page in CSS pixels. Without it, the padding above
      *   the page shows too, and the horizontal scroll position stays. While
-     *   the pages have no layout, e.g. in a hidden viewer, only the page is
-     *   kept, and the offset is dropped.
+     *   the pages have no layout, only the page is kept, and the offset is dropped.
      * @protected
      */
     _scrollToPage(page, offset) {
@@ -185,7 +178,7 @@ export const PdfViewerScrollMixin = (superClass) =>
         issueWarning(
           `The page ${page} is out of range for <vaadin-pdf-viewer>, the document has ${this.__pages.length} pages.`,
         );
-        // The visible pages may not be rendered yet, e.g. when the page was pending.
+        // The visible pages may not be rendered yet when the page was pending.
         this.#updateVisiblePages();
         return;
       }
@@ -279,9 +272,8 @@ export const PdfViewerScrollMixin = (superClass) =>
     }
 
     /**
-     * Lays out the pages again, e.g. after a change of the size or of the
-     * scale, and scrolls to a page that was set while the pages could not be
-     * laid out.
+     * Lays out the pages again, and scrolls to a page that was set while the
+     * pages could not be laid out.
      * @protected
      */
     _refreshLayout() {
@@ -293,11 +285,7 @@ export const PdfViewerScrollMixin = (superClass) =>
       }
     }
 
-    /**
-     * Scrolls to a page that was set before the pages could be laid out, or
-     * else updates the visible pages.
-     * @private
-     */
+    /** @private */
     #scrollToPendingPage() {
       if (this.#pendingPage) {
         this._scrollToPage(this.#pendingPage);
@@ -306,11 +294,7 @@ export const PdfViewerScrollMixin = (superClass) =>
       }
     }
 
-    /**
-     * Whether the viewer has a size, so that pages can be laid out. It has
-     * none e.g. inside a hidden tab.
-     * @private
-     */
+    /** @private */
     #hasLayout() {
       const { content } = this.$;
       return content.clientWidth > 0 && content.clientHeight > 0;
@@ -342,8 +326,7 @@ export const PdfViewerScrollMixin = (superClass) =>
       const { content } = this.$;
 
       if (!this.#hasLayout()) {
-        // Page sizes arrived while the viewer is hidden. Positions cannot be
-        // measured now, so go back to the current page once shown again.
+        // Positions cannot be measured while hidden, so go back to the current page once shown.
         this.__pages.forEach((page) => page.setScale(scale));
         this.#pendingPage ||= this.page;
         return;
@@ -392,10 +375,7 @@ export const PdfViewerScrollMixin = (superClass) =>
       content.scrollLeft += getAnchorScrollLeftDelta(anchor, view, this.#getPageBox(page));
     }
 
-    /**
-     * Returns the position of a page in the content and its rectangle in the viewport.
-     * @private
-     */
+    /** @private */
     #getPageBox(page) {
       const { left, width } = page.element.getBoundingClientRect();
       return { top: page.element.offsetTop, height: page.height, left, width };
@@ -412,14 +392,9 @@ export const PdfViewerScrollMixin = (superClass) =>
       });
     }
 
-    /**
-     * Finds the visible pages, updates the current page, and renders the
-     * pages that are visible or about to become visible.
-     * @private
-     */
+    /** @private */
     #updateVisiblePages() {
       const pages = this.__pages;
-      // Without layout, all pages have no position, so nothing can be visible.
       if (!pages.length || this._scale <= 0 || !this.#hasLayout()) {
         this._renderVisible([]);
         return;
@@ -444,8 +419,7 @@ export const PdfViewerScrollMixin = (superClass) =>
       const mostVisibleIndex = getMostVisibleIndex(visible);
       this.#currentIndex = mostVisibleIndex;
 
-      // Keep a page that was scrolled to as long as the view has not moved.
-      // E.g. the last page cannot always be scrolled to the top of the view.
+      // Keep a page scrolled to while the view has not moved, as it may not reach the top of the view.
       const pinned = this.#pinnedPage;
       if (pinned !== null && Math.abs(this.$.content.scrollTop - this.#pinnedScrollTop) < 1) {
         this.#currentIndex = pinned - 1;

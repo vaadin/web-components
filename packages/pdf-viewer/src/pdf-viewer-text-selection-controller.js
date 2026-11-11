@@ -204,7 +204,7 @@ export class PdfViewerTextSelectionController {
 
     const [range] = ranges;
     const prevRange = this.#prevRange;
-    // Whether the user moves the start of the selection, rather than its end
+    // Whether the user moves the start of the selection, rather than its end.
     const modifyStart =
       !!prevRange &&
       prevRange.startContainer.getRootNode() === range.startContainer.getRootNode() &&

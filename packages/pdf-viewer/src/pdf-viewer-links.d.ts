@@ -28,7 +28,7 @@ export interface PdfViewerLinkAnnotation extends PdfViewerDestination {
   overlaidText?: string;
   /** The layer of the document that the link is on. */
   oc?: object;
-  /** The quadrilaterals that the link covers, e.g. the words of a link that wraps. */
+  /** The quadrilaterals that the link covers, such as the words of a link that wraps. */
   quadPoints?: ArrayLike<number> | null;
 }
 

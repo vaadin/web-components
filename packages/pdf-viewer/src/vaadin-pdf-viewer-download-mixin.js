@@ -18,14 +18,10 @@ import { downloadDocument } from './pdf-viewer-download.js';
 export const PdfViewerDownloadMixin = (superClass) =>
   class PdfViewerDownloadMixinClass extends superClass {
     /**
-     * Downloads the document. The file has the original bytes of the
-     * document, so the viewer does not request it again, and signatures stay
-     * intact. The file name is `fileName` when set, else the name from the
-     * response or `src`, see `fileName`.
-     * While the document loads, it is downloaded once loaded. When `src`
-     * changes meanwhile, also in the same task, the new document is
-     * downloaded. Does nothing without a document, or when the viewer is not
-     * attached.
+     * Downloads the document with its original bytes, without requesting it
+     * again, under the name described in `fileName`. While the document
+     * loads, it is downloaded once loaded, also when `src` changes meanwhile.
+     * Does nothing without a document, or when the viewer is not attached.
      */
     download() {
       this._whenDocumentReady().then((pdfDocument) => {
@@ -50,13 +46,7 @@ export const PdfViewerDownloadMixin = (superClass) =>
       });
     }
 
-    /**
-     * Returns the name to save the document under: `fileName` as given,
-     * else the name of the document, else `document`, with `.pdf` added
-     * when missing.
-     * @return {string}
-     * @private
-     */
+    /** @private */
     #getDownloadFileName() {
       if (this.fileName) {
         return this.fileName;
