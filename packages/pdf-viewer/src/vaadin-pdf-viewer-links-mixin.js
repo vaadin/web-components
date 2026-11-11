@@ -9,6 +9,7 @@
  * license.
  */
 import { isKeyboardActive } from '@vaadin/a11y-base/src/focus-utils.js';
+import { issueWarning } from '@vaadin/component-base/src/warnings.js';
 import { getLinkLabel, resolveDestination } from './pdf-viewer-links.js';
 
 /**
@@ -41,10 +42,17 @@ export const PdfViewerLinksMixin = (superClass) =>
     async _renderPageLayers(page) {
       await super._renderPageLayers(page);
 
-      // The layers that the canvas shows, see `PDFPageProxy.render()`.
-      const optionalContentConfig = await this._pdfDocument?.getOptionalContentConfig({ intent: 'display' });
-      const links = await page.renderLinkLayer((annotation) => this.#followLink(annotation), optionalContentConfig);
-      await this.#nameLinks(links);
+      try {
+        // The layers that the canvas shows, see `PDFPageProxy.render()`.
+        const optionalContentConfig = await this._pdfDocument?.getOptionalContentConfig({ intent: 'display' });
+        const links = await page.renderLinkLayer((annotation) => this.#followLink(annotation), optionalContentConfig);
+        await this.#nameLinks(links);
+      } catch (error) {
+        // The page keeps its canvas and text without links.
+        if (error.name !== 'AbortException' && page.canvas) {
+          issueWarning(`Failed to render the links of page ${page.pageNumber} of the PDF document: ${error.message}`);
+        }
+      }
     }
 
     /**

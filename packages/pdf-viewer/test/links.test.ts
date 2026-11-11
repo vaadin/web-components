@@ -4,7 +4,7 @@ import { fixtureSync, nextFrame, nextRender, nextUpdate } from '@vaadin/testing-
 import sinon from 'sinon';
 import './enable-feature-flag.js';
 import '../vaadin-pdf-viewer.js';
-import type { PDFDocumentProxy } from 'pdfjs-dist';
+import type { PDFDocumentProxy, PDFPageProxy } from 'pdfjs-dist';
 import { getDeepActiveElement } from '@vaadin/a11y-base/src/focus-utils.js';
 import { getSelectionRanges } from '../src/pdf-viewer-text-selection-controller.js';
 import type { PdfViewer } from '../vaadin-pdf-viewer.js';
@@ -14,6 +14,7 @@ import {
   type Fixture,
   fixtureUrl,
   getPdfDocumentPrototype,
+  getPdfPagePrototype,
   loadAndRender,
   nextRenderIdle,
   type PdfPage,
@@ -178,6 +179,22 @@ describe('links', () => {
         expect(rect.top + rect.height / 2 < page.top + page.height / 2).to.equal(vertical === 'top');
         expect(rect.left + rect.width / 2 < page.left + page.width / 2).to.equal(horizontal === 'left');
       });
+    });
+
+    it('should keep the page rendered when its links fail to load', async () => {
+      const prototype = await getPdfPagePrototype();
+      const getAnnotations = prototype.getAnnotations;
+      function fakeGetAnnotations(this: PDFPageProxy, ...args: Parameters<PDFPageProxy['getAnnotations']>) {
+        return this.pageNumber === 1 ? Promise.reject(new Error('Broken links')) : getAnnotations.apply(this, args);
+      }
+      sinon.stub(prototype, 'getAnnotations').callsFake(fakeGetAnnotations);
+      const warn = sinon.stub(console, 'warn');
+      await load('links.pdf');
+      const warnings = warn.args.map(([message]) => message);
+      expect(warnings).to.include('Failed to render the links of page 1 of the PDF document: Broken links');
+      expect(warnings.some((message) => message.startsWith('Failed to render page'))).to.be.false;
+      expect(pages[0].querySelector('canvas')).to.be.ok;
+      expect(getLinks(1)).to.be.empty;
     });
 
     it('should place the link of a rotated page over its text', async () => {
