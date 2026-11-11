@@ -1,20 +1,20 @@
 import { expect } from '@vaadin/chai-plugins';
 import { resetMouse, sendKeys, sendMouse } from '@vaadin/test-runner-commands';
-import { fixtureSync, nextFrame, nextRender, nextUpdate } from '@vaadin/testing-helpers';
+import { fixtureSync, nextFrame, nextRender, nextResize, nextUpdate } from '@vaadin/testing-helpers';
 import sinon from 'sinon';
 import './enable-feature-flag.js';
 import '../vaadin-pdf-viewer.js';
-import type { PDFDocumentProxy, PDFPageProxy } from 'pdfjs-dist';
+import type { PDFDocumentProxy } from 'pdfjs-dist';
 import { getDeepActiveElement } from '@vaadin/a11y-base/src/focus-utils.js';
 import { getSelectionRanges } from '../src/pdf-viewer-text-selection-controller.js';
 import type { PdfViewer } from '../vaadin-pdf-viewer.js';
 import {
   createPdf,
+  failLinksOnce,
   failTextOnce,
   type Fixture,
   fixtureUrl,
   getPdfDocumentPrototype,
-  getPdfPagePrototype,
   loadAndRender,
   nextRenderIdle,
   type PdfPage,
@@ -181,13 +181,8 @@ describe('links', () => {
       });
     });
 
-    it('should keep the page rendered when its links fail to load', async () => {
-      const prototype = await getPdfPagePrototype();
-      const getAnnotations = prototype.getAnnotations;
-      function fakeGetAnnotations(this: PDFPageProxy, ...args: Parameters<PDFPageProxy['getAnnotations']>) {
-        return this.pageNumber === 1 ? Promise.reject(new Error('Broken links')) : getAnnotations.apply(this, args);
-      }
-      sinon.stub(prototype, 'getAnnotations').callsFake(fakeGetAnnotations);
+    it('should keep the page rendered when its links fail to load, and load the links again later', async () => {
+      await failLinksOnce(1);
       const warn = sinon.stub(console, 'warn');
       await load('links.pdf');
       const warnings = warn.args.map(([message]) => message);
@@ -195,6 +190,11 @@ describe('links', () => {
       expect(warnings.some((message) => message.startsWith('Failed to render page'))).to.be.false;
       expect(pages[0].querySelector('canvas')).to.be.ok;
       expect(getLinks(1)).to.be.empty;
+      const idle = nextRenderIdle(viewer);
+      viewer.style.width = '900px';
+      await nextResize(viewer);
+      await idle;
+      expect(getLinks(1)).to.have.lengthOf(2);
     });
 
     it('should place the link of a rotated page over its text', async () => {
