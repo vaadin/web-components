@@ -108,19 +108,25 @@ export class PdfViewerRenderQueue {
     this.renderNext();
   }
 
-  /** Stops rendering pages. The page being rendered finishes. */
+  /**
+   * Stops rendering pages. The page being rendered finishes.
+   */
   clear() {
     this.#queue = [];
     this.#visibleLength = 0;
     this.renderNext();
   }
 
-  /** Cancels rendering the page being rendered. */
+  /**
+   * Cancels rendering the page being rendered.
+   */
   cancel() {
     this.#renderingPage?.cancel();
   }
 
-  /** Renders the next page in the queue that is not rendered yet, one page at a time. */
+  /**
+   * Renders the next page in the queue that is not rendered yet, one page at a time.
+   */
   renderNext() {
     if (this.#renderingPage) {
       return;

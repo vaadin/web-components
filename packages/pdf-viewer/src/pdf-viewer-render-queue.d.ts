@@ -69,12 +69,18 @@ export declare class PdfViewerRenderQueue<TPage extends PdfViewerRenderQueuePage
    */
   update(visible: Array<{ index: number; ratio: number }>): void;
 
-  /** Stops rendering pages. The page being rendered finishes. */
+  /**
+   * Stops rendering pages. The page being rendered finishes.
+   */
   clear(): void;
 
-  /** Cancels rendering the page being rendered. */
+  /**
+   * Cancels rendering the page being rendered.
+   */
   cancel(): void;
 
-  /** Renders the next page in the queue that is not rendered yet, one page at a time. */
+  /**
+   * Renders the next page in the queue that is not rendered yet, one page at a time.
+   */
   renderNext(): void;
 }
