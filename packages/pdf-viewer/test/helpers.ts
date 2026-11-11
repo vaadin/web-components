@@ -10,11 +10,9 @@ export type Fixture =
   | 'javascript.pdf'
   | 'links.pdf'
   | 'multi-page.pdf'
-  | 'outline.pdf'
   | 'rotated.pdf'
   | 'standard-font.pdf'
-  | 'tagged.pdf'
-  | 'unsafe-links.pdf';
+  | 'tagged.pdf';
 
 export function fixtureUrl(name: Fixture): string {
   return new URL(`./fixtures/${name}`, import.meta.url).href;
