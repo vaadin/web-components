@@ -212,6 +212,7 @@ describe('pages', () => {
       });
 
       it('should fit the pages to a new width after setting page to a fraction', async () => {
+        sinon.stub(console, 'warn');
         viewer.page = 2.5;
         await nextFrame();
         viewer.style.width = '600px';

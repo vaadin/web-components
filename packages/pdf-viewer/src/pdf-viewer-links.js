@@ -95,7 +95,8 @@ export function createLink(annotation, followLink) {
  */
 export async function resolveDestination(pdfDocument, { dest, action }, { page, pageCount }) {
   if (action) {
-    const pages = { FirstPage: 1, LastPage: pageCount, NextPage: page + 1, PrevPage: page - 1 };
+    // A page set to a fraction is between two pages.
+    const pages = { FirstPage: 1, LastPage: pageCount, NextPage: Math.floor(page) + 1, PrevPage: Math.ceil(page) - 1 };
     const target = pages[action];
     return target >= 1 && target <= pageCount ? { page: target } : null;
   }

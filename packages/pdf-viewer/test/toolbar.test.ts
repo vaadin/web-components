@@ -119,6 +119,21 @@ describe('toolbar', () => {
       expect(viewer.page).to.equal(2);
     });
 
+    [
+      { button: 'next', page: 3 },
+      { button: 'previous', page: 2 },
+    ].forEach(({ button, page }) => {
+      it(`should go to page ${page} when clicking ${button} page after setting page to a fraction`, async () => {
+        const stub = sinon.stub(console, 'warn');
+        viewer.page = 2.5;
+        await nextFrame();
+        stub.restore();
+        (button === 'next' ? nextButton : previousButton).click();
+        await nextFrame();
+        expect(viewer.page).to.equal(page);
+      });
+    });
+
     it('should show the label of the page buttons in a tooltip', () => {
       const previousTooltip = previousButton.querySelector<Tooltip>('vaadin-tooltip')!;
       const nextTooltip = nextButton.querySelector<Tooltip>('vaadin-tooltip')!;
