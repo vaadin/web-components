@@ -522,7 +522,7 @@ describe('links', () => {
           `<< /Type /Annot /Subtype /Link /Rect [50 ${700 - index * 40} 300 ${720 - index * 40}] /A << /S /Named /N /${action} >> >>`,
       );
       await loadPdf(Array.from({ length: 4 }, () => ({ content: '', annotations })));
-      viewer.page = 2;
+      viewer.scrollToPage(2);
       await nextRenderIdle(viewer);
     });
 
@@ -544,7 +544,7 @@ describe('links', () => {
       ['NextPage', 4],
     ].forEach(([action, page]) => {
       it(`should do nothing for the ${action} action on page ${page}`, async () => {
-        viewer.page = page as number;
+        viewer.scrollToPage(page as number);
         await scrollSettled(content);
         const { scrollTop } = content;
         const warn = sinon.stub(console, 'warn');

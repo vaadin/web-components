@@ -244,7 +244,7 @@ export const PdfViewerToolbarMixin = (superClass) =>
 
     /** @private */
     #onPreviousPageClick() {
-      this._scrollToPage(Math.min(this.page, this.pageCount + 1) - 1);
+      this._scrollToPage(this.page - 1);
     }
 
     /** @private */
@@ -254,18 +254,16 @@ export const PdfViewerToolbarMixin = (superClass) =>
 
     /** @private */
     #onNextPageClick() {
-      this._scrollToPage(Math.max(this.page, 0) + 1);
+      this._scrollToPage(this.page + 1);
     }
 
     /**
-     * Returns the value of the page field. A page out of range set by the
-     * application gives an empty field, as it would make the field invalid.
+     * Returns the value of the page field, which is empty without a document.
      * @return {string}
      * @private
      */
     #getPageFieldValue() {
-      const { page, pageCount } = this;
-      return Number.isInteger(page) && page >= 1 && page <= pageCount ? String(page) : '';
+      return this.pageCount ? String(this.page) : '';
     }
 
     /**
