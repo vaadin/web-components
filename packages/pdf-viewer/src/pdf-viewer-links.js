@@ -35,6 +35,7 @@ const DESTINATION_POSITION_INDEXES = {
 };
 
 /**
+ * Returns whether the URL of a link is safe to open.
  * @param {string} url
  * @return {boolean}
  */
@@ -123,7 +124,8 @@ export async function resolveDestination(pdfDocument, { dest, action }, { page, 
 
 /**
  * Returns the URL to show for a link, without its user name and password, as
- * in pdf.js. They could make a link look like it goes to another site.
+ * in pdf.js. They could make a link look like it goes to another site, e.g.
+ * `https://vaadin.com@example.com/`.
  *
  * @param {string} url
  * @return {string}

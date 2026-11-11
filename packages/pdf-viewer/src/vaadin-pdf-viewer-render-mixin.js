@@ -72,9 +72,8 @@ export const PdfViewerRenderMixin = (superClass) =>
     }
 
     /**
-     * Override method from `PdfViewerDocumentMixin` to create one page view
-     * per page. All pages start with the size of the first page, and get
-     * their own size as they load in the background.
+     * Override method from `PdfViewerDocumentMixin` to create the page views,
+     * sized as the first page until each page loads its own size.
      * @protected
      * @override
      */
@@ -141,9 +140,8 @@ export const PdfViewerRenderMixin = (superClass) =>
     }
 
     /**
-     * Renders the layers over the canvas of a page that has just rendered.
-     * Overrides await `super` first, so that the layers render in the order
-     * of the mixins.
+     * Renders the layers over the canvas of a page that has just rendered,
+     * where overrides await `super` first to keep the mixin order.
      * @param {PdfViewerPage} _page
      * @return {Promise<void>}
      * @protected

@@ -126,7 +126,7 @@ export const PdfViewerScrollMixin = (superClass) =>
 
     /** @private */
     #onResize() {
-      // Hiding the viewer resets its scroll position. A page set while hidden wins over it.
+      // Hiding the viewer resets its scroll position, and a pending page scrolls after this.
       const hasLayout = this.#hasLayout();
       if (hasLayout && !this.#hadLayout) {
         this.$.content.scrollTop = this.#savedScroll.top;
@@ -419,7 +419,7 @@ export const PdfViewerScrollMixin = (superClass) =>
       const mostVisibleIndex = getMostVisibleIndex(visible);
       this.#currentIndex = mostVisibleIndex;
 
-      // Keep a page scrolled to while the view has not moved, as it may not reach the top of the view.
+      // Keep a scrolled-to page while the view has not moved, as the last page may not reach the top.
       const pinned = this.#pinnedPage;
       if (pinned !== null && Math.abs(this.$.content.scrollTop - this.#pinnedScrollTop) < 1) {
         this.#currentIndex = pinned - 1;

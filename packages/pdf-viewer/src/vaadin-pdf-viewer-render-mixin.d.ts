@@ -27,9 +27,8 @@ export declare class PdfViewerRenderMixinClass {
   protected _pageSizesChanged(): void;
 
   /**
-   * Renders the layers over the canvas of a page that has just rendered.
-   * Overrides await `super` first, so that the layers render in the order
-   * of the mixins.
+   * Renders the layers over the canvas of a page that has just rendered,
+   * where overrides await `super` first to keep the mixin order.
    */
   protected _renderPageLayers(page: PdfViewerPage): Promise<void>;
 

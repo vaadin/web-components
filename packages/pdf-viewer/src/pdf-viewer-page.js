@@ -21,6 +21,7 @@ export const MAX_CANVAS_PIXELS = 2 ** 24;
 /**
  * Limits the clickable area of a link to the quadrilaterals of its annotation,
  * such as the words of a link that wraps to the next line, as pdf.js does.
+ * A link whose only quadrilateral is its rectangle gets no areas.
  *
  * @param {HTMLAnchorElement} link
  * @param {{ rect: number[], quadPoints?: ArrayLike<number> | null }} annotation

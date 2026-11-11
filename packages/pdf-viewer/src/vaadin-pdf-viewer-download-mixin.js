@@ -18,10 +18,12 @@ import { downloadDocument } from './pdf-viewer-download.js';
 export const PdfViewerDownloadMixin = (superClass) =>
   class PdfViewerDownloadMixinClass extends superClass {
     /**
-     * Downloads the document with its original bytes, without requesting it
-     * again, so signatures stay intact. The file name is described in `fileName`. While the document
-     * loads, it is downloaded once loaded, also when `src` changes meanwhile.
-     * Does nothing without a document, or when the viewer is not attached.
+     * Downloads the document with its original bytes, so signatures stay
+     * intact, under the file name described in `fileName`.
+     *
+     * The document is not requested again. While it loads, it is downloaded
+     * once loaded, also when `src` changes meanwhile. Does nothing without a
+     * document, or when the viewer is not attached.
      */
     download() {
       this._whenDocumentReady().then((pdfDocument) => {
