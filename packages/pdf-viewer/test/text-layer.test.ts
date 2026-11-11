@@ -1,6 +1,6 @@
 import { expect } from '@vaadin/chai-plugins';
 import { resetMouse, sendMouse } from '@vaadin/test-runner-commands';
-import { fixtureSync, nextFrame, nextRender, nextUpdate } from '@vaadin/testing-helpers';
+import { fixtureSync, nextFrame, nextRender, nextResize, nextUpdate } from '@vaadin/testing-helpers';
 import sinon from 'sinon';
 import './enable-feature-flag.js';
 import '../vaadin-pdf-viewer.js';
@@ -16,7 +16,6 @@ import {
   loadAndRender,
   nextRenderIdle,
   type PdfPage,
-  resizeViewer,
 } from './helpers.js';
 
 describe('text layer', () => {
@@ -28,6 +27,14 @@ describe('text layer', () => {
 
   function getTextLayer(pageNumber: number) {
     return pages[pageNumber - 1].querySelector<HTMLElement>('.text-layer');
+  }
+
+  /** Makes the viewer wider, which renders the pages again at a larger scale. */
+  async function resizeViewer() {
+    const idle = nextRenderIdle(viewer);
+    viewer.style.width = '900px';
+    await nextResize(viewer);
+    await idle;
   }
 
   async function load(name: Fixture) {
@@ -84,7 +91,7 @@ describe('text layer', () => {
     });
 
     it('should resize the text layer when the pages resize', async () => {
-      await resizeViewer(viewer);
+      await resizeViewer();
       const page = pages[0].getBoundingClientRect();
       const layer = getTextLayer(1)!.getBoundingClientRect();
       expect(layer.width).to.be.closeTo(page.width, 1);
@@ -102,7 +109,7 @@ describe('text layer', () => {
 
     it('should keep the text layer when the pages resize', async () => {
       const layer = getTextLayer(1);
-      await resizeViewer(viewer);
+      await resizeViewer();
       expect(getTextLayer(1)).to.equal(layer);
     });
   });
@@ -126,7 +133,7 @@ describe('text layer', () => {
     const warnings = warn.args.map(([message]) => message);
     expect(warnings).to.include('Failed to render the text of page 1 of the PDF document: Broken text');
     expect(warnings.some((message) => message.startsWith('Failed to render page'))).to.be.false;
-    await resizeViewer(viewer);
+    await resizeViewer();
     expect(getTextLayer(1)).to.be.ok;
   });
 

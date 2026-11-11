@@ -19,7 +19,6 @@ import {
   loadAndRender,
   nextRenderIdle,
   type PdfPage,
-  resizeViewer,
   scrollSettled,
 } from './helpers.js';
 
@@ -192,7 +191,10 @@ describe('links', () => {
       expect(warnings.some((message) => message.startsWith('Failed to render page'))).to.be.false;
       expect(pages[0].querySelector('canvas')).to.be.ok;
       expect(getLinks(1)).to.be.empty;
-      await resizeViewer(viewer);
+      // Rendering the pages again at another size loads the links again.
+      const idle = nextRenderIdle(viewer);
+      viewer.style.width = '900px';
+      await idle;
       expect(getLinks(1)).to.have.lengthOf(2);
     });
 
