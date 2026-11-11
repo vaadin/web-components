@@ -61,9 +61,8 @@ how to generate them.
 - `PdfViewerScrollMixin` owns the scale `_scale`, the anchor, the visible pages and `page`. It asks for
   rendering only with `_renderVisible()` and `_cancelRender()`. It gets the scale from `_getScaleForSize()`, which
   fits the width of the current page by default.
-  - `_goToPage()` is for user navigation only: the toolbar, the keys and the links call it. A `page` that
-    the application sets scrolls without it, and so does its `scrollToPage()` call, so that an override reacts
-    to the user alone.
+  - `_goToPage()` is for user navigation only: the toolbar, the keys and the links call it. Setting `page` and
+    `scrollToPage()` scroll without it, so that an override reacts to the user alone.
 - `PdfViewerZoomMixin` owns `zoom`. It writes no render or scroll state:
   - It overrides `_getScaleForSize()` to return the scale for `zoom`.
   - It calls `_refreshLayout()` when `zoom` changes.

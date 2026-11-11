@@ -24,11 +24,10 @@ export declare class PdfViewerScrollMixinClass {
    * user scrolls, to the page with the largest part of it in view, or,
    * for a page taller than the view, the largest part of the view.
    * Setting it to another page scrolls to the start of that page.
-   * Setting it to the current page does not scroll, use `scrollToPage()`
-   * for that. A value that is not
-   * a page of the document logs a warning and does not scroll. A set
-   * value stays as it is until the user scrolls. A new `src` resets it
-   * to 1, unless `page` is set in the same update.
+   * Setting it to the current page does not scroll, see `scrollToPage()`.
+   * A value that is not a page of the document logs a warning and does
+   * not scroll. A set value stays as it is until the user scrolls. A new
+   * `src` resets it to 1, unless `page` is set in the same update.
    */
   page: number;
 
@@ -39,22 +38,19 @@ export declare class PdfViewerScrollMixinClass {
   protected _scale: number;
 
   /**
-   * Scrolls to the start of the given page and makes it the current page,
-   * also when it is the current page already. A value that is not a page
-   * of the document logs a warning and does not scroll. In a hidden
-   * viewer, it scrolls and updates `page` once the viewer is shown. Does
-   * nothing without a document, or when the viewer is not attached.
+   * Scrolls to the start of the given page.
+   *
+   * In a hidden viewer, it scrolls and updates `page` once the viewer is
+   * shown. Does nothing without a document, or when the viewer is not attached.
    */
   scrollToPage(page: number): void;
 
   /**
-   * Goes to the start of the given page, or to an offset on it in CSS
-   * pixels from the top left corner of the page, when the user asks for it,
-   * e.g. with the toolbar, a key or a link. It makes the page the current
-   * page, also when it is the current page already. A `page` that the
-   * application sets, or its `scrollToPage()` call, does not come here. While the pages have no layout,
-   * e.g. in a hidden viewer, only the page is kept, and the offset is
-   * dropped.
+   * Goes to the given page when the user asks for it, e.g. with the toolbar,
+   * a key or a link. Setting `page` and `scrollToPage()` do not call it, so
+   * that an override reacts to the user alone. The offset is in CSS pixels
+   * from the top left corner of the page. While the pages have no layout,
+   * e.g. in a hidden viewer, the offset is dropped.
    */
   protected _goToPage(page: number, offset?: { left: number; top: number }): void;
 
