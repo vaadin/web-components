@@ -540,10 +540,34 @@ describe('vaadin-tooltip', () => {
       await nextUpdate(tooltip);
       expect(overlay.opened).to.be.true;
 
-      // Scrolled while hovered
-      target.scrollIntoView({ block: 'center' });
+      // Scrolled while hovered, still partially visible
+      container.scrollTop += 20;
       await waitForIntersectionObserver();
       expect(overlay.opened).to.be.false;
+    });
+
+    it('should not close overlay opened in manual mode when the container is scrolled after hover', async () => {
+      target.scrollIntoView({ block: 'center' });
+      await waitForIntersectionObserver();
+      mouseenter(target);
+      tooltip.manual = true;
+      tooltip.opened = true;
+      await nextUpdate(tooltip);
+
+      container.scrollTop += 50;
+      await waitForIntersectionObserver();
+      expect(overlay.opened).to.be.true;
+    });
+
+    it('should open overlay on hover of a new target after the target was changed while hovered', async () => {
+      mouseenter(target);
+      const newTarget = fixtureSync('<div>New target</div>');
+      tooltip.target = newTarget;
+      await waitForIntersectionObserver();
+
+      mouseenter(newTarget);
+      await nextUpdate(tooltip);
+      expect(overlay.opened).to.be.true;
     });
 
     it('should not close overlay opened on keyboard focus when the hovered target is scrolled', async () => {
