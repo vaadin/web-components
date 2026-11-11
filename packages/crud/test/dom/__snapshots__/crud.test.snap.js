@@ -5,7 +5,7 @@ snapshots["vaadin-crud host default"] =
 `<vaadin-crud editor-position="">
   <vaadin-confirm-dialog
     aria-description="There are unsaved changes to this item."
-    aria-label="Discard changes"
+    aria-labelledby="header-vaadin-confirm-dialog-0"
     aria-modal="true"
     cancel-button-visible=""
     confirm-theme="primary"
@@ -16,6 +16,7 @@ snapshots["vaadin-crud host default"] =
   >
     <h3
       aria-level="1"
+      id="header-vaadin-confirm-dialog-0"
       slot="header"
     >
       Discard changes
@@ -51,7 +52,7 @@ snapshots["vaadin-crud host default"] =
   </vaadin-confirm-dialog>
   <vaadin-confirm-dialog
     aria-description="Are you sure you want to delete this item? This action cannot be undone."
-    aria-label="Delete item"
+    aria-labelledby="header-vaadin-confirm-dialog-1"
     aria-modal="true"
     cancel-button-visible=""
     confirm-theme="primary error"
@@ -62,6 +63,7 @@ snapshots["vaadin-crud host default"] =
   >
     <h3
       aria-level="1"
+      id="header-vaadin-confirm-dialog-1"
       slot="header"
     >
       Delete item
@@ -109,7 +111,7 @@ snapshots["vaadin-crud host default"] =
     </vaadin-grid-column-group>
     <vaadin-crud-edit-column>
     </vaadin-crud-edit-column>
-    <vaadin-grid-cell-content slot="vaadin-grid-header-cell-content-0-0">
+    <vaadin-grid-cell-content slot="vaadin-grid-header-cell-content-0-2">
       <vaadin-grid-sorter
         aria-label="Sort by Name"
         path="name"
@@ -117,7 +119,7 @@ snapshots["vaadin-crud host default"] =
         Name
       </vaadin-grid-sorter>
     </vaadin-grid-cell-content>
-    <vaadin-grid-cell-content slot="vaadin-grid-header-cell-content-0-2">
+    <vaadin-grid-cell-content slot="vaadin-grid-header-cell-content-0-4">
       <vaadin-grid-sorter
         aria-label="Sort by Age"
         path="age"
@@ -125,9 +127,9 @@ snapshots["vaadin-crud host default"] =
         Age
       </vaadin-grid-sorter>
     </vaadin-grid-cell-content>
-    <vaadin-grid-cell-content slot="vaadin-grid-header-cell-content-0-4">
+    <vaadin-grid-cell-content slot="vaadin-grid-header-cell-content-0-6">
     </vaadin-grid-cell-content>
-    <vaadin-grid-cell-content slot="vaadin-grid-header-cell-content-1-1">
+    <vaadin-grid-cell-content slot="vaadin-grid-header-cell-content-1-3">
       <vaadin-grid-filter
         aria-label="Filter by Name"
         path="name"
@@ -139,26 +141,26 @@ snapshots["vaadin-crud host default"] =
           theme="small"
         >
           <label
-            for="input-vaadin-text-field-8"
-            id="label-vaadin-text-field-5"
+            for="input-vaadin-text-field-10"
+            id="label-vaadin-text-field-7"
             slot="label"
           >
           </label>
           <div
             hidden=""
-            id="error-message-vaadin-text-field-7"
+            id="error-message-vaadin-text-field-9"
             slot="error-message"
           >
           </div>
           <input
-            id="input-vaadin-text-field-8"
+            id="input-vaadin-text-field-10"
             slot="input"
             type="text"
           >
         </vaadin-text-field>
       </vaadin-grid-filter>
     </vaadin-grid-cell-content>
-    <vaadin-grid-cell-content slot="vaadin-grid-header-cell-content-1-3">
+    <vaadin-grid-cell-content slot="vaadin-grid-header-cell-content-1-5">
       <vaadin-grid-filter
         aria-label="Filter by Age"
         path="age"
@@ -170,38 +172,38 @@ snapshots["vaadin-crud host default"] =
           theme="small"
         >
           <label
-            for="input-vaadin-text-field-12"
-            id="label-vaadin-text-field-9"
+            for="input-vaadin-text-field-14"
+            id="label-vaadin-text-field-11"
             slot="label"
           >
           </label>
           <div
             hidden=""
-            id="error-message-vaadin-text-field-11"
+            id="error-message-vaadin-text-field-13"
             slot="error-message"
           >
           </div>
           <input
-            id="input-vaadin-text-field-12"
+            id="input-vaadin-text-field-14"
             slot="input"
             type="text"
           >
         </vaadin-text-field>
       </vaadin-grid-filter>
     </vaadin-grid-cell-content>
-    <vaadin-grid-cell-content slot="vaadin-grid-header-cell-content-1-4">
-    </vaadin-grid-cell-content>
-    <vaadin-grid-cell-content slot="vaadin-grid-footer-cell-content-1-1">
+    <vaadin-grid-cell-content slot="vaadin-grid-header-cell-content-1-6">
     </vaadin-grid-cell-content>
     <vaadin-grid-cell-content slot="vaadin-grid-footer-cell-content-1-3">
     </vaadin-grid-cell-content>
-    <vaadin-grid-cell-content slot="vaadin-grid-footer-cell-content-1-4">
+    <vaadin-grid-cell-content slot="vaadin-grid-footer-cell-content-1-5">
     </vaadin-grid-cell-content>
-    <vaadin-grid-cell-content slot="vaadin-grid-footer-cell-content-0-0">
+    <vaadin-grid-cell-content slot="vaadin-grid-footer-cell-content-1-6">
     </vaadin-grid-cell-content>
     <vaadin-grid-cell-content slot="vaadin-grid-footer-cell-content-0-2">
     </vaadin-grid-cell-content>
     <vaadin-grid-cell-content slot="vaadin-grid-footer-cell-content-0-4">
+    </vaadin-grid-cell-content>
+    <vaadin-grid-cell-content slot="vaadin-grid-footer-cell-content-0-6">
     </vaadin-grid-cell-content>
     <vaadin-grid-cell-content slot="vaadin-grid-cell-content-0">
     </vaadin-grid-cell-content>

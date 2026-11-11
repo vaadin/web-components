@@ -4,7 +4,7 @@ export const snapshots = {};
 snapshots["vaadin-confirm-dialog host"] = 
 `<vaadin-confirm-dialog
   aria-description="Do you want to save or discard the changes?"
-  aria-label="Unsaved changes"
+  aria-labelledby="header-vaadin-confirm-dialog-0"
   aria-modal="true"
   header="Unsaved changes"
   opened=""
@@ -15,6 +15,7 @@ snapshots["vaadin-confirm-dialog host"] =
   Do you want to save or discard the changes?
   <h3
     aria-level="1"
+    id="header-vaadin-confirm-dialog-0"
     slot="header"
   >
     Unsaved changes
@@ -184,7 +185,7 @@ snapshots["vaadin-confirm-dialog overlay"] =
 snapshots["vaadin-confirm-dialog headingLevel"] = 
 `<vaadin-confirm-dialog
   aria-description="Do you want to save or discard the changes?"
-  aria-label="Unsaved changes"
+  aria-labelledby="header-vaadin-confirm-dialog-0"
   aria-modal="true"
   header="Unsaved changes"
   opened=""
@@ -195,6 +196,7 @@ snapshots["vaadin-confirm-dialog headingLevel"] =
   Do you want to save or discard the changes?
   <h3
     aria-level="2"
+    id="header-vaadin-confirm-dialog-0"
     slot="header"
   >
     Unsaved changes

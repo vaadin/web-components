@@ -123,10 +123,22 @@ describe('vaadin-confirm-dialog', () => {
         expect(confirm.header).to.equal('');
       });
 
-      it('should update aria-label on the host when header changes', async () => {
+      it('should set aria-labelledby to the header element when header is set', async () => {
         confirm.header = 'Warning';
         await nextFrame();
-        expect(confirm.ariaLabel).to.equal('Warning');
+        const headerNode = confirm.querySelector('[slot="header"]');
+        expect(headerNode.id).to.be.ok;
+        expect(confirm.getAttribute('aria-labelledby')).to.equal(headerNode.id);
+        expect(confirm.hasAttribute('aria-label')).to.be.false;
+      });
+
+      it('should restore aria-label fallback when header is cleared', async () => {
+        confirm.header = 'Warning';
+        await nextFrame();
+        confirm.header = '';
+        await nextFrame();
+        expect(confirm.hasAttribute('aria-labelledby')).to.be.false;
+        expect(confirm.ariaLabel).to.equal('confirmation');
       });
     });
 
@@ -182,9 +194,25 @@ describe('vaadin-confirm-dialog', () => {
         expect(headerNode.textContent.trim()).to.equal('Slotted header');
       });
 
+      it('should restore default header node when custom node is removed', async () => {
+        confirm.querySelector('[slot="header"]').remove();
+        await nextRender();
+
+        const headerNode = confirm.querySelector('[slot="header"]');
+        expect(headerNode.textContent.trim()).to.equal('Property header');
+        expect(confirm.getAttribute('aria-labelledby')).to.equal(headerNode.id);
+      });
+
       it('should set pointer-events on the element to auto', () => {
         const headerNode = confirm.querySelector('[slot="header"]');
         expect(getComputedStyle(headerNode).pointerEvents).to.equal('auto');
+      });
+
+      it('should set aria-labelledby to the slotted header element', () => {
+        const headerNode = confirm.querySelector('[slot="header"]');
+        expect(headerNode.id).to.be.ok;
+        expect(confirm.getAttribute('aria-labelledby')).to.equal(headerNode.id);
+        expect(confirm.hasAttribute('aria-label')).to.be.false;
       });
     });
   });
