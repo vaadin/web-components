@@ -266,8 +266,8 @@ export const TooltipMixin = (superClass) =>
         /**
          * The delay in milliseconds before the tooltip
          * is closed on losing hover, when not in manual mode.
-         * On blur, and when an ancestor of the target is scrolled,
-         * the tooltip is closed immediately.
+         * On blur, the tooltip is closed immediately. It is also closed immediately
+         * when an ancestor of the target is scrolled, unless the target has focus.
          * @attr {number} hide-delay
          */
         hideDelay: {
