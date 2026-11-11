@@ -27,6 +27,12 @@ export function getFlattenedElements(node: Node): Element[];
 export function getClosestElement(selector: string, node: Node): Node | null;
 
 /**
+ * Returns true if the given `node` is the `ancestor` itself or its descendant
+ * in the flattened tree, which includes slotted nodes and shadow DOM trees.
+ */
+export function isFlattenedAncestor(ancestor: Node, node: Node): boolean;
+
+/**
  * Takes a string with values separated by space and returns a set the values
  */
 export function deserializeAttributeValue(value: string): Set<string>;

@@ -533,7 +533,7 @@ describe('vaadin-tooltip', () => {
       expect(overlay.opened).to.be.false;
     });
 
-    it('should open overlay when hovered target is fully visible and hide otherwise', async () => {
+    it('should open overlay when hovered target is partially visible and close it on scroll', async () => {
       // Partially visible
       mouseenter(target);
       await nextUpdate(tooltip);
@@ -542,25 +542,23 @@ describe('vaadin-tooltip', () => {
       // Fully visible
       target.scrollIntoView({ block: 'center' });
       await waitForIntersectionObserver();
-      expect(overlay.opened).to.be.true;
-
-      // Fully hidden
-      container.scrollTop = 0;
-      await waitForIntersectionObserver();
       expect(overlay.opened).to.be.false;
     });
 
-    it('should close overlay opened on hover when the container is scrolled', async () => {
+    it('should not close overlay opened on hover when another container is scrolled', async () => {
+      const other = fixtureSync(`
+        <div style="height: 50px; overflow: scroll;">
+          <div style="height: 200px;"></div>
+        </div>
+      `);
       target.scrollIntoView({ block: 'center' });
       await waitForIntersectionObserver();
       mouseenter(target);
       await nextUpdate(tooltip);
-      expect(overlay.opened).to.be.true;
 
-      // Target is still partially visible
-      container.scrollTop += 120;
+      other.scrollTop = 100;
       await waitForIntersectionObserver();
-      expect(overlay.opened).to.be.false;
+      expect(overlay.opened).to.be.true;
     });
 
     it('should not open overlay after hover delay when the target was scrolled out', async () => {

@@ -4,6 +4,7 @@
  * This program is available under Apache License Version 2.0, available at https://vaadin.com/license/
  */
 import { isKeyboardActive } from '@vaadin/a11y-base/src/focus-utils.js';
+import { getAncestorRootNodes, isFlattenedAncestor } from '@vaadin/component-base/src/dom-utils.js';
 import { SlotController } from '@vaadin/component-base/src/slot-controller.js';
 import { generateUniqueId } from '@vaadin/component-base/src/unique-id-utils.js';
 import { PopoverPositionMixin } from '@vaadin/popover/src/vaadin-popover-position-mixin.js';
@@ -394,6 +395,7 @@ export const TooltipMixin = (superClass) =>
       this.__onMouseLeave = this.__onMouseLeave.bind(this);
       this.__onKeyDown = this.__onKeyDown.bind(this);
       this.__onOverlayOpen = this.__onOverlayOpen.bind(this);
+      this.__onScroll = this.__onScroll.bind(this);
 
       this.__targetVisibilityObserver = new IntersectionObserver(
         (entries) => {
@@ -421,6 +423,7 @@ export const TooltipMixin = (superClass) =>
       if (this.opened && !this.manual) {
         this._stateController.close(true);
       }
+      this.__removeScrollListeners();
       this._isConnected = false;
 
       document.body.removeEventListener('vaadin-overlay-open', this.__onOverlayOpen);
@@ -491,6 +494,9 @@ export const TooltipMixin = (superClass) =>
       target.removeEventListener('mousedown', this.__onMouseDown);
 
       this.__targetVisibilityObserver.unobserve(target);
+
+      this.__hoverInside = false;
+      this.__removeScrollListeners();
     }
 
     /** @private */
@@ -585,6 +591,7 @@ export const TooltipMixin = (superClass) =>
       }
 
       this.__hoverInside = true;
+      this.__addScrollListeners();
 
       if (!this.__isTargetHidden && (!this.__focusInside || !this.opened)) {
         this._stateController.open({ hover: true });
@@ -640,9 +647,46 @@ export const TooltipMixin = (superClass) =>
       }
 
       this.__hoverInside = false;
+      this.__removeScrollListeners();
 
       if (!this.__focusInside) {
         this._stateController.close();
+      }
+    }
+
+    /** @private */
+    __addScrollListeners() {
+      this.__removeScrollListeners();
+      this.__scrollRootNodes = getAncestorRootNodes(this.target);
+      this.__scrollRootNodes.forEach((node) => {
+        node.addEventListener('scroll', this.__onScroll, { capture: true, passive: true });
+      });
+    }
+
+    /** @private */
+    __removeScrollListeners() {
+      if (this.__scrollRootNodes) {
+        this.__scrollRootNodes.forEach((node) => {
+          node.removeEventListener('scroll', this.__onScroll, { capture: true });
+        });
+        this.__scrollRootNodes = null;
+      }
+    }
+
+    /** @private */
+    __onScroll(event) {
+      // Scrolling moves the target away from the pointer, so it ends hovering.
+      // Ignore scrolling inside the target, which does not move it.
+      if (event.target === this.target || !isFlattenedAncestor(event.target, this.target)) {
+        return;
+      }
+
+      this.__hoverInside = false;
+      this.__removeScrollListeners();
+
+      // Keep the tooltip opened on keyboard focus, as focusing can scroll the target into view.
+      if (!this.__focusInside) {
+        this._stateController.close(true);
       }
     }
 

@@ -7,6 +7,7 @@ import {
   getFlattenedElements,
   hasNodeContent,
   isEmptyTextNode,
+  isFlattenedAncestor,
   removeValuesFromAttribute,
   setOrRemoveAttribute,
 } from '../src/dom-utils.js';
@@ -92,6 +93,45 @@ describe('dom-utils', () => {
       element = fixtureSync(`<${tag}></${tag}>`);
       node = element.shadowRoot.querySelector('.child');
       expect(getClosestElement('.child', node)).to.equal(node);
+    });
+  });
+
+  describe('isFlattenedAncestor', () => {
+    let wrapper, host, scroller, child;
+
+    const tag = defineCE(
+      class SlotElement extends HTMLElement {
+        constructor() {
+          super();
+          this.attachShadow({ mode: 'open' });
+          this.shadowRoot.innerHTML = '<div class="scroller"><slot></slot></div>';
+        }
+      },
+    );
+
+    beforeEach(() => {
+      wrapper = fixtureSync(`<div><${tag}><span></span></${tag}><div class="sibling"></div></div>`);
+      host = wrapper.querySelector(tag);
+      scroller = host.shadowRoot.querySelector('.scroller');
+      child = host.querySelector('span');
+    });
+
+    it('should return true for the node itself', () => {
+      expect(isFlattenedAncestor(child, child)).to.be.true;
+    });
+
+    it('should return true for a shadow DOM element the node is slotted into', () => {
+      expect(isFlattenedAncestor(scroller, child)).to.be.true;
+    });
+
+    it('should return true for ancestors across the shadow root boundary', () => {
+      expect(isFlattenedAncestor(wrapper, scroller)).to.be.true;
+      expect(isFlattenedAncestor(document, child)).to.be.true;
+    });
+
+    it('should return false for elements that are not ancestors', () => {
+      expect(isFlattenedAncestor(wrapper.querySelector('.sibling'), child)).to.be.false;
+      expect(isFlattenedAncestor(child, scroller)).to.be.false;
     });
   });
 
