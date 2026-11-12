@@ -1,6 +1,6 @@
 import { expect } from '@vaadin/chai-plugins';
 import { sendKeys } from '@vaadin/test-runner-commands';
-import { fixtureSync, nextFrame, nextRender, nextUpdate, oneEvent } from '@vaadin/testing-helpers';
+import { fixtureSync, nextFrame, nextRender, oneEvent } from '@vaadin/testing-helpers';
 import sinon from 'sinon';
 import './enable-feature-flag.js';
 import '../vaadin-pdf-viewer.js';
@@ -130,18 +130,6 @@ describe('sidebar', () => {
     expect(getButton().disabled).to.be.true;
   });
 
-  it('should have a tab stop in the thumbnails for a page out of range', async () => {
-    const warn = sinon.stub(console, 'warn');
-    try {
-      viewer.page = 999;
-      viewer.sidebarOpened = true;
-      await nextRender();
-      expect(getTabStops()).to.deep.equal([getThumbnails()[0]]);
-    } finally {
-      warn.restore();
-    }
-  });
-
   it('should close the sidebar with the toolbar button without a document', async () => {
     viewer.sidebarOpened = true;
     viewer.src = undefined;
@@ -243,7 +231,7 @@ describe('sidebar', () => {
     });
 
     it('should mark the thumbnail of the current page', async () => {
-      viewer.page = 3;
+      viewer.scrollToPage(3);
       await nextRenderIdle(viewer);
       const thumbnails = getThumbnails();
       expect(thumbnails[2].getAttribute('aria-selected')).to.equal('true');
@@ -267,22 +255,8 @@ describe('sidebar', () => {
       expect(getThumbnails()[1].getAttribute('aria-label')).to.equal('Sida 2');
     });
 
-    it('should keep the tab stop for a page out of range', async () => {
-      viewer.page = 3;
-      await nextRenderIdle(viewer);
-      const warn = sinon.stub(console, 'warn');
-      try {
-        viewer.page = 999;
-        await nextUpdate(viewer);
-        expect(viewer.page).to.equal(999);
-        expect(getTabStops()).to.deep.equal([getThumbnails()[2]]);
-      } finally {
-        warn.restore();
-      }
-    });
-
     it('should focus the thumbnail of the current page with Tab from the toolbar', async () => {
-      viewer.page = 2;
+      viewer.scrollToPage(2);
       await nextRenderIdle(viewer);
       viewer.querySelector<HTMLElement>('vaadin-pdf-viewer-button[icon="download"]')!.focus();
       await sendKeys({ press: 'Tab' });
@@ -371,7 +345,7 @@ describe('sidebar', () => {
 
       it('should keep the tab stop on the focused thumbnail when the page changes', async () => {
         await sendKeys({ press: 'ArrowDown' });
-        viewer.page = 4;
+        viewer.scrollToPage(4);
         await nextRenderIdle(viewer);
         expect(getTabStops()).to.deep.equal([getThumbnails()[1]]);
       });
@@ -477,7 +451,7 @@ describe('sidebar', () => {
 
     it('should not render thumbnails while the sidebar is closed', async () => {
       viewer.sidebarOpened = false;
-      viewer.page = 150;
+      viewer.scrollToPage(150);
       await nextRenderIdle(viewer);
       const render = sinon.spy(await getPdfPagePrototype(), 'render');
       const getThumbnailRenders = () => render.getCalls().filter((call) => call.args[0].viewport.width < 300).length;
@@ -497,7 +471,7 @@ describe('sidebar', () => {
       await waitForThumbnail(1);
       viewer.sidebarOpened = false;
       await nextRender();
-      viewer.page = 150;
+      viewer.scrollToPage(150);
       await nextRenderIdle(viewer);
       viewer.sidebarOpened = true;
       await nextRender();
@@ -505,23 +479,8 @@ describe('sidebar', () => {
       expect(getThumbnails()[0].querySelector('canvas')).to.be.null;
     });
 
-    it('should scroll the thumbnail of the current page into view once a hidden viewer shows', async () => {
-      viewer.sidebarOpened = false;
-      await nextRender();
-      viewer.hidden = true;
-      viewer.page = 150;
-      viewer.sidebarOpened = true;
-      await nextRender();
-      viewer.hidden = false;
-      await waitForThumbnail(150);
-      const list = getList().getBoundingClientRect();
-      const thumbnail = getThumbnails()[149].getBoundingClientRect();
-      expect(thumbnail.top).to.be.at.least(list.top - 1);
-      expect(thumbnail.bottom).to.be.at.most(list.bottom + 1);
-    });
-
     it('should scroll the thumbnail of the current page into view', async () => {
-      viewer.page = 150;
+      viewer.scrollToPage(150);
       await nextRenderIdle(viewer);
       const list = getList().getBoundingClientRect();
       const thumbnail = getThumbnails()[149].getBoundingClientRect();
@@ -530,9 +489,9 @@ describe('sidebar', () => {
     });
 
     it('should scroll back up to the thumbnail of the current page', async () => {
-      viewer.page = 150;
+      viewer.scrollToPage(150);
       await nextRenderIdle(viewer);
-      viewer.page = 2;
+      viewer.scrollToPage(2);
       await nextRenderIdle(viewer);
       const list = getList().getBoundingClientRect();
       const thumbnail = getThumbnails()[1].getBoundingClientRect();
@@ -541,7 +500,7 @@ describe('sidebar', () => {
     });
 
     it('should render the thumbnails of a scrolled-to part of the list', async () => {
-      viewer.page = 150;
+      viewer.scrollToPage(150);
       await nextRenderIdle(viewer);
       await waitForThumbnail(150);
       expect(getThumbnails()[149].querySelector('canvas')).to.be.ok;
@@ -554,7 +513,7 @@ describe('sidebar', () => {
       viewer.remove();
       parent.appendChild(viewer);
       await nextRender();
-      viewer.page = 150;
+      viewer.scrollToPage(150);
       await nextRenderIdle(viewer);
       await waitForThumbnail(150);
       expect(getThumbnails()[149].querySelector('canvas')).to.be.ok;

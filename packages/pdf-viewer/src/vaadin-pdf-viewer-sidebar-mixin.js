@@ -54,7 +54,7 @@ export const PdfViewerSidebarMixin = (superClass) =>
       super.willUpdate(props);
 
       // Focus in the sidebar would be lost when it hides.
-      if (props.has('sidebarOpened') && !this.sidebarOpened && props.get('sidebarOpened')) {
+      if (props.has('sidebarOpened') && !this.sidebarOpened) {
         this.#moveFocusOutOfSidebar();
       }
     }
@@ -68,10 +68,10 @@ export const PdfViewerSidebarMixin = (superClass) =>
       }
 
       if ((props.has('pageCount') || props.has('sidebarOpened')) && this.sidebarOpened && this.pageCount) {
-        this.#createThumbnails();
+        this.#thumbnails.create(this._pdfDocument, this.#getAspectRatios());
         this.#thumbnails.show(this.page);
       } else if (props.has('page')) {
-        this.#thumbnails.setPage(this.page, this.sidebarOpened);
+        this.#thumbnails.setPage(this.page);
       }
     }
 
@@ -140,11 +140,6 @@ export const PdfViewerSidebarMixin = (superClass) =>
           ></div>
         </div>
       `;
-    }
-
-    /** @private */
-    #createThumbnails() {
-      this.#thumbnails.create(this._pdfDocument, this.#getAspectRatios());
     }
 
     /**

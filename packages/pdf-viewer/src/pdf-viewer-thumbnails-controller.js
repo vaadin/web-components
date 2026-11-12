@@ -8,7 +8,6 @@
  * See https://vaadin.com/commercial-license-and-service-terms for the full
  * license.
  */
-import { isKeyboardActive } from '@vaadin/a11y-base/src/focus-utils.js';
 import { issueWarning } from '@vaadin/component-base/src/warnings.js';
 import { freeCanvas } from './pdf-viewer-page.js';
 
@@ -53,12 +52,6 @@ export class PdfViewerThumbnailsController {
 
   /** The accessible name of a thumbnail, with `{page}` for the page number. */
   #label = '';
-
-  /** The current page. */
-  #page = 0;
-
-  /** Set to scroll the list to the current thumbnail once the list shows. */
-  #scrollPending = false;
 
   /**
    * @param {HTMLElement} list the element to show the thumbnails in
@@ -133,41 +126,32 @@ export class PdfViewerThumbnailsController {
   show(page) {
     // A new observer reports every thumbnail once.
     this.#observe();
-    this.setPage(page, true);
+    this.setPage(page);
   }
 
   /**
    * Marks the thumbnail of the current page, and makes it the one that
    * receives focus in the list.
    * @param {number} page
-   * @param {boolean} scrollIntoView whether to scroll the list to the thumbnail
    */
-  setPage(page, scrollIntoView) {
-    this.#page = page;
-    const current = this.#thumbnails[page - 1];
+  setPage(page) {
+    const current = this.#thumbnails[page - 1]?.element;
+    // The thumbnails are created when the sidebar first opens.
+    if (!current) {
+      return;
+    }
     // Only the current page is marked, so that screen readers do not say "not selected" for every page.
     const previous = this.#list.querySelector('[aria-selected]');
-    if (previous !== current?.element) {
-      previous?.removeAttribute('aria-selected');
-      previous?.part.remove('current');
-      current?.element.setAttribute('aria-selected', 'true');
-      current?.element.part.add('current');
-    }
+    previous?.removeAttribute('aria-selected');
+    previous?.part.remove('current');
+    current.setAttribute('aria-selected', 'true');
+    current.part.add('current');
 
-    // The focused thumbnail stays the tab stop while the user is in the list. A page out of range keeps the tab stop.
-    const tabStop =
-      this.#getFocusedThumbnail() || current?.element || this.#getTabStop() || this.#thumbnails[0]?.element;
-    if (tabStop) {
-      this.#setTabStop(tabStop);
-    }
+    // The focused thumbnail stays the tab stop while the user is in the list.
+    this.#setTabStop(this.#list.querySelector(':focus') || current);
 
-    if (scrollIntoView && current) {
-      if (this.#list.checkVisibility()) {
-        this.#scrollIntoView(current.element);
-      } else {
-        this.#scrollPending = true;
-      }
-    }
+    // Does nothing while the list is hidden.
+    this.#scrollIntoView(current);
   }
 
   /**
@@ -199,7 +183,6 @@ export class PdfViewerThumbnailsController {
     this.#thumbnails = [];
     this.#visibleThumbnails.clear();
     this.#pdfDocument = null;
-    this.#scrollPending = false;
     this.#list.replaceChildren();
   }
 
@@ -246,13 +229,6 @@ export class PdfViewerThumbnailsController {
     // Hiding the list with the sidebar is not leaving the view.
     if (!this.#list.checkVisibility()) {
       return;
-    }
-    if (this.#scrollPending) {
-      this.#scrollPending = false;
-      const current = this.#thumbnails[this.#page - 1];
-      if (current) {
-        this.#scrollIntoView(current.element);
-      }
     }
     entries.forEach(({ target, isIntersecting }) => {
       const thumbnail = this.#thumbnails[Number(target.dataset.page) - 1];
@@ -387,22 +363,8 @@ export class PdfViewerThumbnailsController {
    * @private
    */
   #setTabStop(element) {
-    const previous = this.#getTabStop();
-    if (previous !== element) {
-      previous?.setAttribute('tabindex', '-1');
-      element.setAttribute('tabindex', '0');
-    }
-  }
-
-  /** @private */
-  #getTabStop() {
-    return this.#list.querySelector('[tabindex="0"]');
-  }
-
-  /** @private */
-  #getFocusedThumbnail() {
-    const active = this.#list.getRootNode().activeElement;
-    return active && active.parentNode === this.#list ? active : null;
+    this.#list.querySelector('[tabindex="0"]')?.setAttribute('tabindex', '-1');
+    element.setAttribute('tabindex', '0');
   }
 
   /** @private */
@@ -420,7 +382,7 @@ export class PdfViewerThumbnailsController {
    * @private
    */
   #onKeyDown(event) {
-    const focused = this.#getFocusedThumbnail();
+    const focused = event.target.closest('[part~="thumbnail"]');
     // Key combinations are left to the browser and assistive technology.
     if (!focused || event.ctrlKey || event.metaKey || event.altKey || event.shiftKey) {
       return;
@@ -432,7 +394,7 @@ export class PdfViewerThumbnailsController {
     if (event.key in targets) {
       const target = this.#thumbnails[Math.min(Math.max(targets[event.key], 0), last)].element;
       this.#setTabStop(target);
-      target.focus({ focusVisible: isKeyboardActive() });
+      target.focus({ focusVisible: true });
       this.#scrollIntoView(target);
     } else if (event.key === 'Enter' || event.key === ' ') {
       this.#onSelect(index + 1);
