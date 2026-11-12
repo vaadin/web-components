@@ -14,6 +14,7 @@
       import '@vaadin/button';
       import '@vaadin/checkbox';
       import '@vaadin/checkbox-group';
+      import '@vaadin/integer-field';
       import '@vaadin/pdf-viewer';
       import '@vaadin/radio-group';
       import '@vaadin/select';
@@ -25,6 +26,7 @@
       const fileInput = document.querySelector('#file');
       const log = document.querySelector('#log');
       const findText = document.querySelector('#findText');
+      const highlightPage = document.querySelector('#highlightPage');
 
       select.items = [
         { label: '01_fonts.pdf', value: '/dev/assets/pdf/01_fonts.pdf' },
@@ -88,6 +90,10 @@
 
       document.querySelector('#find').addEventListener('click', () => {
         viewer.find(findText.value);
+      });
+
+      document.querySelector('#highlight').addEventListener('click', () => {
+        viewer.highlight(highlightPage.value ? Number(highlightPage.value) : NaN, findText.value);
       });
 
       document.querySelector('#direction').addEventListener('value-changed', (e) => {
@@ -172,6 +178,8 @@
       <div class="control-group">
         <vaadin-text-field id="findText" label="Find text" value="quick"></vaadin-text-field>
         <vaadin-button id="find" theme="small">find(text)</vaadin-button>
+        <vaadin-integer-field id="highlightPage" label="Page" min="1" value="2"></vaadin-integer-field>
+        <vaadin-button id="highlight" theme="small">highlight(page, text)</vaadin-button>
       </div>
       <div class="control-group">
         <vaadin-radio-group id="direction" label="Direction">

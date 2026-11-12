@@ -53,6 +53,7 @@ assertType<() => void>(viewer.download);
 
 // Methods
 assertType<(text: string) => void>(viewer.find);
+assertType<(page: number, text: string) => void>(viewer.highlight);
 
 // Mixins
 assertType<ElementMixinClass>(viewer);
