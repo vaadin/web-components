@@ -62,8 +62,8 @@ function addLinkAreas(link, { rect: [left, bottom, right, top], quadPoints }) {
 
 /**
  * Manages the DOM of a single page of the document: a placeholder sized to
- * the page, and the canvas and the text and link layers the page is rendered
- * to once it is needed.
+ * the page, and the canvas and the text, link and find layers the page is
+ * rendered to once it is needed.
  */
 export class PdfViewerPage {
   /** Set once the links of the current canvas are rendered, also when the page has none. */
@@ -112,6 +112,9 @@ export class PdfViewerPage {
 
     /** @type {HTMLElement | null} */
     this.linkLayerElement = null;
+
+    /** @type {HTMLElement | null} */
+    this.findLayerElement = null;
 
     /** The scale and device pixel ratio of the current canvas, to know when it is outdated. */
     this.renderedScale = 0;
@@ -404,6 +407,60 @@ export class PdfViewerPage {
     }
   }
 
+  /**
+   * Highlights parts of the text of the text layer, e.g. the matches of a
+   * search, replacing the previous highlights. Does nothing without a text
+   * layer, or while the page has no size, e.g. inside a hidden ancestor.
+   *
+   * @param {Array<{ itemIndex: number, start: number, end: number, current: boolean }>} parts
+   *   the text item, by its index in the text layer, and the offsets of the text to highlight in it
+   * @return {boolean} false when the page has no size, so that it needs the highlights again once it has one
+   */
+  renderFindLayer(parts) {
+    this.clearFindLayer();
+    // Positioned in % of the page, so that they stay in place when zooming.
+    const pageRect = this.element.getBoundingClientRect();
+    if (!pageRect.width || !pageRect.height) {
+      return false;
+    }
+    if (!this.textLayer || !parts.length) {
+      return true;
+    }
+
+    const { textDivs } = this.textLayer;
+    const layer = document.createElement('div');
+    layer.className = 'find-layer';
+    parts.forEach(({ itemIndex, start, end, current }) => {
+      const textNode = textDivs[itemIndex].firstChild;
+      if (!textNode || end > textNode.length) {
+        return;
+      }
+      const range = document.createRange();
+      range.setStart(textNode, start);
+      range.setEnd(textNode, end);
+      [...range.getClientRects()].forEach((rect) => {
+        const highlight = document.createElement('div');
+        highlight.className = current ? 'find-match current' : 'find-match';
+        highlight.style.left = `${((rect.left - pageRect.left) / pageRect.width) * 100}%`;
+        highlight.style.top = `${((rect.top - pageRect.top) / pageRect.height) * 100}%`;
+        highlight.style.width = `${(rect.width / pageRect.width) * 100}%`;
+        highlight.style.height = `${(rect.height / pageRect.height) * 100}%`;
+        layer.append(highlight);
+      });
+    });
+
+    // Below the text layer, so that the text stays selectable.
+    this.textLayerElement.before(layer);
+    this.findLayerElement = layer;
+    return true;
+  }
+
+  /** Removes the highlights of `renderFindLayer()`. */
+  clearFindLayer() {
+    this.findLayerElement?.remove();
+    this.findLayerElement = null;
+  }
+
   cancel() {
     if (this.renderTask) {
       this.renderTask.cancel();
@@ -411,9 +468,10 @@ export class PdfViewerPage {
     }
   }
 
-  /** Cancels a pending render and frees the canvas memory and the text and link layers. */
+  /** Cancels a pending render and frees the canvas memory and the text, link and find layers. */
   release() {
     this.cancel();
+    this.clearFindLayer();
     this.textLayer?.cancel();
     this.textLayer = null;
     this.textLayerElement?.remove();
