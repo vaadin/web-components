@@ -119,6 +119,8 @@ how to generate them.
 
 - Matching ignores case, ligatures, differences in white space and the diacritics of Latin, Greek and
   Cyrillic letters. Marks of other scripts make another letter, so matching keeps them.
+- Matching also ignores spacing accents, as in `r´esum´e` of some PDF files, and matches the Greek final
+  sigma with a capital sigma. It reads the text by code point, so letters such as `𝐀` fold too.
 - `find()` waits while the document loads. It does nothing when the viewer is not attached. Of several calls
   in a row, only the last one runs.
 

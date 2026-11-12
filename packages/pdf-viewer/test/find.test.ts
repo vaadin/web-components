@@ -47,6 +47,24 @@ describe('find', () => {
       expect(find('cafe')).to.deep.equal(['café']);
     });
 
+    it('should ignore the diacritics of Greek and Cyrillic letters', () => {
+      expect(findInText(normalizeText('άλφα'), 'αλφα')).to.deep.equal([{ start: 0, end: 4 }]);
+      expect(findInText(normalizeText('ёлка'), 'елка')).to.deep.equal([{ start: 0, end: 4 }]);
+    });
+
+    it('should ignore spacing accents', () => {
+      expect(findInText(normalizeText('r´esum´e'), 'résumé')).to.deep.equal([{ start: 0, end: 8 }]);
+    });
+
+    it('should match the Greek final sigma with a capital sigma', () => {
+      expect(findInText(normalizeText('οδός'), 'ΟΔΟΣ')).to.deep.equal([{ start: 0, end: 4 }]);
+      expect(findInText(normalizeText('ΟΔΟΣ'), 'οδός')).to.deep.equal([{ start: 0, end: 4 }]);
+    });
+
+    it('should fold letters outside the Basic Multilingual Plane', () => {
+      expect(findInText(normalizeText('𝐀BC'), 'abc')).to.deep.equal([{ start: 0, end: 4 }]);
+    });
+
     it('should split ligatures', () => {
       expect(find('fish')).to.deep.equal(['ﬁsh']);
     });
@@ -61,7 +79,11 @@ describe('find', () => {
       // Japanese voiced kana, and a Devanagari vowel sign
       expect(findInText(normalizeText('がく'), 'かく')).to.be.empty;
       expect(findInText(normalizeText('किताब'), 'कताब')).to.be.empty;
-      expect(findInText(normalizeText('がく'), 'がく')).to.have.lengthOf(1);
+      expect(findInText(normalizeText('がく'), 'がく')).to.deep.equal([{ start: 0, end: 2 }]);
+    });
+
+    it('should not find overlapping matches', () => {
+      expect(findInText(normalizeText('aaa'), 'aa')).to.deep.equal([{ start: 0, end: 2 }]);
     });
 
     it('should find nothing for an empty query', () => {
