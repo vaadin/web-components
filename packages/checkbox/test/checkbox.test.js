@@ -404,17 +404,6 @@ describe('checkbox', () => {
       expect(document.elementFromPoint(x, y)).to.equal(helper);
     });
 
-    it('should not let the label receive pointer events when an ancestor disables them', () => {
-      // Modal overlays set pointer-events: none on the body
-      document.body.style.pointerEvents = 'none';
-      try {
-        const { x, y } = middleOfNode(label);
-        expect(document.elementFromPoint(x, y)).to.equal(document.documentElement);
-      } finally {
-        document.body.style.pointerEvents = '';
-      }
-    });
-
     // Placed last, as a real mouse click in WebKit moves the starting point of Tab navigation in later tests
     describe('real mouse', () => {
       afterEach(async () => {

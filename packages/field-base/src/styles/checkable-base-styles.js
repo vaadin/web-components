@@ -80,6 +80,7 @@ export const checkable = (part, propName = part) => css`
     cursor: var(--_cursor);
     /* Cover the label row to make the space next to the label clickable */
     position: absolute;
+    /* Explicit end line, or the input also covers the helper rows */
     grid-row: 1 / 2;
     grid-column: 1 / -1;
     /* Ensure minimum click target (WCAG) */
