@@ -39,11 +39,6 @@ export const pdfViewerPageStyles = css`
     height: 100%;
   }
 
-  /* As in pdf.js, the tree in the canvas takes no layout */
-  .struct-tree {
-    contain: strict;
-  }
-
   /* Blocks as in HTML, so that screen readers start a new line at a heading or a paragraph */
   .struct-tree [role]:not([role='code'], [role='emphasis'], [role='img'], [role='none'], [role='strong']) {
     display: block;
