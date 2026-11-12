@@ -78,9 +78,8 @@ export const checkable = (part, propName = part) => css`
   ::slotted(input) {
     appearance: none;
     cursor: var(--_cursor);
-    /* Cover the whole label row, so that clicks next to the label reach the input */
+    /* Cover the label row to make the space next to the label clickable */
     position: absolute;
-    /* An absolutely positioned grid item needs an explicit end line, or it also covers the helper rows */
     grid-row: 1 / 2;
     grid-column: 1 / -1;
     /* Ensure minimum click target (WCAG) */
@@ -92,12 +91,10 @@ export const checkable = (part, propName = part) => css`
     margin: 0 !important;
   }
 
-  /* Size the label part to its content, so that clicks next to it reach the input */
   [part='label'] {
     justify-self: start;
   }
 
-  /* Keep the label above the input, so that links in it can be clicked */
   ::slotted(label) {
     position: relative;
   }

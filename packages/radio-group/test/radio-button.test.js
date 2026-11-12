@@ -307,11 +307,17 @@ describe('radio-button', () => {
       expect(inputRect.width).to.be.at.least(partRect.width);
       expect(inputRect.height).to.be.at.least(partRect.height);
     });
+  });
+
+  describe('click target', () => {
+    beforeEach(async () => {
+      radio = fixtureSync('<vaadin-radio-button label="Label" style="width: 400px"></vaadin-radio-button>');
+      await nextRender();
+      input = radio.inputElement;
+    });
 
     it('should cover the empty space next to the label with the input in reverse theme', async () => {
-      radio.label = 'Label';
       radio.setAttribute('theme', 'reverse');
-      radio.style.width = '400px';
       await nextRender();
       const label = radio.querySelector('label');
       const labelRect = label.getBoundingClientRect();

@@ -61,15 +61,24 @@ describe('vaadin-switch', () => {
       expect(inputRect.width).to.be.at.least(partRect.width);
       expect(inputRect.height).to.be.at.least(partRect.height);
     });
+  });
+
+  describe('click target', () => {
+    let input: HTMLInputElement;
+
+    beforeEach(async () => {
+      input = element.inputElement as HTMLInputElement;
+      element.label = 'Label';
+      element.style.width = '400px';
+      await nextRender();
+    });
 
     [undefined, 'reverse'].forEach((theme) => {
       it(`should cover the empty space next to the label with the input${theme ? ` in ${theme} theme` : ''}`, async () => {
-        element.label = 'Label';
-        element.style.width = '400px';
         if (theme) {
           element.setAttribute('theme', theme);
+          await nextRender();
         }
-        await nextRender();
         const label = element.querySelector('label')!;
         const labelRect = label.getBoundingClientRect();
         const hostRect = element.getBoundingClientRect();
