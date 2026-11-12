@@ -388,10 +388,9 @@ describe('checkbox', () => {
 
     [undefined, 'reverse'].forEach((theme) => {
       it(`should make the slotted input at least 24px wide and high${theme ? ` in ${theme} theme` : ''}`, async () => {
-        if (theme) {
-          checkbox.setAttribute('theme', theme);
-          await nextRender();
-        }
+        checkbox = fixtureSync(`<vaadin-checkbox ${theme ? `theme="${theme}"` : ''}></vaadin-checkbox>`);
+        await nextRender();
+        input = checkbox.inputElement;
         const rect = input.getBoundingClientRect();
         expect(rect.width).to.be.at.least(24);
         expect(rect.height).to.be.at.least(24);
