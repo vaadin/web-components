@@ -161,7 +161,14 @@ export const ComboBoxDataProviderMixin = (superClass) =>
       rootCache.items = [...rootCache.items];
 
       this.__synchronizeControllerState();
+      this.__commitValueAfterLoading();
+    }
 
+    /**
+     * Commits the value if focus left the field while the data was loading.
+     * @private
+     */
+    __commitValueAfterLoading() {
       if (!this.opened && !this._isInputFocused()) {
         this._commitValue();
       }
@@ -200,11 +207,18 @@ export const ComboBoxDataProviderMixin = (superClass) =>
     _sizeChanged(size) {
       const { rootCache } = this.__dataProviderController;
       if (rootCache.size !== size) {
+        const wasLoading = rootCache.isLoading;
         rootCache.size = size;
         // The controller adds new placeholders to the cache through mutation,
         // so we need to create a new array to trigger filteredItems observers.
         rootCache.items = [...rootCache.items];
         this.__synchronizeControllerState();
+
+        // The new size can drop pending requests without a response,
+        // e.g. when the Flow server sets the size to 0 for no matches.
+        if (wasLoading && !rootCache.isLoading) {
+          this.__commitValueAfterLoading();
+        }
       }
     }
 

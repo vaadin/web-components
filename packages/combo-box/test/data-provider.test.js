@@ -1145,6 +1145,32 @@ describe('data provider', () => {
           expect(comboBox.inputElement.value).to.equal('other value');
         });
 
+        it('should clear input value when size is set to 0 instead of returning data', async () => {
+          await setInputValueAndTab('item');
+          // Like the Flow connector when the server finds no items
+          comboBox.size = 0;
+          expect(comboBox.loading).to.be.false;
+          expect(comboBox.value).to.equal('');
+          expect(comboBox.inputElement.value).to.equal('');
+        });
+
+        it('should set custom value when size is set to 0 instead of returning data', async () => {
+          const spy = sinon.spy();
+          comboBox.addEventListener('custom-value-set', spy);
+          comboBox.allowCustomValue = true;
+
+          await setInputValueAndTab('custom value');
+          comboBox.size = 0;
+          expect(spy).to.be.calledOnce;
+          expect(comboBox.value).to.equal('custom value');
+        });
+
+        it('should keep input value when size is set to 0 while focused', () => {
+          setInputValue(comboBox, 'item');
+          comboBox.size = 0;
+          expect(comboBox.inputElement.value).to.equal('item');
+        });
+
         if (autoOpenDisabled) {
           it('should keep input value while loading when clicking outside', () => {
             setInputValue(comboBox, 'item 12');
