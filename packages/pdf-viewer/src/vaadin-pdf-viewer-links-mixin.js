@@ -12,8 +12,7 @@ import { isKeyboardActive } from '@vaadin/a11y-base/src/focus-utils.js';
 import { getLinkLabel, resolveDestination } from './pdf-viewer-links.js';
 
 /**
- * Returns the text with its whitespace collapsed to single spaces, without
- * leading and trailing whitespace.
+ * Returns the text with its whitespace collapsed to single spaces, without leading and trailing whitespace.
  * @param {string | undefined} text
  * @return {string | undefined}
  */
@@ -80,11 +79,8 @@ export const PdfViewerLinksMixin = (superClass) =>
     }
 
     /**
-     * Names the links of a page by the alternative text that the structure of
-     * a tagged PDF gives them, as in pdf.js. A link that covers no text, e.g.
-     * a thin one, is named by the text that it owns in the structure, which
-     * names it in pdf.js. The structure renders after the links when the text
-     * of the page failed to render at first.
+     * Names the links of a page by their alternative text in the structure, or by their text in
+     * the structure when they cover no text, as in pdf.js.
      * @private
      */
     #nameLinksByStructure(page) {
@@ -92,7 +88,7 @@ export const PdfViewerLinksMixin = (superClass) =>
         const parts = this.#linkLabels.get(link);
         const alt = collapseWhitespace(page.getLinkAlt(link));
         const structureText = collapseWhitespace(page.getLinkText(link));
-        if (parts && (alt || structureText) && (parts.alt !== alt || parts.structureText !== structureText)) {
+        if (parts && (parts.alt !== alt || parts.structureText !== structureText)) {
           Object.assign(parts, { alt, structureText });
           this.#updateLinkLabel(link);
         }

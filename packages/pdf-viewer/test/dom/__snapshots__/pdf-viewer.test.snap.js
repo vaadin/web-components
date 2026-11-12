@@ -1031,10 +1031,7 @@ snapshots["vaadin-pdf-viewer page tagged"] =
             </span>
           </span>
           <span>
-            <span
-              id="pdfjs_internal_struct_1_link_1"
-              role="none"
-            >
+            <span role="none">
               <span>
               </span>
             </span>

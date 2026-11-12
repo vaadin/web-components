@@ -11,7 +11,6 @@ import { createPdf, failTextOnce, fixtureUrl, getPdfPagePrototype, loadAndRender
 describe('structure', () => {
   let viewer: PdfViewer;
 
-  /** The object URL of a PDF that a test creates, revoked after the test. */
   let url: string | undefined;
 
   function getTree() {
@@ -242,47 +241,36 @@ describe('structure', () => {
     });
   });
 
-  describe('links of two pages', () => {
-    let url: string;
-
-    beforeEach(async () => {
-      // The pages are objects 5 and 8, their links objects 7 and 10.
-      await stubStructTrees((pageNumber) => {
-        const [pageObject, linkObject] = pageNumber === 1 ? [5, 7] : [8, 10];
-        return {
-          role: 'Root',
-          children: [
-            {
-              role: 'Link',
-              children: [
-                { type: 'content', id: `p${pageObject}R_mc0` },
-                { type: 'annotation', id: `pdfjs_internal_id_${linkObject}R` },
-              ],
-            },
-          ],
-        };
-      });
-      url = createPdf(
-        ['First', 'Second'].map((text) => ({
-          content: `/Link << /MCID 0 >> BDC BT /F1 24 Tf 72 700 Td (${text}) Tj ET EMC`,
-          annotations: [
-            '<< /Type /Annot /Subtype /Link /Rect [72 690 160 720] /Border [0 0 0] /A << /S /URI /URI (https://vaadin.com/) >> >>',
-          ],
-        })),
-      );
-      viewer.style.height = '2000px';
-      await loadAndRender(viewer, url);
+  it('should give each link the text of its own page', async () => {
+    // The pages are objects 5 and 8, their links objects 7 and 10.
+    await stubStructTrees((pageNumber) => {
+      const [pageObject, linkObject] = pageNumber === 1 ? [5, 7] : [8, 10];
+      return {
+        role: 'Root',
+        children: [
+          {
+            role: 'Link',
+            children: [
+              { type: 'content', id: `p${pageObject}R_mc0` },
+              { type: 'annotation', id: `pdfjs_internal_id_${linkObject}R` },
+            ],
+          },
+        ],
+      };
     });
-
-    afterEach(() => {
-      URL.revokeObjectURL(url);
-    });
-
-    it('should give each link the text of its own page', () => {
-      const [first, second] = viewer.shadowRoot!.querySelectorAll('a.link');
-      expect(getOwnedText(first)).to.equal('First');
-      expect(getOwnedText(second)).to.equal('Second');
-    });
+    url = createPdf(
+      ['First', 'Second'].map((text) => ({
+        content: `/Link << /MCID 0 >> BDC BT /F1 24 Tf 72 700 Td (${text}) Tj ET EMC`,
+        annotations: [
+          '<< /Type /Annot /Subtype /Link /Rect [72 690 160 720] /Border [0 0 0] /A << /S /URI /URI (https://vaadin.com/) >> >>',
+        ],
+      })),
+    );
+    viewer.style.height = '2000px';
+    await loadAndRender(viewer, url);
+    const [first, second] = viewer.shadowRoot!.querySelectorAll('a.link');
+    expect(getOwnedText(first)).to.equal('First');
+    expect(getOwnedText(second)).to.equal('Second');
   });
 
   describe('links that the viewer leaves out', () => {
@@ -471,7 +459,7 @@ describe('structure', () => {
 
   describe('roles', () => {
     function create(children: PdfViewerStructTreeNode[]) {
-      return new PdfViewerStructureLayer({ role: 'Root', children }, 1);
+      return new PdfViewerStructureLayer({ role: 'Root', children });
     }
 
     it('should not take a role from the inherited properties of objects', () => {
@@ -647,10 +635,16 @@ describe('structure', () => {
       expect(owned).to.deep.equal(['p3R_mc0', 'p12R1_mc7', 'pdfjs_internal_id_5R']);
     });
 
+    function createLink(id: string) {
+      const link = document.createElement('a');
+      link.id = id;
+      return link;
+    }
+
     it('should not own an annotation directly in a table, which owns no content', () => {
       const structure = create([{ role: 'Table', children: [{ type: 'annotation', id: 'pdfjs_internal_id_5R' }] }]);
       expect(structure.element.querySelector('[aria-owns]')).to.be.null;
-      expect(structure.annotationIds).to.be.empty;
+      expect(structure.addLinks([createLink('pdfjs_internal_id_5R')])).to.be.empty;
     });
 
     it('should not add an image for a figure with a link, which its alternative text names', () => {
@@ -679,12 +673,12 @@ describe('structure', () => {
           ],
         },
       ]);
-      const link = structure.element.querySelector('[role="link"]')!;
+      const element = structure.element.querySelector('[role="link"]')!;
       expect(structure.getLinkAlt('pdfjs_internal_id_5R')).to.equal('Docs');
-      expect(link.getAttribute('role')).to.equal('link');
-      const owns = structure.getAriaAttributes('pdfjs_internal_id_5R')!.get('aria-owns')!;
-      expect(link.hasAttribute('role')).to.be.false;
-      expect(owns).to.equal('p3R_mc0');
+      const link = createLink('pdfjs_internal_id_5R');
+      expect(structure.addLinks([link])).to.have.all.keys('pdfjs_internal_id_5R');
+      expect(element.hasAttribute('role')).to.be.false;
+      expect(link.getAttribute('aria-owns')).to.equal('p3R_mc0');
       expect(structure.element.querySelector('[aria-owns="p3R_mc0"]')).to.be.null;
     });
   });
