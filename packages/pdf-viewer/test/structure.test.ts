@@ -23,7 +23,6 @@ describe('structure', () => {
     return viewer.shadowRoot!.querySelectorAll('[part~="page"]')[pageNumber - 1];
   }
 
-  /** Stubs the structure trees of the pages with the trees that the callback returns for each page number. */
   async function stubStructTrees(
     getTree: (pageNumber: number) => PdfViewerStructTreeNode | Promise<PdfViewerStructTreeNode>,
   ) {
@@ -36,7 +35,6 @@ describe('structure', () => {
       .callsFake(fakeGetStructTree as unknown as PDFPageProxy['getStructTree']);
   }
 
-  /** Returns the text that the element owns, also through the elements that it owns. */
   function getOwnedText(element: Element): string {
     return [element, ...element.querySelectorAll('[aria-owns]')]
       .flatMap((owner) => (owner.getAttribute('aria-owns') ?? '').split(' ').filter(Boolean))
@@ -144,7 +142,7 @@ describe('structure', () => {
   describe('released pages', () => {
     let url: string;
 
-    /** The tree of a page of the created PDF, whose page objects are 5, 7, 9 and so on. */
+    // The page objects of the created PDF are 5, 7, 9 and so on.
     function getPageTree(pageNumber: number): PdfViewerStructTreeNode {
       const pageObject = 5 + 2 * (pageNumber - 1);
       return { role: 'Root', children: [{ role: 'P', children: [{ type: 'content', id: `p${pageObject}R_mc0` }] }] };

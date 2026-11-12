@@ -71,8 +71,7 @@ export class PdfViewerPage {
   #linksRendered = false;
 
   /**
-   * A promise of the structure tree of the page, which resolves to null without one. Kept
-   * between renders, so that the page does not ask the worker again, as in pdf.js.
+   * The structure tree of the page, or null without one, kept between renders as in pdf.js.
    * @type {Promise<object | null> | null}
    */
   #structTree = null;
@@ -209,7 +208,6 @@ export class PdfViewerPage {
     const outputScale = Math.min(pixelRatio, Math.sqrt(MAX_CANVAS_PIXELS / (viewport.width * viewport.height)));
 
     const canvas = document.createElement('canvas');
-    // Not hidden, as it holds the structure of a tagged PDF.
     canvas.setAttribute('role', 'presentation');
     canvas.width = Math.floor(viewport.width * outputScale);
     canvas.height = Math.floor(viewport.height * outputScale);
@@ -241,7 +239,7 @@ export class PdfViewerPage {
     if (this.canvas) {
       this.#freeCanvas(this.canvas);
     }
-    // First, as the structure in the canvas comes before the other layers in reading order.
+    // The structure in the canvas comes first in reading order.
     this.element.prepend(canvas);
     if (this.#structureLayer) {
       canvas.append(this.#structureLayer.element);
@@ -296,9 +294,8 @@ export class PdfViewerPage {
 
   /**
    * Renders the text layer: transparent text on top of the canvas, which makes
-   * the text selectable and readable by assistive technology, and then the
-   * structure of a tagged PDF page. When the layer exists, it is only resized
-   * to the current scale.
+   * the text selectable and readable by assistive technology. When the layer
+   * exists, it is only resized to the current scale.
    *
    * @return {Promise<void>}
    */
@@ -346,7 +343,7 @@ export class PdfViewerPage {
       container.append(endOfContent);
       this.endOfContentElement = endOfContent;
       this.#addLinksToText();
-      // As in pdf.js, the structure renders right after the text layer, as its elements own the text.
+      // As in pdf.js, the structure renders after the text layer, whose elements it owns.
       await this.#renderStructureLayer();
     }
   }
@@ -357,7 +354,7 @@ export class PdfViewerPage {
    */
   async #renderStructureLayer() {
     const textLayerElement = this.textLayerElement;
-    // The structure is optional. A page with a broken one is shown as untagged.
+    // A page with a broken structure is shown as untagged.
     this.#structTree ??= this.pdfPage.getStructTree().catch(() => null);
     const tree = await this.#structTree;
     // The page may have been released meanwhile.
@@ -367,8 +364,7 @@ export class PdfViewerPage {
     const structureLayer = tree && this.#createStructureLayer(tree, textLayerElement);
     if (structureLayer) {
       this.#structureLayer = structureLayer;
-      // Fallback content of the canvas, as in pdf.js. Outside of it, VoiceOver in Safari skips
-      // the elements, which then have the size of an empty span instead of the size of their text.
+      // In the canvas as in pdf.js, since VoiceOver in Safari skips the elements, which have no size, outside of it.
       this.canvas.append(structureLayer.element);
     }
   }

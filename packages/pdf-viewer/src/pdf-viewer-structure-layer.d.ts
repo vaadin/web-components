@@ -9,10 +9,6 @@
  * license.
  */
 
-/**
- * A node of the structure of a tagged PDF page, see `PDFPageProxy.getStructTree()`:
- * a structure element with a role, or content with the id of its element.
- */
 export interface PdfViewerStructTreeNode {
   role?: string;
   type?: string;
@@ -25,26 +21,10 @@ export interface PdfViewerStructTreeNode {
   children?: PdfViewerStructTreeNode[];
 }
 
-/**
- * Exposes the structure of a tagged PDF page to assistive technology, e.g.
- * headings, lists, tables and figures with alternative text, adapted from
- * `StructTreeLayerBuilder` of pdf.js. Its elements own the elements of the
- * text layer with `aria-owns`, so these must be in the same DOM tree. As in
- * pdf.js, the page puts the tree in its canvas. There is no MathML, no
- * references to table headers, no table summaries and no positions of
- * figures.
- */
 export declare class PdfViewerStructureLayer {
   constructor(tree: PdfViewerStructTreeNode);
 
   readonly element: HTMLElement;
 
-  /**
-   * Makes the structure own the elements in the marked content of the text
-   * layer, rather than the marked content itself. Chrome leaves out the
-   * elements that `aria-owns` refers to when they have `display: contents`,
-   * as marked content has. Needs the rendered text layer, as the
-   * `updateTextLayer()` of pdf.js does.
-   */
   updateTextLayer(textLayerElement: HTMLElement): void;
 }

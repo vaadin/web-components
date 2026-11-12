@@ -66,16 +66,10 @@ const ROLES_WITHOUT_NAME = new Set(['caption', 'code', 'emphasis', 'generic', 'n
 
 const HEADING_PATTERN = /^H(\d+)$/u;
 
-/**
- * Roles whose children must have specific roles, e.g. rows in a table. Content
- * directly in such an element is not owned by it, and stays in the text layer.
- */
+/** Roles whose children must have specific roles, so content directly in them stays in the text layer. */
 const ROLES_WITH_REQUIRED_CHILDREN = new Set(['list', 'row', 'rowgroup', 'table']);
 
-/**
- * The id that the text layer gives the element of marked content: the
- * reference of the page, then the marked content id, e.g. `p12R_mc3`.
- */
+/** The id that the text layer gives the element of marked content, e.g. `p12R_mc3`. */
 const CONTENT_ID_PATTERN = /^p\d+R\d*_mc\d+$/u;
 
 /**
@@ -88,10 +82,7 @@ function isContent(node) {
 }
 
 /**
- * Whether a structure element may own the element with the id of the node.
- * Only content: the page adds links to the text, and objects have no element.
- * An id of another form comes from the document and could own any element of
- * the viewer.
+ * Whether a structure element may own the element of the node, as another id could own any element of the viewer.
  * @param {object} node
  * @return {boolean}
  */
@@ -100,9 +91,7 @@ function canOwn({ type, id }) {
 }
 
 /**
- * Returns the text elements in the marked content of the text layer, also
- * those in nested marked content, unless the structure owns that separately.
- * Artifacts, such as page numbers, stay hidden, and line breaks have no text.
+ * Returns the text elements in the marked content, also in nested marked content that the structure does not own.
  * @param {HTMLElement} content
  * @param {Set<string>} contentIds the ids of the marked content that the structure owns
  * @return {HTMLElement[]}
@@ -145,13 +134,7 @@ function getRole(node, parents) {
 }
 
 /**
- * Exposes the structure of a tagged PDF page to assistive technology, e.g.
- * headings, lists, tables and figures with alternative text, adapted from
- * `StructTreeLayerBuilder` of pdf.js. Its elements own the elements of the
- * text layer with `aria-owns`, so these must be in the same DOM tree. As in
- * pdf.js, the page puts the tree in its canvas. There is no MathML, no
- * references to table headers, no table summaries and no positions of
- * figures.
+ * Exposes the structure of a tagged PDF page to assistive technology, adapted from `StructTreeLayerBuilder` of pdf.js.
  */
 export class PdfViewerStructureLayer {
   /**
@@ -163,12 +146,7 @@ export class PdfViewerStructureLayer {
   }
 
   /**
-   * Makes the structure own the elements in the marked content of the text
-   * layer, rather than the marked content itself. Chrome leaves out the
-   * elements that `aria-owns` refers to when they have `display: contents`,
-   * as marked content has. Needs the rendered text layer, as the
-   * `updateTextLayer()` of pdf.js does.
-   *
+   * Makes the structure own the text elements in marked content, as Chrome ignores `aria-owns` of `display: contents`.
    * @param {HTMLElement} textLayerElement
    */
   updateTextLayer(textLayerElement) {
