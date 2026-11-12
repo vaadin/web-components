@@ -1104,24 +1104,6 @@ describe('data provider', () => {
           expect(comboBox.value).to.equal('');
         });
 
-        if (autoOpenDisabled) {
-          it('should keep input value while loading when clicking outside', () => {
-            setInputValue(comboBox, 'item 12');
-            expect(comboBox.loading).to.be.true;
-            outsideClick();
-            expect(comboBox.loading).to.be.true;
-            expect(comboBox.inputElement.value).to.equal('item 12');
-            expect(comboBox.value).to.equal('');
-          });
-
-          it('should set value matching input when data is returned after clicking outside', () => {
-            setInputValue(comboBox, 'item 12');
-            outsideClick();
-            returnData(['item 12']);
-            expect(comboBox.value).to.equal('item 12');
-          });
-        }
-
         it('should set value matching input when data is returned', async () => {
           await setInputValueAndTab('item 12');
           returnData(['item 12']);
@@ -1162,6 +1144,24 @@ describe('data provider', () => {
           expect(comboBox.value).to.equal('other value');
           expect(comboBox.inputElement.value).to.equal('other value');
         });
+
+        if (autoOpenDisabled) {
+          it('should keep input value while loading when clicking outside', () => {
+            setInputValue(comboBox, 'item 12');
+            expect(comboBox.loading).to.be.true;
+            outsideClick();
+            expect(comboBox.loading).to.be.true;
+            expect(comboBox.inputElement.value).to.equal('item 12');
+            expect(comboBox.value).to.equal('');
+          });
+
+          it('should set value matching input when data is returned after clicking outside', () => {
+            setInputValue(comboBox, 'item 12');
+            outsideClick();
+            returnData(['item 12']);
+            expect(comboBox.value).to.equal('item 12');
+          });
+        }
       });
     });
   });
