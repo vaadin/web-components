@@ -36,7 +36,8 @@ export const PdfViewerFindMixin = (superClass) =>
      * Searches the document for the given text and fires `find-result` with
      * the number of matches. While the document loads, it runs once loaded.
      * Does nothing without a document, or when the viewer is not attached.
-     * Of several `find()` calls in a row, only the last one runs.
+     * Of several `find()` calls in a row, only the last one runs. A new `src`
+     * stops a running search, which then fires no `find-result`.
      *
      * @param {string} text
      */

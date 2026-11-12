@@ -123,6 +123,7 @@ how to generate them.
   sigma with a capital sigma. It reads the text by code point, so letters such as `𝐀` fold too.
 - `find()` waits while the document loads. It does nothing when the viewer is not attached. Of several calls
   in a row, only the last one runs.
+- A new `src` stops a running search. The search then fires no `find-result`.
 
 ## Install size
 
