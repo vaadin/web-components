@@ -8,24 +8,44 @@
  * See https://vaadin.com/commercial-license-and-service-terms for the full
  * license.
  */
-export interface PageText {
-  text: string;
-  itemStarts: number[];
-  items: string[];
-}
 
-export interface NormalizedText {
+/**
+ * The text of a page for searching, built from the text items of `getTextContent()`.
+ */
+export type PdfViewerPageText = {
+  /** The text of all items, with a line break after items that end a line. */
   text: string;
+};
+
+/**
+ * Text normalized for searching, see `normalizeText()`.
+ */
+export type PdfViewerNormalizedText = {
+  text: string;
+  /** For each character of `text`, the offset of the original character it comes from. */
   offsets: number[];
-}
+};
 
-export interface TextMatch {
+/**
+ * A match as offsets in the original text.
+ */
+export type PdfViewerTextMatch = {
   start: number;
   end: number;
-}
+};
 
-export declare function createPageText(contentItems: Array<{ str?: string; hasEOL?: boolean }>): PageText;
+/**
+ * Builds the text of a page for searching from the items of `getTextContent()`.
+ */
+export declare function createPageText(contentItems: Array<{ str?: string; hasEOL?: boolean }>): PdfViewerPageText;
 
-export declare function normalizeText(text: string): NormalizedText;
+/**
+ * Normalizes text for searching: ignores case, the diacritics of Latin, Greek
+ * and Cyrillic letters and differences in white space, and splits ligatures.
+ */
+export declare function normalizeText(text: string): PdfViewerNormalizedText;
 
-export declare function findInText(normalizedPage: NormalizedText, query: string): TextMatch[];
+/**
+ * Finds all occurrences of the query in the text of a page, as `normalizeText()` normalizes both.
+ */
+export declare function findInText(normalizedPage: PdfViewerNormalizedText, query: string): PdfViewerTextMatch[];

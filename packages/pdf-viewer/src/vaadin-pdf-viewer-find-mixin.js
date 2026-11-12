@@ -20,16 +20,16 @@ const SEARCH_BATCH = 10;
 export const PdfViewerFindMixin = (superClass) =>
   class PdfViewerFindMixinClass extends superClass {
     /**
-     * The text of each page for searching, by page index. Holds the promise
-     * while the text loads.
-     * @type {Map<number, Promise<{ pageText: import('./pdf-viewer-find.js').PageText, normalized: { text: string, offsets: number[] } }>>}
+     * The normalized text of each page for searching, by page index. Holds
+     * the promise while the text loads.
+     * @type {Map<number, Promise<import('./pdf-viewer-find.js').PdfViewerNormalizedText>>}
      */
     #pageTexts = new Map();
 
-    /** Incremented on every search, to drop results of an outdated search. */
+    /** Incremented on every search and document unload, to drop results of an outdated search. */
     #searchId = 0;
 
-    /** Incremented on every `find()` call, so that only the last call of a task runs. */
+    /** Incremented on every `find()` call, so that only the last call runs once the document is ready. */
     #callId = 0;
 
     /**
@@ -41,7 +41,7 @@ export const PdfViewerFindMixin = (superClass) =>
      * @param {string} text
      */
     find(text) {
-      this.#runWhenReady(() => this.#search(String(text ?? '')));
+      this.#runWhenReady(() => this.#searchPages(String(text ?? '')));
     }
 
     /**
@@ -84,37 +84,29 @@ export const PdfViewerFindMixin = (superClass) =>
      * @param {string} query
      * @private
      */
-    #search(query) {
-      this.#searchPages(query).catch((error) => {
-        issueWarning(`Failed to find text in the PDF document: ${error.message}`);
-      });
-    }
-
-    /** @private */
     async #searchPages(query) {
       this.#resetSearch();
       const searchId = this.#searchId;
       const pageIndexes = Array.from({ length: this.pageCount }, (_, index) => index);
-      const matches = [];
+      let matchCount = 0;
 
-      if (query.trim() && this._pdfDocument) {
+      // A query of white space or diacritics only finds nothing, without loading the text.
+      if (normalizeText(query).text.trim()) {
         for (let start = 0; start < pageIndexes.length; start += SEARCH_BATCH) {
           const batch = pageIndexes.slice(start, start + SEARCH_BATCH);
           const texts = await Promise.all(batch.map((pageIndex) => this.#getPageText(pageIndex)));
           if (searchId !== this.#searchId) {
             return;
           }
-          texts.forEach(({ normalized }, i) => {
-            findInText(normalized, query).forEach((match) => matches.push({ pageIndex: batch[i], ...match }));
-          });
+          matchCount += texts.reduce((count, text) => count + findInText(text, query).length, 0);
         }
       }
 
-      this.dispatchEvent(new CustomEvent('find-result', { detail: { query, matchCount: matches.length } }));
+      this.dispatchEvent(new CustomEvent('find-result', { detail: { query, matchCount } }));
     }
 
     /**
-     * Returns the text of a page for searching, loading it when needed.
+     * Returns the normalized text of a page for searching, loading it when needed.
      * @private
      */
     #getPageText(pageIndex) {
@@ -122,21 +114,16 @@ export const PdfViewerFindMixin = (superClass) =>
         const pdfDocument = this._pdfDocument;
         const promise = pdfDocument
           .getPage(pageIndex + 1)
-          .then((pdfPage) => pdfPage.getTextContent({ includeMarkedContent: true }))
-          .then(({ items }) => {
-            // The marked content items have no text and are skipped by `createPageText()`.
-            const pageText = createPageText(items);
-            return { pageText, normalized: normalizeText(pageText.text) };
-          })
+          .then((pdfPage) => pdfPage.getTextContent())
+          .then(({ items }) => normalizeText(createPageText(items).text))
           .catch((error) => {
-            // Loading the text fails when the document is unloaded meanwhile.
+            // No warning when the document is unloaded meanwhile.
             if (this._pdfDocument === pdfDocument) {
               issueWarning(`Failed to load the text of page ${pageIndex + 1} of the PDF document: ${error.message}`);
               // Load the text again for the next search.
               this.#pageTexts.delete(pageIndex);
             }
-            const pageText = createPageText([]);
-            return { pageText, normalized: normalizeText('') };
+            return normalizeText('');
           });
         this.#pageTexts.set(pageIndex, promise);
       }

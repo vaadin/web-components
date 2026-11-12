@@ -10,37 +10,29 @@
  */
 
 /**
- * The text of a page for searching, built from the text items of
- * `getTextContent()`. The text items are in the same order as the elements
- * of the text layer, so a match in the text maps to text layer elements.
+ * The text of a page for searching, built from the text items of `getTextContent()`.
  *
- * @typedef {Object} PageText
+ * @typedef {Object} PdfViewerPageText
  * @property {string} text the text of all items, with a line break after items that end a line
- * @property {number[]} itemStarts the offset in `text` where each text item starts
- * @property {string[]} items the text of each text item
  */
 
 /**
- * @param {Array<{ str?: string, hasEOL?: boolean }>} contentItems the items of `getTextContent()`, with marked content
- * @return {PageText}
+ * @param {Array<{ str?: string, hasEOL?: boolean }>} contentItems the items of `getTextContent()`
+ * @return {PdfViewerPageText}
  */
 export function createPageText(contentItems) {
   let text = '';
-  const itemStarts = [];
-  const items = [];
   contentItems.forEach((item) => {
-    // Marked content items have no text, and no element in the text layer
+    // Marked content items have no text
     if (item.str === undefined) {
       return;
     }
-    itemStarts.push(text.length);
-    items.push(item.str);
     text += item.str;
     if (item.hasEOL) {
       text += '\n';
     }
   });
-  return { text, itemStarts, items };
+  return { text };
 }
 
 /**
@@ -54,12 +46,11 @@ const DIACRITICS = /[\u0300-\u036f]|[\u1ab0-\u1aff]|[\u1dc0-\u1dff]|[\u20d0-\u20
 /**
  * Normalizes text for searching: ignores case, the diacritics of Latin, Greek
  * and Cyrillic letters and differences in white space, and splits ligatures
- * (e.g. "ﬁ" into "fi"). Returns the
- * normalized text, and for each of its characters the offset of the original
- * character it comes from.
+ * (e.g. "ﬁ" into "fi").
  *
  * @param {string} text
- * @return {{ text: string, offsets: number[] }}
+ * @return {{ text: string, offsets: number[] }} the normalized text, and for each of its
+ *   characters the offset of the original character it comes from
  */
 export function normalizeText(text) {
   let normalized = '';
@@ -86,8 +77,7 @@ export function normalizeText(text) {
 }
 
 /**
- * Finds all occurrences of the query in the text of a page, ignoring case,
- * diacritics and white space differences.
+ * Finds all occurrences of the query in the text of a page, as `normalizeText()` normalizes both.
  *
  * @param {{ text: string, offsets: number[] }} normalizedPage the result of `normalizeText()` for the page
  * @param {string} query

@@ -50,8 +50,6 @@ assertType<PdfViewerI18n>({ download: 'Download' });
 
 // Methods
 assertType<() => void>(viewer.download);
-
-// Methods
 assertType<(text: string) => void>(viewer.find);
 
 // Mixins
