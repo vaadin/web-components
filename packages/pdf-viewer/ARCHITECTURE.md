@@ -63,8 +63,6 @@ how to generate them.
 - `PdfViewerScrollMixin` owns the scale `_scale`, the anchor, the visible pages and `page`. It asks for
   rendering only with `_renderVisible()` and `_cancelRender()`. It gets the scale from `_getScaleForSize()`, which
   fits the width of the current page by default.
-  - `_scrollRectIntoView()` centers a rectangle in the view, unless it is well inside the view. It jumps,
-    as pdf.js does for a match.
 - `PdfViewerZoomMixin` owns `zoom`. It writes no render or scroll state:
   - It overrides `_getScaleForSize()` to return the scale for `zoom`.
   - It calls `_refreshLayout()` when `zoom` changes.
@@ -76,9 +74,11 @@ how to generate them.
   - Its `_renderPageLayers()` override highlights the matches with `page.renderFindLayer()` once the text
     layer has rendered. A page gets highlights only when it has `endOfContentElement`, as the text layer
     of a page is set before it has rendered.
-  - It scrolls to the current match with `_scrollRectIntoView()`. When the page of the match has not rendered,
-    it goes to the page with `_scrollToPage()` first. A pending scroll to a match is dropped when `page` changes
-    to another page.
+  - It scrolls to the current match with `_scrollToPage()` and an offset, as the links mixin does for a
+    destination. The match goes to the middle of the view on each axis where it is not well inside the view.
+    The page of the match becomes the current page. It jumps, as pdf.js does for a match.
+  - When the page of the match has not rendered, it goes to the page with `_scrollToPage()` first. A pending
+    scroll to a match is dropped when `page` changes to another page.
 - `PdfViewerLinksMixin` adds the links of each rendered page and follows internal links with `_scrollToPage()`.
 - After a page canvas renders, `PdfViewerRenderMixin` awaits `_renderPageLayers(page)`. Each override awaits
   `super` first, so the layers render in the order of the mixins: text, find, then links.

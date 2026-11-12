@@ -748,6 +748,22 @@ describe('find', () => {
         expect(new Set(positions.map(Math.round)).size).to.be.at.most(2);
       });
 
+      it('should make the page of the match the current page', async () => {
+        // A match at the bottom of page 1, so that the short page 2 is whole in the view once the match is in the middle
+        await loadAndRender(
+          viewer,
+          createPdf([
+            { content: 'BT /F1 12 Tf 72 20 Td (Bottom) Tj ET' },
+            { content: '', mediaBox: [0, 0, 595, 100] },
+            { content: '' },
+          ]),
+        );
+        viewer.highlight(1, 'Bottom');
+        await currentMatchShown(viewer);
+        await scrollSettled(getContent());
+        expect(viewer.page).to.equal(1);
+      });
+
       it('should not scroll to a match when the user goes to another page before it is shown', async () => {
         const result = oneEvent(viewer, 'find-result');
         viewer.find('marker5');

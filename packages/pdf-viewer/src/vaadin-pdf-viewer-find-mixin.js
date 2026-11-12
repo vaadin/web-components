@@ -15,6 +15,23 @@ import { createPageText, findInText, getMatchParts, normalizeText, readTextItems
 const SEARCH_BATCH = 10;
 
 /**
+ * Returns where the view starts on one axis so that a match is in its middle,
+ * or the current start when the match is in the view, `margin` away from its edges.
+ * @param {number} start the start of the match
+ * @param {number} size the size of the match
+ * @param {number} viewStart
+ * @param {number} viewSize
+ * @param {number} [margin]
+ * @return {number}
+ */
+function getViewStart(start, size, viewStart, viewSize, margin = 0) {
+  if (start >= viewStart + margin && start + size <= viewStart + viewSize - margin) {
+    return viewStart;
+  }
+  return start + (size - viewSize) / 2;
+}
+
+/**
  * A mixin that finds text in the document and highlights the matches on
  * the rendered pages.
  */
@@ -319,7 +336,7 @@ export const PdfViewerFindMixin = (superClass) =>
             this.#scrollToMatchPending = false;
             const currentElement = page.findLayerElement?.querySelector('.find-match.current');
             if (currentElement) {
-              this._scrollRectIntoView(currentElement.getBoundingClientRect());
+              this.#scrollToMatch(page, currentElement);
             } else {
               // Without highlights, go at least to the page of the match.
               this._scrollToPage(pageIndex + 1);
@@ -331,5 +348,28 @@ export const PdfViewerFindMixin = (superClass) =>
             `Failed to highlight the matches on page ${page.pageNumber} of the PDF document: ${error.message}`,
           );
         });
+    }
+
+    /**
+     * Scrolls the match to the middle of the view on each axis where it is not
+     * well inside the view, and makes its page the current page.
+     * @private
+     */
+    #scrollToMatch(page, element) {
+      const { content } = this.$;
+      const view = content.getBoundingClientRect();
+      const box = page.element.getBoundingClientRect();
+      const match = element.getBoundingClientRect();
+      // The view in CSS pixels from the top left corner of the page, without the scrollbar on the left in RTL.
+      const viewTop = content.scrollTop - page.element.offsetTop;
+      const viewLeft = view.left + content.clientLeft - box.left;
+      const { clientHeight, clientWidth } = content;
+      // Also scroll a match close to the top or bottom edge, where it is easy to miss.
+      const margin = Math.min(64, clientHeight / 4);
+      const top = getViewStart(match.top - box.top, match.height, viewTop, clientHeight, margin);
+      const left = getViewStart(match.left - box.left, match.width, viewLeft, clientWidth);
+      if (top !== viewTop || left !== viewLeft) {
+        this._scrollToPage(page.pageNumber, { top, left });
+      }
     }
   };
