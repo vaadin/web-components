@@ -29,8 +29,3 @@ export declare function createPageText(contentItems: Array<{ str?: string; hasEO
 export declare function normalizeText(text: string): NormalizedText;
 
 export declare function findInText(normalizedPage: NormalizedText, query: string): TextMatch[];
-
-export declare function getMatchParts(
-  pageText: PageText,
-  match: TextMatch,
-): Array<{ itemIndex: number; start: number; end: number }>;

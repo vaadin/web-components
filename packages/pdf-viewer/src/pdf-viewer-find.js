@@ -108,26 +108,3 @@ export function findInText(normalizedPage, query) {
   }
   return matches;
 }
-
-/**
- * Returns the parts of the text items that a match covers, as the index of
- * the item and the start and end offsets within the item.
- *
- * @param {PageText} pageText
- * @param {{ start: number, end: number }} match
- * @return {Array<{ itemIndex: number, start: number, end: number }>}
- */
-export function getMatchParts(pageText, { start, end }) {
-  const parts = [];
-  pageText.itemStarts.forEach((itemStart, itemIndex) => {
-    const itemEnd = itemStart + pageText.items[itemIndex].length;
-    if (itemEnd > start && itemStart < end) {
-      parts.push({
-        itemIndex,
-        start: Math.max(start, itemStart) - itemStart,
-        end: Math.min(end, itemEnd) - itemStart,
-      });
-    }
-  });
-  return parts;
-}

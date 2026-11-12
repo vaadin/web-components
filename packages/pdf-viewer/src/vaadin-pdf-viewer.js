@@ -17,7 +17,6 @@ import { I18nMixin } from '@vaadin/component-base/src/i18n-mixin.js';
 import { PolylitMixin } from '@vaadin/component-base/src/polylit-mixin.js';
 import { LumoInjectionMixin } from '@vaadin/vaadin-themable-mixin/lumo-injection-mixin.js';
 import { pdfViewerStyles } from './styles/vaadin-pdf-viewer-base-styles.js';
-import { pdfViewerFindStyles } from './styles/vaadin-pdf-viewer-find-base-styles.js';
 import { pdfViewerPageStyles } from './styles/vaadin-pdf-viewer-page-base-styles.js';
 import { pdfViewerTextLayerStyles } from './styles/vaadin-pdf-viewer-text-layer-base-styles.js';
 import { pdfViewerToolbarStyles } from './styles/vaadin-pdf-viewer-toolbar-base-styles.js';
@@ -107,21 +106,19 @@ const DEFAULT_I18N = {
  *
  * The following custom CSS properties are available for styling:
  *
- * Custom CSS property                              |
- * :-------------------------------------------------|
- * | `--vaadin-pdf-viewer-background`                |
- * | `--vaadin-pdf-viewer-border-color`              |
- * | `--vaadin-pdf-viewer-border-radius`             |
- * | `--vaadin-pdf-viewer-current-match-background`  |
- * | `--vaadin-pdf-viewer-match-background`          |
- * | `--vaadin-pdf-viewer-padding`                   |
- * | `--vaadin-pdf-viewer-page-background`           |
- * | `--vaadin-pdf-viewer-page-gap`                  |
- * | `--vaadin-pdf-viewer-page-shadow`               |
- * | `--vaadin-pdf-viewer-text-color`                |
- * | `--vaadin-pdf-viewer-toolbar-background`        |
- * | `--vaadin-pdf-viewer-toolbar-gap`               |
- * | `--vaadin-pdf-viewer-toolbar-padding`           |
+ * Custom CSS property                        |
+ * :-------------------------------------------|
+ * | `--vaadin-pdf-viewer-background`          |
+ * | `--vaadin-pdf-viewer-border-color`        |
+ * | `--vaadin-pdf-viewer-border-radius`       |
+ * | `--vaadin-pdf-viewer-padding`             |
+ * | `--vaadin-pdf-viewer-page-background`     |
+ * | `--vaadin-pdf-viewer-page-gap`            |
+ * | `--vaadin-pdf-viewer-page-shadow`         |
+ * | `--vaadin-pdf-viewer-text-color`          |
+ * | `--vaadin-pdf-viewer-toolbar-background`  |
+ * | `--vaadin-pdf-viewer-toolbar-gap`         |
+ * | `--vaadin-pdf-viewer-toolbar-padding`     |
  *
  * See [Styling Components](https://vaadin.com/docs/latest/styling/styling-components) documentation.
  *
@@ -152,13 +149,7 @@ class PdfViewer extends PdfViewerMixin(
   }
 
   static get styles() {
-    return [
-      pdfViewerStyles,
-      pdfViewerToolbarStyles,
-      pdfViewerPageStyles,
-      pdfViewerTextLayerStyles,
-      pdfViewerFindStyles,
-    ];
+    return [pdfViewerStyles, pdfViewerToolbarStyles, pdfViewerPageStyles, pdfViewerTextLayerStyles];
   }
 
   static get defaultI18n() {

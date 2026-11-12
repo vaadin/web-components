@@ -111,27 +111,6 @@ export async function scrollSettled(element: HTMLElement): Promise<void> {
 }
 
 /**
- * Waits until the current match of a search is highlighted, on the given
- * page when one is given, and scrolled to. Throws when it is not highlighted
- * within 50 frames.
- */
-export async function currentMatchShown(viewer: PdfViewer, pageNumber?: number): Promise<void> {
-  const getCurrentMatch = () => {
-    const root = pageNumber
-      ? viewer.shadowRoot!.querySelectorAll('[part~="page"]')[pageNumber - 1]
-      : viewer.shadowRoot!;
-    return root.querySelector('.find-match.current');
-  };
-  for (let i = 0; i < 50 && !getCurrentMatch(); i++) {
-    await nextFrame();
-  }
-  if (!getCurrentMatch()) {
-    throw new Error(`No current match was highlighted${pageNumber ? ` on page ${pageNumber}` : ''}`);
-  }
-  await scrollSettled(viewer.shadowRoot!.querySelector<HTMLElement>('[part="content"]')!);
-}
-
-/**
  * Returns the prototype of an object of a pdf.js document loaded for that,
  * which is the prototype of the same objects of the documents of the viewer.
  */
