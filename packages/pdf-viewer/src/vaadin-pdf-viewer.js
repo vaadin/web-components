@@ -18,6 +18,7 @@ import { PolylitMixin } from '@vaadin/component-base/src/polylit-mixin.js';
 import { LumoInjectionMixin } from '@vaadin/vaadin-themable-mixin/lumo-injection-mixin.js';
 import { pdfViewerStyles } from './styles/vaadin-pdf-viewer-base-styles.js';
 import { pdfViewerPageStyles } from './styles/vaadin-pdf-viewer-page-base-styles.js';
+import { pdfViewerSidebarStyles } from './styles/vaadin-pdf-viewer-sidebar-base-styles.js';
 import { pdfViewerTextLayerStyles } from './styles/vaadin-pdf-viewer-text-layer-base-styles.js';
 import { pdfViewerToolbarStyles } from './styles/vaadin-pdf-viewer-toolbar-base-styles.js';
 import { PdfViewerMixin } from './vaadin-pdf-viewer-mixin.js';
@@ -39,6 +40,9 @@ const DEFAULT_I18N = {
   goToPage: 'Go to page {page}',
   externalLink: '{text} (opens in a new tab)',
   download: 'Download',
+  sidebar: 'Sidebar',
+  thumbnails: 'Page thumbnails',
+  thumbnailLabel: 'Page {page}',
 };
 
 /**
@@ -90,19 +94,23 @@ const DEFAULT_I18N = {
  * `title`         | The title in the header.
  * `header-toggle` | The icon in the header that shows whether the toolbar is collapsed.
  * `toolbar`       | The toolbar above the pages.
- * `toolbar-group` | A group of related controls in the toolbar: navigation, zoom and actions.
+ * `toolbar-group` | A group of related controls in the toolbar: sidebar and navigation, zoom, and actions.
+ * `sidebar`       | The sidebar next to the pages, see `sidebarOpened`.
+ * `thumbnails`    | The scrollable list of page thumbnails in the sidebar.
+ * `thumbnail`     | A page thumbnail. Also has the `current` part name for the current page.
  * `content`       | The scrollable area that contains the pages.
  * `page`          | A page of the document.
  * `loader`        | The loading indicator shown while the document loads.
  *
  * The following state attributes are available for styling:
  *
- * Attribute    | Description
- * -------------|------------
- * `loading`    | Set while the document is loading.
- * `has-error`  | Set when the document could not be loaded.
- * `focused`    | Set when the page area is focused.
- * `focus-ring` | Set when the page area is focused using the keyboard.
+ * Attribute        | Description
+ * -----------------|------------
+ * `loading`        | Set while the document is loading.
+ * `has-error`      | Set when the document could not be loaded.
+ * `focused`        | Set when the page area is focused.
+ * `focus-ring`     | Set when the page area is focused using the keyboard.
+ * `sidebar-opened` | Set when the sidebar is shown.
  *
  * The following custom CSS properties are available for styling:
  *
@@ -115,6 +123,8 @@ const DEFAULT_I18N = {
  * | `--vaadin-pdf-viewer-page-background`     |
  * | `--vaadin-pdf-viewer-page-gap`            |
  * | `--vaadin-pdf-viewer-page-shadow`         |
+ * | `--vaadin-pdf-viewer-sidebar-background`  |
+ * | `--vaadin-pdf-viewer-sidebar-width`       |
  * | `--vaadin-pdf-viewer-text-color`          |
  * | `--vaadin-pdf-viewer-toolbar-background`  |
  * | `--vaadin-pdf-viewer-toolbar-gap`         |
@@ -126,6 +136,7 @@ const DEFAULT_I18N = {
  * @fires {CustomEvent} document-load - Fired when the document has loaded.
  * @fires {CustomEvent} page-changed - Fired when the `page` property changes.
  * @fires {CustomEvent} page-count-changed - Fired when the `pageCount` property changes.
+ * @fires {CustomEvent} sidebar-opened-changed - Fired when the `sidebarOpened` property changes.
  * @fires {CustomEvent} toolbar-collapsed-changed - Fired when the `toolbarCollapsed` property changes.
  * @fires {CustomEvent} zoom-changed - Fired when the `zoom` property changes.
  *
@@ -148,7 +159,13 @@ class PdfViewer extends PdfViewerMixin(
   }
 
   static get styles() {
-    return [pdfViewerStyles, pdfViewerToolbarStyles, pdfViewerPageStyles, pdfViewerTextLayerStyles];
+    return [
+      pdfViewerStyles,
+      pdfViewerToolbarStyles,
+      pdfViewerSidebarStyles,
+      pdfViewerPageStyles,
+      pdfViewerTextLayerStyles,
+    ];
   }
 
   static get defaultI18n() {
@@ -197,7 +214,13 @@ class PdfViewer extends PdfViewerMixin(
    *   // Accessible name of a link that opens in a new tab. {text} is replaced with the text of the link, or its URL.
    *   externalLink: '{text} (opens in a new tab)',
    *   // Tooltip and accessible name of the download button.
-   *   download: 'Download'
+   *   download: 'Download',
+   *   // Tooltip and accessible name of the button that shows and hides the sidebar.
+   *   sidebar: 'Sidebar',
+   *   // Accessible name of the list of page thumbnails in the sidebar.
+   *   thumbnails: 'Page thumbnails',
+   *   // Accessible name of a page thumbnail. {page} is replaced with the page number.
+   *   thumbnailLabel: 'Page {page}'
    * }
    * ```
    *
@@ -216,18 +239,21 @@ class PdfViewer extends PdfViewerMixin(
     return html`
       <div class="top-area" @focusin="${this.#onTopAreaFocusIn}">${this._renderToolbar()}</div>
       <div part="loader" role="progressbar" aria-label="${this.__effectiveI18n.loading}"></div>
-      <div class="content-area">
-        <div
-          id="content"
-          part="content"
-          role="region"
-          aria-labelledby="title"
-          aria-busy="${this.__loading ? 'true' : 'false'}"
-          tabindex="${this.pageCount ? '0' : '-1'}"
-          @focusin="${this.#onContentFocusIn}"
-          @focusout="${this.#onContentFocusOut}"
-        >
-          <div id="pages"></div>
+      <div class="main-area">
+        ${this._renderSidebar()}
+        <div class="content-area">
+          <div
+            id="content"
+            part="content"
+            role="region"
+            aria-labelledby="title"
+            aria-busy="${this.__loading ? 'true' : 'false'}"
+            tabindex="${this.pageCount ? '0' : '-1'}"
+            @focusin="${this.#onContentFocusIn}"
+            @focusout="${this.#onContentFocusOut}"
+          >
+            <div id="pages"></div>
+          </div>
         </div>
       </div>
     `;

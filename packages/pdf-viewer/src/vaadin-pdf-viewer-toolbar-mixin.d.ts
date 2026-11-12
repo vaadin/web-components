@@ -12,8 +12,8 @@ import type { Constructor } from '@open-wc/dedupe-mixin';
 import type { TemplateResult } from 'lit';
 
 /**
- * A mixin that adds the header and the toolbar with the page navigation, the
- * zoom and the download button.
+ * A mixin that adds the header and the toolbar with the sidebar button, the
+ * page navigation, the zoom and the download button.
  */
 export declare function PdfViewerToolbarMixin<T extends Constructor<HTMLElement>>(
   base: T,

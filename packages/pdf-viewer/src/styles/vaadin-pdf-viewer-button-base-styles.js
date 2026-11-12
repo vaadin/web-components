@@ -48,6 +48,18 @@ export const pdfViewerButtonStyles = css`
     --_icon: var(--_vaadin-icon-download);
   }
 
+  :host([icon='sidebar']) {
+    --_icon: var(--_vaadin-icon-sidebar);
+  }
+
+  :host([icon='sidebar']:dir(rtl)) [part~='icon'] {
+    scale: -1 1;
+  }
+
+  :host([icon='sidebar'][aria-expanded='true']) {
+    background: var(--vaadin-background-container-strong);
+  }
+
   @media (forced-colors: active) {
     [part~='icon'] {
       background: CanvasText;
@@ -55,6 +67,14 @@ export const pdfViewerButtonStyles = css`
 
     :host([disabled]) [part~='icon'] {
       background: GrayText;
+    }
+
+    :host([icon='sidebar'][aria-expanded='true']) {
+      background: Highlight;
+    }
+
+    :host([icon='sidebar'][aria-expanded='true']) [part~='icon'] {
+      background: HighlightText;
     }
   }
 `;
