@@ -69,6 +69,9 @@ how to generate them.
   - Its `_zoomFactor` getter reads `_scale`, in units of the actual page size.
 - `PdfViewerTextLayerMixin` renders the text layer of each rendered page and sets the document language on the
   pages. A page loads its text each time it renders, as pdf.js' own viewer does.
+- `PdfViewerFindMixin` searches the text of the document. It loads the text of each page once per document
+  into a private map. The text layer loads its own text. Text that fails to load is loaded again by the next
+  search.
 - `PdfViewerLinksMixin` adds the links of each rendered page and follows internal links with `_scrollToPage()`.
 - After a page canvas renders, `PdfViewerRenderMixin` awaits `_renderPageLayers(page)`. Each override awaits
   `super` first, so the layers render in the order of the mixins: text, then links.
@@ -111,6 +114,16 @@ how to generate them.
 - A link that wraps to the next line is clickable only on its words, which the `QuadPoints` of the annotation
   give. Its focus ring goes around these words.
 - When a focused link loses its page, focus moves to the page area.
+
+## Find
+
+- Matching ignores case, ligatures, differences in white space and the diacritics of Latin, Greek and
+  Cyrillic letters. Marks of other scripts make another letter, so matching keeps them.
+- Matching also ignores spacing accents, as in `r´esum´e` of some PDF files, and matches the Greek final
+  sigma with a capital sigma. It reads the text by code point, so letters such as `𝐀` fold too.
+- `find()` waits while the document loads. It does nothing when the viewer is not attached. Of several calls
+  in a row, only the last one runs.
+- A new `src` stops a running search. The search then fires no `find-result`.
 
 ## Install size
 
