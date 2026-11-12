@@ -87,7 +87,7 @@ class BreadcrumbsItem extends FocusMixin(DisabledMixin(ElementMixin(PolylitMixin
       current: {
         type: Boolean,
         value: false,
-        readOnly: true,
+        // readOnly: true,
         reflectToAttribute: true,
       },
     };

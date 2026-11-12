@@ -1,0 +1,44 @@
+<!doctype html>
+<html lang="en">
+  <head>
+    <meta charset="UTF-8" />
+    <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+    <title>Navigation Layout</title>
+    <script type="module" src="./common.js"></script>
+    <script type="module">
+      import '@vaadin/navigation-layout';
+      import '@vaadin/navigation-layout/vaadin-navigation-layout-toggle.js';
+
+      document.querySelector('.items').innerHTML = Array.from(
+        { length: 40 },
+        (_, i) => `<div class="item"><span class="icon">${i + 1}</span><span class="label">Item ${i + 1}</span></div>`,
+      ).join('');
+    </script>
+    <style>
+      vaadin-navigation-layout {
+        height: 400px;
+        width: fit-content;
+        border: 1px solid;
+      }
+
+      @container style(--vaadin-navigation-layout-collapsed: 1) {
+        .label {
+          display: none;
+        }
+      }
+
+      .item {
+        display: flex;
+        gap: 0.5em;
+        padding: 0.25em 0.5em;
+      }
+    </style>
+  </head>
+  <body>
+    <vaadin-navigation-layout>
+      <vaadin-navigation-layout-toggle slot="start">Toggle</vaadin-navigation-layout-toggle>
+      <div class="items"></div>
+      <div slot="end">End</div>
+    </vaadin-navigation-layout>
+  </body>
+</html>

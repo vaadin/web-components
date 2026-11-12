@@ -85,7 +85,7 @@ class Tooltip extends TooltipMixin(ThemePropertyMixin(ElementMixin(PolylitMixin(
   static get styles() {
     return css`
       :host {
-        display: contents;
+        display: var(--vaadin-tooltip-display, contents);
       }
     `;
   }

@@ -71,6 +71,7 @@ const sideNavItem = css`
     min-width: 0;
     overflow: hidden;
     text-overflow: ellipsis;
+    /* transition: 0.2s opacity; */
     /* Don't clip ascenders or descenders */
     padding-block: 0.25em;
     margin-block: -0.25em;
@@ -107,6 +108,37 @@ const sideNavItem = css`
 
   [part='children'] ::slotted(*) {
     --_level-2: var(--_level);
+  }
+
+  [part='link'] {
+    transition:
+      0.2s width,
+      0.2s flex;
+    transition-behavior: allow-discrete;
+    interpolate-size: allow-keywords;
+  }
+
+  @container style(--vaadin-navigation-layout-collapsed: 1) {
+    /* TODO perhaps it would be better to re-layout the slots on top of each other? What other prefix and suffix items can there be? */
+
+    [part='link'] {
+      width: var(--vaadin-icon-size, 1lh);
+      flex: none;
+    }
+
+    slot:not([name]) {
+      opacity: 0;
+    }
+
+    ::slotted(vaadin-badge[slot='suffix']) {
+      translate: -100% -50%;
+      scale: 0.75;
+    }
+
+    ::slotted(vaadin-badge[slot='suffix'][theme~='dot']) {
+      translate: -300% -150%;
+      scale: 1;
+    }
   }
 
   @media (forced-colors: active) {

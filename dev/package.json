@@ -41,6 +41,7 @@
     "@vaadin/message-input": "25.4.0-alpha6",
     "@vaadin/message-list": "25.4.0-alpha6",
     "@vaadin/multi-select-combo-box": "25.4.0-alpha6",
+    "@vaadin/navigation-layout": "25.4.0-alpha6",
     "@vaadin/notification": "25.4.0-alpha6",
     "@vaadin/number-field": "25.4.0-alpha6",
     "@vaadin/overlay": "25.4.0-alpha6",

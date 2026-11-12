@@ -32,4 +32,8 @@ export const drawerToggle = css`
       background: CanvasText;
     }
   }
+
+  :host([theme~='optional']) {
+    display: var(--vaadin-drawer-toggle-display, inline-flex);
+  }
 `;
