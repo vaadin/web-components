@@ -6,7 +6,7 @@
 import { setOrRemoveAttribute } from '@vaadin/component-base/src/dom-utils.js';
 import { TooltipController } from '@vaadin/component-base/src/tooltip-controller.js';
 import { IconFontSizeMixin } from './vaadin-icon-font-size-mixin.js';
-import { unsafeSvgLiteral } from './vaadin-icon-svg.js';
+import { parseSvg } from './vaadin-icon-helpers.js';
 
 const srcCache = new Map();
 
@@ -47,9 +47,12 @@ export const IconMixin = (superClass) =>
          * The SVG source to be loaded as the icon. It can be:
          * - an URL to a file containing the icon
          * - an URL in the format `/path/to/file.svg#objectID`, where the `objectID` refers to an ID attribute contained
-         *   inside the SVG referenced by the path. Note that the file needs to follow the same-origin policy.
+         *   inside the SVG referenced by the path
          * - a string in the format `data:image/svg+xml,<svg>...</svg>`. You may need to use the `encodeURIComponent`
          *   function for the SVG content passed
+         *
+         * A file from another origin needs CORS headers. Only static SVG content is rendered, so use presentation
+         * attributes such as `fill` instead of a `<style>` element.
          */
         src: {
           type: String,
@@ -209,53 +212,49 @@ export const IconMixin = (superClass) =>
     async __srcChanged(src, symbol) {
       if (!src) {
         this.svg = null;
+        this.__useRef = undefined;
         return;
       }
 
       // Need to add the "icon" attribute to avoid issues as described in
       // https://github.com/vaadin/web-components/issues/6301
       this.icon = '';
-      if (!src.startsWith('data:') && (symbol || src.includes('#'))) {
-        const [path, iconId] = src.split('#');
-        this.__useRef = `${path}#${symbol || iconId}`;
-      } else {
-        try {
-          if (!srcCache.has(src)) {
-            srcCache.set(
-              src,
-              this.__fetch(src, {
-                mode: 'cors',
-              }).then((data) => {
+      const [path, iconId] = src.split('#');
+      const ref = symbol || iconId;
+      this.__useRef = ref ? `#${ref}` : undefined;
+      try {
+        if (!srcCache.has(path)) {
+          srcCache.set(
+            path,
+            this.__fetch(path, {
+              mode: 'cors',
+            })
+              .then((data) => {
                 if (!data.ok) {
                   throw new Error('Error loading icon');
                 }
                 return data.text();
+              })
+              .then((text) => {
+                const parsed = parseSvg(text);
+                if (!parsed) {
+                  throw new Error(`SVG element not found on path: ${path}`);
+                }
+                return parsed;
               }),
-            );
-          }
-          const svgData = await srcCache.get(src);
-          if (!superClass.__domParser) {
-            superClass.__domParser = new DOMParser();
-          }
-          const parsedResponse = superClass.__domParser.parseFromString(svgData, 'text/html');
-          const svgElement = parsedResponse.querySelector('svg');
-          if (!svgElement) {
-            throw new Error(`SVG element not found on path: ${src}`);
-          }
-          this.svg = unsafeSvgLiteral(svgElement.innerHTML);
-          if (symbol) {
-            this.__useRef = `#${symbol}`;
-          }
-          this.__viewBox = svgElement.getAttribute('viewBox');
-          this.__fill = svgElement.getAttribute('fill');
-          this.__stroke = svgElement.getAttribute('stroke');
-          this.__strokeWidth = svgElement.getAttribute('stroke-width');
-          this.__strokeLinecap = svgElement.getAttribute('stroke-linecap');
-          this.__strokeLinejoin = svgElement.getAttribute('stroke-linejoin');
-        } catch (e) {
-          console.error(e);
-          this.svg = null;
+          );
         }
+        const { svg, svgElement } = await srcCache.get(path);
+        this.svg = svg;
+        this.__viewBox = svgElement.getAttribute('viewBox');
+        this.__fill = svgElement.getAttribute('fill');
+        this.__stroke = svgElement.getAttribute('stroke');
+        this.__strokeWidth = svgElement.getAttribute('stroke-width');
+        this.__strokeLinecap = svgElement.getAttribute('stroke-linecap');
+        this.__strokeLinejoin = svgElement.getAttribute('stroke-linejoin');
+      } catch (e) {
+        console.error(e);
+        this.svg = null;
       }
     }
 

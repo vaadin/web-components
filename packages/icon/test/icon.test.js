@@ -111,7 +111,16 @@ describe('vaadin-icon', () => {
       icon = fixtureSync('<vaadin-icon></vaadin-icon>');
       await nextFrame();
       svgElement = icon.shadowRoot.querySelector('svg');
+      sinon.stub(icon, '__fetch');
     });
+
+    afterEach(() => {
+      sinon.restore();
+    });
+
+    function respondWith(text) {
+      icon.__fetch.resolves({ ok: true, text: () => Promise.resolve(text) });
+    }
 
     it('should not set href attribute on the use element by default', () => {
       const use = svgElement.querySelector('use');
@@ -119,67 +128,45 @@ describe('vaadin-icon', () => {
     });
 
     it('should render svg when path is provided', async () => {
-      const svgSrc = `<svg>${ANGLE_DOWN}</svg>`;
-      sinon.stub(icon, '__fetch').resolves({ ok: true, text: () => Promise.resolve(svgSrc) });
-
-      icon.src = `data:image/svg+xml,${encodeURIComponent(svgSrc)}`;
+      respondWith(`<svg>${ANGLE_DOWN}</svg>`);
+      icon.src = 'angle-down.svg';
       await nextRender();
-
       expectIcon(ANGLE_DOWN);
-
-      icon.__fetch.restore();
     });
 
     it('should add icon attribute when src is defined', () => {
-      sinon.stub(icon, '__fetch').resolves({ ok: true, text: () => Promise.resolve('<svg></svg>') });
-
-      icon.src = 'icon.svg';
-
+      respondWith('<svg></svg>');
+      icon.src = 'icon-attribute.svg';
       expect(icon.hasAttribute('icon')).to.be.ok;
-
-      icon.__fetch.restore();
     });
 
     it('should use cors mode on fetch', () => {
-      sinon.stub(icon, '__fetch').resolves({ ok: true, text: () => Promise.resolve('<svg></svg>') });
-
-      icon.src = `data:image/svg+xml,${encodeURIComponent('<svg></svg')}`;
-
+      respondWith('<svg></svg>');
+      icon.src = 'cors.svg';
       expect(icon.__fetch.firstCall.args[1]).to.be.deep.equal({ mode: 'cors' });
-
-      icon.__fetch.restore();
     });
 
     it('should remove SVG content if src is set to null', async () => {
-      const svgSrc = `<svg>${ANGLE_DOWN}</svg>`;
-      sinon.stub(icon, '__fetch').resolves({ ok: true, text: () => Promise.resolve(svgSrc) });
-
-      icon.src = `data:image/svg+xml,${encodeURIComponent(svgSrc)}`;
+      respondWith(`<svg>${ANGLE_DOWN}</svg>`);
+      icon.src = 'remove.svg';
       await nextRender();
 
       icon.src = null;
       expectIcon('');
-
-      icon.__fetch.restore();
     });
 
     it('should set viewBox attribute if one is returned from SVG', async () => {
-      const svgSrc = `<svg viewBox="0 0 100 100">${ANGLE_DOWN}</svg>`;
-      sinon.stub(icon, '__fetch').resolves({ ok: true, text: () => Promise.resolve(svgSrc) });
-
-      icon.src = `data:image/svg+xml,${encodeURIComponent(svgSrc)}`;
+      respondWith(`<svg viewBox="0 0 100 100">${ANGLE_DOWN}</svg>`);
+      icon.src = 'view-box.svg';
       await nextRender();
-
       expect(svgElement.getAttribute('viewBox')).to.be.equal('0 0 100 100');
-
-      icon.__fetch.restore();
     });
 
     it('should set fill and stroke attributes if they are defined source SVG', async () => {
-      const svgSrc = `<svg fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="bevel">${ANGLE_DOWN}</svg>`;
-      sinon.stub(icon, '__fetch').resolves({ ok: true, text: () => Promise.resolve(svgSrc) });
-
-      icon.src = `data:image/svg+xml,${encodeURIComponent(svgSrc)}`;
+      respondWith(
+        `<svg fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="bevel">${ANGLE_DOWN}</svg>`,
+      );
+      icon.src = 'fill-stroke.svg';
       await nextRender();
 
       expect(svgElement.getAttribute('fill')).to.be.equal('none');
@@ -187,15 +174,11 @@ describe('vaadin-icon', () => {
       expect(svgElement.getAttribute('stroke-width')).to.be.equal('2');
       expect(svgElement.getAttribute('stroke-linecap')).to.be.equal('round');
       expect(svgElement.getAttribute('stroke-linejoin')).to.be.equal('bevel');
-
-      icon.__fetch.restore();
     });
 
     it('should not set fill, stroke and stroke-color attributes if they are not defined in the source SVG', async () => {
-      const svgSrc = `<svg>${ANGLE_DOWN}</svg>`;
-      sinon.stub(icon, '__fetch').resolves({ ok: true, text: () => Promise.resolve(svgSrc) });
-
-      icon.src = `data:image/svg+xml,${encodeURIComponent(svgSrc)}`;
+      respondWith(`<svg>${ANGLE_DOWN}</svg>`);
+      icon.src = 'no-fill-stroke.svg';
       await nextRender();
 
       expect(svgElement.hasAttribute('fill')).to.be.false;
@@ -203,24 +186,25 @@ describe('vaadin-icon', () => {
       expect(svgElement.hasAttribute('stroke-width')).to.be.false;
       expect(svgElement.hasAttribute('stroke-linecap')).to.be.false;
       expect(svgElement.hasAttribute('stroke-linejoin')).to.be.false;
-
-      icon.__fetch.restore();
     });
 
-    it('should append value from symbol property to src', async () => {
-      icon.src = './icon.svg';
+    it('should reference symbol from the loaded SVG', async () => {
+      respondWith('<svg></svg>');
+      icon.src = './sprite-symbol.svg';
       icon.symbol = 'symbol-id';
-      await nextFrame();
+      await nextRender();
 
-      expect(svgElement.querySelector(`use[href="${icon.src}#${icon.symbol}"]`)).to.exist;
+      expect(icon.__fetch.firstCall.firstArg).to.equal('./sprite-symbol.svg');
+      expect(svgElement.querySelector('use[href="#symbol-id"]')).to.exist;
     });
 
     it('should use value from symbol when src path has a hash value', async () => {
-      icon.src = './icon.svg#id-0';
+      respondWith('<svg></svg>');
+      icon.src = './sprite-hash.svg#id-0';
       icon.symbol = 'id-1';
-      await nextFrame();
+      await nextRender();
 
-      expect(svgElement.querySelector(`use[href="${icon.src.split('#')[0]}#${icon.symbol}"]`)).to.exist;
+      expect(svgElement.querySelector('use[href="#id-1"]')).to.exist;
     });
 
     it('should render SVG content and <use> if src is given in data format with symbol prop defined', async () => {
@@ -236,82 +220,137 @@ describe('vaadin-icon', () => {
             </symbol>
           </defs>
         </svg>`;
-      const svgSpriteBase64 = btoa(svgSprite);
-      sinon.stub(icon, '__fetch').resolves({
-        ok: true,
-        text: () => Promise.resolve(svgSprite),
-      });
-
-      icon.src = `data:image/svg+xml;base64,${svgSpriteBase64}`;
+      respondWith(svgSprite);
+      icon.src = `data:image/svg+xml;base64,${btoa(svgSprite)}`;
       icon.symbol = 'icon-cog';
-
       await nextRender();
 
       expect(svgElement.querySelectorAll('symbol')).to.have.lengthOf(2);
       expect(svgElement.querySelectorAll('#icon-cog')).to.exist;
       expect(svgElement.querySelector('use[href="#icon-cog"]')).to.exist;
-
-      icon.__fetch.restore();
     });
 
     it('should fail if SVG is not found', async () => {
       sinon.stub(console, 'error');
-      sinon.stub(icon, '__fetch').resolves({ ok: false });
-
+      icon.__fetch.resolves({ ok: false });
       icon.src = 'not-found.svg';
       await nextRender();
 
       expect(console.error.called).to.be.true;
       expect(console.error.firstCall.firstArg.message).to.contain('Error loading icon');
       expect(icon.svg).to.be.null;
-
-      icon.__fetch.restore();
-      console.error.restore();
     });
 
     it('shoud fail if data returned does not contain valid SVG', async () => {
       sinon.stub(console, 'error');
-      const svgSrc = '<div>not valid SVG</div>';
-      sinon.stub(icon, '__fetch').resolves({ ok: true, text: () => Promise.resolve(svgSrc) });
-
-      icon.src = `data:image/svg+xml,${encodeURIComponent(svgSrc)}`;
+      respondWith('<div>not valid SVG</div>');
+      icon.src = 'invalid.svg';
       await nextRender();
 
       expect(console.error.called).to.be.true;
       expect(console.error.firstCall.firstArg.message).to.contain('SVG element not found');
-
-      icon.__fetch.restore();
-      console.error.restore();
     });
 
-    it('should render <use> tag when path with id selector is given', async () => {
-      icon.src = 'icon.svg#symbol-id';
-      await nextFrame();
-      // We expect a 404 error log from this test, but the test is simply to check
-      // that the <use> element is added when the source provided has the file#id pattern
-      expect(svgElement.querySelector(`use[href="${icon.src}"]`)).to.exist;
+    it('should load the file and only render the element referenced by id', async () => {
+      respondWith('<svg><g id="first"><path d="M0 0h1"></path></g><g id="second"><path d="M0 0h2"></path></g></svg>');
+      icon.src = 'sprite-id.svg#second';
+      await nextRender();
+
+      expect(icon.__fetch.firstCall.firstArg).to.equal('sprite-id.svg');
+      expect(svgElement.querySelector('use[href="#second"]')).to.exist;
       expect(svgElement.querySelector('#use-group').getAttribute('visibility')).to.be.equal('visible');
+      expect(svgElement.querySelector('#svg-group').getAttribute('visibility')).to.be.equal('hidden');
+    });
+
+    it('should remove the reference if src is set to null', async () => {
+      respondWith('<svg><g id="first"></g></svg>');
+      icon.src = 'sprite-null.svg#first';
+      await nextRender();
+
+      icon.src = null;
+      await nextRender();
+      expect(svgElement.querySelector('use').hasAttribute('href')).to.be.false;
+      expect(svgElement.querySelector('#svg-group').hasAttribute('visibility')).to.be.false;
     });
 
     it('should set use group visibility to hidden when src is a standalone SVG', () => {
-      sinon.stub(icon, '__fetch').resolves({ ok: true, text: () => Promise.resolve(`<svg></svg>`) });
-
-      icon.src = 'icon.svg';
+      respondWith('<svg></svg>');
+      icon.src = 'standalone.svg';
       expect(svgElement.querySelector('#use-group').getAttribute('visibility')).to.be.equal('hidden');
+      expect(svgElement.querySelector('#svg-group').hasAttribute('visibility')).to.be.false;
+    });
 
-      icon.__fetch.restore();
+    it('should hide the content when the host is hidden', async () => {
+      respondWith(`<svg>${ANGLE_DOWN}</svg>`);
+      icon.src = 'hidden-host.svg';
+      await nextRender();
+
+      icon.style.visibility = 'hidden';
+      expect(getComputedStyle(svgElement.querySelector('#svg-group path')).visibility).to.equal('hidden');
     });
 
     it('should fetch the same src only once', async () => {
-      icon.src = `data:image/svg+xml,${encodeURIComponent('<svg></svg')}`;
+      respondWith('<svg></svg>');
+      icon.src = 'fetch-once.svg';
 
       const icon2 = fixtureSync('<vaadin-icon></vaadin-icon>');
-      sinon.stub(icon2, '__fetch').resolves({ ok: true, text: () => Promise.resolve('<svg></svg>') });
+      sinon.stub(icon2, '__fetch');
       icon2.src = icon.src;
-
       await nextFrame();
 
       expect(icon2.__fetch.called).to.be.false;
+    });
+
+    describe('SVG content', () => {
+      let svgGroup;
+
+      async function loadSvg(content) {
+        const svgSrc = `<svg>${content}</svg>`;
+        respondWith(svgSrc);
+        icon.src = `data:image/svg+xml,${encodeURIComponent(svgSrc)}`;
+        await nextRender();
+        svgGroup = svgElement.querySelector('#svg-group');
+      }
+
+      it('should only render supported SVG elements', async () => {
+        await loadSvg(`
+          <path d="M0 0h1"></path>
+          <style>.st0 { fill: red; }</style>
+          <image href="photo.png"></image>
+          <foreignObject><span>Text</span></foreignObject>
+          <desc><span>Text</span></desc>
+          <a href="https://example.com"><rect width="1" height="1"></rect></a>
+          <animate attributeName="href" to="#other"></animate>
+        `);
+        expect(svgGroup.querySelector('path')).to.exist;
+        expect(svgGroup.querySelector('desc')).to.exist;
+        expect(svgGroup.querySelector('style, image, foreignObject, span, a, rect, animate')).to.be.null;
+      });
+
+      it('should drop unsupported attributes', async () => {
+        await loadSvg(`
+          <path id="path" d="M0 0h1" fill="url(#gradient)" onclick="onIconClick()"></path>
+          <use id="local" href="#path"></use>
+          <use id="file" href="icons.svg#path"></use>
+          <rect id="paint" fill="url(icons.svg#gradient)" style="mask-image: image-set('mask.png' 1x)"></rect>
+        `);
+        const path = svgGroup.querySelector('#path');
+        expect(path.getAttribute('fill')).to.equal('url(#gradient)');
+        expect(path.hasAttribute('onclick')).to.be.false;
+        expect(svgGroup.querySelector('#local').getAttribute('href')).to.equal('#path');
+        expect(svgGroup.querySelector('#file').hasAttribute('href')).to.be.false;
+        expect(svgGroup.querySelector('#paint').hasAttribute('fill')).to.be.false;
+        expect(svgGroup.querySelector('#paint').hasAttribute('style')).to.be.false;
+      });
+
+      it('should render the same parsed content in multiple icons', async () => {
+        await loadSvg(ANGLE_DOWN);
+        const icon2 = fixtureSync('<vaadin-icon></vaadin-icon>');
+        icon2.src = icon.src;
+        await nextRender();
+        expectIcon(ANGLE_DOWN);
+        expect(icon2.shadowRoot.querySelector('#svg-group path')).to.be.ok;
+      });
     });
   });
 
