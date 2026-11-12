@@ -117,6 +117,18 @@ function getContentElements(content, contentIds) {
 }
 
 /**
+ * Gives a structure element its alternative text, as a description for a role that must not have a name.
+ * @param {HTMLElement} element
+ * @param {string} alt
+ */
+function setAlt(element, alt) {
+  const role = element.getAttribute('role') || 'generic';
+  if (role !== 'none') {
+    element.setAttribute(ROLES_WITHOUT_NAME.has(role) ? 'aria-description' : 'aria-label', alt);
+  }
+}
+
+/**
  * Returns the ARIA role of a structure element.
  * @param {object} node
  * @param {object[]} parents the ancestors of the node, nearest last
@@ -158,8 +170,8 @@ export class PdfViewerStructureLayer {
   #linkElements = new Map();
 
   /**
-   * The alternative text that the structure gives each annotation, by the annotation id.
-   * @type {Map<string, string>}
+   * The alternative text that the structure gives each annotation, and the structure element it comes from.
+   * @type {Map<string, { element: HTMLElement, alt: string }>}
    */
   #linkAlts = new Map();
 
@@ -205,6 +217,15 @@ export class PdfViewerStructureLayer {
       }
     });
     this.#linkElements.clear();
+    // The alternative text names its structure element when none of the annotations got a link.
+    const elementsWithLinks = new Set(
+      [...this.#linkAlts].filter(([id]) => linksById.has(id)).map(([, { element }]) => element),
+    );
+    this.#linkAlts.forEach(({ element, alt }) => {
+      if (!elementsWithLinks.has(element)) {
+        setAlt(element, alt);
+      }
+    });
     return new Set(this.#annotationOwners.keys());
   }
 
@@ -214,7 +235,7 @@ export class PdfViewerStructureLayer {
    * @return {string | undefined}
    */
   getLinkAlt(annotationId) {
-    return this.#linkAlts.get(annotationId);
+    return this.#linkAlts.get(annotationId)?.alt;
   }
 
   /**
@@ -305,12 +326,11 @@ export class PdfViewerStructureLayer {
   #setAttributes(node, element) {
     const { alt, lang, rowSpan, colSpan } = node;
     if (alt !== undefined) {
-      // The alternative text of annotations names their own elements instead.
+      // The alternative text of annotations names their links instead, see `addLinks()`.
       const annotations = (node.children || []).filter((child) => child.type === 'annotation');
-      annotations.forEach(({ id }) => this.#linkAlts.set(id, alt));
-      const role = element.getAttribute('role') || 'generic';
-      if (!annotations.length && role !== 'none') {
-        element.setAttribute(ROLES_WITHOUT_NAME.has(role) ? 'aria-description' : 'aria-label', alt);
+      annotations.forEach(({ id }) => this.#linkAlts.set(id, { element, alt }));
+      if (!annotations.length) {
+        setAlt(element, alt);
       }
     }
     if (canOwn(node)) {

@@ -647,6 +647,33 @@ describe('structure', () => {
       expect(structure.addLinks([createLink('pdfjs_internal_id_5R')])).to.be.empty;
     });
 
+    it('should name an element by its alternative text when its annotation gets no link, e.g. a form field', () => {
+      const structure = create([
+        { role: 'Form', alt: 'Name', children: [{ type: 'annotation', id: 'pdfjs_internal_id_5R' }] },
+      ]);
+      const form = structure.element.querySelector('[role="form"]')!;
+      expect(form.hasAttribute('aria-label')).to.be.false;
+      structure.addLinks([]);
+      expect(form.getAttribute('aria-label')).to.equal('Name');
+    });
+
+    it('should describe a link structure element by its alternative text when it gets no link', () => {
+      const structure = create([
+        {
+          role: 'Link',
+          alt: 'Docs',
+          children: [
+            { type: 'content', id: 'p3R_mc0' },
+            { type: 'annotation', id: 'pdfjs_internal_id_5R' },
+          ],
+        },
+      ]);
+      const element = structure.element.querySelector('[role="link"]')!;
+      structure.addLinks([]);
+      expect(element.hasAttribute('role')).to.be.false;
+      expect(element.getAttribute('aria-description')).to.equal('Docs');
+    });
+
     it('should not add an image for a figure with a link, which its alternative text names', () => {
       const structure = create([
         {
@@ -678,6 +705,7 @@ describe('structure', () => {
       const link = createLink('pdfjs_internal_id_5R');
       expect(structure.addLinks([link])).to.have.all.keys('pdfjs_internal_id_5R');
       expect(element.hasAttribute('role')).to.be.false;
+      expect(element.hasAttribute('aria-description')).to.be.false;
       expect(link.getAttribute('aria-owns')).to.equal('p3R_mc0');
       expect(structure.element.querySelector('[aria-owns="p3R_mc0"]')).to.be.null;
     });
