@@ -10,7 +10,7 @@
  */
 
 /**
- * @license pdf.js 6.4.299
+ * @license pdf.js 6.5.438
  *
  * Copyright 2021 Mozilla Foundation
  *
