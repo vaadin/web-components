@@ -71,11 +71,9 @@ how to generate them.
   pages. A page loads its text each time it renders, as pdf.js' own viewer does.
   - The page renders the structure of a tagged PDF right after its text layer, as pdf.js' own viewer does.
     The structure has no state of the viewer, so it has no mixin.
-  - Unlike in pdf.js, `renderTextLayer()` waits for the structure. The links mixin names the links by the
-    structure right after their layer renders, so `render-idle` comes once the links have their final names.
+  - Unlike in pdf.js, `renderTextLayer()` waits for the structure, so `render-idle` comes once the structure
+    is in place.
 - `PdfViewerLinksMixin` adds the links of each rendered page and follows internal links with `_scrollToPage()`.
-  - The page adds the links to the structure or to the text once both the structure and the links have rendered.
-    A page without structure counts as rendered once its text layer has rendered.
 - After a page canvas renders, `PdfViewerRenderMixin` awaits `_renderPageLayers(page)`. Each override awaits
   `super` first, so the layers render in the order of the mixins: text and structure, then links.
 - The page view owns the DOM of a page: the canvas, the text layer, the structure and the link layer. Its methods
@@ -110,11 +108,8 @@ how to generate them.
   read it.
 - Pages that lose their canvas also lose their text layer, structure and link layer. Screen readers
   therefore reach only the text near the view.
-- Links are in their own layer over the text layer. Each link is named after the first of these that it has:
-  - the alternative text that the structure gives it
-  - the text it covers
-  - the text it owns in the structure
-  - its URL, or the page it goes to
+- Links are in their own layer over the text layer. Each link is named after the text it covers, or
+  after its URL or the page it goes to.
 - Only `http:`, `https:` and `mailto:` links open, in a new tab without access to the viewer.
 - Links on layers that the document hides are left out, as in pdf.js.
 - A link that wraps to the next line is clickable only on its words, which the `QuadPoints` of the annotation
@@ -129,12 +124,8 @@ how to generate them.
   NVDA starts a new line at them. Otherwise, it reads a heading and the next paragraph as one line.
 - The structure owns the text elements in marked content, not the marked content itself. Marked content has
   `display: contents`, and Chrome ignores `aria-owns` of such elements. Artifacts, such as page numbers, stay hidden.
-- The links mixin names all links. It uses the alternative text that the structure gives a link, as in pdf.js.
-- A link that covers no text, such as a thin link in a table of contents, gets the text that it owns in the
-  structure as its name. In pdf.js, this text names such a link, as pdf.js gives it no name.
-- As in pdf.js, a link of the structure owns the text of its structure element. Other links are added to the
-  text before them, so screen readers read them in the order of the text.
-- A link of the structure without a link element, e.g. on a hidden layer, loses its role. Its text is read as text.
+- Unlike in pdf.js, a `Link` element of the structure has no role, and the structure does not own its link.
+  The link is added to the text before it, as on an untagged page.
 - When a focused link loses its page, focus moves to the page area.
 
 ## Install size

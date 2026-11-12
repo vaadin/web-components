@@ -1,18 +1,15 @@
 import { expect } from '@vaadin/chai-plugins';
-import { fixtureSync, nextFrame, nextRender, nextUpdate, oneEvent } from '@vaadin/testing-helpers';
+import { fixtureSync, nextFrame, nextRender, oneEvent } from '@vaadin/testing-helpers';
 import sinon from 'sinon';
 import './enable-feature-flag.js';
 import '../vaadin-pdf-viewer.js';
 import type { PDFPageProxy } from 'pdfjs-dist';
 import { type PdfViewerStructTreeNode, PdfViewerStructureLayer } from '../src/pdf-viewer-structure-layer.js';
 import type { PdfViewer } from '../vaadin-pdf-viewer.js';
-import { createPdf, failTextOnce, fixtureUrl, getPdfPagePrototype, loadAndRender, nextRenderIdle } from './helpers.js';
+import { createPdf, fixtureUrl, getPdfPagePrototype, loadAndRender, nextRenderIdle } from './helpers.js';
 
 describe('structure', () => {
   let viewer: PdfViewer;
-
-  /** The object URL of a PDF that a test creates, revoked after the test. */
-  let url: string | undefined;
 
   function getTree() {
     return viewer.shadowRoot!.querySelector<HTMLElement>('.struct-tree');
@@ -56,10 +53,6 @@ describe('structure', () => {
 
   afterEach(() => {
     sinon.restore();
-    if (url) {
-      URL.revokeObjectURL(url);
-      url = undefined;
-    }
   });
 
   it('should not add a structure for an untagged PDF', async () => {
@@ -140,23 +133,11 @@ describe('structure', () => {
       expect(getPage(1).firstElementChild).to.equal(tree.parentElement);
     });
 
-    it('should give a link the text of its structure element, which is no second link', () => {
-      expect(getOwnedText(getLink())).to.equal('Vaadin website');
-      // Chrome ignores aria-owns of an element that a link owns, so the link owns the text itself.
-      getLink()
-        .getAttribute('aria-owns')!
-        .split(' ')
-        .forEach((id) => {
-          expect(viewer.shadowRoot!.getElementById(id)!.closest('.text-layer')).to.be.ok;
-          expect(getTree()!.querySelector(`[aria-owns~="${id}"]`)).to.be.null;
-        });
-      expect(getLink().getAttribute('aria-label')).to.equal('Vaadin website (opens in a new tab)');
+    it('should read the text of a link structure element as text, and add its link to the text before it', () => {
       expect(getTree()!.querySelector('[role="link"]')).to.be.null;
-    });
-
-    it('should own a link in the structure instead of adding it to the text before it', () => {
-      expect(getTree()!.querySelector(`[aria-owns="${getLink().id}"]`)).to.be.ok;
-      expect(viewer.shadowRoot!.querySelector('.text-layer [aria-owns]')).to.be.null;
+      expect(getOwnedText(getTree()!)).to.contain('Vaadin website');
+      expect(getTree()!.querySelector(`[aria-owns~="${getLink().id}"]`)).to.be.null;
+      expect(viewer.shadowRoot!.querySelector(`.text-layer [aria-owns~="${getLink().id}"]`)).to.be.ok;
     });
   });
 
@@ -244,236 +225,9 @@ describe('structure', () => {
     });
   });
 
-  describe('links of two pages', () => {
-    let url: string;
-
-    beforeEach(async () => {
-      // The pages are objects 5 and 8, their links objects 7 and 10.
-      await stubStructTrees((pageNumber) => {
-        const [pageObject, linkObject] = pageNumber === 1 ? [5, 7] : [8, 10];
-        return {
-          role: 'Root',
-          children: [
-            {
-              role: 'Link',
-              children: [
-                { type: 'content', id: `p${pageObject}R_mc0` },
-                { type: 'annotation', id: `pdfjs_internal_id_${linkObject}R` },
-              ],
-            },
-          ],
-        };
-      });
-      url = createPdf(
-        ['First', 'Second'].map((text) => ({
-          content: `/Link << /MCID 0 >> BDC BT /F1 24 Tf 72 700 Td (${text}) Tj ET EMC`,
-          annotations: [
-            '<< /Type /Annot /Subtype /Link /Rect [72 690 160 720] /Border [0 0 0] /A << /S /URI /URI (https://vaadin.com/) >> >>',
-          ],
-        })),
-      );
-      viewer.style.height = '2000px';
-      await loadAndRender(viewer, url);
-    });
-
-    afterEach(() => {
-      URL.revokeObjectURL(url);
-    });
-
-    it('should give each link the text of its own page', () => {
-      const [first, second] = viewer.shadowRoot!.querySelectorAll('a.link');
-      expect(getOwnedText(first)).to.equal('First');
-      expect(getOwnedText(second)).to.equal('Second');
-    });
-  });
-
-  describe('links that the viewer leaves out', () => {
-    [
-      // The layer is object 5, so the page is object 6 and its link object 8.
-      {
-        name: 'whose link is on a hidden layer',
-        page: 6,
-        link: 8,
-        entries: '/OC 5 0 R',
-        uri: 'https://vaadin.com/docs',
-      },
-      {
-        name: 'whose link has a URL that the viewer does not open',
-        page: 5,
-        link: 7,
-        entries: '',
-        // eslint-disable-next-line no-script-url -- the viewer must not create this link
-        uri: 'javascript:void(0)',
-      },
-    ].forEach(({ name, page, link, entries, uri }) => {
-      it(`should read the text of a link structure element ${name} as text`, async () => {
-        const tree: PdfViewerStructTreeNode = {
-          role: 'Root',
-          children: [
-            {
-              role: 'Link',
-              children: [
-                { type: 'content', id: `p${page}R_mc0` },
-                { type: 'annotation', id: `pdfjs_internal_id_${link}R` },
-              ],
-            },
-          ],
-        };
-        await stubStructTrees(() => tree);
-        url = createPdf(
-          [
-            {
-              content: '/Link << /MCID 0 >> BDC BT /F1 24 Tf 72 700 Td (Docs) Tj ET EMC',
-              annotations: [
-                `<< /Type /Annot /Subtype /Link /Rect [72 690 130 720] /Border [0 0 0] ${entries} /A << /S /URI /URI (${uri}) >> >>`,
-              ],
-            },
-          ],
-          { layers: entries ? [{ name: 'Hidden', visible: false }] : [] },
-        );
-        await loadAndRender(viewer, url);
-        expect(viewer.shadowRoot!.querySelector('a.link')).to.be.null;
-        expect(getTree()!.querySelector('[role="link"]')).to.be.null;
-        expect(getOwnedText(getTree()!)).to.equal('Docs');
-      });
-    });
-  });
-
-  it('should add a link that the structure does not own to the text before it', async () => {
-    // Object 5 is the page of the created PDF, and object 7 its link, which no structure element has.
-    await stubStructTrees(() => ({
-      role: 'Root',
-      children: [{ role: 'P', children: [{ type: 'content', id: 'p5R_mc0' }] }],
-    }));
-    url = createPdf([
-      {
-        content: '/P << /MCID 0 >> BDC BT /F1 24 Tf 72 700 Td (Docs) Tj ET EMC',
-        annotations: [
-          '<< /Type /Annot /Subtype /Link /Rect [72 690 130 720] /Border [0 0 0] /A << /S /URI /URI (https://vaadin.com/docs) >> >>',
-        ],
-      },
-    ]);
-    await loadAndRender(viewer, url);
-    expect(getTree()).to.be.ok;
-    expect(getTree()!.querySelector(`[aria-owns~="${getLink().id}"]`)).to.be.null;
-    expect(viewer.shadowRoot!.querySelector(`.text-layer [aria-owns~="${getLink().id}"]`)).to.be.ok;
-  });
-
-  it('should name a link that covers no text by the text that it owns in the structure, with its lines apart', async () => {
-    // Object 5 is the page of the created PDF, and object 7 its link, which is below the text.
-    await stubStructTrees(() => ({
-      role: 'Root',
-      children: [
-        {
-          role: 'Link',
-          children: [
-            { type: 'content', id: 'p5R_mc0' },
-            { type: 'annotation', id: 'pdfjs_internal_id_7R' },
-          ],
-        },
-      ],
-    }));
-    url = createPdf([
-      {
-        content: '/Link << /MCID 0 >> BDC BT /F1 24 Tf 72 700 Td (Vaadin) Tj 0 -30 Td (docs) Tj ET EMC',
-        annotations: [
-          '<< /Type /Annot /Subtype /Link /Rect [72 600 130 608] /Border [0 0 0] /A << /S /URI /URI (https://vaadin.com/docs) >> >>',
-        ],
-      },
-    ]);
-    await loadAndRender(viewer, url);
-    expect(getLink().getAttribute('aria-label')).to.equal('Vaadin docs (opens in a new tab)');
-  });
-
-  it('should name a link by the text that it covers rather than by the text that it owns in the structure', async () => {
-    // Object 5 is the page of the created PDF, and object 7 its link, which covers the text without structure.
-    await stubStructTrees(() => ({
-      role: 'Root',
-      children: [
-        {
-          role: 'Link',
-          children: [
-            { type: 'content', id: 'p5R_mc0' },
-            { type: 'annotation', id: 'pdfjs_internal_id_7R' },
-          ],
-        },
-      ],
-    }));
-    url = createPdf([
-      {
-        content: '/Link << /MCID 0 >> BDC BT /F1 24 Tf 72 700 Td (Docs) Tj ET EMC BT /F1 24 Tf 72 600 Td (Guide) Tj ET',
-        annotations: [
-          '<< /Type /Annot /Subtype /Link /Rect [72 590 160 620] /Border [0 0 0] /A << /S /URI /URI (https://vaadin.com/docs) >> >>',
-        ],
-      },
-    ]);
-    await loadAndRender(viewer, url);
-    expect(getLink().getAttribute('aria-label')).to.equal('Guide (opens in a new tab)');
-  });
-
-  describe('alternative text of links', () => {
-    let url: string;
-
-    beforeEach(async () => {
-      // Object 5 is the page of the created PDF, and object 7 its link.
-      const tree: PdfViewerStructTreeNode = {
-        role: 'Root',
-        children: [
-          {
-            role: 'Link',
-            alt: 'Vaadin documentation',
-            children: [
-              { type: 'content', id: 'p5R_mc0' },
-              { type: 'annotation', id: 'pdfjs_internal_id_7R' },
-            ],
-          },
-        ],
-      };
-      await stubStructTrees(() => tree);
-      url = createPdf([
-        {
-          content: '/Link << /MCID 0 >> BDC BT /F1 24 Tf 72 700 Td (Docs) Tj ET EMC',
-          annotations: [
-            '<< /Type /Annot /Subtype /Link /Rect [72 690 130 720] /Border [0 0 0] /A << /S /URI /URI (https://vaadin.com/docs) >> >>',
-          ],
-        },
-      ]);
-    });
-
-    afterEach(() => {
-      URL.revokeObjectURL(url);
-    });
-
-    it('should name a link by the alternative text of its structure element', async () => {
-      await loadAndRender(viewer, url);
-      expect(getLink().getAttribute('aria-label')).to.equal('Vaadin documentation (opens in a new tab)');
-      expect(getOwnedText(getLink())).to.equal('Docs');
-      // The alternative text names the link, not its structure element.
-      expect(getTree()!.querySelector('[aria-label]')).to.be.null;
-    });
-
-    it('should own and name a link by its structure element when the structure renders after the link', async () => {
-      await failTextOnce(1);
-      sinon.stub(console, 'warn');
-      await loadAndRender(viewer, url);
-      expect(getTree()).to.be.null;
-      expect(getLink().hasAttribute('aria-owns')).to.be.false;
-      expect(getLink().getAttribute('aria-label')).to.equal('Docs (opens in a new tab)');
-      const idle = nextRenderIdle(viewer);
-      viewer.style.width = '900px';
-      await idle;
-      expect(getOwnedText(getLink())).to.equal('Docs');
-      expect(viewer.shadowRoot!.querySelector('.text-layer [aria-owns]')).to.be.null;
-      expect(getLink().getAttribute('aria-label')).to.equal('Vaadin documentation (opens in a new tab)');
-      viewer.i18n = { externalLink: '{text} (åpnes i en ny fane)' };
-      await nextUpdate(viewer);
-      expect(getLink().getAttribute('aria-label')).to.equal('Vaadin documentation (åpnes i en ny fane)');
-    });
-  });
-
   describe('roles', () => {
     function create(children: PdfViewerStructTreeNode[]) {
-      return new PdfViewerStructureLayer({ role: 'Root', children }, 1);
+      return new PdfViewerStructureLayer({ role: 'Root', children });
     }
 
     it('should not take a role from the inherited properties of objects', () => {
@@ -631,7 +385,7 @@ describe('structure', () => {
       expect(owned).to.deep.equal([['A', 'C'], ['B']]);
     });
 
-    it('should only own the elements of content and annotations', () => {
+    it('should only own the elements of content', () => {
       const { element } = create([
         {
           role: 'P',
@@ -640,54 +394,12 @@ describe('structure', () => {
             { type: 'content', id: 'p12R1_mc7' },
             { type: 'content', id: 'p3R_mcx content pages thumbnails' },
             { type: 'annotation', id: 'pdfjs_internal_id_5R' },
-            { type: 'annotation', id: 'content' },
             { type: 'object', id: '15R' },
           ],
         },
       ]);
       const owned = [...element.querySelectorAll('[aria-owns]')].map((owner) => owner.getAttribute('aria-owns'));
-      expect(owned).to.deep.equal(['p3R_mc0', 'p12R1_mc7', 'pdfjs_internal_id_5R']);
-    });
-
-    it('should not own an annotation directly in a table, which owns no content', () => {
-      const structure = create([{ role: 'Table', children: [{ type: 'annotation', id: 'pdfjs_internal_id_5R' }] }]);
-      expect(structure.element.querySelector('[aria-owns]')).to.be.null;
-      expect(structure.annotationIds).to.be.empty;
-    });
-
-    it('should not add an image for a figure with a link, which its alternative text names', () => {
-      const structure = create([
-        {
-          role: 'Figure',
-          alt: 'Chart',
-          children: [
-            { type: 'content', id: 'p3R_mc0' },
-            { type: 'annotation', id: 'pdfjs_internal_id_5R' },
-          ],
-        },
-      ]);
-      expect(structure.element.querySelector('[role="img"]')).to.be.null;
-      expect(structure.getLinkAlt('pdfjs_internal_id_5R')).to.equal('Chart');
-    });
-
-    it('should keep the role of a link structure element until a link takes its place', () => {
-      const structure = create([
-        {
-          role: 'Link',
-          alt: 'Docs',
-          children: [
-            { type: 'content', id: 'p3R_mc0' },
-            { type: 'annotation', id: 'pdfjs_internal_id_5R' },
-          ],
-        },
-      ]);
-      const link = structure.element.querySelector('[role="link"]')!;
-      expect(structure.getLinkAlt('pdfjs_internal_id_5R')).to.equal('Docs');
-      expect(link.getAttribute('role')).to.equal('link');
-      const owns = structure.getAriaAttributes('pdfjs_internal_id_5R')!.get('aria-owns')!;
-      expect(link.hasAttribute('role')).to.be.false;
-      expect(owns).to.equal('p3R_mc0');
-      expect(structure.element.querySelector('[aria-owns="p3R_mc0"]')).to.be.null;
+      expect(owned).to.deep.equal(['p3R_mc0', 'p12R1_mc7']);
     });
   });
 });

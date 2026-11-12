@@ -26,9 +26,6 @@
  * See the License for the specific language governing permissions and
  * limitations under the License.
  */
-import { removeValuesFromAttribute } from '@vaadin/component-base/src/dom-utils.js';
-import { ANNOTATION_ID_PREFIX } from './pdf-viewer-text-accessibility.js';
-
 /** The ARIA roles of the standard structure types of tagged PDFs. */
 const PDF_ROLE_TO_ARIA_ROLE = {
   Part: 'group',
@@ -46,7 +43,7 @@ const PDF_ROLE_TO_ARIA_ROLE = {
   Strong: 'strong',
   Note: 'note',
   Code: 'code',
-  Link: 'link',
+  // No role for Link, as the page adds its link to the text before it.
   Annot: 'note',
   Form: 'form',
   L: 'list',
@@ -81,9 +78,6 @@ const ROLES_WITH_REQUIRED_CHILDREN = new Set(['list', 'row', 'rowgroup', 'table'
  */
 const CONTENT_ID_PATTERN = /^p\d+R\d*_mc\d+$/u;
 
-/** The id of the element of an annotation, e.g. `pdfjs_internal_id_7R`. */
-const ANNOTATION_ID_PATTERN = new RegExp(`^${ANNOTATION_ID_PREFIX}\\d+R\\d*$`, 'u');
-
 /**
  * Whether the node is content of the page, rather than a structure element.
  * @param {object} node
@@ -95,15 +89,13 @@ function isContent(node) {
 
 /**
  * Whether a structure element may own the element with the id of the node.
- * Objects have no element. An id of another form comes from the document and
- * could own any element of the viewer.
+ * Only content: the page adds links to the text, and objects have no element.
+ * An id of another form comes from the document and could own any element of
+ * the viewer.
  * @param {object} node
  * @return {boolean}
  */
 function canOwn({ type, id }) {
-  if (type === 'annotation') {
-    return ANNOTATION_ID_PATTERN.test(id);
-  }
   return type === 'content' && CONTENT_ID_PATTERN.test(id);
 }
 
@@ -156,104 +148,18 @@ function getRole(node, parents) {
  * Exposes the structure of a tagged PDF page to assistive technology, e.g.
  * headings, lists, tables and figures with alternative text, adapted from
  * `StructTreeLayerBuilder` of pdf.js. Its elements own the elements of the
- * text layer and the links with `aria-owns`, so these must be in the same
- * DOM tree. As in pdf.js, the page puts the tree in its canvas. There is no
- * MathML, no references to table headers, no table summaries and no
- * positions of figures.
+ * text layer with `aria-owns`, so these must be in the same DOM tree. As in
+ * pdf.js, the page puts the tree in its canvas. There is no MathML, no
+ * references to table headers, no table summaries and no positions of
+ * figures.
  */
 export class PdfViewerStructureLayer {
-  /** The ids of the annotations that elements of the structure own. */
-  annotationIds = new Set();
-
-  /** @type {Map<string, Map<string, string>>} */
-  #annotationAttributes = new Map();
-
-  /** @type {Map<string, { element: HTMLElement, ids: string[] }>} */
-  #pendingLinkOwnership = new Map();
-
-  /**
-   * The text that the `Link` structure element of each annotation owns, by the annotation id.
-   * @type {Map<string, string>}
-   */
-  #linkTexts = new Map();
-
-  #idPrefix;
-
-  #linkTextId = 0;
-
   /**
    * @param {object} tree the result of `PDFPageProxy.getStructTree()`
-   * @param {number} pageNumber makes the ids of the elements unique among the pages
    */
-  constructor(tree, pageNumber) {
-    this.#idPrefix = `pdfjs_internal_struct_${pageNumber}_`;
+  constructor(tree) {
     this.element = this.#walk(tree, []);
     this.element.className = 'struct-tree';
-  }
-
-  /**
-   * Returns the ARIA attributes of the link element of an annotation. As in
-   * pdf.js, a link of a `Link` structure element owns the text of that
-   * element, which then loses its role, as the link takes its place.
-   *
-   * @param {string} annotationId
-   * @return {Map<string, string> | undefined}
-   */
-  getAriaAttributes(annotationId) {
-    const ownership = this.#pendingLinkOwnership.get(annotationId);
-    if (ownership) {
-      const { element, ids } = ownership;
-      element.removeAttribute('role');
-      // Unlike in pdf.js, the link owns the text itself, as Chrome ignores aria-owns of an element that a link owns.
-      const owners = this.#getLinkContentOwners(ids);
-      const textIds = owners.flatMap((owner) => owner.getAttribute('aria-owns').split(' '));
-      owners.forEach((owner) => owner.removeAttribute('aria-owns'));
-      if (textIds.length) {
-        this.#getAnnotationAttributes(annotationId).set('aria-owns', textIds.join(' '));
-      }
-      this.#pendingLinkOwnership.delete(annotationId);
-    }
-    return this.#annotationAttributes.get(annotationId);
-  }
-
-  /**
-   * Returns the alternative text that the structure gives the link of an
-   * annotation. Unlike `getAriaAttributes()`, it does not hand the content
-   * of the `Link` structure element over to the link.
-   *
-   * @param {string} annotationId
-   * @return {string | undefined}
-   */
-  getLinkAlt(annotationId) {
-    return this.#annotationAttributes.get(annotationId)?.get('aria-label');
-  }
-
-  /**
-   * Returns the text that the `Link` structure element of an annotation
-   * owns, which the link of the annotation owns in its place. Needs the text
-   * layer, see `updateTextLayer()`.
-   *
-   * @param {string} annotationId
-   * @return {string | undefined}
-   */
-  getLinkText(annotationId) {
-    return this.#linkTexts.get(annotationId);
-  }
-
-  /**
-   * Removes an annotation that has no element, e.g. a link on a hidden layer
-   * or with a URL that the viewer does not open. A `Link` structure element
-   * of the annotation loses its role, so that its text is read as text.
-   *
-   * @param {string} annotationId
-   */
-  removeAnnotation(annotationId) {
-    [this.element, ...this.element.querySelectorAll('[aria-owns]')].forEach((owner) => {
-      removeValuesFromAttribute(owner, 'aria-owns', annotationId);
-    });
-    this.#pendingLinkOwnership.get(annotationId)?.element.removeAttribute('role');
-    this.#pendingLinkOwnership.delete(annotationId);
-    this.annotationIds.delete(annotationId);
   }
 
   /**
@@ -261,8 +167,7 @@ export class PdfViewerStructureLayer {
    * layer, rather than the marked content itself. Chrome leaves out the
    * elements that `aria-owns` refers to when they have `display: contents`,
    * as marked content has. Needs the rendered text layer, as the
-   * `updateTextLayer()` of pdf.js does. Also keeps the text of the links, see
-   * `getLinkText()`.
+   * `updateTextLayer()` of pdf.js does.
    *
    * @param {HTMLElement} textLayerElement
    */
@@ -287,57 +192,6 @@ export class PdfViewerStructureLayer {
         owner.removeAttribute('aria-owns');
       }
     });
-
-    if (this.#pendingLinkOwnership.size) {
-      this.#keepLinkTexts(textLayerElement);
-    }
-  }
-
-  /**
-   * Keeps the text that the `Link` structure element of each annotation
-   * owns, with a space between its lines, as the text layer has a line break
-   * between them instead.
-   * @param {HTMLElement} textLayerElement
-   * @private
-   */
-  #keepLinkTexts(textLayerElement) {
-    const lineStarts = new Set();
-    let afterLineBreak = false;
-    textLayerElement.querySelectorAll('br, span:not(.markedContent)').forEach((element) => {
-      if (afterLineBreak && element.localName !== 'br') {
-        lineStarts.add(element);
-      }
-      afterLineBreak = element.localName === 'br';
-    });
-    this.#pendingLinkOwnership.forEach(({ ids }, annotationId) => {
-      const text = this.#getLinkContentOwners(ids)
-        .flatMap((owner) => owner.getAttribute('aria-owns').split(' '))
-        .map((id) => textLayerElement.querySelector(`#${id}`))
-        .map((element) => (element ? `${lineStarts.has(element) ? ' ' : ''}${element.textContent}` : ''))
-        .join('');
-      this.#linkTexts.set(annotationId, text);
-    });
-  }
-
-  /**
-   * Returns the elements that own the text of a `Link` structure element, in document order.
-   * @param {string[]} ids the ids of the children of the `Link` structure element
-   * @return {HTMLElement[]}
-   * @private
-   */
-  #getLinkContentOwners(ids) {
-    return ids
-      .map((id) => this.element.querySelector(`#${id}`))
-      .flatMap((element) => [element, ...element.querySelectorAll('[aria-owns]')])
-      .filter((owner) => owner.getAttribute('aria-owns'));
-  }
-
-  /** @private */
-  #getAnnotationAttributes(annotationId) {
-    if (!this.#annotationAttributes.has(annotationId)) {
-      this.#annotationAttributes.set(annotationId, new Map());
-    }
-    return this.#annotationAttributes.get(annotationId);
   }
 
   /**
@@ -349,20 +203,13 @@ export class PdfViewerStructureLayer {
   #setAttributes(node, element) {
     const { alt, lang, rowSpan, colSpan } = node;
     if (alt !== undefined) {
-      // The alternative text of annotations names their own elements instead.
-      const annotations = (node.children || []).filter((child) => child.type === 'annotation');
-      annotations.forEach(({ id }) => this.#getAnnotationAttributes(id).set('aria-label', alt));
       const role = element.getAttribute('role') || 'generic';
-      if (!annotations.length && role !== 'none') {
+      if (role !== 'none') {
         element.setAttribute(ROLES_WITHOUT_NAME.has(role) ? 'aria-description' : 'aria-label', alt);
       }
     }
     if (canOwn(node)) {
       element.setAttribute('aria-owns', node.id);
-      // Unlike in pdf.js, collects only the annotations that an element owns, as lists and tables skip their direct content.
-      if (node.type === 'annotation') {
-        this.annotationIds.add(node.id);
-      }
     }
     if (lang !== undefined) {
       element.setAttribute('lang', lang);
@@ -399,8 +246,7 @@ export class PdfViewerStructureLayer {
     this.#setAttributes(node, element);
 
     // An image with the alternative text, as a figure that owns no text has no content to read.
-    // Not for a figure with a link, which the alternative text names instead.
-    if (node.role === 'Figure' && node.alt && !node.children?.some((child) => child.type === 'annotation')) {
+    if (node.role === 'Figure' && node.alt) {
       element.removeAttribute('aria-label');
       const image = document.createElement('span');
       image.setAttribute('role', 'img');
@@ -420,21 +266,6 @@ export class PdfViewerStructureLayer {
       parents.pop();
     }
 
-    if (node.role === 'Link') {
-      const annotations = children.filter((child) => child.type === 'annotation');
-      if (annotations.length === 1) {
-        const [{ id }] = annotations;
-        const ids = [...element.children]
-          .filter((child) => child.getAttribute('aria-owns') !== id)
-          .map((child) => {
-            this.#linkTextId += 1;
-            child.id = `${this.#idPrefix}link_${this.#linkTextId}`;
-            return child.id;
-          });
-        // The structure element stays a link until the link of the annotation takes its place.
-        this.#pendingLinkOwnership.set(id, { element, ids });
-      }
-    }
     return element;
   }
 }
