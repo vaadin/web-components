@@ -358,18 +358,6 @@ describe('checkbox', () => {
       expect(inputRect.width).to.be.at.least(partRect.width);
       expect(inputRect.height).to.be.at.least(partRect.height);
     });
-
-    [undefined, 'reverse'].forEach((theme) => {
-      it(`should make the slotted input at least 24px wide and high${theme ? ` in ${theme} theme` : ''}`, async () => {
-        if (theme) {
-          checkbox.setAttribute('theme', theme);
-          await nextRender();
-        }
-        const rect = input.getBoundingClientRect();
-        expect(rect.width).to.be.at.least(24);
-        expect(rect.height).to.be.at.least(24);
-      });
-    });
   });
 
   describe('click target', () => {
@@ -398,13 +386,24 @@ describe('checkbox', () => {
       });
     });
 
+    [undefined, 'reverse'].forEach((theme) => {
+      it(`should make the slotted input at least 24px wide and high${theme ? ` in ${theme} theme` : ''}`, async () => {
+        if (theme) {
+          checkbox.setAttribute('theme', theme);
+          await nextRender();
+        }
+        const rect = input.getBoundingClientRect();
+        expect(rect.width).to.be.at.least(24);
+        expect(rect.height).to.be.at.least(24);
+      });
+    });
+
     it('should not cover the helper text row with the input', () => {
       const helper = checkbox.querySelector('[slot="helper"]');
       const { x, y } = middleOfNode(helper);
       expect(document.elementFromPoint(x, y)).to.equal(helper);
     });
 
-    // Placed last, as a real mouse click in WebKit moves the starting point of Tab navigation in later tests
     describe('real mouse', () => {
       afterEach(async () => {
         await resetMouse();
