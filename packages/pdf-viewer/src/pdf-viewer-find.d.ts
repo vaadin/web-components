@@ -8,8 +8,6 @@
  * See https://vaadin.com/commercial-license-and-service-terms for the full
  * license.
  */
-import type { PDFPageProxy } from 'pdfjs-dist';
-
 export interface PageText {
   text: string;
   itemStarts: number[];
@@ -25,8 +23,6 @@ export interface TextMatch {
   start: number;
   end: number;
 }
-
-export declare function readTextItems(pdfPage: PDFPageProxy): Promise<Array<{ str?: string; hasEOL?: boolean }>>;
 
 export declare function createPageText(contentItems: Array<{ str?: string; hasEOL?: boolean }>): PageText;
 

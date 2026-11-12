@@ -5,7 +5,7 @@ import './enable-feature-flag.js';
 import '../vaadin-pdf-viewer.js';
 import type { PDFPageProxy } from 'pdfjs-dist';
 import { clearWarnings } from '@vaadin/component-base/src/warnings.js';
-import { createPageText, findInText, getMatchParts, normalizeText, readTextItems } from '../src/pdf-viewer-find.js';
+import { createPageText, findInText, getMatchParts, normalizeText } from '../src/pdf-viewer-find.js';
 import { loadPdfjs } from '../src/pdfjs-loader.js';
 import type { PdfViewer } from '../vaadin-pdf-viewer.js';
 import {
@@ -84,20 +84,6 @@ describe('find', () => {
       // "fox" ends the second item, which the third item follows without a line break.
       const [match] = findInText(normalizeText(pageText.text), 'fox');
       expect(getMatchParts(pageText, match)).to.deep.equal([{ itemIndex: 1, start: 7, end: 10 }]);
-    });
-
-    it('should read the text items of all chunks of the stream', async () => {
-      const chunks = [{ items: [{ str: 'First' }] }, { items: [{ str: 'Second', hasEOL: true }] }];
-      const pdfPage = {
-        streamTextContent: () =>
-          new ReadableStream({
-            start(controller) {
-              chunks.forEach((chunk) => controller.enqueue(chunk));
-              controller.close();
-            },
-          }),
-      } as unknown as PDFPageProxy;
-      expect(await readTextItems(pdfPage)).to.deep.equal([{ str: 'First' }, { str: 'Second', hasEOL: true }]);
     });
   });
 
