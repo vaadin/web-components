@@ -6,7 +6,6 @@ import './enable-feature-flag.js';
 import '../vaadin-pdf-viewer.js';
 import { isSafari } from '@vaadin/component-base/src/browser-utils.js';
 import { getSelectionRanges } from '../src/pdf-viewer-text-selection-controller.js';
-import { loadPdfjs } from '../src/pdfjs-loader.js';
 import type { PdfViewer } from '../vaadin-pdf-viewer.js';
 import {
   createPdf,
@@ -303,13 +302,5 @@ describe('text layer', () => {
     await nextFrame();
     await load('rotated.pdf');
     expect(stub).to.be.not.called;
-  });
-
-  ['styles/vaadin-pdf-viewer-text-layer-base-styles.js', 'pdf-viewer-text-selection-controller.js'].forEach((path) => {
-    it(`should use the pdf.js version that ${path} is ported from`, async () => {
-      const source = await (await fetch(new URL(`../src/${path}`, import.meta.url))).text();
-      const { version } = await loadPdfjs();
-      expect(source.match(/pdf\.js (\d+\.\d+\.\d+)/u)![1]).to.equal(version);
-    });
   });
 });

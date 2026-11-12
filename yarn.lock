@@ -1116,7 +1116,7 @@
   resolved "https://registry.yarnpkg.com/@napi-rs/canvas-win32-x64-msvc/-/canvas-win32-x64-msvc-1.0.13.tgz#8af201bd0170d53dd9cd6756ae0009f0339f1c07"
   integrity sha512-DUlW3lZPz63kYsf8mxgyyZuevhlH0T3/BGP9l+NazhB0F1+gL6D4hqZdnhZpw24DlWmTpATDcyYSZlJOi+DdfQ==
 
-"@napi-rs/canvas@^1.0.10":
+"@napi-rs/canvas@^1.0.13":
   version "1.0.13"
   resolved "https://registry.yarnpkg.com/@napi-rs/canvas/-/canvas-1.0.13.tgz#cfd0428669eee5323c2d80402dbbe4d78f5cf9dc"
   integrity sha512-b87ugZpQ5ViwqVBkjervxpwa0GmJPsKHLBNoZN6GpjWeHzTbDUGryriq+2DYW2XbB+xCqSIINQysC0/I87nPbw==
@@ -8389,12 +8389,12 @@ pbf@5.1.2:
   dependencies:
     resolve-protobuf-schema "^2.1.0"
 
-pdfjs-dist@6.4.299:
-  version "6.4.299"
-  resolved "https://registry.yarnpkg.com/pdfjs-dist/-/pdfjs-dist-6.4.299.tgz#4a46f5146ac6505564c1a5d472900be4df8bf628"
-  integrity sha512-AVl138zALtfaAPvADulE0PZThbYzCBS79nL4pOSL/6Sm/4AH5A21BD9VHt97OlCuzJuCpmeZtAtkinisF4Vb1g==
+pdfjs-dist@6.5.438:
+  version "6.5.438"
+  resolved "https://registry.yarnpkg.com/pdfjs-dist/-/pdfjs-dist-6.5.438.tgz#e7f8986ec4ea04057b5d9d2f0e5b63ea94d2303f"
+  integrity sha512-vg8Pw1x+AFKy4AMDvhuWl5cOYV8d698UoEANoFFhc79hqXDnZQqnOXoxw3HG907WHOg1JYOvLhP756boddFxpA==
   optionalDependencies:
-    "@napi-rs/canvas" "^1.0.10"
+    "@napi-rs/canvas" "^1.0.13"
 
 pend@~1.2.0:
   version "1.2.0"
