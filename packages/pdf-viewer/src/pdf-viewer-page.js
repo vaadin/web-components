@@ -9,6 +9,7 @@
  * license.
  */
 import { createLink } from './pdf-viewer-links.js';
+import { PdfViewerStructureLayer } from './pdf-viewer-structure-layer.js';
 import { addLinksToText, ANNOTATION_ID_PREFIX, compareAnnotationPositions } from './pdf-viewer-text-accessibility.js';
 import { loadPdfjs } from './pdfjs-loader.js';
 
@@ -62,12 +63,21 @@ function addLinkAreas(link, { rect: [left, bottom, right, top], quadPoints }) {
 
 /**
  * Manages the DOM of a single page of the document: a placeholder sized to
- * the page, and the canvas and the text and link layers the page is rendered
- * to once it is needed.
+ * the page, and the canvas, the text layer, the structure and the link layer
+ * the page is rendered to once it is needed.
  */
 export class PdfViewerPage {
   /** Set once the links of the current canvas are rendered, also when the page has none. */
   #linksRendered = false;
+
+  /**
+   * The structure tree of the page, or null without one, kept between renders as in pdf.js.
+   * @type {Promise<object | null> | null}
+   */
+  #structTree = null;
+
+  /** @type {PdfViewerStructureLayer | null} */
+  #structureLayer = null;
 
   /**
    * @param {number} pageNumber
@@ -198,7 +208,7 @@ export class PdfViewerPage {
     const outputScale = Math.min(pixelRatio, Math.sqrt(MAX_CANVAS_PIXELS / (viewport.width * viewport.height)));
 
     const canvas = document.createElement('canvas');
-    canvas.setAttribute('aria-hidden', 'true');
+    canvas.setAttribute('role', 'presentation');
     canvas.width = Math.floor(viewport.width * outputScale);
     canvas.height = Math.floor(viewport.height * outputScale);
 
@@ -229,7 +239,11 @@ export class PdfViewerPage {
     if (this.canvas) {
       this.#freeCanvas(this.canvas);
     }
-    this.element.append(canvas);
+    // The structure in the canvas comes first in reading order.
+    this.element.prepend(canvas);
+    if (this.#structureLayer) {
+      canvas.append(this.#structureLayer.element);
+    }
     this.canvas = canvas;
     this.renderedScale = scale;
     this.renderedPixelRatio = pixelRatio;
@@ -329,6 +343,41 @@ export class PdfViewerPage {
       container.append(endOfContent);
       this.endOfContentElement = endOfContent;
       this.#addLinksToText();
+      // As in pdf.js, the structure renders after the text layer, whose elements it owns.
+      await this.#renderStructureLayer();
+    }
+  }
+
+  /**
+   * Renders the structure of a tagged PDF page for assistive technology.
+   * @private
+   */
+  async #renderStructureLayer() {
+    const textLayerElement = this.textLayerElement;
+    // A page with a broken structure is shown as untagged.
+    this.#structTree ??= this.pdfPage.getStructTree().catch(() => null);
+    const tree = await this.#structTree;
+    // The page may have been released meanwhile.
+    if (this.textLayerElement !== textLayerElement) {
+      return;
+    }
+    const structureLayer = tree && this.#createStructureLayer(tree, textLayerElement);
+    if (structureLayer) {
+      this.#structureLayer = structureLayer;
+      // In the canvas as in pdf.js, since VoiceOver in Safari skips the elements, which have no size, outside of it.
+      this.canvas.append(structureLayer.element);
+    }
+  }
+
+  /** @private */
+  #createStructureLayer(tree, textLayerElement) {
+    try {
+      const structureLayer = new PdfViewerStructureLayer(tree);
+      structureLayer.updateTextLayer(textLayerElement);
+      return structureLayer;
+    } catch {
+      // As in pdf.js, a structure that fails to render does not break the other layers.
+      return null;
     }
   }
 
@@ -411,7 +460,7 @@ export class PdfViewerPage {
     }
   }
 
-  /** Cancels a pending render and frees the canvas memory and the text and link layers. */
+  /** Cancels a pending render and frees the canvas memory, the layers and the structure. */
   release() {
     this.cancel();
     this.textLayer?.cancel();
@@ -419,6 +468,7 @@ export class PdfViewerPage {
     this.textLayerElement?.remove();
     this.textLayerElement = null;
     this.endOfContentElement = null;
+    this.#structureLayer = null;
     this.linkLayerElement?.remove();
     this.linkLayerElement = null;
     this.#linksRendered = false;

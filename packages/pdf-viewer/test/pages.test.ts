@@ -130,8 +130,10 @@ describe('pages', () => {
         expect(canvas.width).to.be.closeTo(page.offsetWidth * window.devicePixelRatio, 1);
       });
 
-      it('should hide the canvas from assistive technology', () => {
-        expect(pages[0].querySelector('canvas')!.getAttribute('aria-hidden')).to.equal('true');
+      it('should give the canvas no role, without hiding its content from assistive technology', () => {
+        const canvas = pages[0].querySelector('canvas')!;
+        expect(canvas.getAttribute('role')).to.equal('presentation');
+        expect(canvas.hasAttribute('aria-hidden')).to.be.false;
       });
 
       it('should make each page a region with a name, also when it is not rendered', () => {

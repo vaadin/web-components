@@ -69,11 +69,15 @@ how to generate them.
   - Its `_zoomFactor` getter reads `_scale`, in units of the actual page size.
 - `PdfViewerTextLayerMixin` renders the text layer of each rendered page and sets the document language on the
   pages. A page loads its text each time it renders, as pdf.js' own viewer does.
+  - The page renders the structure of a tagged PDF right after its text layer, as pdf.js' own viewer does.
+    The structure has no state of the viewer, so it has no mixin.
+  - Unlike in pdf.js, `renderTextLayer()` waits for the structure, so `render-idle` comes once the structure
+    is in place.
 - `PdfViewerLinksMixin` adds the links of each rendered page and follows internal links with `_scrollToPage()`.
 - After a page canvas renders, `PdfViewerRenderMixin` awaits `_renderPageLayers(page)`. Each override awaits
-  `super` first, so the layers render in the order of the mixins: text, then links.
-- The page view owns the DOM of a page: the canvas, the text layer and the link layer. Its methods check after
-  each await that the page still has the same canvas, so a released page gets no layers.
+  `super` first, so the layers render in the order of the mixins: text and structure, then links.
+- The page view owns the DOM of a page: the canvas, the text layer, the structure and the link layer. Its methods
+  check after each await that the page still has the same canvas or text layer, so a released page gets no layers.
 - `PdfViewerKeyboardMixin` handles the keyboard shortcuts.
 - `PdfViewerToolbarMixin` renders the header and the toolbar. Its controls are in the light DOM, so a theme
   styles the page field like any other `vaadin-integer-field`. The `slotContent()` directive renders them, so
@@ -102,14 +106,26 @@ how to generate them.
 
 - The text layer of pdf.js puts transparent text over the canvas. Users can select it, and screen readers
   read it.
-- Pages that lose their canvas also lose their text and link layers. Screen readers therefore reach only
-  the text near the view.
+- Pages that lose their canvas also lose their text layer, structure and link layer. Screen readers
+  therefore reach only the text near the view.
 - Links are in their own layer over the text layer. Each link is named after the text it covers, or
   after its URL or the page it goes to.
 - Only `http:`, `https:` and `mailto:` links open, in a new tab without access to the viewer.
 - Links on layers that the document hides are left out, as in pdf.js.
 - A link that wraps to the next line is clickable only on its words, which the `QuadPoints` of the annotation
   give. Its focus ring goes around these words.
+- Tagged PDFs have a structure of headings, lists, tables and figures. As in pdf.js, an element tree in the
+  canvas exposes it to screen readers. Its elements own the text layer elements with `aria-owns`.
+- The canvas has the `presentation` role, so that its content stays visible to screen readers. Each new
+  canvas of the page gets the tree.
+- Outside of the canvas, VoiceOver in Safari skips the elements of the tree. They then have the size of an
+  empty span, not the size of the text that they own.
+- Elements of the tree that are blocks in HTML, such as headings and paragraphs, have `display: block`.
+  NVDA starts a new line at them. Otherwise, it reads a heading and the next paragraph as one line.
+- The structure owns the text elements in marked content, not the marked content itself. Marked content has
+  `display: contents`, and Chrome ignores `aria-owns` of such elements. Artifacts, such as page numbers, stay hidden.
+- Unlike in pdf.js, a `Link` element of the structure has no role, and the structure does not own its link.
+  The link is added to the text before it, as on an untagged page.
 - When a focused link loses its page, focus moves to the page area.
 
 ## Install size
