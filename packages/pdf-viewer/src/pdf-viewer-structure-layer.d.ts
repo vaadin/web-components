@@ -22,9 +22,19 @@ export interface PdfViewerStructTreeNode {
 }
 
 export declare class PdfViewerStructureLayer {
-  constructor(tree: PdfViewerStructTreeNode);
+  constructor(tree: PdfViewerStructTreeNode, pageNumber: number);
+
+  readonly annotationIds: ReadonlySet<string>;
 
   readonly element: HTMLElement;
 
   updateTextLayer(textLayerElement: HTMLElement): void;
+
+  getAriaAttributes(annotationId: string): Map<string, string> | undefined;
+
+  getLinkAlt(annotationId: string): string | undefined;
+
+  getLinkText(annotationId: string): string | undefined;
+
+  removeAnnotation(annotationId: string): void;
 }

@@ -12,6 +12,16 @@ import { isKeyboardActive } from '@vaadin/a11y-base/src/focus-utils.js';
 import { getLinkLabel, resolveDestination } from './pdf-viewer-links.js';
 
 /**
+ * Returns the text with its whitespace collapsed to single spaces, without
+ * leading and trailing whitespace.
+ * @param {string | undefined} text
+ * @return {string | undefined}
+ */
+function collapseWhitespace(text) {
+  return text?.replace(/\s+/gu, ' ').trim();
+}
+
+/**
  * A mixin that adds the links of the rendered pages, and goes to the
  * destinations of internal links.
  */
@@ -19,7 +29,7 @@ export const PdfViewerLinksMixin = (superClass) =>
   class PdfViewerLinksMixinClass extends superClass {
     /**
      * What the accessible name of each link is made of, to update it when the localization changes.
-     * @type {WeakMap<HTMLElement, { text: string, url?: string, action?: string, targetPage: number | null }>}
+     * @type {WeakMap<HTMLElement, { text: string, alt?: string, structureText?: string, url?: string, action?: string, targetPage: number | null }>}
      */
     #linkLabels = new WeakMap();
 
@@ -45,6 +55,7 @@ export const PdfViewerLinksMixin = (superClass) =>
       const optionalContentConfig = await this._pdfDocument?.getOptionalContentConfig({ intent: 'display' });
       const links = await page.renderLinkLayer((annotation) => this.#followLink(annotation), optionalContentConfig);
       await this.#nameLinks(links);
+      this.#nameLinksByStructure(page);
     }
 
     /**
@@ -56,7 +67,7 @@ export const PdfViewerLinksMixin = (superClass) =>
       await Promise.all(
         links.map(async ({ link, annotation }) => {
           // As in pdf.js, the text that the link covers, which the worker finds for each link.
-          const text = (annotation.overlaidText ?? '').replace(/\s+/gu, ' ').trim();
+          const text = collapseWhitespace(annotation.overlaidText ?? '');
           let targetPage = null;
           if (!text && !annotation.url) {
             const target = await this.#resolveDestination(annotation);
@@ -68,9 +79,31 @@ export const PdfViewerLinksMixin = (superClass) =>
       );
     }
 
+    /**
+     * Names the links of a page by the alternative text that the structure of
+     * a tagged PDF gives them, as in pdf.js. A link that covers no text, e.g.
+     * a thin one, is named by the text that it owns in the structure, which
+     * names it in pdf.js. The structure renders after the links when the text
+     * of the page failed to render at first.
+     * @private
+     */
+    #nameLinksByStructure(page) {
+      [...(page.linkLayerElement?.children ?? [])].forEach((link) => {
+        const parts = this.#linkLabels.get(link);
+        const alt = collapseWhitespace(page.getLinkAlt(link));
+        const structureText = collapseWhitespace(page.getLinkText(link));
+        if (parts && (alt || structureText) && (parts.alt !== alt || parts.structureText !== structureText)) {
+          Object.assign(parts, { alt, structureText });
+          this.#updateLinkLabel(link);
+        }
+      });
+    }
+
     /** @private */
     #updateLinkLabel(link) {
-      link.setAttribute('aria-label', getLinkLabel(this.#linkLabels.get(link), this.__effectiveI18n));
+      const { alt, structureText, ...parts } = this.#linkLabels.get(link);
+      const text = alt || parts.text || structureText;
+      link.setAttribute('aria-label', getLinkLabel({ ...parts, text }, this.__effectiveI18n));
     }
 
     /** @private */

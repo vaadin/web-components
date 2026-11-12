@@ -70,6 +70,9 @@ export class PdfViewerPage {
   /** Set once the links of the current canvas are rendered, also when the page has none. */
   #linksRendered = false;
 
+  /** Set once the structure of the current text layer is rendered, also when the page has none. */
+  #structureRendered = false;
+
   /**
    * The structure tree of the page, or null without one, kept between renders as in pdf.js.
    * @type {Promise<object | null> | null}
@@ -342,7 +345,6 @@ export class PdfViewerPage {
       endOfContent.className = 'end-of-content';
       container.append(endOfContent);
       this.endOfContentElement = endOfContent;
-      this.#addLinksToText();
       // As in pdf.js, the structure renders after the text layer, whose elements it owns.
       await this.#renderStructureLayer();
     }
@@ -361,18 +363,20 @@ export class PdfViewerPage {
     if (this.textLayerElement !== textLayerElement) {
       return;
     }
+    this.#structureRendered = true;
     const structureLayer = tree && this.#createStructureLayer(tree, textLayerElement);
     if (structureLayer) {
       this.#structureLayer = structureLayer;
       // In the canvas as in pdf.js, since VoiceOver in Safari skips the elements, which have no size, outside of it.
       this.canvas.append(structureLayer.element);
     }
+    this.#addLinksToContent();
   }
 
   /** @private */
   #createStructureLayer(tree, textLayerElement) {
     try {
-      const structureLayer = new PdfViewerStructureLayer(tree);
+      const structureLayer = new PdfViewerStructureLayer(tree, this.pageNumber);
       structureLayer.updateTextLayer(textLayerElement);
       return structureLayer;
     } catch {
@@ -437,20 +441,67 @@ export class PdfViewerPage {
     if (links.length) {
       this.element.append(layer);
       this.linkLayerElement = layer;
-      this.#addLinksToText();
     }
+    this.#addLinksToContent();
     return links;
   }
 
   /**
-   * Adds the links to the text, for assistive technology, once both the text
-   * layer and the link layer have rendered, in either order.
+   * Adds the links to the structure or to the text, for assistive technology,
+   * once both the structure and the link layer have rendered, in either
+   * order. As in pdf.js, the structure owns its links, and the other links
+   * are added to the text before them. Annotations of the structure that have
+   * no link, e.g. on a hidden layer, are removed from it. The links mixin
+   * names the links, see `getLinkAlt()`.
    * @private
    */
-  #addLinksToText() {
-    if (this.endOfContentElement && this.linkLayerElement) {
-      addLinksToText(this.textLayer.textDivs, [...this.linkLayerElement.children]);
+  #addLinksToContent() {
+    if (!this.#structureRendered || !this.#linksRendered) {
+      return;
     }
+    const links = [...(this.linkLayerElement?.children ?? [])];
+    const structureLayer = this.#structureLayer;
+    if (structureLayer) {
+      // Annotations that the viewer leaves out, so that no link of the structure stays without its link.
+      const linkIds = new Set(links.map((link) => link.id));
+      [...structureLayer.annotationIds]
+        .filter((id) => !linkIds.has(id))
+        .forEach((id) => structureLayer.removeAnnotation(id));
+      links.forEach((link) => {
+        structureLayer.getAriaAttributes(link.id)?.forEach((value, name) => {
+          if (name !== 'aria-label') {
+            link.setAttribute(name, value);
+          }
+        });
+      });
+    }
+    const textLinks = links.filter((link) => !structureLayer?.annotationIds.has(link.id));
+    // Comparing the positions of the text forces a layout, which a page without links does not need.
+    if (textLinks.length) {
+      addLinksToText(this.textLayer.textDivs, textLinks);
+    }
+  }
+
+  /**
+   * Returns the alternative text that the structure of a tagged PDF gives a
+   * link of this page, to name the link with, as in pdf.js.
+   *
+   * @param {HTMLElement} link
+   * @return {string | undefined}
+   */
+  getLinkAlt(link) {
+    return this.#structureLayer?.getLinkAlt(link.id);
+  }
+
+  /**
+   * Returns the text that a link of this page owns in the structure of a
+   * tagged PDF, to name a link that covers no text with.
+   *
+   * @param {HTMLElement} link
+   * @return {string | undefined}
+   */
+  getLinkText(link) {
+    return this.#structureLayer?.getLinkText(link.id);
   }
 
   cancel() {
@@ -469,6 +520,7 @@ export class PdfViewerPage {
     this.textLayerElement = null;
     this.endOfContentElement = null;
     this.#structureLayer = null;
+    this.#structureRendered = false;
     this.linkLayerElement?.remove();
     this.linkLayerElement = null;
     this.#linksRendered = false;
