@@ -114,7 +114,7 @@ how to generate them.
 
 ## Install size
 
-- The package depends on `pdfjs-dist`, which takes about 35 MB unpacked. Only the parts that the
+- The package depends on `pdfjs-dist`, which takes about 38 MB unpacked. Only the parts that the
   viewer imports go into the browser bundle.
 - `pdfjs-dist` has an optional dependency, `@napi-rs/canvas`, with native binaries of about
   30 MB. pdf.js uses it only in Node.js, and it is not part of the browser bundle. To skip it,

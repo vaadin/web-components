@@ -302,8 +302,7 @@ export class PdfViewerPage {
     container.className = 'text-layer';
     this.element.append(container);
 
-    // As in the viewer of pdf.js, the text layer reads the stream itself. `getTextContent()`
-    // iterates the stream with `for await`, which Safari 26 and earlier do not support.
+    // As in the viewer of pdf.js, the text layer reads the stream itself.
     const textLayer = new TextLayer({
       textContentSource: this.pdfPage.streamTextContent({ includeMarkedContent: true }),
       container,
