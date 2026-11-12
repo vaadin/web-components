@@ -104,7 +104,6 @@ describe('find', () => {
       sinon.restore();
     });
 
-    /** Holds the text of all pages until released, so that a search waits for it. */
     async function holdText(): Promise<() => void> {
       const prototype = await getPdfPagePrototype();
       const getTextContent = prototype.getTextContent;
@@ -150,8 +149,7 @@ describe('find', () => {
       });
 
       it('should find matches when streams are not async iterable', async () => {
-        // Safari 26 and earlier cannot iterate a ReadableStream with `for await`. `getTextContent()` of pdf.js
-        // reads the stream without it, and this test fails if an update of pdf.js starts to use it.
+        // Safari 26 and earlier cannot iterate a ReadableStream with `for await`, which pdf.js could start to use.
         const descriptor = Object.getOwnPropertyDescriptor(ReadableStream.prototype, Symbol.asyncIterator);
         delete (ReadableStream.prototype as Partial<ReadableStream>)[Symbol.asyncIterator];
         try {

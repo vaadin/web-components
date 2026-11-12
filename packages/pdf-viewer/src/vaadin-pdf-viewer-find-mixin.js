@@ -11,7 +11,7 @@
 import { issueWarning } from '@vaadin/component-base/src/warnings.js';
 import { createPageText, findInText, normalizeText } from './pdf-viewer-find.js';
 
-/** The number of pages whose text is loaded at a time when searching. */
+/** Pages whose text loads at a time, so that rendering does not wait behind the text of all pages. */
 const SEARCH_BATCH = 10;
 
 /**
@@ -19,25 +19,21 @@ const SEARCH_BATCH = 10;
  */
 export const PdfViewerFindMixin = (superClass) =>
   class PdfViewerFindMixinClass extends superClass {
-    /**
-     * The normalized text of each page for searching, by page index. Holds
-     * the promise while the text loads.
-     * @type {Map<number, Promise<import('./pdf-viewer-find.js').PdfViewerNormalizedText>>}
-     */
+    /** @type {Map<number, Promise<import('./pdf-viewer-find.js').PdfViewerNormalizedText>>} */
     #pageTexts = new Map();
 
-    /** Incremented on every search and document unload, to drop results of an outdated search. */
     #searchId = 0;
 
-    /** Incremented on every `find()` call, so that only the last call runs once the document is ready. */
+    /** Drops a `find()` call that waits for the document when another call comes. */
     #callId = 0;
 
     /**
      * Searches the document for the given text and fires `find-result` with
-     * the number of matches. While the document loads, it runs once loaded.
-     * Does nothing without a document, or when the viewer is not attached.
-     * Of several `find()` calls in a row, only the last one runs. A new `src`
-     * stops a running search, which then fires no `find-result`.
+     * the number of matches.
+     *
+     * The search waits while the document loads. It fires no `find-result`
+     * without a document, when the viewer is not attached, when another
+     * `find()` call follows, or when `src` changes during the search.
      *
      * @param {string} text
      */
@@ -46,8 +42,7 @@ export const PdfViewerFindMixin = (superClass) =>
     }
 
     /**
-     * Override method from `PdfViewerDocumentMixin` to forget the text of
-     * the previous document and stop a running search.
+     * Override method from `PdfViewerDocumentMixin` to forget the text and stop a running search.
      * @protected
      * @override
      */
@@ -58,8 +53,7 @@ export const PdfViewerFindMixin = (superClass) =>
     }
 
     /**
-     * Runs a `find()` call once the document is ready, unless another call
-     * came meanwhile.
+     * @param {() => void} callback
      * @private
      */
     #runWhenReady(callback) {
@@ -72,16 +66,12 @@ export const PdfViewerFindMixin = (superClass) =>
       });
     }
 
-    /**
-     * Stops a running search.
-     * @private
-     */
+    /** @private */
     #resetSearch() {
       this.#searchId += 1;
     }
 
     /**
-     * Searches the document for the text and fires `find-result`.
      * @param {string} query
      * @private
      */
@@ -91,7 +81,7 @@ export const PdfViewerFindMixin = (superClass) =>
       const pageIndexes = Array.from({ length: this.pageCount }, (_, index) => index);
       let matchCount = 0;
 
-      // A query of white space or diacritics only finds nothing, without loading the text.
+      // Skips loading the text for a query that normalizes to nothing, such as only accents.
       if (normalizeText(query).text.trim()) {
         for (let start = 0; start < pageIndexes.length; start += SEARCH_BATCH) {
           const batch = pageIndexes.slice(start, start + SEARCH_BATCH);
@@ -107,7 +97,8 @@ export const PdfViewerFindMixin = (superClass) =>
     }
 
     /**
-     * Returns the normalized text of a page for searching, loading it when needed.
+     * @param {number} pageIndex
+     * @return {Promise<import('./pdf-viewer-find.js').PdfViewerNormalizedText>}
      * @private
      */
     #getPageText(pageIndex) {
