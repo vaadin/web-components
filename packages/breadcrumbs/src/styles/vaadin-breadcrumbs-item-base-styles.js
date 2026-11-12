@@ -35,6 +35,7 @@ export const breadcrumbsItemStyles = css`
 
   :host(:not([slot='overlay'])) :is([part='link'], [part='nolink']) {
     margin-inline: calc(var(--vaadin-padding-inline-container) * -1);
+    margin-block: calc(var(--vaadin-padding-block-container) * -1);
   }
 
   [part='link'] {

@@ -200,4 +200,16 @@
     margin-top: var(--lumo-space-xs) !important;
     margin-bottom: var(--lumo-space-xs) !important;
   }
+
+  @scope {
+    :scope:has(vaadin-navigation-layout[slot='drawer']) {
+      [part='drawer'] {
+        width: auto;
+      }
+
+      ::slotted(vaadin-navigation-layout:not([collapsed])) {
+        width: var(--vaadin-app-layout-drawer-width, 16em);
+      }
+    }
+  }
 }

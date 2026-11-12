@@ -49,6 +49,7 @@ export const buttonStyles = css`
   [part='label'] {
     overflow: hidden;
     text-overflow: ellipsis;
+    flex: var(--vaadin-button-label-flex);
   }
 
   :host(:is([focus-ring], :focus-visible)) {
@@ -101,6 +102,18 @@ export const buttonStyles = css`
       --vaadin-button-border-color: GrayText !important;
       --vaadin-button-text-color: GrayText !important;
       opacity: 1;
+    }
+  }
+
+  @container style(--vaadin-navigation-layout-collapsed: 1) {
+    :host {
+      width: var(--vaadin-icon-size, 1lh);
+      box-sizing: content-box;
+    }
+
+    ::slotted(vaadin-badge[slot='suffix']) {
+      translate: -100% -50%;
+      scale: 0.75;
     }
   }
 `;

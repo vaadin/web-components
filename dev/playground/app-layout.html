@@ -1,0 +1,570 @@
+<!doctype html>
+<html lang="en">
+  <head>
+    <meta charset="UTF-8" />
+    <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+    <title>App Layout</title>
+    <script type="module" src="../common.js"></script>
+
+    <script type="module">
+      import '@vaadin/avatar';
+      import '@vaadin/app-layout';
+      import '@vaadin/app-layout/vaadin-drawer-toggle.js';
+      import '@vaadin/icon';
+      import '@vaadin/side-nav';
+      import '@vaadin/breadcrumbs';
+      import '@vaadin/icon';
+      import '@vaadin/button';
+      import '@vaadin/badge';
+      import '@vaadin/card';
+      import '@vaadin/vertical-layout';
+      import '@vaadin/horizontal-layout';
+      import '@vaadin/scroller';
+      import '@vaadin/switch';
+      import '@vaadin/grid/all-imports';
+      import '@vaadin/master-detail-layout';
+      import '@vaadin/scroller';
+      import '@vaadin/navigation-layout';
+      import '@vaadin/navigation-layout/vaadin-navigation-layout-toggle.js';
+      import '@vaadin/tooltip';
+
+      const params = new URLSearchParams(location.search);
+      const example = params.get('example');
+
+      if (example) {
+        // Rendered inside an iframe: show a single example
+        document.documentElement.classList.add('example');
+
+        const navLayoutContent = document.getElementById('nav-layout-content').content;
+        const viewContent = document.getElementById('view-content').content;
+
+        document.body.replaceChildren(document.getElementById(example).content.cloneNode(true));
+
+        const navLayout = document.querySelector('vaadin-navigation-layout[slot]');
+        navLayout.prepend(navLayoutContent.cloneNode(true));
+        if (navLayout.slot === 'navbar') {
+          navLayout.querySelectorAll('vaadin-tooltip').forEach((tooltip) => {
+            tooltip.position = 'bottom';
+          });
+        } else {
+          navLayout.setAttribute('collapsed', '');
+        }
+
+        const layout = document.querySelector('vaadin-app-layout');
+        layout.append(viewContent.cloneNode(true));
+
+        // Mirror the options set by the parent page as classes on the iframe element
+        const applyOptions = () => {
+          const { classList } = window.frameElement;
+          document.documentElement.classList = classList;
+          document.documentElement.classList.add('example');
+        };
+        applyOptions();
+        new MutationObserver(applyOptions).observe(window.frameElement, { attributeFilter: ['class'] });
+
+        // Fake navigation: prevent actual navigation, update 'current' item manually
+        layout.addEventListener('click', (e) => {
+          const link = e.composedPath().find((el) => el.localName === 'a');
+          if (link) {
+            e.preventDefault();
+            if (link.href) {
+              layout.querySelectorAll('vaadin-side-nav-item').forEach((item) => item.removeAttribute('current'));
+              e.composedPath()
+                .find((el) => el.localName === 'vaadin-side-nav-item')
+                .setAttribute('current', '');
+            }
+          }
+        });
+      } else {
+        const theme = document.documentElement.dataset.theme;
+        document.querySelectorAll('iframe[data-example]').forEach((iframe) => {
+          const url = new URL(location.href);
+          url.search = '';
+          url.searchParams.set('example', iframe.dataset.example);
+          if (theme) {
+            url.searchParams.set('theme', theme);
+          }
+          iframe.src = url.href;
+        });
+
+        document.querySelector('#full-height').addEventListener('change', (e) => {
+          document.querySelectorAll('iframe').forEach((iframe) => iframe.classList.toggle('full-height', e.target.checked));
+        });
+
+        document.querySelector('#viewport-size').addEventListener('change', (e) => {
+          document.querySelectorAll('iframe').forEach((iframe) => {
+            iframe.classList.remove('desktop-size', 'tablet-size', 'phone-size');
+            // iframe.document.documentElement.classList.remove('desktop-size', 'tablet-size', 'phone-size');
+            if (e.target.value !== 'responsive') {
+              iframe.classList.add(`${e.target.value}-size`);
+              // iframe.document.documentElement.classList.add(`${e.target.value}-size`);
+            }
+            // Clear the size set by manually resizing the iframe
+            iframe.style.removeProperty('width');
+            iframe.style.removeProperty('height');
+          });
+        });
+      }
+    </script>
+
+    <style>
+      /* Styles relevant for the rail nav */
+      .app-logo {
+        display: flex;
+        align-items: baseline;
+        padding: var(--vaadin-side-nav-item-padding, var(--vaadin-padding-block-container) var(--vaadin-padding-inline-container));
+        gap: var(--vaadin-gap-m);
+        border: var(--vaadin-side-nav-border-width, 0) solid transparent;
+        font-size: var(--vaadin-side-nav-item-font-size, 1em);
+        line-height: var(--vaadin-side-nav-item-line-height, inherit);
+        font-weight: 650;
+        transition: 0.1s color;
+
+        vaadin-icon {
+          margin: calc(var(--vaadin-padding-xs) * -1);
+          width: calc(var(--vaadin-icon-size, 1lh) + var(--vaadin-padding-xs) * 2);
+          height: calc(var(--vaadin-icon-size, 1lh) + var(--vaadin-padding-xs) * 2);
+          --vaadin-icon-visual-size: 60%;
+        }
+
+        @container style(--vaadin-navigation-layout-collapsed: 1) {
+          width: var(--vaadin-icon-size, 1lh);
+          color: transparent;
+        }
+      }
+
+      /* TODO figure out selector specificity */
+      .example vaadin-navigation-layout > vaadin-button:has(vaadin-side-nav-item) {
+        padding: 0;
+        border: 0;
+        width: auto;
+
+        &::part(label) {
+          flex: auto;
+        }
+
+        vaadin-avatar[slot='prefix'] {
+          margin: calc(var(--vaadin-padding-xs) * -1);
+          width: calc(var(--vaadin-icon-size, 1lh) + var(--vaadin-padding-xs) * 2);
+          height: calc(var(--vaadin-icon-size, 1lh) + var(--vaadin-padding-xs) * 2);
+        }
+      }
+
+      /* Dev page styles */
+      html:not(.example) {
+        --vaadin-horizontal-layout-gap: var(--vaadin-gap-l);
+
+        h2 {
+          color: var(--vaadin-text-color-secondary);
+          font-size: 0.8rem;
+          font-weight: 500;
+        }
+
+        min-height: 300vh;
+      }
+
+      iframe {
+        display: block;
+        resize: both;
+        overflow: auto;
+        margin: 1.5rem 0 4rem;
+        width: 1200px;
+        height: 602px;
+        min-width: 200px;
+        min-height: 200px;
+        max-width: 100%;
+        border-radius: 12px;
+        border: 0;
+        box-shadow: 0 0 0 12px #000, 0 0 0 13px rgba(255, 255, 255, 0.1), 0 6px 24px 8px #000;
+
+        &:is(.desktop-size, .tablet-size, .phone-size) {
+          resize: none;
+          zoom: 0.75;
+        }
+
+        &.desktop-size {
+          width: 1440px;
+          height: 850px;
+        }
+
+        &.tablet-size {
+          width: 800px;
+          height: 1000px;
+          border-radius: 30px;
+        }
+
+        &.phone-size {
+          width: 390px;
+          height: 800px;
+          border-radius: 40px;
+        }
+      }
+
+      .segmented {
+        display: inline-grid;
+        grid-auto-flow: column;
+        padding: 3px;
+        border-radius: calc(var(--vaadin-radius-m) + 3px);
+        background: oklch(from var(--vaadin-background-color) clamp(0, (0.62 - l) * 1000, 1) 0 0 / 0.05);
+
+        input {
+          position: absolute;
+          opacity: 0;
+          pointer-events: none;
+        }
+
+        label {
+          padding: var(--vaadin-padding-xs) var(--vaadin-padding-s);
+          cursor: pointer;
+          user-select: none;
+          font-weight: 500;
+          color: var(--vaadin-text-color-secondary);
+
+          &:hover {
+            color: var(--vaadin-text-color);
+          }
+
+          &:has(:focus-visible) {
+            outline: 2px solid var(--vaadin-focus-ring-color);
+          }
+
+          &:has(input:checked) {
+            background: light-dark(hsla(0deg, 0%, 100%, 1), hsla(0deg, 0%, 100%, 0.2));
+            color: var(--vaadin-text-color);
+            box-shadow: var(--aura-shadow-s);
+            border-radius: var(--vaadin-radius-m);
+          }
+        }
+      }
+
+      .example {
+        --aura-background-color-dark: #090909;
+        color-scheme: dark;
+        --aura-content-color-scheme: light dark;
+        --vaadin-app-layout-drawer-width: 14rem;
+
+        body {
+          margin: 0;
+          --aura-accent-color-light: var(--aura-neutral);
+          --aura-accent-color-dark: var(--aura-neutral);
+        }
+
+        &.full-height,
+        &.full-height body {
+          height: 100%;
+        }
+
+        &.phone-size {
+          --safe-area-inset-top: 20px;
+          --safe-area-inset-bottom: 40px;
+        }
+      }
+
+      /* Example view styles */
+      @layer example-view {
+        .view {
+          --view-padding-inline: var(--vaadin-padding-xl);
+          --view-padding-block: var(--vaadin-padding-l);
+          --view-gap: var(--vaadin-padding-xl);
+          display: grid;
+          place-content: center;
+          padding-block: var(--view-padding-block);
+          gap: var(--view-gap) var(--view-padding-inline);
+          grid-template-columns: 0 minmax(0, var(--view-max-width, 100%)) 0;
+
+          > * {
+            grid-column: 2;
+          }
+
+          > [theme~="no-border"] {
+            grid-column: 1 / -1;
+          }
+
+          vaadin-grid[theme~="no-border"] {
+            &::part(first-column-cell) {
+              /* TODO needs a dedicated custom property for inline-start */
+              --vaadin-grid-cell-padding: var(--vaadin-padding-block-container) var(--vaadin-padding-inline-container) var(--vaadin-padding-block-container) var(--view-padding-inline);
+            }
+
+            &::part(last-column-cell) {
+              /* TODO needs a dedicated custom property for inline-start */
+              --vaadin-grid-cell-padding: var(--vaadin-padding-block-container) var(--view-padding-inline) var(--vaadin-padding-block-container) var(--vaadin-padding-inline-container);
+            }
+          }
+        }
+
+        :is(vaadin-horizontal-layout, vaadin-vertical-layout) > p {
+          margin-block: 0;
+        }
+
+        .text-secondary {
+          color: var(--vaadin-text-color-secondary);
+        }
+
+        .text-success {
+          color: var(--aura-green-text);
+        }
+
+        .text-warning {
+          color: var(--aura-yellow-text);
+        }
+
+        vaadin-icon:is([theme~="boxed"]) {
+          padding: var(--vaadin-padding-m);
+          box-sizing: content-box;
+          border-radius: var(--vaadin-radius-s);
+          border: 1px solid var(--aura-accent-border-color);
+          background-color: var(--aura-accent-surface);
+          color: var(--aura-accent-text-color);
+        }
+
+        vaadin-icon[theme~="filled"] {
+          background-color: var(--vaadin-text-color);
+          color: var(--vaadin-background-color);
+          border-radius: var(--vaadin-radius-m);
+        }
+
+        vaadin-horizontal-layout {
+          &[theme~="align-baseline"] {
+            align-items: baseline;
+          }
+
+          &[theme~="wrap-balance"] {
+            flex-wrap: balance;
+          }
+
+          &[theme~="stretch-items"] > * {
+            flex: 1 1 14rem; /* TODO how to define min-width */
+          }
+        }
+
+        .kpi {
+          font-size: 2rem;
+          line-height: 1.75rem;
+          font-weight: var(--aura-font-weight-semibold);
+        }
+      }
+    </style>
+  </head>
+
+  <body>
+    <vaadin-horizontal-layout theme="spacing align-baseline">
+      <vaadin-switch id="full-height" label="Scroll App Layout"></vaadin-switch>
+      <div id="viewport-size" class="segmented" role="radiogroup" aria-label="Viewport size">
+        <label><input type="radio" name="viewport-size" value="responsive" checked />Responsive</label>
+        <label><input type="radio" name="viewport-size" value="desktop" />Desktop</label>
+        <label><input type="radio" name="viewport-size" value="tablet" />Tablet</label>
+        <label><input type="radio" name="viewport-size" value="phone" />Phone</label>
+      </div>
+    </vaadin-horizontal-layout>
+
+    <h2 class="heading">Drawer</h2>
+    <iframe data-example="drawer"></iframe>
+
+    <h2 class="heading">Navbar</h2>
+    <iframe data-example="navbar"></iframe>
+
+    <template id="drawer">
+      <vaadin-app-layout>
+        <vaadin-navigation-layout slot="drawer">
+          <vaadin-navigation-layout-toggle slot="end" theme="tertiary"></vaadin-navigation-layout-toggle>
+        </vaadin-navigation-layout>
+      </vaadin-app-layout>
+    </template>
+
+    <template id="navbar">
+      <vaadin-app-layout>
+        <vaadin-navigation-layout slot="navbar"></vaadin-navigation-layout>
+      </vaadin-app-layout>
+    </template>
+
+    <template id="nav-layout-content">
+      <div class="app-logo" slot="start">
+        <vaadin-icon src="../assets/lucide-icons/users.svg" theme="filled" slot="prefix"></vaadin-icon>
+        HR App
+      </div>
+      <!-- <vaadin-text-field aria-label="Search" placeholder="Search" slot="start"></vaadin-text-field> -->
+      <vaadin-side-nav>
+        <vaadin-side-nav-item path="/home" current>
+          <vaadin-icon slot="prefix" src="../assets/lucide-icons/home.svg"></vaadin-icon>
+          Home
+          <vaadin-tooltip slot="tooltip" text="Home" aria-link-mode="none" position="end"></vaadin-tooltip>
+        </vaadin-side-nav-item>
+        <vaadin-side-nav-item path="/dev/playground/app-layout.html">
+          <vaadin-icon slot="prefix" src="../assets/lucide-icons/users.svg"></vaadin-icon>
+          People
+          <vaadin-tooltip slot="tooltip" text="People" aria-link-mode="none" position="end"></vaadin-tooltip>
+        </vaadin-side-nav-item>
+        <vaadin-side-nav-item path="/calendar">
+          <vaadin-icon slot="prefix" src="../assets/lucide-icons/calendar.svg"></vaadin-icon>
+          Calendar
+          <vaadin-tooltip slot="tooltip" text="Calendar" aria-link-mode="none" position="end"></vaadin-tooltip>
+          <vaadin-badge number="2" theme="info number-only" slot="suffix">Invitations</vaadin-badge>
+        </vaadin-side-nav-item>
+        <vaadin-side-nav-item path="/reports">
+          <vaadin-icon slot="prefix" src="../assets/lucide-icons/chart-pie.svg"></vaadin-icon>
+          Reports
+          <vaadin-tooltip slot="tooltip" text="Reports" aria-link-mode="none" position="end"></vaadin-tooltip>
+        </vaadin-side-nav-item>
+        <vaadin-side-nav-item path="/settings">
+          <vaadin-icon slot="prefix" src="../assets/lucide-icons/cog.svg"></vaadin-icon>
+          Settings
+          <vaadin-tooltip slot="tooltip" text="Settings" aria-link-mode="none" position="end"></vaadin-tooltip>
+        </vaadin-side-nav-item>
+      </vaadin-side-nav>
+
+      <vaadin-side-nav-item slot="end" path="support">
+        <vaadin-icon src="../assets/lucide-icons/life-buoy.svg" slot="prefix"></vaadin-icon>
+        Support
+        <vaadin-tooltip slot="tooltip" text="Support" aria-link-mode="none" position="end"></vaadin-tooltip>
+      </vaadin-side-nav-item>
+      <vaadin-button theme="tertiary" slot="end">
+        <vaadin-icon src="../assets/lucide-icons/bell.svg" slot="prefix"></vaadin-icon>
+        Notifications
+        <vaadin-badge slot="suffix" theme="filled error number-only" number="99">Unread</vaadin-badge>
+        <vaadin-tooltip slot="tooltip" text="Notifications" aria-link-mode="none" position="end"></vaadin-tooltip>
+      </vaadin-button>
+      <vaadin-button theme="tertiary" slot="end">
+        <vaadin-side-nav-item>
+          <vaadin-avatar theme="xsmall" name="Olivia" slot="prefix"></vaadin-avatar>
+          Olivia
+          <vaadin-badge slot="suffix" theme="dot success">Online</vaadin-badge>
+        </vaadin-side-nav-item>
+        <vaadin-tooltip slot="tooltip" text="Olivia" aria-link-mode="none" position="end"></vaadin-tooltip>
+      </vaadin-button>
+    </template>
+
+    <template id="view-content">
+      <vaadin-master-detail-layout master-size="200px" expand-detail detail-min-size="300px">
+        <vaadin-navigation-layout>
+          <div slot="start" class="app-logo">
+            <vaadin-drawer-toggle theme="small tertiary optional"></vaadin-drawer-toggle>
+            People
+          </div>
+          <!-- <vaadin-text-field aria-label="Search" placeholder="Search" slot="start"></vaadin-text-field> -->
+          <vaadin-side-nav>
+            <vaadin-side-nav-item path="people/directory">
+              Directory
+            </vaadin-side-nav-item>
+            <vaadin-side-nav-item path="people/org-chart">
+              Org Chart
+            </vaadin-side-nav-item>
+            <vaadin-side-nav-item path="people/time-off">
+              Time Off
+            </vaadin-side-nav-item>
+            <vaadin-side-nav-item path="people/onboarding">
+              Onboarding
+            </vaadin-side-nav-item>
+            <vaadin-side-nav-item path="people/benefits">
+              Benefits
+            </vaadin-side-nav-item>
+            <vaadin-side-nav-item path="people/compensation">
+              Compensation
+            </vaadin-side-nav-item>
+          </vaadin-side-nav>
+        </vaadin-navigation-layout>
+        <vaadin-scroller slot="detail" style="height: 100%;">
+          <section class="view">
+            <vaadin-horizontal-layout theme="spacing wrap align-baseline">
+              <vaadin-vertical-layout style="flex: 1">
+                <vaadin-breadcrumbs theme="xlarge">
+                  <vaadin-breadcrumbs-item path="/people/">People</vaadin-breadcrumbs-item>
+                  <vaadin-breadcrumbs-item role="heading" aria-level="1" current>Directory</vaadin-breadcrumbs-item>
+                </vaadin-breadcrumbs>
+                <p class="text-secondary">Find teammates, understand the shape of your organization, and stay connected</p>
+              </vaadin-vertical-layout>
+              <vaadin-button slot="end">
+                Add Person
+              </vaadin-button>
+            </vaadin-horizontal-layout>
+
+            <vaadin-horizontal-layout style="width: 100%;" theme="spacing wrap-balance stretch-items">
+              <vaadin-card theme="elevated" class="v-success">
+                <vaadin-icon slot="media" theme="boxed" src="../assets/lucide-icons/users.svg"></vaadin-icon>
+                <div slot="title">Total People</div>
+                <div slot="subtitle">
+                  <span class="text-success">+6 this month</span>
+                </div>
+                <div class="kpi">248</div>
+              </vaadin-card>
+              <vaadin-card theme="elevated" class="aura-accent-neutral">
+                <vaadin-icon slot="media" theme="boxed" src="../assets/lucide-icons/shuffle.svg"></vaadin-icon>
+                <div slot="title">Away Today</div>
+                <div slot="subtitle">5 back this week</div>
+                <div class="kpi">12</div>
+              </vaadin-card>
+              <vaadin-card theme="elevated" class="aura-accent-neutral">
+                <vaadin-icon slot="media" theme="boxed" src="../assets/lucide-icons/home.svg"></vaadin-icon>
+                <div slot="title">Work Remotely</div>
+                <div slot="subtitle">Across 14 countries</div>
+                <div class="kpi">68%</div>
+              </vaadin-card>
+              <vaadin-card theme="elevated" class="v-warning">
+                <vaadin-icon slot="media" theme="boxed" src="../assets/lucide-icons/file-text.svg"></vaadin-icon>
+                <div slot="title">Open Roles</div>
+                <div slot="subtitle">
+                  <span class="text-warning">3 priority hires</span>
+                </div>
+                <div class="kpi">9</div>
+              </vaadin-card>
+            </vaadin-horizontal-layout>
+
+            <vaadin-horizontal-layout theme="spacing wrap">
+              <vaadin-vertical-layout style="flex: 1">
+                <!-- TODO this makes for a smaller layout shift - but what is the rule when this gets added? -->
+                <h3>Team Members</h3>
+                <p class="text-secondary">248 people across 8 departments</p>
+              </vaadin-vertical-layout>
+              <vaadin-button slot="end" theme="tertiary">
+                Export
+              </vaadin-button>
+            </vaadin-horizontal-layout>
+
+            <vaadin-grid item-id-path="id" theme="no-border">
+              <vaadin-grid-selection-column></vaadin-grid-selection-column>
+              <vaadin-grid-column path="name" header="Name"></vaadin-grid-column>
+              <vaadin-grid-sort-column path="email" header="Email"></vaadin-grid-sort-column>
+              <vaadin-grid-filter-column path="address" header="Address"></vaadin-grid-filter-column>
+              <vaadin-grid-sort-column path="city" header="City"></vaadin-grid-sort-column>
+              <vaadin-grid-sort-column path="country" header="Country" text-align="end"></vaadin-grid-sort-column>
+
+              <span slot="empty-state">No items.</span>
+            </vaadin-grid>
+          </section>
+        </vaadin-scroller>
+      </vaadin-master-detail-layout>
+      <script>
+        const createItem = (id) => ({
+          name: `First Lastname ${id}`,
+          email: `first.lastname${id}@example.com`,
+          address: `${id} Main Street`,
+          city: `City ${id}`,
+          country: `Country ${id}`,
+          id,
+        });
+
+        // Generate sample data
+        const generateItems = (count) => {
+          return Array.from({ length: count }, (_, i) => createItem(i + 1));
+        };
+
+        const generateDataProvider = (rootLevelSize) => {
+          return ({ parentItem, page, pageSize }, cb) => {
+            if (!parentItem) {
+              const rootItems = generateItems(rootLevelSize);
+              const offset = page * pageSize;
+              cb(rootItems.slice(offset, offset + pageSize), rootItems.length);
+            } else {
+              const childId = parentItem.id + '-1';
+              const childItem = createItem(childId, parentItem.children);
+              cb([childItem], 1);
+            }
+          };
+        };
+
+        const grid = document.querySelector('vaadin-grid');
+        grid.dataProvider = generateDataProvider(100);
+      </script>
+    </template>
+  </body>
+</html>

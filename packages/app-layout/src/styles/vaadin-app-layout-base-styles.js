@@ -42,6 +42,12 @@ export const appLayoutStyles = css`
     --vaadin-app-layout-drawer-offset-left: 0px;
   }
 
+  :host(:is(:not([overlay]), :not([has-drawer]))) {
+    [part='content'] {
+      --vaadin-drawer-toggle-display: none;
+    }
+  }
+
   :host(:not([no-scroll])) [part~='content'] {
     overflow: auto;
   }
@@ -164,6 +170,8 @@ export const appLayoutStyles = css`
     bottom: 0;
     box-shadow: var(--vaadin-overlay-shadow, 0 8px 24px -4px rgba(0, 0, 0, 0.3));
     background: var(--vaadin-app-layout-drawer-background, var(--vaadin-background-color));
+    width: var(--_vaadin-app-layout-drawer-width);
+    --vaadin-navigation-layout-toggle-display: none;
   }
 
   :host([overlay]) [part='drawer'],
@@ -196,6 +204,32 @@ export const appLayoutStyles = css`
   [part='drawer'] ::slotted(vaadin-scroller) {
     flex: 1;
     overscroll-behavior: contain;
+  }
+
+  :host([overlay]) ::slotted(vaadin-navigation-layout[slot='drawer']) {
+    --vaadin-navigation-layout-collapsed: 0 !important;
+  }
+
+  :host(:not([overlay]):has(vaadin-navigation-layout[slot='drawer'])) [part='drawer'] {
+    width: auto;
+  }
+
+  :host(:not([overlay]):has(vaadin-navigation-layout[slot='drawer']))
+    ::slotted(vaadin-navigation-layout:not([collapsed])) {
+    width: var(--vaadin-app-layout-drawer-width);
+  }
+
+  @scope {
+    /* :not([overlay]) doesn't work here */
+    :scope:has(vaadin-navigation-layout[slot='drawer']) {
+      :where([part='drawer']) {
+        width: auto;
+      }
+
+      ::slotted(vaadin-navigation-layout:not([collapsed])) {
+        width: var(--_vaadin-app-layout-drawer-width);
+      }
+    }
   }
 
   @media (forced-colors: active) {

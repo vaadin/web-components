@@ -39,6 +39,10 @@ const sideNav = css`
     text-overflow: ellipsis;
     margin: 0;
   }
+
+  [part='children'] {
+    flex-direction: var(--vaadin-navigation-layout-direction, column);
+  }
 `;
 
 export const sideNavStyles = [sharedStyles, sideNav];
