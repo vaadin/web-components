@@ -104,6 +104,22 @@ describe('find', () => {
       sinon.restore();
     });
 
+    /** Holds the text of all pages until released, so that a search waits for it. */
+    async function holdText(): Promise<() => void> {
+      const prototype = await getPdfPagePrototype();
+      const getTextContent = prototype.getTextContent;
+      let release!: () => void;
+      const released = new Promise<void>((resolve) => {
+        release = resolve;
+      });
+      async function heldGetTextContent(this: PDFPageProxy, ...args: Parameters<PDFPageProxy['getTextContent']>) {
+        await released;
+        return getTextContent.apply(this, args);
+      }
+      sinon.stub(prototype, 'getTextContent').callsFake(heldGetTextContent);
+      return release;
+    }
+
     describe('find()', () => {
       it('should fire find-result with the text and the number of matches', async () => {
         const result = oneEvent(viewer, 'find-result');
@@ -134,7 +150,8 @@ describe('find', () => {
       });
 
       it('should find matches when streams are not async iterable', async () => {
-        // Safari 26 and earlier cannot iterate a ReadableStream with `for await`.
+        // Safari 26 and earlier cannot iterate a ReadableStream with `for await`. `getTextContent()` of pdf.js
+        // reads the stream without it, and this test fails if an update of pdf.js starts to use it.
         const descriptor = Object.getOwnPropertyDescriptor(ReadableStream.prototype, Symbol.asyncIterator);
         delete (ReadableStream.prototype as Partial<ReadableStream>)[Symbol.asyncIterator];
         try {
@@ -151,7 +168,8 @@ describe('find', () => {
       it('should run only the last of two find() calls in a row', async () => {
         const spy = sinon.spy();
         viewer.addEventListener('find-result', spy);
-        viewer.find('marker1');
+        // A blank query finishes without waiting for the text, so only the second call can drop it
+        viewer.find('   ');
         viewer.find('marker2');
         await oneEvent(viewer, 'find-result');
         await nextFrame();
@@ -159,11 +177,36 @@ describe('find', () => {
         expect(spy.firstCall.args[0].detail.query).to.equal('marker2');
       });
 
+      it('should drop a search that waits for the text when find() is called again', async () => {
+        const release = await holdText();
+        const spy = sinon.spy();
+        viewer.addEventListener('find-result', spy);
+        viewer.find('marker1');
+        await nextFrame();
+        viewer.find('marker2');
+        release();
+        await oneEvent(viewer, 'find-result');
+        await nextFrame();
+        expect(spy).to.be.calledOnce;
+        expect(spy.firstCall.args[0].detail.query).to.equal('marker2');
+      });
+
+      it('should load the text of each page once per document', async () => {
+        const spy = sinon.spy(await getPdfPagePrototype(), 'getTextContent');
+        let result = oneEvent(viewer, 'find-result');
+        viewer.find('marker1');
+        await result;
+        result = oneEvent(viewer, 'find-result');
+        viewer.find('marker2');
+        await result;
+        expect(spy.callCount).to.equal(viewer.pageCount);
+      });
+
       it('should find matches on pages after the first ten', async () => {
         await loadAndRender(viewer, createPdfUrl(12));
         const result = oneEvent(viewer, 'find-result');
-        viewer.find('Page 12');
-        expect((await result).detail.matchCount).to.equal(1);
+        viewer.find('Page');
+        expect((await result).detail.matchCount).to.equal(12);
       });
 
       it('should find once the document has loaded when called while it loads', async () => {
@@ -171,21 +214,6 @@ describe('find', () => {
         viewer.find('internal link');
         const event = await oneEvent(viewer, 'find-result');
         expect(event.detail).to.deep.equal({ query: 'internal link', matchCount: 1 });
-      });
-
-      it('should do nothing when not attached', async () => {
-        const spy = sinon.spy();
-        viewer.addEventListener('find-result', spy);
-        const parent = viewer.parentElement!;
-        viewer.remove();
-        viewer.find('marker1');
-        // The viewer releases the document when it stays detached
-        await nextFrame();
-        const idle = nextRenderIdle(viewer);
-        parent.appendChild(viewer);
-        await idle;
-        await nextFrame();
-        expect(spy).to.be.not.called;
       });
 
       it('should do nothing without src', async () => {
@@ -209,13 +237,27 @@ describe('find', () => {
       });
 
       it('should search the new document when called after src changes', async () => {
+        let result = oneEvent(viewer, 'find-result');
         viewer.find('marker1');
-        await oneEvent(viewer, 'find-result');
+        expect((await result).detail.matchCount).to.equal(1);
         await loadDocument(viewer, 'links.pdf');
-        const result = oneEvent(viewer, 'find-result');
+        result = oneEvent(viewer, 'find-result');
         viewer.find('marker1');
         const event = await result;
         expect(event.detail.matchCount).to.equal(0);
+      });
+
+      it('should not fire find-result for a search that a new src stops', async () => {
+        const release = await holdText();
+        const spy = sinon.spy();
+        viewer.addEventListener('find-result', spy);
+        viewer.find('marker1');
+        await nextFrame();
+        await loadDocument(viewer, 'links.pdf');
+        release();
+        await nextFrame();
+        await nextFrame();
+        expect(spy).to.be.not.called;
       });
 
       it('should load the text of a page again after it failed to load', async () => {
@@ -238,6 +280,19 @@ describe('find', () => {
       beforeEach(() => {
         spy = sinon.spy();
         viewer.addEventListener('find-result', spy);
+      });
+
+      it('should do nothing when not attached', async () => {
+        const parent = viewer.parentElement!;
+        viewer.remove();
+        viewer.find('marker1');
+        // The viewer releases the document when it stays detached
+        await nextFrame();
+        const idle = nextRenderIdle(viewer);
+        parent.appendChild(viewer);
+        await idle;
+        await nextFrame();
+        expect(spy).to.be.not.called;
       });
 
       it('should not run find() called while detached once the document loads', async () => {
