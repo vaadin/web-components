@@ -188,14 +188,19 @@ describe('vaadin-icon', () => {
       expect(svgElement.hasAttribute('stroke-linejoin')).to.be.false;
     });
 
+    function getUseHref() {
+      return svgElement.querySelector('use').getAttribute('href');
+    }
+
     it('should reference symbol from the loaded SVG', async () => {
-      respondWith('<svg></svg>');
+      respondWith('<svg><symbol id="symbol-id"></symbol></svg>');
       icon.src = './sprite-symbol.svg';
       icon.symbol = 'symbol-id';
       await nextRender();
 
       expect(icon.__fetch.firstCall.firstArg).to.equal('./sprite-symbol.svg');
-      expect(svgElement.querySelector('use[href="#symbol-id"]')).to.exist;
+      expect(getUseHref()).to.match(/^blob:.+#symbol-id$/u);
+      expectIcon('');
     });
 
     it('should use value from symbol when src path has a hash value', async () => {
@@ -204,10 +209,10 @@ describe('vaadin-icon', () => {
       icon.symbol = 'id-1';
       await nextRender();
 
-      expect(svgElement.querySelector('use[href="#id-1"]')).to.exist;
+      expect(getUseHref()).to.match(/^blob:.+#id-1$/u);
     });
 
-    it('should render SVG content and <use> if src is given in data format with symbol prop defined', async () => {
+    it('should reference symbol from data URL without rendering the content', async () => {
       const svgSprite = `<svg xmlns="http://www.w3.org/2000/svg">
           <defs>
             <symbol id="icon-cog" viewBox="0 0 32 32">
@@ -225,9 +230,8 @@ describe('vaadin-icon', () => {
       icon.symbol = 'icon-cog';
       await nextRender();
 
-      expect(svgElement.querySelectorAll('symbol')).to.have.lengthOf(2);
-      expect(svgElement.querySelectorAll('#icon-cog')).to.exist;
-      expect(svgElement.querySelector('use[href="#icon-cog"]')).to.exist;
+      expect(svgElement.querySelector('symbol')).to.be.null;
+      expect(getUseHref()).to.match(/^blob:.+#icon-cog$/u);
     });
 
     it('should fail if SVG is not found', async () => {
@@ -251,15 +255,63 @@ describe('vaadin-icon', () => {
       expect(console.error.firstCall.firstArg.message).to.contain('SVG element not found');
     });
 
-    it('should load the file and only render the element referenced by id', async () => {
-      respondWith('<svg><g id="first"><path d="M0 0h1"></path></g><g id="second"><path d="M0 0h2"></path></g></svg>');
+    it('should load the file and render the element referenced by id', async () => {
+      respondWith(`
+        <svg viewBox="0 0 100 100" fill="red">
+          <g id="first"><path d="M0 0h1v1H0z"></path></g>
+          <g id="second"><path d="M0 0h2v2H0z"></path></g>
+        </svg>
+      `);
       icon.src = 'sprite-id.svg#second';
       await nextRender();
 
       expect(icon.__fetch.firstCall.firstArg).to.equal('sprite-id.svg');
-      expect(svgElement.querySelector('use[href="#second"]')).to.exist;
+      expect(getUseHref()).to.match(/^blob:.+#second$/u);
       expect(svgElement.querySelector('#use-group').getAttribute('visibility')).to.be.equal('visible');
-      expect(svgElement.querySelector('#svg-group').getAttribute('visibility')).to.be.equal('hidden');
+      expect(svgElement.getAttribute('viewBox')).to.equal('0 0 24 24');
+      expect(svgElement.hasAttribute('fill')).to.be.false;
+      expectIcon('');
+
+      const use = svgElement.querySelector('use');
+      for (let i = 0; i < 50 && use.getBBox().width === 0; i++) {
+        await nextFrame();
+      }
+      expect(use.getBBox().width).to.equal(2);
+    });
+
+    it('should only include supported SVG content in the referenced file', async () => {
+      respondWith(`
+        <svg id="root" onload="init()">
+          <style>.st0 { fill: red; }</style>
+          <g id="first" onclick="onIconClick()"><path d="M0 0h1"></path></g>
+        </svg>
+      `);
+      icon.src = 'sprite-content.svg#first';
+      await nextRender();
+
+      const text = await (await fetch(getUseHref().split('#')[0])).text();
+      expect(text).to.include('id="first"');
+      expect(text).to.not.include('root');
+      expect(text).to.not.include('onload');
+      expect(text).to.not.include('onclick');
+      expect(text).to.not.include('style');
+    });
+
+    it('should share one URL between icons that reference the same file', async () => {
+      respondWith('<svg><g id="first"></g><g id="second"></g></svg>');
+      icon.src = 'sprite-shared.svg#first';
+      await nextRender();
+
+      const icon2 = fixtureSync('<vaadin-icon></vaadin-icon>');
+      sinon.stub(icon2, '__fetch');
+      icon2.src = 'sprite-shared.svg';
+      icon2.symbol = 'second';
+      await nextRender();
+
+      const href2 = icon2.shadowRoot.querySelector('use').getAttribute('href');
+      expect(icon2.__fetch.called).to.be.false;
+      expect(href2.split('#')[0]).to.equal(getUseHref().split('#')[0]);
+      expect(href2).to.match(/#second$/u);
     });
 
     it('should remove the reference if src is set to null', async () => {
@@ -270,23 +322,12 @@ describe('vaadin-icon', () => {
       icon.src = null;
       await nextRender();
       expect(svgElement.querySelector('use').hasAttribute('href')).to.be.false;
-      expect(svgElement.querySelector('#svg-group').hasAttribute('visibility')).to.be.false;
     });
 
     it('should set use group visibility to hidden when src is a standalone SVG', () => {
       respondWith('<svg></svg>');
       icon.src = 'standalone.svg';
       expect(svgElement.querySelector('#use-group').getAttribute('visibility')).to.be.equal('hidden');
-      expect(svgElement.querySelector('#svg-group').hasAttribute('visibility')).to.be.false;
-    });
-
-    it('should hide the content when the host is hidden', async () => {
-      respondWith(`<svg>${ANGLE_DOWN}</svg>`);
-      icon.src = 'hidden-host.svg';
-      await nextRender();
-
-      icon.style.visibility = 'hidden';
-      expect(getComputedStyle(svgElement.querySelector('#svg-group path')).visibility).to.equal('hidden');
     });
 
     it('should fetch the same src only once', async () => {

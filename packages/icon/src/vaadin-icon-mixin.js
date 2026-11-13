@@ -210,9 +210,9 @@ export const IconMixin = (superClass) =>
 
     /** @private */
     async __srcChanged(src, symbol) {
+      this.__useRef = undefined;
       if (!src) {
         this.svg = null;
-        this.__useRef = undefined;
         return;
       }
 
@@ -221,7 +221,6 @@ export const IconMixin = (superClass) =>
       this.icon = '';
       const [path, iconId] = src.split('#');
       const ref = symbol || iconId;
-      this.__useRef = ref ? `#${ref}` : undefined;
       try {
         if (!srcCache.has(path)) {
           srcCache.set(
@@ -244,14 +243,20 @@ export const IconMixin = (superClass) =>
               }),
           );
         }
-        const { svg, svgElement } = await srcCache.get(path);
-        this.svg = svg;
-        this.__viewBox = svgElement.getAttribute('viewBox');
-        this.__fill = svgElement.getAttribute('fill');
-        this.__stroke = svgElement.getAttribute('stroke');
-        this.__strokeWidth = svgElement.getAttribute('stroke-width');
-        this.__strokeLinecap = svgElement.getAttribute('stroke-linecap');
-        this.__strokeLinejoin = svgElement.getAttribute('stroke-linejoin');
+        const parsed = await srcCache.get(path);
+        if (src !== this.src || symbol !== this.symbol) {
+          return;
+        }
+        // Reference an element of a sprite, render a standalone icon inline
+        const root = ref ? null : parsed.svgElement;
+        this.svg = ref ? null : parsed.svg;
+        this.__useRef = ref ? `${parsed.url}#${ref}` : undefined;
+        this.__viewBox = root?.getAttribute('viewBox');
+        this.__fill = root?.getAttribute('fill');
+        this.__stroke = root?.getAttribute('stroke');
+        this.__strokeWidth = root?.getAttribute('stroke-width');
+        this.__strokeLinecap = root?.getAttribute('stroke-linecap');
+        this.__strokeLinejoin = root?.getAttribute('stroke-linejoin');
       } catch (e) {
         console.error(e);
         this.svg = null;

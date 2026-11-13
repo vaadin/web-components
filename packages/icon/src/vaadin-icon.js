@@ -108,7 +108,7 @@ class Icon extends IconMixin(ElementMixin(ThemableMixin(PolylitMixin(LumoInjecti
         stroke-linejoin="${ifDefined(this.__strokeLinejoin)}"
         aria-hidden="true"
       >
-        <g id="svg-group" visibility="${ifDefined(this.__useRef && 'hidden')}">${ensureSvgLiteral(this.svg)}</g>
+        <g id="svg-group">${ensureSvgLiteral(this.svg)}</g>
         <g id="use-group" visibility="${this.__useRef ? 'visible' : 'hidden'}">
           <use href="${ifDefined(this.__useRef)}" />
         </g>
