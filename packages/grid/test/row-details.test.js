@@ -103,17 +103,19 @@ describe('row details', () => {
       expect(bodyRows[1].getBoundingClientRect().bottom).to.be.closeTo(bodyRows[2].getBoundingClientRect().top, 1);
     });
 
-    it('should clear row padding bottom when details are closed', async () => {
+    it('should restore the row height when details are closed', async () => {
+      const rowHeight = bodyRows[1].offsetHeight;
       openRowDetails(1);
       closeRowDetails(1);
       await nextFrame();
-      expect(bodyRows[1].style.paddingBottom).to.equal('');
+      expect(bodyRows[1].offsetHeight).to.equal(rowHeight);
     });
 
-    it('should clear row padding bottom when renderer is cleared', () => {
+    it('should restore the row height when renderer is cleared', () => {
+      const rowHeight = bodyRows[1].offsetHeight;
       openRowDetails(1);
       grid.rowDetailsRenderer = null;
-      expect(bodyRows[1].style.paddingBottom).to.equal('');
+      expect(bodyRows[1].offsetHeight).to.equal(rowHeight);
     });
 
     it('should render the details', () => {
