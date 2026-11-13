@@ -10,6 +10,7 @@
  */
 import type { PDFDocumentProxy, PDFPageProxy, RenderTask, TextLayer } from 'pdfjs-dist';
 import type { PdfViewerLinkAnnotation } from './pdf-viewer-links.js';
+import type { PdfViewerStructureLinkName } from './pdf-viewer-structure-layer.js';
 
 /**
  * The maximum number of pixels of a page canvas. Larger canvases use too much
@@ -19,8 +20,8 @@ export declare const MAX_CANVAS_PIXELS: number;
 
 /**
  * Manages the DOM of a single page of the document: a placeholder sized to
- * the page, and the canvas and the text and link layers the page is rendered
- * to once it is needed.
+ * the page, and the canvas, the text layer, the link layer and the structure
+ * the page is rendered to once it is needed.
  */
 export declare class PdfViewerPage {
   constructor(pageNumber: number, size: { width: number; height: number });
@@ -74,9 +75,7 @@ export declare class PdfViewerPage {
     optionalContentConfig?: Awaited<ReturnType<PDFDocumentProxy['getOptionalContentConfig']>>,
   ): Promise<Array<{ link: HTMLAnchorElement; annotation: PdfViewerLinkAnnotation }>>;
 
-  getLinkAlt(link: HTMLElement): string | undefined;
-
-  getLinkText(link: HTMLElement): string | undefined;
+  renderStructureLayer(): Promise<Map<HTMLElement, PdfViewerStructureLinkName>>;
 
   cancel(): void;
 

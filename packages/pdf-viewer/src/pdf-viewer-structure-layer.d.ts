@@ -21,16 +21,16 @@ export interface PdfViewerStructTreeNode {
   children?: PdfViewerStructTreeNode[];
 }
 
+/** The alternative text and the text that the structure gives a link that it owns. */
+export interface PdfViewerStructureLinkName {
+  alt?: string;
+  text?: string;
+}
+
 export declare class PdfViewerStructureLayer {
-  constructor(tree: PdfViewerStructTreeNode);
+  constructor(tree: PdfViewerStructTreeNode, textLayerElement: HTMLElement, links: HTMLElement[]);
 
   readonly element: HTMLElement;
 
-  updateTextLayer(textLayerElement: HTMLElement): void;
-
-  addLinks(links: HTMLElement[]): Set<string>;
-
-  getLinkAlt(annotationId: string): string | undefined;
-
-  getLinkText(annotationId: string): string | undefined;
+  readonly linkNames: Map<HTMLElement, PdfViewerStructureLinkName>;
 }

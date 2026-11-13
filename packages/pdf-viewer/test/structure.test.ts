@@ -288,7 +288,7 @@ describe('structure', () => {
         page: 5,
         link: 7,
         entries: '',
-        // eslint-disable-next-line no-script-url -- the viewer must not create this link
+
         uri: 'javascript:void(0)',
       },
     ].forEach(({ name, page, link, entries, uri }) => {
@@ -457,9 +457,30 @@ describe('structure', () => {
     });
   });
 
-  describe('roles', () => {
-    function create(children: PdfViewerStructTreeNode[]) {
-      return new PdfViewerStructureLayer({ role: 'Root', children });
+  describe('structure layer', () => {
+    /** A text layer with a text element in each marked content, e.g. `p3R_mc0_0` in `p3R_mc0`. */
+    function createTextLayer(...ids: string[]) {
+      const textLayer = document.createElement('div');
+      textLayer.innerHTML = ids.map((id) => `<span class="markedContent" id="${id}"><span>Text</span></span>`).join('');
+      return textLayer;
+    }
+
+    function createLink(id: string) {
+      const link = document.createElement('a');
+      link.id = id;
+      return link;
+    }
+
+    function create(
+      children: PdfViewerStructTreeNode[],
+      links: HTMLElement[] = [],
+      textLayer = createTextLayer('p3R_mc0', 'p3R_mc1'),
+    ) {
+      return new PdfViewerStructureLayer({ role: 'Root', children }, textLayer, links);
+    }
+
+    function getOwnedIds(element: Element) {
+      return [...element.querySelectorAll('[aria-owns]')].map((owner) => owner.getAttribute('aria-owns'));
     }
 
     it('should not take a role from the inherited properties of objects', () => {
@@ -469,7 +490,7 @@ describe('structure', () => {
           children: [{ type: 'content', id: 'p3R_mc0' }],
         })),
       );
-      expect(element.querySelector('[role]:not([role="none"])')).to.be.null;
+      expect(element.querySelector('[role]')).to.be.null;
     });
 
     it('should expose a table of contents as a list', () => {
@@ -484,6 +505,13 @@ describe('structure', () => {
       ]);
       const list = element.querySelector('[role="list"]')!;
       expect(list.querySelectorAll('[role="listitem"]')).to.have.lengthOf(2);
+    });
+
+    it('should expose the level of a heading', () => {
+      const { element } = create([{ role: 'H2', children: [{ type: 'content', id: 'p3R_mc0' }] }]);
+      const heading = element.querySelector('[role="heading"]')!;
+      expect(heading.getAttribute('aria-level')).to.equal('2');
+      expect(getOwnedIds(heading)).to.deep.equal(['p3R_mc0_0']);
     });
 
     it('should expose the cells that span rows and columns', () => {
@@ -519,17 +547,17 @@ describe('structure', () => {
     });
 
     it('should expose headers by their scope', () => {
-      const header = (scope: 'Column' | 'Row') => ({
+      const header = (scope: 'Column' | 'Row', id: string) => ({
         role: 'TH',
         scope,
-        children: [{ type: 'content', id: 'p3R_mc0' }],
+        children: [{ type: 'content', id }],
       });
       const { element } = create([
         {
           role: 'Table',
           children: [
-            { role: 'TR', children: [header('Row')] },
-            { role: 'TBody', children: [{ role: 'TR', children: [header('Column')] }] },
+            { role: 'TR', children: [header('Row', 'p3R_mc0')] },
+            { role: 'TBody', children: [{ role: 'TR', children: [header('Column', 'p3R_mc1')] }] },
           ],
         },
       ]);
@@ -538,13 +566,13 @@ describe('structure', () => {
     });
 
     it('should expose a caption only as the caption of a table or a figure', () => {
-      const caption = { role: 'Caption', children: [{ type: 'content', id: 'p3R_mc0' }] };
+      const caption = { role: 'Caption', children: [] };
       const { element } = create([
         { role: 'Table', children: [caption] },
         { role: 'Figure', children: [caption] },
         { role: 'P', children: [caption] },
       ]);
-      const roles = [...element.querySelectorAll('[aria-owns="p3R_mc0"]')].map((owner) => owner.getAttribute('role'));
+      const roles = [...element.children].map((parent) => parent.firstElementChild!.getAttribute('role'));
       expect(roles).to.deep.equal(['caption', 'caption', null]);
     });
 
@@ -570,7 +598,7 @@ describe('structure', () => {
           ],
         },
       ]);
-      expect(element.querySelector('[aria-owns]')).to.be.null;
+      expect(getOwnedIds(element)).to.be.empty;
     });
 
     it('should not name a paragraph with its alternative text', () => {
@@ -592,6 +620,13 @@ describe('structure', () => {
       expect(nonStruct.hasAttribute('aria-label')).to.be.false;
     });
 
+    it('should add an image with the alternative text to a figure, which owns no text', () => {
+      const { element } = create([{ role: 'Figure', alt: 'Chart', children: [] }]);
+      const figure = element.querySelector('[role="figure"]')!;
+      expect(figure.hasAttribute('aria-label')).to.be.false;
+      expect(figure.querySelector('[role="img"]')!.getAttribute('aria-label')).to.equal('Chart');
+    });
+
     it('should own the text in marked content, and in nested marked content once, without artifacts', () => {
       const textLayer = document.createElement('div');
       textLayer.innerHTML = `
@@ -603,111 +638,122 @@ describe('structure', () => {
           <span class="markedContent" aria-hidden="true"><span>Artifact</span></span>
         </span>
       `;
-      const structure = create([
-        { role: 'P', children: [{ type: 'content', id: 'p3R_mc0' }] },
-        { role: 'Span', children: [{ type: 'content', id: 'p3R_mc1' }] },
-      ]);
-      structure.updateTextLayer(textLayer);
-      const owned = [...structure.element.querySelectorAll('[aria-owns]')].map((owner) =>
-        owner
-          .getAttribute('aria-owns')!
-          .split(' ')
-          .map((id) => textLayer.querySelector(`#${id}`)!.textContent),
+      const { element } = create(
+        [
+          { role: 'P', children: [{ type: 'content', id: 'p3R_mc0' }] },
+          { role: 'Span', children: [{ type: 'content', id: 'p3R_mc1' }] },
+        ],
+        [],
+        textLayer,
+      );
+      const owned = getOwnedIds(element).map((ids) =>
+        ids!.split(' ').map((id) => textLayer.querySelector(`#${id}`)!.textContent),
       );
       expect(owned).to.deep.equal([['A', 'C'], ['B']]);
     });
 
-    it('should only own the elements of content and annotations', () => {
+    it('should own the text of marked content once', () => {
+      const paragraph = { role: 'P', children: [{ type: 'content', id: 'p3R_mc0' }] };
+      const { element } = create([paragraph, paragraph]);
+      expect(getOwnedIds(element)).to.deep.equal(['p3R_mc0_0']);
+    });
+
+    it('should only own the text and the links of the page', () => {
+      // An element of the viewer that is no text of the page, with an id that the tree refers to.
+      const other = fixtureSync('<div id="other"></div>');
+      const { element } = create(
+        [
+          {
+            role: 'P',
+            children: [
+              { type: 'content', id: 'p3R_mc0' },
+              { type: 'content', id: 'p12R1_mc7' },
+              { type: 'content', id: 'p3R_mc1 other' },
+              { type: 'content', id: other.id },
+              { type: 'annotation', id: 'pdfjs_internal_id_5R' },
+              { type: 'annotation', id: 'pdfjs_internal_id_6R' },
+              { type: 'annotation', id: other.id },
+              { type: 'annotation', id: 'p3R_mc1' },
+              { type: 'object', id: '15R' },
+            ],
+          },
+        ],
+        [createLink('pdfjs_internal_id_5R')],
+        createTextLayer('p3R_mc0', 'p3R_mc1', 'p12R1_mc7'),
+      );
+      expect(getOwnedIds(element)).to.deep.equal(['p3R_mc0_0', 'p12R1_mc7_0', 'pdfjs_internal_id_5R']);
+    });
+
+    it('should not own a link directly in a table, which owns no content', () => {
+      const link = createLink('pdfjs_internal_id_5R');
+      const structure = create([{ role: 'Table', children: [{ type: 'annotation', id: link.id }] }], [link]);
+      expect(getOwnedIds(structure.element)).to.be.empty;
+      expect(structure.linkNames).to.be.empty;
+    });
+
+    it('should name an element by its alternative text when its annotation has no link, e.g. a form field', () => {
       const { element } = create([
-        {
-          role: 'P',
-          children: [
-            { type: 'content', id: 'p3R_mc0' },
-            { type: 'content', id: 'p12R1_mc7' },
-            { type: 'content', id: 'p3R_mcx content pages thumbnails' },
-            { type: 'annotation', id: 'pdfjs_internal_id_5R' },
-            { type: 'annotation', id: 'content' },
-            { type: 'object', id: '15R' },
-          ],
-        },
-      ]);
-      const owned = [...element.querySelectorAll('[aria-owns]')].map((owner) => owner.getAttribute('aria-owns'));
-      expect(owned).to.deep.equal(['p3R_mc0', 'p12R1_mc7', 'pdfjs_internal_id_5R']);
-    });
-
-    function createLink(id: string) {
-      const link = document.createElement('a');
-      link.id = id;
-      return link;
-    }
-
-    it('should not own an annotation directly in a table, which owns no content', () => {
-      const structure = create([{ role: 'Table', children: [{ type: 'annotation', id: 'pdfjs_internal_id_5R' }] }]);
-      expect(structure.element.querySelector('[aria-owns]')).to.be.null;
-      expect(structure.addLinks([createLink('pdfjs_internal_id_5R')])).to.be.empty;
-    });
-
-    it('should name an element by its alternative text when its annotation gets no link, e.g. a form field', () => {
-      const structure = create([
         { role: 'Form', alt: 'Name', children: [{ type: 'annotation', id: 'pdfjs_internal_id_5R' }] },
       ]);
-      const form = structure.element.querySelector('[role="form"]')!;
-      expect(form.hasAttribute('aria-label')).to.be.false;
-      structure.addLinks([]);
-      expect(form.getAttribute('aria-label')).to.equal('Name');
+      expect(element.querySelector('[role="form"]')!.getAttribute('aria-label')).to.equal('Name');
     });
 
-    it('should describe a link structure element by its alternative text when it gets no link', () => {
-      const structure = create([
-        {
-          role: 'Link',
-          alt: 'Docs',
-          children: [
-            { type: 'content', id: 'p3R_mc0' },
-            { type: 'annotation', id: 'pdfjs_internal_id_5R' },
-          ],
-        },
-      ]);
-      const element = structure.element.querySelector('[role="link"]')!;
-      structure.addLinks([]);
-      expect(element.hasAttribute('role')).to.be.false;
-      expect(element.getAttribute('aria-description')).to.equal('Docs');
+    it('should name the links of an element by its alternative text, rather than the element', () => {
+      const links = [createLink('pdfjs_internal_id_5R'), createLink('pdfjs_internal_id_6R')];
+      const structure = create(
+        [
+          {
+            role: 'Figure',
+            alt: 'Chart',
+            children: [{ type: 'content', id: 'p3R_mc0' }, ...links.map(({ id }) => ({ type: 'annotation', id }))],
+          },
+        ],
+        links,
+      );
+      // No image either, which has the alternative text of a figure without links.
+      expect(structure.element.querySelector('[aria-label], [role="img"]')).to.be.null;
+      expect(getOwnedIds(structure.element)).to.deep.equal(['p3R_mc0_0', ...links.map(({ id }) => id)]);
+      expect([...structure.linkNames]).to.deep.equal(links.map((link) => [link, { alt: 'Chart', text: undefined }]));
     });
 
-    it('should not add an image for a figure with a link, which its alternative text names', () => {
-      const structure = create([
-        {
-          role: 'Figure',
-          alt: 'Chart',
-          children: [
-            { type: 'content', id: 'p3R_mc0' },
-            { type: 'annotation', id: 'pdfjs_internal_id_5R' },
-          ],
-        },
-      ]);
-      expect(structure.element.querySelector('[role="img"]')).to.be.null;
-      expect(structure.getLinkAlt('pdfjs_internal_id_5R')).to.equal('Chart');
-    });
+    describe('link structure element', () => {
+      const node: PdfViewerStructTreeNode = {
+        role: 'Link',
+        alt: 'Docs',
+        children: [
+          { type: 'content', id: 'p3R_mc0' },
+          { role: 'Span', children: [{ type: 'content', id: 'p3R_mc1' }] },
+          { type: 'annotation', id: 'pdfjs_internal_id_5R' },
+          { type: 'annotation', id: 'pdfjs_internal_id_6R' },
+        ],
+      };
 
-    it('should keep the role of a link structure element until a link takes its place', () => {
-      const structure = create([
-        {
-          role: 'Link',
-          alt: 'Docs',
-          children: [
-            { type: 'content', id: 'p3R_mc0' },
-            { type: 'annotation', id: 'pdfjs_internal_id_5R' },
-          ],
-        },
-      ]);
-      const element = structure.element.querySelector('[role="link"]')!;
-      expect(structure.getLinkAlt('pdfjs_internal_id_5R')).to.equal('Docs');
-      const link = createLink('pdfjs_internal_id_5R');
-      expect(structure.addLinks([link])).to.have.all.keys('pdfjs_internal_id_5R');
-      expect(element.hasAttribute('role')).to.be.false;
-      expect(element.hasAttribute('aria-description')).to.be.false;
-      expect(link.getAttribute('aria-owns')).to.equal('p3R_mc0');
-      expect(structure.element.querySelector('[aria-owns="p3R_mc0"]')).to.be.null;
+      it('should give its text to its only link, which owns the text itself', () => {
+        const link = createLink('pdfjs_internal_id_5R');
+        const structure = create([node], [link]);
+        // Chrome ignores aria-owns of an element that a link owns.
+        expect(link.getAttribute('aria-owns')).to.equal('p3R_mc0_0 p3R_mc1_0');
+        expect(getOwnedIds(structure.element)).to.deep.equal([link.id]);
+        expect(structure.linkNames.get(link)).to.deep.equal({ alt: 'Docs', text: 'TextText' });
+        expect(structure.element.querySelector('[role], [aria-description]')).to.be.null;
+      });
+
+      it('should keep its text and describe it by its alternative text without a link', () => {
+        const { element } = create([node]);
+        expect(getOwnedIds(element)).to.deep.equal(['p3R_mc0_0', 'p3R_mc1_0']);
+        expect(element.querySelector('[role]')).to.be.null;
+        expect(element.firstElementChild!.getAttribute('aria-description')).to.equal('Docs');
+      });
+
+      it('should keep its text with several links, which do not share it', () => {
+        const links = [createLink('pdfjs_internal_id_5R'), createLink('pdfjs_internal_id_6R')];
+        const structure = create([node], links);
+        expect(getOwnedIds(structure.element)).to.deep.equal(['p3R_mc0_0', 'p3R_mc1_0', ...links.map(({ id }) => id)]);
+        links.forEach((link) => {
+          expect(link.hasAttribute('aria-owns')).to.be.false;
+          expect(structure.linkNames.get(link)).to.deep.equal({ alt: 'Docs', text: undefined });
+        });
+      });
     });
   });
 });

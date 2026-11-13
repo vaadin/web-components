@@ -1032,8 +1032,6 @@ snapshots["vaadin-pdf-viewer page tagged"] =
           </span>
           <span>
             <span role="none">
-              <span>
-              </span>
             </span>
             <span aria-owns="pdfjs_internal_id_11R">
             </span>

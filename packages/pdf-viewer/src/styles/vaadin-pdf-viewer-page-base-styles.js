@@ -40,8 +40,7 @@ export const pdfViewerPageStyles = css`
   }
 
   /* Blocks as in HTML, so that screen readers start a new line at a heading or a paragraph */
-  .struct-tree
-    [role]:not([role='code'], [role='emphasis'], [role='img'], [role='link'], [role='none'], [role='strong']) {
+  .struct-tree [role]:not([role='code'], [role='emphasis'], [role='img'], [role='none'], [role='strong']) {
     display: block;
   }
 

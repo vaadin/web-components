@@ -69,17 +69,18 @@ how to generate them.
   - Its `_zoomFactor` getter reads `_scale`, in units of the actual page size.
 - `PdfViewerTextLayerMixin` renders the text layer of each rendered page and sets the document language on the
   pages. A page loads its text each time it renders, as pdf.js' own viewer does.
-  - The page renders the structure of a tagged PDF right after its text layer, as pdf.js' own viewer does.
-    The structure has no state of the viewer, so it has no mixin.
-  - Unlike in pdf.js, `renderTextLayer()` waits for the structure. The links mixin names the links by the
-    structure right after their layer renders, so `render-idle` comes once the links have their final names.
 - `PdfViewerLinksMixin` adds the links of each rendered page and follows internal links with `_scrollToPage()`.
-  - The page adds the links to the structure or to the text once both the structure and the links have rendered.
-    A page without structure counts as rendered once its text layer has rendered.
+  - It then renders the structure of a tagged PDF and names the links that the structure owns. The structure
+    has no state of the viewer, so it has no mixin.
 - After a page canvas renders, `PdfViewerRenderMixin` awaits `_renderPageLayers(page)`. Each override awaits
-  `super` first, so the layers render in the order of the mixins: text and structure, then links.
-- The page view owns the DOM of a page: the canvas, the text layer, the structure and the link layer. Its methods
+  `super` first, so the layers render in the order of the mixins: text, then links, then structure.
+  `render-idle` comes once the links have their final names.
+- The page view owns the DOM of a page: the canvas, the text layer, the link layer and the structure. Its methods
   check after each await that the page still has the same canvas or text layer, so a released page gets no layers.
+- `PdfViewerStructureLayer` creates the structure in one pass over the structure tree of pdf.js. It renders last,
+  once per text layer, so it gets the rendered text layer and the links, and keeps no state for later.
+  - It refers only to elements that exist: an annotation without link, e.g. on a hidden layer, is left out.
+  - A page whose text layer fails renders its structure when the text layer renders, with the next canvas.
 - `PdfViewerKeyboardMixin` handles the keyboard shortcuts.
 - `PdfViewerToolbarMixin` renders the header and the toolbar. Its controls are in the light DOM, so a theme
   styles the page field like any other `vaadin-integer-field`. The `slotContent()` directive renders them, so
@@ -120,9 +121,9 @@ how to generate them.
 - A link that wraps to the next line is clickable only on its words, which the `QuadPoints` of the annotation
   give. Its focus ring goes around these words.
 - Tagged PDFs have a structure of headings, lists, tables and figures. As in pdf.js, an element tree in the
-  canvas exposes it to screen readers. Its elements own the text layer elements with `aria-owns`.
+  canvas exposes it to screen readers. Its elements own the text layer elements and the links with `aria-owns`.
 - The canvas has the `presentation` role, so that its content stays visible to screen readers. Each new
-  canvas of the page gets the tree.
+  canvas of the page takes the tree from the previous one.
 - Outside of the canvas, VoiceOver in Safari skips the elements of the tree. They then have the size of an
   empty span, not the size of the text that they own.
 - Elements of the tree that are blocks in HTML, such as headings and paragraphs, have `display: block`.
@@ -132,9 +133,10 @@ how to generate them.
 - The links mixin names all links. It uses the alternative text that the structure gives a link, as in pdf.js.
 - A link that covers no text, such as a thin link in a table of contents, gets the text that it owns in the
   structure as its name. In pdf.js, this text names such a link, as pdf.js gives it no name.
-- As in pdf.js, a link of the structure owns the text of its structure element. Other links are added to the
-  text before them, so screen readers read them in the order of the text.
-- A link of the structure without a link element, e.g. on a hidden layer, loses its role. Its text is read as text.
+- A `Link` structure element has no role, as the links of the link layer are the links. As in pdf.js, its only
+  link owns its text. Without a link, e.g. on a hidden layer, or with several links, its text is read as text.
+- Links that the structure does not own, and all links of an untagged page, are added to the text before them,
+  so screen readers read them in the order of the text.
 - When a focused link loses its page, focus moves to the page area.
 
 ## Install size

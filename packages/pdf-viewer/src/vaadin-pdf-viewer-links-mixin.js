@@ -28,7 +28,7 @@ export const PdfViewerLinksMixin = (superClass) =>
   class PdfViewerLinksMixinClass extends superClass {
     /**
      * What the accessible name of each link is made of, to update it when the localization changes.
-     * @type {WeakMap<HTMLElement, { text: string, alt?: string, structureText?: string, url?: string, action?: string, targetPage: number | null }>}
+     * @type {WeakMap<HTMLElement, { text: string, url?: string, action?: string, targetPage: number | null }>}
      */
     #linkLabels = new WeakMap();
 
@@ -43,7 +43,8 @@ export const PdfViewerLinksMixin = (superClass) =>
 
     /**
      * Override method from `PdfViewerRenderMixin` to add the links of the
-     * page over the text layer.
+     * page over the text layer, and then the structure of a tagged PDF,
+     * which owns the text and the links.
      * @protected
      * @override
      */
@@ -54,7 +55,7 @@ export const PdfViewerLinksMixin = (superClass) =>
       const optionalContentConfig = await this._pdfDocument?.getOptionalContentConfig({ intent: 'display' });
       const links = await page.renderLinkLayer((annotation) => this.#followLink(annotation), optionalContentConfig);
       await this.#nameLinks(links);
-      this.#nameLinksByStructure(page);
+      this.#nameLinksByStructure(await page.renderStructureLayer());
     }
 
     /**
@@ -79,27 +80,21 @@ export const PdfViewerLinksMixin = (superClass) =>
     }
 
     /**
-     * Names the links of a page by their alternative text in the structure, or by their text in
-     * the structure when they cover no text, as in pdf.js.
+     * Names the links that the structure of a tagged PDF owns by their alternative text, as in
+     * pdf.js, or by the text that they own when they cover no text.
      * @private
      */
-    #nameLinksByStructure(page) {
-      [...(page.linkLayerElement?.children ?? [])].forEach((link) => {
+    #nameLinksByStructure(linkNames) {
+      linkNames.forEach(({ alt, text }, link) => {
         const parts = this.#linkLabels.get(link);
-        const alt = collapseWhitespace(page.getLinkAlt(link));
-        const structureText = collapseWhitespace(page.getLinkText(link));
-        if (parts && (parts.alt !== alt || parts.structureText !== structureText)) {
-          Object.assign(parts, { alt, structureText });
-          this.#updateLinkLabel(link);
-        }
+        parts.text = collapseWhitespace(alt) || parts.text || collapseWhitespace(text);
+        this.#updateLinkLabel(link);
       });
     }
 
     /** @private */
     #updateLinkLabel(link) {
-      const { alt, structureText, ...parts } = this.#linkLabels.get(link);
-      const text = alt || parts.text || structureText;
-      link.setAttribute('aria-label', getLinkLabel({ ...parts, text }, this.__effectiveI18n));
+      link.setAttribute('aria-label', getLinkLabel(this.#linkLabels.get(link), this.__effectiveI18n));
     }
 
     /** @private */

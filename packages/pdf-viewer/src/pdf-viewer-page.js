@@ -76,11 +76,8 @@ export class PdfViewerPage {
    */
   #structTree = null;
 
-  /**
-   * Undefined until the structure of the current text layer has rendered, and null for a page without one.
-   * @type {PdfViewerStructureLayer | null | undefined}
-   */
-  #structureLayer;
+  /** Set once the structure of the current text layer is rendered, also when the page has none. */
+  #structureRendered = false;
 
   /**
    * @param {number} pageNumber
@@ -239,13 +236,12 @@ export class PdfViewerPage {
     }
     this.renderTask = null;
 
-    if (this.canvas) {
-      this.#freeCanvas(this.canvas);
-    }
     // The structure in the canvas comes first in reading order.
     this.element.prepend(canvas);
-    if (this.#structureLayer) {
-      canvas.append(this.#structureLayer.element);
+    if (this.canvas) {
+      // The new canvas takes the structure, the only content of a canvas.
+      canvas.append(...this.canvas.children);
+      this.#freeCanvas(this.canvas);
     }
     this.canvas = canvas;
     this.renderedScale = scale;
@@ -345,42 +341,6 @@ export class PdfViewerPage {
       endOfContent.className = 'end-of-content';
       container.append(endOfContent);
       this.endOfContentElement = endOfContent;
-      // As in pdf.js, the structure renders after the text layer, whose elements it owns.
-      await this.#renderStructureLayer();
-    }
-  }
-
-  /**
-   * Renders the structure of a tagged PDF page for assistive technology.
-   * @private
-   */
-  async #renderStructureLayer() {
-    const textLayerElement = this.textLayerElement;
-    // A page with a broken structure is shown as untagged.
-    this.#structTree ??= this.pdfPage.getStructTree().catch(() => null);
-    const tree = await this.#structTree;
-    // The page may have been released meanwhile.
-    if (this.textLayerElement !== textLayerElement) {
-      return;
-    }
-    const structureLayer = tree ? this.#createStructureLayer(tree, textLayerElement) : null;
-    this.#structureLayer = structureLayer;
-    if (structureLayer) {
-      // In the canvas as in pdf.js, since VoiceOver in Safari skips the elements, which have no size, outside of it.
-      this.canvas.append(structureLayer.element);
-    }
-    this.#addLinksToContent();
-  }
-
-  /** @private */
-  #createStructureLayer(tree, textLayerElement) {
-    try {
-      const structureLayer = new PdfViewerStructureLayer(tree);
-      structureLayer.updateTextLayer(textLayerElement);
-      return structureLayer;
-    } catch {
-      // As in pdf.js, a structure that fails to render does not break the other layers.
-      return null;
     }
   }
 
@@ -441,43 +401,50 @@ export class PdfViewerPage {
       this.element.append(layer);
       this.linkLayerElement = layer;
     }
-    this.#addLinksToContent();
     return links;
   }
 
   /**
-   * Adds the links to the structure or to the text before them, once both have rendered, in either order.
-   * @private
+   * Makes assistive technology read the text and the links of the page in reading order, once the text layer
+   * and the links have rendered. The structure of a tagged PDF owns its text and its links. The other links,
+   * and all the links of a page without structure, are added to the text before them.
+   *
+   * @return {Promise<Map<HTMLElement, { alt?: string, text?: string }>>} the links that the structure owns, with
+   *   the alternative text and the text that it gives them, or none when the structure is rendered already
    */
-  #addLinksToContent() {
-    if (this.#structureLayer === undefined || !this.#linksRendered) {
-      return;
+  async renderStructureLayer() {
+    const textLayerElement = this.textLayerElement;
+    if (!textLayerElement || !this.#linksRendered || this.#structureRendered) {
+      return new Map();
     }
+    // A page whose structure fails to load is shown as untagged.
+    this.#structTree ??= this.pdfPage.getStructTree().catch(() => null);
+    const tree = await this.#structTree;
+    // The page may have been released meanwhile.
+    if (this.textLayerElement !== textLayerElement) {
+      return new Map();
+    }
+    this.#structureRendered = true;
+
     const links = [...(this.linkLayerElement?.children ?? [])];
-    const structureLinkIds = this.#structureLayer?.addLinks(links);
-    const textLinks = links.filter((link) => !structureLinkIds?.has(link.id));
+    let linkNames = new Map();
+    if (tree) {
+      try {
+        const structureLayer = new PdfViewerStructureLayer(tree, textLayerElement, links);
+        // In the canvas as in pdf.js, since VoiceOver in Safari skips the elements, which have no size, outside of it.
+        this.canvas.append(structureLayer.element);
+        linkNames = structureLayer.linkNames;
+      } catch {
+        // As in pdf.js, a structure that fails to render does not break the other layers.
+      }
+    }
+
+    const textLinks = links.filter((link) => !linkNames.has(link));
     // Comparing the positions of the text forces a layout, which a page without links does not need.
     if (textLinks.length) {
       addLinksToText(this.textLayer.textDivs, textLinks);
     }
-  }
-
-  /**
-   * Returns the alternative text that the structure of a tagged PDF gives a link of this page.
-   * @param {HTMLElement} link
-   * @return {string | undefined}
-   */
-  getLinkAlt(link) {
-    return this.#structureLayer?.getLinkAlt(link.id);
-  }
-
-  /**
-   * Returns the text that a link of this page owns in the structure of a tagged PDF.
-   * @param {HTMLElement} link
-   * @return {string | undefined}
-   */
-  getLinkText(link) {
-    return this.#structureLayer?.getLinkText(link.id);
+    return linkNames;
   }
 
   cancel() {
@@ -495,7 +462,7 @@ export class PdfViewerPage {
     this.textLayerElement?.remove();
     this.textLayerElement = null;
     this.endOfContentElement = null;
-    this.#structureLayer = undefined;
+    this.#structureRendered = false;
     this.linkLayerElement?.remove();
     this.linkLayerElement = null;
     this.#linksRendered = false;
