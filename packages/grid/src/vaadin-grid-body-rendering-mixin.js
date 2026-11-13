@@ -106,6 +106,7 @@ export const BodyRenderingMixin = (superClass) =>
               const cellParts = {
                 'first-column-cell': isFirstCell,
                 'last-column-cell': isLastCell,
+                'loading-row-cell': !item,
               };
 
               return cache(html`
