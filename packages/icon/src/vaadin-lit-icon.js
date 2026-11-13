@@ -44,7 +44,7 @@ class Icon extends IconMixin(ControllerMixin(ElementMixin(ThemableMixin(PolylitM
       >
         <g id="svg-group"></g>
         <g id="use-group" visibility="${this.__computeVisibility(this.__useRef, this.svg)}">
-          <use href="${this.__useRef}" />
+          <use href="${ifDefined(this.__useRef)}" />
         </g>
       </svg>
 
