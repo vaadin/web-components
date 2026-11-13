@@ -103,9 +103,9 @@ describe('row details', () => {
       expect(bodyRows[1].getBoundingClientRect().bottom).to.be.closeTo(bodyRows[2].getBoundingClientRect().top, 1);
     });
 
-    it('should clear row padding bottom when opened items are cleared', async () => {
+    it('should clear row padding bottom when details are closed', async () => {
       openRowDetails(1);
-      grid.detailsOpenedItems = [];
+      closeRowDetails(1);
       await nextFrame();
       expect(bodyRows[1].style.paddingBottom).to.equal('');
     });
