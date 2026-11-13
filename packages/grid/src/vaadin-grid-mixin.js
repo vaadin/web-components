@@ -22,13 +22,7 @@ import { DynamicColumnsMixin } from './vaadin-grid-dynamic-columns-mixin.js';
 import { EventContextMixin } from './vaadin-grid-event-context-mixin.js';
 import { FilterMixin } from './vaadin-grid-filter-mixin.js';
 import { HeaderFooterRenderingMixin } from './vaadin-grid-header-footer-rendering-mixin.js';
-import {
-  getBodyRowCells,
-  getClosestCell,
-  iterateChildren,
-  updateBooleanRowStates,
-  updateCellsPart,
-} from './vaadin-grid-helpers.js';
+import { getClosestCell, iterateChildren, updateBooleanRowStates } from './vaadin-grid-helpers.js';
 import { KeyboardNavigationMixin } from './vaadin-grid-keyboard-navigation-mixin.js';
 import { ResizeMixin } from './vaadin-grid-resize-mixin.js';
 import { RowDetailsMixin } from './vaadin-grid-row-details-mixin.js';
@@ -447,23 +441,6 @@ export const GridMixin = (superClass) =>
 
     /**
      * @param {!HTMLElement} row
-     * @param {boolean} loading
-     * @private
-     */
-    __updateRowCellsLoading(row, loading) {
-      const cells = getBodyRowCells(row);
-
-      // Cells part attribute
-      updateCellsPart(cells, 'loading-row-cell', loading);
-
-      if (loading) {
-        // Run style generators for the loading row to have custom names cleared
-        this._generateCellPartNames(row);
-      }
-    }
-
-    /**
-     * @param {!HTMLElement} row
      * @param {{ skipRenderers?: boolean }} options
      * @private
      */
@@ -471,10 +448,9 @@ export const GridMixin = (superClass) =>
       this.__renderBodyRow(row);
 
       const item = this.__getRowItem(row);
-      if (item) {
-        this.__updateRowCellsLoading(row, false);
-      } else {
-        this.__updateRowCellsLoading(row, true);
+      if (!item) {
+        // Run style generators for the loading row to have custom names cleared
+        this._generateCellPartNames(row);
         return;
       }
 

@@ -181,6 +181,11 @@ describe('row details', () => {
       grid.closeItemDetails({ value: 'foo0' });
       expect(cells[1].hidden).to.be.true;
     });
+
+    it('should remove the details cells when the renderer is cleared', () => {
+      grid.rowDetailsRenderer = null;
+      expect(grid.$.items.querySelector('[part~="details-cell"]')).to.be.null;
+    });
   });
 
   describe('repeat', () => {

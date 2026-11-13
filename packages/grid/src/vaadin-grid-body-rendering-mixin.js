@@ -136,6 +136,7 @@ export const BodyRenderingMixin = (superClass) =>
                 'last-row-cell': isLastRow,
                 'odd-row-cell': isOddRow,
                 'even-row-cell': isEvenRow,
+                'loading-row-cell': !item,
               };
 
               return cache(html`
