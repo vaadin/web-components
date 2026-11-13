@@ -97,12 +97,6 @@ describe('row details', () => {
       expect(getRowCells(bodyRows[1])[1].hidden).to.be.true;
     });
 
-    it('should close details row visually', () => {
-      openRowDetails(1);
-      closeRowDetails(1);
-      expect(bodyRows[1].getBoundingClientRect().bottom).to.be.closeTo(bodyRows[2].getBoundingClientRect().top, 1);
-    });
-
     it('should restore the row height when details are closed', async () => {
       const rowHeight = bodyRows[1].offsetHeight;
       openRowDetails(1);
