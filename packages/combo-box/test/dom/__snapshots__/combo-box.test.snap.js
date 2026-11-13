@@ -491,6 +491,7 @@ snapshots["vaadin-combo-box host opened overlay"] =
   no-vertical-overlap=""
   opened=""
   popover="manual"
+  role="none"
   start-aligned=""
   top-aligned=""
 >
@@ -525,6 +526,7 @@ snapshots["vaadin-combo-box host opened theme overlay"] =
   no-vertical-overlap=""
   opened=""
   popover="manual"
+  role="none"
   start-aligned=""
   theme="align-right"
   top-aligned=""
@@ -585,6 +587,7 @@ snapshots["vaadin-combo-box shadow default"] =
   id="overlay"
   no-vertical-overlap=""
   popover="manual"
+  role="none"
 >
   <slot name="overlay">
   </slot>
@@ -645,6 +648,7 @@ snapshots["vaadin-combo-box shadow disabled"] =
   id="overlay"
   no-vertical-overlap=""
   popover="manual"
+  role="none"
 >
   <slot name="overlay">
   </slot>
@@ -705,6 +709,7 @@ snapshots["vaadin-combo-box shadow readonly"] =
   id="overlay"
   no-vertical-overlap=""
   popover="manual"
+  role="none"
 >
   <slot name="overlay">
   </slot>
@@ -765,6 +770,7 @@ snapshots["vaadin-combo-box shadow invalid"] =
   id="overlay"
   no-vertical-overlap=""
   popover="manual"
+  role="none"
 >
   <slot name="overlay">
   </slot>
@@ -825,6 +831,7 @@ snapshots["vaadin-combo-box shadow theme"] =
   id="overlay"
   no-vertical-overlap=""
   popover="manual"
+  role="none"
   theme="align-right"
 >
   <slot name="overlay">

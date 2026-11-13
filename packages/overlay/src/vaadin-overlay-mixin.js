@@ -125,6 +125,12 @@ export const OverlayMixin = (superClass) =>
       // Set popover in firstUpdated before opened observers are called
       this.popover = 'manual';
 
+      // Browsers add an unnamed role="group" to a popover without a role.
+      // Set role="none" to avoid the extra level in the accessibility tree.
+      if (!this.hasAttribute('role')) {
+        this.setAttribute('role', 'none');
+      }
+
       // Need to add dummy click listeners to this and the backdrop or else
       // the document click event listener (_outsideClickListener) may never
       // get invoked on iOS Safari (reproducible in <vaadin-dialog>

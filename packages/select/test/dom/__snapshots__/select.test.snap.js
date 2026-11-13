@@ -612,6 +612,7 @@ snapshots["vaadin-select host opened overlay"] =
   id="overlay"
   opened=""
   popover="manual"
+  role="none"
   start-aligned=""
   top-aligned=""
 >
@@ -660,6 +661,7 @@ snapshots["vaadin-select shadow default"] =
   exportparts="backdrop, overlay, content"
   id="overlay"
   popover="manual"
+  role="none"
 >
   <slot name="overlay">
   </slot>
@@ -711,6 +713,7 @@ snapshots["vaadin-select shadow disabled"] =
   exportparts="backdrop, overlay, content"
   id="overlay"
   popover="manual"
+  role="none"
 >
   <slot name="overlay">
   </slot>
@@ -762,6 +765,7 @@ snapshots["vaadin-select shadow readonly"] =
   exportparts="backdrop, overlay, content"
   id="overlay"
   popover="manual"
+  role="none"
 >
   <slot name="overlay">
   </slot>
@@ -813,6 +817,7 @@ snapshots["vaadin-select shadow invalid"] =
   exportparts="backdrop, overlay, content"
   id="overlay"
   popover="manual"
+  role="none"
 >
   <slot name="overlay">
   </slot>
@@ -864,6 +869,7 @@ snapshots["vaadin-select shadow theme"] =
   exportparts="backdrop, overlay, content"
   id="overlay"
   popover="manual"
+  role="none"
   theme="align-right"
 >
   <slot name="overlay">
