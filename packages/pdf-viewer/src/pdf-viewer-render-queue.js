@@ -67,8 +67,7 @@ export class PdfViewerRenderQueue {
   }
 
   /**
-   * Sets the pages of the document, e.g. when another document loads, and
-   * forgets the page being rendered.
+   * Sets the pages of the document, and forgets the page being rendered.
    * @param {PdfViewerRenderQueuePage[]} pages
    */
   setPages(pages) {
@@ -90,14 +89,14 @@ export class PdfViewerRenderQueue {
   /**
    * Renders the visible pages, the most visible first, then the pages next to
    * them, and frees the canvases of pages that are far from the view.
-   * @param {Array<{ index: number, height: number }>} visible the indexes of the
-   *   visible pages in document order, with their visible height
+   * @param {Array<{ index: number, ratio: number }>} visible the indexes of the
+   *   visible pages in document order, with the part of their height in view
    */
   update(visible) {
     const pages = this.#pages;
     const first = visible[0].index;
     const last = visible.at(-1).index;
-    const byVisibility = [...visible].sort((a, b) => b.height - a.height).map(({ index }) => pages[index]);
+    const byVisibility = [...visible].sort((a, b) => b.ratio - a.ratio).map(({ index }) => pages[index]);
     const ahead = [];
     for (let distance = 1; distance <= this.#options.renderAhead; distance++) {
       ahead.push(pages[last + distance], pages[first - distance]);
@@ -110,7 +109,7 @@ export class PdfViewerRenderQueue {
   }
 
   /**
-   * Stops rendering pages, e.g. when no page is visible. The page being rendered finishes.
+   * Stops rendering pages. The page being rendered finishes.
    */
   clear() {
     this.#queue = [];
@@ -119,7 +118,7 @@ export class PdfViewerRenderQueue {
   }
 
   /**
-   * Cancels rendering the page being rendered, e.g. when its size changes.
+   * Cancels rendering the page being rendered.
    */
   cancel() {
     this.#renderingPage?.cancel();

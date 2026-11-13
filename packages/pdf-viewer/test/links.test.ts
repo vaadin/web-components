@@ -27,8 +27,7 @@ describe('links', () => {
   let pages: HTMLCollectionOf<HTMLElement>;
   let url: string | undefined;
 
-  // Courier at 20pt has 12pt wide characters, so character `i` starts at x = 50 + 12 * i:
-  // "Vaadin" is at x=110-182 and "documentation" at 242-398.
+  // Courier at 20pt has 12pt wide characters, so "Vaadin" is at x=110-182 and "documentation" at x=242-398.
   const sentence = 'BT /F2 20 Tf 50 700 Td (Read Vaadin for documentation today) Tj ET';
   const vaadinRect = [110, 695, 182, 725];
   const documentationRect = [242, 695, 398, 725];
@@ -45,12 +44,11 @@ describe('links', () => {
     return getLinks(1).map((link) => link.getAttribute('aria-label'));
   }
 
-  /** Returns the link of `links.pdf` that goes to page 2. */
+  // The internal link of `links.pdf` goes to page 2.
   function getInternalLink() {
     return getLinks(1).find((element) => element.getAttribute('href') === '#')!;
   }
 
-  /** Returns the link of `links.pdf` that goes to vaadin.com. */
   function getExternalLink() {
     return getLinks(1).find((element) => element.href === 'https://vaadin.com/')!;
   }
@@ -72,10 +70,8 @@ describe('links', () => {
     return `<< /Type /Annot /Subtype /Link /Rect [50 ${700 - index * 40} 300 ${720 - index * 40}] /Border [0 0 0] /Dest ${dest} >>`;
   }
 
-  /**
-   * Loads a document with a link on "Vaadin" at the end of the first line (x=336-408) and on
-   * "docs" at the start of the second (x=72-120). The rectangle of the link covers both lines.
-   */
+  // One link rectangle covers "Vaadin" at the end of the first line (x=336-408) and "docs" at the
+  // start of the second (x=72-120).
   async function loadWrappingLink() {
     await loadPdf([
       {
@@ -87,7 +83,7 @@ describe('links', () => {
     ]);
   }
 
-  /** Loads a document whose first page links to the given position on page 2. */
+  // The first page links to the given position on page 2.
   async function loadLinkToPosition(dest: string, { rotate = 0 } = {}) {
     await loadPdf([{ content: '', annotations: [destLink(dest)] }, { content: '', rotate }, { content: '' }]);
   }
@@ -522,7 +518,7 @@ describe('links', () => {
           `<< /Type /Annot /Subtype /Link /Rect [50 ${700 - index * 40} 300 ${720 - index * 40}] /A << /S /Named /N /${action} >> >>`,
       );
       await loadPdf(Array.from({ length: 4 }, () => ({ content: '', annotations })));
-      viewer.page = 2;
+      viewer.scrollToPage(2);
       await nextRenderIdle(viewer);
     });
 
@@ -544,7 +540,7 @@ describe('links', () => {
       ['NextPage', 4],
     ].forEach(([action, page]) => {
       it(`should do nothing for the ${action} action on page ${page}`, async () => {
-        viewer.page = page as number;
+        viewer.scrollToPage(page as number);
         await scrollSettled(content);
         const { scrollTop } = content;
         const warn = sinon.stub(console, 'warn');

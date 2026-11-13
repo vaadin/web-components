@@ -4,8 +4,8 @@ export const snapshots = {};
 snapshots["vaadin-pdf-viewer host default"] = 
 `<vaadin-pdf-viewer>
   <vaadin-pdf-viewer-button
-    aria-describedby="vaadin-tooltip-0"
     aria-disabled="true"
+    aria-labelledby="vaadin-tooltip-0"
     disabled=""
     has-tooltip=""
     icon="previous-page"
@@ -17,8 +17,8 @@ snapshots["vaadin-pdf-viewer host default"] =
   >
   </vaadin-pdf-viewer-button>
   <vaadin-pdf-viewer-button
-    aria-describedby="vaadin-tooltip-1"
     aria-disabled="true"
+    aria-labelledby="vaadin-tooltip-1"
     disabled=""
     has-tooltip=""
     icon="next-page"
@@ -53,6 +53,7 @@ snapshots["vaadin-pdf-viewer host default"] =
     >
     </div>
     <input
+      aria-label="Page"
       disabled=""
       id="input-vaadin-integer-field-5"
       max="1"
@@ -63,8 +64,8 @@ snapshots["vaadin-pdf-viewer host default"] =
     >
   </vaadin-integer-field>
   <vaadin-pdf-viewer-button
-    aria-describedby="vaadin-tooltip-6"
     aria-disabled="true"
+    aria-labelledby="vaadin-tooltip-6"
     disabled=""
     has-tooltip=""
     icon="zoom-out"
@@ -84,8 +85,8 @@ snapshots["vaadin-pdf-viewer host default"] =
   >
   </vaadin-select>
   <vaadin-pdf-viewer-button
-    aria-describedby="vaadin-tooltip-10"
     aria-disabled="true"
+    aria-labelledby="vaadin-tooltip-10"
     disabled=""
     has-tooltip=""
     icon="zoom-in"
@@ -97,8 +98,8 @@ snapshots["vaadin-pdf-viewer host default"] =
   >
   </vaadin-pdf-viewer-button>
   <vaadin-pdf-viewer-button
-    aria-describedby="vaadin-tooltip-12"
     aria-disabled="true"
+    aria-labelledby="vaadin-tooltip-12"
     disabled=""
     has-tooltip=""
     icon="download"
@@ -116,8 +117,8 @@ snapshots["vaadin-pdf-viewer host default"] =
 snapshots["vaadin-pdf-viewer host document"] = 
 `<vaadin-pdf-viewer>
   <vaadin-pdf-viewer-button
-    aria-describedby="vaadin-tooltip-0"
     aria-disabled="true"
+    aria-labelledby="vaadin-tooltip-0"
     disabled=""
     has-tooltip=""
     icon="previous-page"
@@ -129,7 +130,7 @@ snapshots["vaadin-pdf-viewer host document"] =
   >
   </vaadin-pdf-viewer-button>
   <vaadin-pdf-viewer-button
-    aria-describedby="vaadin-tooltip-1"
+    aria-labelledby="vaadin-tooltip-1"
     has-tooltip=""
     icon="next-page"
     role="button"
@@ -163,6 +164,7 @@ snapshots["vaadin-pdf-viewer host document"] =
     >
     </div>
     <input
+      aria-label="Page"
       id="input-vaadin-integer-field-5"
       max="6"
       min="1"
@@ -173,7 +175,7 @@ snapshots["vaadin-pdf-viewer host document"] =
     >
   </vaadin-integer-field>
   <vaadin-pdf-viewer-button
-    aria-describedby="vaadin-tooltip-6"
+    aria-labelledby="vaadin-tooltip-6"
     has-tooltip=""
     icon="zoom-out"
     role="button"
@@ -190,7 +192,7 @@ snapshots["vaadin-pdf-viewer host document"] =
   >
   </vaadin-select>
   <vaadin-pdf-viewer-button
-    aria-describedby="vaadin-tooltip-10"
+    aria-labelledby="vaadin-tooltip-10"
     has-tooltip=""
     icon="zoom-in"
     role="button"
@@ -201,7 +203,7 @@ snapshots["vaadin-pdf-viewer host document"] =
   >
   </vaadin-pdf-viewer-button>
   <vaadin-pdf-viewer-button
-    aria-describedby="vaadin-tooltip-12"
+    aria-labelledby="vaadin-tooltip-12"
     has-tooltip=""
     icon="download"
     role="button"
@@ -224,6 +226,7 @@ snapshots["vaadin-pdf-viewer shadow default"] =
   >
     <span
       dir="auto"
+      id="title"
       part="title"
       title="PDF document"
     >
@@ -252,12 +255,19 @@ snapshots["vaadin-pdf-viewer shadow default"] =
     </div>
   </div>
 </div>
-<div part="loader">
+<div
+  aria-label="Loading"
+  part="loader"
+  role="progressbar"
+>
 </div>
 <div class="content-area">
   <div
+    aria-busy="false"
+    aria-labelledby="title"
     id="content"
     part="content"
+    role="region"
     tabindex="-1"
   >
     <div id="pages">
@@ -276,6 +286,7 @@ snapshots["vaadin-pdf-viewer shadow document"] =
   >
     <span
       dir="auto"
+      id="title"
       part="title"
       title="multi-page.pdf"
     >
@@ -304,17 +315,28 @@ snapshots["vaadin-pdf-viewer shadow document"] =
     </div>
   </div>
 </div>
-<div part="loader">
+<div
+  aria-label="Loading"
+  part="loader"
+  role="progressbar"
+>
 </div>
 <div class="content-area">
   <div
+    aria-busy="false"
+    aria-labelledby="title"
     id="content"
     part="content"
+    role="region"
     tabindex="0"
   >
     <div id="pages">
-      <div part="page">
-        <canvas aria-hidden="true">
+      <div
+        aria-label="Page 1"
+        part="page"
+        role="region"
+      >
+        <canvas role="presentation">
         </canvas>
         <div
           class="text-layer"
@@ -358,8 +380,12 @@ snapshots["vaadin-pdf-viewer shadow document"] =
           </div>
         </div>
       </div>
-      <div part="page">
-        <canvas aria-hidden="true">
+      <div
+        aria-label="Page 2"
+        part="page"
+        role="region"
+      >
+        <canvas role="presentation">
         </canvas>
         <div
           class="text-layer"
@@ -403,13 +429,29 @@ snapshots["vaadin-pdf-viewer shadow document"] =
           </div>
         </div>
       </div>
-      <div part="page">
+      <div
+        aria-label="Page 3"
+        part="page"
+        role="region"
+      >
       </div>
-      <div part="page">
+      <div
+        aria-label="Page 4"
+        part="page"
+        role="region"
+      >
       </div>
-      <div part="page">
+      <div
+        aria-label="Page 5"
+        part="page"
+        role="region"
+      >
       </div>
-      <div part="page">
+      <div
+        aria-label="Page 6"
+        part="page"
+        role="region"
+      >
       </div>
     </div>
   </div>
@@ -426,6 +468,7 @@ snapshots["vaadin-pdf-viewer shadow header title"] =
   >
     <span
       dir="auto"
+      id="title"
       part="title"
       title="Annual report"
     >
@@ -454,17 +497,28 @@ snapshots["vaadin-pdf-viewer shadow header title"] =
     </div>
   </div>
 </div>
-<div part="loader">
+<div
+  aria-label="Loading"
+  part="loader"
+  role="progressbar"
+>
 </div>
 <div class="content-area">
   <div
+    aria-busy="false"
+    aria-labelledby="title"
     id="content"
     part="content"
+    role="region"
     tabindex="0"
   >
     <div id="pages">
-      <div part="page">
-        <canvas aria-hidden="true">
+      <div
+        aria-label="Page 1"
+        part="page"
+        role="region"
+      >
+        <canvas role="presentation">
         </canvas>
         <div
           class="text-layer"
@@ -508,8 +562,12 @@ snapshots["vaadin-pdf-viewer shadow header title"] =
           </div>
         </div>
       </div>
-      <div part="page">
-        <canvas aria-hidden="true">
+      <div
+        aria-label="Page 2"
+        part="page"
+        role="region"
+      >
+        <canvas role="presentation">
         </canvas>
         <div
           class="text-layer"
@@ -553,13 +611,29 @@ snapshots["vaadin-pdf-viewer shadow header title"] =
           </div>
         </div>
       </div>
-      <div part="page">
+      <div
+        aria-label="Page 3"
+        part="page"
+        role="region"
+      >
       </div>
-      <div part="page">
+      <div
+        aria-label="Page 4"
+        part="page"
+        role="region"
+      >
       </div>
-      <div part="page">
+      <div
+        aria-label="Page 5"
+        part="page"
+        role="region"
+      >
       </div>
-      <div part="page">
+      <div
+        aria-label="Page 6"
+        part="page"
+        role="region"
+      >
       </div>
     </div>
   </div>
@@ -577,6 +651,7 @@ snapshots["vaadin-pdf-viewer shadow header hidden"] =
   >
     <span
       dir="auto"
+      id="title"
       part="title"
       title="multi-page.pdf"
     >
@@ -605,17 +680,28 @@ snapshots["vaadin-pdf-viewer shadow header hidden"] =
     </div>
   </div>
 </div>
-<div part="loader">
+<div
+  aria-label="Loading"
+  part="loader"
+  role="progressbar"
+>
 </div>
 <div class="content-area">
   <div
+    aria-busy="false"
+    aria-labelledby="title"
     id="content"
     part="content"
+    role="region"
     tabindex="0"
   >
     <div id="pages">
-      <div part="page">
-        <canvas aria-hidden="true">
+      <div
+        aria-label="Page 1"
+        part="page"
+        role="region"
+      >
+        <canvas role="presentation">
         </canvas>
         <div
           class="text-layer"
@@ -659,8 +745,12 @@ snapshots["vaadin-pdf-viewer shadow header hidden"] =
           </div>
         </div>
       </div>
-      <div part="page">
-        <canvas aria-hidden="true">
+      <div
+        aria-label="Page 2"
+        part="page"
+        role="region"
+      >
+        <canvas role="presentation">
         </canvas>
         <div
           class="text-layer"
@@ -704,13 +794,29 @@ snapshots["vaadin-pdf-viewer shadow header hidden"] =
           </div>
         </div>
       </div>
-      <div part="page">
+      <div
+        aria-label="Page 3"
+        part="page"
+        role="region"
+      >
       </div>
-      <div part="page">
+      <div
+        aria-label="Page 4"
+        part="page"
+        role="region"
+      >
       </div>
-      <div part="page">
+      <div
+        aria-label="Page 5"
+        part="page"
+        role="region"
+      >
       </div>
-      <div part="page">
+      <div
+        aria-label="Page 6"
+        part="page"
+        role="region"
+      >
       </div>
     </div>
   </div>
@@ -727,6 +833,7 @@ snapshots["vaadin-pdf-viewer shadow toolbar collapsed"] =
   >
     <span
       dir="auto"
+      id="title"
       part="title"
       title="multi-page.pdf"
     >
@@ -756,17 +863,28 @@ snapshots["vaadin-pdf-viewer shadow toolbar collapsed"] =
     </div>
   </div>
 </div>
-<div part="loader">
+<div
+  aria-label="Loading"
+  part="loader"
+  role="progressbar"
+>
 </div>
 <div class="content-area">
   <div
+    aria-busy="false"
+    aria-labelledby="title"
     id="content"
     part="content"
+    role="region"
     tabindex="0"
   >
     <div id="pages">
-      <div part="page">
-        <canvas aria-hidden="true">
+      <div
+        aria-label="Page 1"
+        part="page"
+        role="region"
+      >
+        <canvas role="presentation">
         </canvas>
         <div
           class="text-layer"
@@ -810,8 +928,12 @@ snapshots["vaadin-pdf-viewer shadow toolbar collapsed"] =
           </div>
         </div>
       </div>
-      <div part="page">
-        <canvas aria-hidden="true">
+      <div
+        aria-label="Page 2"
+        part="page"
+        role="region"
+      >
+        <canvas role="presentation">
         </canvas>
         <div
           class="text-layer"
@@ -855,13 +977,29 @@ snapshots["vaadin-pdf-viewer shadow toolbar collapsed"] =
           </div>
         </div>
       </div>
-      <div part="page">
+      <div
+        aria-label="Page 3"
+        part="page"
+        role="region"
+      >
       </div>
-      <div part="page">
+      <div
+        aria-label="Page 4"
+        part="page"
+        role="region"
+      >
       </div>
-      <div part="page">
+      <div
+        aria-label="Page 5"
+        part="page"
+        role="region"
+      >
       </div>
-      <div part="page">
+      <div
+        aria-label="Page 6"
+        part="page"
+        role="region"
+      >
       </div>
     </div>
   </div>
@@ -870,8 +1008,148 @@ snapshots["vaadin-pdf-viewer shadow toolbar collapsed"] =
 /* end snapshot vaadin-pdf-viewer shadow toolbar collapsed */
 
 snapshots["vaadin-pdf-viewer page tagged"] = 
-`<div part="page">
-  <canvas aria-hidden="true">
+`<div
+  aria-label="Page 1"
+  part="page"
+  role="region"
+>
+  <canvas role="presentation">
+    <span class="struct-tree">
+      <span lang="en">
+        <span
+          aria-level="1"
+          role="heading"
+        >
+          <span role="none">
+            <span aria-owns="p2R_mc1_0">
+            </span>
+          </span>
+        </span>
+        <span role="paragraph">
+          <span role="none">
+            <span aria-owns="p2R_mc2_0">
+            </span>
+          </span>
+          <span>
+            <span role="none">
+              <span aria-owns="p2R_mc3_0 p2R_mc3_1">
+              </span>
+            </span>
+            <span>
+            </span>
+          </span>
+          <span role="none">
+            <span aria-owns="p2R_mc4_0">
+            </span>
+          </span>
+        </span>
+        <span
+          lang="sv"
+          role="paragraph"
+        >
+          <span role="none">
+            <span aria-owns="p2R_mc5_0">
+            </span>
+          </span>
+        </span>
+        <span
+          aria-level="2"
+          role="heading"
+        >
+          <span role="none">
+            <span aria-owns="p2R_mc6_0">
+            </span>
+          </span>
+        </span>
+        <span role="list">
+          <span role="listitem">
+            <span>
+            </span>
+            <span role="none">
+              <span aria-owns="p2R_mc8_0">
+              </span>
+            </span>
+          </span>
+          <span role="listitem">
+            <span>
+            </span>
+            <span role="none">
+              <span aria-owns="p2R_mc10_0">
+              </span>
+            </span>
+          </span>
+        </span>
+        <span
+          aria-level="2"
+          role="heading"
+        >
+          <span role="none">
+            <span aria-owns="p2R_mc11_0">
+            </span>
+          </span>
+        </span>
+        <span role="table">
+          <span role="row">
+            <span role="columnheader">
+              <span role="none">
+                <span aria-owns="p2R_mc12_0">
+                </span>
+              </span>
+            </span>
+            <span role="columnheader">
+              <span role="none">
+                <span aria-owns="p2R_mc13_0 p2R_mc13_1">
+                </span>
+              </span>
+            </span>
+          </span>
+          <span role="row">
+            <span role="cell">
+              <span role="none">
+                <span aria-owns="p2R_mc14_0">
+                </span>
+              </span>
+            </span>
+            <span role="cell">
+              <span role="none">
+                <span aria-owns="p2R_mc15_0 p2R_mc15_1">
+                </span>
+              </span>
+            </span>
+          </span>
+          <span role="row">
+            <span role="cell">
+              <span role="none">
+                <span aria-owns="p2R_mc16_0">
+                </span>
+              </span>
+            </span>
+            <span role="cell">
+              <span role="none">
+                <span aria-owns="p2R_mc17_0 p2R_mc17_1">
+                </span>
+              </span>
+            </span>
+          </span>
+        </span>
+        <span
+          aria-level="2"
+          role="heading"
+        >
+          <span role="none">
+            <span aria-owns="p2R_mc18_0">
+            </span>
+          </span>
+        </span>
+        <span role="figure">
+          <span
+            aria-label="A blue square"
+            role="img"
+          >
+          </span>
+        </span>
+      </span>
+    </span>
   </canvas>
   <div
     class="text-layer"
@@ -888,6 +1166,7 @@ snapshots["vaadin-pdf-viewer page tagged"] =
     >
       <span
         dir="ltr"
+        id="p2R_mc1_0"
         role="presentation"
       >
         Tagged document
@@ -900,6 +1179,7 @@ snapshots["vaadin-pdf-viewer page tagged"] =
       <br role="presentation">
       <span
         dir="ltr"
+        id="p2R_mc2_0"
         role="presentation"
       >
         Visit the
@@ -912,11 +1192,13 @@ snapshots["vaadin-pdf-viewer page tagged"] =
       <span
         aria-owns="pdfjs_internal_id_11R"
         dir="ltr"
+        id="p2R_mc3_0"
         role="presentation"
       >
       </span>
       <span
         dir="ltr"
+        id="p2R_mc3_1"
         role="presentation"
       >
         Vaadin website
@@ -928,6 +1210,7 @@ snapshots["vaadin-pdf-viewer page tagged"] =
     >
       <span
         dir="ltr"
+        id="p2R_mc4_0"
         role="presentation"
       >
         .
@@ -940,6 +1223,7 @@ snapshots["vaadin-pdf-viewer page tagged"] =
       <br role="presentation">
       <span
         dir="ltr"
+        id="p2R_mc5_0"
         role="presentation"
       >
         Hej världen
@@ -952,6 +1236,7 @@ snapshots["vaadin-pdf-viewer page tagged"] =
       <br role="presentation">
       <span
         dir="ltr"
+        id="p2R_mc6_0"
         role="presentation"
       >
         A list
@@ -969,6 +1254,7 @@ snapshots["vaadin-pdf-viewer page tagged"] =
       <br role="presentation">
       <span
         dir="ltr"
+        id="p2R_mc8_0"
         role="presentation"
       >
         First item
@@ -986,6 +1272,7 @@ snapshots["vaadin-pdf-viewer page tagged"] =
       <br role="presentation">
       <span
         dir="ltr"
+        id="p2R_mc10_0"
         role="presentation"
       >
         Second item
@@ -998,6 +1285,7 @@ snapshots["vaadin-pdf-viewer page tagged"] =
       <br role="presentation">
       <span
         dir="ltr"
+        id="p2R_mc11_0"
         role="presentation"
       >
         A table
@@ -1010,6 +1298,7 @@ snapshots["vaadin-pdf-viewer page tagged"] =
       <br role="presentation">
       <span
         dir="ltr"
+        id="p2R_mc12_0"
         role="presentation"
       >
         Name
@@ -1021,11 +1310,13 @@ snapshots["vaadin-pdf-viewer page tagged"] =
     >
       <span
         dir="ltr"
+        id="p2R_mc13_0"
         role="presentation"
       >
       </span>
       <span
         dir="ltr"
+        id="p2R_mc13_1"
         role="presentation"
       >
         Value
@@ -1038,6 +1329,7 @@ snapshots["vaadin-pdf-viewer page tagged"] =
       <br role="presentation">
       <span
         dir="ltr"
+        id="p2R_mc14_0"
         role="presentation"
       >
         Alpha
@@ -1049,11 +1341,13 @@ snapshots["vaadin-pdf-viewer page tagged"] =
     >
       <span
         dir="ltr"
+        id="p2R_mc15_0"
         role="presentation"
       >
       </span>
       <span
         dir="ltr"
+        id="p2R_mc15_1"
         role="presentation"
       >
         1
@@ -1066,6 +1360,7 @@ snapshots["vaadin-pdf-viewer page tagged"] =
       <br role="presentation">
       <span
         dir="ltr"
+        id="p2R_mc16_0"
         role="presentation"
       >
         Beta
@@ -1077,11 +1372,13 @@ snapshots["vaadin-pdf-viewer page tagged"] =
     >
       <span
         dir="ltr"
+        id="p2R_mc17_0"
         role="presentation"
       >
       </span>
       <span
         dir="ltr"
+        id="p2R_mc17_1"
         role="presentation"
       >
         2
@@ -1094,6 +1391,7 @@ snapshots["vaadin-pdf-viewer page tagged"] =
       <br role="presentation">
       <span
         dir="ltr"
+        id="p2R_mc18_0"
         role="presentation"
       >
         A figure
@@ -1127,8 +1425,12 @@ snapshots["vaadin-pdf-viewer page tagged"] =
 /* end snapshot vaadin-pdf-viewer page tagged */
 
 snapshots["vaadin-pdf-viewer page links"] = 
-`<div part="page">
-  <canvas aria-hidden="true">
+`<div
+  aria-label="Page 1"
+  part="page"
+  role="region"
+>
+  <canvas role="presentation">
   </canvas>
   <div
     class="text-layer"

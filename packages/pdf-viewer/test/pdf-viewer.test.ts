@@ -70,6 +70,17 @@ describe('vaadin-pdf-viewer', () => {
       expect(viewer.hasAttribute('loading')).to.be.false;
     });
 
+    it('should mark the content busy while the document loads', async () => {
+      const content = viewer.shadowRoot!.querySelector('[part="content"]')!;
+      viewer.src = fixtureUrl('multi-page.pdf');
+      await nextUpdate(viewer);
+      await nextUpdate(viewer);
+      expect(content.getAttribute('aria-busy')).to.equal('true');
+      await oneEvent(viewer, 'document-load');
+      await nextUpdate(viewer);
+      expect(content.getAttribute('aria-busy')).to.equal('false');
+    });
+
     it('should clear the document when src is removed', async () => {
       await loadDocument(viewer, 'multi-page.pdf');
       viewer.src = null;
@@ -82,7 +93,7 @@ describe('vaadin-pdf-viewer', () => {
       const spy = sinon.spy();
       viewer.addEventListener('document-load', spy);
       viewer.src = fixtureUrl('multi-page.pdf');
-      // Change src right after the update that starts loading
+      // The update that starts loading
       await nextUpdate(viewer);
       viewer.src = fixtureUrl('standard-font.pdf');
       await nextRenderIdle(viewer);
@@ -132,7 +143,7 @@ describe('vaadin-pdf-viewer', () => {
       viewer.addEventListener('document-load', spy);
       const parent = viewer.parentElement!;
       viewer.src = fixtureUrl('multi-page.pdf');
-      // Detach right after the update that starts loading
+      // The update that starts loading
       await nextUpdate(viewer);
       viewer.remove();
       // Give an outdated load enough time to complete

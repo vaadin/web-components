@@ -76,7 +76,7 @@ export declare class PdfViewerDocumentMixinClass {
   protected _documentLoaded(details: PdfViewerDocumentDetails): void;
 
   /**
-   * Called when the document is unloaded, e.g. before another one loads.
+   * Called when the document is unloaded, also before another one loads.
    */
   protected _documentUnloaded(): void;
 }

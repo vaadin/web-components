@@ -44,6 +44,7 @@ describe('toolbar', () => {
     expect(previousButton.disabled).to.be.true;
     expect(nextButton.disabled).to.be.true;
     expect(pageField.disabled).to.be.true;
+    expect(pageField.value).to.equal('');
     expect(zoomOutButton.disabled).to.be.true;
     expect(zoomInButton.disabled).to.be.true;
     expect(zoomSelect.disabled).to.be.true;
@@ -100,7 +101,7 @@ describe('toolbar', () => {
     });
 
     it('should update the page field when the page changes', async () => {
-      viewer.page = 3;
+      viewer.scrollToPage(3);
       await nextRenderIdle(viewer);
       expect(pageField.value).to.equal('3');
     });
@@ -112,7 +113,7 @@ describe('toolbar', () => {
     });
 
     it('should go to the previous page when clicking previous page', async () => {
-      viewer.page = 3;
+      viewer.scrollToPage(3);
       await nextRenderIdle(viewer);
       previousButton.click();
       await nextRenderIdle(viewer);
@@ -129,24 +130,25 @@ describe('toolbar', () => {
     });
 
     it('should use the texts set with i18n', async () => {
-      viewer.i18n = { nextPage: 'Next', pageError: 'Max. {pageCount}' };
+      viewer.i18n = { nextPage: 'Next', page: 'Seite', pageError: 'Max. {pageCount}' };
       await enterPage('999');
       await nextFrame();
       expect(nextButton.querySelector<Tooltip>('vaadin-tooltip')!.text).to.equal('Next');
       expect(previousButton.querySelector<Tooltip>('vaadin-tooltip')!.text).to.equal('Previous page');
+      expect(pageField.accessibleName).to.equal('Seite');
       expect(pageField.errorMessage).to.equal('Max. 6');
     });
 
     it('should toggle disabled on previous page button on the first page', async () => {
       expect(previousButton.disabled).to.be.true;
-      viewer.page = 2;
+      viewer.scrollToPage(2);
       await nextRenderIdle(viewer);
       expect(previousButton.disabled).to.be.false;
     });
 
     it('should toggle disabled on next page button on the last page', async () => {
       expect(nextButton.disabled).to.be.false;
-      viewer.page = 6;
+      viewer.scrollToPage(6);
       await nextRenderIdle(viewer);
       expect(nextButton.disabled).to.be.true;
     });
@@ -178,35 +180,8 @@ describe('toolbar', () => {
       expect(spy).to.be.not.called;
     });
 
-    describe('invalid page', () => {
-      let warnStub: sinon.SinonStub;
-
-      beforeEach(() => {
-        warnStub = sinon.stub(console, 'warn');
-      });
-
-      afterEach(() => {
-        warnStub.restore();
-      });
-
-      it('should leave the page field empty for a page out of range', async () => {
-        viewer.page = 10;
-        await nextFrame();
-        expect(pageField.value).to.equal('');
-        expect(pageField.invalid).to.be.false;
-      });
-
-      it('should go to the last page from a page above the page count', async () => {
-        viewer.page = 10;
-        await nextRenderIdle(viewer);
-        previousButton.click();
-        await nextRenderIdle(viewer);
-        expect(viewer.page).to.equal(6);
-      });
-    });
-
     it('should keep focus on the next page button when it gets disabled', async () => {
-      viewer.page = 5;
+      viewer.scrollToPage(5);
       await nextRenderIdle(viewer);
       nextButton.focus();
       await sendKeys({ press: 'Enter' });
@@ -238,7 +213,7 @@ describe('toolbar', () => {
       });
 
       it('should show the current page again when the page changes', async () => {
-        viewer.page = 3;
+        viewer.scrollToPage(3);
         await nextRenderIdle(viewer);
         expect(pageField.value).to.equal('3');
         expect(pageField.invalid).to.be.false;
@@ -288,7 +263,7 @@ describe('toolbar', () => {
 
     it('should keep the zoom items when the page changes', async () => {
       const { items } = zoomSelect;
-      viewer.page = 3;
+      viewer.scrollToPage(3);
       await nextRenderIdle(viewer);
       expect(zoomSelect.items).to.equal(items);
     });
@@ -352,10 +327,11 @@ describe('toolbar', () => {
     });
 
     it('should use the zoom texts set with i18n', async () => {
-      viewer.i18n = { zoomIn: 'Größer', pageWidth: 'Seitenbreite', pageFit: 'Ganze Seite' };
+      viewer.i18n = { zoomIn: 'Größer', zoom: 'Vergrößerung', pageWidth: 'Seitenbreite', pageFit: 'Ganze Seite' };
       await nextFrame();
       expect(zoomInButton.querySelector<Tooltip>('vaadin-tooltip')!.text).to.equal('Größer');
       expect(zoomOutButton.querySelector<Tooltip>('vaadin-tooltip')!.text).to.equal('Zoom out');
+      expect(zoomSelect.accessibleName).to.equal('Vergrößerung');
       expect(getItemLabel('page-width')).to.equal('Seitenbreite');
       expect(getItemLabel('page-fit')).to.equal('Ganze Seite');
     });
@@ -575,7 +551,7 @@ describe('toolbar', () => {
       });
 
       it('should keep the child when the toolbar renders again', async () => {
-        viewer.page = 2;
+        viewer.scrollToPage(2);
         await nextRenderIdle(viewer);
         expect(approve.parentElement).to.equal(viewer);
         expect(approve.checkVisibility()).to.be.true;
@@ -616,9 +592,7 @@ describe('toolbar', () => {
     });
 
     it('should scroll each control into view when focused with the keyboard', async () => {
-      // The header and the toolbar scroll, so that some controls are out of view
       expect(topArea.scrollHeight).to.be.greaterThan(topArea.clientHeight);
-      // Go backwards from the pages through all toolbar controls.
       content.focus();
       await sendKeys({ press: 'Shift+Tab' });
       const visited = new Set<HTMLElement>();
@@ -631,16 +605,14 @@ describe('toolbar', () => {
         visited.add(control);
         const name = control.getAttribute('icon') ?? control.localName;
         const rect = control.getBoundingClientRect();
-        // Visible in the header and the toolbar, which are inside the viewer
         const areaRect = topArea.getBoundingClientRect();
         const viewerRect = viewer.getBoundingClientRect();
         const top = Math.max(areaRect.top, viewerRect.top);
         const bottom = Math.min(areaRect.bottom, viewerRect.bottom);
-        // With room for the focus ring around the control. The header has it inside.
+        // Leave room for the focus ring, which the header draws inside.
         const room = control === header ? 0 : 3;
         expect(rect.top, name).to.be.at.least(top + room);
         expect(rect.bottom, name).to.be.at.most(bottom - room);
-        // The viewer itself does not scroll, which would move the toolbar or the pages out of view.
         expect(viewer.scrollTop, name).to.equal(0);
         await sendKeys({ press: 'Shift+Tab' });
       }

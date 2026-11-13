@@ -97,10 +97,19 @@ describe('row details', () => {
       expect(getRowCells(bodyRows[1])[1].hidden).to.be.true;
     });
 
-    it('should close details row visually', () => {
+    it('should restore the row height when details are closed', async () => {
+      const rowHeight = bodyRows[1].offsetHeight;
       openRowDetails(1);
       closeRowDetails(1);
-      expect(bodyRows[1].getBoundingClientRect().bottom).to.be.closeTo(bodyRows[2].getBoundingClientRect().top, 1);
+      await nextFrame();
+      expect(bodyRows[1].offsetHeight).to.equal(rowHeight);
+    });
+
+    it('should restore the row height when renderer is cleared', () => {
+      const rowHeight = bodyRows[1].offsetHeight;
+      openRowDetails(1);
+      grid.rowDetailsRenderer = null;
+      expect(bodyRows[1].offsetHeight).to.equal(rowHeight);
     });
 
     it('should render the details', () => {
@@ -479,19 +488,6 @@ describe('row details', () => {
       grid.detailsOpenedItems = [...grid.items];
       await nextFrame();
       expect(bodyRow.offsetHeight).to.equal(detailsRowHeight);
-    });
-
-    it('should clear row padding bottom when opened items are cleared', async () => {
-      grid.detailsOpenedItems = [...grid.items];
-      grid.detailsOpenedItems = [];
-      await nextFrame();
-      expect(bodyRow.style.paddingBottom).to.equal('');
-    });
-
-    it('should clear row padding bottom when renderer is cleared', () => {
-      grid.detailsOpenedItems = [...grid.items];
-      grid.rowDetailsRenderer = null;
-      expect(bodyRow.style.paddingBottom).to.equal('');
     });
 
     it('should update the row height when details cell height changes', async () => {

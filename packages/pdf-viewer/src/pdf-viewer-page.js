@@ -9,6 +9,7 @@
  * license.
  */
 import { createLink } from './pdf-viewer-links.js';
+import { PdfViewerStructureLayer } from './pdf-viewer-structure-layer.js';
 import { addLinksToText, ANNOTATION_ID_PREFIX, compareAnnotationPositions } from './pdf-viewer-text-accessibility.js';
 import { loadPdfjs } from './pdfjs-loader.js';
 
@@ -20,7 +21,7 @@ export const MAX_CANVAS_PIXELS = 2 ** 24;
 
 /**
  * Limits the clickable area of a link to the quadrilaterals of its annotation,
- * e.g. to the words of a link that wraps to the next line, as pdf.js does.
+ * such as the words of a link that wraps to the next line, as pdf.js does.
  * A link whose only quadrilateral is its rectangle gets no areas.
  *
  * @param {HTMLAnchorElement} link
@@ -62,12 +63,21 @@ function addLinkAreas(link, { rect: [left, bottom, right, top], quadPoints }) {
 
 /**
  * Manages the DOM of a single page of the document: a placeholder sized to
- * the page, and the canvas and the text and link layers the page is rendered
- * to once it is needed.
+ * the page, and the canvas, the text layer, the structure and the link layer
+ * the page is rendered to once it is needed.
  */
 export class PdfViewerPage {
   /** Set once the links of the current canvas are rendered, also when the page has none. */
   #linksRendered = false;
+
+  /**
+   * The structure tree of the page, or null without one, kept between renders as in pdf.js.
+   * @type {Promise<object | null> | null}
+   */
+  #structTree = null;
+
+  /** @type {PdfViewerStructureLayer | null} */
+  #structureLayer = null;
 
   /**
    * @param {number} pageNumber
@@ -86,6 +96,8 @@ export class PdfViewerPage {
 
     this.element = document.createElement('div');
     this.element.setAttribute('part', 'page');
+    // As in pdf.js, each page is a region with a name.
+    this.element.setAttribute('role', 'region');
 
     /** @type {number} */
     this.scale = 0;
@@ -196,7 +208,7 @@ export class PdfViewerPage {
     const outputScale = Math.min(pixelRatio, Math.sqrt(MAX_CANVAS_PIXELS / (viewport.width * viewport.height)));
 
     const canvas = document.createElement('canvas');
-    canvas.setAttribute('aria-hidden', 'true');
+    canvas.setAttribute('role', 'presentation');
     canvas.width = Math.floor(viewport.width * outputScale);
     canvas.height = Math.floor(viewport.height * outputScale);
 
@@ -227,19 +239,32 @@ export class PdfViewerPage {
     if (this.canvas) {
       this.#freeCanvas(this.canvas);
     }
-    this.element.append(canvas);
+    // The structure in the canvas comes first in reading order.
+    this.element.prepend(canvas);
+    if (this.#structureLayer) {
+      canvas.append(this.#structureLayer.element);
+    }
     this.canvas = canvas;
     this.renderedScale = scale;
     this.renderedPixelRatio = pixelRatio;
   }
 
   /**
+   * Sets the accessible name of the page.
+   *
+   * @param {string} label
+   */
+  setLabel(label) {
+    this.element.setAttribute('aria-label', label);
+  }
+
+  /**
    * Returns the offset in CSS pixels from the top left corner of the page to
-   * a position given in PDF units from the bottom left corner of the unrotated
-   * page, as in link destinations. With the opposite corner of a rectangle,
-   * the offset goes to the top left corner of the rectangle on the rotated
-   * page. A missing coordinate, or one outside the page, gives an offset of 0
-   * on the axis that it is on after the rotation of the page. Needs the page
+   * a position in PDF units from the bottom left corner of the unrotated page,
+   * as in link destinations. With the opposite corner of a rectangle, the
+   * offset goes to the top left corner of the rectangle on the rotated page.
+   * A missing coordinate, or one outside the page, gives an offset of 0 on
+   * the axis that it is on after the rotation of the page. Needs the page
    * of the document, see `setPdfPage()`.
    *
    * @param {number | undefined} x
@@ -291,8 +316,7 @@ export class PdfViewerPage {
     container.className = 'text-layer';
     this.element.append(container);
 
-    // As in the viewer of pdf.js, the text layer reads the stream itself. `getTextContent()`
-    // iterates the stream with `for await`, which Safari 26 and earlier do not support.
+    // As in the viewer of pdf.js, the text layer reads the stream itself.
     const textLayer = new TextLayer({
       textContentSource: this.pdfPage.streamTextContent({ includeMarkedContent: true }),
       container,
@@ -313,24 +337,56 @@ export class PdfViewerPage {
     }
 
     if (this.textLayer === textLayer) {
-      // Extends the selection to the end of the page while selecting, see the styles.
+      // Extends the selection to the end of the page while selecting.
       const endOfContent = document.createElement('div');
       endOfContent.className = 'end-of-content';
       container.append(endOfContent);
       this.endOfContentElement = endOfContent;
       this.#addLinksToText();
+      // As in pdf.js, the structure renders after the text layer, whose elements it owns.
+      await this.#renderStructureLayer();
     }
   }
 
   /**
-   * Renders the link layer: the links of the page, positioned relative to the
-   * page size so that they need no update when the scale changes. Like the
-   * text layer, the layer has the size of the page without its rotation, and
-   * is rotated with the page. The links are in reading order, as in pdf.js,
-   * also for the Tab key. Links on hidden layers of the document are left
-   * out. A page without links gets no layer. Returns the links with their
-   * annotations, or no links when they are rendered already or the page was
-   * released meanwhile.
+   * Renders the structure of a tagged PDF page for assistive technology.
+   * @private
+   */
+  async #renderStructureLayer() {
+    const textLayerElement = this.textLayerElement;
+    // A page with a broken structure is shown as untagged.
+    this.#structTree ??= this.pdfPage.getStructTree().catch(() => null);
+    const tree = await this.#structTree;
+    // The page may have been released meanwhile.
+    if (this.textLayerElement !== textLayerElement) {
+      return;
+    }
+    const structureLayer = tree && this.#createStructureLayer(tree, textLayerElement);
+    if (structureLayer) {
+      this.#structureLayer = structureLayer;
+      // In the canvas as in pdf.js, since VoiceOver in Safari skips the elements, which have no size, outside of it.
+      this.canvas.append(structureLayer.element);
+    }
+  }
+
+  /** @private */
+  #createStructureLayer(tree, textLayerElement) {
+    try {
+      const structureLayer = new PdfViewerStructureLayer(tree);
+      structureLayer.updateTextLayer(textLayerElement);
+      return structureLayer;
+    } catch {
+      // As in pdf.js, a structure that fails to render does not break the other layers.
+      return null;
+    }
+  }
+
+  /**
+   * Renders the links of the page in reading order, positioned relative to the
+   * page size so that they need no update when the scale changes. Links on
+   * hidden layers of the document are left out, and a page without links gets
+   * no layer. Returns the links with their annotations, or none when they are
+   * rendered already or the page was released meanwhile.
    *
    * @param {(annotation: object) => void} followLink called when an internal link is clicked
    * @param {{ isVisible: (group: object) => boolean }} [optionalContentConfig] the visible layers
@@ -359,7 +415,6 @@ export class PdfViewerPage {
 
     // A copy, as pdf.js returns the same annotations to each call.
     [...annotations].sort(compareAnnotationPositions).forEach((annotation) => {
-      // As in pdf.js, which hides the links on hidden layers.
       if (annotation.oc && optionalContentConfig?.isVisible(annotation.oc) === false) {
         return;
       }
@@ -398,7 +453,6 @@ export class PdfViewerPage {
     }
   }
 
-  /** Cancels a pending render. */
   cancel() {
     if (this.renderTask) {
       this.renderTask.cancel();
@@ -406,7 +460,7 @@ export class PdfViewerPage {
     }
   }
 
-  /** Cancels a pending render and frees the canvas memory and the text and link layers. */
+  /** Cancels a pending render and frees the canvas memory, the layers and the structure. */
   release() {
     this.cancel();
     this.textLayer?.cancel();
@@ -414,6 +468,7 @@ export class PdfViewerPage {
     this.textLayerElement?.remove();
     this.textLayerElement = null;
     this.endOfContentElement = null;
+    this.#structureLayer = null;
     this.linkLayerElement?.remove();
     this.linkLayerElement = null;
     this.#linksRendered = false;

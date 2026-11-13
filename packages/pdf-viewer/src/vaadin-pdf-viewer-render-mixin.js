@@ -62,11 +62,18 @@ export const PdfViewerRenderMixin = (superClass) =>
       this.#unwatchPixelRatio();
     }
 
+    /** @protected */
+    updated(props) {
+      super.updated(props);
+
+      if (props.has('__effectiveI18n')) {
+        this.#updatePageLabels();
+      }
+    }
+
     /**
-     * Override method from `PdfViewerDocumentMixin` to create one page view
-     * per page. All pages start with the size of the first page, and get
-     * their own size as they load in the background. This shows the document
-     * without waiting for every page of a long document.
+     * Override method from `PdfViewerDocumentMixin` to create the page views,
+     * sized as the first page until each page loads its own size.
      * @protected
      * @override
      */
@@ -80,6 +87,7 @@ export const PdfViewerRenderMixin = (superClass) =>
         (_, index) => new PdfViewerPage(index + 1, size),
       );
       this.__pages[0].setPdfPage(firstPage);
+      this.#updatePageLabels();
       this.$.pages.replaceChildren(...this.__pages.map((page) => page.element));
       this.#renderQueue.setPages(this.__pages);
       // `render-idle` waits for the page sizes, see #notifyIdle().
@@ -114,6 +122,14 @@ export const PdfViewerRenderMixin = (superClass) =>
       this.$.pages.replaceChildren();
     }
 
+    /** @private */
+    #updatePageLabels() {
+      const { pageLabel } = this.__effectiveI18n;
+      this.__pages.forEach((page) => {
+        page.setLabel(pageLabel.replace('{page}', page.pageNumber));
+      });
+    }
+
     /**
      * Called at most once per frame when pages got their own size, which
      * differs from the estimate.
@@ -125,8 +141,7 @@ export const PdfViewerRenderMixin = (superClass) =>
 
     /**
      * Renders the layers over the canvas of a page that has just rendered,
-     * e.g. the text layer. Overrides await `super` first, so that the layers
-     * render in the order of the mixins.
+     * where overrides await `super` first to keep the mixin order.
      * @param {PdfViewerPage} _page
      * @return {Promise<void>}
      * @protected
@@ -139,8 +154,8 @@ export const PdfViewerRenderMixin = (superClass) =>
      * Renders the visible pages, the most visible first, then the pages next
      * to them, and frees the canvases of pages far from the view. Stops
      * rendering when no page is visible.
-     * @param {Array<{ index: number, height: number }>} visible the indexes of
-     *   the visible pages in document order, with their visible height
+     * @param {Array<{ index: number, ratio: number }>} visible the indexes of
+     *   the visible pages in document order, with the part of their height in view
      * @protected
      */
     _renderVisible(visible) {
@@ -152,24 +167,20 @@ export const PdfViewerRenderMixin = (superClass) =>
     }
 
     /**
-     * Cancels rendering the page being rendered, e.g. before the pages get another size.
+     * Cancels rendering the page being rendered.
      * @protected
      */
     _cancelRender() {
       this.#renderQueue.cancel();
     }
 
-    /**
-     * Loads the pages after the first one, and corrects their size.
-     * @private
-     */
+    /** @private */
     async #loadPageSizes(pdfDocument) {
       if (this._pdfDocument !== pdfDocument) {
         return;
       }
       const pages = this.__pages.slice(1);
-      // Request a few pages at a time, so that requests for pages to
-      // render do not wait behind the requests for all page sizes.
+      // Request a few pages at a time, so that pages to render do not wait behind all page sizes.
       for (let start = 0; start < pages.length; start += PAGE_SIZE_BATCH) {
         const batch = pages.slice(start, start + PAGE_SIZE_BATCH);
         // A page that fails to load reports the error when it is rendered.
@@ -256,11 +267,12 @@ export const PdfViewerRenderMixin = (superClass) =>
         this.$.content.focus({ preventScroll: true, focusVisible: isKeyboardActive() });
       }
       page.release();
+      // Frees the data that the page keeps after rendering, such as its decoded images.
+      page.pdfPage?.cleanup();
     }
 
     /**
-     * Fires `render-idle` when no page is left to render. Only intended for
-     * testing purposes, tests wait for it.
+     * Fires `render-idle` when no page is left to render, for tests.
      * @private
      */
     #notifyIdle() {
@@ -290,7 +302,6 @@ export const PdfViewerRenderMixin = (superClass) =>
     #onPixelRatioChange = () => {
       // The query only matches the previous ratio, so watch the new one.
       this.#watchPixelRatio();
-      // Render the visible pages again at the new ratio.
       this.#renderQueue.renderNext();
     };
   };

@@ -3,6 +3,7 @@ import { fixtureSync, nextFrame, nextRender, nextResize, oneEvent } from '@vaadi
 import sinon from 'sinon';
 import './enable-feature-flag.js';
 import '../vaadin-pdf-viewer.js';
+import type { PDFPageProxy } from 'pdfjs-dist';
 import { clearWarnings } from '@vaadin/component-base/src/warnings.js';
 import type { PdfViewer } from '../vaadin-pdf-viewer.js';
 import {
@@ -10,6 +11,7 @@ import {
   createPdfUrl,
   fixtureUrl,
   getContentBoxSize,
+  getPdfPagePrototype,
   getViewCenter,
   loadAndRender,
   loadDocument,
@@ -47,6 +49,13 @@ describe('pages', () => {
     content.scrollTop = scrollTop;
     // Scrolling in these tests always brings a page into view that still needs rendering
     await nextRenderIdle(viewer);
+  }
+
+  async function scrollWithoutRender(scrollTop: number) {
+    const scrolled = oneEvent(content, 'scroll');
+    content.scrollTop = scrollTop;
+    await scrolled;
+    await nextFrame();
   }
 
   afterEach(() => {
@@ -105,14 +114,39 @@ describe('pages', () => {
         expect(canvas.height).to.equal(0);
       });
 
+      it('should free the pdf.js data of a released page', async () => {
+        const cleanup = sinon.spy(await getPdfPagePrototype(), 'cleanup');
+        await scrollTo(content.scrollHeight);
+        const pageNumbers = cleanup.thisValues.map((pdfPage: PDFPageProxy) => pdfPage.pageNumber);
+        expect(pageNumbers).to.include(1);
+        expect(pageNumbers).to.not.include(6);
+        // cleanup() returns false when pdf.js only defers freeing the page
+        expect(cleanup.returnValues[pageNumbers.indexOf(1)]).to.be.true;
+      });
+
       it('should render the canvas at the device pixel ratio', () => {
         const page = pages[0];
         const canvas = page.querySelector('canvas')!;
         expect(canvas.width).to.be.closeTo(page.offsetWidth * window.devicePixelRatio, 1);
       });
 
-      it('should hide the canvas from assistive technology', () => {
-        expect(pages[0].querySelector('canvas')!.getAttribute('aria-hidden')).to.equal('true');
+      it('should give the canvas no role, without hiding its content from assistive technology', () => {
+        const canvas = pages[0].querySelector('canvas')!;
+        expect(canvas.getAttribute('role')).to.equal('presentation');
+        expect(canvas.hasAttribute('aria-hidden')).to.be.false;
+      });
+
+      it('should make each page a region with a name, also when it is not rendered', () => {
+        expect(pages[0].getAttribute('role')).to.equal('region');
+        expect(pages[0].getAttribute('aria-label')).to.equal('Page 1');
+        expect(pages[5].getAttribute('role')).to.equal('region');
+        expect(pages[5].getAttribute('aria-label')).to.equal('Page 6');
+      });
+
+      it('should use the page name set with i18n', async () => {
+        viewer.i18n = { pageLabel: 'Seite {page}' };
+        await nextFrame();
+        expect(pages[2].getAttribute('aria-label')).to.equal('Seite 3');
       });
     });
 
@@ -136,47 +170,89 @@ describe('pages', () => {
         expect(spy.secondCall.args[0].detail.value).to.equal(3);
       });
 
-      it('should scroll to the start of the page when setting page', async () => {
-        viewer.page = 4;
-        await nextRenderIdle(viewer);
-        expect(getPageTop(4)).to.be.closeTo(getPaddingTop(), 1);
+      it('should not change the page or scroll when setting page', async () => {
+        (viewer as { page: number }).page = 4;
+        await nextFrame();
+        expect(viewer.page).to.equal(1);
+        expect(content.scrollTop).to.equal(0);
       });
 
-      it('should keep the page when setting the last page that cannot scroll to the top', async () => {
-        viewer.page = 6;
+      it('should keep the page when scrolling to the last page that cannot scroll to the top', async () => {
+        viewer.scrollToPage(6);
         await nextRenderIdle(viewer);
         expect(viewer.page).to.equal(6);
       });
 
-      it('should follow the most visible page again after scrolling from a set page', async () => {
-        viewer.page = 4;
+      it('should follow the most visible page again after scrolling from a page scrolled to', async () => {
+        viewer.scrollToPage(4);
         await nextRenderIdle(viewer);
-        // Scroll until only a small part of page 4 is visible
         await scrollTo(pages[4].offsetTop - 30);
         expect(viewer.page).to.equal(5);
       });
 
-      it('should not scroll when setting a page out of range', async () => {
-        clearWarnings();
-        const stub = sinon.stub(console, 'warn');
-        viewer.page = 10;
+      it('should fit the pages to a new width after scrollToPage() with a fraction', async () => {
+        sinon.stub(console, 'warn');
+        viewer.scrollToPage(2.5);
         await nextFrame();
-        expect(content.scrollTop).to.equal(0);
-        expect(viewer.page).to.equal(10);
-        expect(stub).to.be.calledOnce;
+        viewer.style.width = '600px';
+        await nextResize(viewer);
+        expect(pages[0].offsetWidth).to.be.closeTo(getContentBoxSize(content).width, 1);
       });
 
-      [0, 2.5, NaN].forEach((value) => {
-        it(`should warn and keep the value when setting page to ${value}`, async () => {
+      it('should scroll to the start of the page with scrollToPage()', async () => {
+        const spy = sinon.spy();
+        viewer.addEventListener('page-changed', spy);
+        viewer.scrollToPage(4);
+        await nextRenderIdle(viewer);
+        expect(getPageTop(4)).to.be.closeTo(getPaddingTop(), 1);
+        expect(viewer.page).to.equal(4);
+        expect(spy).to.be.calledOnce;
+        expect(spy.firstCall.args[0].detail.value).to.equal(4);
+      });
+
+      it('should scroll back to the start of the current page with scrollToPage()', async () => {
+        await scrollTo(pages[1].offsetTop + 50);
+        expect(viewer.page).to.equal(2);
+        viewer.scrollToPage(2);
+        await nextFrame();
+        expect(getPageTop(2)).to.be.closeTo(getPaddingTop(), 1);
+        expect(viewer.page).to.equal(2);
+      });
+
+      [0, 2.5, 10, NaN].forEach((value) => {
+        it(`should warn and not scroll with scrollToPage(${value})`, async () => {
           clearWarnings();
           const stub = sinon.stub(console, 'warn');
-          viewer.page = value;
+          viewer.scrollToPage(value);
           await nextFrame();
           expect(content.scrollTop).to.equal(0);
-          expect(Object.is(viewer.page, value)).to.be.true;
+          expect(viewer.page).to.equal(1);
           expect(stub).to.be.calledOnce;
           expect(stub.firstCall.args[0]).to.include(`The page ${value} is out of range`);
         });
+      });
+
+      it('should not scroll with scrollToPage() while detached, or when attached again', async () => {
+        const parent = viewer.parentElement!;
+        viewer.remove();
+        viewer.scrollToPage(4);
+        parent.appendChild(viewer);
+        await nextResize(viewer);
+        await nextFrame();
+        expect(viewer.page).to.equal(1);
+        expect(content.scrollTop).to.equal(0);
+      });
+
+      it('should open a new document at the page of scrollToPage() after setting src', async () => {
+        await scrollTo(pages[1].offsetTop);
+        const scrollTop = content.scrollTop;
+        viewer.src = fixtureUrl('links.pdf');
+        viewer.scrollToPage(3);
+        expect(content.scrollTop).to.equal(scrollTop);
+        await oneEvent(viewer, 'document-load');
+        await nextFrame();
+        expect(viewer.page).to.equal(3);
+        expect(getPageTop(3)).to.be.closeTo(getPaddingTop(), 1);
       });
 
       it('should reset the page when src changes', async () => {
@@ -185,19 +261,11 @@ describe('pages', () => {
         expect(viewer.page).to.equal(1);
         expect(content.scrollTop).to.equal(0);
       });
-
-      it('should keep a page set together with src', async () => {
-        viewer.page = 2;
-        viewer.src = fixtureUrl('links.pdf');
-        await oneEvent(viewer, 'document-load');
-        expect(viewer.page).to.equal(2);
-        expect(getPageTop(2)).to.be.closeTo(getPaddingTop(), 1);
-      });
     });
 
     describe('hide and show', () => {
       beforeEach(async () => {
-        viewer.page = 3;
+        viewer.scrollToPage(3);
         await nextRenderIdle(viewer);
       });
 
@@ -221,10 +289,7 @@ describe('pages', () => {
 
       it('should restore the scroll position when shown again', async () => {
         const scrollTop = pages[2].offsetTop + 50;
-        const scrolled = oneEvent(content, 'scroll');
-        content.scrollTop = scrollTop;
-        await scrolled;
-        await nextFrame();
+        await scrollWithoutRender(scrollTop);
         viewer.hidden = true;
         await nextResize(viewer);
         viewer.hidden = false;
@@ -232,11 +297,10 @@ describe('pages', () => {
         expect(content.scrollTop).to.be.closeTo(scrollTop, 1);
       });
 
-      it('should scroll to a page set while hidden when shown again', async () => {
+      it('should scroll to a page of scrollToPage() while hidden when shown again', async () => {
         viewer.hidden = true;
         await nextResize(viewer);
-        viewer.page = 2;
-        await nextFrame();
+        viewer.scrollToPage(2);
         viewer.hidden = false;
         await nextResize(viewer);
         expect(viewer.page).to.equal(2);
@@ -252,13 +316,12 @@ describe('pages', () => {
       });
 
       it('should keep the current page in view', async () => {
-        viewer.page = 3;
+        viewer.scrollToPage(3);
         await nextRenderIdle(viewer);
         viewer.style.width = '600px';
         await nextResize(viewer);
         await nextFrame();
         expect(viewer.page).to.equal(3);
-        // The point at the top of the view keeps its place relative to the page size
         expect(getPageTop(3)).to.be.within(getPaddingTop(), 2 * getPaddingTop());
       });
 
@@ -285,7 +348,6 @@ describe('pages', () => {
         const stub = sinon.stub(console, 'warn');
         viewer.src = fixtureUrl('links.pdf');
         await oneEvent(viewer, 'document-load');
-        // Rendering of the first page is in progress
         expect(pages[0].querySelector('canvas')).to.be.null;
         const idle = nextRenderIdle(viewer);
         viewer.style.width = '600px';
@@ -320,7 +382,6 @@ describe('pages', () => {
     });
 
     it('should render the most visible page first, then the other visible pages, then one page ahead on each side', async () => {
-      // The end of page 9 and most of page 10 are visible
       await scrollTo(pages[9].offsetTop - 100);
       expect(rendered).to.deep.equal([10, 9, 11, 8]);
     });
@@ -423,7 +484,7 @@ describe('pages', () => {
     beforeEach(async () => {
       await createViewer();
       const getContext = HTMLCanvasElement.prototype.getContext;
-      // The canvas of a page gets an opaque context, the context of a page fails to be created
+      // Page canvases request an opaque context, which fails here
       function fakeGetContext(this: HTMLCanvasElement, type: string, options?: { alpha?: boolean }) {
         return options && options.alpha === false ? null : getContext.call(this, type, options);
       }
@@ -457,39 +518,51 @@ describe('pages', () => {
       await createViewer();
     });
 
-    it('should scroll to the page once loaded', async () => {
-      viewer.page = 3;
+    it('should scroll to the page of scrollToPage() after setting src once loaded', async () => {
       viewer.src = fixtureUrl('multi-page.pdf');
+      viewer.scrollToPage(3);
       await oneEvent(viewer, 'document-load');
+      await nextFrame();
       expect(viewer.page).to.equal(3);
       expect(getPageTop(3)).to.be.closeTo(getPaddingTop(), 1);
     });
 
-    it('should render the first pages for a page out of range', async () => {
-      clearWarnings();
-      const stub = sinon.stub(console, 'warn');
-      viewer.page = 10;
+    it('should scroll the new document with scrollToPage() when src changes again', async () => {
       viewer.src = fixtureUrl('multi-page.pdf');
-      await nextRenderIdle(viewer);
-      expect(getRenderedPageNumbers()).to.include(1);
-      expect(viewer.page).to.equal(10);
-      expect(stub).to.be.calledOnce;
+      viewer.scrollToPage(3);
+      viewer.src = fixtureUrl('links.pdf');
+      await oneEvent(viewer, 'document-load');
+      await nextFrame();
+      expect(viewer.page).to.equal(3);
+      expect(getPageTop(3)).to.be.closeTo(getPaddingTop(), 1);
+    });
+
+    it('should not scroll or warn with scrollToPage() without src', async () => {
+      const stub = sinon.stub(console, 'warn');
+      viewer.scrollToPage(3);
+      await nextFrame();
+      viewer.src = fixtureUrl('multi-page.pdf');
+      await oneEvent(viewer, 'document-load');
+      expect(viewer.page).to.equal(1);
+      expect(content.scrollTop).to.equal(0);
+      expect(stub).to.be.not.called;
     });
   });
 
   describe('hidden before page sizes are known', () => {
     beforeEach(async () => {
       await createViewer();
-      viewer.page = 6;
       viewer.src = fixtureUrl('multi-page.pdf');
+      viewer.scrollToPage(6);
       await oneEvent(viewer, 'document-load');
+      await nextFrame();
       // Hide before the size of the landscape page 6 is applied
       viewer.hidden = true;
       await nextResize(viewer);
       await nextFrame();
     });
 
-    it('should show the set page when shown again', async () => {
+    it('should show the page scrolled to when shown again', async () => {
       viewer.hidden = false;
       await nextResize(viewer);
       await nextFrame();
@@ -504,9 +577,9 @@ describe('pages', () => {
   describe('hidden viewer', () => {
     beforeEach(async () => {
       await createViewer('hidden');
-      viewer.page = 3;
       const idle = nextRenderIdle(viewer);
       viewer.src = fixtureUrl('multi-page.pdf');
+      viewer.scrollToPage(3);
       await idle;
     });
 
@@ -520,6 +593,19 @@ describe('pages', () => {
       await idle;
       expect(getRenderedPageNumbers()).to.include(3);
       expect(viewer.page).to.equal(3);
+    });
+
+    it('should render the first pages once shown after scrollToPage() for a page out of range', async () => {
+      clearWarnings();
+      const stub = sinon.stub(console, 'warn');
+      viewer.scrollToPage(10);
+      await nextFrame();
+      const idle = nextRenderIdle(viewer);
+      viewer.hidden = false;
+      await idle;
+      expect(getRenderedPageNumbers()).to.include(1);
+      expect(viewer.page).to.equal(1);
+      expect(stub).to.be.calledOnce;
     });
   });
 
@@ -553,11 +639,43 @@ describe('pages', () => {
     });
   });
 
-  describe('relayout', () => {
-    it('should keep a set page at the top after an earlier page gets its own size', async () => {
+  describe('short and tall pages', () => {
+    beforeEach(async () => {
       await createViewer();
-      viewer.page = 3;
       await loadAndRender(
+        viewer,
+        createPdf([
+          { content: '', mediaBox: [0, 0, 612, 100] },
+          { content: '', mediaBox: [0, 0, 612, 792] },
+          { content: '', mediaBox: [0, 0, 612, 2000] },
+          { content: '', mediaBox: [0, 0, 612, 100] },
+        ]),
+      );
+    });
+
+    it('should be the first page when scrolled back to the top', async () => {
+      await scrollWithoutRender(50);
+      expect(viewer.page).to.equal(2);
+      await scrollWithoutRender(0);
+      expect(viewer.page).to.equal(1);
+    });
+
+    it('should be the last page when scrolled to the bottom', async () => {
+      await scrollTo(content.scrollHeight);
+      expect(viewer.page).to.equal(4);
+    });
+
+    it('should keep a page taller than the view while it fills most of the view', async () => {
+      // Page 3 is three times taller than the view, and page 4 shows 60% of it
+      await scrollTo(pages[3].offsetTop + pages[3].offsetHeight * 0.6 - content.clientHeight);
+      expect(viewer.page).to.equal(3);
+    });
+  });
+
+  describe('relayout', () => {
+    it('should keep a page scrolled to at the top after an earlier page gets its own size', async () => {
+      await createViewer();
+      const rendered = loadAndRender(
         viewer,
         createPdf([
           { content: '', mediaBox: [0, 0, 612, 792] },
@@ -565,6 +683,8 @@ describe('pages', () => {
           { content: '', mediaBox: [0, 0, 612, 792] },
         ]),
       );
+      viewer.scrollToPage(3);
+      await rendered;
       expect(viewer.page).to.equal(3);
       expect(getPageTop(3)).to.be.closeTo(getPaddingTop(), 1);
     });
@@ -572,7 +692,7 @@ describe('pages', () => {
     it('should keep the scroll position when moved in the DOM', async () => {
       await createViewer();
       await loadAndRender(viewer, fixtureUrl('multi-page.pdf'));
-      viewer.page = 3;
+      viewer.scrollToPage(3);
       await nextRenderIdle(viewer);
       const { scrollTop } = content;
       const container = document.createElement('div');

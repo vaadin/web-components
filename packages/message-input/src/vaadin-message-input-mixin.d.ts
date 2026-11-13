@@ -49,4 +49,12 @@ export declare class MessageInputMixinClass {
    * Set to true to disable this element.
    */
   disabled: boolean;
+
+  /**
+   * Set to true to prevent submitting the message. The send button is
+   * disabled and pressing Enter does not submit. The user can still type
+   * in the text area and the current value is kept.
+   * @attr {boolean} submit-disabled
+   */
+  submitDisabled: boolean;
 }

@@ -77,7 +77,6 @@ export const PdfViewerToolbarMixin = (superClass) =>
       };
     }
 
-    /** The items of the zoom select, built again only when `zoom` or the texts change. */
     #zoomItems = [];
 
     /** @protected */
@@ -105,7 +104,7 @@ export const PdfViewerToolbarMixin = (superClass) =>
           ?hidden="${this.headerHidden}"
           @click="${this.#onHeaderClick}"
         >
-          <span part="title" dir="auto" title="${title}">${title}</span>
+          <span id="title" part="title" dir="auto" title="${title}">${title}</span>
           <span part="header-toggle"></span>
         </button>
         <div id="toolbar" part="toolbar" ?hidden="${collapsed}">
@@ -140,7 +139,11 @@ export const PdfViewerToolbarMixin = (superClass) =>
           .disabled="${!hasDocument || page <= 1}"
           @click="${this.#onPreviousPageClick}"
         >
-          <vaadin-tooltip slot="tooltip" .text="${i18n.previousPage}"></vaadin-tooltip>
+          <vaadin-tooltip
+            slot="tooltip"
+            .ariaLinkMode="${'aria-labelledby'}"
+            .text="${i18n.previousPage}"
+          ></vaadin-tooltip>
         </vaadin-pdf-viewer-button>
         <vaadin-pdf-viewer-button
           slot="toolbar-navigation"
@@ -149,7 +152,7 @@ export const PdfViewerToolbarMixin = (superClass) =>
           .disabled="${!hasDocument || page >= pageCount}"
           @click="${this.#onNextPageClick}"
         >
-          <vaadin-tooltip slot="tooltip" .text="${i18n.nextPage}"></vaadin-tooltip>
+          <vaadin-tooltip slot="tooltip" .ariaLinkMode="${'aria-labelledby'}" .text="${i18n.nextPage}"></vaadin-tooltip>
         </vaadin-pdf-viewer-button>
         <vaadin-integer-field
           slot="toolbar-navigation"
@@ -158,6 +161,7 @@ export const PdfViewerToolbarMixin = (superClass) =>
           min="1"
           max="${pageCount || 1}"
           .value="${this.#getPageFieldValue()}"
+          .accessibleName="${i18n.page}"
           .errorMessage="${i18n.pageError.replace('{pageCount}', pageCount)}"
           .disabled="${!hasDocument}"
           @change="${this.#onPageFieldChange}"
@@ -186,13 +190,14 @@ export const PdfViewerToolbarMixin = (superClass) =>
           .disabled="${!hasDocument || !getZoomOutLevel(zoomFactor)}"
           @click="${this.#onZoomOutClick}"
         >
-          <vaadin-tooltip slot="tooltip" .text="${i18n.zoomOut}"></vaadin-tooltip>
+          <vaadin-tooltip slot="tooltip" .ariaLinkMode="${'aria-labelledby'}" .text="${i18n.zoomOut}"></vaadin-tooltip>
         </vaadin-pdf-viewer-button>
         <vaadin-select
           slot="toolbar-zoom"
           theme="align-center"
           .items="${this.#zoomItems}"
           .value="${String(this.zoom)}"
+          .accessibleName="${i18n.zoom}"
           .disabled="${!hasDocument}"
           @change="${this.#onZoomSelectChange}"
         ></vaadin-select>
@@ -203,7 +208,7 @@ export const PdfViewerToolbarMixin = (superClass) =>
           .disabled="${!hasDocument || !getZoomInLevel(zoomFactor)}"
           @click="${this.#onZoomInClick}"
         >
-          <vaadin-tooltip slot="tooltip" .text="${i18n.zoomIn}"></vaadin-tooltip>
+          <vaadin-tooltip slot="tooltip" .ariaLinkMode="${'aria-labelledby'}" .text="${i18n.zoomIn}"></vaadin-tooltip>
         </vaadin-pdf-viewer-button>
       `;
     }
@@ -222,7 +227,11 @@ export const PdfViewerToolbarMixin = (superClass) =>
           .disabled="${!this.pageCount}"
           @click="${this.#onDownloadClick}"
         >
-          <vaadin-tooltip slot="tooltip" .text="${this.__effectiveI18n.download}"></vaadin-tooltip>
+          <vaadin-tooltip
+            slot="tooltip"
+            .ariaLinkMode="${'aria-labelledby'}"
+            .text="${this.__effectiveI18n.download}"
+          ></vaadin-tooltip>
         </vaadin-pdf-viewer-button>
       `;
     }
@@ -234,7 +243,7 @@ export const PdfViewerToolbarMixin = (superClass) =>
 
     /** @private */
     #onPreviousPageClick() {
-      this._scrollToPage(Math.min(this.page, this.pageCount + 1) - 1);
+      this._scrollToPage(this.page - 1);
     }
 
     /** @private */
@@ -244,18 +253,12 @@ export const PdfViewerToolbarMixin = (superClass) =>
 
     /** @private */
     #onNextPageClick() {
-      this._scrollToPage(Math.max(this.page, 0) + 1);
+      this._scrollToPage(this.page + 1);
     }
 
-    /**
-     * Returns the value of the page field. A page out of range set by the
-     * application gives an empty field, as it would make the field invalid.
-     * @return {string}
-     * @private
-     */
+    /** @private */
     #getPageFieldValue() {
-      const { page, pageCount } = this;
-      return Number.isInteger(page) && page >= 1 && page <= pageCount ? String(page) : '';
+      return this.pageCount ? String(this.page) : '';
     }
 
     /**
@@ -288,11 +291,7 @@ export const PdfViewerToolbarMixin = (superClass) =>
       }
     }
 
-    /**
-     * Returns the items of the zoom select: the fit zooms, the zoom levels,
-     * and a zoom set by the application that is not one of the levels.
-     * @private
-     */
+    /** @private */
     #getZoomItems() {
       const i18n = this.__effectiveI18n;
       const items = [

@@ -6,7 +6,6 @@ import '../vaadin-pdf-viewer.js';
 import type { PdfViewer } from '../vaadin-pdf-viewer.js';
 import { createPdf, fixtureUrl, getContentBoxSize, getViewCenter, loadAndRender, nextRenderIdle } from './helpers.js';
 
-/** The width of an A4 page at 100% in CSS pixels */
 const A4_WIDTH = (595.92 * 96) / 72;
 
 describe('zoom', () => {
@@ -39,7 +38,7 @@ describe('zoom', () => {
 
     it('should fit the whole current page with page-fit', async () => {
       await loadAndRender(viewer, portraitAndLandscape());
-      viewer.page = 2;
+      viewer.scrollToPage(2);
       await nextRenderIdle(viewer);
       viewer.zoom = 'page-fit';
       await nextRenderIdle(viewer);
@@ -52,17 +51,18 @@ describe('zoom', () => {
 
     it('should fit the width of the current page with page-width', async () => {
       await loadAndRender(viewer, portraitAndLandscape());
-      viewer.page = 2;
+      viewer.scrollToPage(2);
       await nextRenderIdle(viewer);
       viewer.style.width = '500px';
       await nextResize(viewer);
       expect(getPage(1).offsetWidth).to.be.closeTo(getContentBoxSize(content).width, 1);
     });
 
-    it('should fit a page set before the document loads once it gets its own size', async () => {
+    it('should fit a page scrolled to on load once it gets its own size', async () => {
       viewer.zoom = 'page-fit';
-      viewer.page = 2;
-      await loadAndRender(viewer, portraitAndLandscape());
+      const rendered = loadAndRender(viewer, portraitAndLandscape());
+      viewer.scrollToPage(2);
+      await rendered;
       const { width, height } = getContentBoxSize(content);
       const landscape = getPage(1);
       expect(viewer.page).to.equal(2);
@@ -75,7 +75,7 @@ describe('zoom', () => {
       viewer.zoom = 'page-fit';
       await nextRenderIdle(viewer);
       const widthBefore = getPage(0).offsetWidth;
-      viewer.page = 2;
+      viewer.scrollToPage(2);
       await nextRenderIdle(viewer);
       expect(viewer.page).to.equal(2);
       expect(getPage(0).offsetWidth).to.equal(widthBefore);
@@ -150,12 +150,10 @@ describe('zoom', () => {
     });
 
     it('should keep the same part of the current page in view when zooming', async () => {
-      // How far the top of the view is down the page, relative to the page height
       const getScrollRatio = (page: HTMLElement) => (content.scrollTop - page.offsetTop) / page.offsetHeight;
 
-      viewer.page = 3;
+      viewer.scrollToPage(3);
       await nextRenderIdle(viewer);
-      // Scroll to the middle of page 3
       content.scrollTop += pages[2].offsetHeight / 2;
       // Let the viewer handle the scroll
       await nextFrame();
