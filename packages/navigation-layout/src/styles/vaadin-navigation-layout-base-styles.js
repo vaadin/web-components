@@ -27,12 +27,14 @@ export const navigationLayoutStyles = css`
     --vaadin-navigation-layout-direction: row;
     --vaadin-navigation-layout-toggle-display: none;
 
-    [part='end'] {
-      --vaadin-navigation-layout-collapsed: 1;
-    }
-
     [part='content'] {
       scrollbar-width: none;
+    }
+  }
+
+  :host([slot='navbar']) {
+    [part='end'] {
+      --vaadin-navigation-layout-collapsed: 1;
     }
   }
 

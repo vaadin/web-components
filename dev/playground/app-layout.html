@@ -27,6 +27,7 @@
       import '@vaadin/navigation-layout';
       import '@vaadin/navigation-layout/vaadin-navigation-layout-toggle.js';
       import '@vaadin/tooltip';
+      import { issueWarning } from '@vaadin/component-base/src/warnings.js';
 
       const params = new URLSearchParams(location.search);
       const example = params.get('example');
@@ -50,30 +51,152 @@
           } else {
             navLayout.setAttribute('collapsed', '');
           }
+
+          // Using both navbar and drawer
+          if (navLayouts.length > 1) {
+            // Remove "deep navigation" from drawer items (which are only used on small viewport sizes)
+            document.querySelectorAll('vaadin-navigation-layout[slot="drawer"] vaadin-side-nav-item').forEach((item) => {
+              item.removeAttribute('data-detail');
+            });
+          }
         });
 
         const layout = document.querySelector('vaadin-app-layout');
         layout.append(viewContent.cloneNode(true));
 
-        // Mirror the options set by the parent page as classes on the iframe element
-        const applyOptions = () => {
-          const { classList } = window.frameElement;
-          document.documentElement.classList = classList;
-          document.documentElement.classList.add('example');
+        // Navigation state: ?example=drawer&section=people&detail=directory
+        const sections = {
+          home: { title: 'Home', items: ['Overview', 'Activity'] },
+          people: {
+            title: 'People',
+            items: ['Directory', 'Org Chart', 'Time Off', 'Onboarding', 'Benefits', 'Compensation'],
+          },
+          calendar: { title: 'Calendar', items: ['Schedule', 'Invitations', 'Holidays'] },
+          reports: { title: 'Reports', items: ['Overview', 'Headcount', 'Time Off'] },
+          settings: { title: 'Settings', items: ['General', 'Account', 'Notifications'] },
+          support: { title: 'Support', items: ['Help Center', 'Contact Support'] },
         };
-        applyOptions();
-        new MutationObserver(applyOptions).observe(window.frameElement, { attributeFilter: ['class'] });
+        const masterDetail = layout.querySelector('vaadin-master-detail-layout');
+        const masterNav = masterDetail.querySelector('vaadin-side-nav');
+        const detail = masterDetail.querySelector('[slot="detail"]');
+        const sectionBreadcrumb = detail.querySelector('vaadin-breadcrumbs-item[path]');
+        const detailHeading = detail.querySelector('vaadin-breadcrumbs-item[current]');
+        const description = detail.querySelector('.text-secondary');
+        const directoryDescription = description.textContent;
+        let currentSection;
 
-        // Fake navigation: prevent actual navigation, update 'current' item manually
+        const navigationUrl = (section, detailKey) => {
+          const url = new URL(location.href);
+          url.searchParams.set('section', section);
+          url.searchParams.delete('detail');
+          url.hash = '';
+          if (detailKey) {
+            url.searchParams.set('detail', detailKey);
+          }
+          return url;
+        };
+
+        const renderNavigation = () => {
+          const url = new URL(location.href);
+          let sectionKey = url.searchParams.get('section') || 'people';
+          if (!Object.hasOwn(sections, sectionKey)) {
+            issueWarning(`Unknown app layout section: ${sectionKey}`);
+            sectionKey = 'people';
+          }
+          const section = sections[sectionKey];
+          const items = section.items.map((title) => ({ title, key: title.toLowerCase().replaceAll(' ', '-') }));
+          // Default the initial view to Directory, but keep explicit section-only routes master-only.
+          let detailKey = url.searchParams.get('detail') ?? (url.searchParams.has('section') ? null : 'directory');
+          if (detailKey && !items.some((item) => item.key === detailKey)) {
+            issueWarning(`Unknown app layout detail in ${sectionKey}: ${detailKey}`);
+            detailKey = null;
+          }
+          const route = navigationUrl(sectionKey, detailKey);
+          if (route.href !== location.href) {
+            history.replaceState(history.state, '', route);
+          }
+
+          if (!document.querySelector('vaadin-app-layout').shadowRoot.querySelector('#navbarBottom').hidden) {
+            window.dispatchEvent(new CustomEvent('close-overlay-drawer'));
+          }
+
+          layout.querySelectorAll('[data-section]').forEach((item) => {
+            item.path = navigationUrl(item.dataset.section, item.dataset.detail).href;
+          });
+          if (currentSection !== sectionKey) {
+            masterDetail.querySelector('.section-title').textContent = section.title;
+            masterNav.setAttribute('aria-label', section.title);
+            masterNav.replaceChildren(
+              ...items.map((item) => {
+                const navItem = document.createElement('vaadin-side-nav-item');
+                navItem.textContent = item.title;
+                navItem.path = navigationUrl(sectionKey, item.key).href;
+                return navItem;
+              }),
+            );
+            currentSection = sectionKey;
+          }
+
+          if (detailKey) {
+            sectionBreadcrumb.textContent = section.title;
+            sectionBreadcrumb.path = navigationUrl(sectionKey).href;
+            detailHeading.textContent = items.find((item) => item.key === detailKey).title;
+            const isDirectory = sectionKey === 'people' && detailKey === 'directory';
+            description.textContent = isDirectory
+              ? directoryDescription
+              : `Explore ${detailHeading.textContent.toLowerCase()} in ${section.title}.`;
+            detail.querySelectorAll('[data-directory-only]').forEach((element) => {
+              element.hidden = !isDirectory;
+            });
+            if (!detail.isConnected) {
+              masterDetail._setDetail(detail);
+            }
+          } else {
+            masterDetail._setDetail(null);
+          }
+          layout.querySelectorAll('vaadin-side-nav').forEach((nav) => {
+            nav.location = location.href;
+          });
+        };
+
+        renderNavigation();
+        window.addEventListener('popstate', renderNavigation);
+
+        // Mirror the options set by the parent page as classes on the iframe element
+        if (window.frameElement) {
+          const applyOptions = () => {
+            const { classList } = window.frameElement;
+            document.documentElement.classList = classList;
+            document.documentElement.classList.add('example');
+          };
+          applyOptions();
+          new MutationObserver(applyOptions).observe(window.frameElement, { attributeFilter: ['class'] });
+        }
+
         layout.addEventListener('click', (e) => {
-          const link = e.composedPath().find((el) => el.localName === 'a');
-          if (link) {
+          if (e.defaultPrevented || e.button !== 0 || e.metaKey || e.ctrlKey || e.shiftKey || e.altKey) {
+            return;
+          }
+
+          const overflowMenuItem = e.target.closest('[data-overflow-menu]');
+          if (overflowMenuItem) {
+            overflowMenuItem.dispatchEvent(new CustomEvent('drawer-toggle-click', { bubbles: true }));
             e.preventDefault();
-            if (link.href) {
-              layout.querySelectorAll('vaadin-side-nav-item').forEach((item) => item.removeAttribute('current'));
-              e.composedPath()
-                .find((el) => el.localName === 'vaadin-side-nav-item')
-                .setAttribute('current', '');
+          }
+
+          const link = e.composedPath().find((el) => el instanceof HTMLAnchorElement);
+          if (!link || link.hasAttribute('download') || (link.target && link.target !== '_self')) {
+            return;
+          }
+          if (link.href) {
+            const url = new URL(link.href);
+            if (url.origin !== location.origin || url.pathname !== location.pathname) {
+              return;
+            }
+            e.preventDefault();
+            if (url.href !== location.href) {
+              history.pushState(null, '', url);
+              renderNavigation();
             }
           }
         });
@@ -96,10 +219,8 @@
         document.querySelector('#viewport-size').addEventListener('change', (e) => {
           document.querySelectorAll('iframe').forEach((iframe) => {
             iframe.classList.remove('desktop-size', 'tablet-size', 'phone-size');
-            // iframe.document.documentElement.classList.remove('desktop-size', 'tablet-size', 'phone-size');
             if (e.target.value !== 'responsive') {
               iframe.classList.add(`${e.target.value}-size`);
-              // iframe.document.documentElement.classList.add(`${e.target.value}-size`);
             }
             // Clear the size set by manually resizing the iframe
             iframe.style.removeProperty('width');
@@ -152,6 +273,44 @@
         }
       }
 
+      @media (width < 600px) {
+        vaadin-app-layout {
+          --vaadin-app-layout-touch-optimized: true;
+        }
+
+        vaadin-master-detail-layout {
+          --_detail-size: 100%;
+          height: 100vh;
+          max-height: 100%;
+        }
+      }
+
+      @media (width >= 600px) {
+        vaadin-breadcrumbs > [slot="root"] {
+          display: none;
+        }
+      }
+
+      vaadin-app-layout:has([slot='navbar']) {
+        /* Force the drawer to be hidden, and hide the toggle button if it's marked "optional" */
+        --vaadin-app-layout-drawer-overlay: true;
+        --vaadin-drawer-toggle-display: none;
+      }
+
+      [data-overflow-menu] {
+        &::part(toggle-button),
+        &::part(children) {
+          display: none;
+        }
+
+        /* TODO might need a feature that allows a parent to show as "current" even though it doesn't have a path */
+        &:has(vaadin-side-nav-item[current])::part(content) {
+          --vaadin-side-nav-item-background: var(--aura-accent-surface) padding-box;
+          --vaadin-side-nav-item-text-color: var(--aura-accent-text-color);
+          --vaadin-side-nav-item-border-color: var(--aura-accent-border-color);
+        }
+      }
+
       /* Dev page styles */
       html:not(.example) {
         --vaadin-horizontal-layout-gap: var(--vaadin-gap-l);
@@ -169,36 +328,42 @@
         display: block;
         resize: both;
         overflow: auto;
-        margin: 1.5rem 0 4rem;
+        margin: 2rem 4rem 4rem 12px;
         width: 1200px;
         height: 602px;
         min-width: 200px;
         min-height: 200px;
         max-width: 100%;
-        border-radius: 12px;
-        border: 0;
-        box-shadow: 0 0 0 12px #000, 0 0 0 13px rgba(255, 255, 255, 0.1), 0 6px 24px 8px #000;
+        border-radius: 24px;
+        border: 10px solid #000;
+        box-shadow: 0 0 0 1px rgba(255, 255, 255, 0.1), 0 2px 8px -2px hsla(0, 0%, 0%, 0.5);
 
         &:is(.desktop-size, .tablet-size, .phone-size) {
           resize: none;
           zoom: 0.75;
+          display: inline-block;
+          box-shadow: 0 0 0 1px rgba(255, 255, 255, 0.1), 0 4px 12px -4px #000;
         }
 
         &.desktop-size {
           width: 1440px;
           height: 850px;
+          border-width: 12px;
         }
 
         &.tablet-size {
-          width: 800px;
-          height: 1000px;
-          border-radius: 30px;
+          width: 768px;
+          height: 1024px;
+          border-radius: 42px;
+          border-width: 20px;
         }
 
         &.phone-size {
           width: 390px;
           height: 800px;
-          border-radius: 40px;
+          border-radius: 42px;
+          border-width: 8px;
+          display: inline-block;
         }
       }
 
@@ -243,13 +408,8 @@
         /* --aura-background-color-dark: #090909; */
         /* color-scheme: dark; */
         /* --aura-content-color-scheme: light dark; */
+        /* TODO should this control nav-layout width or should it have a dedicated property? */
         --vaadin-app-layout-drawer-width: 14rem;
-
-        @media (width < 600px) {
-          vaadin-app-layout {
-            --vaadin-app-layout-touch-optimized: true;
-          }
-        }
 
         body {
           margin: 0;
@@ -265,11 +425,6 @@
         &.phone-size {
           --safe-area-inset-top: 20px;
           --safe-area-inset-bottom: 40px;
-        }
-
-        vaadin-app-layout:has([slot='navbar']) {
-          --vaadin-drawer-toggle-display: none;
-          --vaadin-app-layout-drawer-overlay: true;
         }
       }
 
@@ -371,10 +526,10 @@
       </div>
     </vaadin-horizontal-layout>
 
-    <h2 class="heading">Drawer</h2>
+    <!-- <h2 class="heading">Drawer</h2> -->
     <iframe data-example="drawer"></iframe>
 
-    <h2 class="heading">Navbar</h2>
+    <!-- <h2 class="heading">Navbar</h2> -->
     <iframe data-example="navbar"></iframe>
 
     <template id="drawer">
@@ -391,25 +546,34 @@
         <vaadin-navigation-layout slot="drawer"></vaadin-navigation-layout>
         <vaadin-navigation-layout slot="navbar-bottom">
           <vaadin-side-nav>
-            <vaadin-side-nav-item path="/home" theme="icon-on-top">
+            <vaadin-side-nav-item data-section="home" theme="icon-on-top">
               <vaadin-icon slot="prefix" src="../assets/lucide-icons/home.svg"></vaadin-icon>
               Home
             </vaadin-side-nav-item>
-            <vaadin-side-nav-item path="/dev/playground/app-layout.html" theme="icon-on-top">
+            <vaadin-side-nav-item data-section="people" theme="icon-on-top">
               <vaadin-icon slot="prefix" src="../assets/lucide-icons/users.svg"></vaadin-icon>
               People
             </vaadin-side-nav-item>
-            <vaadin-side-nav-item path="/calendar" theme="icon-on-top">
+            <vaadin-side-nav-item data-section="calendar" theme="icon-on-top">
               <vaadin-icon slot="prefix" src="../assets/lucide-icons/calendar.svg"></vaadin-icon>
               Calendar
               <vaadin-badge number="2" theme="info number-only" slot="suffix">Invitations</vaadin-badge>
             </vaadin-side-nav-item>
-            <vaadin-side-nav-item path="/reports" theme="icon-on-top">
+            <vaadin-side-nav-item data-section="reports" theme="icon-on-top">
               <vaadin-icon slot="prefix" src="../assets/lucide-icons/chart-pie.svg"></vaadin-icon>
               Reports
             </vaadin-side-nav-item>
+            <vaadin-side-nav-item theme="icon-on-top" data-overflow-menu match-nested>
+              <vaadin-icon slot="prefix" src="../assets/lucide-icons/layers.svg"></vaadin-icon>
+              Menu
+              <vaadin-side-nav-item slot="children" data-section="settings">
+                Settings
+              </vaadin-side-nav-item>
+              <vaadin-side-nav-item slot="children" data-section="support">
+                Support
+              </vaadin-side-nav-item>
+            </vaadin-side-nav-item>
           </vaadin-side-nav>
-          <vaadin-drawer-toggle slot="end"></vaadin-drawer-toggle>
         </vaadin-navigation-layout>
       </vaadin-app-layout>
     </template>
@@ -421,35 +585,35 @@
       </div>
       <!-- <vaadin-text-field aria-label="Search" placeholder="Search" slot="start"></vaadin-text-field> -->
       <vaadin-side-nav>
-        <vaadin-side-nav-item path="/home">
+        <vaadin-side-nav-item data-section="home" data-detail="overview">
           <vaadin-icon slot="prefix" src="../assets/lucide-icons/home.svg"></vaadin-icon>
           Home
           <vaadin-tooltip slot="tooltip" text="Home" aria-link-mode="none" position="end"></vaadin-tooltip>
         </vaadin-side-nav-item>
-        <vaadin-side-nav-item path="/dev/playground/app-layout.html">
+        <vaadin-side-nav-item data-section="people" data-detail="directory">
           <vaadin-icon slot="prefix" src="../assets/lucide-icons/users.svg"></vaadin-icon>
           People
           <vaadin-tooltip slot="tooltip" text="People" aria-link-mode="none" position="end"></vaadin-tooltip>
         </vaadin-side-nav-item>
-        <vaadin-side-nav-item path="/calendar">
+        <vaadin-side-nav-item data-section="calendar" data-detail="schedule">
           <vaadin-icon slot="prefix" src="../assets/lucide-icons/calendar.svg"></vaadin-icon>
           Calendar
           <vaadin-tooltip slot="tooltip" text="Calendar" aria-link-mode="none" position="end"></vaadin-tooltip>
           <vaadin-badge number="2" theme="info number-only" slot="suffix">Invitations</vaadin-badge>
         </vaadin-side-nav-item>
-        <vaadin-side-nav-item path="/reports">
+        <vaadin-side-nav-item data-section="reports" data-detail="overview">
           <vaadin-icon slot="prefix" src="../assets/lucide-icons/chart-pie.svg"></vaadin-icon>
           Reports
           <vaadin-tooltip slot="tooltip" text="Reports" aria-link-mode="none" position="end"></vaadin-tooltip>
         </vaadin-side-nav-item>
-        <vaadin-side-nav-item path="/settings">
+        <vaadin-side-nav-item data-section="settings" data-detail="general">
           <vaadin-icon slot="prefix" src="../assets/lucide-icons/cog.svg"></vaadin-icon>
           Settings
           <vaadin-tooltip slot="tooltip" text="Settings" aria-link-mode="none" position="end"></vaadin-tooltip>
         </vaadin-side-nav-item>
       </vaadin-side-nav>
 
-      <vaadin-side-nav-item slot="end" path="support">
+      <vaadin-side-nav-item slot="end" data-section="support" data-detail="help-center">
         <vaadin-icon src="../assets/lucide-icons/life-buoy.svg" slot="prefix"></vaadin-icon>
         Support
         <vaadin-tooltip slot="tooltip" text="Support" aria-link-mode="none" position="end"></vaadin-tooltip>
@@ -462,7 +626,7 @@
       </vaadin-button>
       <vaadin-button theme="tertiary" slot="end">
         <vaadin-side-nav-item>
-          <vaadin-avatar theme="xsmall" name="Olivia" slot="prefix"></vaadin-avatar>
+          <vaadin-avatar theme="xsmall" name="Olivia" img="https://randomuser.me/api/portraits/thumb/women/10.jpg" slot="prefix"></vaadin-avatar>
           Olivia
           <vaadin-badge slot="suffix" theme="dot success">Online</vaadin-badge>
         </vaadin-side-nav-item>
@@ -475,29 +639,10 @@
         <vaadin-navigation-layout>
           <div slot="start" class="app-logo">
             <vaadin-drawer-toggle theme="small tertiary optional"></vaadin-drawer-toggle>
-            People
+            <span class="section-title">People</span>
           </div>
           <!-- <vaadin-text-field aria-label="Search" placeholder="Search" slot="start"></vaadin-text-field> -->
-          <vaadin-side-nav>
-            <vaadin-side-nav-item path="people/directory">
-              Directory
-            </vaadin-side-nav-item>
-            <vaadin-side-nav-item path="people/org-chart">
-              Org Chart
-            </vaadin-side-nav-item>
-            <vaadin-side-nav-item path="people/time-off">
-              Time Off
-            </vaadin-side-nav-item>
-            <vaadin-side-nav-item path="people/onboarding">
-              Onboarding
-            </vaadin-side-nav-item>
-            <vaadin-side-nav-item path="people/benefits">
-              Benefits
-            </vaadin-side-nav-item>
-            <vaadin-side-nav-item path="people/compensation">
-              Compensation
-            </vaadin-side-nav-item>
-          </vaadin-side-nav>
+          <vaadin-side-nav></vaadin-side-nav>
         </vaadin-navigation-layout>
         <vaadin-scroller slot="detail" style="height: 100%;">
           <section class="view">
