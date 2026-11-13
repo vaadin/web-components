@@ -289,6 +289,7 @@ describe('structure', () => {
         link: 7,
         entries: '',
 
+        // eslint-disable-next-line no-script-url -- the viewer must not create this link
         uri: 'javascript:void(0)',
       },
     ].forEach(({ name, page, link, entries, uri }) => {
@@ -482,6 +483,21 @@ describe('structure', () => {
     function getOwnedIds(element: Element) {
       return [...element.querySelectorAll('[aria-owns]')].map((owner) => owner.getAttribute('aria-owns'));
     }
+
+    it('should not add text to the structure, which screen readers would read', () => {
+      const { element } = create([
+        {
+          role: 'Figure',
+          alt: 'Chart',
+          children: [
+            { role: 'P', children: [{ type: 'content', id: 'p3R_mc0' }] },
+            { type: 'content', id: 'p3R_mc1' },
+          ],
+        },
+      ]);
+      expect(element.querySelectorAll('*')).to.have.lengthOf(5);
+      expect(element.textContent).to.equal('');
+    });
 
     it('should not take a role from the inherited properties of objects', () => {
       const { element } = create(

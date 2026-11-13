@@ -26,6 +26,8 @@
  * See the License for the specific language governing permissions and
  * limitations under the License.
  */
+import { html, render } from 'lit';
+import { ifDefined } from 'lit/directives/if-defined.js';
 
 /**
  * The ARIA roles of the standard structure types of tagged PDFs. `Link` has none, as the links of the page
@@ -131,9 +133,50 @@ function getOwnedIds(elements) {
 }
 
 /**
+ * What to render for a structure element, or for content or a link among its children.
+ * @typedef {object} StructureElementData
+ * @property {string} [role] the ARIA role
+ * @property {string} [level] the level of a heading
+ * @property {number} [rowSpan]
+ * @property {number} [colSpan]
+ * @property {string} [lang]
+ * @property {string} [alt] the alternative text
+ * @property {string} [owns] the ids of the text elements or of the link that are read in place of the element
+ * @property {StructureElementData[]} [children]
+ */
+
+/**
+ * Renders an element of the structure, with its children. The template has no whitespace between the
+ * elements, which assistive technology would read as text.
+ * @param {StructureElementData} data
+ * @return {import('lit').TemplateResult}
+ */
+function renderElement({ role, level, rowSpan, colSpan, lang, alt, owns, children = [] }) {
+  // The alternative text is the name of the element, or its description when the role must not have a name.
+  // An element without semantics has neither.
+  const hasName = !ROLES_WITHOUT_NAME.has(role ?? 'generic');
+  const label = hasName ? alt : undefined;
+  const description = !hasName && role !== 'none' ? alt : undefined;
+  return html`<span
+    role=${ifDefined(role)}
+    aria-level=${ifDefined(level)}
+    aria-rowspan=${ifDefined(rowSpan)}
+    aria-colspan=${ifDefined(colSpan)}
+    aria-label=${ifDefined(label)}
+    aria-description=${ifDefined(description)}
+    aria-owns=${ifDefined(owns)}
+    lang=${ifDefined(lang)}
+    >${children.map(renderElement)}</span
+  >`;
+}
+
+/**
  * The structure of a tagged PDF page for assistive technology: a tree of elements with ARIA roles that own
  * the text elements and the links of the page. Adapted from `StructTreeLayerBuilder` of pdf.js. Unlike it, the
  * structure is created once the text layer and the links exist, so it only refers to elements of the page.
+ *
+ * One pass over the structure tree decides what each element is and owns, and gives the links their text.
+ * A Lit template then renders the result.
  */
 export class PdfViewerStructureLayer {
   /**
@@ -179,34 +222,22 @@ export class PdfViewerStructureLayer {
      * The root element of the structure.
      * @type {HTMLElement}
      */
-    this.element = this.#createElement(tree);
+    this.element = document.createElement('span');
     this.element.className = 'struct-tree';
+    render(this.#getElementData(tree).children.map(renderElement), this.element);
   }
 
   /**
-   * Creates the element of a structure element, with the elements of its children.
+   * Returns what to render for a structure element and its children. Gives the links of the structure element
+   * their names, and its text when it is a `Link`.
    * @param {object} node a structure element of the tree
    * @param {object} [parent]
    * @param {object} [grandParent]
-   * @return {HTMLElement}
+   * @return {StructureElementData}
    * @private
    */
-  #createElement(node, parent, grandParent) {
-    const element = document.createElement('span');
+  #getElementData(node, parent, grandParent) {
     const role = getRole(node, parent, grandParent);
-    const attributes = {
-      role,
-      'aria-level': node.role.match(HEADING_PATTERN)?.[1],
-      'aria-rowspan': node.rowSpan,
-      'aria-colspan': node.colSpan,
-      lang: node.lang,
-    };
-    Object.entries(attributes).forEach(([name, value]) => {
-      if (value !== undefined) {
-        element.setAttribute(name, value);
-      }
-    });
-
     // A list or a table has only items or rows, so it leaves out content and links directly in it.
     const children = (node.children ?? []).filter(
       (child) => 'role' in child || !ROLES_WITH_REQUIRED_CHILDREN.has(role),
@@ -218,31 +249,30 @@ export class PdfViewerStructureLayer {
     // As in pdf.js, the alternative text names the links of the structure element. Without links, it names
     // the structure element.
     links.forEach((link) => this.linkNames.set(link, { alt: node.alt, text }));
-    if (node.alt && !links.length) {
-      if (node.role === 'Figure') {
-        // An image with the alternative text, as a figure that owns no text has no content to read.
-        const image = element.appendChild(document.createElement('span'));
-        image.setAttribute('role', 'img');
-        image.setAttribute('aria-label', node.alt);
-      } else if (role !== 'none') {
-        element.setAttribute(ROLES_WITHOUT_NAME.has(role ?? 'generic') ? 'aria-description' : 'aria-label', node.alt);
-      }
-    }
+    const alt = links.length ? undefined : node.alt || undefined;
+    // A figure owns no text to read, so an image in it has the alternative text instead.
+    const image = role === 'figure' && alt ? [{ role: 'img', alt }] : [];
 
-    children.forEach((child) => {
-      if ('role' in child) {
-        element.append(this.#createElement(child, node, parent));
-        return;
-      }
-      const link = this.#getLink(child);
-      const owned = link ? [link] : this.#takeText(child);
-      if (owned.length) {
-        // An element that reads the link or the text at its place among the children.
-        const owner = element.appendChild(document.createElement('span'));
-        owner.setAttribute('aria-owns', getOwnedIds(owned));
-      }
-    });
-    return element;
+    return {
+      role,
+      level: node.role.match(HEADING_PATTERN)?.[1],
+      rowSpan: node.rowSpan,
+      colSpan: node.colSpan,
+      lang: node.lang,
+      alt: image.length ? undefined : alt,
+      children: [
+        ...image,
+        ...children.flatMap((child) => {
+          if ('role' in child) {
+            return [this.#getElementData(child, node, parent)];
+          }
+          // An element that reads the link or the text at its place among the children.
+          const link = this.#getLink(child);
+          const owned = link ? [link] : this.#takeText(child);
+          return owned.length ? [{ owns: getOwnedIds(owned) }] : [];
+        }),
+      ],
+    };
   }
 
   /**

@@ -79,6 +79,8 @@ how to generate them.
   check after each await that the page still has the same canvas or text layer, so a released page gets no layers.
 - `PdfViewerStructureLayer` creates the structure in one pass over the structure tree of pdf.js. It renders last,
   once per text layer, so it gets the rendered text layer and the links, and keeps no state for later.
+  - The pass returns plain data for each element: its role, its attributes and what it owns. A Lit template
+    renders the data once. The template has no side effects, and no whitespace between the elements.
   - It refers only to elements that exist: an annotation without link, e.g. on a hidden layer, is left out.
   - A page whose text layer fails renders its structure when the text layer renders, with the next canvas.
 - `PdfViewerKeyboardMixin` handles the keyboard shortcuts.
