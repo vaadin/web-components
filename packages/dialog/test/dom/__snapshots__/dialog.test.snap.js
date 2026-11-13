@@ -56,7 +56,7 @@ snapshots["vaadin-dialog host footerRenderer"] =
 
 snapshots["vaadin-dialog host headerTitle default"] = 
 `<vaadin-dialog
-  aria-label="Title"
+  aria-labelledby="title-vaadin-dialog-0"
   aria-modal="true"
   has-title=""
   opened=""
@@ -70,6 +70,7 @@ snapshots["vaadin-dialog host headerTitle default"] =
   <h2
     aria-level="1"
     class="draggable"
+    id="title-vaadin-dialog-0"
     slot="title"
   >
     Title
@@ -80,7 +81,7 @@ snapshots["vaadin-dialog host headerTitle default"] =
 
 snapshots["vaadin-dialog host headerTitle headingLevel"] = 
 `<vaadin-dialog
-  aria-label="Title"
+  aria-labelledby="title-vaadin-dialog-0"
   aria-modal="true"
   has-title=""
   opened=""
@@ -94,6 +95,7 @@ snapshots["vaadin-dialog host headerTitle headingLevel"] =
   <h2
     aria-level="3"
     class="draggable"
+    id="title-vaadin-dialog-0"
     slot="title"
   >
     Title
@@ -104,7 +106,7 @@ snapshots["vaadin-dialog host headerTitle headingLevel"] =
 
 snapshots["vaadin-dialog host headerTitle modeless"] = 
 `<vaadin-dialog
-  aria-label="Title"
+  aria-labelledby="title-vaadin-dialog-0"
   has-title=""
   modeless=""
   opened=""
@@ -117,6 +119,7 @@ snapshots["vaadin-dialog host headerTitle modeless"] =
   <h2
     aria-level="2"
     class="draggable"
+    id="title-vaadin-dialog-0"
     slot="title"
   >
     Title
@@ -127,7 +130,7 @@ snapshots["vaadin-dialog host headerTitle modeless"] =
 
 snapshots["vaadin-dialog host headerTitle modeless headingLevel"] = 
 `<vaadin-dialog
-  aria-label="Title"
+  aria-labelledby="title-vaadin-dialog-0"
   has-title=""
   modeless=""
   opened=""
@@ -140,6 +143,7 @@ snapshots["vaadin-dialog host headerTitle modeless headingLevel"] =
   <h2
     aria-level="3"
     class="draggable"
+    id="title-vaadin-dialog-0"
     slot="title"
   >
     Title

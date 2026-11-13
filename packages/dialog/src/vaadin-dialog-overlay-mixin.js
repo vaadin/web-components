@@ -4,7 +4,6 @@
  * This program is available under Apache License Version 2.0, available at https://vaadin.com/license/
  */
 import { getDeepActiveElement } from '@vaadin/a11y-base/src/focus-utils.js';
-import { setOrRemoveAttribute } from '@vaadin/component-base/src/dom-utils.js';
 import { SlotObserver } from '@vaadin/component-base/src/slot-observer.js';
 import { OverlayMixin } from '@vaadin/overlay/src/vaadin-overlay-mixin.js';
 import { setOverlayStateAttribute } from '@vaadin/overlay/src/vaadin-overlay-utils.js';
@@ -14,20 +13,6 @@ export const DialogOverlayMixin = (superClass) =>
   class DialogOverlayMixin extends OverlayMixin(superClass) {
     static get properties() {
       return {
-        /**
-         * String used for rendering a dialog title.
-         */
-        headerTitle: {
-          type: String,
-        },
-
-        /**
-         * The ARIA heading level of the title.
-         */
-        headingLevel: {
-          type: Number,
-        },
-
         /**
          * Custom function for rendering the dialog header.
          */
@@ -53,10 +38,7 @@ export const DialogOverlayMixin = (superClass) =>
     }
 
     static get observers() {
-      return [
-        '_headerFooterRendererChange(headerRenderer, footerRenderer, opened)',
-        '_headerTitleChanged(headerTitle, opened)',
-      ];
+      return ['_headerFooterRendererChange(headerRenderer, footerRenderer, opened)'];
     }
 
     /**
@@ -109,7 +91,13 @@ export const DialogOverlayMixin = (superClass) =>
       });
       this.__resizeObserver.observe(this.$.resizerContainer);
 
-      // Observe header-content and footer slots for dynamic content
+      // Observe title, header-content and footer slots for dynamic content
+      const titleSlot = this.shadowRoot.querySelector('slot[name="title"]');
+      this.__titleSlotObserver = new SlotObserver(titleSlot, ({ currentNodes }) => {
+        setOverlayStateAttribute(this, 'has-title', currentNodes.length > 0);
+        this.__overflowController.update();
+      });
+
       const headerSlot = this.shadowRoot.querySelector('slot[name="header-content"]');
       this.__headerSlotObserver = new SlotObserver(headerSlot, ({ currentNodes }) => {
         setOverlayStateAttribute(this, 'has-header', currentNodes.length > 0);
@@ -134,10 +122,6 @@ export const DialogOverlayMixin = (superClass) =>
         } else {
           window.removeEventListener('resize', this.__handleWindowResize);
         }
-      }
-
-      if (props.has('headingLevel') && this.headerTitleElement) {
-        setOrRemoveAttribute(this.headerTitleElement, 'aria-level', this.headingLevel);
       }
     }
 
@@ -209,33 +193,6 @@ export const DialogOverlayMixin = (superClass) =>
       }
     }
 
-    /** @private */
-    _headerTitleChanged(headerTitle, opened) {
-      setOverlayStateAttribute(this, 'has-title', !!headerTitle);
-
-      if (opened && (headerTitle || this._oldHeaderTitle)) {
-        this.requestContentUpdate();
-      }
-      this._oldHeaderTitle = headerTitle;
-    }
-
-    /** @private */
-    _headerTitleRenderer() {
-      if (this.headerTitle) {
-        if (!this.headerTitleElement) {
-          this.headerTitleElement = document.createElement('h2');
-          this.headerTitleElement.setAttribute('slot', 'title');
-          this.headerTitleElement.classList.add('draggable');
-        }
-        this.owner.appendChild(this.headerTitleElement);
-        this.headerTitleElement.textContent = this.headerTitle;
-        setOrRemoveAttribute(this.headerTitleElement, 'aria-level', this.headingLevel);
-      } else if (this.headerTitleElement) {
-        this.headerTitleElement.remove();
-        this.headerTitleElement = null;
-      }
-    }
-
     /**
      * @override
      */
@@ -249,8 +206,6 @@ export const DialogOverlayMixin = (superClass) =>
       if (this.footerContainer && this.footerRenderer) {
         this.footerRenderer.call(this.owner, this.footerContainer, this.owner);
       }
-
-      this._headerTitleRenderer();
 
       // May run via observers before the controller is set up in `ready()`;
       // the initial overflow state is then detected by the resize observer.

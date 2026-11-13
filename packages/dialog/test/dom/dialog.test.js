@@ -1,6 +1,7 @@
 import { expect } from '@vaadin/chai-plugins';
 import { fixtureSync, nextRender, nextUpdate, oneEvent } from '@vaadin/testing-helpers';
 import '../../src/vaadin-dialog.js';
+import { resetUniqueId } from '@vaadin/component-base/src/unique-id-utils.js';
 
 describe('vaadin-dialog', () => {
   let dialog, overlay;
@@ -12,6 +13,7 @@ describe('vaadin-dialog', () => {
   };
 
   beforeEach(async () => {
+    resetUniqueId();
     dialog = fixtureSync('<vaadin-dialog></vaadin-dialog>');
     await nextRender();
     overlay = dialog.$.overlay;
@@ -46,7 +48,7 @@ describe('vaadin-dialog', () => {
     describe('headerTitle', () => {
       beforeEach(async () => {
         dialog.headerTitle = 'Title';
-        await nextUpdate(dialog);
+        await nextRender();
       });
 
       it('default', async () => {
