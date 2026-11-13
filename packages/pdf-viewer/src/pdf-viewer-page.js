@@ -472,12 +472,25 @@ export class PdfViewerPage {
   }
 
   /**
-   * Returns the text that a link of this page owns in the structure of a tagged PDF.
+   * Returns the text that a link of this page owns in the structure of a tagged PDF, with a space between its lines,
+   * as the text layer has a line break between them instead.
    * @param {HTMLElement} link
    * @return {string | undefined}
    */
   getLinkText(link) {
-    return this.#structureLayer?.getLinkText(link.id);
+    const ids = link.getAttribute('aria-owns')?.split(' ');
+    if (!ids) {
+      return undefined;
+    }
+    const texts = new Map();
+    let afterLineBreak = false;
+    this.textLayerElement.querySelectorAll('br, span:not(.markedContent)').forEach((element) => {
+      if (ids.includes(element.id)) {
+        texts.set(element.id, `${afterLineBreak ? ' ' : ''}${element.textContent}`);
+      }
+      afterLineBreak = element.localName === 'br';
+    });
+    return ids.map((id) => texts.get(id)).join('');
   }
 
   cancel() {

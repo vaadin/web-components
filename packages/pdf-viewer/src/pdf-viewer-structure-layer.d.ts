@@ -31,6 +31,4 @@ export declare class PdfViewerStructureLayer {
   addLinks(links: HTMLElement[]): Set<string>;
 
   getLinkAlt(annotationId: string): string | undefined;
-
-  getLinkText(annotationId: string): string | undefined;
 }

@@ -28,7 +28,7 @@ export const PdfViewerLinksMixin = (superClass) =>
   class PdfViewerLinksMixinClass extends superClass {
     /**
      * What the accessible name of each link is made of, to update it when the localization changes.
-     * @type {WeakMap<HTMLElement, { text: string, alt?: string, structureText?: string, url?: string, action?: string, targetPage: number | null }>}
+     * @type {WeakMap<HTMLElement, { page: import('./pdf-viewer-page.js').PdfViewerPage, text: string, url?: string, action?: string, targetPage: number | null }>}
      */
     #linkLabels = new WeakMap();
 
@@ -53,16 +53,14 @@ export const PdfViewerLinksMixin = (superClass) =>
       // The layers that the canvas shows, see `PDFPageProxy.render()`.
       const optionalContentConfig = await this._pdfDocument?.getOptionalContentConfig({ intent: 'display' });
       const links = await page.renderLinkLayer((annotation) => this.#followLink(annotation), optionalContentConfig);
-      await this.#nameLinks(links);
-      this.#nameLinksByStructure(page);
+      await this.#nameLinks(page, links);
     }
 
     /**
-     * Gives the links of a page their accessible name: the text they cover,
-     * or the URL or the page they go to.
+     * Gives the links of a page their accessible name, also the links that rendered before the structure of the page.
      * @private
      */
-    async #nameLinks(links) {
+    async #nameLinks(page, links) {
       await Promise.all(
         links.map(async ({ link, annotation }) => {
           // As in pdf.js, the text that the link covers, which the worker finds for each link.
@@ -72,39 +70,26 @@ export const PdfViewerLinksMixin = (superClass) =>
             const target = await this.#resolveDestination(annotation);
             targetPage = target ? target.page : null;
           }
-          this.#linkLabels.set(link, { text, url: annotation.url, action: annotation.action, targetPage });
-          this.#updateLinkLabel(link);
+          this.#linkLabels.set(link, { page, text, url: annotation.url, action: annotation.action, targetPage });
         }),
       );
+      this.#updateLinkLabels(page.element);
     }
 
     /**
-     * Names the links of a page by their alternative text in the structure, or by their text in
-     * the structure when they cover no text, as in pdf.js.
+     * Names a link by its alternative text in the structure, the text it covers or the text it owns in the structure.
      * @private
      */
-    #nameLinksByStructure(page) {
-      [...(page.linkLayerElement?.children ?? [])].forEach((link) => {
-        const parts = this.#linkLabels.get(link);
-        const alt = collapseWhitespace(page.getLinkAlt(link));
-        const structureText = collapseWhitespace(page.getLinkText(link));
-        if (parts && (parts.alt !== alt || parts.structureText !== structureText)) {
-          Object.assign(parts, { alt, structureText });
-          this.#updateLinkLabel(link);
-        }
-      });
-    }
-
-    /** @private */
     #updateLinkLabel(link) {
-      const { alt, structureText, ...parts } = this.#linkLabels.get(link);
-      const text = alt || parts.text || structureText;
+      const { page, ...parts } = this.#linkLabels.get(link);
+      const text =
+        collapseWhitespace(page.getLinkAlt(link)) || parts.text || collapseWhitespace(page.getLinkText(link));
       link.setAttribute('aria-label', getLinkLabel({ ...parts, text }, this.__effectiveI18n));
     }
 
     /** @private */
-    #updateLinkLabels() {
-      this.$.pages.querySelectorAll('a.link').forEach((link) => {
+    #updateLinkLabels(container = this.$.pages) {
+      container.querySelectorAll('a.link').forEach((link) => {
         if (this.#linkLabels.has(link)) {
           this.#updateLinkLabel(link);
         }

@@ -134,7 +134,8 @@ how to generate them.
   structure as its name. In pdf.js, this text names such a link, as pdf.js gives it no name.
 - As in pdf.js, a link of the structure owns the text of its structure element. Other links are added to the
   text before them, so screen readers read them in the order of the text.
-- A link of the structure without a link element, e.g. on a hidden layer, loses its role. Its text is read as text.
+- Unlike in pdf.js, a `Link` element of the structure has no role, so that only its link is a link. Without a
+  link, such as on a hidden layer, screen readers read its text as text.
 - When a focused link loses its page, focus moves to the page area.
 
 ## Install size
