@@ -87,15 +87,6 @@ export const A11yMixin = (superClass) =>
 
     /**
      * @param {!HTMLElement} row
-     * @param {number} index
-     * @private
-     */
-    __a11yUpdateRowRowindex(row) {
-      row.setAttribute('aria-rowindex', row.index + this.__a11yGetHeaderRowCount(this._columnTree) + 1);
-    }
-
-    /**
-     * @param {!HTMLElement} row
      * @param {boolean} selected
      * @private
      */

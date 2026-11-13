@@ -397,16 +397,6 @@ export const GridMixin = (superClass) =>
     }
 
     /** @private */
-    __updateRowOrderParts(row) {
-      updateBooleanRowStates(row, {
-        first: row.index === 0,
-        last: row.index === this._flatSize - 1,
-        odd: row.index % 2 !== 0,
-        even: row.index % 2 === 0,
-      });
-    }
-
-    /** @private */
     __updateRowStateParts(row, { item, expanded, selected, detailsOpened }) {
       updateBooleanRowStates(row, {
         expanded,
@@ -456,9 +446,6 @@ export const GridMixin = (superClass) =>
      */
     __updateRow(row, { skipRenderers = false } = {}) {
       this.__renderBodyRow(row);
-
-      this.__a11yUpdateRowRowindex(row);
-      this.__updateRowOrderParts(row);
 
       const item = this.__getRowItem(row);
       if (!item) {

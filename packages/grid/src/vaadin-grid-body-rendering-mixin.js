@@ -6,6 +6,7 @@
 import { html, nothing, render } from 'lit';
 import { cache } from 'lit/directives/cache.js';
 import { classMap } from 'lit/directives/class-map.js';
+import { ifDefined } from 'lit/directives/if-defined.js';
 import { repeat } from 'lit/directives/repeat.js';
 import { microTask } from '@vaadin/component-base/src/async.js';
 import { Debouncer } from '@vaadin/component-base/src/debounce.js';
@@ -78,10 +79,16 @@ export const BodyRenderingMixin = (superClass) =>
     #getRowState(row) {
       const columns = this._columnTree.at(-1).toSorted((a, b) => a._order - b._order);
       const visibleColumns = columns.filter((column) => !column.hidden);
+      const { index } = row;
 
       return {
         rowId: row.__id,
         item: this.__getRowItem(row),
+        ariaRowIndex: index === undefined ? undefined : index + this.__a11yGetHeaderRowCount(this._columnTree) + 1,
+        isFirstRow: index === 0,
+        isLastRow: index === this._flatSize - 1,
+        isOddRow: index % 2 === 1,
+        isEvenRow: index % 2 === 0,
         cells: columns.map((column) => {
           return {
             column,
@@ -92,9 +99,28 @@ export const BodyRenderingMixin = (superClass) =>
       };
     }
 
-    #bodyRowTemplate = ({ rowId, item, cells } = {}) => {
+    #bodyRowTemplate = ({ rowId, item, ariaRowIndex, isFirstRow, isLastRow, isOddRow, isEvenRow, cells } = {}) => {
+      const rowParts = {
+        'first-row': isFirstRow,
+        'last-row': isLastRow,
+        'odd-row': isOddRow,
+        'even-row': isEvenRow,
+      };
+
       return html`
-        <tr role="row" tabindex="-1" part="row body-row" class="row body-row" ?loading="${!item}" ${bodyRow()}>
+        <tr
+          role="row"
+          tabindex="-1"
+          part="row body-row${partMap(rowParts)}"
+          class="row body-row${classMap(rowParts)}"
+          aria-rowindex="${ifDefined(ariaRowIndex)}"
+          ?first="${isFirstRow}"
+          ?last="${isLastRow}"
+          ?odd="${isOddRow}"
+          ?even="${isEvenRow}"
+          ?loading="${!item}"
+          ${bodyRow()}
+        >
           ${repeat(
             cells ?? [],
             ({ column }) => column._id,
@@ -106,6 +132,10 @@ export const BodyRenderingMixin = (superClass) =>
               const cellParts = {
                 'first-column-cell': isFirstCell,
                 'last-column-cell': isLastCell,
+                'first-row-cell': isFirstRow,
+                'last-row-cell': isLastRow,
+                'odd-row-cell': isOddRow,
+                'even-row-cell': isEvenRow,
                 'loading-row-cell': !item,
               };
 
