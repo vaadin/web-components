@@ -589,7 +589,6 @@ export const InlineEditingMixin = (superClass) =>
      * Override method from `BodyRenderingMixin` to apply `editable-cell` part to the
      * cells of edit columns.
      *
-     * @private
      * @override
      */
     __renderBodyRow(row) {
