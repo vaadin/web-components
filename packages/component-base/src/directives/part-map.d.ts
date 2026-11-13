@@ -20,3 +20,9 @@ export interface PartNameInfo {
  * if the property value is truthy, and removed if the value is falsy.
  */
 export declare function partMap(partNameInfo: PartNameInfo): DirectiveResult;
+
+/**
+ * Parses a whitespace separated list of part names
+ * into an object accepted by the `partMap` directive.
+ */
+export declare function parsePartNames(partName: string | null | undefined): Record<string, boolean>;
