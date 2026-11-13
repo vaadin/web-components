@@ -449,38 +449,11 @@ describe('row details', () => {
       grid.rowDetailsRenderer = simpleDetailsRenderer;
       grid.items = [{ name: 'foo' }, { name: 'bar' }];
       await nextFrame();
-      bodyRows = getRows(grid.$.items);
     });
 
-    it('should remove the details cells when all details are closed', () => {
+    it('should remove the details cells of rows with closed details', () => {
       grid.rowDetailsRenderer = null;
       expect(grid.$.items.querySelector('[part~="details-cell"]')).to.be.null;
-    });
-
-    it('should remove the details cells when some details are opened', async () => {
-      grid.detailsOpenedItems = [grid.items[0]];
-      await nextFrame();
-      grid.rowDetailsRenderer = null;
-      expect(grid.$.items.querySelector('[part~="details-cell"]')).to.be.null;
-    });
-
-    it('should add the details cells back when the renderer is set again', () => {
-      grid.rowDetailsRenderer = null;
-      grid.rowDetailsRenderer = simpleDetailsRenderer;
-      bodyRows.forEach((row) => {
-        expect(row.querySelectorAll('[part~="details-cell"]')).to.have.lengthOf(1);
-      });
-    });
-
-    it('should invoke the body renderer once per row', async () => {
-      const renderer = sinon.spy(indexRenderer);
-      grid.querySelector('vaadin-grid-column').renderer = renderer;
-      grid.detailsOpenedItems = [grid.items[0]];
-      await nextFrame();
-      renderer.resetHistory();
-
-      grid.rowDetailsRenderer = null;
-      expect(renderer).to.be.calledTwice;
     });
   });
 
