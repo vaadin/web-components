@@ -141,6 +141,24 @@ const sideNavItem = css`
     }
   }
 
+  :host([theme~='icon-on-top']) {
+    flex: 1;
+    min-width: min-content;
+
+    [part='link'] {
+      flex-direction: column;
+      position: relative;
+      font-size: 0.8em;
+      gap: 0;
+    }
+
+    ::slotted([slot='suffix']) {
+      position: absolute;
+      top: 0;
+      inset-inline-end: 0;
+    }
+  }
+
   @media (forced-colors: active) {
     [part='content'] {
       border: 1px solid Canvas !important;

@@ -64,7 +64,7 @@ import { AppLayoutMixin } from './vaadin-app-layout-mixin.js';
  * Attribute      | Description
  * ---------------|-------------
  * `has-drawer`   | Set when the element has light DOM content in the drawer slot.
- * `has-navbar`   | Set when the element has light DOM content in the navbar slot.
+ * `has-navbar`   | Set when the top navbar has visible slotted content.
  *
  * The following custom CSS properties are available for styling:
  *
@@ -78,6 +78,7 @@ import { AppLayoutMixin } from './vaadin-app-layout-mixin.js';
  * | `--vaadin-app-layout-navbar-padding-inline-end`    |
  * | `--vaadin-app-layout-navbar-padding-inline-start`  |
  * | `--vaadin-app-layout-navbar-padding-top`           |
+ * | `--vaadin-app-layout-touch-optimized`              |
  * | `--vaadin-app-layout-transition-duration`          |
  * | `--vaadin-overlay-backdrop-background`             |
  * | `--vaadin-overlay-shadow`                          |
@@ -91,7 +92,8 @@ import { AppLayoutMixin } from './vaadin-app-layout-mixin.js';
  * Slot name          | Description
  * -------------------|---------------------------------------------------|
  * no name            | Default container for the page content
- * `navbar `          | Container for the top navbar area
+ * `navbar`           | Container for the top navbar area
+ * `navbar-bottom`    | Dedicated bottom navbar, visible only in touch-optimized mode
  * `drawer`           | Container for an application menu
  * `touch-optimized`  | Container for the bottom navbar area (only visible for mobile devices)
  *
@@ -101,6 +103,13 @@ import { AppLayoutMixin } from './vaadin-app-layout-mixin.js';
  * elements with `slot[navbar]`. Internally, when the user is interacting with App Layout from a
  * touchscreen device, the component will search for elements with `slot[navbar touch-optimized]` and move
  * them to the bottom of the page.
+ *
+ * Alternatively, assign independent mobile navigation to `slot="navbar-bottom"`.
+ * When this slot has explicitly assigned content, `--vaadin-app-layout-touch-optimized: true`
+ * shows only the bottom navbar, and `false` shows only the top navbar. This property can
+ * be set in a media query. Elements using `slot="navbar touch-optimized"` are hidden
+ * in both modes while explicit bottom content is present. Removing the last explicit
+ * bottom element restores automatic switching for those elements.
  *
  * ### Navigation
  *
@@ -154,7 +163,7 @@ class AppLayout extends AppLayoutMixin(ElementMixin(ThemableMixin(PolylitMixin(L
         <slot></slot>
       </div>
       <div part="navbar navbar-bottom" id="navbarBottom" hidden>
-        <slot name="navbar-bottom"></slot>
+        <slot name="navbar-bottom" @slotchange="${this.__onNavbarSlotChange}"></slot>
       </div>
       <div hidden>
         <slot id="touchSlot" name="navbar touch-optimized" @slotchange="${this.__onNavbarSlotChange}"></slot>
