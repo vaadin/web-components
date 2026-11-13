@@ -72,7 +72,7 @@
     "pkg-pr-new": "^0.0.91",
     "postcss-html": "^2.0.0",
     "postcss-lit": "^1.2.0",
-    "prettier": "^3.9.4",
+    "prettier": "^3.10.1",
     "prettier-plugin-package": "^2.0.0",
     "replace-in-file": "^8.3.0",
     "stylelint": "^17.4.0",
