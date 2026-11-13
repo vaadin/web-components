@@ -107,13 +107,6 @@ export const BodyRenderingMixin = (superClass) =>
         'even-row': isEvenRow,
       };
 
-      const rowCellParts = {
-        'first-row-cell': isFirstRow,
-        'last-row-cell': isLastRow,
-        'odd-row-cell': isOddRow,
-        'even-row-cell': isEvenRow,
-      };
-
       return html`
         <tr
           role="row"
@@ -139,13 +132,17 @@ export const BodyRenderingMixin = (superClass) =>
               const cellParts = {
                 'first-column-cell': isFirstCell,
                 'last-column-cell': isLastCell,
+                'first-row-cell': isFirstRow,
+                'last-row-cell': isLastRow,
+                'odd-row-cell': isOddRow,
+                'even-row-cell': isEvenRow,
               };
 
               return cache(html`
                 <td
                   role="${column.rowHeader ? 'rowheader' : 'gridcell'}"
-                  part="cell body-cell${partMap({ ...cellParts, ...rowCellParts })}"
-                  class="cell body-cell${classMap({ ...cellParts, ...rowCellParts })}"
+                  part="cell body-cell${partMap(cellParts)}"
+                  class="cell body-cell${classMap(cellParts)}"
                   ?first-column="${isFirstCell}"
                   ?last-column="${isLastCell}"
                   tabindex="${column._focusButtonMode ? nothing : '-1'}"
