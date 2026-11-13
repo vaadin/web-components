@@ -80,12 +80,11 @@ export const BodyRenderingMixin = (superClass) =>
       const columns = this._columnTree.at(-1).toSorted((a, b) => a._order - b._order);
       const visibleColumns = columns.filter((column) => !column.hidden);
       const { index } = row;
-      const item = this.__getRowItem(row);
 
       return {
         rowId: row.__id,
-        item,
-        model: item ? this.__getRowModel(row) : undefined,
+        item: this.__getRowItem(row),
+        model: this.__getRowModel(row),
         ariaRowIndex: index === undefined ? undefined : index + this.__a11yGetHeaderRowCount(this._columnTree) + 1,
         isFirstRow: index === 0,
         isLastRow: index === this._flatSize - 1,
@@ -151,7 +150,7 @@ export const BodyRenderingMixin = (superClass) =>
                 'loading-row-cell': !item,
               };
 
-              const customCellParts = model ? parsePartNames(this.cellPartNameGenerator?.(column, model)) : {};
+              const customCellParts = item ? parsePartNames(this.cellPartNameGenerator?.(column, model)) : {};
 
               return cache(html`
                 <td
@@ -183,7 +182,7 @@ export const BodyRenderingMixin = (superClass) =>
                     id="vaadin-grid-details-cell-${rowId}"
                     role="gridcell"
                     part="cell details-cell${partMap(
-                      model ? parsePartNames(this.cellPartNameGenerator?.(undefined, model)) : {},
+                      item ? parsePartNames(this.cellPartNameGenerator?.(undefined, model)) : {},
                     )}"
                     class="cell details-cell"
                     tabindex="-1"
