@@ -172,6 +172,11 @@ describe('row details', () => {
       grid.closeItemDetails({ value: 'foo0' });
       expect(cells[1].hidden).to.be.true;
     });
+
+    it('should remove the details cells when the renderer is cleared', () => {
+      grid.rowDetailsRenderer = null;
+      expect(grid.$.items.querySelector('[part~="details-cell"]')).to.be.null;
+    });
   });
 
   describe('repeat', () => {
@@ -436,24 +441,6 @@ describe('row details', () => {
       await nextFrame();
       const detailsCell = bodyRows[0].querySelector('[part~="details-cell"]');
       expect(detailsCell.getBoundingClientRect().left).to.be.closeTo(grid.$.table.getBoundingClientRect().left, 1);
-    });
-  });
-
-  describe('cleared details renderer', () => {
-    beforeEach(async () => {
-      grid = fixtureSync(`
-        <vaadin-grid>
-          <vaadin-grid-column path="name"></vaadin-grid-column>
-        </vaadin-grid>
-      `);
-      grid.rowDetailsRenderer = simpleDetailsRenderer;
-      grid.items = [{ name: 'foo' }, { name: 'bar' }];
-      await nextFrame();
-    });
-
-    it('should remove the details cells of rows with closed details', () => {
-      grid.rowDetailsRenderer = null;
-      expect(grid.$.items.querySelector('[part~="details-cell"]')).to.be.null;
     });
   });
 
