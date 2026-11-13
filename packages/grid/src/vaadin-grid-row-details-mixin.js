@@ -69,18 +69,19 @@ export const RowDetailsMixin = (superClass) =>
 
     /** @private */
     _rowDetailsRendererChanged(rowDetailsRenderer) {
-      if (!rowDetailsRenderer) {
+      if (!this._columnTree) {
+        // Only update the rows if the column tree has already been initialized
         return;
       }
 
-      if (this._columnTree) {
-        // Only update the rows if the column tree has already been initialized
-        this._getRenderedRows().forEach((row) => {
-          if (!row.querySelector('.details-cell') || row.hasAttribute('details-opened')) {
-            this.__updateRow(row);
-          }
-        });
-      }
+      this._getRenderedRows().forEach((row) => {
+        // Update the rows that need the details cell added or removed,
+        // and the rows with opened details to apply the new renderer.
+        const hasDetailsCell = !!row.querySelector('.details-cell');
+        if (hasDetailsCell !== !!rowDetailsRenderer || row.hasAttribute('details-opened')) {
+          this.__updateRow(row);
+        }
+      });
     }
 
     /** @private */

@@ -439,6 +439,51 @@ describe('row details', () => {
     });
   });
 
+  describe('cleared details renderer', () => {
+    beforeEach(async () => {
+      grid = fixtureSync(`
+        <vaadin-grid>
+          <vaadin-grid-column path="name"></vaadin-grid-column>
+        </vaadin-grid>
+      `);
+      grid.rowDetailsRenderer = simpleDetailsRenderer;
+      grid.items = [{ name: 'foo' }, { name: 'bar' }];
+      await nextFrame();
+      bodyRows = getRows(grid.$.items);
+    });
+
+    it('should remove the details cells when all details are closed', () => {
+      grid.rowDetailsRenderer = null;
+      expect(grid.$.items.querySelector('[part~="details-cell"]')).to.be.null;
+    });
+
+    it('should remove the details cells when some details are opened', async () => {
+      grid.detailsOpenedItems = [grid.items[0]];
+      await nextFrame();
+      grid.rowDetailsRenderer = null;
+      expect(grid.$.items.querySelector('[part~="details-cell"]')).to.be.null;
+    });
+
+    it('should add the details cells back when the renderer is set again', () => {
+      grid.rowDetailsRenderer = null;
+      grid.rowDetailsRenderer = simpleDetailsRenderer;
+      bodyRows.forEach((row) => {
+        expect(row.querySelectorAll('[part~="details-cell"]')).to.have.lengthOf(1);
+      });
+    });
+
+    it('should invoke the body renderer once per row', async () => {
+      const renderer = sinon.spy(indexRenderer);
+      grid.querySelector('vaadin-grid-column').renderer = renderer;
+      grid.detailsOpenedItems = [grid.items[0]];
+      await nextFrame();
+      renderer.resetHistory();
+
+      grid.rowDetailsRenderer = null;
+      expect(renderer).to.be.calledTwice;
+    });
+  });
+
   describe('details cell height change', () => {
     let bodyRow;
     let updateDetailsCellHeight;
