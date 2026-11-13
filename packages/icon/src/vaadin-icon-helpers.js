@@ -150,13 +150,6 @@ export function needsFontIconSizingFallback() {
   return !supportsCQUnitsForPseudoElements();
 }
 
-function createSvgUrl(content) {
-  const root = content.ownerDocument.createElementNS(SVG_NS, 'svg');
-  root.append(content.cloneNode(true));
-  const blob = new Blob([new XMLSerializer().serializeToString(root)], { type: 'image/svg+xml' });
-  return URL.createObjectURL(blob);
-}
-
 /**
  * Parse the first `<svg>` element in the source string. Returns its static
  * content as SVG literal, and the element without children for its attributes.
@@ -173,14 +166,5 @@ export function parseSvg(source) {
   }
   prepareSvg(svgElement);
   template.content.replaceChildren(...svgElement.childNodes);
-  let url;
-  return {
-    svg: svg`${templateContent(template)}`,
-    svgElement,
-    // A `blob:` URL of the prepared content, for `<use>` to reference by id
-    get url() {
-      url ??= createSvgUrl(template.content);
-      return url;
-    },
-  };
+  return { svg: svg`${templateContent(template)}`, svgElement };
 }

@@ -188,31 +188,24 @@ describe('vaadin-icon', () => {
       expect(svgElement.hasAttribute('stroke-linejoin')).to.be.false;
     });
 
-    function getUseHref() {
-      return svgElement.querySelector('use').getAttribute('href');
-    }
-
-    it('should reference symbol from the loaded SVG', async () => {
-      respondWith('<svg><symbol id="symbol-id"></symbol></svg>');
-      icon.src = './sprite-symbol.svg';
+    it('should append value from symbol property to src', async () => {
+      respondWith('<svg></svg>');
+      icon.src = './icon.svg';
       icon.symbol = 'symbol-id';
       await nextRender();
 
-      expect(icon.__fetch.firstCall.firstArg).to.equal('./sprite-symbol.svg');
-      expect(getUseHref()).to.match(/^blob:.+#symbol-id$/u);
-      expectIcon('');
+      expect(svgElement.querySelector('use[href="./icon.svg#symbol-id"]')).to.exist;
     });
 
     it('should use value from symbol when src path has a hash value', async () => {
-      respondWith('<svg></svg>');
-      icon.src = './sprite-hash.svg#id-0';
+      icon.src = './icon.svg#id-0';
       icon.symbol = 'id-1';
-      await nextRender();
+      await nextFrame();
 
-      expect(getUseHref()).to.match(/^blob:.+#id-1$/u);
+      expect(svgElement.querySelector('use[href="./icon.svg#id-1"]')).to.exist;
     });
 
-    it('should reference symbol from data URL without rendering the content', async () => {
+    it('should render SVG content and <use> if src is given in data format with symbol prop defined', async () => {
       const svgSprite = `<svg xmlns="http://www.w3.org/2000/svg">
           <defs>
             <symbol id="icon-cog" viewBox="0 0 32 32">
@@ -230,8 +223,8 @@ describe('vaadin-icon', () => {
       icon.symbol = 'icon-cog';
       await nextRender();
 
-      expect(svgElement.querySelector('symbol')).to.be.null;
-      expect(getUseHref()).to.match(/^blob:.+#icon-cog$/u);
+      expect(svgElement.querySelectorAll('symbol')).to.have.lengthOf(2);
+      expect(svgElement.querySelector('use[href="#icon-cog"]')).to.exist;
     });
 
     it('should fail if SVG is not found', async () => {
@@ -255,67 +248,26 @@ describe('vaadin-icon', () => {
       expect(console.error.firstCall.firstArg.message).to.contain('SVG element not found');
     });
 
-    it('should load the file and render the element referenced by id', async () => {
-      respondWith(`
-        <svg viewBox="0 0 100 100" fill="red">
-          <g id="first"><path d="M0 0h1v1H0z"></path></g>
-          <g id="second"><path d="M0 0h2v2H0z"></path></g>
-        </svg>
-      `);
-      icon.src = 'sprite-id.svg#second';
-      await nextRender();
+    it('should render <use> tag when path with id selector is given', async () => {
+      icon.src = 'icon.svg#symbol-id';
+      await nextFrame();
 
-      expect(icon.__fetch.firstCall.firstArg).to.equal('sprite-id.svg');
-      expect(getUseHref()).to.match(/^blob:.+#second$/u);
+      expect(icon.__fetch.called).to.be.false;
+      expect(svgElement.querySelector('use[href="icon.svg#symbol-id"]')).to.exist;
       expect(svgElement.querySelector('#use-group').getAttribute('visibility')).to.be.equal('visible');
-      expect(svgElement.getAttribute('viewBox')).to.equal('0 0 24 24');
-      expect(svgElement.hasAttribute('fill')).to.be.false;
-      expectIcon('');
-
-      const use = svgElement.querySelector('use');
-      for (let i = 0; i < 50 && use.getBBox().width === 0; i++) {
-        await nextFrame();
-      }
-      expect(use.getBBox().width).to.equal(2);
     });
 
-    it('should only include supported SVG content in the referenced file', async () => {
-      respondWith(`
-        <svg id="root" onload="init()">
-          <style>.st0 { fill: red; }</style>
-          <g id="first" onclick="onIconClick()"><path d="M0 0h1"></path></g>
-        </svg>
-      `);
-      icon.src = 'sprite-content.svg#first';
+    it('should load data URL with uppercase scheme and hash', async () => {
+      respondWith(`<svg>${ANGLE_DOWN}</svg>`);
+      icon.src = `DATA:image/svg+xml,${encodeURIComponent(`<svg>${ANGLE_DOWN}</svg>`)}#id`;
       await nextRender();
 
-      const text = await (await fetch(getUseHref().split('#')[0])).text();
-      expect(text).to.include('id="first"');
-      expect(text).to.not.include('root');
-      expect(text).to.not.include('onload');
-      expect(text).to.not.include('onclick');
-      expect(text).to.not.include('style');
-    });
-
-    it('should share one URL between icons that reference the same file', async () => {
-      respondWith('<svg><g id="first"></g><g id="second"></g></svg>');
-      icon.src = 'sprite-shared.svg#first';
-      await nextRender();
-
-      const icon2 = fixtureSync('<vaadin-icon></vaadin-icon>');
-      sinon.stub(icon2, '__fetch');
-      icon2.src = 'sprite-shared.svg';
-      icon2.symbol = 'second';
-      await nextRender();
-
-      const href2 = icon2.shadowRoot.querySelector('use').getAttribute('href');
-      expect(icon2.__fetch.called).to.be.false;
-      expect(href2.split('#')[0]).to.equal(getUseHref().split('#')[0]);
-      expect(href2).to.match(/#second$/u);
+      expect(icon.__fetch.called).to.be.true;
+      expect(svgElement.querySelector('use').hasAttribute('href')).to.be.false;
+      expectIcon(ANGLE_DOWN);
     });
 
     it('should remove the reference if src is set to null', async () => {
-      respondWith('<svg><g id="first"></g></svg>');
       icon.src = 'sprite-null.svg#first';
       await nextRender();
 

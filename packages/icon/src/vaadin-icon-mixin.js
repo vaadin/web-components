@@ -47,12 +47,12 @@ export const IconMixin = (superClass) =>
          * The SVG source to be loaded as the icon. It can be:
          * - an URL to a file containing the icon
          * - an URL in the format `/path/to/file.svg#objectID`, where the `objectID` refers to an ID attribute contained
-         *   inside the SVG referenced by the path
+         *   inside the SVG referenced by the path. Note that the file needs to follow the same-origin policy.
          * - a string in the format `data:image/svg+xml,<svg>...</svg>`. You may need to use the `encodeURIComponent`
          *   function for the SVG content passed
          *
-         * A file from another origin needs CORS headers. Only static SVG content is rendered, so use presentation
-         * attributes such as `fill` instead of a `<style>` element.
+         * An SVG loaded without an ID only renders static SVG content, so use presentation attributes such as `fill`
+         * instead of a `<style>` element.
          */
         src: {
           type: String,
@@ -219,13 +219,16 @@ export const IconMixin = (superClass) =>
       // Need to add the "icon" attribute to avoid issues as described in
       // https://github.com/vaadin/web-components/issues/6301
       this.icon = '';
-      const [path, iconId] = src.split('#');
-      const ref = symbol || iconId;
+      if (!/^\s*data:/iu.test(src) && (symbol || src.includes('#'))) {
+        const [path, iconId] = src.split('#');
+        this.__useRef = `${path}#${symbol || iconId}`;
+        return;
+      }
       try {
-        if (!srcCache.has(path)) {
+        if (!srcCache.has(src)) {
           srcCache.set(
-            path,
-            this.__fetch(path, {
+            src,
+            this.__fetch(src, {
               mode: 'cors',
             })
               .then((data) => {
@@ -237,26 +240,26 @@ export const IconMixin = (superClass) =>
               .then((text) => {
                 const parsed = parseSvg(text);
                 if (!parsed) {
-                  throw new Error(`SVG element not found on path: ${path}`);
+                  throw new Error(`SVG element not found on path: ${src}`);
                 }
                 return parsed;
               }),
           );
         }
-        const parsed = await srcCache.get(path);
+        const { svg, svgElement } = await srcCache.get(src);
         if (src !== this.src || symbol !== this.symbol) {
           return;
         }
-        // Reference an element of a sprite, render a standalone icon inline
-        const root = ref ? null : parsed.svgElement;
-        this.svg = ref ? null : parsed.svg;
-        this.__useRef = ref ? `${parsed.url}#${ref}` : undefined;
-        this.__viewBox = root?.getAttribute('viewBox');
-        this.__fill = root?.getAttribute('fill');
-        this.__stroke = root?.getAttribute('stroke');
-        this.__strokeWidth = root?.getAttribute('stroke-width');
-        this.__strokeLinecap = root?.getAttribute('stroke-linecap');
-        this.__strokeLinejoin = root?.getAttribute('stroke-linejoin');
+        this.svg = svg;
+        if (symbol) {
+          this.__useRef = `#${symbol}`;
+        }
+        this.__viewBox = svgElement.getAttribute('viewBox');
+        this.__fill = svgElement.getAttribute('fill');
+        this.__stroke = svgElement.getAttribute('stroke');
+        this.__strokeWidth = svgElement.getAttribute('stroke-width');
+        this.__strokeLinecap = svgElement.getAttribute('stroke-linecap');
+        this.__strokeLinejoin = svgElement.getAttribute('stroke-linejoin');
       } catch (e) {
         console.error(e);
         this.svg = null;
