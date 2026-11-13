@@ -137,14 +137,14 @@ describe('Grid', () => {
 
           return (
             <Grid<Item> items={gridItems}>
-              {ColumnType !== GridFilterColumn<Item> &&
-              ColumnType !== GridSelectionColumn<Item> &&
-              ColumnType !== GridSortColumn<Item> ? (
+              {ColumnType !== (GridFilterColumn<Item>) &&
+              ColumnType !== (GridSelectionColumn<Item>) &&
+              ColumnType !== (GridSortColumn<Item>) ? (
                 // @ts-expect-error not all column types have header prop
                 <ColumnType header={<button style={{ width: '300px' }}>header</button>} autoWidth flexGrow={0} />
               ) : null}
 
-              {ColumnType !== GridTreeColumn<Item> ? (
+              {ColumnType !== (GridTreeColumn<Item>) ? (
                 <ColumnType autoWidth flexGrow={0}>
                   {({ item }) => <button style={{ width: '300px' }}>{item.name}</button>}
                 </ColumnType>
