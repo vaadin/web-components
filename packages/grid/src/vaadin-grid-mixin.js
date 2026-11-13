@@ -445,16 +445,18 @@ export const GridMixin = (superClass) =>
      * @private
      */
     __updateRow(row, { skipRenderers = false } = {}) {
+      const item = this.__getRowItem(row);
+      if (item) {
+        // Set the item before rendering, the row template reads the row model
+        row._item = item;
+      }
+
       this.__renderBodyRow(row);
 
-      const item = this.__getRowItem(row);
       if (!item) {
-        // Run style generators for the loading row to have custom names cleared
-        this._generateCellPartNames(row);
         return;
       }
 
-      row._item = item;
       const model = this.__getRowModel(row);
 
       this._toggleDetailsCell(row, model.detailsOpened);
@@ -464,7 +466,6 @@ export const GridMixin = (superClass) =>
 
       this.__updateRowStateParts(row, model);
 
-      this._generateCellPartNames(row, model);
       this._filterDragAndDrop(row, model);
       this.__updateDragSourceParts(row, model);
 
