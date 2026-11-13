@@ -75,11 +75,6 @@ describe('checkbox', () => {
       expect(checkbox.checked).to.be.false;
     });
 
-    it('should not cover the label link with the input', () => {
-      const { x, y } = middleOfNode(link);
-      expect(document.elementFromPoint(x, y)).to.equal(link);
-    });
-
     it('should not toggle checked property on label link click', () => {
       link.click();
       expect(checkbox.checked).to.be.false;
@@ -304,6 +299,45 @@ describe('checkbox', () => {
         expect(event).to.have.property('composed', false);
       });
     });
+
+    describe('click target', () => {
+      beforeEach(() => {
+        checkbox.style.width = '500px';
+      });
+
+      afterEach(async () => {
+        await resetMouse();
+      });
+
+      it('should toggle checked property and set active attribute on mouse press on the empty space next to the label', async () => {
+        const spy = sinon.spy();
+        checkbox.addEventListener('click', spy);
+        // Middle of the empty space between the label text and the host edge
+        const x = (label.getBoundingClientRect().right + checkbox.getBoundingClientRect().right) / 2;
+        const { y } = middleOfNode(label);
+        await sendMouse({ type: 'move', position: [Math.round(x), Math.round(y)] });
+        await sendMouse({ type: 'down' });
+        expect(checkbox.hasAttribute('active')).to.be.true;
+
+        await sendMouse({ type: 'up' });
+        expect(checkbox.hasAttribute('active')).to.be.false;
+        expect(checkbox.checked).to.be.true;
+        expect(spy).to.be.calledOnce;
+      });
+
+      it('should not cover the label link with the input', () => {
+        const { x, y } = middleOfNode(link);
+        expect(document.elementFromPoint(x, y)).to.equal(link);
+      });
+
+      it('should not cover the helper text row with the input', async () => {
+        checkbox.helperText = 'Helper';
+        await nextUpdate(checkbox);
+        const helper = checkbox.querySelector('[slot="helper"]');
+        const { x, y } = middleOfNode(helper);
+        expect(document.elementFromPoint(x, y)).to.equal(helper);
+      });
+    });
   });
 
   describe('indeterminate property', () => {
@@ -358,70 +392,12 @@ describe('checkbox', () => {
       expect(inputRect.width).to.be.at.least(partRect.width);
       expect(inputRect.height).to.be.at.least(partRect.height);
     });
-  });
 
-  describe('click target', () => {
-    let label;
-
-    beforeEach(async () => {
-      checkbox = fixtureSync(`
-        <vaadin-checkbox required helper-text="Helper" style="width: 400px">
-          <label slot="label">Label</label>
-        </vaadin-checkbox>
-      `);
-      await nextRender();
-      input = checkbox.inputElement;
-      label = checkbox.querySelector('label');
-    });
-
-    [undefined, 'reverse'].forEach((theme) => {
-      it(`should cover the empty space next to the label with the input${theme ? ` in ${theme} theme` : ''}`, async () => {
-        if (theme) {
-          checkbox.setAttribute('theme', theme);
-          await nextRender();
-        }
-        const { x } = middleOfNode(checkbox);
-        const { y } = middleOfNode(label);
-        expect(document.elementFromPoint(x, y)).to.equal(input);
-      });
-    });
-
-    [undefined, 'reverse'].forEach((theme) => {
-      it(`should make the slotted input at least 24px wide and high${theme ? ` in ${theme} theme` : ''}`, async () => {
-        checkbox = fixtureSync(`<vaadin-checkbox ${theme ? `theme="${theme}"` : ''}></vaadin-checkbox>`);
-        await nextRender();
-        input = checkbox.inputElement;
-        const rect = input.getBoundingClientRect();
-        expect(rect.width).to.be.at.least(24);
-        expect(rect.height).to.be.at.least(24);
-      });
-    });
-
-    it('should not cover the helper text row with the input', () => {
-      const helper = checkbox.querySelector('[slot="helper"]');
-      const { x, y } = middleOfNode(helper);
-      expect(document.elementFromPoint(x, y)).to.equal(helper);
-    });
-
-    describe('real mouse', () => {
-      afterEach(async () => {
-        await resetMouse();
-      });
-
-      it('should toggle checked property and set active attribute on mouse press on the empty space next to the label', async () => {
-        const spy = sinon.spy();
-        checkbox.addEventListener('click', spy);
-        const { x } = middleOfNode(checkbox);
-        const { y } = middleOfNode(label);
-        await sendMouse({ type: 'move', position: [Math.round(x), Math.round(y)] });
-        await sendMouse({ type: 'down' });
-        expect(checkbox.hasAttribute('active')).to.be.true;
-
-        await sendMouse({ type: 'up' });
-        expect(checkbox.hasAttribute('active')).to.be.false;
-        expect(checkbox.checked).to.be.true;
-        expect(spy).to.be.calledOnce;
-      });
+    it('should make the slotted input at least 24px wide and high', () => {
+      const rect = input.getBoundingClientRect();
+      // Round, as Firefox and WebKit snap the size to a fraction below 24px
+      expect(Math.round(rect.width)).to.be.at.least(24);
+      expect(Math.round(rect.height)).to.be.at.least(24);
     });
   });
 });

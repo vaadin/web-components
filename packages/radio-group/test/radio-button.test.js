@@ -1,6 +1,6 @@
 import { expect } from '@vaadin/chai-plugins';
 import { resetMouse, sendKeys, sendMouseToElement } from '@vaadin/test-runner-commands';
-import { fire, fixtureSync, mousedown, mouseup, nextRender, nextUpdate } from '@vaadin/testing-helpers';
+import { fire, fixtureSync, middleOfNode, mousedown, mouseup, nextRender, nextUpdate } from '@vaadin/testing-helpers';
 import sinon from 'sinon';
 import '../src/vaadin-radio-button.js';
 
@@ -41,6 +41,30 @@ describe('radio-button', () => {
 
     it('should set value property to "on"', () => {
       expect(radio.value).to.equal('on');
+    });
+
+    describe('click target', () => {
+      beforeEach(() => {
+        radio.style.width = '400px';
+      });
+
+      it('should cover the gap between the label and the radio part with the input in reverse theme', () => {
+        radio.setAttribute('theme', 'reverse');
+        const part = radio.shadowRoot.querySelector('[part="radio"]');
+        // Middle of the gap between the label and the radio part
+        const x = (label.getBoundingClientRect().right + part.getBoundingClientRect().left) / 2;
+        const { y } = middleOfNode(label);
+        expect(document.elementFromPoint(x, y)).to.equal(radio.inputElement);
+      });
+
+      it('should not cover the label link with the input', () => {
+        const link = document.createElement('a');
+        link.href = '#';
+        link.textContent = 'link';
+        label.appendChild(link);
+        const { x, y } = middleOfNode(link);
+        expect(document.elementFromPoint(x, y)).to.equal(link);
+      });
     });
   });
 
@@ -306,25 +330,6 @@ describe('radio-button', () => {
       const partRect = radio.shadowRoot.querySelector("[part='radio']").getBoundingClientRect();
       expect(inputRect.width).to.be.at.least(partRect.width);
       expect(inputRect.height).to.be.at.least(partRect.height);
-    });
-  });
-
-  describe('click target', () => {
-    beforeEach(async () => {
-      radio = fixtureSync('<vaadin-radio-button label="Label" style="width: 400px"></vaadin-radio-button>');
-      await nextRender();
-      input = radio.inputElement;
-    });
-
-    it('should cover the empty space next to the label with the input in reverse theme', async () => {
-      radio.setAttribute('theme', 'reverse');
-      await nextRender();
-      const label = radio.querySelector('label');
-      const labelRect = label.getBoundingClientRect();
-      const partRect = radio.shadowRoot.querySelector("[part='radio']").getBoundingClientRect();
-      const y = labelRect.top + labelRect.height / 2;
-      // Empty space between the label text and the radio part
-      expect(document.elementFromPoint((labelRect.right + partRect.left) / 2, y)).to.equal(input);
     });
   });
 });
