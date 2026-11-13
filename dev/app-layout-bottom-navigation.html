@@ -1,0 +1,61 @@
+<!doctype html>
+<html lang="en">
+  <head>
+    <meta charset="UTF-8" />
+    <meta name="viewport" content="width=device-width, initial-scale=1.0, viewport-fit=cover" />
+    <title>App Layout bottom navigation</title>
+    <script type="module" src="./common.js"></script>
+    <script type="module">
+      import '@vaadin/app-layout';
+    </script>
+    <style>
+      body {
+        margin: 0;
+      }
+
+      .my-layout {
+        --vaadin-app-layout-touch-optimized: false;
+      }
+
+      nav {
+        display: flex;
+        align-items: center;
+        gap: 1rem;
+        padding: 0.5rem;
+      }
+
+      main {
+        padding: 1rem;
+        min-height: 150vh;
+      }
+
+      @media (max-width: 768px) {
+        .my-layout {
+          --vaadin-app-layout-touch-optimized: true;
+        }
+      }
+    </style>
+  </head>
+  <body>
+    <vaadin-app-layout class="my-layout">
+      <nav slot="navbar" aria-label="Desktop navigation">
+        <strong>Desktop navigation</strong>
+        <a href="#home">Home</a>
+        <a href="#reports">Reports</a>
+        <a href="#settings">Settings</a>
+      </nav>
+      <nav slot="navbar-bottom" aria-label="Mobile navigation">
+        <a href="#home">Home</a>
+        <a href="#reports">Reports</a>
+        <a href="#settings">Settings</a>
+      </nav>
+      <main>
+        <h1 id="home">Independent desktop and mobile navigation</h1>
+        <p>Resize the viewport below 769px to switch from top navigation to dedicated bottom navigation.</p>
+        <p id="reports">Reports</p>
+        <p id="settings">Settings</p>
+        <p>Scroll to check that the fixed navigation does not cover the page content.</p>
+      </main>
+    </vaadin-app-layout>
+  </body>
+</html>

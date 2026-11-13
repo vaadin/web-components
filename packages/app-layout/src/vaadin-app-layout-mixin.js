@@ -18,6 +18,8 @@ const DEFAULT_I18N = {
   drawer: 'Drawer',
 };
 
+const automaticBottomNavbarItems = new WeakSet();
+
 export const AppLayoutMixin = (superclass) =>
   class AppLayoutMixinClass extends I18nMixin(superclass) {
     static get properties() {
@@ -191,7 +193,6 @@ export const AppLayoutMixin = (superclass) =>
     __onNavbarSlotChange() {
       const { touchOptimized } = this.__readCSSState();
       this.__setTouchOptimized(touchOptimized);
-      this.toggleAttribute('has-navbar', !!this.querySelector('[slot="navbar"]'));
 
       const { navbarTopOffsetSize, navbarBottomOffsetSize } = this.__readCSSState();
       this.__setNavbarTopOffsetSize(navbarTopOffsetSize);
@@ -214,8 +215,7 @@ export const AppLayoutMixin = (superclass) =>
       const isHostResized = entries.some(({ target }) => target === this);
       const isNavbarResized = entries.some(({ target }) => [this.$.navbarTop, this.$.navbarBottom].includes(target));
 
-      const { overlayMode, touchOptimized, drawerOffsetSize, navbarTopOffsetSize, navbarBottomOffsetSize } =
-        this.__readCSSState();
+      const { overlayMode, touchOptimized, drawerOffsetSize } = this.__readCSSState();
 
       const isDrawerAnimating = this.__isDrawerAnimating;
 
@@ -230,6 +230,7 @@ export const AppLayoutMixin = (superclass) =>
         }
 
         if (!isDrawerAnimating) {
+          const { navbarTopOffsetSize, navbarBottomOffsetSize } = this.__readCSSState();
           this.__setDrawerOffsetSize(drawerOffsetSize);
           this.__setNavbarTopOffsetSize(navbarTopOffsetSize);
           this.__setNavbarBottomOffsetSize(navbarBottomOffsetSize);
@@ -510,26 +511,40 @@ export const AppLayoutMixin = (superclass) =>
 
     /** @private */
     __setTouchOptimized(touchOptimized) {
-      const navbarItems = this.querySelectorAll('[slot*="navbar"]');
-      if (navbarItems.length > 0) {
-        Array.from(navbarItems).forEach((navbar) => {
-          if (navbar.getAttribute('slot').indexOf('touch-optimized') > -1) {
-            navbar.__touchOptimized = true;
-          }
+      const navbarItems = Array.from(this.querySelectorAll(':scope > [slot*="navbar"]'));
+      const isExplicitBottomItem = (item) => item.slot === 'navbar-bottom' && !automaticBottomNavbarItems.has(item);
+      const hasExplicitBottom = navbarItems.some(isExplicitBottomItem);
 
-          if (touchOptimized && navbar.__touchOptimized) {
-            navbar.setAttribute('slot', 'navbar-bottom');
-          } else {
-            navbar.setAttribute('slot', 'navbar');
-          }
-        });
-      }
+      navbarItems.forEach((navbar) => {
+        if (isExplicitBottomItem(navbar)) {
+          return;
+        }
+
+        if (navbar.slot.includes('touch-optimized')) {
+          navbar.__touchOptimized = true;
+        }
+
+        let slot = 'navbar';
+        if (navbar.__touchOptimized) {
+          slot = hasExplicitBottom ? 'navbar touch-optimized' : touchOptimized ? 'navbar-bottom' : 'navbar';
+        }
+
+        if (slot === 'navbar-bottom') {
+          automaticBottomNavbarItems.add(navbar);
+        } else {
+          automaticBottomNavbarItems.delete(navbar);
+        }
+        if (navbar.slot !== slot) {
+          navbar.slot = slot;
+        }
+      });
 
       const hasNavbar = this.$.navbarTop.querySelector('[name=navbar]').assignedNodes().length > 0;
-      this.$.navbarTop.toggleAttribute('hidden', !hasNavbar);
+      this.$.navbarTop.toggleAttribute('hidden', !hasNavbar || (hasExplicitBottom && touchOptimized));
+      this.toggleAttribute('has-navbar', hasNavbar && !this.$.navbarTop.hidden);
 
       const hasNavbarBottom = this.$.navbarBottom.querySelector('[name=navbar-bottom]').assignedNodes().length > 0;
-      this.$.navbarBottom.toggleAttribute('hidden', !hasNavbarBottom);
+      this.$.navbarBottom.toggleAttribute('hidden', !hasNavbarBottom || (hasExplicitBottom && !touchOptimized));
     }
 
     /** @protected */

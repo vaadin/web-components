@@ -20,25 +20,11 @@ export const navigationLayoutStyles = css`
     white-space: nowrap;
   }
 
-  :host([slot='navbar']) {
+  :host([slot^='navbar']) {
     flex-direction: row;
     align-items: center;
+    margin: calc(var(--vaadin-padding-s) * -1);
     --vaadin-navigation-layout-direction: row;
-    margin-top: calc(
-      max(var(--vaadin-app-layout-navbar-padding-top, var(--vaadin-padding-s)), var(--safe-area-inset-top)) * -1
-    );
-    margin-bottom: calc(var(--vaadin-app-layout-navbar-padding-bottom, var(--vaadin-padding-s)) * -1);
-    margin-inline: calc(
-        max(
-            var(--vaadin-app-layout-navbar-padding-inline-start, var(--vaadin-padding-s)),
-            var(--safe-area-inset-left)
-          ) *
-          -1
-      )
-      calc(
-        max(var(--vaadin-app-layout-navbar-padding-inline-end, var(--vaadin-padding-s)), var(--safe-area-inset-right)) *
-          -1
-      );
     --vaadin-navigation-layout-toggle-display: none;
 
     [part='end'] {

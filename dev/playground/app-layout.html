@@ -40,15 +40,17 @@
 
         document.body.replaceChildren(document.getElementById(example).content.cloneNode(true));
 
-        const navLayout = document.querySelector('vaadin-navigation-layout[slot]');
-        navLayout.prepend(navLayoutContent.cloneNode(true));
-        if (navLayout.slot === 'navbar') {
-          navLayout.querySelectorAll('vaadin-tooltip').forEach((tooltip) => {
-            tooltip.position = 'bottom';
-          });
-        } else {
-          navLayout.setAttribute('collapsed', '');
-        }
+        const navLayouts = document.querySelectorAll('vaadin-navigation-layout:is([slot="navbar"], [slot="drawer"])');
+        navLayouts.forEach((navLayout) => {
+          navLayout.prepend(navLayoutContent.cloneNode(true));
+          if (navLayout.slot === 'navbar') {
+            navLayout.querySelectorAll('vaadin-tooltip').forEach((tooltip) => {
+              tooltip.position = 'bottom';
+            });
+          } else {
+            navLayout.setAttribute('collapsed', '');
+          }
+        });
 
         const layout = document.querySelector('vaadin-app-layout');
         layout.append(viewContent.cloneNode(true));
@@ -238,10 +240,16 @@
       }
 
       .example {
-        --aura-background-color-dark: #090909;
-        color-scheme: dark;
-        --aura-content-color-scheme: light dark;
+        /* --aura-background-color-dark: #090909; */
+        /* color-scheme: dark; */
+        /* --aura-content-color-scheme: light dark; */
         --vaadin-app-layout-drawer-width: 14rem;
+
+        @media (width < 600px) {
+          vaadin-app-layout {
+            --vaadin-app-layout-touch-optimized: true;
+          }
+        }
 
         body {
           margin: 0;
@@ -257,6 +265,11 @@
         &.phone-size {
           --safe-area-inset-top: 20px;
           --safe-area-inset-bottom: 40px;
+        }
+
+        vaadin-app-layout:has([slot='navbar']) {
+          --vaadin-drawer-toggle-display: none;
+          --vaadin-app-layout-drawer-overlay: true;
         }
       }
 
@@ -375,6 +388,29 @@
     <template id="navbar">
       <vaadin-app-layout>
         <vaadin-navigation-layout slot="navbar"></vaadin-navigation-layout>
+        <vaadin-navigation-layout slot="drawer"></vaadin-navigation-layout>
+        <vaadin-navigation-layout slot="navbar-bottom">
+          <vaadin-side-nav>
+            <vaadin-side-nav-item path="/home" theme="icon-on-top">
+              <vaadin-icon slot="prefix" src="../assets/lucide-icons/home.svg"></vaadin-icon>
+              Home
+            </vaadin-side-nav-item>
+            <vaadin-side-nav-item path="/dev/playground/app-layout.html" theme="icon-on-top">
+              <vaadin-icon slot="prefix" src="../assets/lucide-icons/users.svg"></vaadin-icon>
+              People
+            </vaadin-side-nav-item>
+            <vaadin-side-nav-item path="/calendar" theme="icon-on-top">
+              <vaadin-icon slot="prefix" src="../assets/lucide-icons/calendar.svg"></vaadin-icon>
+              Calendar
+              <vaadin-badge number="2" theme="info number-only" slot="suffix">Invitations</vaadin-badge>
+            </vaadin-side-nav-item>
+            <vaadin-side-nav-item path="/reports" theme="icon-on-top">
+              <vaadin-icon slot="prefix" src="../assets/lucide-icons/chart-pie.svg"></vaadin-icon>
+              Reports
+            </vaadin-side-nav-item>
+          </vaadin-side-nav>
+          <vaadin-drawer-toggle slot="end"></vaadin-drawer-toggle>
+        </vaadin-navigation-layout>
       </vaadin-app-layout>
     </template>
 
@@ -385,7 +421,7 @@
       </div>
       <!-- <vaadin-text-field aria-label="Search" placeholder="Search" slot="start"></vaadin-text-field> -->
       <vaadin-side-nav>
-        <vaadin-side-nav-item path="/home" current>
+        <vaadin-side-nav-item path="/home">
           <vaadin-icon slot="prefix" src="../assets/lucide-icons/home.svg"></vaadin-icon>
           Home
           <vaadin-tooltip slot="tooltip" text="Home" aria-link-mode="none" position="end"></vaadin-tooltip>
