@@ -3,7 +3,7 @@
  * Copyright (c) 2016 - 2026 Vaadin Ltd.
  * This program is available under Apache License Version 2.0, available at https://vaadin.com/license/
  */
-import { iterateChildren, iterateRowCells, updatePart } from './vaadin-grid-helpers.js';
+import { iterateChildren } from './vaadin-grid-helpers.js';
 
 export const StylingMixin = (superClass) =>
   class StylingMixin extends superClass {
@@ -51,31 +51,13 @@ export const StylingMixin = (superClass) =>
      * the conditions change.
      */
     generateCellPartNames() {
+      if (!this._columnTree) {
+        return;
+      }
+
       iterateChildren(this.$.items, (row) => {
         if (!row.hidden) {
-          this._generateCellPartNames(row, this.__getRowModel(row));
-        }
-      });
-    }
-
-    /** @private */
-    _generateCellPartNames(row, model) {
-      iterateRowCells(row, (cell) => {
-        if (cell.__generatedParts) {
-          cell.__generatedParts.forEach((partName) => {
-            // Remove previously generated part names
-            updatePart(cell, partName, null);
-          });
-        }
-        if (this.cellPartNameGenerator && !row.hasAttribute('loading')) {
-          const result = this.cellPartNameGenerator(cell._column, model);
-          cell.__generatedParts = result && result.split(' ').filter((partName) => partName.length > 0);
-          if (cell.__generatedParts) {
-            cell.__generatedParts.forEach((partName) => {
-              // Add the newly generated names to part
-              updatePart(cell, partName, true);
-            });
-          }
+          this.__renderBodyRow(row);
         }
       });
     }
