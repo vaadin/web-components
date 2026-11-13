@@ -50,49 +50,79 @@ snapshots["vaadin-date-picker opened"] =
 - combobox "Start date" [haspopup=dialog, expanded]: "2/15/2020"
 - group:
   - dialog "Calendar":
-    - grid "February 2020":
-      - rowgroup:
-        - row
-      - row "1 February 2020, Saturday":
-        - gridcell
-        - gridcell
-        - gridcell
-        - gridcell
-        - gridcell
-        - gridcell
-        - gridcell "1 February 2020, Saturday": "1"
-      - row "2 February 2020, Sunday 3 February 2020, Monday 4 February 2020, Tuesday 5 February 2020, Wednesday 6 February 2020, Thursday 7 February 2020, Friday 8 February 2020, Saturday":
-        - gridcell "2 February 2020, Sunday": "2"
-        - gridcell "3 February 2020, Monday": "3"
-        - gridcell "4 February 2020, Tuesday": "4"
-        - gridcell "5 February 2020, Wednesday": "5"
-        - gridcell "6 February 2020, Thursday": "6"
-        - gridcell "7 February 2020, Friday": "7"
-        - gridcell "8 February 2020, Saturday": "8"
-      - row "9 February 2020, Sunday 10 February 2020, Monday 11 February 2020, Tuesday 12 February 2020, Wednesday 13 February 2020, Thursday 14 February 2020, Friday 15 February 2020, Saturday":
-        - gridcell "9 February 2020, Sunday": "9"
-        - gridcell "10 February 2020, Monday": "10"
-        - gridcell "11 February 2020, Tuesday": "11"
-        - gridcell "12 February 2020, Wednesday": "12"
-        - gridcell "13 February 2020, Thursday": "13"
-        - gridcell "14 February 2020, Friday": "14"
-        - gridcell "15 February 2020, Saturday" [selected]: "15"
-      - row "16 February 2020, Sunday 17 February 2020, Monday 18 February 2020, Tuesday 19 February 2020, Wednesday 20 February 2020, Thursday 21 February 2020, Friday 22 February 2020, Saturday":
-        - gridcell "16 February 2020, Sunday": "16"
-        - gridcell "17 February 2020, Monday": "17"
-        - gridcell "18 February 2020, Tuesday": "18"
-        - gridcell "19 February 2020, Wednesday": "19"
-        - gridcell "20 February 2020, Thursday": "20"
-        - gridcell "21 February 2020, Friday": "21"
-        - gridcell "22 February 2020, Saturday": "22"
-      - row "23 February 2020, Sunday 24 February 2020, Monday 25 February 2020, Tuesday 26 February 2020, Wednesday 27 February 2020, Thursday 28 February 2020, Friday 29 February 2020, Saturday":
-        - gridcell "23 February 2020, Sunday": "23"
-        - gridcell "24 February 2020, Monday": "24"
-        - gridcell "25 February 2020, Tuesday": "25"
-        - gridcell "26 February 2020, Wednesday": "26"
-        - gridcell "27 February 2020, Thursday": "27"
-        - gridcell "28 February 2020, Friday": "28"
-        - gridcell "29 February 2020, Saturday": "29"
+    - application:
+      - grid "February 2020":
+        - rowgroup:
+          - row
+        - row "1 February 2020, Saturday":
+          - gridcell
+          - gridcell
+          - gridcell
+          - gridcell
+          - gridcell
+          - gridcell
+          - gridcell "1 February 2020, Saturday":
+            - button "1 February 2020, Saturday": "1"
+        - row "2 February 2020, Sunday 3 February 2020, Monday 4 February 2020, Tuesday 5 February 2020, Wednesday 6 February 2020, Thursday 7 February 2020, Friday 8 February 2020, Saturday":
+          - gridcell "2 February 2020, Sunday":
+            - button "2 February 2020, Sunday": "2"
+          - gridcell "3 February 2020, Monday":
+            - button "3 February 2020, Monday": "3"
+          - gridcell "4 February 2020, Tuesday":
+            - button "4 February 2020, Tuesday": "4"
+          - gridcell "5 February 2020, Wednesday":
+            - button "5 February 2020, Wednesday": "5"
+          - gridcell "6 February 2020, Thursday":
+            - button "6 February 2020, Thursday": "6"
+          - gridcell "7 February 2020, Friday":
+            - button "7 February 2020, Friday": "7"
+          - gridcell "8 February 2020, Saturday":
+            - button "8 February 2020, Saturday": "8"
+        - row "9 February 2020, Sunday 10 February 2020, Monday 11 February 2020, Tuesday 12 February 2020, Wednesday 13 February 2020, Thursday 14 February 2020, Friday 15 February 2020, Saturday":
+          - gridcell "9 February 2020, Sunday":
+            - button "9 February 2020, Sunday": "9"
+          - gridcell "10 February 2020, Monday":
+            - button "10 February 2020, Monday": "10"
+          - gridcell "11 February 2020, Tuesday":
+            - button "11 February 2020, Tuesday": "11"
+          - gridcell "12 February 2020, Wednesday":
+            - button "12 February 2020, Wednesday": "12"
+          - gridcell "13 February 2020, Thursday":
+            - button "13 February 2020, Thursday": "13"
+          - gridcell "14 February 2020, Friday":
+            - button "14 February 2020, Friday": "14"
+          - gridcell "15 February 2020, Saturday" [selected]:
+            - button "15 February 2020, Saturday": "15"
+        - row "16 February 2020, Sunday 17 February 2020, Monday 18 February 2020, Tuesday 19 February 2020, Wednesday 20 February 2020, Thursday 21 February 2020, Friday 22 February 2020, Saturday":
+          - gridcell "16 February 2020, Sunday":
+            - button "16 February 2020, Sunday": "16"
+          - gridcell "17 February 2020, Monday":
+            - button "17 February 2020, Monday": "17"
+          - gridcell "18 February 2020, Tuesday":
+            - button "18 February 2020, Tuesday": "18"
+          - gridcell "19 February 2020, Wednesday":
+            - button "19 February 2020, Wednesday": "19"
+          - gridcell "20 February 2020, Thursday":
+            - button "20 February 2020, Thursday": "20"
+          - gridcell "21 February 2020, Friday":
+            - button "21 February 2020, Friday": "21"
+          - gridcell "22 February 2020, Saturday":
+            - button "22 February 2020, Saturday": "22"
+        - row "23 February 2020, Sunday 24 February 2020, Monday 25 February 2020, Tuesday 26 February 2020, Wednesday 27 February 2020, Thursday 28 February 2020, Friday 29 February 2020, Saturday":
+          - gridcell "23 February 2020, Sunday":
+            - button "23 February 2020, Sunday": "23"
+          - gridcell "24 February 2020, Monday":
+            - button "24 February 2020, Monday": "24"
+          - gridcell "25 February 2020, Tuesday":
+            - button "25 February 2020, Tuesday": "25"
+          - gridcell "26 February 2020, Wednesday":
+            - button "26 February 2020, Wednesday": "26"
+          - gridcell "27 February 2020, Thursday":
+            - button "27 February 2020, Thursday": "27"
+          - gridcell "28 February 2020, Friday":
+            - button "28 February 2020, Friday": "28"
+          - gridcell "29 February 2020, Saturday":
+            - button "29 February 2020, Saturday": "29"
     - toolbar [orientation=horizontal]:
       - button "Today"
       - button "Cancel"`;
