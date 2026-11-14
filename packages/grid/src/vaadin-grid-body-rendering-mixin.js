@@ -10,7 +10,7 @@ import { ifDefined } from 'lit/directives/if-defined.js';
 import { repeat } from 'lit/directives/repeat.js';
 import { microTask } from '@vaadin/component-base/src/async.js';
 import { Debouncer } from '@vaadin/component-base/src/debounce.js';
-import { partMap } from '@vaadin/component-base/src/directives/part-map.js';
+import { parsePartNames, partMap } from '@vaadin/component-base/src/directives/part-map.js';
 import { generateUniqueId } from '@vaadin/component-base/src/unique-id-utils.js';
 import { bodyCell } from './directives/body-cell-directive.js';
 import { bodyRow } from './directives/body-row-directive.js';
@@ -84,6 +84,7 @@ export const BodyRenderingMixin = (superClass) =>
       return {
         rowId: row.__id,
         item: this.__getRowItem(row),
+        model: this.__getRowModel(row),
         ariaRowIndex: index === undefined ? undefined : index + this.__a11yGetHeaderRowCount(this._columnTree) + 1,
         isFirstRow: index === 0,
         isLastRow: index === this._flatSize - 1,
@@ -99,7 +100,17 @@ export const BodyRenderingMixin = (superClass) =>
       };
     }
 
-    #bodyRowTemplate = ({ rowId, item, ariaRowIndex, isFirstRow, isLastRow, isOddRow, isEvenRow, cells } = {}) => {
+    #bodyRowTemplate = ({
+      rowId,
+      item,
+      model,
+      ariaRowIndex,
+      isFirstRow,
+      isLastRow,
+      isOddRow,
+      isEvenRow,
+      cells,
+    } = {}) => {
       const rowParts = {
         'first-row': isFirstRow,
         'last-row': isLastRow,
@@ -139,10 +150,12 @@ export const BodyRenderingMixin = (superClass) =>
                 'loading-row-cell': !item,
               };
 
+              const customCellParts = item ? parsePartNames(this.cellPartNameGenerator?.(column, model)) : {};
+
               return cache(html`
                 <td
                   role="${column.rowHeader ? 'rowheader' : 'gridcell'}"
-                  part="cell body-cell${partMap(cellParts)}"
+                  part="cell body-cell${partMap({ ...cellParts, ...customCellParts })}"
                   class="cell body-cell${classMap(cellParts)}"
                   ?first-column="${isFirstCell}"
                   ?last-column="${isLastCell}"
@@ -168,7 +181,9 @@ export const BodyRenderingMixin = (superClass) =>
                   <td
                     id="vaadin-grid-details-cell-${rowId}"
                     role="gridcell"
-                    part="cell details-cell"
+                    part="cell details-cell${partMap(
+                      item ? parsePartNames(this.cellPartNameGenerator?.(undefined, model)) : {},
+                    )}"
                     class="cell details-cell"
                     tabindex="-1"
                     frozen
