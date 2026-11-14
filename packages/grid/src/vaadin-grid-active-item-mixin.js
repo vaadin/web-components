@@ -80,8 +80,35 @@ export const ActiveItemMixin = (superClass) =>
         // Clicked on a focusable element
         this._isFocusable(e.target) ||
         // Clicked on a label element
-        e.target instanceof HTMLLabelElement
+        e.target instanceof HTMLLabelElement ||
+        // Click inside an overlay hosted by the cell (select, combo-box, date-picker, …).
+        // The overlay closes synchronously on item click, so the item no longer has an
+        // offsetParent and isFocusable() misses it. :focus-within also misses overlays
+        // opened from code, when focus never entered the cell. Ancestors outside the cell
+        // are ignored, so a grid placed inside an overlay still activates its own cells.
+        this.__isClickInsideCellOverlay(e, cell)
       );
+    }
+
+    /**
+     * True when the click path reaches the cell through a Vaadin overlay
+     * (`*-overlay`) rendered inside that cell.
+     *
+     * @param {!Event} event
+     * @param {!HTMLElement} cell
+     * @return {boolean}
+     * @private
+     */
+    __isClickInsideCellOverlay(event, cell) {
+      const path = event.composedPath();
+      const cellIndex = path.indexOf(cell);
+      if (cellIndex <= 0) {
+        return false;
+      }
+
+      return path.slice(0, cellIndex).some((node) => {
+        return typeof node.localName === 'string' && node.localName.endsWith('-overlay');
+      });
     }
 
     /**
