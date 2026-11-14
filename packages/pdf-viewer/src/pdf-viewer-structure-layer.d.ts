@@ -27,4 +27,8 @@ export declare class PdfViewerStructureLayer {
   readonly element: HTMLElement;
 
   updateTextLayer(textLayerElement: HTMLElement): void;
+
+  addLinks(links: HTMLElement[]): Set<string>;
+
+  getLinkAlt(annotationId: string): string | undefined;
 }

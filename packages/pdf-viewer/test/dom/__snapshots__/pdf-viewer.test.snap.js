@@ -1032,10 +1032,10 @@ snapshots["vaadin-pdf-viewer page tagged"] =
           </span>
           <span>
             <span role="none">
-              <span aria-owns="p2R_mc3_0 p2R_mc3_1">
+              <span>
               </span>
             </span>
-            <span>
+            <span aria-owns="pdfjs_internal_id_11R">
             </span>
           </span>
           <span role="none">
@@ -1190,7 +1190,6 @@ snapshots["vaadin-pdf-viewer page tagged"] =
       id="p2R_mc3"
     >
       <span
-        aria-owns="pdfjs_internal_id_11R"
         dir="ltr"
         id="p2R_mc3_0"
         role="presentation"
@@ -1411,6 +1410,7 @@ snapshots["vaadin-pdf-viewer page tagged"] =
   >
     <a
       aria-label="Vaadin website (opens in a new tab)"
+      aria-owns="p2R_mc3_0 p2R_mc3_1"
       class="link"
       href="https://vaadin.com/"
       id="pdfjs_internal_id_11R"

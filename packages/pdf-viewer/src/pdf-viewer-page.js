@@ -76,8 +76,11 @@ export class PdfViewerPage {
    */
   #structTree = null;
 
-  /** @type {PdfViewerStructureLayer | null} */
-  #structureLayer = null;
+  /**
+   * Undefined until the structure of the current text layer has rendered, and null for a page without one.
+   * @type {PdfViewerStructureLayer | null | undefined}
+   */
+  #structureLayer;
 
   /**
    * @param {number} pageNumber
@@ -342,7 +345,6 @@ export class PdfViewerPage {
       endOfContent.className = 'end-of-content';
       container.append(endOfContent);
       this.endOfContentElement = endOfContent;
-      this.#addLinksToText();
       // As in pdf.js, the structure renders after the text layer, whose elements it owns.
       await this.#renderStructureLayer();
     }
@@ -361,12 +363,13 @@ export class PdfViewerPage {
     if (this.textLayerElement !== textLayerElement) {
       return;
     }
-    const structureLayer = tree && this.#createStructureLayer(tree, textLayerElement);
+    const structureLayer = tree ? this.#createStructureLayer(tree, textLayerElement) : null;
+    this.#structureLayer = structureLayer;
     if (structureLayer) {
-      this.#structureLayer = structureLayer;
       // In the canvas as in pdf.js, since VoiceOver in Safari skips the elements, which have no size, outside of it.
       this.canvas.append(structureLayer.element);
     }
+    this.#addLinksToContent();
   }
 
   /** @private */
@@ -437,20 +440,57 @@ export class PdfViewerPage {
     if (links.length) {
       this.element.append(layer);
       this.linkLayerElement = layer;
-      this.#addLinksToText();
     }
+    this.#addLinksToContent();
     return links;
   }
 
   /**
-   * Adds the links to the text, for assistive technology, once both the text
-   * layer and the link layer have rendered, in either order.
+   * Adds the links to the structure or to the text before them, once both have rendered, in either order.
    * @private
    */
-  #addLinksToText() {
-    if (this.endOfContentElement && this.linkLayerElement) {
-      addLinksToText(this.textLayer.textDivs, [...this.linkLayerElement.children]);
+  #addLinksToContent() {
+    if (this.#structureLayer === undefined || !this.#linksRendered) {
+      return;
     }
+    const links = [...(this.linkLayerElement?.children ?? [])];
+    const structureLinkIds = this.#structureLayer?.addLinks(links);
+    const textLinks = links.filter((link) => !structureLinkIds?.has(link.id));
+    // Comparing the positions of the text forces a layout, which a page without links does not need.
+    if (textLinks.length) {
+      addLinksToText(this.textLayer.textDivs, textLinks);
+    }
+  }
+
+  /**
+   * Returns the alternative text that the structure of a tagged PDF gives a link of this page.
+   * @param {HTMLElement} link
+   * @return {string | undefined}
+   */
+  getLinkAlt(link) {
+    return this.#structureLayer?.getLinkAlt(link.id);
+  }
+
+  /**
+   * Returns the text that a link of this page owns in the structure of a tagged PDF, with a space between its lines,
+   * as the text layer has a line break between them instead.
+   * @param {HTMLElement} link
+   * @return {string | undefined}
+   */
+  getLinkText(link) {
+    const ids = link.getAttribute('aria-owns')?.split(' ');
+    if (!ids) {
+      return undefined;
+    }
+    const texts = new Map();
+    let afterLineBreak = false;
+    this.textLayerElement.querySelectorAll('br, span:not(.markedContent)').forEach((element) => {
+      if (ids.includes(element.id)) {
+        texts.set(element.id, `${afterLineBreak ? ' ' : ''}${element.textContent}`);
+      }
+      afterLineBreak = element.localName === 'br';
+    });
+    return ids.map((id) => texts.get(id)).join('');
   }
 
   cancel() {
@@ -468,7 +508,7 @@ export class PdfViewerPage {
     this.textLayerElement?.remove();
     this.textLayerElement = null;
     this.endOfContentElement = null;
-    this.#structureLayer = null;
+    this.#structureLayer = undefined;
     this.linkLayerElement?.remove();
     this.linkLayerElement = null;
     this.#linksRendered = false;
