@@ -9,6 +9,6 @@
   "module": "index.js",
   "type": "module",
   "dependencies": {
-    "@web/test-runner-commands": "^1.0.1"
+    "@web/test-runner-commands": "^1.1.0"
   }
 }
