@@ -2839,10 +2839,10 @@
     chrome-launcher "^0.15.0"
     puppeteer-core "^25.0.0"
 
-"@web/test-runner-commands@^1.0.0", "@web/test-runner-commands@^1.0.1", "@web/test-runner-commands@^1.0.2":
-  version "1.0.3"
-  resolved "https://registry.yarnpkg.com/@web/test-runner-commands/-/test-runner-commands-1.0.3.tgz#ccdb3d5fa63c5a93e89d60a1fb5200dc554406cd"
-  integrity sha512-8p1tQX/JRVAwuDhTbTQ3bneAlajeygJHBM6DBzo87Zs9J8HINY9sHg+N/4JVB3WQRO50dMsi21GbbmRyebxptA==
+"@web/test-runner-commands@^1.0.0", "@web/test-runner-commands@^1.0.2", "@web/test-runner-commands@^1.1.0":
+  version "1.1.0"
+  resolved "https://registry.yarnpkg.com/@web/test-runner-commands/-/test-runner-commands-1.1.0.tgz#8867329330bd78054b2fee04b4e4d3954c0a08d3"
+  integrity sha512-8Psi6Wuc3VjoAyfkzjsJtqpvVSg9JnZV5EjmecaLTJvRMt3L3sx9beNNdrPLDs+gP+kM2sScxx0yHjfKFP0czg==
   dependencies:
     "@web/test-runner-core" "^1.0.2"
     mkdirp "^1.0.4"
