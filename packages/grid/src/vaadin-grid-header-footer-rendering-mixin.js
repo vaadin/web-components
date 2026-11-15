@@ -11,7 +11,7 @@ import { repeat } from 'lit/directives/repeat.js';
 import { styleMap } from 'lit/directives/style-map.js';
 import { microTask } from '@vaadin/component-base/src/async.js';
 import { Debouncer } from '@vaadin/component-base/src/debounce.js';
-import { partMap } from '@vaadin/component-base/src/directives/part-map.js';
+import { parsePartNames, partMap } from '@vaadin/component-base/src/directives/part-map.js';
 import { cellContent } from './directives/cell-content-directive.js';
 
 function isContentCell(column, level, columnTree) {
@@ -47,19 +47,6 @@ function isFooterRowVisible(columns, level, columnTree) {
 
     return column.footerRenderer;
   });
-}
-
-/**
- * Converts a whitespace separated list of custom part names
- * into an object accepted by the `partMap` directive.
- */
-function getCustomParts(partName) {
-  return Object.fromEntries(
-    (partName ?? '')
-      .split(' ')
-      .filter((name) => name !== '')
-      .map((name) => [name, true]),
-  );
 }
 
 /**
@@ -142,7 +129,7 @@ export const HeaderFooterRenderingMixin = (superClass) =>
                 'last-column-cell': isLastCell,
               };
 
-              const customCellParts = isContentCell ? getCustomParts(column.headerPartName) : {};
+              const customCellParts = isContentCell ? parsePartNames(column.headerPartName) : {};
 
               return cache(html`
                 <th
@@ -225,7 +212,7 @@ export const HeaderFooterRenderingMixin = (superClass) =>
                 'last-column-cell': isLastCell,
               };
 
-              const customCellParts = isContentCell ? getCustomParts(column.footerPartName) : {};
+              const customCellParts = isContentCell ? parsePartNames(column.footerPartName) : {};
 
               return cache(html`
                 <td

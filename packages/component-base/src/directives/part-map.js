@@ -84,3 +84,19 @@ class PartMapDirective extends Directive {
  * if the property value is truthy, and removed if the value is falsy.
  */
 export const partMap = directive(PartMapDirective);
+
+/**
+ * Parses a whitespace separated list of part names
+ * into an object accepted by the `partMap` directive.
+ *
+ * @param {string | null | undefined} partName
+ * @return {Record<string, boolean>}
+ */
+export function parsePartNames(partName) {
+  return Object.fromEntries(
+    (partName || '')
+      .split(/\s+/u)
+      .filter((name) => name !== '')
+      .map((name) => [name, true]),
+  );
+}
