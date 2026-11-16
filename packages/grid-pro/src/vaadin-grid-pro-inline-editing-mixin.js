@@ -586,13 +586,13 @@ export const InlineEditingMixin = (superClass) =>
     }
 
     /**
-     * Override method from `StylingMixin` to apply `editable-cell` part to the
+     * Override method from `BodyRenderingMixin` to apply `editable-cell` part to the
      * cells of edit columns.
      *
      * @override
      */
-    _generateCellPartNames(row, model) {
-      super._generateCellPartNames(row, model);
+    __renderBodyRow(row) {
+      super.__renderBodyRow(row);
 
       iterateRowCells(row, (cell) => {
         const isEditable = !row.hasAttribute('loading') && this._isCellEditable(cell._column, row);
