@@ -4,7 +4,7 @@ import { fixtureSync, nextFrame, nextRender, nextUpdate } from '@vaadin/testing-
 import sinon from 'sinon';
 import './enable-feature-flag.js';
 import '../vaadin-pdf-viewer.js';
-import type { PDFDocumentProxy } from 'pdfjs-dist';
+import type { PDFDocumentProxy, PDFPageProxy } from 'pdfjs-dist';
 import { getDeepActiveElement } from '@vaadin/a11y-base/src/focus-utils.js';
 import { getSelectionRanges } from '../src/pdf-viewer-text-selection-controller.js';
 import type { PdfViewer } from '../vaadin-pdf-viewer.js';
@@ -14,6 +14,7 @@ import {
   type Fixture,
   fixtureUrl,
   getPdfDocumentPrototype,
+  getPdfPagePrototype,
   loadAndRender,
   nextRenderIdle,
   type PdfPage,
@@ -198,6 +199,39 @@ describe('links', () => {
       expect(pages[0].querySelector('.link-layer')).to.be.ok;
       const idle = nextRenderIdle(viewer);
       content.scrollTop = content.scrollHeight;
+      await idle;
+      expect(pages[0].querySelector('.link-layer')).to.be.null;
+    });
+
+    it('should not add links to a page that is released while its links load', async () => {
+      viewer.style.height = '300px';
+      let resolveAnnotations!: () => void;
+      const annotationsLoaded = new Promise<void>((resolve) => {
+        resolveAnnotations = resolve;
+      });
+      let setRequested!: () => void;
+      const requested = new Promise<void>((resolve) => {
+        setRequested = resolve;
+      });
+      const prototype = await getPdfPagePrototype();
+      const getAnnotations = prototype.getAnnotations;
+      async function fakeGetAnnotations(this: PDFPageProxy, ...args: Parameters<PDFPageProxy['getAnnotations']>) {
+        if (this.pageNumber === 1) {
+          setRequested();
+          await annotationsLoaded;
+        }
+        return getAnnotations.apply(this, args);
+      }
+      sinon.stub(prototype, 'getAnnotations').callsFake(fakeGetAnnotations);
+      viewer.src = fixtureUrl('links.pdf');
+      await requested;
+      const idle = nextRenderIdle(viewer);
+      content.scrollTop = content.scrollHeight;
+      for (let i = 0; i < 50 && pages[0].querySelector('canvas'); i++) {
+        await nextFrame();
+      }
+      expect(pages[0].querySelector('canvas')).to.be.null;
+      resolveAnnotations();
       await idle;
       expect(pages[0].querySelector('.link-layer')).to.be.null;
     });
