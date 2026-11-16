@@ -771,7 +771,7 @@ describe('pages', () => {
       ]);
       await loaded;
       // Resolves after the viewer got the page and requested a frame to apply its size
-
+      // eslint-disable-next-line dot-notation -- bracket access reaches the protected member
       await viewer['_pdfDocument']!.getPage(2);
       viewer.parentElement!.appendChild(viewer);
       await idle;
