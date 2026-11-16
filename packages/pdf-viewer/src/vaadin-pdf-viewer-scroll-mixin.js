@@ -157,16 +157,9 @@ export const PdfViewerScrollMixin = (superClass) =>
     }
 
     /**
-     * Scrolls to the start of the first page and makes it the current page.
-     */
-    scrollToStart() {
-      this.scrollToPage(1);
-    }
-
-    /**
      * Scrolls to the start of the last page and makes it the current page.
      */
-    scrollToEnd() {
+    scrollToLastPage() {
       this.scrollToPage(Infinity);
     }
 

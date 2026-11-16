@@ -47,14 +47,9 @@ export declare class PdfViewerScrollMixinClass {
   scrollToPage(page: number): void;
 
   /**
-   * Scrolls to the start of the first page and makes it the current page.
-   */
-  scrollToStart(): void;
-
-  /**
    * Scrolls to the start of the last page and makes it the current page.
    */
-  scrollToEnd(): void;
+  scrollToLastPage(): void;
 
   /**
    * Scrolls to the start of the given page, or to an offset on it in CSS
