@@ -35,9 +35,8 @@ export declare class PdfViewerScrollMixinClass {
   protected _scale: number;
 
   /**
-   * Scrolls to the start of the given page so that it becomes the current
-   * page. A value below 1 scrolls to the first page, and a value above the
-   * page count scrolls to the last page.
+   * Scrolls to the start of the given page. A value below 1 scrolls to the
+   * first page, and a value above the page count scrolls to the last page.
    *
    * Right after setting `src`, it scrolls once the document has loaded, and
    * in a hidden viewer, once the viewer is shown. Does nothing without a
@@ -46,7 +45,7 @@ export declare class PdfViewerScrollMixinClass {
   scrollToPage(page: number): void;
 
   /**
-   * Scrolls to the start of the last page so that it becomes the current page.
+   * Scrolls to the start of the last page.
    */
   scrollToLastPage(): void;
 
