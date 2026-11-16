@@ -651,7 +651,7 @@ describe('pages', () => {
       expect(viewer.page).to.equal(6);
     });
 
-    it('should render the first pages once shown after scrollToPage() for a value that is not a page', async () => {
+    it('should not scroll and warn once shown after scrollToPage() for a value that is not a page', async () => {
       clearWarnings();
       const stub = sinon.stub(console, 'warn');
       viewer.scrollToPage(2.5);
