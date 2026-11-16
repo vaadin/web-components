@@ -8,10 +8,11 @@
  * See https://vaadin.com/commercial-license-and-service-terms for the full
  * license.
  */
+import '@vaadin/button/src/vaadin-button.js';
 import '@vaadin/integer-field/src/vaadin-integer-field.js';
 import '@vaadin/select/src/vaadin-select.js';
 import '@vaadin/tooltip/src/vaadin-tooltip.js';
-import './vaadin-pdf-viewer-button.js';
+import './vaadin-pdf-viewer-icon.js';
 import { html } from 'lit';
 import { styleMap } from 'lit/directives/style-map.js';
 import { slotContent } from '@vaadin/component-base/src/directives/slot-content.js';
@@ -132,28 +133,28 @@ export const PdfViewerToolbarMixin = (superClass) =>
       const i18n = this.__effectiveI18n;
 
       return html`
-        <vaadin-pdf-viewer-button
+        <vaadin-button
           slot="toolbar-navigation"
-          icon="previous-page"
           theme="tertiary icon"
           .disabled="${!hasDocument || page <= 1}"
           @click="${this.#onPreviousPageClick}"
         >
+          <vaadin-pdf-viewer-icon icon="previous-page" aria-hidden="true"></vaadin-pdf-viewer-icon>
           <vaadin-tooltip
             slot="tooltip"
             .ariaLinkMode="${'aria-labelledby'}"
             .text="${i18n.previousPage}"
           ></vaadin-tooltip>
-        </vaadin-pdf-viewer-button>
-        <vaadin-pdf-viewer-button
+        </vaadin-button>
+        <vaadin-button
           slot="toolbar-navigation"
-          icon="next-page"
           theme="tertiary icon"
           .disabled="${!hasDocument || page >= pageCount}"
           @click="${this.#onNextPageClick}"
         >
+          <vaadin-pdf-viewer-icon icon="next-page" aria-hidden="true"></vaadin-pdf-viewer-icon>
           <vaadin-tooltip slot="tooltip" .ariaLinkMode="${'aria-labelledby'}" .text="${i18n.nextPage}"></vaadin-tooltip>
-        </vaadin-pdf-viewer-button>
+        </vaadin-button>
         <vaadin-integer-field
           slot="toolbar-navigation"
           theme="align-right"
@@ -183,15 +184,15 @@ export const PdfViewerToolbarMixin = (superClass) =>
       const i18n = this.__effectiveI18n;
 
       return html`
-        <vaadin-pdf-viewer-button
+        <vaadin-button
           slot="toolbar-zoom"
-          icon="zoom-out"
           theme="tertiary icon"
           .disabled="${!hasDocument || !getZoomOutLevel(zoomFactor)}"
           @click="${this.#onZoomOutClick}"
         >
+          <vaadin-pdf-viewer-icon icon="zoom-out" aria-hidden="true"></vaadin-pdf-viewer-icon>
           <vaadin-tooltip slot="tooltip" .ariaLinkMode="${'aria-labelledby'}" .text="${i18n.zoomOut}"></vaadin-tooltip>
-        </vaadin-pdf-viewer-button>
+        </vaadin-button>
         <vaadin-select
           slot="toolbar-zoom"
           theme="align-center"
@@ -201,15 +202,15 @@ export const PdfViewerToolbarMixin = (superClass) =>
           .disabled="${!hasDocument}"
           @change="${this.#onZoomSelectChange}"
         ></vaadin-select>
-        <vaadin-pdf-viewer-button
+        <vaadin-button
           slot="toolbar-zoom"
-          icon="zoom-in"
           theme="tertiary icon"
           .disabled="${!hasDocument || !getZoomInLevel(zoomFactor)}"
           @click="${this.#onZoomInClick}"
         >
+          <vaadin-pdf-viewer-icon icon="zoom-in" aria-hidden="true"></vaadin-pdf-viewer-icon>
           <vaadin-tooltip slot="tooltip" .ariaLinkMode="${'aria-labelledby'}" .text="${i18n.zoomIn}"></vaadin-tooltip>
-        </vaadin-pdf-viewer-button>
+        </vaadin-button>
       `;
     }
 
@@ -219,20 +220,20 @@ export const PdfViewerToolbarMixin = (superClass) =>
      */
     _renderDownloadButton() {
       return html`
-        <vaadin-pdf-viewer-button
+        <vaadin-button
           slot="toolbar-download"
-          icon="download"
           theme="tertiary icon"
           ?hidden="${this.downloadButtonHidden}"
           .disabled="${!this.pageCount}"
           @click="${this.#onDownloadClick}"
         >
+          <vaadin-pdf-viewer-icon icon="download" aria-hidden="true"></vaadin-pdf-viewer-icon>
           <vaadin-tooltip
             slot="tooltip"
             .ariaLinkMode="${'aria-labelledby'}"
             .text="${this.__effectiveI18n.download}"
           ></vaadin-tooltip>
-        </vaadin-pdf-viewer-button>
+        </vaadin-button>
       `;
     }
 

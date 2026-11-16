@@ -3,32 +3,38 @@ export const snapshots = {};
 
 snapshots["vaadin-pdf-viewer host default"] = 
 `<vaadin-pdf-viewer>
-  <vaadin-pdf-viewer-button
+  <vaadin-button
     aria-disabled="true"
     aria-labelledby="vaadin-tooltip-0"
     disabled=""
     has-tooltip=""
-    icon="previous-page"
     role="button"
     slot="toolbar-navigation"
-    style="--_vaadin-button-disabled-pointer-events: auto;"
-    tabindex="0"
+    tabindex="-1"
     theme="tertiary icon"
   >
-  </vaadin-pdf-viewer-button>
-  <vaadin-pdf-viewer-button
+    <vaadin-pdf-viewer-icon
+      aria-hidden="true"
+      icon="previous-page"
+    >
+    </vaadin-pdf-viewer-icon>
+  </vaadin-button>
+  <vaadin-button
     aria-disabled="true"
     aria-labelledby="vaadin-tooltip-1"
     disabled=""
     has-tooltip=""
-    icon="next-page"
     role="button"
     slot="toolbar-navigation"
-    style="--_vaadin-button-disabled-pointer-events: auto;"
-    tabindex="0"
+    tabindex="-1"
     theme="tertiary icon"
   >
-  </vaadin-pdf-viewer-button>
+    <vaadin-pdf-viewer-icon
+      aria-hidden="true"
+      icon="next-page"
+    >
+    </vaadin-pdf-viewer-icon>
+  </vaadin-button>
   <vaadin-integer-field
     aria-disabled="true"
     disabled=""
@@ -63,19 +69,22 @@ snapshots["vaadin-pdf-viewer host default"] =
       type="number"
     >
   </vaadin-integer-field>
-  <vaadin-pdf-viewer-button
+  <vaadin-button
     aria-disabled="true"
     aria-labelledby="vaadin-tooltip-6"
     disabled=""
     has-tooltip=""
-    icon="zoom-out"
     role="button"
     slot="toolbar-zoom"
-    style="--_vaadin-button-disabled-pointer-events: auto;"
-    tabindex="0"
+    tabindex="-1"
     theme="tertiary icon"
   >
-  </vaadin-pdf-viewer-button>
+    <vaadin-pdf-viewer-icon
+      aria-hidden="true"
+      icon="zoom-out"
+    >
+    </vaadin-pdf-viewer-icon>
+  </vaadin-button>
   <vaadin-select
     aria-disabled="true"
     disabled=""
@@ -84,62 +93,74 @@ snapshots["vaadin-pdf-viewer host default"] =
     theme="align-center"
   >
   </vaadin-select>
-  <vaadin-pdf-viewer-button
+  <vaadin-button
     aria-disabled="true"
     aria-labelledby="vaadin-tooltip-10"
     disabled=""
     has-tooltip=""
-    icon="zoom-in"
     role="button"
     slot="toolbar-zoom"
-    style="--_vaadin-button-disabled-pointer-events: auto;"
-    tabindex="0"
+    tabindex="-1"
     theme="tertiary icon"
   >
-  </vaadin-pdf-viewer-button>
-  <vaadin-pdf-viewer-button
+    <vaadin-pdf-viewer-icon
+      aria-hidden="true"
+      icon="zoom-in"
+    >
+    </vaadin-pdf-viewer-icon>
+  </vaadin-button>
+  <vaadin-button
     aria-disabled="true"
     aria-labelledby="vaadin-tooltip-12"
     disabled=""
     has-tooltip=""
-    icon="download"
     role="button"
     slot="toolbar-download"
-    style="--_vaadin-button-disabled-pointer-events: auto;"
-    tabindex="0"
+    tabindex="-1"
     theme="tertiary icon"
   >
-  </vaadin-pdf-viewer-button>
+    <vaadin-pdf-viewer-icon
+      aria-hidden="true"
+      icon="download"
+    >
+    </vaadin-pdf-viewer-icon>
+  </vaadin-button>
 </vaadin-pdf-viewer>
 `;
 /* end snapshot vaadin-pdf-viewer host default */
 
 snapshots["vaadin-pdf-viewer host document"] = 
 `<vaadin-pdf-viewer>
-  <vaadin-pdf-viewer-button
+  <vaadin-button
     aria-disabled="true"
     aria-labelledby="vaadin-tooltip-0"
     disabled=""
     has-tooltip=""
-    icon="previous-page"
     role="button"
     slot="toolbar-navigation"
-    style="--_vaadin-button-disabled-pointer-events: auto;"
-    tabindex="0"
+    tabindex="-1"
     theme="tertiary icon"
   >
-  </vaadin-pdf-viewer-button>
-  <vaadin-pdf-viewer-button
+    <vaadin-pdf-viewer-icon
+      aria-hidden="true"
+      icon="previous-page"
+    >
+    </vaadin-pdf-viewer-icon>
+  </vaadin-button>
+  <vaadin-button
     aria-labelledby="vaadin-tooltip-1"
     has-tooltip=""
-    icon="next-page"
     role="button"
     slot="toolbar-navigation"
-    style="--_vaadin-button-disabled-pointer-events: auto;"
     tabindex="0"
     theme="tertiary icon"
   >
-  </vaadin-pdf-viewer-button>
+    <vaadin-pdf-viewer-icon
+      aria-hidden="true"
+      icon="next-page"
+    >
+    </vaadin-pdf-viewer-icon>
+  </vaadin-button>
   <vaadin-integer-field
     has-value=""
     max="6"
@@ -174,45 +195,54 @@ snapshots["vaadin-pdf-viewer host document"] =
       type="number"
     >
   </vaadin-integer-field>
-  <vaadin-pdf-viewer-button
+  <vaadin-button
     aria-labelledby="vaadin-tooltip-6"
     has-tooltip=""
-    icon="zoom-out"
     role="button"
     slot="toolbar-zoom"
-    style="--_vaadin-button-disabled-pointer-events: auto;"
     tabindex="0"
     theme="tertiary icon"
   >
-  </vaadin-pdf-viewer-button>
+    <vaadin-pdf-viewer-icon
+      aria-hidden="true"
+      icon="zoom-out"
+    >
+    </vaadin-pdf-viewer-icon>
+  </vaadin-button>
   <vaadin-select
     has-value=""
     slot="toolbar-zoom"
     theme="align-center"
   >
   </vaadin-select>
-  <vaadin-pdf-viewer-button
+  <vaadin-button
     aria-labelledby="vaadin-tooltip-10"
     has-tooltip=""
-    icon="zoom-in"
     role="button"
     slot="toolbar-zoom"
-    style="--_vaadin-button-disabled-pointer-events: auto;"
     tabindex="0"
     theme="tertiary icon"
   >
-  </vaadin-pdf-viewer-button>
-  <vaadin-pdf-viewer-button
+    <vaadin-pdf-viewer-icon
+      aria-hidden="true"
+      icon="zoom-in"
+    >
+    </vaadin-pdf-viewer-icon>
+  </vaadin-button>
+  <vaadin-button
     aria-labelledby="vaadin-tooltip-12"
     has-tooltip=""
-    icon="download"
     role="button"
     slot="toolbar-download"
-    style="--_vaadin-button-disabled-pointer-events: auto;"
     tabindex="0"
     theme="tertiary icon"
   >
-  </vaadin-pdf-viewer-button>
+    <vaadin-pdf-viewer-icon
+      aria-hidden="true"
+      icon="download"
+    >
+    </vaadin-pdf-viewer-icon>
+  </vaadin-button>
 </vaadin-pdf-viewer>
 `;
 /* end snapshot vaadin-pdf-viewer host document */
