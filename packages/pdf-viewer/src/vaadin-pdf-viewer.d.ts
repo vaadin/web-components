@@ -46,6 +46,11 @@ export type PdfViewerDocumentLoadEvent = CustomEvent<{ pageCount: number; title:
 export type PdfViewerDocumentErrorEvent = CustomEvent<{ reason: 'invalid' | 'network' | 'password'; error: unknown }>;
 
 /**
+ * Fired when `find()` has searched the document.
+ */
+export type PdfViewerFindResultEvent = CustomEvent<{ query: string; matchCount: number }>;
+
+/**
  * Fired when the `page` property changes.
  */
 export type PdfViewerPageChangedEvent = CustomEvent<{ value: number }>;
@@ -69,6 +74,8 @@ export interface PdfViewerCustomEventMap {
   'document-error': PdfViewerDocumentErrorEvent;
 
   'document-load': PdfViewerDocumentLoadEvent;
+
+  'find-result': PdfViewerFindResultEvent;
 
   'page-changed': PdfViewerPageChangedEvent;
 
@@ -164,6 +171,7 @@ export interface PdfViewerEventMap extends HTMLElementEventMap, PdfViewerCustomE
  *
  * @fires {CustomEvent} document-error - Fired when the document could not be loaded.
  * @fires {CustomEvent} document-load - Fired when the document has loaded.
+ * @fires {CustomEvent} find-result - Fired when `find()` has searched the document.
  * @fires {CustomEvent} page-changed - Fired when the `page` property changes.
  * @fires {CustomEvent} page-count-changed - Fired when the `pageCount` property changes.
  * @fires {CustomEvent} toolbar-collapsed-changed - Fired when the `toolbarCollapsed` property changes.

@@ -124,6 +124,7 @@ const DEFAULT_I18N = {
  *
  * @fires {CustomEvent} document-error - Fired when the document could not be loaded.
  * @fires {CustomEvent} document-load - Fired when the document has loaded.
+ * @fires {CustomEvent} find-result - Fired when `find()` has searched the document.
  * @fires {CustomEvent} page-changed - Fired when the `page` property changes.
  * @fires {CustomEvent} page-count-changed - Fired when the `pageCount` property changes.
  * @fires {CustomEvent} toolbar-collapsed-changed - Fired when the `toolbarCollapsed` property changes.

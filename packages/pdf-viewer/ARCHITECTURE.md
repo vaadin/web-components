@@ -73,6 +73,9 @@ how to generate them.
     The structure has no state of the viewer, so it has no mixin.
   - Unlike in pdf.js, `renderTextLayer()` waits for the structure, so `render-idle` comes once the structure
     is in place.
+- `PdfViewerFindMixin` searches the text of the document. It loads the text of each page once per document
+  into a private map. The text layer loads its own text. Text that fails to load is loaded again by the next
+  search.
 - `PdfViewerLinksMixin` adds the links of each rendered page and follows internal links with `_scrollToPage()`.
 - After a page canvas renders, `PdfViewerRenderMixin` awaits `_renderPageLayers(page)`. Each override awaits
   `super` first, so the layers render in the order of the mixins: text and structure, then links.
@@ -135,6 +138,16 @@ how to generate them.
 - Unlike in pdf.js, a `Link` element of the structure has no role, and the structure does not own its link.
   The link is added to the text before it, as on an untagged page.
 - When a focused link loses its page, focus moves to the page area.
+
+## Find
+
+- Matching ignores case, ligatures, differences in white space and the diacritics of Latin, Greek and
+  Cyrillic letters. Marks of other scripts make another letter, so matching keeps them.
+- Matching also ignores spacing accents, as in `r´esum´e` of some PDF files, and matches the Greek final
+  sigma with a capital sigma. It reads the text by code point, so letters such as `𝐀` fold too.
+- `find()` waits while the document loads. It does nothing when the viewer is not attached. Of several calls
+  in a row, only the last one runs.
+- A new `src` stops a running search. The search then fires no `find-result`.
 
 ## Install size
 
