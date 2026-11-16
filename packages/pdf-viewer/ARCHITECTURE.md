@@ -82,8 +82,8 @@ how to generate them.
     elements to the page.
   - The layers can render in any order. One method of the page view connects them. It puts the structure in the
     canvas and adds the links to the text.
-  - A release aborts the signal of the page. The page view and the text layer check it after each await, so a
-    released page gets no layers.
+  - A release aborts the signal of the page. The page view checks it after each await, so a released page
+    gets no layers. The text layer also checks it before it loads the text.
   - The render queue renders a page again only once its layers are done. One signal therefore covers the time
     between two releases.
 - `PdfViewerKeyboardMixin` handles the keyboard shortcuts.
