@@ -1,0 +1,26 @@
+vaadin-button,
+vaadin-button::before,
+vaadin-button::after {
+  transition: none !important;
+}
+
+vaadin-integer-field {
+  &[focused] input {
+    caret-color: transparent;
+  }
+
+  &::part(input-field),
+  &::part(error-message) {
+    &,
+    &::before,
+    &::after {
+      animation: none !important;
+      transition: none !important;
+    }
+  }
+}
+
+vaadin-tooltip[opening]::part(overlay),
+vaadin-tooltip[closing]::part(overlay) {
+  animation: none !important;
+}
