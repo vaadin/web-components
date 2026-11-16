@@ -52,7 +52,7 @@ class PartMapDirective extends Directive {
 
     // Remove old parts that no longer apply
     this.#previousParts.forEach((name) => {
-      if (!(name in partNameInfo)) {
+      if (!Object.hasOwn(partNameInfo, name)) {
         partList.remove(name);
         this.#previousParts.delete(name);
       }
