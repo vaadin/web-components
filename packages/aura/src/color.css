@@ -170,8 +170,8 @@ vaadin-upload-file,
   --aura-accent-surface: light-dark(var(--_accent-surface-light), var(--_accent-surface-dark));
   @supports (color: hsl(0 0 0)) {
     /* This removes the semi-transparency */
-    --aura-accent-surface: oklch(
-      from light-dark(var(--_accent-surface-light), var(--_accent-surface-dark)) l c h / var(--aura-surface-opacity)
+    --aura-accent-surface: oklab(
+      from light-dark(var(--_accent-surface-light), var(--_accent-surface-dark)) l a b / var(--aura-surface-opacity)
     );
   }
   --_accent-border: light-dark(

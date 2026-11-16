@@ -87,15 +87,6 @@ export const A11yMixin = (superClass) =>
 
     /**
      * @param {!HTMLElement} row
-     * @param {number} index
-     * @private
-     */
-    __a11yUpdateRowRowindex(row) {
-      row.setAttribute('aria-rowindex', row.index + this.__a11yGetHeaderRowCount(this._columnTree) + 1);
-    }
-
-    /**
-     * @param {!HTMLElement} row
      * @param {boolean} selected
      * @private
      */
@@ -134,19 +125,6 @@ export const A11yMixin = (superClass) =>
       // Set level for the expandable rows itself, and all the nested rows.
       const hasLevel = level > 0 || this.__isRowCollapsible(row) || this.__isRowExpandable(row);
       setOrRemoveAttribute(row, 'aria-level', hasLevel && level + 1);
-    }
-
-    /**
-     * @param {!HTMLElement} row
-     * @param {!HTMLElement} detailsCell
-     * @private
-     */
-    __a11ySetRowDetailsCell(row, detailsCell) {
-      iterateRowCells(row, (cell) => {
-        if (cell !== detailsCell) {
-          cell.setAttribute('aria-controls', detailsCell.id);
-        }
-      });
     }
 
     /** @private */

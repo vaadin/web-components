@@ -567,9 +567,10 @@ export const InlineEditingMixin = (superClass) =>
 
     /**
      * @param {!HTMLElement} row
+     * @param {{ skipRenderers?: boolean }} options
      * @private
      */
-    __updateRow(row) {
+    __updateRow(row, options) {
       const item = this.__getRowItem(row);
       if (this.__edited) {
         const { cell, model } = this.__edited;
@@ -581,17 +582,17 @@ export const InlineEditingMixin = (superClass) =>
           this._stopEdit();
         }
       }
-      super.__updateRow(row, item);
+      super.__updateRow(row, options);
     }
 
     /**
-     * Override method from `StylingMixin` to apply `editable-cell` part to the
+     * Override method from `BodyRenderingMixin` to apply `editable-cell` part to the
      * cells of edit columns.
      *
      * @override
      */
-    _generateCellPartNames(row, model) {
-      super._generateCellPartNames(row, model);
+    __renderBodyRow(row) {
+      super.__renderBodyRow(row);
 
       iterateRowCells(row, (cell) => {
         const isEditable = !row.hasAttribute('loading') && this._isCellEditable(cell._column, row);

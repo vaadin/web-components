@@ -805,19 +805,14 @@ export const ComboBoxBaseMixin = (superClass) =>
      * @protected
      */
     _handleFocusOut() {
-      if (isKeyboardActive()) {
-        // Close on Tab key causing blur. With mouse, close on outside click instead.
-        this._closeOrCommit();
+      // With mouse, the outside click closes the visible overlay without committing
+      if (!isKeyboardActive() && this.opened && this._overlayOpened) {
         return;
       }
 
-      if (!this.opened) {
-        this._commitValue();
-      } else if (!this._overlayOpened) {
-        // Combo-box is opened, but overlay is not visible -> custom value was entered.
-        // Make sure we close here as there won't be an "outside click" in this case.
-        this.close();
-      }
+      // When tabbing out or the overlay is already closed, commit the
+      // value instead, also while data provider might still be loading
+      this._closeOrCommit();
     }
 
     /**

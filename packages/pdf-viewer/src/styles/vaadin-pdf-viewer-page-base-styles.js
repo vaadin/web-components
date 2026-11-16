@@ -39,6 +39,11 @@ export const pdfViewerPageStyles = css`
     height: 100%;
   }
 
+  /* Blocks as in HTML, so that screen readers start a new line at a heading or a paragraph */
+  .struct-tree [role]:not([role='code'], [role='emphasis'], [role='img'], [role='none'], [role='strong']) {
+    display: block;
+  }
+
   .link-layer {
     position: absolute;
     inset: 0;

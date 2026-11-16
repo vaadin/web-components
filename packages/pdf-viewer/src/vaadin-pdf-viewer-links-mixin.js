@@ -73,11 +73,7 @@ export const PdfViewerLinksMixin = (superClass) =>
       link.setAttribute('aria-label', getLinkLabel(this.#linkLabels.get(link), this.__effectiveI18n));
     }
 
-    /**
-     * Updates the accessible names of the links of the rendered pages, e.g.
-     * when the localization changes.
-     * @private
-     */
+    /** @private */
     #updateLinkLabels() {
       this.$.pages.querySelectorAll('a.link').forEach((link) => {
         if (this.#linkLabels.has(link)) {
@@ -88,8 +84,7 @@ export const PdfViewerLinksMixin = (superClass) =>
 
     /**
      * Returns the page and the position on the page that an internal link
-     * points to, or null when it cannot be resolved.
-     * @return {Promise<{ page: number, left?: number, top?: number, right?: number, bottom?: number } | null>}
+     * points to, or null when it cannot be resolved, see `resolveDestination()`.
      * @private
      */
     #resolveDestination(destination) {

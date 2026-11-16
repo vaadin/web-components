@@ -365,6 +365,11 @@ describe('accessibility', () => {
           ]);
         });
       });
+
+      it('should remove aria-controls from body cells when the renderer is cleared', () => {
+        grid.rowDetailsRenderer = null;
+        expect(uniqueAttrValues(grid.$.items.querySelectorAll('td'), 'aria-controls')).to.eql([null]);
+      });
     });
   });
 

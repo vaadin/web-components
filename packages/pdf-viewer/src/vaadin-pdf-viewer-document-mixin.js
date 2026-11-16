@@ -11,9 +11,8 @@
 import { PdfViewerDocumentController } from './pdf-viewer-document-controller.js';
 
 /**
- * Returns the PDF file name at the end of the path of a URL, e.g.
- * `report.pdf` of `/files/report.pdf`, or null for URLs without one, e.g.
- * blob URLs or `/files/123`.
+ * Returns the PDF file name at the end of the path of a URL, or null for URLs
+ * without one, such as blob URLs.
  * @param {string | null | undefined} src
  * @return {string | null}
  */
@@ -172,7 +171,7 @@ export const PdfViewerDocumentMixin = (superClass) =>
     }
 
     /**
-     * Called when the document is unloaded, e.g. before another one loads.
+     * Called when the document is unloaded, also before another one loads.
      * @protected
      */
     _documentUnloaded() {

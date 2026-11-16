@@ -3,8 +3,6 @@
  * Copyright (c) 2016 - 2026 Vaadin Ltd.
  * This program is available under Apache License Version 2.0, available at https://vaadin.com/license/
  */
-import { updatePart } from './vaadin-grid-helpers.js';
-
 export const RowDetailsMixin = (superClass) =>
   class RowDetailsMixin extends superClass {
     static get properties() {
@@ -41,14 +39,6 @@ export const RowDetailsMixin = (superClass) =>
         },
 
         /**
-         * @type {!Array<!HTMLElement> | undefined}
-         * @protected
-         */
-        _detailsCells: {
-          type: Array,
-        },
-
-        /**
          * Set of opened details item ids
          * @private
          */
@@ -79,27 +69,19 @@ export const RowDetailsMixin = (superClass) =>
 
     /** @private */
     _rowDetailsRendererChanged(rowDetailsRenderer) {
-      if (!rowDetailsRenderer) {
+      if (!this._columnTree) {
+        // Only update the rows if the column tree has already been initialized
         return;
       }
 
-      if (this._columnTree) {
-        // Only update the rows if the column tree has already been initialized
-        this._getRenderedRows().forEach((row) => {
-          if (!row.querySelector('.details-cell')) {
-            this.__initRow(row, this._columnTree.at(-1), 'body', true);
-            this.__updateRow(row);
-            return;
-          }
-
-          if (row.hasAttribute('details-opened')) {
-            this.__updateRow(row);
-          }
-        });
-
-        // Details cells are frozen, so the frozen cells cache needs to include them
-        this._frozenCellsChanged();
-      }
+      this._getRenderedRows().forEach((row) => {
+        // Update the rows that need the details cell added or removed,
+        // and the rows with opened details to apply the new renderer.
+        const hasDetailsCell = !!row.querySelector('.details-cell');
+        if (hasDetailsCell !== !!rowDetailsRenderer || row.hasAttribute('details-opened')) {
+          this.__updateRow(row);
+        }
+      });
     }
 
     /** @private */
@@ -109,25 +91,6 @@ export const RowDetailsMixin = (superClass) =>
           this.__updateRow(row);
         }
       });
-    }
-
-    /**
-     * @param {!HTMLElement} cell
-     * @protected
-     */
-    _configureDetailsCell(cell) {
-      updatePart(cell, 'cell', true);
-      updatePart(cell, 'details-cell', true);
-      // Freeze the details cell, so that it does not scroll horizontally
-      // with the normal cells. This way it looks less weird.
-      cell.toggleAttribute('frozen', true);
-
-      this._detailsCellResizeObserver.observe(cell);
-    }
-
-    /** @private */
-    __teardownDetailsCell(cell) {
-      this._detailsCellResizeObserver.unobserve(cell);
     }
 
     /**
@@ -156,19 +119,15 @@ export const RowDetailsMixin = (superClass) =>
 
     /** @protected */
     _updateDetailsCellHeight(row) {
-      const cell = row.querySelector('.details-cell');
-      if (!cell) {
-        return;
-      }
-
-      this.__updateDetailsRowPadding(row, cell);
+      this.__updateDetailsRowPadding(row);
       // Ensure the row has correct padding after frame (the resize observer might miss it)
-      requestAnimationFrame(() => this.__updateDetailsRowPadding(row, cell));
+      requestAnimationFrame(() => this.__updateDetailsRowPadding(row));
     }
 
     /** @private */
-    __updateDetailsRowPadding(row, cell) {
-      if (cell.hidden) {
+    __updateDetailsRowPadding(row) {
+      const cell = row.querySelector('.details-cell');
+      if (!cell || cell.hidden) {
         row.style.removeProperty('padding-bottom');
       } else {
         row.style.setProperty('padding-bottom', `${cell.offsetHeight}px`);

@@ -36,7 +36,7 @@ export const PdfViewerZoomMixin = (superClass) =>
         zoom: {
           value: 'page-width',
           notify: true,
-          // Numbers set as attribute, e.g. zoom="1.5", become numbers.
+          // Numeric attribute values become numbers.
           converter: {
             fromAttribute: (value) =>
               value !== null && value.trim() !== '' && !Number.isNaN(Number(value)) ? Number(value) : value,

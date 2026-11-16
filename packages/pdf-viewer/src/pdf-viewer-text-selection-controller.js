@@ -10,7 +10,7 @@
  */
 
 /**
- * @license pdf.js 6.4.299
+ * @license pdf.js 6.5.438
  *
  * Copyright 2024 Mozilla Foundation
  *
@@ -178,8 +178,8 @@ export class PdfViewerTextSelectionController {
     }
 
     const ranges = getSelectionRanges(this.host.shadowRoot);
-    // As in later versions of pdf.js, the collapsed range of a click whose `selectionchange` comes after
-    // `pointerup` does not mark the text layer, as that would keep the links from being clicked.
+    // As in pdf.js, the collapsed range of a click whose `selectionchange` comes after `pointerup`
+    // does not mark the text layer, as that would keep the links from being clicked.
     const activeRanges = ranges.filter((range) => !range.collapsed || this.#isPointerDown);
     const activePages = pages.filter((page) =>
       activeRanges.some((range) => range.intersectsNode(page.textLayerElement)),
@@ -204,7 +204,7 @@ export class PdfViewerTextSelectionController {
 
     const [range] = ranges;
     const prevRange = this.#prevRange;
-    // Whether the user moves the start of the selection, rather than its end
+    // Whether the user moves the start of the selection, rather than its end.
     const modifyStart =
       !!prevRange &&
       prevRange.startContainer.getRootNode() === range.startContainer.getRootNode() &&

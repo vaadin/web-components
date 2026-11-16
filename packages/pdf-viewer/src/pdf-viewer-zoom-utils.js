@@ -55,7 +55,7 @@ export function isValidZoom(zoom) {
   if (zoom === 'page-width' || zoom === 'page-fit') {
     return true;
   }
-  // Other types are not converted, as converting e.g. an object can throw.
+  // Other types are not converted, as converting an object can throw.
   if (typeof zoom !== 'number' && typeof zoom !== 'string') {
     return false;
   }

@@ -5,6 +5,7 @@
  */
 import { html } from 'lit';
 import { AsyncDirective, directive } from 'lit/async-directive.js';
+import { ref } from 'lit/directives/ref.js';
 
 /**
  * A directive that manages the `<vaadin-grid-cell-content>` element for a cell.
@@ -12,7 +13,14 @@ import { AsyncDirective, directive } from 'lit/async-directive.js';
 class CellContentDirective extends AsyncDirective {
   #cell;
 
-  update(part, [grid, slotName, { textAlign } = {}]) {
+  #setFocusButton = (button) => {
+    if (button) {
+      this.#cell._focusButton = button;
+      this.#cell.focus = (options) => button.focus(options);
+    }
+  };
+
+  update(part, [grid, slotName, { textAlign, focusButton } = {}]) {
     this.#cell = part.parentNode;
     this.#cell._content ??= document.createElement('vaadin-grid-cell-content');
     this.#cell._content.slot = slotName;
@@ -22,7 +30,8 @@ class CellContentDirective extends AsyncDirective {
       grid.appendChild(this.#cell._content);
     }
 
-    return html`<slot name="${slotName}"></slot>`;
+    const slot = html`<slot name="${slotName}"></slot>`;
+    return focusButton ? html`<div role="button" tabindex="-1" ${ref(this.#setFocusButton)}>${slot}</div>` : slot;
   }
 
   disconnected() {

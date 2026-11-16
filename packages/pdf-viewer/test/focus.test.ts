@@ -48,7 +48,7 @@ describe('focus', () => {
     });
 
     it('should toggle focused attribute when focus moves between the page area and an element in a page', () => {
-      // E.g. a link in a page
+      // Stands in for a link in a page.
       const button = document.createElement('button');
       content.querySelector('[part~="page"]')!.append(button);
       content.focus();

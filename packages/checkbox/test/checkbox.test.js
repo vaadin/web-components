@@ -1,6 +1,14 @@
 import { expect } from '@vaadin/chai-plugins';
-import { resetMouse, sendKeys, sendMouseToElement } from '@vaadin/test-runner-commands';
-import { fixtureSync, mousedown, mouseup, nextFrame, nextRender, nextUpdate } from '@vaadin/testing-helpers';
+import { resetMouse, sendKeys, sendMouse, sendMouseToElement } from '@vaadin/test-runner-commands';
+import {
+  fixtureSync,
+  middleOfNode,
+  mousedown,
+  mouseup,
+  nextFrame,
+  nextRender,
+  nextUpdate,
+} from '@vaadin/testing-helpers';
 import sinon from 'sinon';
 import '../src/vaadin-checkbox.js';
 
@@ -161,16 +169,16 @@ describe('checkbox', () => {
         await resetMouse();
       });
 
-      it('should focus on input click when not focused yet', async () => {
-        await sendMouseToElement({ type: 'click', element: input });
+      it('should focus on checkbox part click when not focused yet', async () => {
+        await sendMouseToElement({ type: 'click', element: checkbox.shadowRoot.querySelector('[part="checkbox"]') });
         expect(checkbox.hasAttribute('focused')).to.be.true;
       });
 
-      it('should keep focus on input click when already focused', async () => {
+      it('should keep focus on checkbox part click when already focused', async () => {
         const spy = sinon.spy();
         checkbox.addEventListener('focusout', spy);
         input.focus();
-        await sendMouseToElement({ type: 'click', element: input });
+        await sendMouseToElement({ type: 'click', element: checkbox.shadowRoot.querySelector('[part="checkbox"]') });
         expect(spy).to.be.not.called;
       });
     });
@@ -236,11 +244,6 @@ describe('checkbox', () => {
         expect(checkbox.hasAttribute('active')).to.be.true;
       });
 
-      it('should not set active attribute when clicking empty space next to the label', () => {
-        mousedown(checkbox.shadowRoot.querySelector('[part="label"]'));
-        expect(checkbox.hasAttribute('active')).to.be.false;
-      });
-
       it('should not set active attribute when clicking empty space below the checkbox', () => {
         mousedown(checkbox);
         expect(checkbox.hasAttribute('active')).to.be.false;
@@ -296,6 +299,45 @@ describe('checkbox', () => {
         expect(event).to.have.property('composed', false);
       });
     });
+
+    describe('click target', () => {
+      beforeEach(() => {
+        checkbox.style.width = '500px';
+      });
+
+      afterEach(async () => {
+        await resetMouse();
+      });
+
+      it('should toggle checked property and set active attribute on mouse press on the empty space next to the label', async () => {
+        const spy = sinon.spy();
+        checkbox.addEventListener('click', spy);
+        // Middle of the empty space between the label text and the host edge
+        const x = (label.getBoundingClientRect().right + checkbox.getBoundingClientRect().right) / 2;
+        const { y } = middleOfNode(label);
+        await sendMouse({ type: 'move', position: [Math.round(x), Math.round(y)] });
+        await sendMouse({ type: 'down' });
+        expect(checkbox.hasAttribute('active')).to.be.true;
+
+        await sendMouse({ type: 'up' });
+        expect(checkbox.hasAttribute('active')).to.be.false;
+        expect(checkbox.checked).to.be.true;
+        expect(spy).to.be.calledOnce;
+      });
+
+      it('should not cover the label link with the input', () => {
+        const { x, y } = middleOfNode(link);
+        expect(document.elementFromPoint(x, y)).to.equal(link);
+      });
+
+      it('should not cover the helper text row with the input', async () => {
+        checkbox.helperText = 'Helper';
+        await nextUpdate(checkbox);
+        const helper = checkbox.querySelector('[slot="helper"]');
+        const { x, y } = middleOfNode(helper);
+        expect(document.elementFromPoint(x, y)).to.equal(helper);
+      });
+    });
   });
 
   describe('indeterminate property', () => {
@@ -349,6 +391,13 @@ describe('checkbox', () => {
       const partRect = checkbox.shadowRoot.querySelector("[part='checkbox']").getBoundingClientRect();
       expect(inputRect.width).to.be.at.least(partRect.width);
       expect(inputRect.height).to.be.at.least(partRect.height);
+    });
+
+    it('should make the slotted input at least 24px wide and high', () => {
+      const rect = input.getBoundingClientRect();
+      // Round, as Firefox and WebKit snap the size to a fraction below 24px
+      expect(Math.round(rect.width)).to.be.at.least(24);
+      expect(Math.round(rect.height)).to.be.at.least(24);
     });
   });
 });

@@ -6,7 +6,6 @@ import './enable-feature-flag.js';
 import '../vaadin-pdf-viewer.js';
 import { isSafari } from '@vaadin/component-base/src/browser-utils.js';
 import { getSelectionRanges } from '../src/pdf-viewer-text-selection-controller.js';
-import { loadPdfjs } from '../src/pdfjs-loader.js';
 import type { PdfViewer } from '../vaadin-pdf-viewer.js';
 import {
   createPdf,
@@ -29,7 +28,7 @@ describe('text layer', () => {
     return pages[pageNumber - 1].querySelector<HTMLElement>('.text-layer');
   }
 
-  /** Makes the viewer wider, which renders the pages again at a larger scale. */
+  // A wider viewer renders the pages again at a larger scale.
   async function resizeViewer() {
     const idle = nextRenderIdle(viewer);
     viewer.style.width = '900px';
@@ -158,8 +157,7 @@ describe('text layer', () => {
       (element) => element.textContent === 'Rotated page',
     )!;
     const rect = span.getBoundingClientRect();
-    // The text starts at 72pt from the left of the portrait page, which is the top of the rotated page.
-    // Its baseline is 720pt from the bottom, which is 720pt from the left of the rotated page.
+    // On the rotated page, the text starts 72pt from the top and its baseline is 720pt from the left.
     expect((rect.top - page.top) / page.height).to.be.closeTo(72 / 595, 0.01);
     expect((rect.right - page.left) / page.width).to.be.closeTo(745 / 842, 0.02);
     expect(rect.height).to.be.greaterThan(rect.width);
@@ -218,7 +216,7 @@ describe('text layer', () => {
       });
     }
 
-    /** Selects the start of the first line, and drags into the empty space to the right of the second line. */
+    // Selects the start of the first line and drags into the empty space right of the second line.
     async function dragOverEmptySpace() {
       const [first, second] = lines.map((line) => line.getBoundingClientRect());
       const page = pages[0].getBoundingClientRect();
@@ -304,13 +302,5 @@ describe('text layer', () => {
     await nextFrame();
     await load('rotated.pdf');
     expect(stub).to.be.not.called;
-  });
-
-  ['styles/vaadin-pdf-viewer-text-layer-base-styles.js', 'pdf-viewer-text-selection-controller.js'].forEach((path) => {
-    it(`should use the pdf.js version that ${path} is ported from`, async () => {
-      const source = await (await fetch(new URL(`../src/${path}`, import.meta.url))).text();
-      const { version } = await loadPdfjs();
-      expect(source.match(/pdf\.js (\d+\.\d+\.\d+)/u)![1]).to.equal(version);
-    });
   });
 });

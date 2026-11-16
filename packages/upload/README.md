@@ -45,6 +45,7 @@ upload.maxConcurrentUploads = 5;
 ```
 
 This helps prevent:
+
 - Browser XHR limitations (failures when uploading 2000+ files simultaneously)
 - Performance degradation with hundreds of concurrent uploads
 - Network congestion on slower connections

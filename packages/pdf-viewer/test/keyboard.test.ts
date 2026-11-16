@@ -85,7 +85,7 @@ describe('keyboard', () => {
     });
 
     it('should scroll to the top of the current last page with Ctrl+End', async () => {
-      viewer.page = 6;
+      viewer.scrollToPage(6);
       await nextRenderIdle(viewer);
       const top = content.scrollTop;
       const scrolled = oneEvent(content, 'scroll');
@@ -164,7 +164,7 @@ describe('keyboard', () => {
     });
 
     it('should go to the first page with Ctrl+Home', async () => {
-      viewer.page = 4;
+      viewer.scrollToPage(4);
       await nextRenderIdle(viewer);
       content.focus();
       await sendKeys({ press: 'Control+Home' });
