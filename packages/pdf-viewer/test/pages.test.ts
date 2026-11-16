@@ -249,16 +249,9 @@ describe('pages', () => {
         });
       });
 
-      it('should scroll to the last page with scrollToLastPage()', async () => {
-        viewer.scrollToLastPage();
-        await nextFrame();
-        expect(isPageInView(6)).to.be.true;
-        expect(viewer.page).to.equal(6);
-      });
-
-      it('should open a new document at the last page with scrollToLastPage() after setting src', async () => {
+      it('should open a new document at the last page with scrollToPage(Infinity) after setting src', async () => {
         viewer.src = fixtureUrl('links.pdf');
-        viewer.scrollToLastPage();
+        viewer.scrollToPage(Infinity);
         await oneEvent(viewer, 'document-load');
         await nextFrame();
         expect(viewer.pageCount).to.be.greaterThan(1);

@@ -40,7 +40,6 @@ assertType<boolean>(viewer.downloadButtonHidden);
 assertType<number>(viewer.page);
 assertType<number>(viewer.pageCount);
 assertType<(page: number) => void>(viewer.scrollToPage);
-assertType<() => void>(viewer.scrollToLastPage);
 assertType<PdfViewerZoom>(viewer.zoom);
 assertType<'page-fit' | 'page-width' | number>(viewer.zoom);
 assertType<PdfViewerI18n | undefined>(viewer.i18n);
