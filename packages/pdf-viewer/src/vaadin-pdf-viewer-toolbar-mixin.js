@@ -139,7 +139,7 @@ export const PdfViewerToolbarMixin = (superClass) =>
           .disabled="${!hasDocument || page <= 1}"
           @click="${this.#onPreviousPageClick}"
         >
-          <vaadin-pdf-viewer-icon icon="previous-page" aria-hidden="true"></vaadin-pdf-viewer-icon>
+          <vaadin-pdf-viewer-icon icon="previous-page"></vaadin-pdf-viewer-icon>
           <vaadin-tooltip
             slot="tooltip"
             .ariaLinkMode="${'aria-labelledby'}"
@@ -152,7 +152,7 @@ export const PdfViewerToolbarMixin = (superClass) =>
           .disabled="${!hasDocument || page >= pageCount}"
           @click="${this.#onNextPageClick}"
         >
-          <vaadin-pdf-viewer-icon icon="next-page" aria-hidden="true"></vaadin-pdf-viewer-icon>
+          <vaadin-pdf-viewer-icon icon="next-page"></vaadin-pdf-viewer-icon>
           <vaadin-tooltip slot="tooltip" .ariaLinkMode="${'aria-labelledby'}" .text="${i18n.nextPage}"></vaadin-tooltip>
         </vaadin-button>
         <vaadin-integer-field
@@ -190,7 +190,7 @@ export const PdfViewerToolbarMixin = (superClass) =>
           .disabled="${!hasDocument || !getZoomOutLevel(zoomFactor)}"
           @click="${this.#onZoomOutClick}"
         >
-          <vaadin-pdf-viewer-icon icon="zoom-out" aria-hidden="true"></vaadin-pdf-viewer-icon>
+          <vaadin-pdf-viewer-icon icon="zoom-out"></vaadin-pdf-viewer-icon>
           <vaadin-tooltip slot="tooltip" .ariaLinkMode="${'aria-labelledby'}" .text="${i18n.zoomOut}"></vaadin-tooltip>
         </vaadin-button>
         <vaadin-select
@@ -208,7 +208,7 @@ export const PdfViewerToolbarMixin = (superClass) =>
           .disabled="${!hasDocument || !getZoomInLevel(zoomFactor)}"
           @click="${this.#onZoomInClick}"
         >
-          <vaadin-pdf-viewer-icon icon="zoom-in" aria-hidden="true"></vaadin-pdf-viewer-icon>
+          <vaadin-pdf-viewer-icon icon="zoom-in"></vaadin-pdf-viewer-icon>
           <vaadin-tooltip slot="tooltip" .ariaLinkMode="${'aria-labelledby'}" .text="${i18n.zoomIn}"></vaadin-tooltip>
         </vaadin-button>
       `;
@@ -227,7 +227,7 @@ export const PdfViewerToolbarMixin = (superClass) =>
           .disabled="${!this.pageCount}"
           @click="${this.#onDownloadClick}"
         >
-          <vaadin-pdf-viewer-icon icon="download" aria-hidden="true"></vaadin-pdf-viewer-icon>
+          <vaadin-pdf-viewer-icon icon="download"></vaadin-pdf-viewer-icon>
           <vaadin-tooltip
             slot="tooltip"
             .ariaLinkMode="${'aria-labelledby'}"

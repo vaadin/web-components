@@ -13,10 +13,7 @@ snapshots["vaadin-pdf-viewer host default"] =
     tabindex="-1"
     theme="tertiary icon"
   >
-    <vaadin-pdf-viewer-icon
-      aria-hidden="true"
-      icon="previous-page"
-    >
+    <vaadin-pdf-viewer-icon icon="previous-page">
     </vaadin-pdf-viewer-icon>
   </vaadin-button>
   <vaadin-button
@@ -29,10 +26,7 @@ snapshots["vaadin-pdf-viewer host default"] =
     tabindex="-1"
     theme="tertiary icon"
   >
-    <vaadin-pdf-viewer-icon
-      aria-hidden="true"
-      icon="next-page"
-    >
+    <vaadin-pdf-viewer-icon icon="next-page">
     </vaadin-pdf-viewer-icon>
   </vaadin-button>
   <vaadin-integer-field
@@ -79,10 +73,7 @@ snapshots["vaadin-pdf-viewer host default"] =
     tabindex="-1"
     theme="tertiary icon"
   >
-    <vaadin-pdf-viewer-icon
-      aria-hidden="true"
-      icon="zoom-out"
-    >
+    <vaadin-pdf-viewer-icon icon="zoom-out">
     </vaadin-pdf-viewer-icon>
   </vaadin-button>
   <vaadin-select
@@ -103,10 +94,7 @@ snapshots["vaadin-pdf-viewer host default"] =
     tabindex="-1"
     theme="tertiary icon"
   >
-    <vaadin-pdf-viewer-icon
-      aria-hidden="true"
-      icon="zoom-in"
-    >
+    <vaadin-pdf-viewer-icon icon="zoom-in">
     </vaadin-pdf-viewer-icon>
   </vaadin-button>
   <vaadin-button
@@ -119,10 +107,7 @@ snapshots["vaadin-pdf-viewer host default"] =
     tabindex="-1"
     theme="tertiary icon"
   >
-    <vaadin-pdf-viewer-icon
-      aria-hidden="true"
-      icon="download"
-    >
+    <vaadin-pdf-viewer-icon icon="download">
     </vaadin-pdf-viewer-icon>
   </vaadin-button>
 </vaadin-pdf-viewer>
@@ -141,10 +126,7 @@ snapshots["vaadin-pdf-viewer host document"] =
     tabindex="-1"
     theme="tertiary icon"
   >
-    <vaadin-pdf-viewer-icon
-      aria-hidden="true"
-      icon="previous-page"
-    >
+    <vaadin-pdf-viewer-icon icon="previous-page">
     </vaadin-pdf-viewer-icon>
   </vaadin-button>
   <vaadin-button
@@ -155,10 +137,7 @@ snapshots["vaadin-pdf-viewer host document"] =
     tabindex="0"
     theme="tertiary icon"
   >
-    <vaadin-pdf-viewer-icon
-      aria-hidden="true"
-      icon="next-page"
-    >
+    <vaadin-pdf-viewer-icon icon="next-page">
     </vaadin-pdf-viewer-icon>
   </vaadin-button>
   <vaadin-integer-field
@@ -203,10 +182,7 @@ snapshots["vaadin-pdf-viewer host document"] =
     tabindex="0"
     theme="tertiary icon"
   >
-    <vaadin-pdf-viewer-icon
-      aria-hidden="true"
-      icon="zoom-out"
-    >
+    <vaadin-pdf-viewer-icon icon="zoom-out">
     </vaadin-pdf-viewer-icon>
   </vaadin-button>
   <vaadin-select
@@ -223,10 +199,7 @@ snapshots["vaadin-pdf-viewer host document"] =
     tabindex="0"
     theme="tertiary icon"
   >
-    <vaadin-pdf-viewer-icon
-      aria-hidden="true"
-      icon="zoom-in"
-    >
+    <vaadin-pdf-viewer-icon icon="zoom-in">
     </vaadin-pdf-viewer-icon>
   </vaadin-button>
   <vaadin-button
@@ -237,10 +210,7 @@ snapshots["vaadin-pdf-viewer host document"] =
     tabindex="0"
     theme="tertiary icon"
   >
-    <vaadin-pdf-viewer-icon
-      aria-hidden="true"
-      icon="download"
-    >
+    <vaadin-pdf-viewer-icon icon="download">
     </vaadin-pdf-viewer-icon>
   </vaadin-button>
 </vaadin-pdf-viewer>
