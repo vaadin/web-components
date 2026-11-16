@@ -51,10 +51,6 @@ export const StylingMixin = (superClass) =>
      * the conditions change.
      */
     generateCellPartNames() {
-      if (!this._columnTree) {
-        return;
-      }
-
       iterateChildren(this.$.items, (row) => {
         if (!row.hidden) {
           this.__renderBodyRow(row);
