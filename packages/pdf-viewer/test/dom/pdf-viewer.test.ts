@@ -17,7 +17,7 @@ describe('vaadin-pdf-viewer', () => {
 
   describe('host', () => {
     // Leaves out the tooltips of the buttons and the items of the select.
-    const options = { ignoreChildren: ['vaadin-pdf-viewer-button', 'vaadin-select'] };
+    const options = { ignoreTags: ['vaadin-tooltip'], ignoreChildren: ['vaadin-select'] };
 
     it('default', async () => {
       await expect(viewer).dom.to.equalSnapshot(options);

@@ -8,18 +8,16 @@
  * See https://vaadin.com/commercial-license-and-service-terms for the full
  * license.
  */
-import { ButtonMixin } from '@vaadin/button/src/vaadin-button-mixin.js';
-import { DirMixin } from '@vaadin/component-base/src/dir-mixin.js';
 
 /**
  * An element used internally by `<vaadin-pdf-viewer>`. Not intended to be used separately.
  */
-declare class PdfViewerButton extends ButtonMixin(DirMixin(HTMLElement)) {}
+declare class PdfViewerIcon extends HTMLElement {}
 
 declare global {
   interface HTMLElementTagNameMap {
-    'vaadin-pdf-viewer-button': PdfViewerButton;
+    'vaadin-pdf-viewer-icon': PdfViewerIcon;
   }
 }
 
-export { PdfViewerButton };
+export { PdfViewerIcon };

@@ -142,7 +142,7 @@ describe('keyboard', () => {
       });
 
       it('should zoom with Ctrl+= from a toolbar button', async () => {
-        viewer.querySelector<HTMLElement>('vaadin-pdf-viewer-button[icon="next-page"]')!.focus();
+        viewer.querySelector<HTMLElement>('vaadin-button:has(> [icon="next-page"])')!.focus();
         await sendKeys({ press: 'Control+Equal' });
         expect(viewer.zoom).to.equal(3);
       });

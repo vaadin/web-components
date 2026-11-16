@@ -10,4 +10,4 @@
  */
 import type { CSSResult } from 'lit';
 
-export const pdfViewerButtonStyles: CSSResult;
+export const pdfViewerIconStyles: CSSResult;

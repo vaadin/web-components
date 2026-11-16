@@ -5,11 +5,11 @@ import sinon from 'sinon';
 import './enable-feature-flag.js';
 import '../vaadin-pdf-viewer.js';
 import { getDeepActiveElement } from '@vaadin/a11y-base/src/focus-utils.js';
+import type { Button } from '@vaadin/button';
 import type { IntegerField } from '@vaadin/integer-field';
 import type { Select } from '@vaadin/select';
 import type { SelectItem } from '@vaadin/select/src/vaadin-select-item.js';
 import type { Tooltip } from '@vaadin/tooltip';
-import type { PdfViewerButton } from '../src/vaadin-pdf-viewer-button.js';
 import type { PdfViewer } from '../vaadin-pdf-viewer.js';
 import {
   fixtureUrl,
@@ -26,11 +26,11 @@ describe('toolbar', () => {
   let header: HTMLElement;
   let toolbar: HTMLElement;
   let content: HTMLElement;
-  let previousButton: PdfViewerButton;
-  let nextButton: PdfViewerButton;
+  let previousButton: Button;
+  let nextButton: Button;
   let pageField: IntegerField;
-  let zoomOutButton: PdfViewerButton;
-  let zoomInButton: PdfViewerButton;
+  let zoomOutButton: Button;
+  let zoomInButton: Button;
   let zoomSelect: Select;
 
   function createButton(text: string) {
@@ -64,11 +64,11 @@ describe('toolbar', () => {
     header = viewer.shadowRoot!.querySelector<HTMLElement>('[part~="header"]')!;
     toolbar = viewer.shadowRoot!.querySelector<HTMLElement>('[part~="toolbar"]')!;
     content = viewer.shadowRoot!.querySelector<HTMLElement>('[part="content"]')!;
-    previousButton = viewer.querySelector<PdfViewerButton>('vaadin-pdf-viewer-button[icon="previous-page"]')!;
-    nextButton = viewer.querySelector<PdfViewerButton>('vaadin-pdf-viewer-button[icon="next-page"]')!;
+    previousButton = viewer.querySelector<Button>('vaadin-button:has(> [icon="previous-page"])')!;
+    nextButton = viewer.querySelector<Button>('vaadin-button:has(> [icon="next-page"])')!;
     pageField = viewer.querySelector<IntegerField>('vaadin-integer-field')!;
-    zoomOutButton = viewer.querySelector<PdfViewerButton>('vaadin-pdf-viewer-button[icon="zoom-out"]')!;
-    zoomInButton = viewer.querySelector<PdfViewerButton>('vaadin-pdf-viewer-button[icon="zoom-in"]')!;
+    zoomOutButton = viewer.querySelector<Button>('vaadin-button:has(> [icon="zoom-out"])')!;
+    zoomInButton = viewer.querySelector<Button>('vaadin-button:has(> [icon="zoom-in"])')!;
     zoomSelect = viewer.querySelector<Select>('vaadin-select')!;
   });
 
@@ -536,7 +536,7 @@ describe('toolbar', () => {
       const approve = createButton('Approve');
       viewer.append(approve);
       await nextFrame();
-      const download = viewer.querySelector<HTMLElement>('vaadin-pdf-viewer-button[icon="download"]')!;
+      const download = viewer.querySelector<HTMLElement>('vaadin-button:has(> [icon="download"])')!;
       expect(download.assignedSlot!.parentElement).to.equal(approve.assignedSlot!.parentElement);
       expect(approve.getBoundingClientRect().right).to.be.at.most(download.getBoundingClientRect().left);
     });
@@ -567,7 +567,7 @@ describe('toolbar', () => {
         await nextFrame();
         expect(approve.parentElement).to.equal(viewer);
         expect(approve.checkVisibility()).to.be.true;
-        expect(viewer.querySelectorAll('vaadin-pdf-viewer-button[icon="next-page"]')).to.have.lengthOf(1);
+        expect(viewer.querySelectorAll('vaadin-button:has(> [icon="next-page"])')).to.have.lengthOf(1);
       });
     });
   });
@@ -603,7 +603,7 @@ describe('toolbar', () => {
           break;
         }
         visited.add(control);
-        const name = control.getAttribute('icon') ?? control.localName;
+        const name = control.querySelector('[icon]')?.getAttribute('icon') ?? control.localName;
         const rect = control.getBoundingClientRect();
         const areaRect = topArea.getBoundingClientRect();
         const viewerRect = viewer.getBoundingClientRect();
