@@ -138,10 +138,10 @@ export const PdfViewerScrollMixin = (superClass) =>
     }
 
     /**
-     * Scrolls to the start of the given page and makes it the current page,
-     * also when it is the current page already. A value below 1 scrolls to
-     * the first page, and a value above the page count scrolls to the last
-     * page.
+     * Scrolls to the start of the given page and makes it the current page.
+     * It scrolls even when the page is already the current one. A value
+     * below 1 scrolls to the first page, and a value above the page count
+     * scrolls to the last page.
      *
      * Right after setting `src`, it scrolls once the document has loaded, and
      * in a hidden viewer, once the viewer is shown. Does nothing without a
