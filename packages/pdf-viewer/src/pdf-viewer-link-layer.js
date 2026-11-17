@@ -9,7 +9,7 @@
  * license.
  */
 import { createLink } from './pdf-viewer-links.js';
-import { addLinksToText, ANNOTATION_ID_PREFIX, compareAnnotationPositions } from './pdf-viewer-text-accessibility.js';
+import { ANNOTATION_ID_PREFIX, compareAnnotationPositions } from './pdf-viewer-text-accessibility.js';
 import { loadPdfjs } from './pdfjs-loader.js';
 
 /**
@@ -56,8 +56,6 @@ function addLinkAreas(link, { rect: [left, bottom, right, top], quadPoints }) {
  * need no update when the scale changes.
  */
 export class PdfViewerLinkLayer {
-  #addedToText = false;
-
   constructor() {
     this.element = document.createElement('div');
     this.element.className = 'link-layer';
@@ -105,16 +103,5 @@ export class PdfViewerLinkLayer {
 
     this.links = links.map(({ link }) => link);
     return links;
-  }
-
-  /**
-   * @param {import('./pdf-viewer-text-layer.js').PdfViewerTextLayer} textLayer a rendered text layer
-   */
-  addToText(textLayer) {
-    if (this.#addedToText || !this.links.length) {
-      return;
-    }
-    this.#addedToText = true;
-    addLinksToText(textLayer.textDivs, this.links);
   }
 }

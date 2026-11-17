@@ -10,7 +10,6 @@
  */
 import type { PDFDocumentProxy, PDFPageProxy } from 'pdfjs-dist';
 import type { PdfViewerLinkAnnotation } from './pdf-viewer-links.js';
-import type { PdfViewerTextLayer } from './pdf-viewer-text-layer.js';
 
 export declare class PdfViewerLinkLayer {
   readonly element: HTMLElement;
@@ -22,6 +21,4 @@ export declare class PdfViewerLinkLayer {
     followLink: (annotation: PdfViewerLinkAnnotation) => void,
     optionalContentConfig?: Awaited<ReturnType<PDFDocumentProxy['getOptionalContentConfig']>>,
   ): Promise<Array<{ link: HTMLAnchorElement; annotation: PdfViewerLinkAnnotation }>>;
-
-  addToText(textLayer: PdfViewerTextLayer): void;
 }

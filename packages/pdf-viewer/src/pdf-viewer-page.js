@@ -306,7 +306,7 @@ export class PdfViewerPage {
   #createStructureLayer(tree) {
     try {
       const structureLayer = new PdfViewerStructureLayer(tree);
-      structureLayer.updateTextLayer(this.textLayer.element);
+      structureLayer.bindText(this.textLayer.element);
       return structureLayer;
     } catch {
       // As in pdf.js, a structure that fails to render does not break the other layers.
@@ -388,7 +388,7 @@ export class PdfViewerPage {
       this.canvas.append(structureElement);
     }
     if (this.linkLayer && this.textLayer?.rendered) {
-      this.linkLayer.addToText(this.textLayer);
+      this.textLayer.bindLinks(this.linkLayer.links);
     }
   }
 

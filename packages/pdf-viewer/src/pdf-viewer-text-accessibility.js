@@ -119,7 +119,8 @@ function binarySearchFirstItem(items, condition) {
  * @param {HTMLElement[]} links the links of the page, with ids
  */
 export function addLinksToText(textDivs, links) {
-  if (!textDivs.length) {
+  // Comparing the positions forces a layout, which a page without links does not need.
+  if (!textDivs.length || !links.length) {
     return;
   }
   const rects = new Map([...textDivs, ...links].map((element) => [element, element.getBoundingClientRect()]));

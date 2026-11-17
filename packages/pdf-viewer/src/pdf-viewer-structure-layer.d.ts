@@ -26,5 +26,5 @@ export declare class PdfViewerStructureLayer {
 
   readonly element: HTMLElement;
 
-  updateTextLayer(textLayerElement: HTMLElement): void;
+  bindText(textLayerElement: HTMLElement): void;
 }

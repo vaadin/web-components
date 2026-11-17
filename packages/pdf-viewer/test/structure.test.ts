@@ -373,7 +373,7 @@ describe('structure', () => {
         { role: 'P', children: [{ type: 'content', id: 'p3R_mc0' }] },
         { role: 'Span', children: [{ type: 'content', id: 'p3R_mc1' }] },
       ]);
-      structure.updateTextLayer(textLayer);
+      structure.bindText(textLayer);
       const owned = [...structure.element.querySelectorAll('[aria-owns]')].map((owner) =>
         owner
           .getAttribute('aria-owns')!

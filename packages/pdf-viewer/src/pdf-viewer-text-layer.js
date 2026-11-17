@@ -8,6 +8,7 @@
  * See https://vaadin.com/commercial-license-and-service-terms for the full
  * license.
  */
+import { addLinksToText } from './pdf-viewer-text-accessibility.js';
 import { loadPdfjs } from './pdfjs-loader.js';
 
 /**
@@ -17,6 +18,9 @@ import { loadPdfjs } from './pdfjs-loader.js';
 export class PdfViewerTextLayer {
   /** @type {import('pdfjs-dist').TextLayer | null} */
   #textLayer = null;
+
+  /** Set once the text owns the links of the page. */
+  #linksBound = false;
 
   constructor() {
     this.element = document.createElement('div');
@@ -62,6 +66,18 @@ export class PdfViewerTextLayer {
     endOfContent.className = 'end-of-content';
     this.element.append(endOfContent);
     this.endOfContent = endOfContent;
+  }
+
+  /**
+   * Adds each link to the `aria-owns` of the text before it, once, for assistive technology.
+   * @param {HTMLElement[]} links the links of the page, with ids
+   */
+  bindLinks(links) {
+    if (this.#linksBound) {
+      return;
+    }
+    this.#linksBound = true;
+    addLinksToText(this.textDivs, links);
   }
 
   /** @param {import('pdfjs-dist').PageViewport} viewport */
