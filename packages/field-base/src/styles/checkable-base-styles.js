@@ -78,11 +78,9 @@ export const checkable = (part, propName = part) => css`
   ::slotted(input) {
     appearance: none;
     cursor: var(--_cursor);
-    /* Cover the label row to make the space next to the label clickable */
     position: absolute;
-    /* Explicit end line, or the input also covers the helper rows */
     grid-row: 1 / 2;
-    grid-column: 1 / -1;
+    grid-column: 1 / 2;
     /* Ensure minimum click target (WCAG) */
     inset-block: min(0px, (100% - 24px) / 2);
     inset-inline: min(0px, (100% - 24px) / 2);
@@ -92,12 +90,22 @@ export const checkable = (part, propName = part) => css`
     margin: 0 !important;
   }
 
-  [part='label'] {
-    justify-self: start;
+  /* Cover the gap next to the label */
+  :host([has-label]) ::slotted(input) {
+    inset-inline-end: calc(min(0px, (100% - 24px) / 2) - var(--vaadin-${unsafeCSS(propName)}-gap, var(--vaadin-gap-s)));
   }
 
-  ::slotted(label) {
+  /* Make the space next to the label clickable */
+  [part~='label'] {
     position: relative;
+    z-index: 0;
+  }
+
+  [part~='label'] ::slotted(label)::after {
+    content: '';
+    position: absolute;
+    inset: 0;
+    z-index: -1;
   }
 
   /* Control container (checkbox, radio button) */
@@ -191,6 +199,14 @@ export const checkable = (part, propName = part) => css`
     [part='${unsafeCSS(part)}'] {
       grid-column: 2;
     }
+
+    ::slotted(input) {
+      grid-column: 2 / 3;
+    }
+  }
+
+  :host([theme~='reverse'][has-label]) ::slotted(input) {
+    inset-inline: calc(min(0px, (100% - 24px) / 2) - var(--vaadin-${unsafeCSS(propName)}-gap, var(--vaadin-gap-s))) min(0px, (100% - 24px) / 2);
   }
 
   @media (forced-colors: active) {

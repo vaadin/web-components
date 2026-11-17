@@ -48,12 +48,22 @@ describe('radio-button', () => {
         radio.style.width = '400px';
       });
 
-      it('should cover the gap between the label and the radio part with the input in reverse theme', () => {
-        radio.setAttribute('theme', 'reverse');
-        const part = radio.shadowRoot.querySelector('[part="radio"]');
-        // Middle of the gap between the label and the radio part
-        const x = (label.getBoundingClientRect().right + part.getBoundingClientRect().left) / 2;
-        const { y } = middleOfNode(label);
+      [undefined, 'reverse'].forEach((theme) => {
+        it(`should cover the gap between the radio part and the label with the input${theme ? ` in ${theme} theme` : ''}`, () => {
+          if (theme) {
+            radio.setAttribute('theme', theme);
+          }
+          const partRect = radio.shadowRoot.querySelector('[part="radio"]').getBoundingClientRect();
+          const labelRect = label.getBoundingClientRect();
+          // Middle of the gap between the radio part and the label
+          const x = (Math.min(partRect.right, labelRect.right) + Math.max(partRect.left, labelRect.left)) / 2;
+          const { y } = middleOfNode(label);
+          expect(document.elementFromPoint(x, y)).to.equal(radio.inputElement);
+        });
+      });
+
+      it('should not cover the input with the label', () => {
+        const { x, y } = middleOfNode(radio.inputElement);
         expect(document.elementFromPoint(x, y)).to.equal(radio.inputElement);
       });
 
