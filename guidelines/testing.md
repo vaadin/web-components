@@ -19,6 +19,20 @@ Typings tests are documented in [TypeScript](typescript.md).
   the shared setup keeps the act / assert lines short.
 - **Clean up in `afterEach`** — `resetMouse()` for tests that move the
   pointer, `clock.restore()` for tests that use fake timers.
+- **Restore state once per suite.** Put the cleanup that many tests
+  need, such as `sinon.restore()` or revoking object URLs, in one
+  `afterEach` of the top-level `describe`. Do not use `try`/`finally`
+  blocks for it.
+- **Set stable elements in `beforeEach`.** Query an element that the
+  test keeps, such as a part or a slotted control, once into a `let`
+  variable. Keep a query function only for elements that tests replace.
+- **Order tests by topic.** Put the default state and simple
+  interactions first. Then group each feature area in a nested `describe`.
+  Put long asynchronous tests, such as rendering, at the end.
+- **Share waits in a helper file.** Move a wait that several test files
+  need into a helper module of the package. Throw when the wait reaches
+  its limit, so that the test fails instead of asserting a half-rendered
+  state.
 - **Don't test mixin / controller internals** in components that
   consume them. The mixin's own tests already cover that.
 - **Write new tests in `.ts` files**. Unit, visual and snapshot tests
@@ -32,6 +46,16 @@ Location: `packages/{name}/test/{name}.test.{js,ts}`.
   what the component _does_ in response to a property change, click,
   or keypress. If the assertion examines what the template _renders_
   (a part exists, an attribute is set on the host), it's a snapshot.
+- **Prove that a snapshot covers a removed test.** Before you replace a
+  DOM assertion with a snapshot, break the source and check that a
+  snapshot fails. Snapshots run in Chromium only. Keep unit tests for
+  DOM that depends on layout, as it can differ between browsers.
+- **Test a toggle in one test.** Assert the property, the event and the
+  ARIA state for both states in one test. This is an exception to one
+  act per test, as `CONVENTIONS.md` asks for one toggle test.
+- **Skip the default text next to an i18n test.** A test that sets
+  `i18n` and reads the rendered text already covers the binding of the
+  default text.
 - **Structure.** Top-level `describe(componentName)` with nested
   `describe` blocks per feature area, each with its own `beforeEach`.
 - **Always `await nextRender()` after `fixtureSync`** so LitElement has
@@ -88,6 +112,13 @@ Baseline screenshots are placed under `screenshots/{name}/baseline/`.
   catches what a `getComputedStyle` assertion can't. Cover every
   affected style layer, and add a screenshot for the specific state
   the change targets (e.g. hover, disabled, RTL).
+- **Use visual tests for positions.** Replace a `getBoundingClientRect`
+  check of where an element is, such as its place in RTL, with a
+  screenshot of that state.
+- **Check every updated baseline.** After `yarn update:base`, `update:lumo`
+  or `update:aura`, check that each expected screenshot changed. The
+  update keeps an old baseline when the difference stays under the
+  threshold, such as a new control in a disabled state.
 - **Use unit tests when JS logic depends on a style value** (e.g. a
   component that reads a CSS custom property to compute its layout):
   set the style value and assert the resulting outcome.
