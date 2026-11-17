@@ -110,10 +110,14 @@ export const PdfViewerToolbarMixin = (superClass) =>
         </button>
         <div id="toolbar" part="toolbar" ?hidden="${collapsed}">
           <div part="toolbar-group">
-            <slot name="toolbar-navigation" ${slotContent(this._renderNavigationControls())}></slot>
+            <slot name="toolbar-previous-page" ${slotContent(this._renderPreviousPageButton())}></slot>
+            <slot name="toolbar-next-page" ${slotContent(this._renderNextPageButton())}></slot>
+            <slot name="toolbar-page" ${slotContent(this._renderPageField())}></slot>
           </div>
           <div part="toolbar-group">
-            <slot name="toolbar-zoom" ${slotContent(this._renderZoomControls())}></slot>
+            <slot name="toolbar-zoom-out" ${slotContent(this._renderZoomOutButton())}></slot>
+            <slot name="toolbar-zoom" ${slotContent(this._renderZoomSelect())}></slot>
+            <slot name="toolbar-zoom-in" ${slotContent(this._renderZoomInButton())}></slot>
           </div>
           <div part="toolbar-group">
             <slot name="toolbar-actions"></slot>
@@ -124,39 +128,60 @@ export const PdfViewerToolbarMixin = (superClass) =>
     }
 
     /**
-     * Returns the template of the navigation controls in the `toolbar-navigation` slot.
+     * Returns the template of the previous page button in the `toolbar-previous-page` slot.
      * @protected
      */
-    _renderNavigationControls() {
-      const { page, pageCount } = this;
-      const hasDocument = pageCount > 0;
-      const i18n = this.__effectiveI18n;
-
+    _renderPreviousPageButton() {
       return html`
         <vaadin-button
-          slot="toolbar-navigation"
+          slot="toolbar-previous-page"
           theme="tertiary icon"
-          .disabled="${!hasDocument || page <= 1}"
+          .disabled="${!this.pageCount || this.page <= 1}"
           @click="${this.#onPreviousPageClick}"
         >
           <vaadin-pdf-viewer-icon icon="previous-page"></vaadin-pdf-viewer-icon>
           <vaadin-tooltip
             slot="tooltip"
             .ariaLinkMode="${'aria-labelledby'}"
-            .text="${i18n.previousPage}"
+            .text="${this.__effectiveI18n.previousPage}"
           ></vaadin-tooltip>
         </vaadin-button>
+      `;
+    }
+
+    /**
+     * Returns the template of the next page button in the `toolbar-next-page` slot.
+     * @protected
+     */
+    _renderNextPageButton() {
+      return html`
         <vaadin-button
-          slot="toolbar-navigation"
+          slot="toolbar-next-page"
           theme="tertiary icon"
-          .disabled="${!hasDocument || page >= pageCount}"
+          .disabled="${!this.pageCount || this.page >= this.pageCount}"
           @click="${this.#onNextPageClick}"
         >
           <vaadin-pdf-viewer-icon icon="next-page"></vaadin-pdf-viewer-icon>
-          <vaadin-tooltip slot="tooltip" .ariaLinkMode="${'aria-labelledby'}" .text="${i18n.nextPage}"></vaadin-tooltip>
+          <vaadin-tooltip
+            slot="tooltip"
+            .ariaLinkMode="${'aria-labelledby'}"
+            .text="${this.__effectiveI18n.nextPage}"
+          ></vaadin-tooltip>
         </vaadin-button>
+      `;
+    }
+
+    /**
+     * Returns the template of the page field in the `toolbar-page` slot.
+     * @protected
+     */
+    _renderPageField() {
+      const { pageCount } = this;
+      const i18n = this.__effectiveI18n;
+
+      return html`
         <vaadin-integer-field
-          slot="toolbar-navigation"
+          slot="toolbar-page"
           theme="align-right"
           style="${styleMap({ '--_page-digits': String(pageCount).length })}"
           min="1"
@@ -164,52 +189,74 @@ export const PdfViewerToolbarMixin = (superClass) =>
           .value="${this.#getPageFieldValue()}"
           .accessibleName="${i18n.page}"
           .errorMessage="${i18n.pageError.replace('{pageCount}', pageCount)}"
-          .disabled="${!hasDocument}"
+          .disabled="${!pageCount}"
           @change="${this.#onPageFieldChange}"
           @input="${this.#onPageFieldInput}"
           @keydown="${this.#onPageFieldKeyDown}"
         >
-          <span slot="suffix">${hasDocument ? `/ ${pageCount}` : ''}</span>
+          <span slot="suffix">${pageCount ? `/ ${pageCount}` : ''}</span>
         </vaadin-integer-field>
       `;
     }
 
     /**
-     * Returns the template of the zoom controls in the `toolbar-zoom` slot.
+     * Returns the template of the zoom out button in the `toolbar-zoom-out` slot.
      * @protected
      */
-    _renderZoomControls() {
-      const zoomFactor = this._zoomFactor;
-      const hasDocument = this.pageCount > 0;
-      const i18n = this.__effectiveI18n;
-
+    _renderZoomOutButton() {
       return html`
         <vaadin-button
-          slot="toolbar-zoom"
+          slot="toolbar-zoom-out"
           theme="tertiary icon"
-          .disabled="${!hasDocument || !getZoomOutLevel(zoomFactor)}"
+          .disabled="${!this.pageCount || !getZoomOutLevel(this._zoomFactor)}"
           @click="${this.#onZoomOutClick}"
         >
           <vaadin-pdf-viewer-icon icon="zoom-out"></vaadin-pdf-viewer-icon>
-          <vaadin-tooltip slot="tooltip" .ariaLinkMode="${'aria-labelledby'}" .text="${i18n.zoomOut}"></vaadin-tooltip>
+          <vaadin-tooltip
+            slot="tooltip"
+            .ariaLinkMode="${'aria-labelledby'}"
+            .text="${this.__effectiveI18n.zoomOut}"
+          ></vaadin-tooltip>
         </vaadin-button>
+      `;
+    }
+
+    /**
+     * Returns the template of the zoom select in the `toolbar-zoom` slot.
+     * @protected
+     */
+    _renderZoomSelect() {
+      return html`
         <vaadin-select
           slot="toolbar-zoom"
           theme="align-center"
           .items="${this.#zoomItems}"
           .value="${String(this.zoom)}"
-          .accessibleName="${i18n.zoom}"
-          .disabled="${!hasDocument}"
+          .accessibleName="${this.__effectiveI18n.zoom}"
+          .disabled="${!this.pageCount}"
           @change="${this.#onZoomSelectChange}"
         ></vaadin-select>
+      `;
+    }
+
+    /**
+     * Returns the template of the zoom in button in the `toolbar-zoom-in` slot.
+     * @protected
+     */
+    _renderZoomInButton() {
+      return html`
         <vaadin-button
-          slot="toolbar-zoom"
+          slot="toolbar-zoom-in"
           theme="tertiary icon"
-          .disabled="${!hasDocument || !getZoomInLevel(zoomFactor)}"
+          .disabled="${!this.pageCount || !getZoomInLevel(this._zoomFactor)}"
           @click="${this.#onZoomInClick}"
         >
           <vaadin-pdf-viewer-icon icon="zoom-in"></vaadin-pdf-viewer-icon>
-          <vaadin-tooltip slot="tooltip" .ariaLinkMode="${'aria-labelledby'}" .text="${i18n.zoomIn}"></vaadin-tooltip>
+          <vaadin-tooltip
+            slot="tooltip"
+            .ariaLinkMode="${'aria-labelledby'}"
+            .text="${this.__effectiveI18n.zoomIn}"
+          ></vaadin-tooltip>
         </vaadin-button>
       `;
     }

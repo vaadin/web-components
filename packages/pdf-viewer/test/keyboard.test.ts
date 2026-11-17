@@ -132,13 +132,13 @@ describe('keyboard', () => {
       });
 
       it('should zoom with Ctrl+= from a toolbar button', async () => {
-        viewer.querySelector<HTMLElement>('vaadin-button:has(> [icon="next-page"])')!.focus();
+        viewer.querySelector<HTMLElement>('[slot="toolbar-next-page"]')!.focus();
         await sendKeys({ press: 'Control+Equal' });
         expect(viewer.zoom).to.equal(3);
       });
 
       it('should not zoom with Ctrl+= in the page field', async () => {
-        viewer.querySelector<HTMLElement>('vaadin-integer-field')!.focus();
+        viewer.querySelector<HTMLElement>('[slot="toolbar-page"]')!.focus();
         await sendKeys({ press: 'Control+Equal' });
         expect(viewer.zoom).to.equal(2);
       });
