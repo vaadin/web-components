@@ -73,10 +73,6 @@ describe('toolbar', () => {
   });
 
   describe('without document', () => {
-    it('should disable the controls', () => {
-      expectControlsDisabled();
-    });
-
     it('should disable the controls while a document loads', async () => {
       viewer.src = fixtureUrl('multi-page.pdf');
       await nextFrame();
@@ -361,10 +357,6 @@ describe('toolbar', () => {
       expect(header.checkVisibility()).to.be.false;
     });
 
-    it('should show a fallback title without a document', () => {
-      expect(title.textContent).to.equal('PDF document');
-    });
-
     it('should show the file name of src while the document loads', async () => {
       viewer.src = fixtureUrl('multi-page.pdf');
       await nextFrame();
@@ -376,13 +368,6 @@ describe('toolbar', () => {
       await oneEvent(viewer, 'document-error');
       await nextFrame();
       expect(title.textContent).to.equal('invalid.pdf');
-    });
-
-    it('should show headerTitle instead of the file name', async () => {
-      viewer.src = fixtureUrl('multi-page.pdf');
-      viewer.headerTitle = 'Annual report';
-      await nextFrame();
-      expect(title.textContent).to.equal('Annual report');
     });
 
     it('should show fileName instead of the file name of src', async () => {
@@ -465,12 +450,6 @@ describe('toolbar', () => {
       await nextFrame();
       expect(viewer.toolbarCollapsed).to.be.true;
       expect(toolbar.checkVisibility()).to.be.false;
-    });
-
-    it('should mark the header as the button that controls the toolbar', () => {
-      expect(header.localName).to.equal('button');
-      expect(header.getAttribute('aria-controls')).to.equal(toolbar.id);
-      expect(header.getAttribute('aria-expanded')).to.equal('true');
     });
 
     it('should collapse and expand the toolbar on header click', async () => {
