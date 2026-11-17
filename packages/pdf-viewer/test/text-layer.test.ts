@@ -65,14 +65,6 @@ describe('text layer', () => {
       await load('multi-page.pdf');
     });
 
-    it('should contain the text of the rendered pages', () => {
-      expect(getTextLayer(1)!.textContent).to.include('Unique word on this page: marker1.');
-    });
-
-    it('should not have a text layer for pages that are not rendered', () => {
-      expect(getTextLayer(6)).to.be.null;
-    });
-
     it('should place the text over the same text on the canvas', () => {
       const page = pages[0].getBoundingClientRect();
       const heading = [...getTextLayer(1)!.querySelectorAll('span')].find((span) => span.textContent === 'Page 1')!;

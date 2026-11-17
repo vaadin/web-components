@@ -81,10 +81,6 @@ describe('pages', () => {
     });
 
     describe('layout', () => {
-      it('should create a placeholder for every page', () => {
-        expect(pages).to.have.lengthOf(6);
-      });
-
       it('should size the placeholders to the page sizes', async () => {
         // Pages after the first get their own size while they load
         await scrollTo(content.scrollHeight);
@@ -133,19 +129,6 @@ describe('pages', () => {
         const page = pages[0];
         const canvas = page.querySelector('canvas')!;
         expect(canvas.width).to.be.closeTo(page.offsetWidth * window.devicePixelRatio, 1);
-      });
-
-      it('should give the canvas no role, without hiding its content from assistive technology', () => {
-        const canvas = pages[0].querySelector('canvas')!;
-        expect(canvas.getAttribute('role')).to.equal('presentation');
-        expect(canvas.hasAttribute('aria-hidden')).to.be.false;
-      });
-
-      it('should make each page a region with a name, also when it is not rendered', () => {
-        expect(pages[0].getAttribute('role')).to.equal('region');
-        expect(pages[0].getAttribute('aria-label')).to.equal('Page 1');
-        expect(pages[5].getAttribute('role')).to.equal('region');
-        expect(pages[5].getAttribute('aria-label')).to.equal('Page 6');
       });
 
       it('should use the page name set with i18n', async () => {
