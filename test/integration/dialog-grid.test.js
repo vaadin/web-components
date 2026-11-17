@@ -1,8 +1,10 @@
 import { expect } from '@vaadin/chai-plugins';
-import { sendKeys } from '@vaadin/test-runner-commands';
+import { sendKeys, sendMouseToElement } from '@vaadin/test-runner-commands';
 import { fixtureSync, nextFrame, oneEvent } from '@vaadin/testing-helpers';
+import sinon from 'sinon';
 import '@vaadin/grid';
 import '@vaadin/dialog';
+import { getBodyCellContent } from '@vaadin/grid/test/helpers.js';
 
 describe('grid in dialog', () => {
   let dialog;
@@ -44,6 +46,22 @@ describe('grid in dialog', () => {
       await sendKeys({ press: 'Escape' });
       await sendKeys({ press: 'Escape' });
       expect(dialog.opened).to.be.false;
+    });
+  });
+
+  describe('cell activation', () => {
+    it('should activate item on cell click when grid is inside a dialog overlay', async () => {
+      const grid = dialog.$.overlay._rendererRoot.querySelector('vaadin-grid');
+      const spy = sinon.spy();
+      grid.addEventListener('active-item-changed', spy);
+
+      grid.firstElementChild.renderer = (root, _, model) => {
+        root.textContent = model.item;
+      };
+      await nextFrame();
+      await sendMouseToElement({ type: 'click', element: getBodyCellContent(grid, 0, 0) });
+
+      expect(spy.calledOnce).to.be.true;
     });
   });
 });

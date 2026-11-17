@@ -81,7 +81,7 @@ export const ActiveItemMixin = (superClass) =>
         this._isFocusable(e.target) ||
         // Clicked on a label element
         e.target instanceof HTMLLabelElement ||
-        // Click inside an overlay hosted by the cell (select, combo-box, date-picker, …).
+        // Click inside an overlay (popover) hosted by the cell (select, combo-box, date-picker, …).
         // The overlay closes synchronously on item click, so the item no longer has an
         // offsetParent and isFocusable() misses it. :focus-within also misses overlays
         // opened from code, when focus never entered the cell. Ancestors outside the cell
@@ -91,8 +91,8 @@ export const ActiveItemMixin = (superClass) =>
     }
 
     /**
-     * True when the click path reaches the cell through a Vaadin overlay
-     * (`*-overlay`) rendered inside that cell.
+     * True when the click path reaches the cell through a popover element
+     * (e.g. a Vaadin overlay) rendered inside that cell.
      *
      * @param {!Event} event
      * @param {!HTMLElement} cell
@@ -106,9 +106,7 @@ export const ActiveItemMixin = (superClass) =>
         return false;
       }
 
-      return path.slice(0, cellIndex).some((node) => {
-        return typeof node.localName === 'string' && node.localName.endsWith('-overlay');
-      });
+      return path.slice(0, cellIndex).some((node) => !!node.popover);
     }
 
     /**

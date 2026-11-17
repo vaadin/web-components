@@ -76,39 +76,19 @@ describe('events', () => {
       expect(spy).not.to.be.called;
     });
 
-    // An overlay hosted in the cell closes on item click, before this listener runs.
-    // The item then has no offsetParent, and focus is outside the cell when the overlay
-    // was opened from code, so neither isFocusable() nor :focus-within applies.
-    it('should not fire when clicking an item in a cell overlay opened without focus', async () => {
+    it('should not fire when clicking inside a native popover rendered in a cell', async () => {
       column.renderer = (root) => {
-        const overlay = document.createElement('vaadin-select-overlay');
-        const item = document.createElement('button');
-        item.textContent = 'Second';
-        overlay.append(item);
-        overlay.addEventListener(
-          'click',
-          () => {
-            overlay.style.display = 'none';
-            item.blur();
-          },
-          true,
-        );
-        root.append(overlay);
+        const popover = document.createElement('div');
+        popover.popover = 'manual';
+        popover.textContent = 'Popover';
+        root.append(popover);
       };
       flushGrid(grid);
 
-      const item = getBodyCellContent(grid, 0, 0).querySelector('button');
-      await sendMouseToElement({ type: 'click', element: item });
+      const popover = getBodyCellContent(grid, 0, 0).querySelector('div');
+      popover.showPopover();
+      await sendMouseToElement({ type: 'click', element: popover });
       expect(spy).not.to.be.called;
-    });
-
-    it('should fire on cell click when the grid is inside an overlay', async () => {
-      const overlay = document.createElement('vaadin-dialog-overlay');
-      grid.before(overlay);
-      overlay.append(grid);
-
-      await sendMouseToElement({ type: 'click', element: getBodyCellContent(grid, 0, 0) });
-      expect(spy).to.be.calledOnce;
     });
   });
 

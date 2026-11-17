@@ -1,5 +1,6 @@
 import { expect } from '@vaadin/chai-plugins';
-import { fixtureSync, nextRender } from '@vaadin/testing-helpers';
+import { sendMouseToElement } from '@vaadin/test-runner-commands';
+import { aTimeout, fixtureSync, nextRender } from '@vaadin/testing-helpers';
 import sinon from 'sinon';
 import '@vaadin/grid/src/vaadin-grid.js';
 import '@vaadin/select/src/vaadin-select.js';
@@ -50,6 +51,21 @@ describe('select in grid', () => {
     const select = getBodyCellContent(grid, 0, 0).firstElementChild;
     const label = select.querySelector('[slot="label"]');
     label.click();
+
+    expect(spy.called).to.be.false;
+  });
+
+  it('should not activate item on click of an item in select overlay opened without focus', async () => {
+    const spy = sinon.spy();
+    grid.addEventListener('active-item-changed', spy);
+
+    const select = getBodyCellContent(grid, 0, 0).firstElementChild;
+    select.opened = true;
+    await nextRender();
+
+    const item = select._menuElement.querySelector('vaadin-select-item');
+    await sendMouseToElement({ type: 'click', element: item });
+    await aTimeout(0);
 
     expect(spy.called).to.be.false;
   });
