@@ -327,6 +327,18 @@ describe('checkbox', () => {
         expect(document.elementFromPoint(x, y)).to.equal(input);
       });
 
+      [undefined, 'reverse'].forEach((theme) => {
+        it(`should cover the space above the label when the checkbox is taller${theme ? ` in ${theme} theme` : ''}`, () => {
+          if (theme) {
+            checkbox.setAttribute('theme', theme);
+          }
+          checkbox.style.setProperty('--vaadin-checkbox-size', '40px');
+          const { x } = middleOfNode(label);
+          const y = (checkbox.getBoundingClientRect().top + label.getBoundingClientRect().top) / 2;
+          expect(document.elementFromPoint(x, y)).to.equal(label);
+        });
+      });
+
       it('should not cover the label link with the label click area', () => {
         const { x, y } = middleOfNode(link);
         expect(document.elementFromPoint(x, y)).to.equal(link);

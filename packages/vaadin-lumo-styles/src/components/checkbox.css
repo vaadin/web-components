@@ -14,6 +14,7 @@
 
   [part='label'] {
     display: flex;
+    max-width: max-content;
   }
 
   :host([has-label]) ::slotted(label) {

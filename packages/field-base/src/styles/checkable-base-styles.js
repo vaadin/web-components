@@ -10,6 +10,7 @@ import { css, unsafeCSS } from 'lit';
 export const checkable = (part, propName = part) => css`
   :host {
     position: relative;
+    isolation: isolate;
     align-items: baseline;
     column-gap: var(--vaadin-${unsafeCSS(propName)}-gap, var(--vaadin-gap-s));
     grid-template: none;
@@ -97,13 +98,15 @@ export const checkable = (part, propName = part) => css`
 
   /* Make the space next to the label clickable */
   [part~='label'] {
-    position: relative;
-    z-index: 0;
+    position: static;
+    justify-self: start;
   }
 
-  [part~='label'] ::slotted(label)::after {
+  :host([has-label]) ::slotted(label)::after {
     content: '';
     position: absolute;
+    grid-row: 1 / 2;
+    grid-column: 2 / 3;
     inset: 0;
     z-index: -1;
   }
@@ -202,6 +205,10 @@ export const checkable = (part, propName = part) => css`
 
     ::slotted(input) {
       grid-column: 2 / 3;
+    }
+
+    ::slotted(label)::after {
+      grid-column: 1 / 2;
     }
   }
 

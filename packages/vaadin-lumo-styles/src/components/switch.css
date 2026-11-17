@@ -45,6 +45,7 @@
 
   :host([required]) [part='label'] {
     display: flex;
+    max-width: max-content;
     padding-inline-end: 0;
   }
 

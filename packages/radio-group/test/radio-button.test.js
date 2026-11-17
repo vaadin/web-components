@@ -67,6 +67,13 @@ describe('radio-button', () => {
         expect(document.elementFromPoint(x, y)).to.equal(radio.inputElement);
       });
 
+      it('should cover the space above the label when the radio button is taller', () => {
+        radio.style.setProperty('--vaadin-radio-button-size', '40px');
+        const { x } = middleOfNode(label);
+        const y = (radio.getBoundingClientRect().top + label.getBoundingClientRect().top) / 2;
+        expect(document.elementFromPoint(x, y)).to.equal(label);
+      });
+
       it('should not cover the label link with the input', () => {
         const link = document.createElement('a');
         link.href = '#';
