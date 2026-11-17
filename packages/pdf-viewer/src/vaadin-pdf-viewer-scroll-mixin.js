@@ -8,7 +8,6 @@
  * See https://vaadin.com/commercial-license-and-service-terms for the full
  * license.
  */
-import { issueWarning } from '@vaadin/component-base/src/warnings.js';
 import {
   getAnchor,
   getAnchorScrollLeftDelta,
@@ -172,15 +171,6 @@ export const PdfViewerScrollMixin = (superClass) =>
         return;
       }
       this.#pendingPage = 0;
-
-      if (!Number.isInteger(page) || page < 1 || page > this.__pages.length) {
-        issueWarning(
-          `The page ${page} is out of range for <vaadin-pdf-viewer>, the document has ${this.__pages.length} pages.`,
-        );
-        // The visible pages may not be rendered yet when the page was pending.
-        this.#updateVisiblePages();
-        return;
-      }
 
       const { content } = this.$;
       const pageView = this.__pages[page - 1];
