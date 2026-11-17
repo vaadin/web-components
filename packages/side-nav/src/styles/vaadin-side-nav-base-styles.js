@@ -43,6 +43,27 @@ const sideNav = css`
   [part='children'] {
     flex-direction: var(--vaadin-navigation-layout-direction, column);
   }
+
+  @container style(--vaadin-navigation-layout-collapsed: 1) {
+    /* Turn the label into a divider line */
+    [part='label'] {
+      color: transparent;
+      flex-direction: column;
+      width: 100%;
+      box-sizing: border-box;
+      height: 1px;
+      padding-block: var(--vaadin-padding-m);
+      contain: size;
+    }
+
+    [part='label']::before {
+      content: '';
+      display: block;
+      width: 100%;
+      min-height: 1px;
+      background-color: var(--vaadin-border-color);
+    }
+  }
 `;
 
 export const sideNavStyles = [sharedStyles, sideNav];

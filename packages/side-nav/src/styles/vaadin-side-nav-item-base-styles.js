@@ -130,6 +130,11 @@ const sideNavItem = css`
       opacity: 0;
     }
 
+    [part='toggle-button'],
+    [part='children'] {
+      display: none;
+    }
+
     ::slotted(vaadin-badge[slot='suffix']) {
       translate: -100% -50%;
       scale: 0.75;

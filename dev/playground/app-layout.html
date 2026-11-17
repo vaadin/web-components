@@ -26,6 +26,7 @@
       import '@vaadin/scroller';
       import '@vaadin/navigation-layout';
       import '@vaadin/navigation-layout/vaadin-navigation-layout-toggle.js';
+      import '@vaadin/popover';
       import '@vaadin/tooltip';
       import { issueWarning } from '@vaadin/component-base/src/warnings.js';
 
@@ -41,9 +42,24 @@
 
         document.body.replaceChildren(document.getElementById(example).content.cloneNode(true));
 
+        // Navigation state: ?example=drawer&section=people&detail=directory
+        const sections = {
+          home: { title: 'Home', items: ['Overview', 'Activity'] },
+          people: {
+            title: 'People',
+            items: ['Directory', 'Org Chart', 'Time Off', 'Onboarding', 'Benefits', 'Compensation'],
+          },
+          calendar: { title: 'Calendar', items: ['Schedule', 'Invitations', 'Holidays'] },
+          reports: { title: 'Reports', items: ['Overview', 'Headcount', 'Time Off'] },
+          settings: { title: 'Settings', items: ['General', 'Account', 'Notifications'] },
+          support: { title: 'Support', items: ['Help Center', 'Contact Support'] },
+        };
+
         const navLayouts = document.querySelectorAll('vaadin-navigation-layout:is([slot="navbar"], [slot="drawer"])');
         navLayouts.forEach((navLayout) => {
           navLayout.prepend(navLayoutContent.cloneNode(true));
+
+          // Reposition tooltips
           if (navLayout.slot === 'navbar') {
             navLayout.querySelectorAll('vaadin-tooltip').forEach((tooltip) => {
               tooltip.position = 'bottom';
@@ -59,23 +75,44 @@
               item.removeAttribute('data-detail');
             });
           }
+          // Add child items
+          document.querySelectorAll('vaadin-navigation-layout vaadin-side-nav-item').forEach((item) => {
+            if (Object.hasOwn(sections, item.dataset.section)) {
+              const popover = document.createElement('vaadin-popover');
+              const popoverNav = document.createElement('vaadin-side-nav');
+              popover.target = item;
+              popover.position = 'end-top';
+              // TODO focus-visible is not possible
+              popover.trigger = ['hover', 'focus-visible'];
+              popover.style.setProperty('--vaadin-navigation-layout-collapsed', '0');
+              popover.style.setProperty('--vaadin-navigation-layout-direction', 'column');
+
+              sections[item.dataset.section].items.forEach((title) => {
+                const childItem = document.createElement('vaadin-side-nav-item');
+                childItem.slot = 'children';
+                childItem.textContent = title;
+                // childItem.dataset.section = item.dataset.section;
+                // childItem.dataset.detail = title.toLowerCase().replaceAll(' ', '-');
+                if (item.closest('vaadin-navigation-layout[slot="drawer"]')) {
+                  item.append(childItem);
+                } else {
+                  popover.position = 'bottom-start';
+                }
+
+                const popoverItem = childItem.cloneNode(true);
+                popoverItem.removeAttribute('slot');
+                popoverNav.append(popoverItem);
+              });
+
+              popover.append(popoverNav);
+              item.append(popover);
+            }
+          });
         });
 
         const layout = document.querySelector('vaadin-app-layout');
         layout.append(viewContent.cloneNode(true));
 
-        // Navigation state: ?example=drawer&section=people&detail=directory
-        const sections = {
-          home: { title: 'Home', items: ['Overview', 'Activity'] },
-          people: {
-            title: 'People',
-            items: ['Directory', 'Org Chart', 'Time Off', 'Onboarding', 'Benefits', 'Compensation'],
-          },
-          calendar: { title: 'Calendar', items: ['Schedule', 'Invitations', 'Holidays'] },
-          reports: { title: 'Reports', items: ['Overview', 'Headcount', 'Time Off'] },
-          settings: { title: 'Settings', items: ['General', 'Account', 'Notifications'] },
-          support: { title: 'Support', items: ['Help Center', 'Contact Support'] },
-        };
         const masterDetail = layout.querySelector('vaadin-master-detail-layout');
         const masterNav = masterDetail.querySelector('vaadin-side-nav');
         const detail = masterDetail.querySelector('[slot="detail"]');
@@ -311,6 +348,18 @@
         }
       }
 
+      @container style(--vaadin-navigation-layout-collapsed: 0) {
+        vaadin-side-nav-item > vaadin-popover {
+          --vaadin-popover-display: none;
+        }
+      }
+
+      @container style(--vaadin-navigation-layout-direction: row) {
+        vaadin-side-nav-item > vaadin-popover {
+          --vaadin-popover-display: flex;
+        }
+      }
+
       /* Dev page styles */
       html:not(.example) {
         --vaadin-horizontal-layout-gap: var(--vaadin-gap-l);
@@ -535,6 +584,24 @@
     <template id="drawer">
       <vaadin-app-layout>
         <vaadin-navigation-layout slot="drawer">
+          <vaadin-side-nav>
+            <div slot="label">Shortcuts</div>
+            <vaadin-side-nav-item>
+              <vaadin-icon slot="prefix" src="../assets/lucide-icons/bookmark.svg"></vaadin-icon>
+              Directory
+              <vaadin-tooltip slot="tooltip" text="Directory" aria-link-mode="none" position="end"></vaadin-tooltip>
+            </vaadin-side-nav-item>
+            <vaadin-side-nav-item>
+              <vaadin-icon slot="prefix" src="../assets/lucide-icons/bookmark.svg"></vaadin-icon>
+              Holidays
+              <vaadin-tooltip slot="tooltip" text="Holidays" aria-link-mode="none" position="end"></vaadin-tooltip>
+            </vaadin-side-nav-item>
+            <vaadin-side-nav-item>
+              <vaadin-icon slot="prefix" src="../assets/lucide-icons/bookmark.svg"></vaadin-icon>
+              Headcount
+              <vaadin-tooltip slot="tooltip" text="Headcount" aria-link-mode="none" position="end"></vaadin-tooltip>
+            </vaadin-side-nav-item>
+          </vaadin-side-nav>
           <vaadin-navigation-layout-toggle slot="end" theme="tertiary"></vaadin-navigation-layout-toggle>
         </vaadin-navigation-layout>
       </vaadin-app-layout>
@@ -590,7 +657,7 @@
           Home
           <vaadin-tooltip slot="tooltip" text="Home" aria-link-mode="none" position="end"></vaadin-tooltip>
         </vaadin-side-nav-item>
-        <vaadin-side-nav-item data-section="people" data-detail="directory">
+        <vaadin-side-nav-item data-section="people" data-detail="directory" match-nested>
           <vaadin-icon slot="prefix" src="../assets/lucide-icons/users.svg"></vaadin-icon>
           People
           <vaadin-tooltip slot="tooltip" text="People" aria-link-mode="none" position="end"></vaadin-tooltip>
@@ -613,11 +680,13 @@
         </vaadin-side-nav-item>
       </vaadin-side-nav>
 
-      <vaadin-side-nav-item slot="end" data-section="support" data-detail="help-center">
-        <vaadin-icon src="../assets/lucide-icons/life-buoy.svg" slot="prefix"></vaadin-icon>
-        Support
-        <vaadin-tooltip slot="tooltip" text="Support" aria-link-mode="none" position="end"></vaadin-tooltip>
-      </vaadin-side-nav-item>
+      <vaadin-side-nav slot="end" style="margin-top: 0;">
+        <vaadin-side-nav-item data-section="support" data-detail="help-center">
+          <vaadin-icon src="../assets/lucide-icons/life-buoy.svg" slot="prefix"></vaadin-icon>
+          Support
+          <vaadin-tooltip slot="tooltip" text="Support" aria-link-mode="none" position="end"></vaadin-tooltip>
+        </vaadin-side-nav-item>
+      </vaadin-side-nav>
       <vaadin-button theme="tertiary" slot="end">
         <vaadin-icon src="../assets/lucide-icons/bell.svg" slot="prefix"></vaadin-icon>
         Notifications

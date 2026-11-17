@@ -13,6 +13,7 @@ const popoverOverlay = css`
     --_default-offset: 4px;
     --_rtl-multiplier: 1;
     --_border-width: var(--vaadin-popover-border-width, var(--vaadin-overlay-border-width, 1px));
+    display: var(--vaadin-popover-display, flex);
   }
 
   [part='overlay']:focus-visible {

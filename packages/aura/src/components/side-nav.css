@@ -7,8 +7,10 @@
   --vaadin-side-nav-items-gap: var(--vaadin-gap-xs);
 }
 
-vaadin-side-nav + vaadin-side-nav {
-  margin-top: var(--vaadin-gap-l);
+@container style(--vaadin-navigation-layout-collapsed: 0) {
+  vaadin-side-nav + vaadin-side-nav {
+    margin-top: var(--vaadin-gap-l);
+  }
 }
 
 vaadin-side-nav::part(label) {
