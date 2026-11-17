@@ -62,14 +62,34 @@ export declare class PdfViewerToolbarMixinClass {
   protected _renderToolbar(): TemplateResult;
 
   /**
-   * Returns the template of the navigation controls in the `toolbar-navigation` slot.
+   * Returns the template of the previous page button in the `toolbar-prev-page` slot.
    */
-  protected _renderNavigationControls(): TemplateResult;
+  protected _renderPrevPageButton(): TemplateResult;
 
   /**
-   * Returns the template of the zoom controls in the `toolbar-zoom` slot.
+   * Returns the template of the next page button in the `toolbar-next-page` slot.
    */
-  protected _renderZoomControls(): TemplateResult;
+  protected _renderNextPageButton(): TemplateResult;
+
+  /**
+   * Returns the template of the page field in the `toolbar-page` slot.
+   */
+  protected _renderPageField(): TemplateResult;
+
+  /**
+   * Returns the template of the zoom out button in the `toolbar-zoom-out` slot.
+   */
+  protected _renderZoomOutButton(): TemplateResult;
+
+  /**
+   * Returns the template of the zoom select in the `toolbar-zoom` slot.
+   */
+  protected _renderZoomSelect(): TemplateResult;
+
+  /**
+   * Returns the template of the zoom in button in the `toolbar-zoom-in` slot.
+   */
+  protected _renderZoomInButton(): TemplateResult;
 
   /**
    * Returns the template of the download button in the `toolbar-download` slot.

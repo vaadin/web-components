@@ -21,7 +21,7 @@ describe('download', () => {
   let createObjectUrlSpy: sinon.SinonSpy;
 
   function getButton() {
-    return viewer.querySelector<HTMLElement & { disabled: boolean }>('vaadin-button:has(> [icon="download"])');
+    return viewer.querySelector<HTMLElement & { disabled: boolean }>('[slot="toolbar-download"]');
   }
 
   function nextDownload() {
