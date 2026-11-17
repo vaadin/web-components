@@ -71,13 +71,15 @@ export class PdfViewerTextLayer {
   /**
    * Adds each link to the `aria-owns` of the text before it, once, for assistive technology.
    * @param {HTMLElement[]} links the links of the page, with ids
+   * @param {Set<string>} [linkTextIds] the ids of the text that other links own, as a link in a link is invalid
    */
-  bindLinks(links) {
+  bindLinks(links, linkTextIds = new Set()) {
     if (this.#linksBound) {
       return;
     }
     this.#linksBound = true;
-    addLinksToText(this.textDivs, links);
+    const textDivs = this.textDivs.filter((div) => !linkTextIds.has(div.id));
+    addLinksToText(textDivs, links);
   }
 
   /** @param {import('pdfjs-dist').PageViewport} viewport */

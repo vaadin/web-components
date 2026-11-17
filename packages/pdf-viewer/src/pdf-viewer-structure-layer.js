@@ -119,6 +119,15 @@ function setAlt(element, alt) {
 }
 
 /**
+ * Removes the alternative text of a structure element, see `setAlt()`.
+ * @param {HTMLElement} element
+ */
+function removeAlt(element) {
+  element.removeAttribute('aria-label');
+  element.removeAttribute('aria-description');
+}
+
+/**
  * Returns the ARIA role of a structure element.
  * @param {object} node
  * @param {object[]} parents the ancestors of the node, nearest last
@@ -194,7 +203,6 @@ export class PdfViewerStructureLayer {
       return;
     }
     this.#linksBound = true;
-    const linkIds = new Set(links.map((link) => link.id));
     // Unlike in pdf.js, a link owns its text, as Chrome ignores aria-owns of an element that a link owns.
     links.forEach((link) => {
       const owners = [...(this.#linkElements.get(link.id)?.querySelectorAll('[aria-owns]') ?? [])];
@@ -204,13 +212,11 @@ export class PdfViewerStructureLayer {
       }
     });
     links.forEach((link) => this.#annotationOwners.get(link.id)?.setAttribute('aria-owns', link.id));
-    // The alternative text names its structure element when none of its annotations got a link.
-    const elementsWithLinks = new Set(
-      [...this.#linkAlts].filter(([id]) => linkIds.has(id)).map(([, { element }]) => element),
-    );
-    this.#linkAlts.forEach(({ element, alt }) => {
-      if (!elementsWithLinks.has(element)) {
-        setAlt(element, alt);
+    // The alternative text names the link instead of its structure element, see `getLinkAlt()`.
+    links.forEach((link) => {
+      const element = this.#linkAlts.get(link.id)?.element;
+      if (element) {
+        removeAlt(element);
       }
     });
   }
@@ -260,12 +266,11 @@ export class PdfViewerStructureLayer {
   #setAttributes(node, element) {
     const { alt, lang, rowSpan, colSpan } = node;
     if (alt !== undefined) {
-      // The alternative text of annotations names their links instead, see `bindLinks()`.
-      const annotations = (node.children || []).filter((child) => child.type === 'annotation');
-      annotations.forEach(({ id }) => this.#linkAlts.set(id, { element, alt }));
-      if (!annotations.length) {
-        setAlt(element, alt);
-      }
+      // Until the links of its annotations take it over, see `bindLinks()`.
+      setAlt(element, alt);
+      (node.children || [])
+        .filter((child) => child.type === 'annotation')
+        .forEach(({ id }) => this.#linkAlts.set(id, { element, alt }));
     }
     if (node.type === 'annotation') {
       // Unlike in pdf.js, only the annotations that an element owns, as lists and tables skip their direct content.

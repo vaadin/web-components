@@ -213,7 +213,7 @@ describe('structure layer', () => {
       { role: 'Form', alt: 'Name', children: [{ type: 'annotation', id: 'pdfjs_internal_id_5R' }] },
     ]);
     const form = structure.element.querySelector('[role="form"]')!;
-    expect(form.hasAttribute('aria-label')).to.be.false;
+    expect(form.getAttribute('aria-label')).to.equal('Name');
     structure.bindLinks([]);
     expect(form.getAttribute('aria-label')).to.equal('Name');
   });

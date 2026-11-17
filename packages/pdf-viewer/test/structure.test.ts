@@ -8,6 +8,7 @@ import type { PdfViewerStructTreeNode } from '../src/pdf-viewer-structure-layer.
 import type { PdfViewer } from '../vaadin-pdf-viewer.js';
 import {
   createPdf,
+  failLinksOnce,
   failTextOnce,
   fixtureUrl,
   getPdfPagePrototype,
@@ -312,6 +313,22 @@ describe('structure', () => {
     expect(viewer.shadowRoot!.querySelector(`.text-layer [aria-owns~="${getLink().id}"]`)).to.be.ok;
   });
 
+  it('should not add a link to the text that another link owns, as a link in a link is invalid', async () => {
+    await stubStructTrees(() => linkTree());
+    // The second link, which the structure does not own, has no text of its own after the first link.
+    await loadPdf([
+      {
+        content:
+          'BT /F1 24 Tf 72 700 Td (Read) Tj ET /Link << /MCID 0 >> BDC BT /F1 24 Tf 140 700 Td (Vaadin) Tj ET EMC',
+        annotations: [uriLink([140, 690, 215, 720]), uriLink([230, 690, 280, 720], 'https://vaadin.com/docs')],
+      },
+    ]);
+    const [tagged, untagged] = viewer.shadowRoot!.querySelectorAll('a.link');
+    expect(getOwnedText(tagged)).to.equal('Vaadin');
+    const owner = viewer.shadowRoot!.querySelector(`.text-layer [aria-owns~="${untagged.id}"]`)!;
+    expect(owner.textContent).to.equal('Read');
+  });
+
   it('should name a link that covers no text by the text that it owns in the structure, with its lines apart', async () => {
     await stubStructTrees(() => linkTree());
     // The link is below the text.
@@ -345,6 +362,16 @@ describe('structure', () => {
           annotations: [uriLink([72, 690, 130, 720], 'https://vaadin.com/docs')],
         },
       ]);
+    });
+
+    it('should keep the alternative text on its structure element when the links fail to load', async () => {
+      await failLinksOnce(1);
+      sinon.stub(console, 'warn');
+      await loadAndRender(viewer, url!);
+      expect(viewer.shadowRoot!.querySelector('a.link')).to.be.null;
+      expect(getTree()!.querySelector('[aria-description]')!.getAttribute('aria-description')).to.equal(
+        'Vaadin documentation',
+      );
     });
 
     it('should name a link by the alternative text of its structure element', async () => {

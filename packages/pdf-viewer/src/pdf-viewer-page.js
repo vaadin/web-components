@@ -424,7 +424,9 @@ export class PdfViewerPage {
     if (this.linkLayer && this.#structureLayer !== undefined) {
       const { links } = this.linkLayer;
       this.#structureLayer?.bindLinks(links);
-      this.textLayer.bindLinks(links.filter((link) => !this.#structureLayer?.hasLink(link)));
+      const textLinks = links.filter((link) => !this.#structureLayer?.hasLink(link));
+      const linkTextIds = new Set(links.flatMap((link) => link.getAttribute('aria-owns')?.split(' ') ?? []));
+      this.textLayer.bindLinks(textLinks, linkTextIds);
     }
   }
 
