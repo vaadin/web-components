@@ -20,6 +20,16 @@ import { PdfViewerTextLayer } from './pdf-viewer-text-layer.js';
 export const MAX_CANVAS_PIXELS = 2 ** 24;
 
 /**
+ * Frees the memory of a canvas that is no longer shown.
+ * @param {HTMLCanvasElement} canvas
+ */
+export function freeCanvas(canvas) {
+  // Shrinking the canvas frees its memory right away in Safari.
+  canvas.width = 0;
+  canvas.height = 0;
+}
+
+/**
  * Manages the DOM of a single page of the document: a placeholder sized to
  * the page, and the canvas, the text layer, the structure and the link layer
  * the page is rendered to once it is needed.
@@ -177,7 +187,7 @@ export class PdfViewerPage {
     try {
       await renderTask.promise;
     } catch (error) {
-      this.#freeCanvas(canvas);
+      freeCanvas(canvas);
       if (this.renderTask === renderTask) {
         this.renderTask = null;
       }
@@ -186,7 +196,7 @@ export class PdfViewerPage {
 
     // The page was released or rendered again meanwhile, drop this result.
     if (this.renderTask !== renderTask) {
-      this.#freeCanvas(canvas);
+      freeCanvas(canvas);
       return;
     }
     this.renderTask = null;
@@ -195,7 +205,7 @@ export class PdfViewerPage {
     this.canvas = canvas;
     this.#renderLayers();
     if (oldCanvas) {
-      this.#freeCanvas(oldCanvas);
+      freeCanvas(oldCanvas);
     }
     this.renderedScale = scale;
     this.renderedPixelRatio = pixelRatio;
@@ -358,7 +368,7 @@ export class PdfViewerPage {
     this.cancel();
     this.textLayer?.cancel();
     if (this.canvas) {
-      this.#freeCanvas(this.canvas);
+      freeCanvas(this.canvas);
     }
     this.canvas = null;
     this.textLayer = null;
@@ -390,12 +400,5 @@ export class PdfViewerPage {
     if (this.linkLayer && this.textLayer?.rendered) {
       this.textLayer.bindLinks(this.linkLayer.links);
     }
-  }
-
-  /** @private */
-  #freeCanvas(canvas) {
-    // Shrinking the canvas frees its memory right away in Safari.
-    canvas.width = 0;
-    canvas.height = 0;
   }
 }

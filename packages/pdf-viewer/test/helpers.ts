@@ -1,4 +1,4 @@
-import { nextFrame, oneEvent } from '@vaadin/testing-helpers';
+import { nextFrame, nextRender, oneEvent } from '@vaadin/testing-helpers';
 import sinon from 'sinon';
 import type { PDFDocumentProxy, PDFPageProxy } from 'pdfjs-dist';
 import { acquireWorker, loadPdfjs, releaseWorker } from '../src/pdfjs-loader.js';
@@ -34,6 +34,26 @@ export async function loadDocument(viewer: PdfViewer, name: Fixture): Promise<vo
  */
 export async function nextRenderIdle(viewer: PdfViewer): Promise<void> {
   await oneEvent(viewer, 'render-idle');
+}
+
+/**
+ * Opens the sidebar of the viewer and waits until the thumbnails in view have rendered.
+ */
+export async function openSidebar(viewer: PdfViewer): Promise<void> {
+  viewer.sidebarOpened = true;
+  await nextRender();
+  const list = viewer.shadowRoot!.querySelector('[part~="thumbnails"]')!;
+  const { bottom } = list.getBoundingClientRect();
+  const inView = [...list.querySelectorAll('[part~="thumbnail"]')].filter(
+    (thumbnail) => thumbnail.getBoundingClientRect().top < bottom,
+  );
+  const isRendered = () => inView.every((thumbnail) => thumbnail.querySelector('canvas'));
+  for (let i = 0; i < 100 && !isRendered(); i++) {
+    await nextFrame();
+  }
+  if (!isRendered()) {
+    throw new Error('The thumbnails in view did not render');
+  }
 }
 
 /**
