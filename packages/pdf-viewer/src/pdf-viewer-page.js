@@ -8,6 +8,7 @@
  * See https://vaadin.com/commercial-license-and-service-terms for the full
  * license.
  */
+import { html, nothing, render } from 'lit';
 import { PdfViewerLinkLayer } from './pdf-viewer-link-layer.js';
 import { PdfViewerStructureLayer } from './pdf-viewer-structure-layer.js';
 import { PdfViewerTextLayer } from './pdf-viewer-text-layer.js';
@@ -18,9 +19,6 @@ import { PdfViewerTextLayer } from './pdf-viewer-text-layer.js';
  */
 export const MAX_CANVAS_PIXELS = 2 ** 24;
 
-/** The layers of a page in DOM order, as in pdf.js, so that screen readers read the structure in the canvas first. */
-const LAYER_ORDER = ['canvas', 'text', 'links'];
-
 /**
  * Manages the DOM of a single page of the document: a placeholder sized to
  * the page, and the canvas, the text layer, the structure and the link layer
@@ -29,12 +27,6 @@ const LAYER_ORDER = ['canvas', 'text', 'links'];
 export class PdfViewerPage {
   /** Aborted on release, to drop the layers that still load. */
   #abortController = new AbortController();
-
-  /**
-   * The elements of the layers in the page, at their index in `LAYER_ORDER`.
-   * @type {Array<HTMLElement | null>}
-   */
-  #layerElements = LAYER_ORDER.map(() => null);
 
   /**
    * The structure tree of the page, or null without one, kept between renders as in pdf.js.
@@ -200,11 +192,11 @@ export class PdfViewerPage {
     this.renderTask = null;
 
     const oldCanvas = this.canvas;
-    this.#addLayer('canvas', canvas);
+    this.canvas = canvas;
+    this.#renderLayers();
     if (oldCanvas) {
       this.#freeCanvas(oldCanvas);
     }
-    this.canvas = canvas;
     this.renderedScale = scale;
     this.renderedPixelRatio = pixelRatio;
     this.#connectLayers();
@@ -273,14 +265,14 @@ export class PdfViewerPage {
     const { signal } = this.#abortController;
     const textLayer = new PdfViewerTextLayer();
     this.textLayer = textLayer;
-    this.#addLayer('text', textLayer.element);
+    this.#renderLayers();
     try {
       await textLayer.render(this.pdfPage, viewport, signal);
     } catch (error) {
       // Without its text, the layer is removed, so that the page tries again when it renders again.
       if (!signal.aborted) {
-        this.#removeLayer('text');
         this.textLayer = null;
+        this.#renderLayers();
       }
       throw error;
     }
@@ -347,9 +339,7 @@ export class PdfViewerPage {
     }
 
     this.linkLayer = linkLayer;
-    if (links.length) {
-      this.#addLayer('links', linkLayer.element);
-    }
+    this.#renderLayers();
     this.#connectLayers();
     return links;
   }
@@ -370,11 +360,21 @@ export class PdfViewerPage {
     if (this.canvas) {
       this.#freeCanvas(this.canvas);
     }
-    LAYER_ORDER.forEach((name) => this.#removeLayer(name));
     this.canvas = null;
     this.textLayer = null;
     this.#structureLayer = null;
     this.linkLayer = null;
+    this.#renderLayers();
+  }
+
+  /**
+   * Renders the layers in a fixed order, as in pdf.js, so that screen readers read the structure in the canvas first.
+   * @private
+   */
+  #renderLayers() {
+    // A page without links gets no link layer.
+    const linkLayer = this.linkLayer?.links.length ? this.linkLayer.element : nothing;
+    render(html`${this.canvas}${this.textLayer?.element}${linkLayer}`, this.element);
   }
 
   /**
@@ -392,39 +392,10 @@ export class PdfViewerPage {
     }
   }
 
-  /**
-   * @param {string} name
-   * @param {HTMLElement} element
-   * @private
-   */
-  #addLayer(name, element) {
-    const index = LAYER_ORDER.indexOf(name);
-    const oldElement = this.#layerElements[index];
-    this.#layerElements[index] = element;
-    if (oldElement) {
-      oldElement.replaceWith(element);
-      return;
-    }
-    const previous = this.#layerElements.slice(0, index).findLast(Boolean);
-    if (previous) {
-      previous.after(element);
-    } else {
-      this.element.prepend(element);
-    }
-  }
-
-  /** @private */
-  #removeLayer(name) {
-    const index = LAYER_ORDER.indexOf(name);
-    this.#layerElements[index]?.remove();
-    this.#layerElements[index] = null;
-  }
-
   /** @private */
   #freeCanvas(canvas) {
     // Shrinking the canvas frees its memory right away in Safari.
     canvas.width = 0;
     canvas.height = 0;
-    canvas.remove();
   }
 }
