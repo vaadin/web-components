@@ -5,7 +5,6 @@
  */
 import '@vaadin/button/src/vaadin-button.js';
 import './vaadin-upload-icon.js';
-import './vaadin-upload-icons.js';
 import './vaadin-upload-file-list.js';
 import { html, LitElement } from 'lit';
 import { ifDefined } from 'lit/directives/if-defined.js';

@@ -216,22 +216,26 @@ describe('pages', () => {
       });
 
       [0, -3, -Infinity].forEach((value) => {
-        it(`should scroll to the first page with scrollToPage(${value})`, async () => {
+        it(`should scroll to the first page without a warning with scrollToPage(${value})`, async () => {
           viewer.scrollToPage(4);
           await nextRenderIdle(viewer);
+          const stub = sinon.stub(console, 'warn');
           viewer.scrollToPage(value);
           await nextFrame();
           expect(content.scrollTop).to.equal(0);
           expect(viewer.page).to.equal(1);
+          expect(stub).to.be.not.called;
         });
       });
 
       [7, 10, Infinity].forEach((value) => {
-        it(`should scroll to the last page with scrollToPage(${value})`, async () => {
+        it(`should scroll to the last page without a warning with scrollToPage(${value})`, async () => {
+          const stub = sinon.stub(console, 'warn');
           viewer.scrollToPage(value);
           await nextFrame();
           expect(isPageInView(6)).to.be.true;
           expect(viewer.page).to.equal(6);
+          expect(stub).to.be.not.called;
         });
       });
 

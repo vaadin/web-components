@@ -87,6 +87,10 @@ how to generate them.
     else `_getDocumentName()` of the document mixin, the name that downloads also use.
   - The controls call the methods of the inner mixins, for example `_scrollToPage()`, `_stepZoom()` and
     `download()`.
+  - Each icon button is a `vaadin-button` with the `tertiary icon` theme. Themes style it like any other
+    `vaadin-button`, so a theme needs no rules for a new tag name.
+  - The icon of a button is a `vaadin-pdf-viewer-icon` child. Its `icon` attribute selects the image, and its
+    shadow root lets a theme replace the image.
   - Each icon button is named after its tooltip text: its `vaadin-tooltip` has the `ariaLinkMode` property set to
     `aria-labelledby`. A new button needs the same, and no `aria-label`. Bind the property, not the
     `aria-link-mode` attribute: it is not a real ARIA attribute, so a11y checkers such as axe (`aria-valid-attr`)
