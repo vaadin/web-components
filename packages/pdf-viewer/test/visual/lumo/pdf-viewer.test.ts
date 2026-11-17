@@ -10,6 +10,7 @@ import '@vaadin/vaadin-lumo-styles/components/tooltip.css';
 import '../not-animated-styles.css';
 import '../../enable-feature-flag.js';
 import '../../../vaadin-pdf-viewer.js';
+import type { IntegerField } from '@vaadin/integer-field';
 import { Tooltip } from '@vaadin/tooltip/src/vaadin-tooltip.js';
 import type { PdfViewer } from '../../../vaadin-pdf-viewer.js';
 import { createPdf, loadAndRender } from '../../helpers.js';
@@ -56,7 +57,7 @@ describe('pdf-viewer', () => {
 
   it('page error', async () => {
     await load();
-    const field = viewer.querySelector('vaadin-integer-field')!;
+    const field = viewer.querySelector<IntegerField>('[slot="toolbar-page"]')!;
     field.focus();
     (field.inputElement as HTMLInputElement).select();
     await sendKeys({ type: '999' });

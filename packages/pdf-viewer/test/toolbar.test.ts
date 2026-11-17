@@ -64,7 +64,7 @@ describe('toolbar', () => {
     header = viewer.shadowRoot!.querySelector<HTMLElement>('[part~="header"]')!;
     toolbar = viewer.shadowRoot!.querySelector<HTMLElement>('[part~="toolbar"]')!;
     content = viewer.shadowRoot!.querySelector<HTMLElement>('[part="content"]')!;
-    previousButton = viewer.querySelector<Button>('[slot="toolbar-prev-page"]')!;
+    previousButton = viewer.querySelector<Button>('[slot="toolbar-previous-page"]')!;
     nextButton = viewer.querySelector<Button>('[slot="toolbar-next-page"]')!;
     pageField = viewer.querySelector<IntegerField>('[slot="toolbar-page"]')!;
     zoomOutButton = viewer.querySelector<Button>('[slot="toolbar-zoom-out"]')!;
@@ -549,7 +549,7 @@ describe('toolbar', () => {
           break;
         }
         visited.add(control);
-        const name = control.querySelector('[icon]')?.getAttribute('icon') ?? control.localName;
+        const name = control.slot || control.localName;
         const rect = control.getBoundingClientRect();
         const areaRect = topArea.getBoundingClientRect();
         const viewerRect = viewer.getBoundingClientRect();

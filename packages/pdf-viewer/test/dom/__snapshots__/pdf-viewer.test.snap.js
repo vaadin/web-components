@@ -9,7 +9,7 @@ snapshots["vaadin-pdf-viewer host default"] =
     disabled=""
     has-tooltip=""
     role="button"
-    slot="toolbar-prev-page"
+    slot="toolbar-previous-page"
     tabindex="-1"
     theme="tertiary icon"
   >
@@ -122,7 +122,7 @@ snapshots["vaadin-pdf-viewer host document"] =
     disabled=""
     has-tooltip=""
     role="button"
-    slot="toolbar-prev-page"
+    slot="toolbar-previous-page"
     tabindex="-1"
     theme="tertiary icon"
   >
@@ -240,7 +240,7 @@ snapshots["vaadin-pdf-viewer shadow default"] =
     part="toolbar"
   >
     <div part="toolbar-group">
-      <slot name="toolbar-prev-page">
+      <slot name="toolbar-previous-page">
       </slot>
       <slot name="toolbar-next-page">
       </slot>
@@ -308,7 +308,7 @@ snapshots["vaadin-pdf-viewer shadow document"] =
     part="toolbar"
   >
     <div part="toolbar-group">
-      <slot name="toolbar-prev-page">
+      <slot name="toolbar-previous-page">
       </slot>
       <slot name="toolbar-next-page">
       </slot>
@@ -498,7 +498,7 @@ snapshots["vaadin-pdf-viewer shadow header title"] =
     part="toolbar"
   >
     <div part="toolbar-group">
-      <slot name="toolbar-prev-page">
+      <slot name="toolbar-previous-page">
       </slot>
       <slot name="toolbar-next-page">
       </slot>
@@ -689,7 +689,7 @@ snapshots["vaadin-pdf-viewer shadow header hidden"] =
     part="toolbar"
   >
     <div part="toolbar-group">
-      <slot name="toolbar-prev-page">
+      <slot name="toolbar-previous-page">
       </slot>
       <slot name="toolbar-next-page">
       </slot>
@@ -880,7 +880,7 @@ snapshots["vaadin-pdf-viewer shadow toolbar collapsed"] =
     part="toolbar"
   >
     <div part="toolbar-group">
-      <slot name="toolbar-prev-page">
+      <slot name="toolbar-previous-page">
       </slot>
       <slot name="toolbar-next-page">
       </slot>

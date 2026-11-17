@@ -110,7 +110,7 @@ export const PdfViewerToolbarMixin = (superClass) =>
         </button>
         <div id="toolbar" part="toolbar" ?hidden="${collapsed}">
           <div part="toolbar-group">
-            <slot name="toolbar-prev-page" ${slotContent(this._renderPrevPageButton())}></slot>
+            <slot name="toolbar-previous-page" ${slotContent(this._renderPreviousPageButton())}></slot>
             <slot name="toolbar-next-page" ${slotContent(this._renderNextPageButton())}></slot>
             <slot name="toolbar-page" ${slotContent(this._renderPageField())}></slot>
           </div>
@@ -128,13 +128,13 @@ export const PdfViewerToolbarMixin = (superClass) =>
     }
 
     /**
-     * Returns the template of the previous page button in the `toolbar-prev-page` slot.
+     * Returns the template of the previous page button in the `toolbar-previous-page` slot.
      * @protected
      */
-    _renderPrevPageButton() {
+    _renderPreviousPageButton() {
       return html`
         <vaadin-button
-          slot="toolbar-prev-page"
+          slot="toolbar-previous-page"
           theme="tertiary icon"
           .disabled="${!this.pageCount || this.page <= 1}"
           @click="${this.#onPreviousPageClick}"

@@ -62,9 +62,9 @@ export declare class PdfViewerToolbarMixinClass {
   protected _renderToolbar(): TemplateResult;
 
   /**
-   * Returns the template of the previous page button in the `toolbar-prev-page` slot.
+   * Returns the template of the previous page button in the `toolbar-previous-page` slot.
    */
-  protected _renderPrevPageButton(): TemplateResult;
+  protected _renderPreviousPageButton(): TemplateResult;
 
   /**
    * Returns the template of the next page button in the `toolbar-next-page` slot.
