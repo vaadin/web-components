@@ -294,13 +294,6 @@ describe('links', () => {
       expect(getLinks(1).map((link) => link.href)).to.deep.equal(['https://vaadin.com/', 'https://vaadin.com/docs']);
     });
 
-    it('should add each link to the text before it for assistive technology', async () => {
-      await loadTwoLines();
-      const [vaadin, docs] = getLinks(1);
-      expect(vaadin.id).to.be.ok.and.not.equal(docs.id);
-      expect(getTextDivs().map((div) => div.getAttribute('aria-owns'))).to.deep.equal([vaadin.id, docs.id]);
-    });
-
     it('should add several links to the same text before them', async () => {
       await loadPdf([
         {

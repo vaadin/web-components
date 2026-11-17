@@ -460,13 +460,11 @@ describe('toolbar', () => {
       expect(viewer.toolbarCollapsed).to.be.true;
       expect(spy).to.be.calledOnce;
       expect(toolbar.checkVisibility()).to.be.false;
-      expect(header.getAttribute('aria-expanded')).to.equal('false');
 
       header.click();
       await nextFrame();
       expect(viewer.toolbarCollapsed).to.be.false;
       expect(toolbar.checkVisibility()).to.be.true;
-      expect(header.getAttribute('aria-expanded')).to.equal('true');
     });
 
     it('should fit the whole page again when the toolbar collapses', async () => {

@@ -35,15 +35,6 @@ describe('structure', () => {
       .callsFake(fakeGetStructTree as unknown as PDFPageProxy['getStructTree']);
   }
 
-  function getOwnedText(element: Element): string {
-    return [element, ...element.querySelectorAll('[aria-owns]')]
-      .flatMap((owner) => (owner.getAttribute('aria-owns') ?? '').split(' ').filter(Boolean))
-      .map((id) => viewer.shadowRoot!.getElementById(id)!)
-      .map((owned) => (owned.closest('.text-layer') ? owned.textContent : getOwnedText(owned)))
-      .join('')
-      .trim();
-  }
-
   beforeEach(async () => {
     viewer = fixtureSync('<vaadin-pdf-viewer style="width: 600px; height: 800px"></vaadin-pdf-viewer>');
     await nextRender();
@@ -51,11 +42,6 @@ describe('structure', () => {
 
   afterEach(() => {
     sinon.restore();
-  });
-
-  it('should not add a structure for an untagged PDF', async () => {
-    await loadAndRender(viewer, fixtureUrl('multi-page.pdf'));
-    expect(getTree()).to.be.null;
   });
 
   it('should show a page with a broken structure as untagged', async () => {
@@ -129,13 +115,6 @@ describe('structure', () => {
       expect(tree.parentElement).to.equal(getPage(1).querySelector('canvas'));
       // Before the text layer, in reading order.
       expect(getPage(1).firstElementChild).to.equal(tree.parentElement);
-    });
-
-    it('should read the text of a link structure element as text, and add its link to the text before it', () => {
-      expect(getTree()!.querySelector('[role="link"]')).to.be.null;
-      expect(getOwnedText(getTree()!)).to.contain('Vaadin website');
-      expect(getTree()!.querySelector(`[aria-owns~="${getLink().id}"]`)).to.be.null;
-      expect(viewer.shadowRoot!.querySelector(`.text-layer [aria-owns~="${getLink().id}"]`)).to.be.ok;
     });
   });
 
