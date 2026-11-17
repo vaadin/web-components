@@ -42,7 +42,8 @@ how to generate them.
 - A page that loses its canvas also frees the data that pdf.js keeps after rendering it, such as its
   decoded images, as in the pdf.js viewer.
 - When the device pixel ratio changes, the viewer renders the visible pages again at the new ratio.
-- `page` is read-only. A new `src` resets it to 1. The application goes to a page with `scrollToPage()`.
+- `page` is read-only. A new `src` resets it to 1. The application goes to a page with `scrollToPage()`,
+  which goes to the first or the last page for a page outside the document.
 - `page` follows the page with the largest part of it in view. A page taller than the view counts the part
   of the view that it fills instead. A page scrolled to stays current until the user scrolls.
 - On resize and zoom, the viewer keeps the same point of the current page at the top of the view.
@@ -76,8 +77,16 @@ how to generate them.
 - `PdfViewerLinksMixin` adds the links of each rendered page and follows internal links with `_scrollToPage()`.
 - After a page canvas renders, `PdfViewerRenderMixin` awaits `_renderPageLayers(page)`. Each override awaits
   `super` first, so the layers render in the order of the mixins: text and structure, then links.
-- The page view owns the DOM of a page: the canvas, the text layer, the structure and the link layer. Its methods
-  check after each await that the page still has the same canvas or text layer, so a released page gets no layers.
+- The page view owns the DOM of a page. A Lit template renders the canvas, the text layer and the link layer
+  in this order, as pdf.js does. Screen readers read the structure in the canvas first.
+  - `PdfViewerTextLayer` and `PdfViewerLinkLayer` render the content of their layer. The template of the page
+    view renders their elements.
+  - The layers can render in any order. One method of the page view connects them. It puts the structure in the
+    canvas and passes the links to the text layer, which adds them to its text.
+  - A release aborts the signal of the page. The page view checks it after each await, so a released page
+    gets no layers. The text layer also checks it before it loads the text.
+  - The render queue renders a page again only once its layers are done. One signal therefore covers the time
+    between two releases.
 - `PdfViewerKeyboardMixin` handles the keyboard shortcuts.
 - `PdfViewerToolbarMixin` renders the header and the toolbar. Its controls are in the light DOM, so a theme
   styles the page field like any other `vaadin-integer-field`. The `slotContent()` directive renders them, so
@@ -86,6 +95,10 @@ how to generate them.
     else `_getDocumentName()` of the document mixin, the name that downloads also use.
   - The controls call the methods of the inner mixins, for example `_scrollToPage()`, `_stepZoom()` and
     `download()`.
+  - Each icon button is a `vaadin-button` with the `tertiary icon` theme. Themes style it like any other
+    `vaadin-button`, so a theme needs no rules for a new tag name.
+  - The icon of a button is a `vaadin-pdf-viewer-icon` child. Its `icon` attribute selects the image, and its
+    shadow root lets a theme replace the image.
   - Each icon button is named after its tooltip text: its `vaadin-tooltip` has the `ariaLinkMode` property set to
     `aria-labelledby`. A new button needs the same, and no `aria-label`. Bind the property, not the
     `aria-link-mode` attribute: it is not a real ARIA attribute, so a11y checkers such as axe (`aria-valid-attr`)

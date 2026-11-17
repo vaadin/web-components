@@ -163,6 +163,24 @@ export async function failTextOnce(pageNumber: number, message = 'Broken text'):
 }
 
 /**
+ * Makes the links of the given page fail to load once, with the given message.
+ * `sinon.restore()` undoes it.
+ */
+export async function failLinksOnce(pageNumber: number, message = 'Broken links'): Promise<void> {
+  const prototype = await getPdfPagePrototype();
+  const getAnnotations = prototype.getAnnotations;
+  let failed = false;
+  function fakeGetAnnotations(this: PDFPageProxy, ...args: Parameters<PDFPageProxy['getAnnotations']>) {
+    if (this.pageNumber === pageNumber && !failed) {
+      failed = true;
+      return Promise.reject(new Error(message));
+    }
+    return getAnnotations.apply(this, args);
+  }
+  sinon.stub(prototype, 'getAnnotations').callsFake(fakeGetAnnotations);
+}
+
+/**
  * A page of a PDF created with `createPdf()`.
  */
 export type PdfPage = {

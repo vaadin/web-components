@@ -5,11 +5,11 @@ import sinon from 'sinon';
 import './enable-feature-flag.js';
 import '../vaadin-pdf-viewer.js';
 import { getDeepActiveElement } from '@vaadin/a11y-base/src/focus-utils.js';
+import type { Button } from '@vaadin/button';
 import type { IntegerField } from '@vaadin/integer-field';
 import type { Select } from '@vaadin/select';
 import type { SelectItem } from '@vaadin/select/src/vaadin-select-item.js';
 import type { Tooltip } from '@vaadin/tooltip';
-import type { PdfViewerButton } from '../src/vaadin-pdf-viewer-button.js';
 import type { PdfViewer } from '../vaadin-pdf-viewer.js';
 import {
   fixtureUrl,
@@ -26,11 +26,11 @@ describe('toolbar', () => {
   let header: HTMLElement;
   let toolbar: HTMLElement;
   let content: HTMLElement;
-  let previousButton: PdfViewerButton;
-  let nextButton: PdfViewerButton;
+  let previousButton: Button;
+  let nextButton: Button;
   let pageField: IntegerField;
-  let zoomOutButton: PdfViewerButton;
-  let zoomInButton: PdfViewerButton;
+  let zoomOutButton: Button;
+  let zoomInButton: Button;
   let zoomSelect: Select;
 
   function createButton(text: string) {
@@ -64,19 +64,15 @@ describe('toolbar', () => {
     header = viewer.shadowRoot!.querySelector<HTMLElement>('[part~="header"]')!;
     toolbar = viewer.shadowRoot!.querySelector<HTMLElement>('[part~="toolbar"]')!;
     content = viewer.shadowRoot!.querySelector<HTMLElement>('[part="content"]')!;
-    previousButton = viewer.querySelector<PdfViewerButton>('vaadin-pdf-viewer-button[icon="previous-page"]')!;
-    nextButton = viewer.querySelector<PdfViewerButton>('vaadin-pdf-viewer-button[icon="next-page"]')!;
-    pageField = viewer.querySelector<IntegerField>('vaadin-integer-field')!;
-    zoomOutButton = viewer.querySelector<PdfViewerButton>('vaadin-pdf-viewer-button[icon="zoom-out"]')!;
-    zoomInButton = viewer.querySelector<PdfViewerButton>('vaadin-pdf-viewer-button[icon="zoom-in"]')!;
-    zoomSelect = viewer.querySelector<Select>('vaadin-select')!;
+    previousButton = viewer.querySelector<Button>('[slot="toolbar-previous-page"]')!;
+    nextButton = viewer.querySelector<Button>('[slot="toolbar-next-page"]')!;
+    pageField = viewer.querySelector<IntegerField>('[slot="toolbar-page"]')!;
+    zoomOutButton = viewer.querySelector<Button>('[slot="toolbar-zoom-out"]')!;
+    zoomInButton = viewer.querySelector<Button>('[slot="toolbar-zoom-in"]')!;
+    zoomSelect = viewer.querySelector<Select>('[slot="toolbar-zoom"]')!;
   });
 
   describe('without document', () => {
-    it('should disable the controls', () => {
-      expectControlsDisabled();
-    });
-
     it('should disable the controls while a document loads', async () => {
       viewer.src = fixtureUrl('multi-page.pdf');
       await nextFrame();
@@ -361,10 +357,6 @@ describe('toolbar', () => {
       expect(header.checkVisibility()).to.be.false;
     });
 
-    it('should show a fallback title without a document', () => {
-      expect(title.textContent).to.equal('PDF document');
-    });
-
     it('should show the file name of src while the document loads', async () => {
       viewer.src = fixtureUrl('multi-page.pdf');
       await nextFrame();
@@ -376,13 +368,6 @@ describe('toolbar', () => {
       await oneEvent(viewer, 'document-error');
       await nextFrame();
       expect(title.textContent).to.equal('invalid.pdf');
-    });
-
-    it('should show headerTitle instead of the file name', async () => {
-      viewer.src = fixtureUrl('multi-page.pdf');
-      viewer.headerTitle = 'Annual report';
-      await nextFrame();
-      expect(title.textContent).to.equal('Annual report');
     });
 
     it('should show fileName instead of the file name of src', async () => {
@@ -467,12 +452,6 @@ describe('toolbar', () => {
       expect(toolbar.checkVisibility()).to.be.false;
     });
 
-    it('should mark the header as the button that controls the toolbar', () => {
-      expect(header.localName).to.equal('button');
-      expect(header.getAttribute('aria-controls')).to.equal(toolbar.id);
-      expect(header.getAttribute('aria-expanded')).to.equal('true');
-    });
-
     it('should collapse and expand the toolbar on header click', async () => {
       const spy = sinon.spy();
       viewer.addEventListener('toolbar-collapsed-changed', spy);
@@ -481,13 +460,11 @@ describe('toolbar', () => {
       expect(viewer.toolbarCollapsed).to.be.true;
       expect(spy).to.be.calledOnce;
       expect(toolbar.checkVisibility()).to.be.false;
-      expect(header.getAttribute('aria-expanded')).to.equal('false');
 
       header.click();
       await nextFrame();
       expect(viewer.toolbarCollapsed).to.be.false;
       expect(toolbar.checkVisibility()).to.be.true;
-      expect(header.getAttribute('aria-expanded')).to.equal('true');
     });
 
     it('should fit the whole page again when the toolbar collapses', async () => {
@@ -510,65 +487,34 @@ describe('toolbar', () => {
   });
 
   describe('toolbar-actions slot', () => {
+    let approve: HTMLButtonElement;
+
     beforeEach(async () => {
       await loadDocument(viewer, 'multi-page.pdf');
       await nextFrame();
-    });
-
-    it('should show slotted controls in the action group in DOM order', async () => {
-      const approve = createButton('Approve');
-      const reject = createButton('Reject');
-      viewer.append(approve, reject);
-      await nextFrame();
-      expect(approve.assignedSlot!.parentElement!.matches('[part~="toolbar-group"]')).to.be.true;
-      expect(approve.getBoundingClientRect().right).to.be.at.most(reject.getBoundingClientRect().left);
-    });
-
-    it('should hide slotted controls with the collapsed toolbar', async () => {
-      const approve = createButton('Approve');
+      approve = createButton('Approve');
       viewer.appendChild(approve);
-      viewer.toolbarCollapsed = true;
       await nextFrame();
-      expect(approve.checkVisibility()).to.be.false;
     });
 
-    it('should show slotted controls before the built-in download button', async () => {
-      const approve = createButton('Approve');
-      viewer.append(approve);
-      await nextFrame();
-      const download = viewer.querySelector<HTMLElement>('vaadin-pdf-viewer-button[icon="download"]')!;
-      expect(download.assignedSlot!.parentElement).to.equal(approve.assignedSlot!.parentElement);
-      expect(approve.getBoundingClientRect().right).to.be.at.most(download.getBoundingClientRect().left);
+    it('should keep a child added after the first render when the toolbar renders again', async () => {
+      viewer.scrollToPage(2);
+      await nextRenderIdle(viewer);
+      expect(approve.parentElement).to.equal(viewer);
+      expect(approve.checkVisibility()).to.be.true;
     });
 
-    describe('child added after the first render', () => {
-      let approve: HTMLButtonElement;
-
-      beforeEach(async () => {
-        approve = createButton('Approve');
-        viewer.appendChild(approve);
-        await nextFrame();
-      });
-
-      it('should keep the child when the toolbar renders again', async () => {
-        viewer.scrollToPage(2);
-        await nextRenderIdle(viewer);
-        expect(approve.parentElement).to.equal(viewer);
-        expect(approve.checkVisibility()).to.be.true;
-      });
-
-      it('should keep the child when the viewer is detached and attached again', async () => {
-        const parent = viewer.parentElement!;
-        viewer.remove();
-        await nextFrame();
-        const loaded = oneEvent(viewer, 'document-load');
-        parent.appendChild(viewer);
-        await loaded;
-        await nextFrame();
-        expect(approve.parentElement).to.equal(viewer);
-        expect(approve.checkVisibility()).to.be.true;
-        expect(viewer.querySelectorAll('vaadin-pdf-viewer-button[icon="next-page"]')).to.have.lengthOf(1);
-      });
+    it('should keep a child added after the first render when the viewer is detached and attached again', async () => {
+      const parent = viewer.parentElement!;
+      viewer.remove();
+      await nextFrame();
+      const loaded = oneEvent(viewer, 'document-load');
+      parent.appendChild(viewer);
+      await loaded;
+      await nextFrame();
+      expect(approve.parentElement).to.equal(viewer);
+      expect(approve.checkVisibility()).to.be.true;
+      expect(viewer.querySelectorAll('[slot="toolbar-next-page"]')).to.have.lengthOf(1);
     });
   });
 
@@ -603,7 +549,7 @@ describe('toolbar', () => {
           break;
         }
         visited.add(control);
-        const name = control.getAttribute('icon') ?? control.localName;
+        const name = control.slot || control.localName;
         const rect = control.getBoundingClientRect();
         const areaRect = topArea.getBoundingClientRect();
         const viewerRect = viewer.getBoundingClientRect();

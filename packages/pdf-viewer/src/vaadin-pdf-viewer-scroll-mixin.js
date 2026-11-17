@@ -8,7 +8,6 @@
  * See https://vaadin.com/commercial-license-and-service-terms for the full
  * license.
  */
-import { issueWarning } from '@vaadin/component-base/src/warnings.js';
 import {
   getAnchor,
   getAnchorScrollLeftDelta,
@@ -138,9 +137,8 @@ export const PdfViewerScrollMixin = (superClass) =>
     }
 
     /**
-     * Scrolls to the start of the given page and makes it the current page,
-     * also when it is the current page already. A value that is not a page
-     * of the document logs a warning and does not scroll.
+     * Scrolls to the start of the given page. A value below 1 scrolls to the
+     * first page, and a value above the page count scrolls to the last page.
      *
      * Right after setting `src`, it scrolls once the document has loaded, and
      * in a hidden viewer, once the viewer is shown. Does nothing without a
@@ -150,7 +148,7 @@ export const PdfViewerScrollMixin = (superClass) =>
     scrollToPage(page) {
       this._whenDocumentReady().then((pdfDocument) => {
         if (pdfDocument) {
-          this._scrollToPage(page);
+          this._scrollToPage(Math.min(Math.max(page, 1), pdfDocument.numPages));
         }
       });
     }
@@ -173,15 +171,6 @@ export const PdfViewerScrollMixin = (superClass) =>
         return;
       }
       this.#pendingPage = 0;
-
-      if (!Number.isInteger(page) || page < 1 || page > this.__pages.length) {
-        issueWarning(
-          `The page ${page} is out of range for <vaadin-pdf-viewer>, the document has ${this.__pages.length} pages.`,
-        );
-        // The visible pages may not be rendered yet when the page was pending.
-        this.#updateVisiblePages();
-        return;
-      }
 
       const { content } = this.$;
       const pageView = this.__pages[page - 1];

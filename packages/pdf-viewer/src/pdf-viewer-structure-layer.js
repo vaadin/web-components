@@ -149,7 +149,7 @@ export class PdfViewerStructureLayer {
    * Makes the structure own the text elements in marked content, as Chrome ignores `aria-owns` of `display: contents`.
    * @param {HTMLElement} textLayerElement
    */
-  updateTextLayer(textLayerElement) {
+  bindText(textLayerElement) {
     const owners = [...this.element.querySelectorAll('[aria-owns]')];
     const contentIds = new Set(
       owners.map((owner) => owner.getAttribute('aria-owns')).filter((id) => CONTENT_ID_PATTERN.test(id)),

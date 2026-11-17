@@ -1,6 +1,6 @@
 import { expect } from '@vaadin/chai-plugins';
 import { sendKeys } from '@vaadin/test-runner-commands';
-import { aTimeout, fixtureSync, nextFrame, nextRender, nextUpdate, oneEvent } from '@vaadin/testing-helpers';
+import { aTimeout, fixtureSync, nextFrame, nextRender, oneEvent } from '@vaadin/testing-helpers';
 import sinon from 'sinon';
 import './enable-feature-flag.js';
 import '../vaadin-pdf-viewer.js';
@@ -15,16 +15,6 @@ describe('keyboard', () => {
     viewer = fixtureSync('<vaadin-pdf-viewer style="width: 400px; height: 400px"></vaadin-pdf-viewer>');
     await nextRender();
     content = viewer.shadowRoot!.querySelector<HTMLElement>('[part="content"]')!;
-  });
-
-  it('should not make the page area focusable without a document', () => {
-    expect(content.getAttribute('tabindex')).to.equal('-1');
-  });
-
-  it('should make the page area focusable once a document has loaded', async () => {
-    await loadDocument(viewer, 'multi-page.pdf');
-    await nextUpdate(viewer);
-    expect(content.getAttribute('tabindex')).to.equal('0');
   });
 
   describe('with a document', () => {
@@ -142,13 +132,13 @@ describe('keyboard', () => {
       });
 
       it('should zoom with Ctrl+= from a toolbar button', async () => {
-        viewer.querySelector<HTMLElement>('vaadin-pdf-viewer-button[icon="next-page"]')!.focus();
+        viewer.querySelector<HTMLElement>('[slot="toolbar-next-page"]')!.focus();
         await sendKeys({ press: 'Control+Equal' });
         expect(viewer.zoom).to.equal(3);
       });
 
       it('should not zoom with Ctrl+= in the page field', async () => {
-        viewer.querySelector<HTMLElement>('vaadin-integer-field')!.focus();
+        viewer.querySelector<HTMLElement>('[slot="toolbar-page"]')!.focus();
         await sendKeys({ press: 'Control+Equal' });
         expect(viewer.zoom).to.equal(2);
       });

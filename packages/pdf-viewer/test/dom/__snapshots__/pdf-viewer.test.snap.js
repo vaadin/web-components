@@ -3,38 +3,38 @@ export const snapshots = {};
 
 snapshots["vaadin-pdf-viewer host default"] = 
 `<vaadin-pdf-viewer>
-  <vaadin-pdf-viewer-button
+  <vaadin-button
     aria-disabled="true"
     aria-labelledby="vaadin-tooltip-0"
     disabled=""
     has-tooltip=""
-    icon="previous-page"
     role="button"
-    slot="toolbar-navigation"
-    style="--_vaadin-button-disabled-pointer-events: auto;"
-    tabindex="0"
+    slot="toolbar-previous-page"
+    tabindex="-1"
     theme="tertiary icon"
   >
-  </vaadin-pdf-viewer-button>
-  <vaadin-pdf-viewer-button
+    <vaadin-pdf-viewer-icon icon="previous-page">
+    </vaadin-pdf-viewer-icon>
+  </vaadin-button>
+  <vaadin-button
     aria-disabled="true"
     aria-labelledby="vaadin-tooltip-1"
     disabled=""
     has-tooltip=""
-    icon="next-page"
     role="button"
-    slot="toolbar-navigation"
-    style="--_vaadin-button-disabled-pointer-events: auto;"
-    tabindex="0"
+    slot="toolbar-next-page"
+    tabindex="-1"
     theme="tertiary icon"
   >
-  </vaadin-pdf-viewer-button>
+    <vaadin-pdf-viewer-icon icon="next-page">
+    </vaadin-pdf-viewer-icon>
+  </vaadin-button>
   <vaadin-integer-field
     aria-disabled="true"
     disabled=""
     max="1"
     min="1"
-    slot="toolbar-navigation"
+    slot="toolbar-page"
     style="--_page-digits:1;"
     theme="align-right"
   >
@@ -63,19 +63,19 @@ snapshots["vaadin-pdf-viewer host default"] =
       type="number"
     >
   </vaadin-integer-field>
-  <vaadin-pdf-viewer-button
+  <vaadin-button
     aria-disabled="true"
     aria-labelledby="vaadin-tooltip-6"
     disabled=""
     has-tooltip=""
-    icon="zoom-out"
     role="button"
-    slot="toolbar-zoom"
-    style="--_vaadin-button-disabled-pointer-events: auto;"
-    tabindex="0"
+    slot="toolbar-zoom-out"
+    tabindex="-1"
     theme="tertiary icon"
   >
-  </vaadin-pdf-viewer-button>
+    <vaadin-pdf-viewer-icon icon="zoom-out">
+    </vaadin-pdf-viewer-icon>
+  </vaadin-button>
   <vaadin-select
     aria-disabled="true"
     disabled=""
@@ -84,67 +84,67 @@ snapshots["vaadin-pdf-viewer host default"] =
     theme="align-center"
   >
   </vaadin-select>
-  <vaadin-pdf-viewer-button
+  <vaadin-button
     aria-disabled="true"
-    aria-labelledby="vaadin-tooltip-10"
+    aria-labelledby="vaadin-tooltip-11"
     disabled=""
     has-tooltip=""
-    icon="zoom-in"
     role="button"
-    slot="toolbar-zoom"
-    style="--_vaadin-button-disabled-pointer-events: auto;"
-    tabindex="0"
+    slot="toolbar-zoom-in"
+    tabindex="-1"
     theme="tertiary icon"
   >
-  </vaadin-pdf-viewer-button>
-  <vaadin-pdf-viewer-button
+    <vaadin-pdf-viewer-icon icon="zoom-in">
+    </vaadin-pdf-viewer-icon>
+  </vaadin-button>
+  <vaadin-button
     aria-disabled="true"
     aria-labelledby="vaadin-tooltip-12"
     disabled=""
     has-tooltip=""
-    icon="download"
     role="button"
     slot="toolbar-download"
-    style="--_vaadin-button-disabled-pointer-events: auto;"
-    tabindex="0"
+    tabindex="-1"
     theme="tertiary icon"
   >
-  </vaadin-pdf-viewer-button>
+    <vaadin-pdf-viewer-icon icon="download">
+    </vaadin-pdf-viewer-icon>
+  </vaadin-button>
 </vaadin-pdf-viewer>
 `;
 /* end snapshot vaadin-pdf-viewer host default */
 
 snapshots["vaadin-pdf-viewer host document"] = 
 `<vaadin-pdf-viewer>
-  <vaadin-pdf-viewer-button
+  <vaadin-button
     aria-disabled="true"
     aria-labelledby="vaadin-tooltip-0"
     disabled=""
     has-tooltip=""
-    icon="previous-page"
     role="button"
-    slot="toolbar-navigation"
-    style="--_vaadin-button-disabled-pointer-events: auto;"
-    tabindex="0"
+    slot="toolbar-previous-page"
+    tabindex="-1"
     theme="tertiary icon"
   >
-  </vaadin-pdf-viewer-button>
-  <vaadin-pdf-viewer-button
+    <vaadin-pdf-viewer-icon icon="previous-page">
+    </vaadin-pdf-viewer-icon>
+  </vaadin-button>
+  <vaadin-button
     aria-labelledby="vaadin-tooltip-1"
     has-tooltip=""
-    icon="next-page"
     role="button"
-    slot="toolbar-navigation"
-    style="--_vaadin-button-disabled-pointer-events: auto;"
+    slot="toolbar-next-page"
     tabindex="0"
     theme="tertiary icon"
   >
-  </vaadin-pdf-viewer-button>
+    <vaadin-pdf-viewer-icon icon="next-page">
+    </vaadin-pdf-viewer-icon>
+  </vaadin-button>
   <vaadin-integer-field
     has-value=""
     max="6"
     min="1"
-    slot="toolbar-navigation"
+    slot="toolbar-page"
     style="--_page-digits:1;"
     theme="align-right"
   >
@@ -174,45 +174,45 @@ snapshots["vaadin-pdf-viewer host document"] =
       type="number"
     >
   </vaadin-integer-field>
-  <vaadin-pdf-viewer-button
+  <vaadin-button
     aria-labelledby="vaadin-tooltip-6"
     has-tooltip=""
-    icon="zoom-out"
     role="button"
-    slot="toolbar-zoom"
-    style="--_vaadin-button-disabled-pointer-events: auto;"
+    slot="toolbar-zoom-out"
     tabindex="0"
     theme="tertiary icon"
   >
-  </vaadin-pdf-viewer-button>
+    <vaadin-pdf-viewer-icon icon="zoom-out">
+    </vaadin-pdf-viewer-icon>
+  </vaadin-button>
   <vaadin-select
     has-value=""
     slot="toolbar-zoom"
     theme="align-center"
   >
   </vaadin-select>
-  <vaadin-pdf-viewer-button
-    aria-labelledby="vaadin-tooltip-10"
+  <vaadin-button
+    aria-labelledby="vaadin-tooltip-11"
     has-tooltip=""
-    icon="zoom-in"
     role="button"
-    slot="toolbar-zoom"
-    style="--_vaadin-button-disabled-pointer-events: auto;"
+    slot="toolbar-zoom-in"
     tabindex="0"
     theme="tertiary icon"
   >
-  </vaadin-pdf-viewer-button>
-  <vaadin-pdf-viewer-button
+    <vaadin-pdf-viewer-icon icon="zoom-in">
+    </vaadin-pdf-viewer-icon>
+  </vaadin-button>
+  <vaadin-button
     aria-labelledby="vaadin-tooltip-12"
     has-tooltip=""
-    icon="download"
     role="button"
     slot="toolbar-download"
-    style="--_vaadin-button-disabled-pointer-events: auto;"
     tabindex="0"
     theme="tertiary icon"
   >
-  </vaadin-pdf-viewer-button>
+    <vaadin-pdf-viewer-icon icon="download">
+    </vaadin-pdf-viewer-icon>
+  </vaadin-button>
 </vaadin-pdf-viewer>
 `;
 /* end snapshot vaadin-pdf-viewer host document */
@@ -240,11 +240,19 @@ snapshots["vaadin-pdf-viewer shadow default"] =
     part="toolbar"
   >
     <div part="toolbar-group">
-      <slot name="toolbar-navigation">
+      <slot name="toolbar-previous-page">
+      </slot>
+      <slot name="toolbar-next-page">
+      </slot>
+      <slot name="toolbar-page">
       </slot>
     </div>
     <div part="toolbar-group">
+      <slot name="toolbar-zoom-out">
+      </slot>
       <slot name="toolbar-zoom">
+      </slot>
+      <slot name="toolbar-zoom-in">
       </slot>
     </div>
     <div part="toolbar-group">
@@ -300,11 +308,19 @@ snapshots["vaadin-pdf-viewer shadow document"] =
     part="toolbar"
   >
     <div part="toolbar-group">
-      <slot name="toolbar-navigation">
+      <slot name="toolbar-previous-page">
+      </slot>
+      <slot name="toolbar-next-page">
+      </slot>
+      <slot name="toolbar-page">
       </slot>
     </div>
     <div part="toolbar-group">
+      <slot name="toolbar-zoom-out">
+      </slot>
       <slot name="toolbar-zoom">
+      </slot>
+      <slot name="toolbar-zoom-in">
       </slot>
     </div>
     <div part="toolbar-group">
@@ -482,11 +498,19 @@ snapshots["vaadin-pdf-viewer shadow header title"] =
     part="toolbar"
   >
     <div part="toolbar-group">
-      <slot name="toolbar-navigation">
+      <slot name="toolbar-previous-page">
+      </slot>
+      <slot name="toolbar-next-page">
+      </slot>
+      <slot name="toolbar-page">
       </slot>
     </div>
     <div part="toolbar-group">
+      <slot name="toolbar-zoom-out">
+      </slot>
       <slot name="toolbar-zoom">
+      </slot>
+      <slot name="toolbar-zoom-in">
       </slot>
     </div>
     <div part="toolbar-group">
@@ -665,11 +689,19 @@ snapshots["vaadin-pdf-viewer shadow header hidden"] =
     part="toolbar"
   >
     <div part="toolbar-group">
-      <slot name="toolbar-navigation">
+      <slot name="toolbar-previous-page">
+      </slot>
+      <slot name="toolbar-next-page">
+      </slot>
+      <slot name="toolbar-page">
       </slot>
     </div>
     <div part="toolbar-group">
+      <slot name="toolbar-zoom-out">
+      </slot>
       <slot name="toolbar-zoom">
+      </slot>
+      <slot name="toolbar-zoom-in">
       </slot>
     </div>
     <div part="toolbar-group">
@@ -848,11 +880,19 @@ snapshots["vaadin-pdf-viewer shadow toolbar collapsed"] =
     part="toolbar"
   >
     <div part="toolbar-group">
-      <slot name="toolbar-navigation">
+      <slot name="toolbar-previous-page">
+      </slot>
+      <slot name="toolbar-next-page">
+      </slot>
+      <slot name="toolbar-page">
       </slot>
     </div>
     <div part="toolbar-group">
+      <slot name="toolbar-zoom-out">
+      </slot>
       <slot name="toolbar-zoom">
+      </slot>
+      <slot name="toolbar-zoom-in">
       </slot>
     </div>
     <div part="toolbar-group">

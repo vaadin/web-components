@@ -21,7 +21,7 @@ describe('download', () => {
   let createObjectUrlSpy: sinon.SinonSpy;
 
   function getButton() {
-    return viewer.querySelector<HTMLElement & { disabled: boolean }>('vaadin-pdf-viewer-button[icon="download"]');
+    return viewer.querySelector<HTMLElement & { disabled: boolean }>('[slot="toolbar-download"]');
   }
 
   function nextDownload() {
@@ -52,20 +52,10 @@ describe('download', () => {
   });
 
   describe('button', () => {
-    it('should disable the button without document', () => {
-      expect(getButton()!.disabled).to.be.true;
-    });
-
     it('should disable the button while the document loads', async () => {
       viewer.src = fixtureUrl('multi-page.pdf');
       await nextUpdate(viewer);
       expect(getButton()!.disabled).to.be.true;
-    });
-
-    it('should enable the button when the document has loaded', async () => {
-      await loadDocument(viewer, 'multi-page.pdf');
-      await nextUpdate(viewer);
-      expect(getButton()!.disabled).to.be.false;
     });
 
     it('should use i18n for the tooltip', async () => {

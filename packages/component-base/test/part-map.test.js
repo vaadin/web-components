@@ -40,6 +40,12 @@ describe('partMap', () => {
       expect([...element.part]).to.have.members(['bar']);
     });
 
+    it('should remove omitted part names that match inherited object properties', () => {
+      element = renderPart({ constructor: true, toString: true, bar: true });
+      renderPart({ bar: true });
+      expect([...element.part]).to.have.members(['bar']);
+    });
+
     it('should add part names whose values become truthy', () => {
       element = renderPart({ foo: false });
       renderPart({ foo: true });

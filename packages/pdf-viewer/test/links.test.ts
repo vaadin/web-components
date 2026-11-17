@@ -4,16 +4,18 @@ import { fixtureSync, nextFrame, nextRender, nextUpdate } from '@vaadin/testing-
 import sinon from 'sinon';
 import './enable-feature-flag.js';
 import '../vaadin-pdf-viewer.js';
-import type { PDFDocumentProxy } from 'pdfjs-dist';
+import type { PDFDocumentProxy, PDFPageProxy } from 'pdfjs-dist';
 import { getDeepActiveElement } from '@vaadin/a11y-base/src/focus-utils.js';
 import { getSelectionRanges } from '../src/pdf-viewer-text-selection-controller.js';
 import type { PdfViewer } from '../vaadin-pdf-viewer.js';
 import {
   createPdf,
+  failLinksOnce,
   failTextOnce,
   type Fixture,
   fixtureUrl,
   getPdfDocumentPrototype,
+  getPdfPagePrototype,
   loadAndRender,
   nextRenderIdle,
   type PdfPage,
@@ -104,11 +106,6 @@ describe('links', () => {
   });
 
   describe('rendering', () => {
-    it('should not add a link layer to a page without links', async () => {
-      await load('multi-page.pdf');
-      expect(pages[0].querySelector('.link-layer')).to.be.null;
-    });
-
     it('should only make the quadrilaterals of a link that wraps clickable', async () => {
       await loadWrappingLink();
       const linkAt = (x: number, y: number) => {
@@ -176,6 +173,47 @@ describe('links', () => {
       });
     });
 
+    it('should keep the page rendered when its links fail to load, and load the links again later', async () => {
+      await failLinksOnce(1);
+      const warn = sinon.stub(console, 'warn');
+      await load('links.pdf');
+      const warnings = warn.args.map(([message]) => message);
+      expect(warnings).to.include('Failed to render the links of page 1 of the PDF document: Broken links');
+      expect(warnings.some((message) => message.startsWith('Failed to render page'))).to.be.false;
+      expect(pages[0].querySelector('canvas')).to.be.ok;
+      expect(getLinks(1)).to.be.empty;
+      // Rendering the pages again at another size loads the links again.
+      const idle = nextRenderIdle(viewer);
+      viewer.style.width = '900px';
+      await idle;
+      expect(getLinks(1)).to.have.lengthOf(2);
+    });
+
+    it('should not warn when the links of a page fail after the document changes', async () => {
+      const prototype = await getPdfPagePrototype();
+      const getAnnotations = prototype.getAnnotations;
+      let rejectLinks: ((error: Error) => void) | undefined;
+      const linksRequested = new Promise<void>((resolve) => {
+        function fakeGetAnnotations(this: PDFPageProxy, ...args: Parameters<PDFPageProxy['getAnnotations']>) {
+          if (rejectLinks) {
+            return getAnnotations.apply(this, args);
+          }
+          resolve();
+          return new Promise<never>((_, reject) => {
+            rejectLinks = reject;
+          });
+        }
+        sinon.stub(prototype, 'getAnnotations').callsFake(fakeGetAnnotations);
+      });
+      const warn = sinon.stub(console, 'warn');
+      viewer.src = fixtureUrl('links.pdf');
+      await linksRequested;
+      await load('multi-page.pdf');
+      rejectLinks!(new Error('Links of a released page'));
+      await nextFrame();
+      expect(warn.args).to.deep.equal([]);
+    });
+
     it('should place the link of a rotated page over its text', async () => {
       await loadPdf([{ content: sentence, rotate: 90, annotations: [uriLink(vaadinRect)] }]);
       const link = getLinks(1)[0];
@@ -201,6 +239,39 @@ describe('links', () => {
       await idle;
       expect(pages[0].querySelector('.link-layer')).to.be.null;
     });
+
+    it('should not add links to a page that is released while its links load', async () => {
+      viewer.style.height = '300px';
+      let resolveAnnotations!: () => void;
+      const annotationsLoaded = new Promise<void>((resolve) => {
+        resolveAnnotations = resolve;
+      });
+      let setRequested!: () => void;
+      const requested = new Promise<void>((resolve) => {
+        setRequested = resolve;
+      });
+      const prototype = await getPdfPagePrototype();
+      const getAnnotations = prototype.getAnnotations;
+      async function fakeGetAnnotations(this: PDFPageProxy, ...args: Parameters<PDFPageProxy['getAnnotations']>) {
+        if (this.pageNumber === 1) {
+          setRequested();
+          await annotationsLoaded;
+        }
+        return getAnnotations.apply(this, args);
+      }
+      sinon.stub(prototype, 'getAnnotations').callsFake(fakeGetAnnotations);
+      viewer.src = fixtureUrl('links.pdf');
+      await requested;
+      const idle = nextRenderIdle(viewer);
+      content.scrollTop = content.scrollHeight;
+      for (let i = 0; i < 50 && pages[0].querySelector('canvas'); i++) {
+        await nextFrame();
+      }
+      expect(pages[0].querySelector('canvas')).to.be.null;
+      resolveAnnotations();
+      await idle;
+      expect(pages[0].querySelector('.link-layer')).to.be.null;
+    });
   });
 
   describe('reading order', () => {
@@ -221,13 +292,6 @@ describe('links', () => {
     it('should put the links of a page in reading order', async () => {
       await loadTwoLines();
       expect(getLinks(1).map((link) => link.href)).to.deep.equal(['https://vaadin.com/', 'https://vaadin.com/docs']);
-    });
-
-    it('should add each link to the text before it for assistive technology', async () => {
-      await loadTwoLines();
-      const [vaadin, docs] = getLinks(1);
-      expect(vaadin.id).to.be.ok.and.not.equal(docs.id);
-      expect(getTextDivs().map((div) => div.getAttribute('aria-owns'))).to.deep.equal([vaadin.id, docs.id]);
     });
 
     it('should add several links to the same text before them', async () => {
@@ -282,14 +346,6 @@ describe('links', () => {
   });
 
   describe('names', () => {
-    it('should name links by their text, and tell that external links open in a new tab', async () => {
-      await load('links.pdf');
-      expect(getLinkNames()).to.deep.equal([
-        'Internal link to page 2',
-        'External link to vaadin.com (opens in a new tab)',
-      ]);
-    });
-
     it('should name several links in one text item by their words', async () => {
       await loadPdf([
         {

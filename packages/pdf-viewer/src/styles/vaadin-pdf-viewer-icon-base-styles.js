@@ -11,12 +11,8 @@
 import '@vaadin/component-base/src/styles/style-props.js';
 import { css } from 'lit';
 
-export const pdfViewerButtonStyles = css`
+export const pdfViewerIconStyles = css`
   :host {
-    padding: var(--vaadin-button-padding, var(--vaadin-padding-block-container));
-  }
-
-  [part~='icon'] {
     display: block;
     width: var(--vaadin-icon-size, 1lh);
     height: var(--vaadin-icon-size, 1lh);
@@ -26,9 +22,6 @@ export const pdfViewerButtonStyles = css`
 
   :host([icon='previous-page']) {
     --_icon: var(--_vaadin-icon-chevron-down);
-  }
-
-  :host([icon='previous-page']) [part~='icon'] {
     scale: 1 -1;
   }
 
@@ -49,12 +42,8 @@ export const pdfViewerButtonStyles = css`
   }
 
   @media (forced-colors: active) {
-    [part~='icon'] {
+    :host {
       background: CanvasText;
-    }
-
-    :host([disabled]) [part~='icon'] {
-      background: GrayText;
     }
   }
 `;
