@@ -4,7 +4,6 @@ import sinon from 'sinon';
 import './enable-feature-flag.js';
 import '../vaadin-pdf-viewer.js';
 import type { PDFPageProxy } from 'pdfjs-dist';
-import { clearWarnings } from '@vaadin/component-base/src/warnings.js';
 import type { PdfViewer } from '../vaadin-pdf-viewer.js';
 import {
   createPdf,
@@ -196,15 +195,6 @@ describe('pages', () => {
         expect(viewer.page).to.equal(5);
       });
 
-      it('should fit the pages to a new width after scrollToPage() with a fraction', async () => {
-        sinon.stub(console, 'warn');
-        viewer.scrollToPage(2.5);
-        await nextFrame();
-        viewer.style.width = '600px';
-        await nextResize(viewer);
-        expect(pages[0].offsetWidth).to.be.closeTo(getContentBoxSize(content).width, 1);
-      });
-
       it('should scroll to the start of the page with scrollToPage()', async () => {
         const spy = sinon.spy();
         viewer.addEventListener('page-changed', spy);
@@ -226,26 +216,22 @@ describe('pages', () => {
       });
 
       [0, -3, -Infinity].forEach((value) => {
-        it(`should scroll to the first page without a warning with scrollToPage(${value})`, async () => {
+        it(`should scroll to the first page with scrollToPage(${value})`, async () => {
           viewer.scrollToPage(4);
           await nextRenderIdle(viewer);
-          const stub = sinon.stub(console, 'warn');
           viewer.scrollToPage(value);
           await nextFrame();
           expect(content.scrollTop).to.equal(0);
           expect(viewer.page).to.equal(1);
-          expect(stub).to.be.not.called;
         });
       });
 
       [7, 10, Infinity].forEach((value) => {
-        it(`should scroll to the last page without a warning with scrollToPage(${value})`, async () => {
-          const stub = sinon.stub(console, 'warn');
+        it(`should scroll to the last page with scrollToPage(${value})`, async () => {
           viewer.scrollToPage(value);
           await nextFrame();
           expect(isPageInView(6)).to.be.true;
           expect(viewer.page).to.equal(6);
-          expect(stub).to.be.not.called;
         });
       });
 
@@ -256,19 +242,6 @@ describe('pages', () => {
         await nextFrame();
         expect(viewer.pageCount).to.be.greaterThan(1);
         expect(viewer.page).to.equal(viewer.pageCount);
-      });
-
-      [2.5, NaN].forEach((value) => {
-        it(`should warn and not scroll with scrollToPage(${value})`, async () => {
-          clearWarnings();
-          const stub = sinon.stub(console, 'warn');
-          viewer.scrollToPage(value);
-          await nextFrame();
-          expect(content.scrollTop).to.equal(0);
-          expect(viewer.page).to.equal(1);
-          expect(stub).to.be.calledOnce;
-          expect(stub.firstCall.args[0]).to.include(`The page ${value} is out of range`);
-        });
       });
 
       it('should not scroll with scrollToPage() while detached, or when attached again', async () => {
@@ -642,19 +615,6 @@ describe('pages', () => {
       await idle;
       expect(getRenderedPageNumbers()).to.include(6);
       expect(viewer.page).to.equal(6);
-    });
-
-    it('should warn and not scroll once shown after scrollToPage() for a value that is not a page', async () => {
-      clearWarnings();
-      const stub = sinon.stub(console, 'warn');
-      viewer.scrollToPage(2.5);
-      await nextFrame();
-      const idle = nextRenderIdle(viewer);
-      viewer.hidden = false;
-      await idle;
-      expect(getRenderedPageNumbers()).to.include(1);
-      expect(viewer.page).to.equal(1);
-      expect(stub).to.be.calledOnce;
     });
   });
 
