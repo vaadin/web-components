@@ -8,10 +8,10 @@
  * See https://vaadin.com/commercial-license-and-service-terms for the full
  * license.
  */
-import { createLink } from './pdf-viewer-links.js';
+import { html, nothing, render } from 'lit';
+import { PdfViewerLinkLayer } from './pdf-viewer-link-layer.js';
 import { PdfViewerStructureLayer } from './pdf-viewer-structure-layer.js';
-import { addLinksToText, ANNOTATION_ID_PREFIX, compareAnnotationPositions } from './pdf-viewer-text-accessibility.js';
-import { loadPdfjs } from './pdfjs-loader.js';
+import { PdfViewerTextLayer } from './pdf-viewer-text-layer.js';
 
 /**
  * The maximum number of pixels of a page canvas. Larger canvases use too much
@@ -20,55 +20,13 @@ import { loadPdfjs } from './pdfjs-loader.js';
 export const MAX_CANVAS_PIXELS = 2 ** 24;
 
 /**
- * Limits the clickable area of a link to the quadrilaterals of its annotation,
- * such as the words of a link that wraps to the next line, as pdf.js does.
- * A link whose only quadrilateral is its rectangle gets no areas.
- *
- * @param {HTMLAnchorElement} link
- * @param {{ rect: number[], quadPoints?: ArrayLike<number> | null }} annotation
- */
-function addLinkAreas(link, { rect: [left, bottom, right, top], quadPoints }) {
-  if (!quadPoints?.length) {
-    return;
-  }
-  const width = right - left;
-  const height = top - bottom;
-  const areas = [];
-  // pdf.js orders the corners of each quadrilateral as top left, top right, bottom left, bottom right.
-  for (let i = 0; i < quadPoints.length; i += 8) {
-    const [areaLeft, areaTop, areaRight] = [quadPoints[i], quadPoints[i + 1], quadPoints[i + 2]];
-    const areaBottom = quadPoints[i + 5];
-    areas.push([
-      (areaLeft - left) / width,
-      (top - areaTop) / height,
-      (areaRight - areaLeft) / width,
-      (areaTop - areaBottom) / height,
-    ]);
-  }
-  // The left, top, width and height of an area that covers the whole link.
-  const wholeLink = [0, 0, 1, 1];
-  if (areas.length === 1 && areas[0].every((value, index) => Math.abs(value - wholeLink[index]) < 0.001)) {
-    return;
-  }
-  areas.forEach(([areaLeft, areaTop, areaWidth, areaHeight]) => {
-    const area = document.createElement('span');
-    area.className = 'link-area';
-    area.style.left = `${areaLeft * 100}%`;
-    area.style.top = `${areaTop * 100}%`;
-    area.style.width = `${areaWidth * 100}%`;
-    area.style.height = `${areaHeight * 100}%`;
-    link.append(area);
-  });
-}
-
-/**
  * Manages the DOM of a single page of the document: a placeholder sized to
  * the page, and the canvas, the text layer, the structure and the link layer
  * the page is rendered to once it is needed.
  */
 export class PdfViewerPage {
-  /** Set once the links of the current canvas are rendered, also when the page has none. */
-  #linksRendered = false;
+  /** Aborted on release, to drop the layers that still load. */
+  #abortController = new AbortController();
 
   /**
    * The structure tree of the page, or null without one, kept between renders as in pdf.js.
@@ -111,17 +69,14 @@ export class PdfViewerPage {
     /** Set when rendering failed, to not try again at the same scale. */
     this.renderFailed = false;
 
-    /** @type {import('pdfjs-dist').TextLayer | null} */
+    /** @type {PdfViewerTextLayer | null} */
     this.textLayer = null;
 
-    /** @type {HTMLElement | null} */
-    this.textLayerElement = null;
-
-    /** @type {HTMLElement | null} */
-    this.endOfContentElement = null;
-
-    /** @type {HTMLElement | null} */
-    this.linkLayerElement = null;
+    /**
+     * Set once the links of the page are rendered, also when the page has none.
+     * @type {PdfViewerLinkLayer | null}
+     */
+    this.linkLayer = null;
 
     /** The scale and device pixel ratio of the current canvas, to know when it is outdated. */
     this.renderedScale = 0;
@@ -236,17 +191,15 @@ export class PdfViewerPage {
     }
     this.renderTask = null;
 
-    if (this.canvas) {
-      this.#freeCanvas(this.canvas);
-    }
-    // The structure in the canvas comes first in reading order.
-    this.element.prepend(canvas);
-    if (this.#structureLayer) {
-      canvas.append(this.#structureLayer.element);
-    }
+    const oldCanvas = this.canvas;
     this.canvas = canvas;
+    this.#renderLayers();
+    if (oldCanvas) {
+      this.#freeCanvas(oldCanvas);
+    }
     this.renderedScale = scale;
     this.renderedPixelRatio = pixelRatio;
+    this.#connectLayers();
   }
 
   /**
@@ -300,80 +253,60 @@ export class PdfViewerPage {
    * @return {Promise<void>}
    */
   async renderTextLayer() {
+    const viewport = this.pdfPage.getViewport({ scale: this.scale });
     if (this.textLayer) {
-      this.textLayer.update({ viewport: this.pdfPage.getViewport({ scale: this.scale }) });
+      this.textLayer.update(viewport);
+      return;
+    }
+    if (!this.canvas) {
       return;
     }
 
-    const canvas = this.canvas;
-    const { TextLayer } = await loadPdfjs();
-    // The page may have been released or rendered again meanwhile.
-    if (!canvas || this.canvas !== canvas || this.textLayer) {
-      return;
-    }
-
-    const container = document.createElement('div');
-    container.className = 'text-layer';
-    this.element.append(container);
-
-    // As in the viewer of pdf.js, the text layer reads the stream itself.
-    const textLayer = new TextLayer({
-      textContentSource: this.pdfPage.streamTextContent({ includeMarkedContent: true }),
-      container,
-      viewport: this.pdfPage.getViewport({ scale: this.scale }),
-    });
+    const { signal } = this.#abortController;
+    const textLayer = new PdfViewerTextLayer();
     this.textLayer = textLayer;
-    this.textLayerElement = container;
+    this.#renderLayers();
     try {
-      await textLayer.render();
+      await textLayer.render(this.pdfPage, viewport, signal);
     } catch (error) {
       // Without its text, the layer is removed, so that the page tries again when it renders again.
-      if (this.textLayer === textLayer) {
-        container.remove();
+      if (!signal.aborted) {
         this.textLayer = null;
-        this.textLayerElement = null;
+        this.#renderLayers();
       }
       throw error;
     }
 
-    if (this.textLayer === textLayer) {
-      // Extends the selection to the end of the page while selecting.
-      const endOfContent = document.createElement('div');
-      endOfContent.className = 'end-of-content';
-      container.append(endOfContent);
-      this.endOfContentElement = endOfContent;
-      this.#addLinksToText();
+    if (!signal.aborted) {
+      this.#connectLayers();
       // As in pdf.js, the structure renders after the text layer, whose elements it owns.
-      await this.#renderStructureLayer();
+      await this.#renderStructureLayer(signal);
     }
   }
 
   /**
    * Renders the structure of a tagged PDF page for assistive technology.
+   *
+   * @param {AbortSignal} signal
    * @private
    */
-  async #renderStructureLayer() {
-    const textLayerElement = this.textLayerElement;
+  async #renderStructureLayer(signal) {
     // A page with a broken structure is shown as untagged.
     this.#structTree ??= this.pdfPage.getStructTree().catch(() => null);
     const tree = await this.#structTree;
     // The page may have been released meanwhile.
-    if (this.textLayerElement !== textLayerElement) {
+    if (signal.aborted) {
       return;
     }
-    const structureLayer = tree && this.#createStructureLayer(tree, textLayerElement);
-    if (structureLayer) {
-      this.#structureLayer = structureLayer;
-      // In the canvas as in pdf.js, since VoiceOver in Safari skips the elements, which have no size, outside of it.
-      this.canvas.append(structureLayer.element);
-    }
+    this.#structureLayer = tree && this.#createStructureLayer(tree);
+    this.#connectLayers();
   }
 
   /** @private */
-  #createStructureLayer(tree, textLayerElement) {
+  #createStructureLayer(tree) {
     try {
       const structureLayer = new PdfViewerStructureLayer(tree);
-      structureLayer.updateTextLayer(textLayerElement);
+      structureLayer.bindText(this.textLayer.element);
       return structureLayer;
     } catch {
       // As in pdf.js, a structure that fails to render does not break the other layers.
@@ -393,64 +326,22 @@ export class PdfViewerPage {
    * @return {Promise<Array<{ link: HTMLAnchorElement, annotation: object }>>}
    */
   async renderLinkLayer(followLink, optionalContentConfig) {
-    const canvas = this.canvas;
-    if (!canvas || this.#linksRendered) {
+    if (!this.canvas || this.linkLayer) {
       return [];
     }
-    const [{ setLayerDimensions }, annotations] = await Promise.all([
-      loadPdfjs(),
-      this.pdfPage.getAnnotations({ intent: 'display' }),
-    ]);
-    // The page may have been released or rendered again meanwhile.
-    if (this.canvas !== canvas || this.#linksRendered) {
+
+    const { signal } = this.#abortController;
+    const linkLayer = new PdfViewerLinkLayer();
+    const links = await linkLayer.render(this.pdfPage, followLink, optionalContentConfig);
+    // The page may have been released meanwhile.
+    if (signal.aborted || this.linkLayer) {
       return [];
     }
-    this.#linksRendered = true;
 
-    const links = [];
-    const viewport = this.pdfPage.getViewport({ scale: 1, rotation: 0 });
-    const layer = document.createElement('div');
-    layer.className = 'link-layer';
-    setLayerDimensions(layer, this.pdfPage.getViewport({ scale: 1 }));
-
-    // A copy, as pdf.js returns the same annotations to each call.
-    [...annotations].sort(compareAnnotationPositions).forEach((annotation) => {
-      if (annotation.oc && optionalContentConfig?.isVisible(annotation.oc) === false) {
-        return;
-      }
-      const link = annotation.subtype === 'Link' && createLink(annotation, followLink);
-      if (!link) {
-        return;
-      }
-      link.id = `${ANNOTATION_ID_PREFIX}${annotation.id}`;
-      const [x1, y1] = viewport.convertToViewportPoint(annotation.rect[0], annotation.rect[1]);
-      const [x2, y2] = viewport.convertToViewportPoint(annotation.rect[2], annotation.rect[3]);
-      link.style.left = `${(Math.min(x1, x2) / viewport.width) * 100}%`;
-      link.style.top = `${(Math.min(y1, y2) / viewport.height) * 100}%`;
-      link.style.width = `${(Math.abs(x2 - x1) / viewport.width) * 100}%`;
-      link.style.height = `${(Math.abs(y2 - y1) / viewport.height) * 100}%`;
-      addLinkAreas(link, annotation);
-      layer.append(link);
-      links.push({ link, annotation });
-    });
-
-    if (links.length) {
-      this.element.append(layer);
-      this.linkLayerElement = layer;
-      this.#addLinksToText();
-    }
+    this.linkLayer = linkLayer;
+    this.#renderLayers();
+    this.#connectLayers();
     return links;
-  }
-
-  /**
-   * Adds the links to the text, for assistive technology, once both the text
-   * layer and the link layer have rendered, in either order.
-   * @private
-   */
-  #addLinksToText() {
-    if (this.endOfContentElement && this.linkLayerElement) {
-      addLinksToText(this.textLayer.textDivs, [...this.linkLayerElement.children]);
-    }
   }
 
   cancel() {
@@ -462,19 +353,42 @@ export class PdfViewerPage {
 
   /** Cancels a pending render and frees the canvas memory, the layers and the structure. */
   release() {
+    this.#abortController.abort();
+    this.#abortController = new AbortController();
     this.cancel();
     this.textLayer?.cancel();
-    this.textLayer = null;
-    this.textLayerElement?.remove();
-    this.textLayerElement = null;
-    this.endOfContentElement = null;
-    this.#structureLayer = null;
-    this.linkLayerElement?.remove();
-    this.linkLayerElement = null;
-    this.#linksRendered = false;
     if (this.canvas) {
       this.#freeCanvas(this.canvas);
-      this.canvas = null;
+    }
+    this.canvas = null;
+    this.textLayer = null;
+    this.#structureLayer = null;
+    this.linkLayer = null;
+    this.#renderLayers();
+  }
+
+  /**
+   * Renders the layers in a fixed order, as in pdf.js, so that screen readers read the structure in the canvas first.
+   * @private
+   */
+  #renderLayers() {
+    // A page without links gets no link layer.
+    const linkLayer = this.linkLayer?.links.length ? this.linkLayer.element : nothing;
+    render(html`${this.canvas}${this.textLayer?.element}${linkLayer}`, this.element);
+  }
+
+  /**
+   * Connects the layers that have rendered, as they render in any order.
+   * @private
+   */
+  #connectLayers() {
+    const structureElement = this.#structureLayer?.element;
+    // In the canvas as in pdf.js, since VoiceOver in Safari skips the elements, which have no size, outside of it.
+    if (structureElement && this.canvas && structureElement.parentNode !== this.canvas) {
+      this.canvas.append(structureElement);
+    }
+    if (this.linkLayer && this.textLayer?.rendered) {
+      this.textLayer.bindLinks(this.linkLayer.links);
     }
   }
 
@@ -483,6 +397,5 @@ export class PdfViewerPage {
     // Shrinking the canvas frees its memory right away in Safari.
     canvas.width = 0;
     canvas.height = 0;
-    canvas.remove();
   }
 }

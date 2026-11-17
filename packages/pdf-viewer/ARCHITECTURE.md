@@ -77,8 +77,16 @@ how to generate them.
 - `PdfViewerLinksMixin` adds the links of each rendered page and follows internal links with `_scrollToPage()`.
 - After a page canvas renders, `PdfViewerRenderMixin` awaits `_renderPageLayers(page)`. Each override awaits
   `super` first, so the layers render in the order of the mixins: text and structure, then links.
-- The page view owns the DOM of a page: the canvas, the text layer, the structure and the link layer. Its methods
-  check after each await that the page still has the same canvas or text layer, so a released page gets no layers.
+- The page view owns the DOM of a page. A Lit template renders the canvas, the text layer and the link layer
+  in this order, as pdf.js does. Screen readers read the structure in the canvas first.
+  - `PdfViewerTextLayer` and `PdfViewerLinkLayer` render the content of their layer. The template of the page
+    view renders their elements.
+  - The layers can render in any order. One method of the page view connects them. It puts the structure in the
+    canvas and passes the links to the text layer, which adds them to its text.
+  - A release aborts the signal of the page. The page view checks it after each await, so a released page
+    gets no layers. The text layer also checks it before it loads the text.
+  - The render queue renders a page again only once its layers are done. One signal therefore covers the time
+    between two releases.
 - `PdfViewerKeyboardMixin` handles the keyboard shortcuts.
 - `PdfViewerToolbarMixin` renders the header and the toolbar. Its controls are in the light DOM, so a theme
   styles the page field like any other `vaadin-integer-field`. The `slotContent()` directive renders them, so

@@ -8,8 +8,10 @@
  * See https://vaadin.com/commercial-license-and-service-terms for the full
  * license.
  */
-import type { PDFDocumentProxy, PDFPageProxy, RenderTask, TextLayer } from 'pdfjs-dist';
+import type { PDFDocumentProxy, PDFPageProxy, RenderTask } from 'pdfjs-dist';
+import type { PdfViewerLinkLayer } from './pdf-viewer-link-layer.js';
 import type { PdfViewerLinkAnnotation } from './pdf-viewer-links.js';
+import type { PdfViewerTextLayer } from './pdf-viewer-text-layer.js';
 
 /**
  * The maximum number of pixels of a page canvas. Larger canvases use too much
@@ -34,10 +36,8 @@ export declare class PdfViewerPage {
   canvas: HTMLCanvasElement | null;
   renderTask: RenderTask | null;
   renderFailed: boolean;
-  textLayer: TextLayer | null;
-  textLayerElement: HTMLElement | null;
-  endOfContentElement: HTMLElement | null;
-  linkLayerElement: HTMLElement | null;
+  textLayer: PdfViewerTextLayer | null;
+  linkLayer: PdfViewerLinkLayer | null;
   renderedScale: number;
   renderedPixelRatio: number;
 

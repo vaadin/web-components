@@ -73,15 +73,15 @@ export function getSelectionRanges(root) {
 }
 
 /**
- * Puts the end-of-content element of a page back at the end of its text layer.
- * @param {import('./pdf-viewer-page.js').PdfViewerPage} page
+ * Puts the end-of-content element of a text layer back at its end.
+ * @param {import('./pdf-viewer-text-layer.js').PdfViewerTextLayer} textLayer
  */
-function reset({ textLayerElement, endOfContentElement }) {
-  textLayerElement.append(endOfContentElement);
-  endOfContentElement.style.width = '';
-  endOfContentElement.style.height = '';
-  endOfContentElement.style.userSelect = '';
-  textLayerElement.classList.remove('selecting');
+function reset({ element, endOfContent }) {
+  element.append(endOfContent);
+  endOfContent.style.width = '';
+  endOfContent.style.height = '';
+  endOfContent.style.userSelect = '';
+  element.classList.remove('selecting');
 }
 
 /**
@@ -133,7 +133,7 @@ export class PdfViewerTextSelectionController {
       'pointerup',
       () => {
         this.#isPointerDown = false;
-        this.#getTextLayerPages().forEach(reset);
+        this.#getTextLayers().forEach(reset);
       },
       { signal },
     );
@@ -141,7 +141,7 @@ export class PdfViewerTextSelectionController {
       'blur',
       () => {
         this.#isPointerDown = false;
-        this.#getTextLayerPages().forEach(reset);
+        this.#getTextLayers().forEach(reset);
       },
       { signal },
     );
@@ -149,7 +149,7 @@ export class PdfViewerTextSelectionController {
       'keyup',
       () => {
         if (!this.#isPointerDown) {
-          this.#getTextLayerPages().forEach(reset);
+          this.#getTextLayers().forEach(reset);
         }
       },
       { signal },
@@ -163,17 +163,19 @@ export class PdfViewerTextSelectionController {
   }
 
   /**
-   * Returns the pages whose text layer has rendered.
+   * @return {import('./pdf-viewer-text-layer.js').PdfViewerTextLayer[]}
    * @private
    */
-  #getTextLayerPages() {
-    return this.getPages().filter((page) => page.endOfContentElement);
+  #getTextLayers() {
+    return this.getPages()
+      .map((page) => page.textLayer)
+      .filter((textLayer) => textLayer?.rendered);
   }
 
   /** @private */
   #onSelectionChange() {
-    const pages = this.#getTextLayerPages();
-    if (!pages.length) {
+    const textLayers = this.#getTextLayers();
+    if (!textLayers.length) {
       return;
     }
 
@@ -181,20 +183,20 @@ export class PdfViewerTextSelectionController {
     // As in pdf.js, the collapsed range of a click whose `selectionchange` comes after `pointerup`
     // does not mark the text layer, as that would keep the links from being clicked.
     const activeRanges = ranges.filter((range) => !range.collapsed || this.#isPointerDown);
-    const activePages = pages.filter((page) =>
-      activeRanges.some((range) => range.intersectsNode(page.textLayerElement)),
+    const activeTextLayers = textLayers.filter((textLayer) =>
+      activeRanges.some((range) => range.intersectsNode(textLayer.element)),
     );
-    pages.forEach((page) => {
-      if (activePages.includes(page)) {
-        page.textLayerElement.classList.add('selecting');
+    textLayers.forEach((textLayer) => {
+      if (activeTextLayers.includes(textLayer)) {
+        textLayer.element.classList.add('selecting');
       } else {
-        reset(page);
+        reset(textLayer);
       }
     });
 
     // Unlike in pdf.js, which handles the text layers of all viewers together,
     // only a selection in the text layers of this viewer moves their elements.
-    if (!activePages.length) {
+    if (!activeTextLayers.length) {
       this.#prevRange = null;
       return;
     }
@@ -224,11 +226,11 @@ export class PdfViewerTextSelectionController {
       } while (anchor && !anchor.childNodes.length);
     }
 
-    const textLayer = anchor?.parentElement?.closest('.text-layer');
-    const end = pages.find((page) => page.textLayerElement === textLayer)?.endOfContentElement;
+    const textLayerElement = anchor?.parentElement?.closest('.text-layer');
+    const end = textLayers.find((textLayer) => textLayer.element === textLayerElement)?.endOfContent;
     if (end) {
-      end.style.width = textLayer.style.width;
-      end.style.height = textLayer.style.height;
+      end.style.width = textLayerElement.style.width;
+      end.style.height = textLayerElement.style.height;
       end.style.userSelect = 'text';
       anchor.parentElement.insertBefore(end, modifyStart ? anchor : anchor.nextSibling);
     }
