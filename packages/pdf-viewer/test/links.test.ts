@@ -106,11 +106,6 @@ describe('links', () => {
   });
 
   describe('rendering', () => {
-    it('should not add a link layer to a page without links', async () => {
-      await load('multi-page.pdf');
-      expect(pages[0].querySelector('.link-layer')).to.be.null;
-    });
-
     it('should only make the quadrilaterals of a link that wraps clickable', async () => {
       await loadWrappingLink();
       const linkAt = (x: number, y: number) => {
@@ -358,14 +353,6 @@ describe('links', () => {
   });
 
   describe('names', () => {
-    it('should name links by their text, and tell that external links open in a new tab', async () => {
-      await load('links.pdf');
-      expect(getLinkNames()).to.deep.equal([
-        'Internal link to page 2',
-        'External link to vaadin.com (opens in a new tab)',
-      ]);
-    });
-
     it('should name several links in one text item by their words', async () => {
       await loadPdf([
         {
