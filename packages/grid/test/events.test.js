@@ -78,10 +78,7 @@ describe('events', () => {
 
     it('should not fire when clicking inside a native popover rendered in a cell', async () => {
       column.renderer = (root) => {
-        const popover = document.createElement('div');
-        popover.popover = 'manual';
-        popover.textContent = 'Popover';
-        root.append(popover);
+        root.innerHTML = '<div popover="manual">Popover</div>';
       };
       flushGrid(grid);
 

@@ -20,6 +20,23 @@ export const isFocusable = (target) => {
   );
 };
 
+/**
+ * True when the click path reaches the cell through a popover element
+ * (e.g. a Vaadin overlay) rendered inside that cell. Popover content is
+ * rendered in the top layer, where the focus and visibility based checks
+ * in `_shouldPreventCellActivationOnClick` are not reliable. Ancestors
+ * outside the cell are ignored, so a grid inside an overlay still
+ * activates its cells.
+ *
+ * @param {!Event} event
+ * @param {!HTMLElement} cell
+ * @return {boolean}
+ */
+const isInsideCellPopover = (event, cell) => {
+  const path = event.composedPath();
+  return path.slice(0, path.indexOf(cell)).some((node) => node.popover);
+};
+
 export const ActiveItemMixin = (superClass) =>
   class ActiveItemMixin extends superClass {
     static get properties() {
@@ -82,30 +99,8 @@ export const ActiveItemMixin = (superClass) =>
         // Clicked on a label element
         e.target instanceof HTMLLabelElement ||
         // Click inside an overlay (popover) hosted by the cell
-        this.__isClickInsideCellOverlay(e, cell)
+        isInsideCellPopover(e, cell)
       );
-    }
-
-    /**
-     * True when the click path reaches the cell through a popover element
-     * (e.g. a Vaadin overlay) rendered inside that cell. Such overlays close
-     * synchronously on item click, so `isFocusable()` no longer sees the item,
-     * and `:focus-within` misses overlays opened from code. Ancestors outside
-     * the cell are ignored, so a grid inside an overlay still activates its cells.
-     *
-     * @param {!Event} event
-     * @param {!HTMLElement} cell
-     * @return {boolean}
-     * @private
-     */
-    __isClickInsideCellOverlay(event, cell) {
-      const path = event.composedPath();
-      const cellIndex = path.indexOf(cell);
-      if (cellIndex <= 0) {
-        return false;
-      }
-
-      return path.slice(0, cellIndex).some((node) => !!node.popover);
     }
 
     /**
