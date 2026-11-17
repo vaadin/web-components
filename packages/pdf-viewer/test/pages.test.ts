@@ -41,6 +41,12 @@ describe('pages', () => {
     return pages[pageNumber - 1].getBoundingClientRect().top - content.getBoundingClientRect().top;
   }
 
+  function isPageInView(pageNumber: number) {
+    const pageRect = pages[pageNumber - 1].getBoundingClientRect();
+    const contentRect = content.getBoundingClientRect();
+    return pageRect.bottom > contentRect.top && pageRect.top < contentRect.bottom;
+  }
+
   function getPaddingTop() {
     return parseFloat(getComputedStyle(content).paddingTop);
   }
@@ -219,7 +225,40 @@ describe('pages', () => {
         expect(viewer.page).to.equal(2);
       });
 
-      [0, 2.5, 10, NaN].forEach((value) => {
+      [0, -3, -Infinity].forEach((value) => {
+        it(`should scroll to the first page without a warning with scrollToPage(${value})`, async () => {
+          viewer.scrollToPage(4);
+          await nextRenderIdle(viewer);
+          const stub = sinon.stub(console, 'warn');
+          viewer.scrollToPage(value);
+          await nextFrame();
+          expect(content.scrollTop).to.equal(0);
+          expect(viewer.page).to.equal(1);
+          expect(stub).to.be.not.called;
+        });
+      });
+
+      [7, 10, Infinity].forEach((value) => {
+        it(`should scroll to the last page without a warning with scrollToPage(${value})`, async () => {
+          const stub = sinon.stub(console, 'warn');
+          viewer.scrollToPage(value);
+          await nextFrame();
+          expect(isPageInView(6)).to.be.true;
+          expect(viewer.page).to.equal(6);
+          expect(stub).to.be.not.called;
+        });
+      });
+
+      it('should open a new document at the last page with scrollToPage(Infinity) after setting src', async () => {
+        viewer.src = fixtureUrl('links.pdf');
+        viewer.scrollToPage(Infinity);
+        await oneEvent(viewer, 'document-load');
+        await nextFrame();
+        expect(viewer.pageCount).to.be.greaterThan(1);
+        expect(viewer.page).to.equal(viewer.pageCount);
+      });
+
+      [2.5, NaN].forEach((value) => {
         it(`should warn and not scroll with scrollToPage(${value})`, async () => {
           clearWarnings();
           const stub = sinon.stub(console, 'warn');
@@ -595,10 +634,20 @@ describe('pages', () => {
       expect(viewer.page).to.equal(3);
     });
 
-    it('should render the first pages once shown after scrollToPage() for a page out of range', async () => {
+    it('should scroll to the last page once shown after scrollToPage() for a page after the last one', async () => {
+      viewer.scrollToPage(10);
+      await nextFrame();
+      const idle = nextRenderIdle(viewer);
+      viewer.hidden = false;
+      await idle;
+      expect(getRenderedPageNumbers()).to.include(6);
+      expect(viewer.page).to.equal(6);
+    });
+
+    it('should warn and not scroll once shown after scrollToPage() for a value that is not a page', async () => {
       clearWarnings();
       const stub = sinon.stub(console, 'warn');
-      viewer.scrollToPage(10);
+      viewer.scrollToPage(2.5);
       await nextFrame();
       const idle = nextRenderIdle(viewer);
       viewer.hidden = false;
