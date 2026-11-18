@@ -47,9 +47,6 @@ export class PdfViewerThumbnailsController {
   /** @type {IntersectionObserver | null} */
   #observer = null;
 
-  /** @type {MediaQueryList | null} */
-  #pixelRatioQuery = null;
-
   /** The accessible name of a thumbnail, with `{page}` for the page number. */
   #label = '';
 
@@ -69,7 +66,6 @@ export class PdfViewerThumbnailsController {
   hostConnected() {
     if (this.#thumbnails.length) {
       this.#observe();
-      this.#watchPixelRatio();
     }
   }
 
@@ -77,7 +73,6 @@ export class PdfViewerThumbnailsController {
   hostDisconnected() {
     this.#observer?.disconnect();
     this.#observer = null;
-    this.#unwatchPixelRatio();
     // The observer adds the visible thumbnails again when the host is attached.
     this.#visibleThumbnails.clear();
   }
@@ -113,7 +108,6 @@ export class PdfViewerThumbnailsController {
     });
     this.#list.replaceChildren(...this.#thumbnails.map((thumbnail) => thumbnail.element));
     this.#updateLabels();
-    this.#watchPixelRatio();
   }
 
   /**
@@ -174,11 +168,15 @@ export class PdfViewerThumbnailsController {
     this.#updateLabels();
   }
 
+  /** Renders the visible thumbnails again, e.g. at a new device pixel ratio. */
+  refresh() {
+    this.#renderNext();
+  }
+
   /** Removes the thumbnails, e.g. when the document is unloaded. */
   clear() {
     this.#observer?.disconnect();
     this.#observer = null;
-    this.#unwatchPixelRatio();
     this.#thumbnails.forEach((thumbnail) => this.#release(thumbnail));
     this.#thumbnails = [];
     this.#visibleThumbnails.clear();
@@ -202,27 +200,6 @@ export class PdfViewerThumbnailsController {
     });
     this.#thumbnails.forEach(({ element }) => this.#observer.observe(element));
   }
-
-  /** @private */
-  #watchPixelRatio() {
-    this.#unwatchPixelRatio();
-    this.#pixelRatioQuery = window.matchMedia(`(resolution: ${window.devicePixelRatio || 1}dppx)`);
-    this.#pixelRatioQuery.addEventListener('change', this.#onPixelRatioChange);
-  }
-
-  /** @private */
-  #unwatchPixelRatio() {
-    this.#pixelRatioQuery?.removeEventListener('change', this.#onPixelRatioChange);
-    this.#pixelRatioQuery = null;
-  }
-
-  /** @private */
-  #onPixelRatioChange = () => {
-    // The query only matches the previous ratio, so watch the new one.
-    this.#watchPixelRatio();
-    // Render the visible thumbnails again at the new ratio.
-    this.#renderNext();
-  };
 
   /** @private */
   #onIntersection(entries) {

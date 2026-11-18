@@ -89,6 +89,17 @@ export const PdfViewerSidebarMixin = (superClass) =>
     }
 
     /**
+     * Override method from `PdfViewerRenderMixin` to render the thumbnails
+     * again at the new ratio.
+     * @protected
+     * @override
+     */
+    _pixelRatioChanged() {
+      super._pixelRatioChanged();
+      this.#thumbnails.refresh();
+    }
+
+    /**
      * Override method from `PdfViewerDocumentMixin` to remove the thumbnails
      * of the previous document.
      * @protected

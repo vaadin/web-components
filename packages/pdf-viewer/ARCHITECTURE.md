@@ -60,7 +60,7 @@ how to generate them.
 - `PdfViewerDownloadMixin` adds `download()`. It uses only the document mixin, so it comes right after it.
   - A download keeps its data for a minute, also when the viewer is detached meanwhile. Some browsers fail a
     download whose URL is released right after the click.
-- `PdfViewerRenderMixin` owns the page views, their sizes, the render queue and the device pixel ratio. It calls `_pageSizesChanged()` at most once per frame when pages get their own size.
+- `PdfViewerRenderMixin` owns the page views, their sizes, the render queue and the device pixel ratio. It calls `_pageSizesChanged()` at most once per frame when pages get their own size, and `_pixelRatioChanged()` when the device pixel ratio changes.
 - `PdfViewerScrollMixin` owns the scale `_scale`, the anchor, the visible pages and `page`. It asks for
   rendering only with `_renderVisible()` and `_cancelRender()`. It gets the scale from `_getScaleForSize()`, which
   fits the width of the current page by default.

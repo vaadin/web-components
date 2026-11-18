@@ -140,6 +140,14 @@ export const PdfViewerRenderMixin = (superClass) =>
     }
 
     /**
+     * Called when the device pixel ratio changes.
+     * @protected
+     */
+    _pixelRatioChanged() {
+      // To be implemented.
+    }
+
+    /**
      * Renders the layers over the canvas of a page that has just rendered,
      * where overrides await `super` first to keep the mixin order.
      * @param {PdfViewerPage} _page
@@ -303,5 +311,6 @@ export const PdfViewerRenderMixin = (superClass) =>
       // The query only matches the previous ratio, so watch the new one.
       this.#watchPixelRatio();
       this.#renderQueue.renderNext();
+      this._pixelRatioChanged();
     };
   };
