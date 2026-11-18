@@ -95,7 +95,6 @@ export const pdfViewerToolbarStyles = css`
     --vaadin-field-default-width: 9em;
   }
 
-  /* The sidebar button looks pressed while the sidebar is open */
   ::slotted([slot='toolbar-sidebar'][aria-expanded='true']) {
     --vaadin-button-background: var(--vaadin-background-container-strong);
     --vaadin-button-tertiary-background: var(--vaadin-background-container-strong);

@@ -25,7 +25,6 @@ export const pdfViewerSidebarStyles = css`
     display: none;
   }
 
-  /* The focus ring of the pages meets the sidebar at a square corner */
   :host([sidebar-opened]) .content-area::after {
     border-end-start-radius: 0;
   }
@@ -71,7 +70,6 @@ export const pdfViewerSidebarStyles = css`
     font-weight: 600;
   }
 
-  /* Not only a background color, which can have low contrast */
   [part~='thumbnail'][part~='current'] .thumbnail-image {
     outline: 2px solid var(--vaadin-text-color);
     outline-offset: 2px;
@@ -92,7 +90,6 @@ export const pdfViewerSidebarStyles = css`
   }
 
   @media (forced-colors: active) {
-    /* Thumbnails lose their shadow in forced colors, like the pages */
     .thumbnail-image {
       outline: 1px solid CanvasText;
     }
