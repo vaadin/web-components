@@ -19,6 +19,8 @@ import {
   loadDocument,
   nextRenderIdle,
   openSidebar,
+  stubDevicePixelRatio,
+  waitUntil,
 } from './helpers.js';
 
 describe('sidebar', () => {
@@ -28,6 +30,7 @@ describe('sidebar', () => {
   let list: HTMLElement;
   let content: HTMLElement;
   let url: string | undefined;
+  let setDevicePixelRatio: (ratio: number) => void;
 
   function getThumbnails() {
     return [...viewer.shadowRoot!.querySelectorAll<HTMLElement>('[part~="thumbnail"]')];
@@ -41,13 +44,8 @@ describe('sidebar', () => {
     return getThumbnails().filter((thumbnail) => thumbnail.querySelector('canvas'));
   }
 
-  async function waitForThumbnail(pageNumber: number) {
-    for (let i = 0; i < 100 && !getThumbnails()[pageNumber - 1].querySelector('canvas'); i++) {
-      await nextFrame();
-    }
-    if (!getThumbnails()[pageNumber - 1].querySelector('canvas')) {
-      throw new Error(`The thumbnail of page ${pageNumber} did not render`);
-    }
+  function isRendered(pageNumber: number) {
+    return !!getThumbnails()[pageNumber - 1].querySelector('canvas');
   }
 
   async function nextFrames(count: number) {
@@ -64,6 +62,7 @@ describe('sidebar', () => {
   }
 
   beforeEach(async () => {
+    setDevicePixelRatio = stubDevicePixelRatio();
     viewer = fixtureSync('<vaadin-pdf-viewer style="width: 700px; height: 500px"></vaadin-pdf-viewer>');
     await nextRender();
     await loadAndRender(viewer, fixtureUrl('multi-page.pdf'));
@@ -291,7 +290,7 @@ describe('sidebar', () => {
     });
 
     it('should keep the rendered thumbnails while the sidebar is closed', async () => {
-      await waitForThumbnail(1);
+      await waitUntil(() => isRendered(1));
       viewer.sidebarOpened = false;
       await nextRender();
       await nextFrame();
@@ -301,35 +300,19 @@ describe('sidebar', () => {
 
   describe('rendering', () => {
     it('should render the thumbnails again when the device pixel ratio changes', async () => {
-      const descriptor = Object.getOwnPropertyDescriptor(window, 'devicePixelRatio');
-      const pixelRatio = (window.devicePixelRatio || 1) + 1;
-      const query = new EventTarget();
-      const matchMedia = window.matchMedia.bind(window);
-      sinon
-        .stub(window, 'matchMedia')
-        .callsFake((media: string) =>
-          media.startsWith('(resolution') ? (query as MediaQueryList) : matchMedia(media),
-        );
-      try {
-        await openSidebar(viewer);
-        const thumbnail = getThumbnails()[0];
-        const canvas = thumbnail.querySelector('canvas')!;
-        const width = thumbnail.querySelector<HTMLElement>('.thumbnail-image')!.offsetWidth;
-        Object.defineProperty(window, 'devicePixelRatio', { value: pixelRatio, configurable: true });
-        query.dispatchEvent(new Event('change'));
-        for (let i = 0; i < 100 && thumbnail.querySelector('canvas') === canvas; i++) {
-          await nextFrame();
-        }
-        expect(thumbnail.querySelectorAll('canvas')).to.have.lengthOf(1);
-        expect(thumbnail.querySelector('canvas')!.width).to.be.closeTo(width * pixelRatio, 1);
-        expect(canvas.width).to.equal(0);
-      } finally {
-        if (descriptor) {
-          Object.defineProperty(window, 'devicePixelRatio', descriptor);
-        } else {
-          delete (window as any).devicePixelRatio;
-        }
-      }
+      // Tall enough for every thumbnail to render, so that none is rendering when the ratio changes.
+      viewer.style.height = '1500px';
+      await openSidebar(viewer);
+      await waitUntil(() => getRenderedThumbnails().length === getThumbnails().length);
+      const thumbnail = getThumbnails()[0];
+      const canvas = thumbnail.querySelector('canvas')!;
+      const width = thumbnail.querySelector<HTMLElement>('.thumbnail-image')!.offsetWidth;
+      const pixelRatio = window.devicePixelRatio + 1;
+      setDevicePixelRatio(pixelRatio);
+      await waitUntil(() => thumbnail.querySelector('canvas') !== canvas);
+      expect(thumbnail.querySelectorAll('canvas')).to.have.lengthOf(1);
+      expect(thumbnail.querySelector('canvas')!.width).to.be.closeTo(width * pixelRatio, 1);
+      expect(canvas.width).to.equal(0);
     });
 
     it('should give the thumbnails the size of their page when the sidebar is open while the document loads', async () => {
@@ -349,6 +332,11 @@ describe('sidebar', () => {
     describe('large document', () => {
       let thumbnails: HTMLElement[];
 
+      // A thumbnail canvas is hidden from screen readers, unlike the canvas of a page.
+      function isThumbnailRender(params: Parameters<PDFPageProxy['render']>[0]) {
+        return !!params.canvas?.hasAttribute('aria-hidden');
+      }
+
       beforeEach(async () => {
         url = createPdfUrl(200);
         const loaded = oneEvent(viewer, 'document-load');
@@ -362,7 +350,7 @@ describe('sidebar', () => {
       it('should only render the thumbnails near the visible part of the sidebar', async () => {
         const listRect = list.getBoundingClientRect();
         const inView = thumbnails.filter((thumbnail) => thumbnail.getBoundingClientRect().top < listRect.bottom);
-        await waitForThumbnail(inView.length);
+        await waitUntil(() => isRendered(inView.length));
         await nextFrames(20);
         expect(getRenderedThumbnails().length).to.be.lessThan(20);
         expect(thumbnails[199].querySelector('canvas')).to.be.null;
@@ -375,7 +363,7 @@ describe('sidebar', () => {
         let maxPending = 0;
         function countingRender(this: PDFPageProxy, params: Parameters<PDFPageProxy['render']>[0]) {
           const task = render.call(this, params);
-          if (params.viewport.width < 300) {
+          if (isThumbnailRender(params)) {
             pending += 1;
             maxPending = Math.max(maxPending, pending);
             const done = () => {
@@ -400,11 +388,9 @@ describe('sidebar', () => {
         viewer.scrollToPage(150);
         await nextRenderIdle(viewer);
         const render = sinon.spy(await getPdfPagePrototype(), 'render');
-        const getThumbnailRenders = () => render.getCalls().filter((call) => call.args[0].viewport.width < 300).length;
+        const getThumbnailRenders = () => render.getCalls().filter((call) => isThumbnailRender(call.args[0])).length;
         viewer.sidebarOpened = true;
-        for (let i = 0; i < 50 && !getThumbnailRenders(); i++) {
-          await nextFrame();
-        }
+        await waitUntil(() => getThumbnailRenders() > 0);
         viewer.sidebarOpened = false;
         const count = getThumbnailRenders();
         expect(count).to.be.above(0);
@@ -414,14 +400,14 @@ describe('sidebar', () => {
       });
 
       it('should release the thumbnails that left the view while the sidebar was closed', async () => {
-        await waitForThumbnail(1);
+        await waitUntil(() => isRendered(1));
         viewer.sidebarOpened = false;
         await nextRender();
         viewer.scrollToPage(150);
         await nextRenderIdle(viewer);
         viewer.sidebarOpened = true;
         await nextRender();
-        await waitForThumbnail(150);
+        await waitUntil(() => isRendered(150));
         expect(thumbnails[0].querySelector('canvas')).to.be.null;
       });
 
@@ -435,14 +421,14 @@ describe('sidebar', () => {
       });
 
       it('should render the thumbnails of a scrolled-to part of the list when attached again', async () => {
-        await waitForThumbnail(1);
+        await waitUntil(() => isRendered(1));
         const parent = viewer.parentElement!;
         viewer.remove();
         parent.appendChild(viewer);
         await nextRender();
         viewer.scrollToPage(150);
         await nextRenderIdle(viewer);
-        await waitForThumbnail(150);
+        await waitUntil(() => isRendered(150));
         expect(thumbnails[149].querySelector('canvas')).to.be.ok;
       });
     });
@@ -454,55 +440,45 @@ describe('sidebar', () => {
         release?.();
       });
 
-      /**
-       * Makes the next request for the first page of a document, which is the
-       * one of its thumbnail once the pages have rendered, wait until
-       * `release()` is called. The page is loaded already, so that it is
-       * returned also when the document has been unloaded meanwhile.
-       */
-      async function delayFirstPage() {
+      // Holds the next request for the first page, which comes from its thumbnail once the pages have rendered.
+      async function holdFirstPage() {
         const prototype = await getPdfDocumentPrototype();
         const getPage = prototype.getPage;
         const released = new Promise<void>((resolve) => {
           release = resolve;
         });
-        let isDelayed = false;
-        async function delayedGetPage(this: PDFDocumentProxy, pageNumber: number) {
+        let isHeld = false;
+        async function heldGetPage(this: PDFDocumentProxy, pageNumber: number) {
+          // The page loads first, so that it is returned also after the document is unloaded.
           const pdfPage = await getPage.call(this, pageNumber);
-          if (pageNumber === 1 && !isDelayed) {
-            isDelayed = true;
+          if (pageNumber === 1 && !isHeld) {
+            isHeld = true;
             await released;
           }
           return pdfPage;
         }
-        return sinon.stub(prototype, 'getPage').callsFake(delayedGetPage);
-      }
-
-      async function waitForCall(stub: sinon.SinonStub) {
-        for (let i = 0; i < 50 && !stub.calledWith(1); i++) {
-          await nextFrame();
-        }
-        expect(stub).to.be.calledWith(1);
+        const stub = sinon.stub(prototype, 'getPage').callsFake(heldGetPage);
+        return () => waitUntil(() => stub.calledWith(1));
       }
 
       it('should render the thumbnails of a new document after an outdated thumbnail finishes', async () => {
-        const getPage = await delayFirstPage();
+        const requested = await holdFirstPage();
         viewer.sidebarOpened = true;
-        await waitForCall(getPage);
+        await requested();
 
         await loadAndRender(viewer, fixtureUrl('links.pdf'));
         await nextRender();
         release();
-        await waitForThumbnail(4);
+        await waitUntil(() => isRendered(4));
         expect(getRenderedThumbnails()).to.have.lengthOf(4);
       });
 
       it('should render other thumbnails after one that was scrolled away from finishes', async () => {
         url = createPdfUrl(100);
         await loadAndRender(viewer, url);
-        const getPage = await delayFirstPage();
+        const requested = await holdFirstPage();
         viewer.sidebarOpened = true;
-        await waitForCall(getPage);
+        await requested();
 
         list.scrollTop = list.scrollHeight / 2;
         // Let the thumbnails that became visible wait for the outdated one.
@@ -513,7 +489,7 @@ describe('sidebar', () => {
           const rect = thumbnail.getBoundingClientRect();
           return rect.top >= listRect.top && rect.bottom <= listRect.bottom;
         })!;
-        await waitForThumbnail(Number(visible.dataset.page));
+        await waitUntil(() => isRendered(Number(visible.dataset.page)));
         expect(visible.querySelector('canvas')).to.be.ok;
         expect(getThumbnails()[0].querySelector('canvas')).to.be.null;
       });
@@ -541,7 +517,7 @@ describe('sidebar', () => {
       it('should warn and render the other thumbnails when a thumbnail fails to render', async () => {
         viewer.sidebarOpened = true;
         await nextRender();
-        await waitForThumbnail(3);
+        await waitUntil(() => isRendered(3));
         expect(getThumbnails()[2].querySelector('canvas')).to.be.ok;
         expect(getThumbnails()[1].querySelector('canvas')).to.be.null;
         expect(warn).to.be.calledWith('Failed to render the thumbnail of page 2 of the PDF document: Broken page');
@@ -551,14 +527,12 @@ describe('sidebar', () => {
         viewer.style.height = '250px';
         viewer.sidebarOpened = true;
         await nextRender();
-        for (let i = 0; i < 100 && !warn.called; i++) {
-          await nextFrame();
-        }
+        await waitUntil(() => warn.called);
         isBroken = false;
         list.scrollTop = list.scrollHeight;
         await nextFrames(5);
         list.scrollTop = 0;
-        await waitForThumbnail(2);
+        await waitUntil(() => isRendered(2));
         expect(getThumbnails()[1].querySelector('canvas')).to.be.ok;
       });
     });

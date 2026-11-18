@@ -15,6 +15,7 @@ import {
   loadAndRender,
   loadDocument,
   nextRenderIdle,
+  stubDevicePixelRatio,
 } from './helpers.js';
 
 const A4_RATIO = 842.88 / 595.92;
@@ -427,36 +428,17 @@ describe('pages', () => {
   });
 
   describe('device pixel ratio', () => {
-    let query: EventTarget;
-    let matchMediaStub: sinon.SinonStub;
-    let pixelRatio: PropertyDescriptor | undefined;
+    let setDevicePixelRatio: (ratio: number) => void;
 
     beforeEach(async () => {
-      pixelRatio = Object.getOwnPropertyDescriptor(window, 'devicePixelRatio');
-      query = new EventTarget();
-      const matchMedia = window.matchMedia.bind(window);
-      matchMediaStub = sinon
-        .stub(window, 'matchMedia')
-        .callsFake((media: string) =>
-          media.startsWith('(resolution') ? (query as MediaQueryList) : matchMedia(media),
-        );
+      setDevicePixelRatio = stubDevicePixelRatio();
       await createViewer();
       await loadAndRender(viewer, fixtureUrl('multi-page.pdf'));
     });
 
-    afterEach(() => {
-      matchMediaStub.restore();
-      if (pixelRatio) {
-        Object.defineProperty(window, 'devicePixelRatio', pixelRatio);
-      } else {
-        delete (window as any).devicePixelRatio;
-      }
-    });
-
     it('should render the visible pages again when the device pixel ratio changes', async () => {
-      Object.defineProperty(window, 'devicePixelRatio', { value: 2, configurable: true });
       const idle = nextRenderIdle(viewer);
-      query.dispatchEvent(new Event('change'));
+      setDevicePixelRatio(2);
       await idle;
       const page = pages[0];
       expect(page.querySelector('canvas')!.width).to.be.closeTo(page.offsetWidth * 2, 1);
@@ -465,9 +447,8 @@ describe('pages', () => {
     it('should keep the previous canvas until the new one is rendered', async () => {
       const page = pages[0];
       const canvas = page.querySelector('canvas')!;
-      Object.defineProperty(window, 'devicePixelRatio', { value: 2, configurable: true });
       const idle = nextRenderIdle(viewer);
-      query.dispatchEvent(new Event('change'));
+      setDevicePixelRatio(2);
       expect(page.querySelector('canvas')).to.equal(canvas);
       await idle;
       expect(page.querySelectorAll('canvas')).to.have.lengthOf(1);

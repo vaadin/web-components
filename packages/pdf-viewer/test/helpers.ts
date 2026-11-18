@@ -37,6 +37,35 @@ export async function nextRenderIdle(viewer: PdfViewer): Promise<void> {
 }
 
 /**
+ * Waits until the condition is met, and throws when it is not met in time.
+ */
+export async function waitUntil(condition: () => boolean): Promise<void> {
+  for (let i = 0; i < 100 && !condition(); i++) {
+    await nextFrame();
+  }
+  if (!condition()) {
+    throw new Error('The condition was not met in time');
+  }
+}
+
+/**
+ * Replaces `devicePixelRatio` and the `(resolution)` media queries until `sinon.restore()`, and returns a
+ * function that changes the ratio. Call it before the viewer is attached, as the viewer creates its query then.
+ */
+export function stubDevicePixelRatio(): (ratio: number) => void {
+  const query = new EventTarget() as MediaQueryList;
+  const matchMedia = window.matchMedia.bind(window);
+  sinon
+    .stub(window, 'matchMedia')
+    .callsFake((media: string) => (media.startsWith('(resolution') ? query : matchMedia(media)));
+  const pixelRatio = sinon.stub(window, 'devicePixelRatio').value(window.devicePixelRatio);
+  return (ratio) => {
+    pixelRatio.value(ratio);
+    query.dispatchEvent(new Event('change'));
+  };
+}
+
+/**
  * Opens the sidebar of the viewer and waits until the thumbnails in view have rendered.
  */
 export async function openSidebar(viewer: PdfViewer): Promise<void> {
@@ -47,13 +76,7 @@ export async function openSidebar(viewer: PdfViewer): Promise<void> {
   const inView = [...list.querySelectorAll('[part~="thumbnail"]')].filter(
     (thumbnail) => thumbnail.getBoundingClientRect().top < bottom,
   );
-  const isRendered = () => inView.every((thumbnail) => thumbnail.querySelector('canvas'));
-  for (let i = 0; i < 100 && !isRendered(); i++) {
-    await nextFrame();
-  }
-  if (!isRendered()) {
-    throw new Error('The thumbnails in view did not render');
-  }
+  await waitUntil(() => inView.every((thumbnail) => thumbnail.querySelector('canvas')));
 }
 
 /**
