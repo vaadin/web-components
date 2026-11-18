@@ -34,7 +34,7 @@ const PDF_ROLE_TO_ARIA_ROLE = {
   Div: 'group',
   BlockQuote: 'blockquote',
   Aside: 'note',
-  NonStruct: 'none',
+  // No role for NonStruct, as VoiceOver in Safari reads no text under the none role in the canvas.
   P: 'paragraph',
   H: 'heading',
   FENote: 'note',
@@ -62,7 +62,7 @@ const PDF_ROLE_TO_ARIA_ROLE = {
 };
 
 /** Roles that must not have a name, so alternative text becomes a description. */
-const ROLES_WITHOUT_NAME = new Set(['caption', 'code', 'emphasis', 'generic', 'none', 'paragraph', 'strong']);
+const ROLES_WITHOUT_NAME = new Set(['caption', 'code', 'emphasis', 'generic', 'paragraph', 'strong']);
 
 const HEADING_PATTERN = /^H(\d+)$/u;
 
@@ -182,9 +182,7 @@ export class PdfViewerStructureLayer {
     const { alt, lang, rowSpan, colSpan } = node;
     if (alt !== undefined) {
       const role = element.getAttribute('role') || 'generic';
-      if (role !== 'none') {
-        element.setAttribute(ROLES_WITHOUT_NAME.has(role) ? 'aria-description' : 'aria-label', alt);
-      }
+      element.setAttribute(ROLES_WITHOUT_NAME.has(role) ? 'aria-description' : 'aria-label', alt);
     }
     if (canOwn(node)) {
       element.setAttribute('aria-owns', node.id);
@@ -235,7 +233,7 @@ export class PdfViewerStructureLayer {
     const role = element.getAttribute('role');
     const hasRequiredChildren = ROLES_WITH_REQUIRED_CHILDREN.has(role);
     const children = (node.children || []).filter((child) => !(hasRequiredChildren && isContent(child)));
-    if (children.length === 1 && isContent(children[0]) && role !== 'none') {
+    if (children.length === 1 && isContent(children[0])) {
       // A single content child is owned by this element directly.
       this.#setAttributes(children[0], element);
     } else {

@@ -85,10 +85,7 @@ describe('structure', () => {
         { role: 'H1', children: [] },
         {
           role: 'P',
-          children: [
-            { role: 'Strong', children: [] },
-            { role: 'NonStruct', children: [] },
-          ],
+          children: [{ role: 'Strong', children: [] }],
         },
       ],
     }));
@@ -97,7 +94,6 @@ describe('structure', () => {
     expect(getComputedStyle(tree.querySelector('[role="heading"]')!).display).to.equal('block');
     expect(getComputedStyle(tree.querySelector('[role="paragraph"]')!).display).to.equal('block');
     expect(getComputedStyle(tree.querySelector('[role="strong"]')!).display).to.equal('inline');
-    expect(getComputedStyle(tree.querySelector('[role="none"]')!).display).to.equal('inline');
   });
 
   describe('tagged', () => {

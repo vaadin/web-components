@@ -131,14 +131,16 @@ how to generate them.
   canvas exposes it to screen readers. Its elements own the text layer elements with `aria-owns`.
 - The canvas has the `presentation` role, so that its content stays visible to screen readers. Each new
   canvas of the page gets the tree.
-- Outside of the canvas, VoiceOver in Safari skips the elements of the tree. They then have the size of an
-  empty span, not the size of the text that they own.
+- Outside of the canvas, VoiceOver in Safari finds no tables of the tree, and its cursor outlines the whole page.
+  The elements of the tree then have the size of an empty span, not the size of the text that they own.
 - Elements of the tree that are blocks in HTML, such as headings and paragraphs, have `display: block`.
   NVDA starts a new line at them. Otherwise, it reads a heading and the next paragraph as one line.
 - The structure owns the text elements in marked content, not the marked content itself. Marked content has
   `display: contents`, and Chrome ignores `aria-owns` of such elements. Artifacts, such as page numbers, stay hidden.
 - Unlike in pdf.js, a `Link` element of the structure has no role, and the structure does not own its link.
   The link is added to the text before it, as on an untagged page.
+- Unlike in pdf.js, a `NonStruct` element of the structure has no role. In the canvas, VoiceOver in Safari reads
+  no text under an element with the `none` role.
 - When a focused link loses its page, focus moves to the page area.
 
 ## Install size

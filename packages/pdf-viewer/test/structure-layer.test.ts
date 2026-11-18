@@ -13,7 +13,7 @@ describe('structure layer', () => {
         children: [{ type: 'content', id: 'p3R_mc0' }],
       })),
     );
-    expect(element.querySelector('[role]:not([role="none"])')).to.be.null;
+    expect(element.querySelector('[role]')).to.be.null;
   });
 
   it('should expose a table of contents as a list', () => {
@@ -124,16 +124,15 @@ describe('structure layer', () => {
     expect(paragraph.getAttribute('aria-description')).to.equal('Note');
   });
 
-  it('should describe an element without a role by its alternative text, but not an element without semantics', () => {
+  it('should describe an element without a role by its alternative text', () => {
     const { element } = create([
       { role: 'Span', alt: 'Note', children: [{ type: 'content', id: 'p3R_mc0' }] },
-      { role: 'NonStruct', alt: 'Hidden', children: [{ type: 'content', id: 'p3R_mc1' }] },
+      { role: 'NonStruct', alt: 'Note', children: [{ type: 'content', id: 'p3R_mc1' }] },
     ]);
     const [span, nonStruct] = element.children;
     expect(span.getAttribute('aria-description')).to.equal('Note');
-    expect(nonStruct.getAttribute('role')).to.equal('none');
-    expect(nonStruct.hasAttribute('aria-description')).to.be.false;
-    expect(nonStruct.hasAttribute('aria-label')).to.be.false;
+    expect(nonStruct.hasAttribute('role')).to.be.false;
+    expect(nonStruct.getAttribute('aria-description')).to.equal('Note');
   });
 
   it('should own the text in marked content, and in nested marked content once, without artifacts', () => {
