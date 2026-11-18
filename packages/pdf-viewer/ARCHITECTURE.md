@@ -160,6 +160,8 @@ how to generate them.
   its own size.
 - The frame and the images are released after printing, on a new `src` and on detach. Printing then
   stops without waiting for the page that is loading.
+- Printing stops on detach only when the document is unloaded. Moving the viewer in the DOM keeps the
+  document, so printing goes on.
 
 ## Install size
 

@@ -38,13 +38,6 @@ export const PdfViewerPrintMixin = (superClass) =>
      */
     #printFrame = null;
 
-    /** @protected */
-    disconnectedCallback() {
-      super.disconnectedCallback();
-
-      this.#cancelPrint();
-    }
-
     /**
      * Prints the document with the print dialog of the browser. The viewer
      * prepares the pages for printing first, which can take a while for long
@@ -65,7 +58,7 @@ export const PdfViewerPrintMixin = (superClass) =>
 
     /**
      * Override method from `PdfViewerDocumentMixin` to stop printing the
-     * previous document.
+     * document on a new `src` or on detach.
      * @protected
      * @override
      */

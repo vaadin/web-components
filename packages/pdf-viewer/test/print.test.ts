@@ -212,6 +212,7 @@ describe('print', () => {
     it('should remove the frame of the last print when detached', async () => {
       await viewer.print();
       viewer.remove();
+      await nextFrame();
       expect(getFrame()).to.be.null;
     });
 
@@ -228,6 +229,7 @@ describe('print', () => {
       await waitUntil(() => getImages().length >= 2);
       const urls = getImages().map((image) => image.src);
       viewer.remove();
+      await nextFrame();
       expect(getFrame()).to.be.null;
       expect(revokeSpy).to.be.calledTwice;
       expect(revokeSpy.args.flat()).to.have.members(urls);
@@ -235,6 +237,17 @@ describe('print', () => {
       await nextUpdate(viewer);
       expect(viewer.hasAttribute('printing')).to.be.false;
       expect(printStub).to.be.not.called;
+    });
+
+    it('should keep printing when moved in the DOM', async () => {
+      release = await holdPages(2);
+      const printed = viewer.print();
+      await waitUntil(() => getImages().length >= 1);
+      viewer.parentElement!.appendChild(viewer);
+      await nextFrame();
+      release();
+      await printed;
+      expect(printStub).to.be.calledOnce;
     });
 
     it('should not print when detached right after print()', async () => {
