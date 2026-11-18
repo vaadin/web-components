@@ -10,13 +10,9 @@ import type { Tooltip } from '@vaadin/tooltip';
 import type { PdfViewer } from '../vaadin-pdf-viewer.js';
 import { createPdf, fixtureUrl, getPdfDocumentPrototype, getPdfPagePrototype, loadDocument } from './helpers.js';
 
-/** The page size in points of the fixtures that Chromium prints as A4, see `generate-fixtures.js`. */
+// The page size in points of the fixtures that Chromium prints as A4, see `generate-fixtures.js`.
 const A4_PAGE_SIZE = { width: 595.92, height: 842.88 };
 
-/**
- * Holds the pages of all documents from the given page number on until
- * released. Returns the function that releases them.
- */
 async function holdPages(fromPage: number): Promise<() => void> {
   const prototype = await getPdfDocumentPrototype();
   const { getPage } = prototype;
@@ -36,7 +32,6 @@ async function holdPages(fromPage: number): Promise<() => void> {
   };
 }
 
-/** Waits until the condition is met, and throws when it is not met in time. */
 async function waitUntil(condition: () => boolean): Promise<void> {
   for (let i = 0; i < 100 && !condition(); i++) {
     await nextFrame();
@@ -51,7 +46,6 @@ describe('print', () => {
   let button: Button;
   let loader: HTMLElement;
   let observer: MutationObserver;
-  /** Called with the print frame instead of opening the print dialog. */
   let printStub: sinon.SinonStub;
   let release: (() => void) | undefined;
 
@@ -64,7 +58,6 @@ describe('print', () => {
     return frame ? [...frame.contentDocument!.images] : [];
   }
 
-  /** Returns the width and height in points of the `@page` rule of a printed page. */
   function getPageSize(image: HTMLImageElement) {
     const frameWindow = getFrame()!.contentWindow as typeof window;
     const [styleSheet] = frameWindow.document.adoptedStyleSheets;
@@ -74,7 +67,6 @@ describe('print', () => {
     return rule.style.getPropertyValue('size').split(' ').map(parseFloat);
   }
 
-  /** Resolves with the print frame when its print dialog would open. */
   function nextPrint() {
     return new Promise<HTMLIFrameElement>((resolve) => {
       printStub.callsFake(resolve);
@@ -82,7 +74,7 @@ describe('print', () => {
   }
 
   beforeEach(async () => {
-    // Each test sees its own warnings.
+    // The warnings are issued once per page, so that each test sees its own.
     clearWarnings();
     printStub = sinon.stub();
     // Replace the print dialog of each print frame as soon as the frame is added.

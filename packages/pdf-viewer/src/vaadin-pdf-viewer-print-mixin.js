@@ -12,8 +12,7 @@ import { issueWarning } from '@vaadin/component-base/src/warnings.js';
 import { PdfViewerPrintFrame } from './pdf-viewer-print-frame.js';
 
 /**
- * A mixin that adds printing the document. The toolbar has a button that
- * calls `print()`.
+ * A mixin that adds printing the document.
  */
 export const PdfViewerPrintMixin = (superClass) =>
   class PdfViewerPrintMixinClass extends superClass {
@@ -39,16 +38,12 @@ export const PdfViewerPrintMixin = (superClass) =>
     #printFrame = null;
 
     /**
-     * Prints the document with the print dialog of the browser. The viewer
-     * prepares the pages for printing first, which can take a while for long
-     * documents, and shows its loader meanwhile. Each page prints on paper of
-     * its own size. While the document loads, it is printed once loaded. Does
-     * nothing without a document, when the viewer is not attached, or while a
-     * print is prepared already. The returned promise resolves when the print
-     * dialog closes, or when printing stops because the viewer is detached or
-     * another document loads. In browsers whose print dialog does not block
-     * the page, it resolves once the dialog opens. The promise never rejects.
-     * A failed print logs a warning.
+     * Prints the document with the print dialog of the browser, each page on paper of its own size.
+     *
+     * A document that is loading is printed once it has loaded. Does nothing
+     * without a document, when the viewer is not attached, or while a print is
+     * prepared. The returned promise resolves after the print dialog opens, or
+     * when printing stops, and never rejects.
      *
      * @return {Promise<void>}
      */
@@ -57,8 +52,7 @@ export const PdfViewerPrintMixin = (superClass) =>
     }
 
     /**
-     * Override method from `PdfViewerDocumentMixin` to stop printing the
-     * document on a new `src` or on detach.
+     * Override method from `PdfViewerDocumentMixin` to stop printing.
      * @protected
      * @override
      */
@@ -68,8 +62,7 @@ export const PdfViewerPrintMixin = (superClass) =>
     }
 
     /**
-     * Prints the loaded document, and resolves when printing ends or is
-     * cancelled. The pages print from the bytes that are loaded already.
+     * Prints the loaded document, and resolves when printing ends or stops.
      * @private
      */
     async #print(pdfDocument) {

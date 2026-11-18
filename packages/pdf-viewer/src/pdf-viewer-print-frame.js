@@ -10,7 +10,6 @@
  */
 import { MAX_CANVAS_PIXELS } from './pdf-viewer-page.js';
 
-/** The resolution that pages are printed at. PDF units are 1/72 inch. */
 const PRINT_DPI = 300;
 
 const PRINT_STYLES = `
@@ -21,11 +20,7 @@ const PRINT_STYLES = `
 `;
 
 /**
- * An off-screen frame that holds the pages of a document as images, and
- * opens the print dialog of the browser for them. Each page prints on paper
- * of its own size. The pages render one at a time on a canvas of at most
- * `MAX_CANVAS_PIXELS` pixels, so that rendering needs the same memory for
- * any number of pages.
+ * An off-screen frame that prints the pages of a document as images.
  */
 export class PdfViewerPrintFrame {
   /** @type {HTMLIFrameElement} */
@@ -72,9 +67,7 @@ export class PdfViewerPrintFrame {
   }
 
   /**
-   * Renders the pages of the document as images into the frame, and waits
-   * until the images have loaded. Stops when the frame is removed.
-   *
+   * Renders the pages as images into the frame, until all have loaded or the frame is removed.
    * @param {import('pdfjs-dist').PDFDocumentProxy} pdfDocument
    * @return {Promise<void>}
    */
@@ -85,8 +78,7 @@ export class PdfViewerPrintFrame {
   }
 
   /**
-   * Opens the print dialog of the browser for the rendered pages. The frame
-   * is removed once printing ends.
+   * Opens the print dialog, and removes the frame once printing ends.
    */
   print() {
     const frameWindow = this.#frame.contentWindow;
@@ -95,7 +87,7 @@ export class PdfViewerPrintFrame {
   }
 
   /**
-   * Removes the frame and releases the images. Stops rendering the pages.
+   * Removes the frame, releases the images and stops rendering.
    */
   remove() {
     this.#removed = true;
@@ -107,8 +99,7 @@ export class PdfViewerPrintFrame {
   }
 
   /**
-   * Renders a page as an image into the frame, sized to the paper size of
-   * the page.
+   * Renders a page as an image into the frame, at the paper size of the page.
    * @private
    */
   async #renderPage(pdfDocument, pageNumber) {
@@ -148,8 +139,7 @@ export class PdfViewerPrintFrame {
     const url = URL.createObjectURL(blob);
     this.#urls.push(url);
     const image = this.#frame.contentDocument.createElement('img');
-    // Wait until the image has loaded, as the viewer of pdf.js does. Decoding all images would hold
-    // the pixels of every page in memory at once.
+    // Wait for the load and not for `decode()`, as pdf.js does, so that memory does not hold every page at once.
     const loaded = new Promise((resolve, reject) => {
       image.addEventListener('load', resolve, { once: true });
       image.addEventListener(
@@ -173,8 +163,7 @@ export class PdfViewerPrintFrame {
   }
 
   /**
-   * Returns the name of the `@page` rule for a page size, and adds the rule
-   * for a new size. A named page gives each printed page the size of its PDF page.
+   * Returns the name of the `@page` rule for a page size, and adds the rule for a new size.
    * @private
    */
   #getPageName(width, height) {
