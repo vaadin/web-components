@@ -10,6 +10,8 @@ import type {
   PdfViewerI18n,
   PdfViewerPageChangedEvent,
   PdfViewerPageCountChangedEvent,
+  PdfViewerPrintEndEvent,
+  PdfViewerPrintStartEvent,
   PdfViewerToolbarCollapsedChangedEvent,
   PdfViewerZoom,
   PdfViewerZoomChangedEvent,
@@ -89,6 +91,16 @@ viewer.addEventListener('page-changed', (event) => {
 viewer.addEventListener('page-count-changed', (event) => {
   assertType<PdfViewerPageCountChangedEvent>(event);
   assertType<number>(event.detail.value);
+});
+
+viewer.addEventListener('print-start', (event) => {
+  assertType<PdfViewerPrintStartEvent>(event);
+});
+
+viewer.addEventListener('print-end', (event) => {
+  assertType<PdfViewerPrintEndEvent>(event);
+  assertType<'closed' | 'cancelled' | 'failed'>(event.detail.reason);
+  assertType<unknown>(event.detail.error);
 });
 
 viewer.addEventListener('toolbar-collapsed-changed', (event) => {

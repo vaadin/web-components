@@ -75,24 +75,37 @@ export const PdfViewerPrintMixin = (superClass) =>
       const printFrame = new PdfViewerPrintFrame();
       this.#printFrame = printFrame;
       this._printing = true;
+      this.dispatchEvent(new CustomEvent('print-start'));
 
+      const detail = await this.#printPages(printFrame, pdfDocument);
+      // Fire `print-end` once the `printing` state is removed.
+      await this.updateComplete;
+      this.dispatchEvent(new CustomEvent('print-end', { detail }));
+    }
+
+    /**
+     * Prepares the pages and opens the print dialog, and resolves with the detail of `print-end`.
+     * @return {Promise<{ reason: 'closed' | 'cancelled' | 'failed', error?: unknown }>}
+     * @private
+     */
+    async #printPages(printFrame, pdfDocument) {
       try {
         await printFrame.renderPages(pdfDocument);
         if (printFrame.removed) {
-          return;
+          return { reason: 'cancelled' };
         }
         this._printing = false;
         printFrame.print();
+        return { reason: 'closed' };
       } catch (error) {
         // Rendering fails when printing stops meanwhile.
         if (printFrame.removed) {
-          return;
+          return { reason: 'cancelled' };
         }
         this.#cancelPrint();
         issueWarning(`Failed to print the PDF document: ${error.message}`);
+        return { reason: 'failed', error };
       }
-      // Resolve once the `printing` state is removed.
-      await this.updateComplete;
     }
 
     /**

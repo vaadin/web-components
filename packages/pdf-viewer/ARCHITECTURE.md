@@ -162,6 +162,10 @@ how to generate them.
   stops without waiting for the page that is loading.
 - Printing stops on detach only when the document is unloaded. Moving the viewer in the DOM keeps the
   document, so printing goes on.
+- `print-start` fires when the pages start to be prepared. `print-end` fires once for each print, with the
+  reason `closed`, `cancelled` or `failed`.
+- `closed` means that the print dialog has closed. Browsers do not tell whether the user printed or cancelled.
+- The `beforeprint` and `afterprint` events of the print frame do not reach the window of the application.
 
 ## Install size
 

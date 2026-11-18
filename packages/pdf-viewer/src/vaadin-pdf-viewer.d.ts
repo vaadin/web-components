@@ -57,6 +57,16 @@ export type PdfViewerPageChangedEvent = CustomEvent<{ value: number }>;
 export type PdfViewerPageCountChangedEvent = CustomEvent<{ value: number }>;
 
 /**
+ * Fired when the pages start to be prepared for printing.
+ */
+export type PdfViewerPrintStartEvent = CustomEvent;
+
+/**
+ * Fired when printing ends, with the reason in `detail.reason`.
+ */
+export type PdfViewerPrintEndEvent = CustomEvent<{ reason: 'closed' | 'cancelled' | 'failed'; error?: unknown }>;
+
+/**
  * Fired when the `toolbarCollapsed` property changes.
  */
 export type PdfViewerToolbarCollapsedChangedEvent = CustomEvent<{ value: boolean }>;
@@ -74,6 +84,10 @@ export interface PdfViewerCustomEventMap {
   'page-changed': PdfViewerPageChangedEvent;
 
   'page-count-changed': PdfViewerPageCountChangedEvent;
+
+  'print-end': PdfViewerPrintEndEvent;
+
+  'print-start': PdfViewerPrintStartEvent;
 
   'toolbar-collapsed-changed': PdfViewerToolbarCollapsedChangedEvent;
 
@@ -168,6 +182,8 @@ export interface PdfViewerEventMap extends HTMLElementEventMap, PdfViewerCustomE
  * @fires {CustomEvent} document-load - Fired when the document has loaded.
  * @fires {CustomEvent} page-changed - Fired when the `page` property changes.
  * @fires {CustomEvent} page-count-changed - Fired when the `pageCount` property changes.
+ * @fires {CustomEvent} print-end - Fired when printing ends, with the reason in `detail.reason`.
+ * @fires {CustomEvent} print-start - Fired when the pages start to be prepared for printing.
  * @fires {CustomEvent} toolbar-collapsed-changed - Fired when the `toolbarCollapsed` property changes.
  * @fires {CustomEvent} zoom-changed - Fired when the `zoom` property changes.
  */

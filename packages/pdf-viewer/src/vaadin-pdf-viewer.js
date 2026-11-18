@@ -128,6 +128,8 @@ const DEFAULT_I18N = {
  * @fires {CustomEvent} document-load - Fired when the document has loaded.
  * @fires {CustomEvent} page-changed - Fired when the `page` property changes.
  * @fires {CustomEvent} page-count-changed - Fired when the `pageCount` property changes.
+ * @fires {CustomEvent} print-end - Fired when printing ends, with the reason in `detail.reason`.
+ * @fires {CustomEvent} print-start - Fired when the pages start to be prepared for printing.
  * @fires {CustomEvent} toolbar-collapsed-changed - Fired when the `toolbarCollapsed` property changes.
  * @fires {CustomEvent} zoom-changed - Fired when the `zoom` property changes.
  *

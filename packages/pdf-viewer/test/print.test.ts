@@ -47,6 +47,8 @@ describe('print', () => {
   let loader: HTMLElement;
   let observer: MutationObserver;
   let printStub: sinon.SinonStub;
+  let startSpy: sinon.SinonSpy;
+  let endSpy: sinon.SinonSpy;
   let release: (() => void) | undefined;
 
   function getFrame() {
@@ -90,6 +92,10 @@ describe('print', () => {
     observer.observe(document.body, { childList: true });
     viewer = fixtureSync('<vaadin-pdf-viewer style="width: 600px; height: 400px"></vaadin-pdf-viewer>');
     await nextRender();
+    startSpy = sinon.spy();
+    endSpy = sinon.spy();
+    viewer.addEventListener('print-start', startSpy);
+    viewer.addEventListener('print-end', endSpy);
     button = viewer.querySelector<Button>('[slot="toolbar-print"]')!;
     loader = viewer.shadowRoot!.querySelector<HTMLElement>('[part="loader"]')!;
   });
@@ -140,6 +146,16 @@ describe('print', () => {
       expect(printStub).to.be.calledOnce;
     });
 
+    it('should fire print-start before and print-end after the print dialog', async () => {
+      button.click();
+      await nextPrint();
+      expect(startSpy).to.be.calledOnce;
+      expect(startSpy).to.be.calledBefore(printStub);
+      await waitUntil(() => endSpy.called);
+      expect(endSpy).to.be.calledOnce;
+      expect(endSpy.firstCall.args[0].detail).to.deep.equal({ reason: 'closed' });
+    });
+
     it('should print with print() while the button is hidden', async () => {
       viewer.printButtonHidden = true;
       await nextUpdate(viewer);
@@ -176,6 +192,8 @@ describe('print', () => {
       expect(printStub).to.be.not.called;
       await printed;
       expect(printStub).to.be.calledOnce;
+      expect(startSpy).to.be.calledOnce;
+      expect(endSpy).to.be.calledOnce;
     });
 
     it('should keep focus on the print button after printing', async () => {
@@ -229,6 +247,8 @@ describe('print', () => {
       await nextUpdate(viewer);
       expect(viewer.hasAttribute('printing')).to.be.false;
       expect(printStub).to.be.not.called;
+      expect(endSpy).to.be.calledOnce;
+      expect(endSpy.firstCall.args[0].detail).to.deep.equal({ reason: 'cancelled' });
     });
 
     it('should keep printing when moved in the DOM', async () => {
@@ -261,6 +281,7 @@ describe('print', () => {
       await nextUpdate(viewer);
       expect(viewer.hasAttribute('printing')).to.be.false;
       expect(printStub).to.be.not.called;
+      expect(endSpy.firstCall.args[0].detail).to.deep.equal({ reason: 'cancelled' });
     });
 
     it('should not warn when printing stops while a page renders', async () => {
@@ -280,6 +301,7 @@ describe('print', () => {
       expect(warnStub).to.be.not.called;
       expect(printStub).to.be.not.called;
       expect(getFrame()).to.be.null;
+      expect(endSpy.firstCall.args[0].detail).to.deep.equal({ reason: 'cancelled' });
     });
 
     it('should warn and stop when a page cannot be rendered to an image', async () => {
@@ -291,6 +313,9 @@ describe('print', () => {
       expect(getFrame()).to.be.null;
       await nextUpdate(viewer);
       expect(viewer.hasAttribute('printing')).to.be.false;
+      const { reason, error } = endSpy.firstCall.args[0].detail;
+      expect(reason).to.equal('failed');
+      expect(error.message).to.equal('Failed to render page 1');
     });
 
     it('should warn and stop when the image of a page cannot be loaded', async () => {
@@ -316,6 +341,8 @@ describe('print', () => {
       await viewer.print();
       expect(printStub).to.be.not.called;
       expect(getFrame()).to.be.null;
+      expect(startSpy).to.be.not.called;
+      expect(endSpy).to.be.not.called;
     });
 
     it('should print the document once loaded when called in the same task as setting src', async () => {
