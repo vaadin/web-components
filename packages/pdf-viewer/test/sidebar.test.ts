@@ -1,5 +1,5 @@
 import { expect } from '@vaadin/chai-plugins';
-import { sendKeys } from '@vaadin/test-runner-commands';
+import { sendKeys, sendMouse } from '@vaadin/test-runner-commands';
 import { fixtureSync, nextFrame, nextRender, oneEvent } from '@vaadin/testing-helpers';
 import sinon from 'sinon';
 import './enable-feature-flag.js';
@@ -423,8 +423,10 @@ describe('sidebar', () => {
       it('should not scroll the list when a thumbnail is clicked', async () => {
         const listRect = list.getBoundingClientRect();
         const thumbnail = thumbnails.find((item) => item.getBoundingClientRect().bottom > listRect.bottom)!;
+        const { left, width } = thumbnail.getBoundingClientRect();
         const { scrollTop } = list;
-        thumbnail.click();
+        // A mouse click, which focuses the thumbnail, on its part that is in view.
+        await sendMouse({ type: 'click', position: [Math.round(left + width / 2), Math.round(listRect.bottom - 10)] });
         await nextRenderIdle(viewer);
         expect(viewer.page).to.equal(Number(thumbnail.dataset.page));
         expect(list.scrollTop).to.equal(scrollTop);
