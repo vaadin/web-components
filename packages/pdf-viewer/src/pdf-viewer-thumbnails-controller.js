@@ -50,6 +50,9 @@ export class PdfViewerThumbnailsController {
   /** The accessible name of a thumbnail, with `{page}` for the page number. */
   #label = '';
 
+  /** The page of a clicked thumbnail, which the list does not scroll to. */
+  #clickedPage = 0;
+
   /**
    * @param {HTMLElement} list the element to show the thumbnails in
    * @param {Object} callbacks
@@ -144,8 +147,12 @@ export class PdfViewerThumbnailsController {
     // The focused thumbnail stays the tab stop while the user is in the list.
     this.#setTabStop(this.#list.querySelector(':focus') || current);
 
-    // Does nothing while the list is hidden.
-    this.#scrollIntoView(current);
+    // A clicked thumbnail stays where it is, so that it does not move away from the pointer.
+    if (page !== this.#clickedPage) {
+      // Does nothing while the list is hidden.
+      this.#scrollIntoView(current);
+    }
+    this.#clickedPage = 0;
   }
 
   /**
@@ -349,8 +356,9 @@ export class PdfViewerThumbnailsController {
   #onClick(event) {
     const element = event.target.closest('[part~="thumbnail"]');
     if (element) {
+      this.#clickedPage = Number(element.dataset.page);
       this.#setTabStop(element);
-      this.#onSelect(Number(element.dataset.page));
+      this.#onSelect(this.#clickedPage);
     }
   }
 

@@ -420,6 +420,16 @@ describe('sidebar', () => {
         expectThumbnailInView(2);
       });
 
+      it('should not scroll the list when a thumbnail is clicked', async () => {
+        const listRect = list.getBoundingClientRect();
+        const thumbnail = thumbnails.find((item) => item.getBoundingClientRect().bottom > listRect.bottom)!;
+        const { scrollTop } = list;
+        thumbnail.click();
+        await nextRenderIdle(viewer);
+        expect(viewer.page).to.equal(Number(thumbnail.dataset.page));
+        expect(list.scrollTop).to.equal(scrollTop);
+      });
+
       it('should render the thumbnails of a scrolled-to part of the list when attached again', async () => {
         await waitUntil(() => isRendered(1));
         const parent = viewer.parentElement!;
