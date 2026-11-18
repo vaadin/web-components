@@ -10,6 +10,7 @@ import { css, unsafeCSS } from 'lit';
 export const checkable = (part, propName = part) => css`
   :host {
     position: relative;
+    isolation: isolate;
     align-items: baseline;
     column-gap: var(--vaadin-${unsafeCSS(propName)}-gap, var(--vaadin-gap-s));
     grid-template: none;
@@ -78,11 +79,9 @@ export const checkable = (part, propName = part) => css`
   ::slotted(input) {
     appearance: none;
     cursor: var(--_cursor);
-    /* Cover the label row to make the space next to the label clickable */
     position: absolute;
-    /* Explicit end line, or the input also covers the helper rows */
     grid-row: 1 / 2;
-    grid-column: 1 / -1;
+    grid-column: 1 / 2;
     /* Ensure minimum click target (WCAG) */
     inset-block: min(0px, (100% - 24px) / 2);
     inset-inline: min(0px, (100% - 24px) / 2);
@@ -92,12 +91,24 @@ export const checkable = (part, propName = part) => css`
     margin: 0 !important;
   }
 
-  [part='label'] {
+  /* Cover the gap next to the label */
+  :host([has-label]) ::slotted(input) {
+    inset-inline-end: calc(min(0px, (100% - 24px) / 2) - var(--vaadin-${unsafeCSS(propName)}-gap, var(--vaadin-gap-s)));
+  }
+
+  /* Make the space next to the label clickable */
+  [part~='label'] {
+    position: static;
     justify-self: start;
   }
 
-  ::slotted(label) {
-    position: relative;
+  :host([has-label]) ::slotted(label)::after {
+    content: '';
+    position: absolute;
+    grid-row: 1 / 2;
+    grid-column: 2 / 3;
+    inset: 0;
+    z-index: -1;
   }
 
   /* Control container (checkbox, radio button) */
@@ -191,6 +202,18 @@ export const checkable = (part, propName = part) => css`
     [part='${unsafeCSS(part)}'] {
       grid-column: 2;
     }
+
+    ::slotted(input) {
+      grid-column: 2 / 3;
+    }
+
+    ::slotted(label)::after {
+      grid-column: 1 / 2;
+    }
+  }
+
+  :host([theme~='reverse'][has-label]) ::slotted(input) {
+    inset-inline: calc(min(0px, (100% - 24px) / 2) - var(--vaadin-${unsafeCSS(propName)}-gap, var(--vaadin-gap-s))) min(0px, (100% - 24px) / 2);
   }
 
   @media (forced-colors: active) {
