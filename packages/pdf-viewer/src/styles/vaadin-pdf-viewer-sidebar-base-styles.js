@@ -65,14 +65,12 @@ export const pdfViewerSidebarStyles = css`
   }
 
   [part~='thumbnail'][part~='current'] {
-    background: var(--vaadin-background-container-strong);
     color: var(--vaadin-text-color);
     font-weight: 600;
   }
 
   [part~='thumbnail'][part~='current'] .thumbnail-image {
     outline: 2px solid var(--vaadin-text-color);
-    outline-offset: 2px;
   }
 
   .thumbnail-image {
