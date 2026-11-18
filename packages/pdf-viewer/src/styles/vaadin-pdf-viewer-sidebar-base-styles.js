@@ -70,7 +70,7 @@ export const pdfViewerSidebarStyles = css`
   }
 
   [part~='thumbnail'][part~='current'] .thumbnail-image {
-    outline: 2px solid var(--vaadin-text-color);
+    outline: 2px solid var(--vaadin-text-color-secondary);
   }
 
   .thumbnail-image {
