@@ -123,6 +123,12 @@ describe('switch', () => {
           await visualDiff(div, `${dir}-helper-text`);
         });
 
+        it('required wide', async () => {
+          element.required = true;
+          element.style.width = '300px';
+          await visualDiff(div, `${dir}-required-wide`);
+        });
+
         if (dir === 'rtl') {
           it('checked', async () => {
             element.checked = true;
