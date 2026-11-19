@@ -34,6 +34,22 @@ class CrudEdit extends Button {
     return [super.styles, crudEditStyles];
   }
 
+  static get properties() {
+    return {
+      /**
+       * The accessible name of the button.
+       *
+       * @attr {string} aria-label
+       */
+      ariaLabel: {
+        type: String,
+        value: 'Edit',
+        reflectToAttribute: true,
+        sync: true,
+      },
+    };
+  }
+
   /** @protected */
   render() {
     return html`
@@ -46,9 +62,6 @@ class CrudEdit extends Button {
   ready() {
     super.ready();
     this.addEventListener('click', this.__onClick);
-    if (!this.hasAttribute('aria-label')) {
-      this.setAttribute('aria-label', 'Edit');
-    }
   }
 
   /** @private */
