@@ -20,5 +20,6 @@ export declare class PdfViewerLinkLayer {
     pdfPage: PDFPageProxy,
     followLink: (annotation: PdfViewerLinkAnnotation) => void,
     optionalContentConfig?: Awaited<ReturnType<PDFDocumentProxy['getOptionalContentConfig']>>,
+    linkGroups?: string[][],
   ): Promise<Array<{ link: HTMLAnchorElement; annotation: PdfViewerLinkAnnotation }>>;
 }

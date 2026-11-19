@@ -404,4 +404,83 @@ describe('structure', () => {
       expect(getLink().getAttribute('aria-label')).to.equal('Vaadin documentation (åpnes i en ny fane)');
     });
   });
+
+  describe('links of figures and of several lines', () => {
+    // As Chromium writes them, with an annotation for each line of a link, or for its line and its image.
+    function severalAnnotationsTree(children: PdfViewerStructTreeNode[], annotationCount = 2) {
+      const annotations = [7, 8]
+        .slice(0, annotationCount)
+        .map((id) => ({ type: 'annotation', id: `pdfjs_internal_id_${id}R` }));
+      return { role: 'Root', children: [{ role: 'Link', children: [...children, ...annotations] }] };
+    }
+
+    function getLinks() {
+      return viewer.shadowRoot!.querySelectorAll('a.link');
+    }
+
+    const figure = { role: 'Figure', alt: 'Vaadin logo', children: [{ type: 'content', id: 'p5R_mc0' }] };
+
+    const figurePdf = {
+      content: '/Figure << /MCID 0 >> BDC 0 0 1 rg 72 690 58 30 re f EMC',
+      annotations: [uriLink([72, 690, 130, 706]), uriLink([72, 690, 130, 720])],
+    };
+
+    const wrappedLinkPdf = {
+      content: '/Link << /MCID 0 >> BDC BT /F1 24 Tf 72 700 Td (Vaadin) Tj 0 -30 Td (docs) Tj ET EMC',
+      annotations: [uriLink([72, 690, 150, 720]), uriLink([72, 660, 130, 690])],
+    };
+
+    it('should render a link with an annotation for each line as one link, with an area for each line', async () => {
+      await stubStructTrees(() => severalAnnotationsTree([{ type: 'content', id: 'p5R_mc0' }]));
+      await loadPdf([wrappedLinkPdf]);
+      expect(getLinks()).to.have.lengthOf(1);
+      // The focus ring goes around each area.
+      expect(getLink().querySelectorAll('.link-area')).to.have.lengthOf(2);
+    });
+
+    it('should name a link with an annotation for each line by all its lines', async () => {
+      await stubStructTrees(() => severalAnnotationsTree([{ type: 'content', id: 'p5R_mc0' }]));
+      await loadPdf([wrappedLinkPdf]);
+      expect(getLink().getAttribute('aria-label')).to.equal('Vaadin docs (opens in a new tab)');
+      expect(getOwnedText(getLink())).to.equal('Vaadindocs');
+    });
+
+    it('should keep the annotations of a link apart when its structure renders after the links', async () => {
+      await stubStructTrees(() => severalAnnotationsTree([{ type: 'content', id: 'p5R_mc0' }]));
+      await failTextOnce(1);
+      sinon.stub(console, 'warn');
+      await loadPdf([wrappedLinkPdf]);
+      expect(getLinks()).to.have.lengthOf(2);
+    });
+
+    it('should name a link by the alternative text of its figure, which the link then replaces', async () => {
+      await stubStructTrees(() => severalAnnotationsTree([figure]));
+      await loadPdf([figurePdf]);
+      expect(getLinks()).to.have.lengthOf(1);
+      expect(getLink().getAttribute('aria-label')).to.equal('Vaadin logo (opens in a new tab)');
+      expect(getTree()!.querySelector('[role]')).to.be.null;
+    });
+
+    it('should name a link with a figure and text by its text, as it shows the text', async () => {
+      await stubStructTrees(() => severalAnnotationsTree([figure, { type: 'content', id: 'p5R_mc1' }], 1));
+      await loadPdf([
+        {
+          content: `${figurePdf.content} /Span << /MCID 1 >> BDC BT /F1 24 Tf 140 700 Td (Docs) Tj ET EMC`,
+          annotations: [uriLink([72, 690, 200, 720])],
+        },
+      ]);
+      expect(getLink().getAttribute('aria-label')).to.equal('Docs (opens in a new tab)');
+      expect(getTree()!.querySelector('[role="img"]')!.getAttribute('aria-label')).to.equal('Vaadin logo');
+    });
+
+    it('should keep the image of the figure when the links fail to load', async () => {
+      await stubStructTrees(() => severalAnnotationsTree([figure]));
+      await failLinksOnce(1);
+      sinon.stub(console, 'warn');
+      await loadPdf([figurePdf]);
+      expect(getTree()!.querySelector('[role="figure"] > [role="img"]')!.getAttribute('aria-label')).to.equal(
+        'Vaadin logo',
+      );
+    });
+  });
 });

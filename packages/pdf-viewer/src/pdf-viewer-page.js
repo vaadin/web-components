@@ -335,7 +335,12 @@ export class PdfViewerPage {
 
     const { signal } = this.#abortController;
     const linkLayer = new PdfViewerLinkLayer();
-    const links = await linkLayer.render(this.pdfPage, followLink, optionalContentConfig);
+    const links = await linkLayer.render(
+      this.pdfPage,
+      followLink,
+      optionalContentConfig,
+      this.#structureLayer?.getLinkGroups(),
+    );
     // The page may have been released meanwhile.
     if (signal.aborted || this.linkLayer) {
       return [];

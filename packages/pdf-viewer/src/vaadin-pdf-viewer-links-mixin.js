@@ -90,8 +90,9 @@ export const PdfViewerLinksMixin = (superClass) =>
      */
     #updateLinkLabel(link) {
       const { page, ...parts } = this.#linkLabels.get(link);
-      const text =
-        collapseWhitespace(page.getLinkAlt(link)) || parts.text || collapseWhitespace(page.getLinkText(link));
+      const ownText = collapseWhitespace(page.getLinkText(link));
+      // The text it owns when that holds the text it covers, such as all lines of a wrapped link.
+      const text = collapseWhitespace(page.getLinkAlt(link)) || (ownText?.includes(parts.text) ? ownText : parts.text);
       link.setAttribute('aria-label', getLinkLabel({ ...parts, text }, this.__effectiveI18n));
     }
 
