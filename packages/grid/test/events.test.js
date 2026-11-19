@@ -75,6 +75,18 @@ describe('events', () => {
       await sendMouseToElement({ type: 'click', element: getBodyCellContent(grid, 0, 0).firstElementChild });
       expect(spy).not.to.be.called;
     });
+
+    it('should not fire when clicking inside a native popover rendered in a cell', async () => {
+      column.renderer = (root) => {
+        root.innerHTML = '<div popover="manual">Popover</div>';
+      };
+      flushGrid(grid);
+
+      const popover = getBodyCellContent(grid, 0, 0).querySelector('div');
+      popover.showPopover();
+      await sendMouseToElement({ type: 'click', element: popover });
+      expect(spy).not.to.be.called;
+    });
   });
 
   describe('row-activate', () => {
