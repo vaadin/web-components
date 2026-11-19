@@ -78,8 +78,8 @@ export const CheckboxGroupMixin = (superclass) =>
     }
 
     /**
-     * Override method inherited from `FocusMixin` to move focus to the
-     * first enabled checkbox, since the group host itself is not focusable.
+     * Override method inherited from `FocusMixin`
+     * to move focus to the first enabled checkbox.
      *
      * @param {FocusOptions=} options
      * @protected
