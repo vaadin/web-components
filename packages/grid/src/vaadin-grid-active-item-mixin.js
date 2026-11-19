@@ -21,7 +21,7 @@ export const isFocusable = (target) => {
 };
 
 /**
-   * Popover content renders in the top layer, so `isFocusable` and `:focus-within` miss clicks inside it.
+ * Popover content renders in the top layer, so `isFocusable` and `:focus-within` miss clicks inside it.
  *
  * @param {!Event} event
  * @param {!HTMLElement} cell
