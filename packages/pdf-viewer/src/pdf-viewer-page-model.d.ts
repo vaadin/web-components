@@ -19,7 +19,21 @@ export interface PdfViewerPlannedLink {
   ownedByStructure: boolean;
 }
 
+export interface PdfViewerStructNode {
+  role?: string | null;
+  level?: string;
+  label?: string;
+  description?: string;
+  owns?: string;
+  lang?: string;
+  rowSpan?: number;
+  colSpan?: number;
+  image?: string;
+  children: PdfViewerStructNode[];
+}
+
 export interface PdfViewerLinkPlan {
+  root: object | null;
   links: PdfViewerPlannedLink[];
   linkIds: Set<string>;
   linkContents: Set<PdfViewerStructTreeNode>;
@@ -37,27 +51,16 @@ export interface PdfViewerTextIndex {
   markers: PdfViewerTextMarker[];
 }
 
-export declare const PDF_ROLE_TO_ARIA_ROLE: Record<string, string>;
-
-export declare const ROLES_WITHOUT_NAME: Set<string>;
-
-export declare const HEADING_PATTERN: RegExp;
-
-export declare function isContent(node: PdfViewerStructTreeNode): boolean;
-
-export declare function canOwn(node: PdfViewerStructTreeNode): boolean;
-
-export declare function getRole(node: PdfViewerStructTreeNode, parents: PdfViewerStructTreeNode[]): string | null;
-
-export declare function getChildren(node: PdfViewerStructTreeNode, role: string | null): PdfViewerStructTreeNode[];
-
-export declare function getAnnotationIds(node: PdfViewerStructTreeNode): string[];
-
 export declare function planLinks(
   tree: PdfViewerStructTreeNode | null,
   annotations: PdfViewerLinkAnnotation[],
   isRendered: (annotation: PdfViewerLinkAnnotation) => boolean,
 ): PdfViewerLinkPlan;
+
+export declare function buildStructure(
+  plan: PdfViewerLinkPlan,
+  contentSpans: Map<string, string[]>,
+): PdfViewerStructNode | null;
 
 export declare function indexText(items: object[]): PdfViewerTextIndex;
 

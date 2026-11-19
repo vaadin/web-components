@@ -29,7 +29,7 @@
 import { ANNOTATION_ID_PREFIX, compareAnnotationPositions } from './pdf-viewer-text-accessibility.js';
 
 /** The ARIA roles of the standard structure types of tagged PDFs. */
-export const PDF_ROLE_TO_ARIA_ROLE = {
+const PDF_ROLE_TO_ARIA_ROLE = {
   Part: 'group',
   Art: 'article',
   Sect: 'group',
@@ -64,9 +64,9 @@ export const PDF_ROLE_TO_ARIA_ROLE = {
 };
 
 /** Roles that must not have a name, so alternative text becomes a description. */
-export const ROLES_WITHOUT_NAME = new Set(['caption', 'code', 'emphasis', 'generic', 'paragraph', 'strong']);
+const ROLES_WITHOUT_NAME = new Set(['caption', 'code', 'emphasis', 'generic', 'paragraph', 'strong']);
 
-export const HEADING_PATTERN = /^H(\d+)$/u;
+const HEADING_PATTERN = /^H(\d+)$/u;
 
 /** Roles whose children must have specific roles, so content directly in them stays in the text layer. */
 const ROLES_WITH_REQUIRED_CHILDREN = new Set(['list', 'row', 'rowgroup', 'table']);
@@ -79,7 +79,7 @@ const CONTENT_ID_PATTERN = /^p\d+R\d*_mc\d+$/u;
  * @param {object} node
  * @return {boolean}
  */
-export function isContent(node) {
+function isContent(node) {
   return !('role' in node) && 'id' in node;
 }
 
@@ -88,7 +88,7 @@ export function isContent(node) {
  * @param {object} node
  * @return {boolean}
  */
-export function canOwn({ type, id }) {
+function canOwn({ type, id }) {
   return type === 'content' && CONTENT_ID_PATTERN.test(id);
 }
 
@@ -98,7 +98,7 @@ export function canOwn({ type, id }) {
  * @param {object[]} parents the ancestors of the node, nearest last
  * @return {string | null}
  */
-export function getRole(node, parents) {
+function getRole(node, parents) {
   const { role } = node;
   // Not an inherited property, e.g. for a role named `constructor`.
   let ariaRole = Object.hasOwn(PDF_ROLE_TO_ARIA_ROLE, role) ? PDF_ROLE_TO_ARIA_ROLE[role] : null;
@@ -124,7 +124,7 @@ export function getRole(node, parents) {
  * @param {string | null} role the ARIA role of the element
  * @return {object[]}
  */
-export function getChildren(node, role) {
+function getChildren(node, role) {
   const hasRequiredChildren = ROLES_WITH_REQUIRED_CHILDREN.has(role);
   return (node.children || []).filter((child) => !(hasRequiredChildren && isContent(child)));
 }
@@ -134,8 +134,45 @@ export function getChildren(node, role) {
  * @param {object} node
  * @return {string[]}
  */
-export function getAnnotationIds(node) {
+function getAnnotationIds(node) {
   return (node.children || []).filter((child) => child.type === 'annotation').map(({ id }) => id);
+}
+
+/**
+ * Whether a figure gets an image with its alternative text, as a figure that owns no text has no content to read.
+ * Not a figure with a link, which the alternative text names instead.
+ * @param {object} node
+ * @return {boolean}
+ */
+function hasImage(node) {
+  return node.role === 'Figure' && !!node.alt && !getAnnotationIds(node).length;
+}
+
+/**
+ * Returns the element of the structure layer for a node of the structure tree, with the elements of its children.
+ * A single content child is owned by the element directly.
+ * @param {object} node
+ * @param {object[]} parents the ancestors of the node, nearest last
+ * @return {{ node: object, role: string | null, level?: string, nodes: object[], owned: object[], children: object[] }}
+ */
+function toElement(node, parents) {
+  let role = null;
+  let level;
+  if ('role' in node) {
+    const heading = node.role.match(HEADING_PATTERN);
+    role = heading ? 'heading' : getRole(node, parents);
+    level = heading?.[1];
+  }
+  const nodes = getChildren(node, role);
+  const ownsChild = nodes.length === 1 && isContent(nodes[0]);
+  return {
+    node,
+    role,
+    level,
+    nodes,
+    owned: ownsChild ? [node, nodes[0]] : [node],
+    children: ownsChild ? [] : nodes.map((child) => toElement(child, [...parents, node])),
+  };
 }
 
 /**
@@ -149,53 +186,43 @@ export function getAnnotationIds(node) {
  * @return {import('./pdf-viewer-page-model.js').PdfViewerLinkPlan}
  */
 export function planLinks(tree, annotations, isRendered) {
+  const root = tree ? toElement(tree, []) : null;
   const ownedAnnotations = new Set();
   const alts = new Map();
   const contents = [];
   const linkElements = [];
   const contentIds = new Set();
 
-  function own(node, linkChain) {
-    if (node.type === 'annotation') {
-      ownedAnnotations.add(node.id);
-    } else if (canOwn(node)) {
-      contentIds.add(node.id);
-      contents.push({ node, linkChain });
-    }
-  }
-
-  // The same elements as the structure layer, see `PdfViewerStructureLayer`.
-  function visit(node, parents, linkChain) {
-    const role = 'role' in node ? getRole(node, parents) : null;
+  function visit({ node, nodes, owned, children }, linkChain) {
     if (node.alt !== undefined) {
       getAnnotationIds(node).forEach((id) => alts.set(id, node.alt));
     }
-    own(node, linkChain);
-    const children = getChildren(node, role);
     let chain = linkChain;
-    if (node.role === 'Link') {
-      const ids = children.filter((child) => child.type === 'annotation').map(({ id }) => id);
-      if (ids.length) {
-        const isFigure = children.every((child) => child.type === 'annotation' || child.role === 'Figure');
-        const element = { ids, isFigure, image: null };
-        linkElements.push(element);
-        chain = [...linkChain, element];
-      }
+    const ids = node.role === 'Link' ? nodes.filter((child) => child.type === 'annotation').map(({ id }) => id) : [];
+    if (ids.length) {
+      const isFigure = nodes.every((child) => child.type === 'annotation' || child.role === 'Figure');
+      const element = { ids, isFigure, image: null };
+      linkElements.push(element);
+      chain = [...linkChain, element];
     }
-    if (node.role === 'Figure' && node.alt && !getAnnotationIds(node).length) {
+    if (hasImage(node)) {
       chain.forEach((element) => {
         element.image ??= node;
       });
     }
-    if (children.length === 1 && isContent(children[0])) {
-      own(children[0], chain);
-    } else {
-      children.forEach((child) => visit(child, [...parents, node], chain));
-    }
+    owned.forEach((ownedNode) => {
+      if (ownedNode.type === 'annotation') {
+        ownedAnnotations.add(ownedNode.id);
+      } else if (canOwn(ownedNode)) {
+        contentIds.add(ownedNode.id);
+        contents.push({ node: ownedNode, linkChain: chain });
+      }
+    });
+    children.forEach((child) => visit(child, chain));
   }
 
-  if (tree) {
-    visit(tree, [], []);
+  if (root) {
+    visit(root, []);
   }
 
   const linkElementOf = new Map(linkElements.flatMap((element) => element.ids.map((id) => [id, element])));
@@ -245,7 +272,50 @@ export function planLinks(tree, annotations, isRendered) {
     }
   });
 
-  return { links, linkIds: new Set(links.map(({ id }) => id)), linkContents, linkFigures, contentIds };
+  return { root, links, linkIds: new Set(links.map(({ id }) => id)), linkContents, linkFigures, contentIds };
+}
+
+/**
+ * Builds the structure of a tagged PDF page for assistive technology, as the plan of its links leaves it.
+ *
+ * @param {import('./pdf-viewer-page-model.js').PdfViewerLinkPlan} plan
+ * @param {Map<string, string[]>} contentSpans the ids of the text elements of each marked content
+ * @return {import('./pdf-viewer-page-model.js').PdfViewerStructNode | null}
+ */
+export function buildStructure({ root, linkIds, linkContents, linkFigures }, contentSpans) {
+  function build({ node, role, level, owned, children }) {
+    const { alt, lang, rowSpan, colSpan } = node;
+    const structNode = { role, level };
+    if (hasImage(node)) {
+      if (linkFigures.has(node)) {
+        // The link takes the place of the figure.
+        structNode.role = null;
+      } else {
+        structNode.image = alt;
+      }
+    } else if (alt !== undefined && !getAnnotationIds(node).some((id) => linkIds.has(id))) {
+      // A role that must not have a name gets a description. The link of an annotation gets the name instead.
+      structNode[ROLES_WITHOUT_NAME.has(role || 'generic') ? 'description' : 'label'] = alt;
+    }
+    const owns = owned.flatMap((ownedNode) => {
+      // Unlike in pdf.js, only the annotations that an element owns, as lists and tables skip their direct content.
+      if (ownedNode.type === 'annotation') {
+        return linkIds.has(ownedNode.id) ? [ownedNode.id] : [];
+      }
+      // The text elements, as Chrome ignores `aria-owns` of the marked content, which has `display: contents`.
+      if (canOwn(ownedNode) && !linkContents.has(ownedNode)) {
+        return contentSpans.get(ownedNode.id) ?? [ownedNode.id];
+      }
+      return [];
+    });
+    if (owns.length) {
+      structNode.owns = owns.join(' ');
+    }
+    Object.assign(structNode, { lang, rowSpan, colSpan, children: children.map(build) });
+    return structNode;
+  }
+
+  return root ? build(root) : null;
 }
 
 /** The number of text elements after which `TextLayer` of pdf.js renders no more text. */

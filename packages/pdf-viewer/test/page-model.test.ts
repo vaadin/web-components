@@ -1,5 +1,5 @@
 import { expect } from '@vaadin/chai-plugins';
-import { getContentIndexes, getText, indexText, planLinks } from '../src/pdf-viewer-page-model.js';
+import { buildStructure, getContentIndexes, getText, indexText, planLinks } from '../src/pdf-viewer-page-model.js';
 import type { PdfViewerStructTreeNode } from '../src/pdf-viewer-structure-layer.js';
 import { PdfViewerTextLayer } from '../src/pdf-viewer-text-layer.js';
 import { acquireWorker, loadPdfjs, releaseWorker } from '../src/pdfjs-loader.js';
@@ -74,6 +74,47 @@ describe('page model', () => {
       const tree = { role: 'Root', children: [{ role: 'Table', children: [annotationNode(5)] }] };
       const plan = planLinks(tree, [annotation(5)], () => true);
       expect(plan.links[0].ownedByStructure).to.be.false;
+    });
+  });
+
+  describe('buildStructure', () => {
+    const annotation = { id: '5R', rect: [72, 700, 150, 720] };
+
+    function build(children: PdfViewerStructTreeNode[], isRendered = false) {
+      const plan = planLinks({ role: 'Root', children }, [annotation], () => isRendered);
+      return buildStructure(plan, new Map([['p3R_mc0', ['p3R_mc0_0']]]))!.children;
+    }
+
+    it('should give an element the text elements of its marked content', () => {
+      const [paragraph] = build([{ role: 'P', children: [{ type: 'content', id: 'p3R_mc0' }] }]);
+      expect(paragraph).to.include({ role: 'paragraph', owns: 'p3R_mc0_0' });
+    });
+
+    it('should give a figure an image with its alternative text', () => {
+      const [figure] = build([{ role: 'Figure', alt: 'Logo', children: [{ type: 'content', id: 'p3R_mc0' }] }]);
+      expect(figure).to.include({ role: 'figure', image: 'Logo' });
+      expect(figure.label).to.be.undefined;
+    });
+
+    it('should leave the text, the figure and the alternative text of a link structure element to its link', () => {
+      const figure = { role: 'Figure', alt: 'Logo', children: [{ type: 'content', id: 'p3R_mc0' }] };
+      const [link] = build(
+        [{ role: 'Link', children: [figure, { type: 'annotation', id: 'pdfjs_internal_id_5R' }] }],
+        true,
+      );
+      const [figureNode, annotationNode] = link.children;
+      expect(figureNode).to.include({ role: null });
+      expect(figureNode.image).to.be.undefined;
+      expect(figureNode.owns).to.be.undefined;
+      expect(annotationNode.owns).to.equal('pdfjs_internal_id_5R');
+    });
+
+    it('should keep the alternative text of an element whose annotation gets no link', () => {
+      const [form] = build([
+        { role: 'Form', alt: 'Name', children: [{ type: 'annotation', id: 'pdfjs_internal_id_5R' }] },
+      ]);
+      expect(form).to.include({ role: 'form', label: 'Name' });
+      expect(form.owns).to.be.undefined;
     });
   });
 

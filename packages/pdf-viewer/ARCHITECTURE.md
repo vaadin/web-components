@@ -80,6 +80,9 @@ how to generate them.
     the links, which text and figure of the structure each link takes, and its alternative text.
   - The structure and the links render once with these attributes. Nothing removes or moves them afterwards.
     When the links fail to render, the structure renders as if no annotation had a link.
+  - `buildStructure()` builds the structure as data from the plan and the text elements, adapted from
+    `StructTreeLayerBuilder` of pdf.js. `PdfViewerStructureLayer` only renders it. The functions of
+    `pdf-viewer-page-model.js` use no DOM, so their tests need no PDF.
 - After a page canvas renders, `PdfViewerRenderMixin` awaits `_renderPageLayers(page)`. Each override awaits
   `super` first, so the layers render in the order of the mixins: text and structure, then links.
 - The page view owns the DOM of a page. A Lit template renders the canvas, the text layer and the link layer

@@ -1,5 +1,5 @@
 import { expect } from '@vaadin/chai-plugins';
-import { planLinks } from '../src/pdf-viewer-page-model.js';
+import { buildStructure, planLinks } from '../src/pdf-viewer-page-model.js';
 import { type PdfViewerStructTreeNode, PdfViewerStructureLayer } from '../src/pdf-viewer-structure-layer.js';
 
 describe('structure layer', () => {
@@ -8,7 +8,7 @@ describe('structure layer', () => {
     const tree = { role: 'Root', children };
     const annotations = linkIds.map((id) => ({ id: id.replace('pdfjs_internal_id_', ''), rect: [0, 0, 10, 10] }));
     const plan = planLinks(tree, annotations, () => true);
-    return new PdfViewerStructureLayer(tree, plan, contentSpans);
+    return new PdfViewerStructureLayer(buildStructure(plan, contentSpans)!);
   }
 
   it('should not take a role from the inherited properties of objects', () => {

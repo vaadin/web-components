@@ -26,130 +26,47 @@
  * See the License for the specific language governing permissions and
  * limitations under the License.
  */
-import {
-  canOwn,
-  getAnnotationIds,
-  getChildren,
-  getRole,
-  HEADING_PATTERN,
-  isContent,
-  ROLES_WITHOUT_NAME,
-} from './pdf-viewer-page-model.js';
-
 /**
- * Gives a structure element its alternative text, as a description for a role that must not have a name.
- * @param {HTMLElement} element
- * @param {string} alt
+ * Returns the element of a node of the structure, with the elements of its children.
+ * @param {import('./pdf-viewer-page-model.js').PdfViewerStructNode} node
+ * @return {HTMLElement}
  */
-function setAlt(element, alt) {
-  const role = element.getAttribute('role') || 'generic';
-  element.setAttribute(ROLES_WITHOUT_NAME.has(role) ? 'aria-description' : 'aria-label', alt);
+function renderNode({ role, level, label, description, owns, lang, rowSpan, colSpan, image, children }) {
+  const element = document.createElement('span');
+  const attributes = {
+    role,
+    'aria-level': level,
+    'aria-label': label,
+    'aria-description': description,
+    'aria-owns': owns,
+    lang,
+    'aria-rowspan': rowSpan,
+    'aria-colspan': colSpan,
+  };
+  Object.entries(attributes).forEach(([name, value]) => {
+    if (value !== undefined && value !== null) {
+      element.setAttribute(name, value);
+    }
+  });
+  if (image !== undefined) {
+    const imageElement = document.createElement('span');
+    imageElement.setAttribute('role', 'img');
+    imageElement.setAttribute('aria-label', image);
+    element.append(imageElement);
+  }
+  element.append(...children.map(renderNode));
+  return element;
 }
 
 /**
- * Exposes the structure of a tagged PDF page to assistive technology, adapted from `StructTreeLayerBuilder` of pdf.js.
+ * Exposes the structure of a tagged PDF page to assistive technology, as `buildStructure()` builds it.
  */
 export class PdfViewerStructureLayer {
-  /** @type {import('./pdf-viewer-page-model.js').PdfViewerLinkPlan} */
-  #plan;
-
-  /** @type {Map<string, string[]>} */
-  #contentSpans;
-
   /**
-   * @param {object} tree the result of `PDFPageProxy.getStructTree()`
-   * @param {import('./pdf-viewer-page-model.js').PdfViewerLinkPlan} plan the links of the page
-   * @param {Map<string, string[]>} contentSpans the ids of the text elements of each marked content
+   * @param {import('./pdf-viewer-page-model.js').PdfViewerStructNode} structure
    */
-  constructor(tree, plan, contentSpans) {
-    this.#plan = plan;
-    this.#contentSpans = contentSpans;
-    this.element = this.#walk(tree, []);
+  constructor(structure) {
+    this.element = renderNode(structure);
     this.element.className = 'struct-tree';
-  }
-
-  /**
-   * Sets the ARIA attributes of a structure element.
-   * @param {object} node a node of `PDFPageProxy.getStructTree()`
-   * @param {HTMLElement} element
-   * @private
-   */
-  #setAttributes(node, element) {
-    const { alt, lang, rowSpan, colSpan } = node;
-    // The alternative text of an element whose annotation renders as a link names the link instead.
-    if (alt !== undefined && !getAnnotationIds(node).some((id) => this.#plan.linkIds.has(id))) {
-      setAlt(element, alt);
-    }
-    if (node.type === 'annotation') {
-      // Unlike in pdf.js, only the annotations that an element owns, as lists and tables skip their direct content.
-      if (this.#plan.linkIds.has(node.id)) {
-        element.setAttribute('aria-owns', node.id);
-      }
-    } else if (canOwn(node) && !this.#plan.linkContents.has(node)) {
-      // The text elements, as Chrome ignores `aria-owns` of the marked content, which has `display: contents`.
-      const ids = this.#contentSpans.get(node.id) ?? [node.id];
-      if (ids.length) {
-        element.setAttribute('aria-owns', ids.join(' '));
-      }
-    }
-    if (lang !== undefined) {
-      element.setAttribute('lang', lang);
-    }
-    if (rowSpan !== undefined) {
-      element.setAttribute('aria-rowspan', rowSpan);
-    }
-    if (colSpan !== undefined) {
-      element.setAttribute('aria-colspan', colSpan);
-    }
-  }
-
-  /**
-   * Creates the element of a node of the structure tree, with the elements of its children.
-   * @param {object} node
-   * @param {object[]} parents the ancestors of the node, nearest last
-   * @return {HTMLElement}
-   * @private
-   */
-  #walk(node, parents) {
-    const element = document.createElement('span');
-    if ('role' in node) {
-      const heading = node.role.match(HEADING_PATTERN);
-      if (heading) {
-        element.setAttribute('role', 'heading');
-        element.setAttribute('aria-level', heading[1]);
-      } else {
-        const role = getRole(node, parents);
-        if (role) {
-          element.setAttribute('role', role);
-        }
-      }
-    }
-    this.#setAttributes(node, element);
-
-    // An image with the alternative text, as a figure that owns no text has no content to read.
-    // Not for a figure with a link, which the alternative text names instead.
-    if (node.role === 'Figure' && node.alt && !getAnnotationIds(node).length) {
-      element.removeAttribute('aria-label');
-      if (this.#plan.linkFigures.has(node)) {
-        // The link takes the place of the figure.
-        element.removeAttribute('role');
-      } else {
-        const image = document.createElement('span');
-        image.setAttribute('role', 'img');
-        image.setAttribute('aria-label', node.alt);
-        element.append(image);
-      }
-    }
-
-    const children = getChildren(node, element.getAttribute('role'));
-    if (children.length === 1 && isContent(children[0])) {
-      // A single content child is owned by this element directly.
-      this.#setAttributes(children[0], element);
-    } else {
-      parents.push(node);
-      children.forEach((child) => element.append(this.#walk(child, parents)));
-      parents.pop();
-    }
-    return element;
   }
 }

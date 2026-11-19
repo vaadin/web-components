@@ -11,7 +11,7 @@
 import { html, nothing, render } from 'lit';
 import { PdfViewerLinkLayer } from './pdf-viewer-link-layer.js';
 import { isSupportedLink } from './pdf-viewer-links.js';
-import { planLinks } from './pdf-viewer-page-model.js';
+import { buildStructure, planLinks } from './pdf-viewer-page-model.js';
 import { PdfViewerStructureLayer } from './pdf-viewer-structure-layer.js';
 import { PdfViewerTextLayer } from './pdf-viewer-text-layer.js';
 
@@ -38,7 +38,7 @@ export class PdfViewerPage {
 
   /**
    * The links of the page and their place in the structure, undefined until the links render or fail to render.
-   * @type {(import('./pdf-viewer-page-model.js').PdfViewerLinkPlan & { tree: object | null }) | undefined}
+   * @type {import('./pdf-viewer-page-model.js').PdfViewerLinkPlan | undefined}
    */
   #linkPlan;
 
@@ -318,10 +318,10 @@ export class PdfViewerPage {
       !(annotation.oc && optionalContentConfig?.isVisible(annotation.oc) === false) &&
       isSupportedLink(annotation);
     try {
-      return { ...planLinks(tree, annotations, isRendered), tree };
+      return planLinks(tree, annotations, isRendered);
     } catch {
       // As in pdf.js, a structure that fails to render does not break the other layers.
-      return { ...planLinks(null, annotations, isRendered), tree: null };
+      return planLinks(null, annotations, isRendered);
     }
   }
 
@@ -441,7 +441,7 @@ export class PdfViewerPage {
     const plan = this.#linkPlan;
     if (plan && this.textLayer?.rendered && this.#structureLayer === undefined) {
       const contentSpans = this.textLayer.getContentSpans(plan.contentIds);
-      this.#structureLayer = plan.tree ? this.#createStructureLayer(plan, contentSpans) : null;
+      this.#structureLayer = plan.root ? this.#createStructureLayer(plan, contentSpans) : null;
       this.#bindLinks(plan, contentSpans);
     }
     const structureElement = this.#structureLayer?.element;
@@ -454,7 +454,7 @@ export class PdfViewerPage {
   /** @private */
   #createStructureLayer(plan, contentSpans) {
     try {
-      return new PdfViewerStructureLayer(plan.tree, plan, contentSpans);
+      return new PdfViewerStructureLayer(buildStructure(plan, contentSpans));
     } catch {
       // As in pdf.js, a structure that fails to render does not break the other layers.
       return null;
