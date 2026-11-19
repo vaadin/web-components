@@ -27,6 +27,16 @@ export interface PdfViewerLinkPlan {
   contentIds: Set<string>;
 }
 
+export interface PdfViewerTextMarker {
+  id?: string;
+  isArtifact: boolean;
+}
+
+export interface PdfViewerTextIndex {
+  texts: Array<{ str: string; afterLineBreak: boolean; markers: PdfViewerTextMarker[] }>;
+  markers: PdfViewerTextMarker[];
+}
+
 export declare const PDF_ROLE_TO_ARIA_ROLE: Record<string, string>;
 
 export declare const ROLES_WITHOUT_NAME: Set<string>;
@@ -48,3 +58,9 @@ export declare function planLinks(
   annotations: PdfViewerLinkAnnotation[],
   isRendered: (annotation: PdfViewerLinkAnnotation) => boolean,
 ): PdfViewerLinkPlan;
+
+export declare function indexText(items: object[]): PdfViewerTextIndex;
+
+export declare function getContentIndexes(index: PdfViewerTextIndex, contentIds: Set<string>): Map<string, number[]>;
+
+export declare function getText(index: PdfViewerTextIndex, indexes: Array<number | undefined>): string;

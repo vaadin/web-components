@@ -8,24 +8,37 @@
  * See https://vaadin.com/commercial-license-and-service-terms for the full
  * license.
  */
+import { getContentIndexes, getText, indexText } from './pdf-viewer-page-model.js';
 import { addLinksToText } from './pdf-viewer-text-accessibility.js';
 import { loadPdfjs } from './pdfjs-loader.js';
 
 /**
- * Returns the text elements in the marked content, also in nested marked content that the structure does not own.
- * @param {HTMLElement} content
- * @param {Set<string>} contentIds the ids of the marked content that the structure owns
- * @return {HTMLElement[]}
+ * Returns a stream of the same text content, which adds the text items to the array as the text layer reads them.
+ * @param {ReadableStream} stream
+ * @param {object[]} items
+ * @return {ReadableStream}
  */
-function getContentElements(content, contentIds) {
-  return [...content.children].flatMap((child) => {
-    if (child.localName === 'br' || child.getAttribute('aria-hidden') === 'true') {
-      return [];
-    }
-    if (!child.classList.contains('markedContent')) {
-      return [child];
-    }
-    return contentIds.has(child.id) ? [] : getContentElements(child, contentIds);
+function recordItems(stream, items) {
+  // With a reader, as Safari 26 and earlier cannot read a stream with `for await`.
+  const reader = stream.getReader();
+  let cancelled = false;
+  return new ReadableStream({
+    async pull(controller) {
+      const { value, done } = await reader.read();
+      if (cancelled) {
+        return;
+      }
+      if (done) {
+        controller.close();
+        return;
+      }
+      value.items.forEach((item) => items.push(item));
+      controller.enqueue(value);
+    },
+    cancel(reason) {
+      cancelled = true;
+      return reader.cancel(reason);
+    },
   });
 }
 
@@ -39,6 +52,15 @@ export class PdfViewerTextLayer {
 
   /** Set once the text owns the links of the page. */
   #linksBound = false;
+
+  /** @type {import('./pdf-viewer-page-model.js').PdfViewerTextIndex} */
+  #index = { texts: [], markers: [] };
+
+  /**
+   * The index of each text element with an id, see `getContentSpans()`.
+   * @type {Map<string, number>}
+   */
+  #textIndexes = new Map();
 
   constructor() {
     this.element = document.createElement('div');
@@ -72,13 +94,15 @@ export class PdfViewerTextLayer {
       return;
     }
 
-    // As in the viewer of pdf.js, the text layer reads the stream itself.
+    // As in the viewer of pdf.js, the text layer reads the stream itself. Its items index the text.
+    const items = [];
     this.#textLayer = new TextLayer({
-      textContentSource: pdfPage.streamTextContent({ includeMarkedContent: true }),
+      textContentSource: recordItems(pdfPage.streamTextContent({ includeMarkedContent: true }), items),
       container: this.element,
       viewport,
     });
     await this.#textLayer.render();
+    this.#index = indexText(items);
 
     const endOfContent = document.createElement('div');
     endOfContent.className = 'end-of-content';
@@ -87,24 +111,36 @@ export class PdfViewerTextLayer {
   }
 
   /**
-   * Returns the ids of the text elements of each marked content that the structure owns, and gives the elements ids.
-   * Leaves out marked content that has no element. Artifacts, such as page numbers, stay hidden.
+   * Returns the ids of the text elements of each marked content that the structure owns, and gives the elements ids,
+   * as Chrome ignores `aria-owns` of the marked content, which has `display: contents`. Leaves out marked content
+   * that has no element. Artifacts, such as page numbers, stay hidden.
    * @param {Set<string>} contentIds the ids of the marked content that the structure owns
    * @return {Map<string, string[]>}
    */
   getContentSpans(contentIds) {
     const contentSpans = new Map();
-    contentIds.forEach((id) => {
-      const content = this.element.querySelector(`#${id}`);
-      if (content) {
-        const ids = getContentElements(content, contentIds).map((element, index) => {
-          element.id ||= `${id}_${index}`;
-          return element.id;
-        });
-        contentSpans.set(id, ids);
-      }
+    getContentIndexes(this.#index, contentIds).forEach((indexes, id) => {
+      const ids = indexes.map((index, position) => {
+        const element = this.textDivs[index];
+        element.id ||= `${id}_${position}`;
+        this.#textIndexes.set(element.id, index);
+        return element.id;
+      });
+      contentSpans.set(id, ids);
     });
     return contentSpans;
+  }
+
+  /**
+   * Returns the text of the text elements with the ids, with a space between their lines.
+   * @param {string[]} ids
+   * @return {string}
+   */
+  getText(ids) {
+    return getText(
+      this.#index,
+      ids.map((id) => this.#textIndexes.get(id)),
+    );
   }
 
   /**

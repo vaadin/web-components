@@ -247,3 +247,87 @@ export function planLinks(tree, annotations, isRendered) {
 
   return { links, linkIds: new Set(links.map(({ id }) => id)), linkContents, linkFigures, contentIds };
 }
+
+/** The number of text elements after which `TextLayer` of pdf.js renders no more text. */
+const MAX_TEXT_DIVS_TO_RENDER = 100000;
+
+/**
+ * Indexes the text items of a page as `TextLayer` of pdf.js renders them: an element for each item with a string,
+ * which is appended unless the string is empty, a line break after an item that ends a line, and an element for
+ * each marked content, hidden for artifacts.
+ *
+ * @param {object[]} items the items of `PDFPageProxy.streamTextContent({ includeMarkedContent: true })`
+ * @return {import('./pdf-viewer-page-model.js').PdfViewerTextIndex}
+ */
+export function indexText(items) {
+  const texts = [];
+  const markers = [];
+  const openMarkers = [];
+  let afterLineBreak = false;
+  for (const item of items) {
+    // As in `TextLayer`, which checks before each item.
+    if (texts.length > MAX_TEXT_DIVS_TO_RENDER) {
+      break;
+    }
+    if (item.str !== undefined) {
+      texts.push({ str: item.str, afterLineBreak, markers: [...openMarkers] });
+      if (item.str) {
+        afterLineBreak = false;
+      }
+      if (item.hasEOL) {
+        afterLineBreak = true;
+      }
+    } else if (item.type === 'beginMarkedContentProps' || item.type === 'beginMarkedContent') {
+      const marker = { id: item.id, isArtifact: item.tag === 'Artifact' };
+      markers.push(marker);
+      openMarkers.push(marker);
+    } else if (item.type === 'endMarkedContent') {
+      openMarkers.pop();
+    }
+  }
+  return { texts, markers };
+}
+
+/**
+ * Returns the indexes of the text elements in each marked content that the structure owns, also in nested marked
+ * content that it does not own. Leaves out artifacts and marked content that has no element.
+ *
+ * @param {import('./pdf-viewer-page-model.js').PdfViewerTextIndex} index
+ * @param {Set<string>} contentIds the ids of the marked content that the structure owns
+ * @return {Map<string, number[]>}
+ */
+export function getContentIndexes({ texts, markers }, contentIds) {
+  // The text layer finds marked content by its id, so a second one with the same id has no text.
+  const contents = new Map();
+  markers.forEach((marker) => {
+    if (contentIds.has(marker.id) && !contents.has(marker.id)) {
+      contents.set(marker.id, marker);
+    }
+  });
+  const contentIndexes = new Map([...contents.keys()].map((id) => [id, []]));
+  texts.forEach(({ str, markers: openMarkers }, index) => {
+    // An element without text is not in the text layer.
+    if (!str) {
+      return;
+    }
+    const marker = openMarkers.findLast(({ id, isArtifact }) => contentIds.has(id) || isArtifact);
+    if (marker && contents.get(marker.id) === marker) {
+      contentIndexes.get(marker.id).push(index);
+    }
+  });
+  return contentIndexes;
+}
+
+/**
+ * Returns the text of text elements, with a space between their lines, as the text layer has a line break between
+ * them instead.
+ *
+ * @param {import('./pdf-viewer-page-model.js').PdfViewerTextIndex} index
+ * @param {Array<number | undefined>} indexes
+ * @return {string}
+ */
+export function getText({ texts }, indexes) {
+  return indexes
+    .map((index) => (index === undefined ? '' : `${texts[index].afterLineBreak ? ' ' : ''}${texts[index].str}`))
+    .join('');
+}

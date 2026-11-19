@@ -1,7 +1,6 @@
 import { expect } from '@vaadin/chai-plugins';
 import { planLinks } from '../src/pdf-viewer-page-model.js';
 import { type PdfViewerStructTreeNode, PdfViewerStructureLayer } from '../src/pdf-viewer-structure-layer.js';
-import { PdfViewerTextLayer } from '../src/pdf-viewer-text-layer.js';
 
 describe('structure layer', () => {
   // The structure of a page whose annotations of the ids render as links.
@@ -141,18 +140,11 @@ describe('structure layer', () => {
     expect(nonStruct.getAttribute('aria-description')).to.equal('Note');
   });
 
-  it('should own the text in marked content, and in nested marked content once, without artifacts', () => {
-    const textLayer = new PdfViewerTextLayer();
-    textLayer.element.innerHTML = `
-      <span class="markedContent" id="p3R_mc0">
-        <span>A</span>
-        <br>
-        <span class="markedContent" id="p3R_mc1"><span>B</span></span>
-        <span class="markedContent"><span>C</span></span>
-        <span class="markedContent" aria-hidden="true"><span>Artifact</span></span>
-      </span>
-    `;
-    const contentSpans = textLayer.getContentSpans(new Set(['p3R_mc0', 'p3R_mc1']));
+  it('should own the text elements of marked content, and nothing for marked content without text', () => {
+    const contentSpans = new Map([
+      ['p3R_mc0', ['p3R_mc0_0', 'p3R_mc0_1']],
+      ['p3R_mc1', []],
+    ]);
     const structure = create(
       [
         { role: 'P', children: [{ type: 'content', id: 'p3R_mc0' }] },
@@ -162,12 +154,9 @@ describe('structure layer', () => {
       contentSpans,
     );
     const owned = [...structure.element.querySelectorAll('[aria-owns]')].map((owner) =>
-      owner
-        .getAttribute('aria-owns')!
-        .split(' ')
-        .map((id) => textLayer.element.querySelector(`#${id}`)!.textContent),
+      owner.getAttribute('aria-owns'),
     );
-    expect(owned).to.deep.equal([['A', 'C'], ['B']]);
+    expect(owned).to.deep.equal(['p3R_mc0_0 p3R_mc0_1']);
   });
 
   it('should only own the elements of content', () => {

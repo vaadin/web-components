@@ -23,6 +23,8 @@ export declare class PdfViewerTextLayer {
 
   getContentSpans(contentIds: Set<string>): Map<string, string[]>;
 
+  getText(ids: string[]): string;
+
   bindLinks(links: HTMLElement[], linkTextIds?: Set<string>): void;
 
   update(viewport: PageViewport): void;

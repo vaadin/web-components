@@ -395,18 +395,7 @@ export class PdfViewerPage {
    */
   getLinkText(link) {
     const ids = link.getAttribute('aria-owns')?.split(' ');
-    if (!ids) {
-      return undefined;
-    }
-    const texts = new Map();
-    let afterLineBreak = false;
-    this.textLayer.element.querySelectorAll('br, span:not(.markedContent)').forEach((element) => {
-      if (ids.includes(element.id)) {
-        texts.set(element.id, `${afterLineBreak ? ' ' : ''}${element.textContent}`);
-      }
-      afterLineBreak = element.localName === 'br';
-    });
-    return ids.map((id) => texts.get(id)).join('');
+    return ids && this.textLayer?.getText(ids);
   }
 
   cancel() {

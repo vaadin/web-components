@@ -144,6 +144,9 @@ how to generate them.
   NVDA starts a new line at them. Otherwise, it reads a heading and the next paragraph as one line.
 - The structure owns the text elements in marked content, not the marked content itself. Marked content has
   `display: contents`, and Chrome ignores `aria-owns` of such elements. Artifacts, such as page numbers, stay hidden.
+- The text layer records the text items as `TextLayer` of pdf.js reads them. `TextLayer` renders an element for
+  each item, so `indexText()` of `pdf-viewer-page-model.js` gives the text elements of each marked content and the
+  text of the links from the items, without reading the DOM.
 - The links mixin names all links. It uses the alternative text that the structure gives a link, as in pdf.js.
   The structure element keeps its alternative text when its annotation gets no link, such as a form field.
 - A link without alternative text that shows only a figure gets the alternative text of the figure, as pdf.js

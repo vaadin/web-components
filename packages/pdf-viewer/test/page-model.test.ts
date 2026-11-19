@@ -1,6 +1,9 @@
 import { expect } from '@vaadin/chai-plugins';
-import { planLinks } from '../src/pdf-viewer-page-model.js';
+import { getContentIndexes, getText, indexText, planLinks } from '../src/pdf-viewer-page-model.js';
 import type { PdfViewerStructTreeNode } from '../src/pdf-viewer-structure-layer.js';
+import { PdfViewerTextLayer } from '../src/pdf-viewer-text-layer.js';
+import { acquireWorker, loadPdfjs, releaseWorker } from '../src/pdfjs-loader.js';
+import { fixtureUrl } from './helpers.js';
 
 describe('page model', () => {
   describe('planLinks', () => {
@@ -71,6 +74,76 @@ describe('page model', () => {
       const tree = { role: 'Root', children: [{ role: 'Table', children: [annotationNode(5)] }] };
       const plan = planLinks(tree, [annotation(5)], () => true);
       expect(plan.links[0].ownedByStructure).to.be.false;
+    });
+  });
+
+  describe('text index', () => {
+    const begin = (id?: string, tag = 'P') => ({ type: 'beginMarkedContentProps', id, tag });
+    const end = { type: 'endMarkedContent' };
+    const text = (str: string, hasEOL = false) => ({ str, hasEOL });
+
+    it('should give each marked content its text, also in nested marked content that the structure does not own', () => {
+      const index = indexText([
+        begin('p3R_mc0'),
+        text('A', true),
+        begin('p3R_mc1'),
+        text('B'),
+        end,
+        begin(),
+        text('C'),
+        end,
+        begin(undefined, 'Artifact'),
+        text('Artifact'),
+        end,
+        text(''),
+        end,
+      ]);
+      const indexes = getContentIndexes(index, new Set(['p3R_mc0', 'p3R_mc1', 'p3R_mc2']));
+      expect([...indexes]).to.deep.equal([
+        ['p3R_mc0', [0, 2]],
+        ['p3R_mc1', [1]],
+      ]);
+    });
+
+    it('should give no text to a second marked content with the same id, which the text layer does not find', () => {
+      const index = indexText([begin('p3R_mc0'), text('A'), end, begin('p3R_mc0'), text('B'), end]);
+      expect([...getContentIndexes(index, new Set(['p3R_mc0']))]).to.deep.equal([['p3R_mc0', [0]]]);
+    });
+
+    it('should give the text with a space after a line break, also after empty text that ends a line', () => {
+      const index = indexText([text('Vaadin'), text('', true), text('docs', true), text('and'), text('more')]);
+      expect(getText(index, [0, 2, 3, 4, undefined])).to.equal('Vaadin docs andmore');
+    });
+
+    it('should stop where the text layer of pdf.js stops', () => {
+      const index = indexText(Array.from({ length: 100005 }, () => text('A')));
+      expect(index.texts).to.have.lengthOf(100001);
+    });
+
+    it('should index the text as the text layer of pdf.js renders it', async () => {
+      const pdfjs = await loadPdfjs();
+      const handle = acquireWorker(pdfjs);
+      const task = pdfjs.getDocument({ url: fixtureUrl('tagged.pdf'), worker: handle.worker! });
+      try {
+        const pdfPage = await (await task.promise).getPage(1);
+        const textLayer = new PdfViewerTextLayer();
+        await textLayer.render(pdfPage, pdfPage.getViewport({ scale: 1 }), new AbortController().signal);
+        const contents = [...textLayer.element.querySelectorAll('.markedContent[id]')];
+        const contentSpans = textLayer.getContentSpans(new Set(contents.map(({ id }) => id)));
+        contents.forEach((content) => {
+          // The text elements of the marked content, without the marked content and the artifacts in it.
+          const expected = [...content.querySelectorAll('span:not(.markedContent)')].filter(
+            (span) => span.parentElement!.closest('.markedContent:is([id], [aria-hidden="true"])') === content,
+          );
+          expect(contentSpans.get(content.id)!.map((id) => textLayer.element.querySelector(`#${id}`))).to.deep.equal(
+            expected,
+          );
+        });
+        expect(contentSpans.size).to.equal(contents.length);
+      } finally {
+        await task.destroy();
+        releaseWorker(handle);
+      }
     });
   });
 });
