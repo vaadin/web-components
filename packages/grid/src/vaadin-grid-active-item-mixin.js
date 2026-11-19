@@ -20,6 +20,18 @@ export const isFocusable = (target) => {
   );
 };
 
+/**
+ * Popover content renders in the top layer, so `isFocusable` and `:focus-within` miss clicks inside it.
+ *
+ * @param {!Event} event
+ * @param {!HTMLElement} cell
+ * @return {boolean}
+ */
+const isInsideCellPopover = (event, cell) => {
+  const path = event.composedPath();
+  return path.slice(0, path.indexOf(cell)).some((node) => node.popover);
+};
+
 export const ActiveItemMixin = (superClass) =>
   class ActiveItemMixin extends superClass {
     static get properties() {
@@ -80,7 +92,9 @@ export const ActiveItemMixin = (superClass) =>
         // Clicked on a focusable element
         this._isFocusable(e.target) ||
         // Clicked on a label element
-        e.target instanceof HTMLLabelElement
+        e.target instanceof HTMLLabelElement ||
+        // Click inside an overlay (popover) hosted by the cell
+        isInsideCellPopover(e, cell)
       );
     }
 
