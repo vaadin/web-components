@@ -1,4 +1,8 @@
+import { join, resolve } from 'node:path';
 import * as ts from 'typescript';
+
+// Repository root, which holds tsconfig.json and the module paths of the manifest
+const ROOT_DIR = resolve(import.meta.dirname, '..');
 
 function findPropertyAccessForMember(node: ts.Node, memberName: string): ts.PropertyAccessExpression | undefined {
   if (ts.isPropertyAccessExpression(node) && node.name.text === memberName) {
@@ -27,16 +31,17 @@ export class TypeContext {
   private relatedTypes = new Map<string, RelatedTypeInfo>();
   private elementSchema: any;
 
-  constructor(elementSchema: any) {
+  constructor(elementSchema: any, { rootDir = ROOT_DIR }: { rootDir?: string } = {}) {
     this.elementSchema = elementSchema;
 
-    const modulePath = `../${elementSchema.path}`;
+    const modulePath = `./${elementSchema.path}`;
     const className = elementSchema.name;
-    const configPath = ts.findConfigFile('../', ts.sys.fileExists, 'tsconfig.json');
+    const configPath = ts.findConfigFile(rootDir, ts.sys.fileExists, 'tsconfig.json');
     if (!configPath) throw new Error('tsconfig.json not found');
 
     const configFile = ts.readConfigFile(configPath, ts.sys.readFile);
-    const parsed = ts.parseJsonConfigFileContent(configFile.config, ts.sys, './');
+    const parsed = ts.parseJsonConfigFileContent(configFile.config, ts.sys, rootDir);
+    const accessFileName = join(rootDir, '__api-docs-types__.ts');
 
     // Generate and compile a small TS program that just accesses all members of the element class,
     // which makes retrieving their types easier.
@@ -55,7 +60,7 @@ export class TypeContext {
     const compilerHost = ts.createCompilerHost({});
     const originalGetSourceFile = compilerHost.getSourceFile;
     compilerHost.getSourceFile = (fileName: any, languageVersion: any) => {
-      if (fileName === 'test.ts') {
+      if (fileName === accessFileName) {
         return ts.createSourceFile(
           fileName,
           `
@@ -71,14 +76,14 @@ export class TypeContext {
       return originalGetSourceFile.call(compilerHost, fileName, languageVersion);
     };
     this.program = ts.createProgram({
-      rootNames: ['test.ts'],
+      rootNames: [accessFileName],
       options: parsed.options,
       host: compilerHost,
     });
 
-    const sourceFile = this.program.getSourceFile('test.ts');
+    const sourceFile = this.program.getSourceFile(accessFileName);
     if (!sourceFile) {
-      throw new Error(`Source file 'test.ts' not found in the program.`);
+      throw new Error(`Source file '${accessFileName}' not found in the program.`);
     }
     this.sourceFile = sourceFile;
     this.checker = this.program.getTypeChecker();
