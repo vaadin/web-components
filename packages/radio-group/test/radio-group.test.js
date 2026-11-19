@@ -218,6 +218,39 @@ describe('radio-group', () => {
     });
   });
 
+  describe('focus()', () => {
+    beforeEach(async () => {
+      group = fixtureSync(`
+        <vaadin-radio-group>
+          <vaadin-radio-button value="1" label="Button 1" disabled></vaadin-radio-button>
+          <vaadin-radio-button value="2" label="Button 2"></vaadin-radio-button>
+          <vaadin-radio-button value="3" label="Button 3"></vaadin-radio-button>
+        </vaadin-radio-group>
+      `);
+      await nextFrame();
+      buttons = [...group.querySelectorAll('vaadin-radio-button')];
+    });
+
+    it('should focus the first enabled radio button when none is checked', () => {
+      group.focus();
+      expect(document.activeElement).to.equal(buttons[1].inputElement);
+      expect(buttons[1].hasAttribute('focused')).to.be.true;
+    });
+
+    it('should focus the checked radio button', async () => {
+      group.value = '3';
+      await nextUpdate(group);
+      group.focus();
+      expect(document.activeElement).to.equal(buttons[2].inputElement);
+    });
+
+    it('should not move focus when all radio buttons are disabled', () => {
+      group.disabled = true;
+      group.focus();
+      expect(document.activeElement).to.equal(document.body);
+    });
+  });
+
   describe('focused state', () => {
     let firstGlobalFocusable;
 

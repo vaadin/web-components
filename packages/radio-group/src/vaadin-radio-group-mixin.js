@@ -95,6 +95,24 @@ export const RadioGroupMixin = (superclass) =>
     }
 
     /**
+     * Override method inherited from `FocusMixin` to move focus to the
+     * checked radio button, or to the first enabled one if none is checked,
+     * since the group host itself is not focusable.
+     *
+     * @param {FocusOptions=} options
+     * @protected
+     * @override
+     */
+    focus(options) {
+      const target =
+        this.__radioButtons.find((radio) => radio.checked && !radio.disabled) ||
+        this.__radioButtons.find((radio) => !radio.disabled);
+      if (target) {
+        target.focus(options);
+      }
+    }
+
+    /**
      * A currently selected radio button.
      *
      * @return {!RadioButton | undefined}

@@ -77,6 +77,21 @@ export const CheckboxGroupMixin = (superclass) =>
       return this.__filterCheckboxes([...this.children]);
     }
 
+    /**
+     * Override method inherited from `FocusMixin` to move focus to the
+     * first enabled checkbox, since the group host itself is not focusable.
+     *
+     * @param {FocusOptions=} options
+     * @protected
+     * @override
+     */
+    focus(options) {
+      const target = this.__checkboxes.find((checkbox) => !checkbox.disabled);
+      if (target) {
+        target.focus(options);
+      }
+    }
+
     /** @protected */
     ready() {
       super.ready();
