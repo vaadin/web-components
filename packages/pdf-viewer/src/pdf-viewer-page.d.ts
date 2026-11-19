@@ -71,7 +71,7 @@ export declare class PdfViewerPage {
 
   renderLinkLayer(
     followLink: (annotation: PdfViewerLinkAnnotation) => void,
-    optionalContentConfig?: Awaited<ReturnType<PDFDocumentProxy['getOptionalContentConfig']>>,
+    optionalContentConfig?: ReturnType<PDFDocumentProxy['getOptionalContentConfig']>,
   ): Promise<Array<{ link: HTMLAnchorElement; annotation: PdfViewerLinkAnnotation }>>;
 
   getLinkAlt(link: HTMLElement): string | undefined;

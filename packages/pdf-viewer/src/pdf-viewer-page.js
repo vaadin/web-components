@@ -343,7 +343,7 @@ export class PdfViewerPage {
    * rendered already or the page was released meanwhile.
    *
    * @param {(annotation: object) => void} followLink called when an internal link is clicked
-   * @param {{ isVisible: (group: object) => boolean }} [optionalContentConfig] the visible layers
+   * @param {Promise<{ isVisible: (group: object) => boolean } | undefined>} [optionalContentConfig] the visible layers
    * @return {Promise<Array<{ link: HTMLAnchorElement, annotation: object }>>}
    */
   async renderLinkLayer(followLink, optionalContentConfig) {
@@ -355,8 +355,11 @@ export class PdfViewerPage {
     // The structure decides which annotations render as one link, also when the text renders after the links.
     const tree = await this.#loadStructTree();
     try {
-      const annotations = await this.pdfPage.getAnnotations({ intent: 'display' });
-      const plan = this.#planLinks(tree, annotations, optionalContentConfig);
+      const [annotations, config] = await Promise.all([
+        this.pdfPage.getAnnotations({ intent: 'display' }),
+        optionalContentConfig,
+      ]);
+      const plan = this.#planLinks(tree, annotations, config);
       const linkLayer = new PdfViewerLinkLayer();
       const links = await linkLayer.render(this.pdfPage, plan.links, followLink);
       // The page may have been released meanwhile.
@@ -371,7 +374,7 @@ export class PdfViewerPage {
     } catch (error) {
       // Without links, the structure keeps the alternative text of the annotations.
       if (!signal.aborted && !this.linkLayer) {
-        this.#setLinkPlan(this.#planLinks(tree, [], optionalContentConfig));
+        this.#setLinkPlan(this.#planLinks(tree, []));
         this.#connectLayers();
       }
       throw error;
@@ -440,8 +443,7 @@ export class PdfViewerPage {
   #connectLayers() {
     const plan = this.#linkPlan;
     if (plan && this.textLayer?.rendered && this.#structureLayer === undefined) {
-      const contentSpans = this.textLayer.getContentSpans(plan.contentIds);
-      this.#structureLayer = plan.root ? this.#createStructureLayer(plan, contentSpans) : null;
+      const contentSpans = this.#createStructureLayer(plan);
       this.#bindLinks(plan, contentSpans);
     }
     const structureElement = this.#structureLayer?.element;
@@ -451,13 +453,19 @@ export class PdfViewerPage {
     }
   }
 
-  /** @private */
-  #createStructureLayer(plan, contentSpans) {
+  /**
+   * Renders the structure, and returns the ids of the text elements of each marked content.
+   * @private
+   */
+  #createStructureLayer(plan) {
     try {
-      return new PdfViewerStructureLayer(buildStructure(plan, contentSpans));
+      const contentSpans = this.textLayer.getContentSpans(plan.contentIds);
+      this.#structureLayer = plan.root ? new PdfViewerStructureLayer(buildStructure(plan, contentSpans)) : null;
+      return contentSpans;
     } catch {
       // As in pdf.js, a structure that fails to render does not break the other layers.
-      return null;
+      this.#structureLayer = null;
+      return new Map();
     }
   }
 

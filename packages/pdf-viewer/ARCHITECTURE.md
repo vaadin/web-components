@@ -78,11 +78,12 @@ how to generate them.
   - Before the links render, the page plans them from the annotations and the structure tree with
     `planLinks()` of `pdf-viewer-page-model.js`, as pdf.js plans them with `getAriaAttributes()`. The plan gives
     the links, which text and figure of the structure each link takes, and its alternative text.
-  - The structure and the links render once with these attributes. Nothing removes or moves them afterwards.
-    When the links fail to render, the structure renders as if no annotation had a link.
+  - The structure and the links render with these attributes, and nothing moves them between the layers.
+    When the links fail to render, the structure renders as if no annotation had a link. It renders again
+    once the links render.
   - `buildStructure()` builds the structure as data from the plan and the text elements, adapted from
     `StructTreeLayerBuilder` of pdf.js. `PdfViewerStructureLayer` only renders it. The functions of
-    `pdf-viewer-page-model.js` use no DOM, so their tests need no PDF.
+    `pdf-viewer-page-model.js` use no DOM, so most of their tests need no PDF.
 - After a page canvas renders, `PdfViewerRenderMixin` awaits `_renderPageLayers(page)`. Each override awaits
   `super` first, so the layers render in the order of the mixins: text and structure, then links.
 - The page view owns the DOM of a page. A Lit template renders the canvas, the text layer and the link layer
@@ -91,8 +92,8 @@ how to generate them.
     view renders their elements.
   - The layers can render in any order. One method of the page view connects them. It renders the structure
     into the canvas, gives the links the text that they own, and passes the other links to the text layer.
-  - A release aborts the signal of the page. The page view checks it after each await, so a released page
-    gets no layers. The text layer also checks it before it loads the text.
+  - A release aborts the signal of the page. The page view checks it before it adds a layer, so a released
+    page gets no layers. The text layer also checks it before it loads the text.
   - The render queue renders a page again only once its layers are done. One signal therefore covers the time
     between two releases.
 - `PdfViewerKeyboardMixin` handles the keyboard shortcuts.

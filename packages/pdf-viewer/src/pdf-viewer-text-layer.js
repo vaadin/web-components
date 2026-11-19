@@ -120,7 +120,9 @@ export class PdfViewerTextLayer {
   getContentSpans(contentIds) {
     const contentSpans = new Map();
     getContentIndexes(this.#index, contentIds).forEach((indexes, id) => {
-      const ids = indexes.map((index, position) => {
+      // The text layer has an element for each index, unless a version of pdf.js renders text differently.
+      const elements = indexes.filter((index) => this.textDivs[index]);
+      const ids = elements.map((index, position) => {
         const element = this.textDivs[index];
         element.id ||= `${id}_${position}`;
         this.#textIndexes.set(element.id, index);

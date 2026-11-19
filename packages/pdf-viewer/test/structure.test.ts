@@ -397,6 +397,19 @@ describe('structure', () => {
       expect(getLink().getAttribute('aria-label')).to.equal('Vaadin documentation (opens in a new tab)');
     });
 
+    it('should give the text and the alternative text to the link once the links render after failing', async () => {
+      await failLinksOnce(1);
+      sinon.stub(console, 'warn');
+      await loadAndRender(viewer, url!);
+      const idle = nextRenderIdle(viewer);
+      viewer.style.width = '900px';
+      await idle;
+      expect(viewer.shadowRoot!.querySelectorAll('.struct-tree')).to.have.lengthOf(1);
+      expect(getLink().getAttribute('aria-label')).to.equal('Vaadin documentation (opens in a new tab)');
+      expect(getOwnedText(getLink())).to.equal('Docs');
+      expect(getTree()!.querySelector('[aria-description]')).to.be.null;
+    });
+
     it('should keep the alternative text in the name of a link when the localization changes', async () => {
       await loadAndRender(viewer, url!);
       viewer.i18n = { externalLink: '{text} (åpnes i en ny fane)' };
