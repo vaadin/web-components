@@ -26,36 +26,26 @@
  * See the License for the specific language governing permissions and
  * limitations under the License.
  */
+import { html, nothing, render } from 'lit';
+
 /**
- * Returns the element of a node of the structure, with the elements of its children.
+ * Returns the template of a node of the structure, with the templates of its children.
  * @param {import('./pdf-viewer-page-model.js').PdfViewerStructNode} node
- * @return {HTMLElement}
+ * @return {import('lit').TemplateResult}
  */
 function renderNode({ role, level, label, description, owns, lang, rowSpan, colSpan, image, children }) {
-  const element = document.createElement('span');
-  const attributes = {
-    role,
-    'aria-level': level,
-    'aria-label': label,
-    'aria-description': description,
-    'aria-owns': owns,
-    lang,
-    'aria-rowspan': rowSpan,
-    'aria-colspan': colSpan,
-  };
-  Object.entries(attributes).forEach(([name, value]) => {
-    if (value !== undefined && value !== null) {
-      element.setAttribute(name, value);
-    }
-  });
-  if (image !== undefined) {
-    const imageElement = document.createElement('span');
-    imageElement.setAttribute('role', 'img');
-    imageElement.setAttribute('aria-label', image);
-    element.append(imageElement);
-  }
-  element.append(...children.map(renderNode));
-  return element;
+  const imageTemplate = image === undefined ? nothing : html`<span role="img" aria-label=${image}></span>`;
+  return html`<span
+    role=${role ?? nothing}
+    aria-level=${level ?? nothing}
+    aria-label=${label ?? nothing}
+    aria-description=${description ?? nothing}
+    aria-owns=${owns ?? nothing}
+    lang=${lang ?? nothing}
+    aria-rowspan=${rowSpan ?? nothing}
+    aria-colspan=${colSpan ?? nothing}
+    >${imageTemplate}${children.map(renderNode)}</span
+  >`;
 }
 
 /**
@@ -66,7 +56,9 @@ export class PdfViewerStructureLayer {
    * @param {import('./pdf-viewer-page-model.js').PdfViewerStructNode} structure
    */
   constructor(structure) {
-    this.element = renderNode(structure);
+    const container = document.createElement('div');
+    render(renderNode(structure), container);
+    this.element = container.firstElementChild;
     this.element.className = 'struct-tree';
   }
 }
