@@ -10,6 +10,8 @@
  */
 import { html, nothing, render } from 'lit';
 import { PdfViewerLinkLayer } from './pdf-viewer-link-layer.js';
+import { isSupportedLink } from './pdf-viewer-links.js';
+import { planLinks } from './pdf-viewer-page-model.js';
 import { PdfViewerStructureLayer } from './pdf-viewer-structure-layer.js';
 import { PdfViewerTextLayer } from './pdf-viewer-text-layer.js';
 
@@ -33,6 +35,12 @@ export class PdfViewerPage {
    * @type {Promise<object | null> | null}
    */
   #structTree = null;
+
+  /**
+   * The links of the page and their place in the structure, undefined until the links render or fail to render.
+   * @type {(import('./pdf-viewer-page-model.js').PdfViewerLinkPlan & { tree: object | null }) | undefined}
+   */
+  #linkPlan;
 
   /**
    * Undefined until the structure of the current text layer has rendered, and null for a page without one.
@@ -282,39 +290,49 @@ export class PdfViewerPage {
 
     if (!signal.aborted) {
       this.#connectLayers();
-      // As in pdf.js, the structure renders after the text layer, whose elements it owns.
-      await this.#renderStructureLayer(signal);
     }
   }
 
   /**
-   * Renders the structure of a tagged PDF page for assistive technology.
-   *
-   * @param {AbortSignal} signal
+   * Returns the structure tree of the page, or null without one, loaded once as in pdf.js.
+   * @return {Promise<object | null>}
    * @private
    */
-  async #renderStructureLayer(signal) {
+  #loadStructTree() {
     // A page with a broken structure is shown as untagged.
     this.#structTree ??= this.pdfPage.getStructTree().catch(() => null);
-    const tree = await this.#structTree;
-    // The page may have been released meanwhile.
-    if (signal.aborted) {
-      return;
-    }
-    this.#structureLayer = tree ? this.#createStructureLayer(tree) : null;
-    this.#connectLayers();
+    return this.#structTree;
   }
 
-  /** @private */
-  #createStructureLayer(tree) {
+  /**
+   * Plans the links of the page from its annotations and its structure, see `planLinks()`.
+   * @param {object | null} tree
+   * @param {object[]} annotations
+   * @param {{ isVisible: (group: object) => boolean }} [optionalContentConfig] the visible layers
+   * @private
+   */
+  #planLinks(tree, annotations, optionalContentConfig) {
+    // Links on hidden layers of the document are left out, as in pdf.js.
+    const isRendered = (annotation) =>
+      annotation.subtype === 'Link' &&
+      !(annotation.oc && optionalContentConfig?.isVisible(annotation.oc) === false) &&
+      isSupportedLink(annotation);
     try {
-      const structureLayer = new PdfViewerStructureLayer(tree);
-      structureLayer.bindText(this.textLayer.element);
-      return structureLayer;
+      return { ...planLinks(tree, annotations, isRendered), tree };
     } catch {
       // As in pdf.js, a structure that fails to render does not break the other layers.
-      return null;
+      return { ...planLinks(null, annotations, isRendered), tree: null };
     }
+  }
+
+  /**
+   * Sets the plan of the links, after which the structure renders again, see `#connectLayers()`.
+   * @private
+   */
+  #setLinkPlan(plan) {
+    this.#structureLayer?.element.remove();
+    this.#structureLayer = undefined;
+    this.#linkPlan = plan;
   }
 
   /**
@@ -334,22 +352,30 @@ export class PdfViewerPage {
     }
 
     const { signal } = this.#abortController;
-    const linkLayer = new PdfViewerLinkLayer();
-    const links = await linkLayer.render(
-      this.pdfPage,
-      followLink,
-      optionalContentConfig,
-      this.#structureLayer?.getLinkGroups(),
-    );
-    // The page may have been released meanwhile.
-    if (signal.aborted || this.linkLayer) {
-      return [];
+    // The structure decides which annotations render as one link, also when the text renders after the links.
+    const tree = await this.#loadStructTree();
+    try {
+      const annotations = await this.pdfPage.getAnnotations({ intent: 'display' });
+      const plan = this.#planLinks(tree, annotations, optionalContentConfig);
+      const linkLayer = new PdfViewerLinkLayer();
+      const links = await linkLayer.render(this.pdfPage, plan.links, followLink);
+      // The page may have been released meanwhile.
+      if (signal.aborted || this.linkLayer) {
+        return [];
+      }
+      this.linkLayer = linkLayer;
+      this.#setLinkPlan(plan);
+      this.#renderLayers();
+      this.#connectLayers();
+      return links;
+    } catch (error) {
+      // Without links, the structure keeps the alternative text of the annotations.
+      if (!signal.aborted && !this.linkLayer) {
+        this.#setLinkPlan(this.#planLinks(tree, [], optionalContentConfig));
+        this.#connectLayers();
+      }
+      throw error;
     }
-
-    this.linkLayer = linkLayer;
-    this.#renderLayers();
-    this.#connectLayers();
-    return links;
   }
 
   /**
@@ -358,7 +384,7 @@ export class PdfViewerPage {
    * @return {string | undefined}
    */
   getLinkAlt(link) {
-    return this.#structureLayer?.getLinkAlt(link.id);
+    return this.#linkPlan?.links.find(({ id }) => id === link.id)?.alt;
   }
 
   /**
@@ -403,6 +429,7 @@ export class PdfViewerPage {
     this.textLayer = null;
     this.#structureLayer = undefined;
     this.linkLayer = null;
+    this.#linkPlan = undefined;
     this.#renderLayers();
   }
 
@@ -417,22 +444,60 @@ export class PdfViewerPage {
   }
 
   /**
-   * Connects the layers that have rendered, as they render in any order.
+   * Connects the layers that have rendered, as they render in any order. The structure renders once the text and the
+   * plan of the links are there.
    * @private
    */
   #connectLayers() {
+    const plan = this.#linkPlan;
+    if (plan && this.textLayer?.rendered && this.#structureLayer === undefined) {
+      const contentSpans = this.textLayer.getContentSpans(plan.contentIds);
+      this.#structureLayer = plan.tree ? this.#createStructureLayer(plan, contentSpans) : null;
+      this.#bindLinks(plan, contentSpans);
+    }
     const structureElement = this.#structureLayer?.element;
     // In the canvas as in pdf.js, since VoiceOver in Safari skips the elements, which have no size, outside of it.
     if (structureElement && this.canvas && structureElement.parentNode !== this.canvas) {
       this.canvas.append(structureElement);
     }
-    if (this.linkLayer && this.#structureLayer !== undefined) {
-      const { links } = this.linkLayer;
-      this.#structureLayer?.bindLinks(links);
-      const textLinks = links.filter((link) => !this.#structureLayer?.hasLink(link));
-      const linkTextIds = new Set(links.flatMap((link) => link.getAttribute('aria-owns')?.split(' ') ?? []));
-      this.textLayer.bindLinks(textLinks, linkTextIds);
+  }
+
+  /** @private */
+  #createStructureLayer(plan, contentSpans) {
+    try {
+      return new PdfViewerStructureLayer(plan.tree, plan, contentSpans);
+    } catch {
+      // As in pdf.js, a structure that fails to render does not break the other layers.
+      return null;
     }
+  }
+
+  /**
+   * Gives the links of the structure the text of their structure element, and adds the other links to the text
+   * before them, so that screen readers read the links in the order of the text.
+   * @private
+   */
+  #bindLinks(plan, contentSpans) {
+    if (!this.linkLayer) {
+      return;
+    }
+    const plannedLinks = new Map(plan.links.map((plannedLink) => [plannedLink.id, plannedLink]));
+    const { links } = this.linkLayer;
+    const isOwned = (link) => !!this.#structureLayer && plannedLinks.get(link.id).ownedByStructure;
+    links.forEach((link) => {
+      const contentIds = isOwned(link) ? plannedLinks.get(link.id).contentIds : [];
+      const ids = contentIds.flatMap((id) => contentSpans.get(id) ?? [id]);
+      if (ids.length) {
+        link.setAttribute('aria-owns', ids.join(' '));
+      } else {
+        link.removeAttribute('aria-owns');
+      }
+    });
+    const linkTextIds = new Set(links.flatMap((link) => link.getAttribute('aria-owns')?.split(' ') ?? []));
+    this.textLayer.bindLinks(
+      links.filter((link) => !isOwned(link)),
+      linkTextIds,
+    );
   }
 
   /** @private */

@@ -12,6 +12,24 @@ import { addLinksToText } from './pdf-viewer-text-accessibility.js';
 import { loadPdfjs } from './pdfjs-loader.js';
 
 /**
+ * Returns the text elements in the marked content, also in nested marked content that the structure does not own.
+ * @param {HTMLElement} content
+ * @param {Set<string>} contentIds the ids of the marked content that the structure owns
+ * @return {HTMLElement[]}
+ */
+function getContentElements(content, contentIds) {
+  return [...content.children].flatMap((child) => {
+    if (child.localName === 'br' || child.getAttribute('aria-hidden') === 'true') {
+      return [];
+    }
+    if (!child.classList.contains('markedContent')) {
+      return [child];
+    }
+    return contentIds.has(child.id) ? [] : getContentElements(child, contentIds);
+  });
+}
+
+/**
  * The text layer of a page: transparent text on top of the canvas, which
  * makes the text selectable and readable by assistive technology.
  */
@@ -66,6 +84,27 @@ export class PdfViewerTextLayer {
     endOfContent.className = 'end-of-content';
     this.element.append(endOfContent);
     this.endOfContent = endOfContent;
+  }
+
+  /**
+   * Returns the ids of the text elements of each marked content that the structure owns, and gives the elements ids.
+   * Leaves out marked content that has no element. Artifacts, such as page numbers, stay hidden.
+   * @param {Set<string>} contentIds the ids of the marked content that the structure owns
+   * @return {Map<string, string[]>}
+   */
+  getContentSpans(contentIds) {
+    const contentSpans = new Map();
+    contentIds.forEach((id) => {
+      const content = this.element.querySelector(`#${id}`);
+      if (content) {
+        const ids = getContentElements(content, contentIds).map((element, index) => {
+          element.id ||= `${id}_${index}`;
+          return element.id;
+        });
+        contentSpans.set(id, ids);
+      }
+    });
+    return contentSpans;
   }
 
   /**

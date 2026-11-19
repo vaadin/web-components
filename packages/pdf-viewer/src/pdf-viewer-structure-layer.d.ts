@@ -8,6 +8,7 @@
  * See https://vaadin.com/commercial-license-and-service-terms for the full
  * license.
  */
+import type { PdfViewerLinkPlan } from './pdf-viewer-page-model.js';
 
 export interface PdfViewerStructTreeNode {
   role?: string;
@@ -22,17 +23,7 @@ export interface PdfViewerStructTreeNode {
 }
 
 export declare class PdfViewerStructureLayer {
-  constructor(tree: PdfViewerStructTreeNode);
+  constructor(tree: PdfViewerStructTreeNode, plan: PdfViewerLinkPlan, contentSpans: Map<string, string[]>);
 
   readonly element: HTMLElement;
-
-  hasLink(link: HTMLElement): boolean;
-
-  bindLinks(links: HTMLElement[]): void;
-
-  getLinkGroups(): string[][];
-
-  getLinkAlt(annotationId: string): string | undefined;
-
-  bindText(textLayerElement: HTMLElement): void;
 }

@@ -382,13 +382,13 @@ describe('structure', () => {
       expect(getTree()!.querySelector('[aria-label]')).to.be.null;
     });
 
-    it('should own and name a link by its structure element when the structure renders after the link', async () => {
+    it('should name a link by its structure element, and own its text once the text renders after the link', async () => {
       await failTextOnce(1);
       sinon.stub(console, 'warn');
       await loadAndRender(viewer, url!);
       expect(getTree()).to.be.null;
       expect(getLink().hasAttribute('aria-owns')).to.be.false;
-      expect(getLink().getAttribute('aria-label')).to.equal('Docs (opens in a new tab)');
+      expect(getLink().getAttribute('aria-label')).to.equal('Vaadin documentation (opens in a new tab)');
       const idle = nextRenderIdle(viewer);
       viewer.style.width = '900px';
       await idle;
@@ -445,12 +445,12 @@ describe('structure', () => {
       expect(getOwnedText(getLink())).to.equal('Vaadindocs');
     });
 
-    it('should keep the annotations of a link apart when its structure renders after the links', async () => {
+    it('should render a link with an annotation for each line as one link also when its text fails to render', async () => {
       await stubStructTrees(() => severalAnnotationsTree([{ type: 'content', id: 'p5R_mc0' }]));
       await failTextOnce(1);
       sinon.stub(console, 'warn');
       await loadPdf([wrappedLinkPdf]);
-      expect(getLinks()).to.have.lengthOf(2);
+      expect(getLinks()).to.have.lengthOf(1);
     });
 
     it('should name a link by the alternative text of its figure, which the link then replaces', async () => {

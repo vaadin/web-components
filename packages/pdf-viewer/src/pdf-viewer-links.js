@@ -48,6 +48,15 @@ function isAllowedLinkUrl(url) {
 }
 
 /**
+ * Whether the viewer adds a link for a link annotation: one with an allowed URL, a destination or a supported action.
+ * @param {{ url?: string, dest?: string | Array, action?: string }} annotation
+ * @return {boolean}
+ */
+export function isSupportedLink({ url, dest, action }) {
+  return url ? isAllowedLinkUrl(url) : !!dest || SUPPORTED_LINK_ACTIONS.includes(action);
+}
+
+/**
  * Creates the link element for a link annotation, or returns null for
  * links that the viewer does not support or does not consider safe.
  * External links open in a new tab without access to the page.
@@ -57,15 +66,15 @@ function isAllowedLinkUrl(url) {
  * @return {HTMLAnchorElement | null}
  */
 export function createLink(annotation, followLink) {
+  if (!isSupportedLink(annotation)) {
+    return null;
+  }
   const link = document.createElement('a');
   if (annotation.url) {
-    if (!isAllowedLinkUrl(annotation.url)) {
-      return null;
-    }
     link.href = annotation.url;
     link.target = '_blank';
     link.rel = 'noopener noreferrer';
-  } else if (annotation.dest || SUPPORTED_LINK_ACTIONS.includes(annotation.action)) {
+  } else {
     // The href makes the link focusable and a link for assistive technology. Opening it in a new
     // tab opens the application page, as the destination is only known to the viewer.
     link.href = '#';
@@ -73,8 +82,6 @@ export function createLink(annotation, followLink) {
       event.preventDefault();
       followLink(annotation);
     });
-  } else {
-    return null;
   }
   link.className = 'link';
   // Safari skips links on Tab without it, unless the user turns on Tab for links.

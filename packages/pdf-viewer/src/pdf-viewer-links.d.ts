@@ -22,6 +22,8 @@ export interface PdfViewerDestination {
  * A link annotation of a page, as pdf.js returns it.
  */
 export interface PdfViewerLinkAnnotation extends PdfViewerDestination {
+  /** The id of the annotation object, such as `5R`. */
+  id: string;
   rect: number[];
   url?: string;
   /** The text that the link covers. */
@@ -31,6 +33,8 @@ export interface PdfViewerLinkAnnotation extends PdfViewerDestination {
   /** The quadrilaterals that the link covers, such as the words of a link that wraps. */
   quadPoints?: ArrayLike<number> | null;
 }
+
+export declare function isSupportedLink(annotation: PdfViewerLinkAnnotation): boolean;
 
 /**
  * Creates the link element for a link annotation, or returns null for

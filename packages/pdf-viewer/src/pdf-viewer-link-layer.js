@@ -9,7 +9,6 @@
  * license.
  */
 import { createLink } from './pdf-viewer-links.js';
-import { ANNOTATION_ID_PREFIX, compareAnnotationPositions } from './pdf-viewer-text-accessibility.js';
 import { loadPdfjs } from './pdfjs-loader.js';
 
 /**
@@ -71,52 +70,18 @@ export class PdfViewerLinkLayer {
 
   /**
    * @param {import('pdfjs-dist').PDFPageProxy} pdfPage
+   * @param {Array<{ id: string, annotations: object[] }>} plannedLinks the links in reading order, see `planLinks()`
    * @param {(annotation: object) => void} followLink called when an internal link is clicked
-   * @param {{ isVisible: (group: object) => boolean }} [optionalContentConfig] the visible layers
-   * @param {string[][]} [linkGroups] the ids of the annotations that render as one link, see `getLinkGroups()`
    * @return {Promise<Array<{ link: HTMLAnchorElement, annotation: object }>>}
    */
-  async render(pdfPage, followLink, optionalContentConfig, linkGroups = []) {
-    const [{ setLayerDimensions }, annotations] = await Promise.all([
-      loadPdfjs(),
-      pdfPage.getAnnotations({ intent: 'display' }),
-    ]);
-
+  async render(pdfPage, plannedLinks, followLink) {
+    const { setLayerDimensions } = await loadPdfjs();
     const viewport = pdfPage.getViewport({ scale: 1, rotation: 0 });
     setLayerDimensions(this.element, pdfPage.getViewport({ scale: 1 }));
 
-    const groupIndexes = new Map(linkGroups.flatMap((ids, index) => ids.map((id) => [id, index])));
-    const groupLinks = new Map();
-    const links = [];
-    // A copy, as pdf.js returns the same annotations to each call.
-    [...annotations].sort(compareAnnotationPositions).forEach((annotation) => {
-      if (
-        annotation.subtype !== 'Link' ||
-        (annotation.oc && optionalContentConfig?.isVisible(annotation.oc) === false)
-      ) {
-        return;
-      }
-      const id = `${ANNOTATION_ID_PREFIX}${annotation.id}`;
-      const groupIndex = groupIndexes.get(id);
-      // Another annotation of a link, such as its next line, adds its area to the link.
-      if (groupLinks.has(groupIndex)) {
-        groupLinks.get(groupIndex).annotations.push(annotation);
-        return;
-      }
+    const links = plannedLinks.map(({ id, annotations: [annotation, ...others] }) => {
       const link = createLink(annotation, followLink);
-      if (!link) {
-        return;
-      }
       link.id = id;
-      const entry = { link, annotations: [annotation] };
-      if (groupIndex !== undefined) {
-        groupLinks.set(groupIndex, entry);
-      }
-      links.push(entry);
-    });
-
-    this.links = links.map(({ link }) => link);
-    return links.map(({ link, annotations: [annotation, ...others] }) => {
       const rect = [...others.map((other) => other.rect), annotation.rect].reduce((union, [x1, y1, x2, y2]) => [
         Math.min(union[0], x1),
         Math.min(union[1], y1),
@@ -138,5 +103,7 @@ export class PdfViewerLinkLayer {
       const overlaidText = [annotation, ...others].map((part) => part.overlaidText ?? '').join(' ');
       return { link, annotation: { ...annotation, rect, overlaidText } };
     });
+    this.links = links.map(({ link }) => link);
+    return links;
   }
 }

@@ -70,21 +70,24 @@ how to generate them.
   - Its `_zoomFactor` getter reads `_scale`, in units of the actual page size.
 - `PdfViewerTextLayerMixin` renders the text layer of each rendered page and sets the document language on the
   pages. A page loads its text each time it renders, as pdf.js' own viewer does.
-  - The page renders the structure of a tagged PDF right after its text layer, as pdf.js' own viewer does.
+  - The page renders the structure of a tagged PDF once its text layer and the plan of its links are there.
     The structure has no state of the viewer, so it has no mixin.
-  - Unlike in pdf.js, `renderTextLayer()` waits for the structure. The links mixin names the links by the
-    structure right after their layer renders, so `render-idle` comes once the links have their final names.
+  - The links mixin names the links right after their layer renders, so `render-idle` comes once the links
+    have their final names.
 - `PdfViewerLinksMixin` adds the links of each rendered page and follows internal links with `_scrollToPage()`.
-  - The page adds the links to the structure or to the text once both the structure and the links have rendered.
-    A page without structure counts as rendered once its text layer has rendered.
+  - Before the links render, the page plans them from the annotations and the structure tree with
+    `planLinks()` of `pdf-viewer-page-model.js`, as pdf.js plans them with `getAriaAttributes()`. The plan gives
+    the links, which text and figure of the structure each link takes, and its alternative text.
+  - The structure and the links render once with these attributes. Nothing removes or moves them afterwards.
+    When the links fail to render, the structure renders as if no annotation had a link.
 - After a page canvas renders, `PdfViewerRenderMixin` awaits `_renderPageLayers(page)`. Each override awaits
   `super` first, so the layers render in the order of the mixins: text and structure, then links.
 - The page view owns the DOM of a page. A Lit template renders the canvas, the text layer and the link layer
   in this order, as pdf.js does. Screen readers read the structure in the canvas first.
   - `PdfViewerTextLayer` and `PdfViewerLinkLayer` render the content of their layer. The template of the page
     view renders their elements.
-  - The layers can render in any order. One method of the page view connects them. It puts the structure in the
-    canvas. It passes the links that the structure owns to the structure, and the other links to the text layer.
+  - The layers can render in any order. One method of the page view connects them. It renders the structure
+    into the canvas, gives the links the text that they own, and passes the other links to the text layer.
   - A release aborts the signal of the page. The page view checks it after each await, so a released page
     gets no layers. The text layer also checks it before it loads the text.
   - The render queue renders a page again only once its layers are done. One signal therefore covers the time
@@ -142,13 +145,13 @@ how to generate them.
 - The structure owns the text elements in marked content, not the marked content itself. Marked content has
   `display: contents`, and Chrome ignores `aria-owns` of such elements. Artifacts, such as page numbers, stay hidden.
 - The links mixin names all links. It uses the alternative text that the structure gives a link, as in pdf.js.
-  The structure element keeps its alternative text until its link renders, so it keeps it when the links fail.
+  The structure element keeps its alternative text when its annotation gets no link, such as a form field.
 - A link without alternative text that shows only a figure gets the alternative text of the figure, as pdf.js
   names a link by its content. The link then takes the place of the figure, so the alternative text is read once.
   A link that also shows text is named by its text, so its name holds what it shows.
 - Chromium writes an annotation for each line of a link, and for the line and the image of a linked image.
   The annotations of one structure element render as one link, with an area for each annotation, as the
-  quadrilaterals of a link that wraps. When the structure renders after the links, the links stay apart.
+  quadrilaterals of a link that wraps.
 - A link that covers no text, such as a thin link in a table of contents, gets the text that it owns in the
   structure as its name. In pdf.js, this text names such a link, as pdf.js gives it no name.
 - As in pdf.js, a link of the structure owns the text of its structure element. Other links are added to the
