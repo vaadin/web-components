@@ -11,6 +11,8 @@ const sideNav = css`
   :host {
     white-space: nowrap;
     touch-action: manipulation;
+    --_icon-indent: 0;
+    --_level: 0;
   }
 
   [part='label'] {
@@ -86,7 +88,7 @@ export const sideNavSlotStyles = css`
     --_level: var(--_level-2, 0);
   }
 
-  vaadin-side-nav:not(:has([slot='label']))::part(label) {
+  vaadin-side-nav:not(:has(> [slot='label']))::part(label) {
     display: none;
   }
 `;

@@ -135,6 +135,12 @@ const sideNavItem = css`
       display: none;
     }
 
+    ::slotted(vaadin-avatar[slot='prefix']) {
+      margin: calc(var(--vaadin-padding-xs) * -1);
+      width: calc(var(--vaadin-icon-size, 1lh) + var(--vaadin-padding-xs) * 2);
+      height: calc(var(--vaadin-icon-size, 1lh) + var(--vaadin-padding-xs) * 2);
+    }
+
     ::slotted(vaadin-badge[slot='suffix']) {
       translate: -100% -50%;
       scale: 0.75;
@@ -161,6 +167,9 @@ const sideNavItem = css`
       position: absolute;
       top: 0;
       inset-inline-end: 0;
+      /* TODO resolve specificity */
+      font-size: 1em !important;
+      line-height: 1.4 !important;
     }
   }
 

@@ -21,7 +21,7 @@ export const navigationLayoutStyles = css`
   }
 
   :host([slot^='navbar']) {
-    flex-direction: row;
+    flex-direction: var(--vaadin-navigation-layout-direction);
     align-items: center;
     margin: calc(var(--vaadin-padding-s) * -1);
     --vaadin-navigation-layout-direction: row;
