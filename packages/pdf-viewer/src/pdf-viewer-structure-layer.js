@@ -215,7 +215,11 @@ export class PdfViewerStructureLayer {
     // The alternative text names the link instead of its structure element, see `getLinkAlt()`.
     links.forEach((link) => {
       const element = this.#linkAlts.get(link.id)?.element;
-      if (element) {
+      if (element?.getAttribute('role') === 'img') {
+        // The link takes the place of the figure.
+        element.parentElement.removeAttribute('role');
+        element.remove();
+      } else if (element) {
         removeAlt(element);
       }
     });
@@ -337,7 +341,13 @@ export class PdfViewerStructureLayer {
     if (node.role === 'Link') {
       const annotations = children.filter((child) => child.type === 'annotation');
       if (annotations.length === 1) {
-        this.#linkElements.set(annotations[0].id, element);
+        const { id } = annotations[0];
+        this.#linkElements.set(id, element);
+        // The image of a figure names a link without alternative text, as its content names a link in pdf.js.
+        const image = element.querySelector('[role="img"]');
+        if (image && !this.#linkAlts.has(id)) {
+          this.#linkAlts.set(id, { element: image, alt: image.getAttribute('aria-label') });
+        }
       }
     }
     return element;

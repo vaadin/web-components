@@ -404,4 +404,42 @@ describe('structure', () => {
       expect(getLink().getAttribute('aria-label')).to.equal('Vaadin documentation (åpnes i en ny fane)');
     });
   });
+
+  describe('links of figures', () => {
+    beforeEach(async () => {
+      await stubStructTrees(() => ({
+        role: 'Root',
+        children: [
+          {
+            role: 'Link',
+            children: [
+              { role: 'Figure', alt: 'Vaadin logo', children: [{ type: 'content', id: 'p5R_mc0' }] },
+              { type: 'annotation', id: 'pdfjs_internal_id_7R' },
+            ],
+          },
+        ],
+      }));
+      url = createPdf([
+        {
+          content: '/Figure << /MCID 0 >> BDC 0 0 1 rg 72 690 58 30 re f EMC',
+          annotations: [uriLink([72, 690, 130, 720], 'https://vaadin.com/')],
+        },
+      ]);
+    });
+
+    it('should name a link by the alternative text of its figure, which the link then replaces', async () => {
+      await loadAndRender(viewer, url!);
+      expect(getLink().getAttribute('aria-label')).to.equal('Vaadin logo (opens in a new tab)');
+      expect(getTree()!.querySelector('[role]')).to.be.null;
+    });
+
+    it('should keep the image of the figure when the links fail to load', async () => {
+      await failLinksOnce(1);
+      sinon.stub(console, 'warn');
+      await loadAndRender(viewer, url!);
+      expect(getTree()!.querySelector('[role="figure"] > [role="img"]')!.getAttribute('aria-label')).to.equal(
+        'Vaadin logo',
+      );
+    });
+  });
 });

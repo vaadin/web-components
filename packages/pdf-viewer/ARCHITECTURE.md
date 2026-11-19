@@ -144,6 +144,8 @@ how to generate them.
   `display: contents`, and Chrome ignores `aria-owns` of such elements. Artifacts, such as page numbers, stay hidden.
 - The links mixin names all links. It uses the alternative text that the structure gives a link, as in pdf.js.
   The structure element keeps its alternative text until its link renders, so it keeps it when the links fail.
+- A link without alternative text that shows a figure gets the alternative text of the figure, as pdf.js names
+  a link by its content. The link then takes the place of the figure, so the alternative text is read once.
 - A link that covers no text, such as a thin link in a table of contents, gets the text that it owns in the
   structure as its name. In pdf.js, this text names such a link, as pdf.js gives it no name.
 - As in pdf.js, a link of the structure owns the text of its structure element. Other links are added to the
