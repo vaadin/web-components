@@ -2,7 +2,7 @@
   "$schema": "https://json.schemastore.org/tsconfig",
   "compilerOptions": {
     "target": "es2023",
-    "lib": ["es2023", "dom", "dom.iterable"],
+    "lib": ["es2025", "dom", "dom.iterable"],
     "module": "esnext",
     "moduleResolution": "bundler",
     // Storybook builds manager entries with React.createElement, so React must be in scope
@@ -10,6 +10,9 @@
     "strict": true,
     "noEmit": true,
     "verbatimModuleSyntax": true,
+    // Node runs the docgen worker and the tests without a build step
+    "allowImportingTsExtensions": true,
+    "erasableSyntaxOnly": true,
     "skipLibCheck": true,
     "types": ["node", "vite/client"]
   },

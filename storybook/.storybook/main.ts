@@ -13,6 +13,7 @@ export default defineMain({
     '@storybook/addon-a11y',
     '../addons/theme-switcher/preset.ts',
     '../addons/rtl-direction/preset.ts',
+    '../addons/api-reference/preset.ts',
   ],
   core: {
     disableTelemetry: true,

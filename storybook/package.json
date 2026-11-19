@@ -9,7 +9,8 @@
   "scripts": {
     "build": "storybook build --output-dir dist",
     "lint:types": "tsc -p tsconfig.json",
-    "start": "storybook dev --port 6006"
+    "start": "storybook dev --port 6006",
+    "test": "node --test 'addons/**/*.test.ts'"
   },
   "dependencies": {
     "@vaadin/accordion": "25.4.0-beta1",
@@ -36,6 +37,7 @@
     "@storybook/web-components-vite": "^11.0.0-beta.3",
     "@types/node": "^22.15.17",
     "@types/react": "^19.1.13",
+    "custom-elements-manifest": "1.0.0",
     "react": "^19.3.0",
     "storybook": "^11.0.0-beta.3",
     "typescript": "^6.0.3",
