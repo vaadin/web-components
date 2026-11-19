@@ -17,6 +17,7 @@
     "lint:js": "eslint",
     "lint:types": "tsc",
     "lint:types:react": "yarn workspace react-components-tooling lint:types",
+    "lint:types:storybook": "yarn workspace storybook-tooling lint:types",
     "postinstall": "patch-package",
     "prepare": "husky",
     "release": "yarn release:themes && yarn release:cem && yarn release:meta && yarn release:web-types && yarn release:react",
@@ -29,6 +30,8 @@
     "start:aura": "web-dev-server --node-resolve --open /dev --theme=aura",
     "start:lumo": "web-dev-server --node-resolve --open /dev --theme=lumo",
     "start:react": "yarn workspace react-components-tooling start",
+    "storybook:build": "yarn release:cem && yarn workspace storybook-tooling build",
+    "storybook:start": "yarn release:cem && yarn workspace storybook-tooling start",
     "test": "web-test-runner",
     "test:aura": "./scripts/run-docker-visual-tests.sh test --config web-test-runner-aura.config.js",
     "test:aura:dark": "./scripts/run-docker-visual-tests.sh test --config web-test-runner-aura.config.js --dark",
@@ -99,6 +102,7 @@
     "api-docs",
     "dev",
     "manifest",
-    "react"
+    "react",
+    "storybook"
   ]
 }

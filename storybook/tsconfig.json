@@ -1,0 +1,20 @@
+{
+  "$schema": "https://json.schemastore.org/tsconfig",
+  "compilerOptions": {
+    "target": "es2023",
+    "lib": ["es2023", "dom", "dom.iterable"],
+    "module": "esnext",
+    "moduleResolution": "bundler",
+    // Storybook builds manager entries with React.createElement, so React must be in scope
+    "jsx": "react",
+    "strict": true,
+    "noEmit": true,
+    "verbatimModuleSyntax": true,
+    "resolveJsonModule": true,
+    "skipLibCheck": true,
+    "types": ["node", "vite/client"]
+  },
+  // Stories stay in JavaScript like the dev pages and tests
+  "include": [".storybook/*.ts", "addons"],
+  "exclude": ["node_modules", "dist"]
+}

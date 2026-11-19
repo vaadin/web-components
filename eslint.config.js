@@ -62,7 +62,12 @@ const PRO_COMPONENTS = [
   'react-components-pro',
 ];
 
-const REACT_FILES = ['packages/react-components*/**/*.{ts,tsx}', 'react/test/**/*.ts', 'react/dev/**/*.tsx'];
+const REACT_FILES = [
+  'packages/react-components*/**/*.{ts,tsx}',
+  'react/test/**/*.ts',
+  'react/dev/**/*.tsx',
+  'storybook/addons/**/*.tsx',
+];
 
 /** Turns off every rule of the React preset whose name starts with the given plugin prefix. */
 const reactRulesOff = (prefix) =>
@@ -173,7 +178,7 @@ export default [
     },
   },
   {
-    files: ['packages/**/*', 'test/integration/**', 'dev/**/*', 'api-docs/js/**'],
+    files: ['packages/**/*', 'test/integration/**', 'dev/**/*', 'api-docs/js/**', 'storybook/**/*'],
     languageOptions: {
       globals: {
         ...globals.browser,

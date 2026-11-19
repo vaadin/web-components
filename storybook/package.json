@@ -1,0 +1,43 @@
+{
+  "name": "storybook-tooling",
+  "version": "25.4.0-beta1",
+  "private": true,
+  "description": "Storybook for Vaadin web components",
+  "license": "Apache-2.0",
+  "author": "Vaadin Ltd",
+  "type": "module",
+  "scripts": {
+    "build": "storybook build --output-dir dist",
+    "lint:types": "tsc -p tsconfig.json",
+    "start": "storybook dev --port 6006"
+  },
+  "dependencies": {
+    "@vaadin/accordion": "25.4.0-beta1",
+    "@vaadin/aura": "25.4.0-beta1",
+    "@vaadin/button": "25.4.0-beta1",
+    "@vaadin/checkbox": "25.4.0-beta1",
+    "@vaadin/combo-box": "25.4.0-beta1",
+    "@vaadin/date-picker": "25.4.0-beta1",
+    "@vaadin/details": "25.4.0-beta1",
+    "@vaadin/dialog": "25.4.0-beta1",
+    "@vaadin/item": "25.4.0-beta1",
+    "@vaadin/list-box": "25.4.0-beta1",
+    "@vaadin/select": "25.4.0-beta1",
+    "@vaadin/slider": "25.4.0-beta1",
+    "@vaadin/switch": "25.4.0-beta1",
+    "@vaadin/text-field": "25.4.0-beta1",
+    "@vaadin/vaadin-lumo-styles": "25.4.0-beta1",
+    "lit": "^3.0.0"
+  },
+  "devDependencies": {
+    "@storybook/addon-a11y": "^10.6.7",
+    "@storybook/addon-docs": "^10.6.7",
+    "@storybook/icons": "^2.0.2",
+    "@storybook/web-components-vite": "^10.6.7",
+    "@types/node": "^22.15.17",
+    "@types/react": "^19.1.13",
+    "react": "^19.3.0",
+    "storybook": "^10.6.7",
+    "vite": "^8.3.8"
+  }
+}
