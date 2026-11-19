@@ -46,7 +46,9 @@ class CrudEdit extends Button {
   ready() {
     super.ready();
     this.addEventListener('click', this.__onClick);
-    this.setAttribute('aria-label', 'Edit');
+    if (!this.hasAttribute('aria-label')) {
+      this.setAttribute('aria-label', 'Edit');
+    }
   }
 
   /** @private */
