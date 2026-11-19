@@ -163,10 +163,10 @@ export class PdfViewerStructureLayer {
   #annotationOwners = new Map();
 
   /**
-   * The `Link` structure element of each annotation, whose text the link of the annotation owns.
-   * @type {Map<string, HTMLElement>}
+   * The annotations of each `Link` structure element, whose text the first of their links owns.
+   * @type {Map<HTMLElement, string[]>}
    */
-  #linkElements = new Map();
+  #linkAnnotations = new Map();
 
   /**
    * The alternative text that the structure gives each annotation, and the structure element it comes from.
@@ -203,9 +203,21 @@ export class PdfViewerStructureLayer {
       return;
     }
     this.#linksBound = true;
-    // Unlike in pdf.js, a link owns its text, as Chrome ignores aria-owns of an element that a link owns.
-    links.forEach((link) => {
-      const owners = [...(this.#linkElements.get(link.id)?.querySelectorAll('[aria-owns]') ?? [])];
+    const linksById = new Map(links.map((link) => [link.id, link]));
+    this.#linkAnnotations.forEach((ids, element) => {
+      const [link, ...otherLinks] = ids.map((id) => linksById.get(id)).filter(Boolean);
+      if (!link) {
+        return;
+      }
+      // The first link stands for the others, such as the second line of a wrapped link. They stay clickable.
+      otherLinks.forEach((otherLink) => {
+        otherLink.setAttribute('aria-hidden', 'true');
+        otherLink.tabIndex = -1;
+        // A click does not focus it, as focus must not be hidden from screen readers.
+        otherLink.addEventListener('mousedown', (event) => event.preventDefault());
+      });
+      // Unlike in pdf.js, a link owns its text, as Chrome ignores aria-owns of an element that a link owns.
+      const owners = [...element.querySelectorAll('[aria-owns]')];
       if (owners.length) {
         link.setAttribute('aria-owns', owners.map((owner) => owner.getAttribute('aria-owns')).join(' '));
         owners.forEach((owner) => owner.removeAttribute('aria-owns'));
@@ -217,7 +229,7 @@ export class PdfViewerStructureLayer {
       const element = this.#linkAlts.get(link.id)?.element;
       if (element?.getAttribute('role') === 'img') {
         // The link takes the place of the figure.
-        element.parentElement.removeAttribute('role');
+        element.parentElement?.removeAttribute('role');
         element.remove();
       } else if (element) {
         removeAlt(element);
@@ -339,15 +351,18 @@ export class PdfViewerStructureLayer {
     }
 
     if (node.role === 'Link') {
-      const annotations = children.filter((child) => child.type === 'annotation');
-      if (annotations.length === 1) {
-        const { id } = annotations[0];
-        this.#linkElements.set(id, element);
-        // The image of a figure names a link without alternative text, as its content names a link in pdf.js.
-        const image = element.querySelector('[role="img"]');
-        if (image && !this.#linkAlts.has(id)) {
-          this.#linkAlts.set(id, { element: image, alt: image.getAttribute('aria-label') });
-        }
+      // A link can have an annotation for each of its lines or boxes, as Chromium writes them.
+      const ids = children.filter((child) => child.type === 'annotation').map(({ id }) => id);
+      if (ids.length) {
+        this.#linkAnnotations.set(element, ids);
+      }
+      // The image of a figure names a link that shows only figures, as its content names a link in pdf.js.
+      const isFigure = children.every((child) => child.type === 'annotation' || child.role === 'Figure');
+      const image = isFigure && element.querySelector('[role="img"]');
+      if (image) {
+        ids
+          .filter((id) => !this.#linkAlts.has(id))
+          .forEach((id) => this.#linkAlts.set(id, { element: image, alt: image.getAttribute('aria-label') }));
       }
     }
     return element;

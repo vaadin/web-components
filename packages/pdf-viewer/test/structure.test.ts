@@ -405,38 +405,78 @@ describe('structure', () => {
     });
   });
 
-  describe('links of figures', () => {
-    beforeEach(async () => {
-      await stubStructTrees(() => ({
-        role: 'Root',
-        children: [
-          {
-            role: 'Link',
-            children: [
-              { role: 'Figure', alt: 'Vaadin logo', children: [{ type: 'content', id: 'p5R_mc0' }] },
-              { type: 'annotation', id: 'pdfjs_internal_id_7R' },
-            ],
-          },
-        ],
-      }));
-      url = createPdf([
+  describe('links of figures and of several lines', () => {
+    // As Chromium writes them, with an annotation for each line of a link, or for its line and its image.
+    // The first and the second annotation of the link, by their objects in a created PDF.
+    function getLinks() {
+      return [7, 8].map((id) => viewer.shadowRoot!.getElementById(`pdfjs_internal_id_${id}R`) as HTMLAnchorElement);
+    }
+
+    function severalAnnotationsTree(children: PdfViewerStructTreeNode[], annotationCount = 2) {
+      const annotations = [7, 8]
+        .slice(0, annotationCount)
+        .map((id) => ({ type: 'annotation', id: `pdfjs_internal_id_${id}R` }));
+      return { role: 'Root', children: [{ role: 'Link', children: [...children, ...annotations] }] };
+    }
+
+    const figure = { role: 'Figure', alt: 'Vaadin logo', children: [{ type: 'content', id: 'p5R_mc0' }] };
+
+    const figurePdf = {
+      content: '/Figure << /MCID 0 >> BDC 0 0 1 rg 72 690 58 30 re f EMC',
+      annotations: [uriLink([72, 690, 130, 706]), uriLink([72, 690, 130, 720])],
+    };
+
+    it('should own the text of a link with an annotation for each line by its first link, named by all lines', async () => {
+      await stubStructTrees(() => severalAnnotationsTree([{ type: 'content', id: 'p5R_mc0' }]));
+      await loadPdf([
         {
-          content: '/Figure << /MCID 0 >> BDC 0 0 1 rg 72 690 58 30 re f EMC',
-          annotations: [uriLink([72, 690, 130, 720], 'https://vaadin.com/')],
+          content: '/Link << /MCID 0 >> BDC BT /F1 24 Tf 72 700 Td (Vaadin) Tj 0 -30 Td (docs) Tj ET EMC',
+          annotations: [uriLink([72, 690, 150, 720]), uriLink([72, 660, 130, 690])],
         },
       ]);
+      const [first, second] = getLinks();
+      expect(first.getAttribute('aria-label')).to.equal('Vaadin docs (opens in a new tab)');
+      expect(getOwnedText(first)).to.equal('Vaadindocs');
+      expect(second.hasAttribute('aria-owns')).to.be.false;
+    });
+
+    it('should hide the other links of a link from screen readers and Tab, but not from the mouse', async () => {
+      await stubStructTrees(() => severalAnnotationsTree([figure]));
+      await loadPdf([figurePdf]);
+      const [first, second] = getLinks();
+      expect(first.hasAttribute('aria-hidden')).to.be.false;
+      expect(second.getAttribute('aria-hidden')).to.equal('true');
+      expect(second.tabIndex).to.equal(-1);
+      // Focus must not be hidden from screen readers.
+      const event = new MouseEvent('mousedown', { bubbles: true, cancelable: true });
+      second.dispatchEvent(event);
+      expect(event.defaultPrevented).to.be.true;
     });
 
     it('should name a link by the alternative text of its figure, which the link then replaces', async () => {
-      await loadAndRender(viewer, url!);
-      expect(getLink().getAttribute('aria-label')).to.equal('Vaadin logo (opens in a new tab)');
+      await stubStructTrees(() => severalAnnotationsTree([figure]));
+      await loadPdf([figurePdf]);
+      expect(getLinks()[0].getAttribute('aria-label')).to.equal('Vaadin logo (opens in a new tab)');
       expect(getTree()!.querySelector('[role]')).to.be.null;
     });
 
+    it('should name a link with a figure and text by its text, as it shows the text', async () => {
+      await stubStructTrees(() => severalAnnotationsTree([figure, { type: 'content', id: 'p5R_mc1' }], 1));
+      await loadPdf([
+        {
+          content: `${figurePdf.content} /Span << /MCID 1 >> BDC BT /F1 24 Tf 140 700 Td (Docs) Tj ET EMC`,
+          annotations: [uriLink([72, 690, 200, 720])],
+        },
+      ]);
+      expect(getLinks()[0].getAttribute('aria-label')).to.equal('Docs (opens in a new tab)');
+      expect(getTree()!.querySelector('[role="img"]')!.getAttribute('aria-label')).to.equal('Vaadin logo');
+    });
+
     it('should keep the image of the figure when the links fail to load', async () => {
+      await stubStructTrees(() => severalAnnotationsTree([figure]));
       await failLinksOnce(1);
       sinon.stub(console, 'warn');
-      await loadAndRender(viewer, url!);
+      await loadPdf([figurePdf]);
       expect(getTree()!.querySelector('[role="figure"] > [role="img"]')!.getAttribute('aria-label')).to.equal(
         'Vaadin logo',
       );

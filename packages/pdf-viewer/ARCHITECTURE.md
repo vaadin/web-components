@@ -124,9 +124,8 @@ how to generate them.
 - Pages that lose their canvas also lose their text layer, structure and link layer. Screen readers
   therefore reach only the text near the view.
 - Links are in their own layer over the text layer. Each link is named after the first of these that it has:
-  - the alternative text that the structure gives it
-  - the text it covers
-  - the text it owns in the structure
+  - the alternative text that the structure gives it, or the figure that it only shows
+  - the text it covers, or the text it owns in the structure when that holds the text it covers
   - its URL, or the page it goes to
 - Only `http:`, `https:` and `mailto:` links open, in a new tab without access to the viewer.
 - Links on layers that the document hides are left out, as in pdf.js.
@@ -144,8 +143,12 @@ how to generate them.
   `display: contents`, and Chrome ignores `aria-owns` of such elements. Artifacts, such as page numbers, stay hidden.
 - The links mixin names all links. It uses the alternative text that the structure gives a link, as in pdf.js.
   The structure element keeps its alternative text until its link renders, so it keeps it when the links fail.
-- A link without alternative text that shows a figure gets the alternative text of the figure, as pdf.js names
-  a link by its content. The link then takes the place of the figure, so the alternative text is read once.
+- A link without alternative text that shows only a figure gets the alternative text of the figure, as pdf.js
+  names a link by its content. The link then takes the place of the figure, so the alternative text is read once.
+  A link that also shows text is named by its text, so its name holds what it shows.
+- Chromium writes an annotation for each line of a link, and for the line and the image of a linked image.
+  The first link of a structure element owns its text and stands for the others. The others stay clickable,
+  but screen readers and Tab skip them.
 - A link that covers no text, such as a thin link in a table of contents, gets the text that it owns in the
   structure as its name. In pdf.js, this text names such a link, as pdf.js gives it no name.
 - As in pdf.js, a link of the structure owns the text of its structure element. Other links are added to the
