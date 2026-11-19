@@ -35,7 +35,18 @@
 
       if (example) {
         // Rendered inside an iframe: show a single example
-        document.documentElement.classList.add('example');
+
+        // Mirror the options set by the parent page as classes on the iframe element
+        if (window.frameElement) {
+          const applyOptions = () => {
+            const { classList } = window.frameElement;
+            document.documentElement.classList = classList;
+            document.documentElement.classList.add('example');
+            document.documentElement.classList.add(example);
+          };
+          applyOptions();
+          new MutationObserver(applyOptions).observe(window.frameElement, { attributeFilter: ['class'] });
+        }
 
         const navLayoutContent = document.getElementById('nav-layout-content').content;
         const viewContent = document.getElementById('view-content').content;
@@ -55,17 +66,17 @@
           support: { title: 'Support', items: ['Help Center', 'Contact Support'] },
         };
 
-        const navLayouts = document.querySelectorAll('vaadin-navigation-layout:is([slot="navbar"], [slot="drawer"])');
+        const navLayouts = document.querySelectorAll(
+          'vaadin-navigation-layout:is([slot="navbar"], [slot="drawer"]):not([data-custom])',
+        );
         navLayouts.forEach((navLayout) => {
           navLayout.prepend(navLayoutContent.cloneNode(true));
 
           // Reposition tooltips
-          if (navLayout.slot === 'navbar') {
+          if (navLayout.slot === 'navbar' && example !== 'vertical-navbar') {
             navLayout.querySelectorAll('vaadin-tooltip').forEach((tooltip) => {
               tooltip.position = 'bottom';
             });
-          } else {
-            navLayout.setAttribute('collapsed', '');
           }
 
           // Using both navbar and drawer
@@ -75,168 +86,180 @@
               item.removeAttribute('data-detail');
             });
           }
-          // Add child items
-          document.querySelectorAll('vaadin-navigation-layout vaadin-side-nav-item').forEach((item) => {
-            if (Object.hasOwn(sections, item.dataset.section)) {
-              const popover = document.createElement('vaadin-popover');
-              const popoverNav = document.createElement('vaadin-side-nav');
-              popover.target = item;
-              popover.position = 'end-top';
-              // TODO focus-visible is not possible
-              popover.trigger = ['hover', 'focus-visible'];
-              popover.style.setProperty('--vaadin-navigation-layout-collapsed', '0');
-              popover.style.setProperty('--vaadin-navigation-layout-direction', 'column');
 
-              sections[item.dataset.section].items.forEach((title) => {
-                const childItem = document.createElement('vaadin-side-nav-item');
-                childItem.slot = 'children';
-                childItem.textContent = title;
-                // childItem.dataset.section = item.dataset.section;
-                // childItem.dataset.detail = title.toLowerCase().replaceAll(' ', '-');
-                if (item.closest('vaadin-navigation-layout[slot="drawer"]')) {
-                  item.append(childItem);
-                } else {
-                  popover.position = 'bottom-start';
+          if (navLayout.closest('.icon-on-top-rail')) {
+            document.querySelectorAll('vaadin-navigation-layout vaadin-side-nav-item').forEach((item) => {
+              item.setAttribute('theme', 'icon-on-top');
+            });
+          } else {
+            // Add child items
+            document
+              .querySelectorAll('vaadin-navigation-layout:not([slot="navbar-bottom"]) vaadin-side-nav-item')
+              .forEach((item) => {
+                if (Object.hasOwn(sections, item.dataset.section)) {
+                  const popover = document.createElement('vaadin-popover');
+                  const popoverNav = document.createElement('vaadin-side-nav');
+                  popover.target = item;
+                  popover.position = 'end-top';
+                  // TODO focus-visible is not possible
+                  popover.trigger = ['hover', 'focus'];
+                  popover.style.setProperty('--vaadin-navigation-layout-collapsed', '0');
+                  popover.style.setProperty('--vaadin-navigation-layout-direction', 'column');
+
+                  const label = document.createElement('span');
+                  label.textContent = item.dataset.section.substring(0, 1).toUpperCase() + item.dataset.section.substring(1);
+                  label.slot = 'label';
+                  popoverNav.append(label);
+
+                  sections[item.dataset.section].items.forEach((title) => {
+                    const childItem = document.createElement('vaadin-side-nav-item');
+                    childItem.slot = 'children';
+                    childItem.textContent = title;
+                    // childItem.dataset.section = item.dataset.section;
+                    // childItem.dataset.detail = title.toLowerCase().replaceAll(' ', '-');
+                    if (item.closest('vaadin-navigation-layout[slot="drawer"]')) {
+                      item.append(childItem);
+                    } else {
+                      popover.position = 'bottom-start';
+                    }
+
+                    const popoverItem = childItem.cloneNode(true);
+                    popoverItem.removeAttribute('slot');
+                    popoverNav.append(popoverItem);
+                  });
+
+                  popover.append(popoverNav);
+                  // need to be nested so that the --vaadin-popover-display property cascades
+                  item.append(popover);
                 }
-
-                const popoverItem = childItem.cloneNode(true);
-                popoverItem.removeAttribute('slot');
-                popoverNav.append(popoverItem);
               });
-
-              popover.append(popoverNav);
-              item.append(popover);
-            }
-          });
+          }
         });
 
         const layout = document.querySelector('vaadin-app-layout');
-        layout.append(viewContent.cloneNode(true));
+        if (layout.dataset.customContent === undefined) {
+          layout.append(viewContent.cloneNode(true));
 
-        const masterDetail = layout.querySelector('vaadin-master-detail-layout');
-        const masterNav = masterDetail.querySelector('vaadin-side-nav');
-        const detail = masterDetail.querySelector('[slot="detail"]');
-        const sectionBreadcrumb = detail.querySelector('vaadin-breadcrumbs-item[path]');
-        const detailHeading = detail.querySelector('vaadin-breadcrumbs-item[current]');
-        const description = detail.querySelector('.text-secondary');
-        const directoryDescription = description.textContent;
-        let currentSection;
+          const masterDetail = layout.querySelector('vaadin-master-detail-layout');
+          const masterNav = masterDetail.querySelector('vaadin-side-nav');
+          const detail = masterDetail.querySelector('[slot="detail"]');
+          const sectionBreadcrumb = detail.querySelector('vaadin-breadcrumbs-item[path]');
+          const detailHeading = detail.querySelector('vaadin-breadcrumbs-item[current]');
+          const description = detail.querySelector('.text-secondary');
+          const directoryDescription = description.textContent;
+          let currentSection;
 
-        const navigationUrl = (section, detailKey) => {
-          const url = new URL(location.href);
-          url.searchParams.set('section', section);
-          url.searchParams.delete('detail');
-          url.hash = '';
-          if (detailKey) {
-            url.searchParams.set('detail', detailKey);
-          }
-          return url;
-        };
-
-        const renderNavigation = () => {
-          const url = new URL(location.href);
-          let sectionKey = url.searchParams.get('section') || 'people';
-          if (!Object.hasOwn(sections, sectionKey)) {
-            issueWarning(`Unknown app layout section: ${sectionKey}`);
-            sectionKey = 'people';
-          }
-          const section = sections[sectionKey];
-          const items = section.items.map((title) => ({ title, key: title.toLowerCase().replaceAll(' ', '-') }));
-          // Default the initial view to Directory, but keep explicit section-only routes master-only.
-          let detailKey = url.searchParams.get('detail') ?? (url.searchParams.has('section') ? null : 'directory');
-          if (detailKey && !items.some((item) => item.key === detailKey)) {
-            issueWarning(`Unknown app layout detail in ${sectionKey}: ${detailKey}`);
-            detailKey = null;
-          }
-          const route = navigationUrl(sectionKey, detailKey);
-          if (route.href !== location.href) {
-            history.replaceState(history.state, '', route);
-          }
-
-          if (!document.querySelector('vaadin-app-layout').shadowRoot.querySelector('#navbarBottom').hidden) {
-            window.dispatchEvent(new CustomEvent('close-overlay-drawer'));
-          }
-
-          layout.querySelectorAll('[data-section]').forEach((item) => {
-            item.path = navigationUrl(item.dataset.section, item.dataset.detail).href;
-          });
-          if (currentSection !== sectionKey) {
-            masterDetail.querySelector('.section-title').textContent = section.title;
-            masterNav.setAttribute('aria-label', section.title);
-            masterNav.replaceChildren(
-              ...items.map((item) => {
-                const navItem = document.createElement('vaadin-side-nav-item');
-                navItem.textContent = item.title;
-                navItem.path = navigationUrl(sectionKey, item.key).href;
-                return navItem;
-              }),
-            );
-            currentSection = sectionKey;
-          }
-
-          if (detailKey) {
-            sectionBreadcrumb.textContent = section.title;
-            sectionBreadcrumb.path = navigationUrl(sectionKey).href;
-            detailHeading.textContent = items.find((item) => item.key === detailKey).title;
-            const isDirectory = sectionKey === 'people' && detailKey === 'directory';
-            description.textContent = isDirectory
-              ? directoryDescription
-              : `Explore ${detailHeading.textContent.toLowerCase()} in ${section.title}.`;
-            detail.querySelectorAll('[data-directory-only]').forEach((element) => {
-              element.hidden = !isDirectory;
-            });
-            if (!detail.isConnected) {
-              masterDetail._setDetail(detail);
+          const navigationUrl = (section, detailKey) => {
+            const url = new URL(location.href);
+            url.searchParams.set('section', section);
+            url.searchParams.delete('detail');
+            url.hash = '';
+            if (detailKey) {
+              url.searchParams.set('detail', detailKey);
             }
-          } else {
-            masterDetail._setDetail(null);
-          }
-          layout.querySelectorAll('vaadin-side-nav').forEach((nav) => {
-            nav.location = location.href;
-          });
-        };
-
-        renderNavigation();
-        window.addEventListener('popstate', renderNavigation);
-
-        // Mirror the options set by the parent page as classes on the iframe element
-        if (window.frameElement) {
-          const applyOptions = () => {
-            const { classList } = window.frameElement;
-            document.documentElement.classList = classList;
-            document.documentElement.classList.add('example');
+            return url;
           };
-          applyOptions();
-          new MutationObserver(applyOptions).observe(window.frameElement, { attributeFilter: ['class'] });
-        }
 
-        layout.addEventListener('click', (e) => {
-          if (e.defaultPrevented || e.button !== 0 || e.metaKey || e.ctrlKey || e.shiftKey || e.altKey) {
-            return;
-          }
+          const renderNavigation = () => {
+            const url = new URL(location.href);
+            let sectionKey = url.searchParams.get('section') || 'people';
+            if (!Object.hasOwn(sections, sectionKey)) {
+              issueWarning(`Unknown app layout section: ${sectionKey}`);
+              sectionKey = 'people';
+            }
+            const section = sections[sectionKey];
+            const items = section.items.map((title) => ({ title, key: title.toLowerCase().replaceAll(' ', '-') }));
+            // Default the initial view to Directory, but keep explicit section-only routes master-only.
+            let detailKey = url.searchParams.get('detail') ?? (url.searchParams.has('section') ? null : 'directory');
+            if (detailKey && !items.some((item) => item.key === detailKey)) {
+              issueWarning(`Unknown app layout detail in ${sectionKey}: ${detailKey}`);
+              detailKey = null;
+            }
+            const route = navigationUrl(sectionKey, detailKey);
+            if (route.href !== location.href) {
+              history.replaceState(history.state, '', route);
+            }
 
-          const overflowMenuItem = e.target.closest('[data-overflow-menu]');
-          if (overflowMenuItem) {
-            overflowMenuItem.dispatchEvent(new CustomEvent('drawer-toggle-click', { bubbles: true }));
-            e.preventDefault();
-          }
+            if (!document.querySelector('vaadin-app-layout').shadowRoot.querySelector('#navbarBottom').hidden) {
+              window.dispatchEvent(new CustomEvent('close-overlay-drawer'));
+            }
 
-          const link = e.composedPath().find((el) => el instanceof HTMLAnchorElement);
-          if (!link || link.hasAttribute('download') || (link.target && link.target !== '_self')) {
-            return;
-          }
-          if (link.href) {
-            const url = new URL(link.href);
-            if (url.origin !== location.origin || url.pathname !== location.pathname) {
+            layout.querySelectorAll('[data-section]').forEach((item) => {
+              item.path = navigationUrl(item.dataset.section, item.dataset.detail).href;
+            });
+            if (currentSection !== sectionKey) {
+              masterDetail.querySelector('.section-title').textContent = section.title;
+              masterNav.setAttribute('aria-label', section.title);
+              masterNav.replaceChildren(
+                ...items.map((item) => {
+                  const navItem = document.createElement('vaadin-side-nav-item');
+                  navItem.textContent = item.title;
+                  navItem.path = navigationUrl(sectionKey, item.key).href;
+                  return navItem;
+                }),
+              );
+              currentSection = sectionKey;
+            }
+
+            if (detailKey) {
+              sectionBreadcrumb.textContent = section.title;
+              sectionBreadcrumb.path = navigationUrl(sectionKey).href;
+              detailHeading.textContent = items.find((item) => item.key === detailKey).title;
+              const isDirectory = sectionKey === 'people' && detailKey === 'directory';
+              description.textContent = isDirectory
+                ? directoryDescription
+                : `Explore ${detailHeading.textContent.toLowerCase()} in ${section.title}.`;
+              detail.querySelectorAll('[data-directory-only]').forEach((element) => {
+                element.hidden = !isDirectory;
+              });
+              if (!detail.isConnected) {
+                masterDetail._setDetail(detail);
+              }
+            } else {
+              masterDetail._setDetail(null);
+            }
+            layout.querySelectorAll('vaadin-side-nav').forEach((nav) => {
+              nav.location = location.href;
+            });
+          };
+
+          renderNavigation();
+          window.addEventListener('popstate', renderNavigation);
+
+          layout.addEventListener('click', (e) => {
+            if (e.defaultPrevented || e.button !== 0 || e.metaKey || e.ctrlKey || e.shiftKey || e.altKey) {
               return;
             }
-            e.preventDefault();
-            if (url.href !== location.href) {
-              history.pushState(null, '', url);
-              renderNavigation();
+
+            const overflowMenuItem = e.target.closest('[data-overflow-menu]');
+            if (overflowMenuItem) {
+              overflowMenuItem.dispatchEvent(new CustomEvent('drawer-toggle-click', { bubbles: true }));
+              e.preventDefault();
             }
-          }
-        });
+
+            const link = e.composedPath().find((el) => el instanceof HTMLAnchorElement);
+            if (!link || link.hasAttribute('download') || (link.target && link.target !== '_self')) {
+              return;
+            }
+            if (link.href) {
+              const url = new URL(link.href);
+              if (url.origin !== location.origin || url.pathname !== location.pathname) {
+                return;
+              }
+              e.preventDefault();
+              if (url.href !== location.href) {
+                window.dispatchEvent(new CustomEvent('close-overlay-drawer'));
+                history.pushState(null, '', url);
+                renderNavigation();
+              }
+            }
+          });
+        } else {
+          document.querySelectorAll('.vertical-navbar vaadin-navigation-layout vaadin-popover').forEach((popover) => {
+            // TODO would need focus-visible as well
+            popover.trigger = ['hover', 'focus'];
+          });
+        }
       } else {
         const theme = document.documentElement.dataset.theme;
         document.querySelectorAll('iframe[data-example]').forEach((iframe) => {
@@ -250,7 +273,9 @@
         });
 
         document.querySelector('#full-height').addEventListener('change', (e) => {
-          document.querySelectorAll('iframe').forEach((iframe) => iframe.classList.toggle('full-height', e.target.checked));
+          document
+            .querySelectorAll('iframe')
+            .forEach((iframe) => iframe.classList.toggle('not-full-height', e.target.checked));
         });
 
         document.querySelector('#viewport-size').addEventListener('change', (e) => {
@@ -274,7 +299,7 @@
         align-items: baseline;
         padding: var(--vaadin-side-nav-item-padding, var(--vaadin-padding-block-container) var(--vaadin-padding-inline-container));
         gap: var(--vaadin-gap-m);
-        border: var(--vaadin-side-nav-border-width, 0) solid transparent;
+        border: var(--vaadin-side-nav-border-width, 1px) solid transparent;
         font-size: var(--vaadin-side-nav-item-font-size, 1em);
         line-height: var(--vaadin-side-nav-item-line-height, inherit);
         font-weight: 650;
@@ -454,9 +479,9 @@
       }
 
       .example {
-        /* --aura-background-color-dark: #090909; */
-        /* color-scheme: dark; */
-        /* --aura-content-color-scheme: light dark; */
+        /* --aura-background-color-dark: #090909;
+        color-scheme: dark;
+        --aura-content-color-scheme: light dark; */
         /* TODO should this control nav-layout width or should it have a dedicated property? */
         --vaadin-app-layout-drawer-width: 14rem;
 
@@ -466,14 +491,115 @@
           --aura-accent-color-dark: var(--aura-neutral);
         }
 
-        &.full-height,
-        &.full-height body {
+        &:not(.not-full-height),
+        &:not(.not-full-height) body {
           height: 100%;
         }
 
         &.phone-size {
           --safe-area-inset-top: 20px;
           --safe-area-inset-bottom: 40px;
+        }
+
+        &.icon-on-top-rail {
+          --vaadin-app-layout-drawer-width: auto;
+
+          [slot="drawer"] .app-logo {
+            flex-direction: column;
+            align-items: center;
+          }
+
+          vaadin-navigation-layout > vaadin-button {
+            flex-direction: column;
+            font-size: 0.8em;
+
+            > vaadin-badge[slot="suffix"] {
+              position: absolute;
+              top: 0;
+              inset-inline-end: 0;
+              font-size: 1em;
+              line-height: 1.4;
+            }
+          }
+        }
+
+        &.vertical-navbar {
+          vaadin-app-layout {
+            --navbar-width: 3.5rem; /* TODO would need to be measured */
+            padding-top: var(--aura-app-layout-inset, 0);
+            padding-inline-start: calc(var(--navbar-width) + var(--_vaadin-app-layout-drawer-offset-size));
+            margin: 0;
+            --vaadin-app-layout-drawer-overlay: unset;
+            --vaadin-drawer-toggle-display: unset;
+
+            &:not([drawer-opened]) {
+              padding-inline-start: var(--navbar-width);
+            }
+
+            &::part(navbar) {
+              inset-block: 0;
+              inset-inline-end: auto;
+              inset-inline-start: 0;
+              padding: var(--aura-app-layout-inset, 0) 0;
+              width: var(--navbar-width);
+            }
+
+            &::part(drawer) {
+              top: 0;
+              inset-inline-start: var(--navbar-width);
+              transition-property: opacity, visibility, transform;
+            }
+
+            &:not([drawer-opened])::part(drawer) {
+              transform: translateX(-20px);
+              opacity: 0;
+            }
+
+            vaadin-navigation-layout[slot="navbar"] {
+              --vaadin-navigation-layout-direction: column;
+              --vaadin-navigation-layout-collapsed: 1;
+              margin: 0;
+            }
+
+            vaadin-popover {
+              --vaadin-navigation-layout-collapsed: 0;
+              --vaadin-popover-offset-start: 0;
+              --vaadin-overlay-animation-duration: 0s;
+
+              &::part(overlay) {
+                position: fixed;
+                inset-inline-start: calc(var(--navbar-width) + 1px);
+                inset-block: var(--aura-app-layout-inset, 8px);
+                width: var(--_vaadin-app-layout-drawer-offset-size);
+                transition: background-color 100ms, backdrop-filter 100ms;
+              }
+            }
+
+            &:has(vaadin-popover[opened])::part(drawer) {
+              opacity: 0;
+            }
+
+            &:has(vaadin-popover[opened]) vaadin-popover {
+              /* --vaadin-overlay-animation-duration: 0s; */
+              /* --vaadin-popover-display: none; */
+            }
+
+            &[drawer-opened] vaadin-popover {
+              --vaadin-popover-background: transparent;
+              --vaadin-popover-shadow: none;
+              --aura-overlay-backdrop-filter: none;
+
+              &::part(overlay) {
+                inset-block: 0;
+              }
+            }
+
+            &:not([drawer-opened]) vaadin-popover {
+              --vaadin-overlay-animation-duration: 200ms;
+              --vaadin-overlay-translate-closed: -20px;
+              --vaadin-overlay-opacity-closed: 0;
+            }
+          }
         }
       }
 
@@ -566,7 +692,7 @@
 
   <body>
     <vaadin-horizontal-layout theme="spacing align-baseline">
-      <vaadin-switch id="full-height" label="Scroll App Layout"></vaadin-switch>
+      <vaadin-switch id="full-height" label="Scroll Page (instead of App Layout)"></vaadin-switch>
       <div id="viewport-size" class="segmented" role="radiogroup" aria-label="Viewport size">
         <label><input type="radio" name="viewport-size" value="responsive" checked />Responsive</label>
         <label><input type="radio" name="viewport-size" value="desktop" />Desktop</label>
@@ -581,9 +707,15 @@
     <!-- <h2 class="heading">Navbar</h2> -->
     <iframe data-example="navbar"></iframe>
 
+    <!-- <h2 class="heading">Icon-on-top</h2> -->
+    <iframe data-example="icon-on-top-rail"></iframe>
+
+    <!-- <h2 class="heading">Vertical navbar</h2> -->
+    <iframe data-example="vertical-navbar"></iframe>
+
     <template id="drawer">
       <vaadin-app-layout>
-        <vaadin-navigation-layout slot="drawer">
+        <vaadin-navigation-layout slot="drawer" collapsed>
           <vaadin-side-nav>
             <div slot="label">Shortcuts</div>
             <vaadin-side-nav-item>
@@ -642,6 +774,124 @@
             </vaadin-side-nav-item>
           </vaadin-side-nav>
         </vaadin-navigation-layout>
+      </vaadin-app-layout>
+    </template>
+
+    <template id="icon-on-top-rail">
+      <vaadin-app-layout>
+        <vaadin-navigation-layout slot="drawer"></vaadin-navigation-layout>
+      </vaadin-app-layout>
+    </template>
+
+    <template id="vertical-navbar">
+      <vaadin-app-layout data-custom-content>
+        <vaadin-navigation-layout slot="navbar" data-custom>
+          <div class="app-logo" slot="start">
+            <vaadin-icon src="../assets/lucide-icons/users.svg" theme="filled" slot="prefix"></vaadin-icon>
+            HR App
+          </div>
+          <!-- <vaadin-text-field aria-label="Search" placeholder="Search" slot="start"></vaadin-text-field> -->
+          <vaadin-side-nav>
+            <vaadin-side-nav-item path="home">
+              <vaadin-icon slot="prefix" src="../assets/lucide-icons/home.svg"></vaadin-icon>
+              Home
+              <vaadin-tooltip slot="tooltip" text="Home" aria-link-mode="none" position="end"></vaadin-tooltip>
+            </vaadin-side-nav-item>
+            <vaadin-side-nav-item path="/dev/playground/app-layout.html?example=vertical-navbar" id="people-nav-item">
+              <vaadin-icon slot="prefix" src="../assets/lucide-icons/users.svg"></vaadin-icon>
+              People
+              <!-- <vaadin-tooltip slot="tooltip" text="People" aria-link-mode="none" position="end"></vaadin-tooltip> -->
+            </vaadin-side-nav-item>
+            <vaadin-popover for="people-nav-item" position="end-top" hover-delay="0" hide-delay="0">
+              <!-- <vaadin-drawer-toggle theme="tertiary"></vaadin-drawer-toggle> -->
+              <vaadin-side-nav>
+                <span slot="label">People</span>
+                <vaadin-side-nav-item path="/dev/playground/app-layout.html?example=vertical-navbar">Directory</vaadin-side-nav-item>
+                <vaadin-side-nav-item path="org-chart">Org Chart</vaadin-side-nav-item>
+                <vaadin-side-nav-item path="time-off">Time Off</vaadin-side-nav-item>
+                <vaadin-side-nav-item path="onboarding">Onboarding</vaadin-side-nav-item>
+                <vaadin-side-nav-item path="benefits">Benefits</vaadin-side-nav-item>
+                <vaadin-side-nav-item path="compensation">Compensation</vaadin-side-nav-item>
+              </vaadin-side-nav>
+            </vaadin-popover>
+            <vaadin-side-nav-item path="calendar" id="calendar-nav-item">
+              <vaadin-icon slot="prefix" src="../assets/lucide-icons/calendar.svg"></vaadin-icon>
+              Calendar
+              <!-- <vaadin-tooltip slot="tooltip" text="Calendar" aria-link-mode="none" position="end"></vaadin-tooltip> -->
+              <vaadin-badge number="2" theme="info number-only" slot="suffix">Invitations</vaadin-badge>
+            </vaadin-side-nav-item>
+            <vaadin-popover for="calendar-nav-item" position="end-top" hover-delay="0" hide-delay="0">
+              <!-- <vaadin-drawer-toggle theme="tertiary"></vaadin-drawer-toggle> -->
+              <vaadin-side-nav>
+                <span slot="label">Calendar</span>
+                <vaadin-side-nav-item path="schedule">Schedule</vaadin-side-nav-item>
+                <vaadin-side-nav-item path="invitations">Invitations</vaadin-side-nav-item>
+                <vaadin-side-nav-item path="holidays">Holidays</vaadin-side-nav-item>
+              </vaadin-side-nav>
+            </vaadin-popover>
+            <vaadin-side-nav-item path="reports" id="reports-nav-item">
+              <vaadin-icon slot="prefix" src="../assets/lucide-icons/chart-pie.svg"></vaadin-icon>
+              Reports
+              <!-- <vaadin-tooltip slot="tooltip" text="Reports" aria-link-mode="none" position="end"></vaadin-tooltip> -->
+            </vaadin-side-nav-item>
+            <vaadin-popover for="reports-nav-item" position="end-top" hover-delay="0" hide-delay="0">
+              <!-- <vaadin-drawer-toggle theme="tertiary"></vaadin-drawer-toggle> -->
+              <vaadin-side-nav>
+                <span slot="label">Reports</span>
+                <vaadin-side-nav-item path="overview">Overview</vaadin-side-nav-item>
+                <vaadin-side-nav-item path="headcount">Headcount</vaadin-side-nav-item>
+                <vaadin-side-nav-item path="time-off">Time Off</vaadin-side-nav-item>
+              </vaadin-side-nav>
+            </vaadin-popover>
+            <vaadin-side-nav-item path="settings">
+              <vaadin-icon slot="prefix" src="../assets/lucide-icons/cog.svg"></vaadin-icon>
+              Settings
+              <vaadin-tooltip slot="tooltip" text="Settings" aria-link-mode="none" position="end"></vaadin-tooltip>
+            </vaadin-side-nav-item>
+          </vaadin-side-nav>
+
+          <vaadin-side-nav slot="end" style="margin-top: 0;">
+            <vaadin-side-nav-item path="support">
+              <vaadin-icon src="../assets/lucide-icons/life-buoy.svg" slot="prefix"></vaadin-icon>
+              Support
+              <vaadin-tooltip slot="tooltip" text="Support" aria-link-mode="none" position="end"></vaadin-tooltip>
+            </vaadin-side-nav-item>
+          </vaadin-side-nav>
+          <vaadin-button theme="tertiary" slot="end">
+            <vaadin-icon src="../assets/lucide-icons/bell.svg" slot="prefix"></vaadin-icon>
+            Notifications
+            <vaadin-badge slot="suffix" theme="filled error number-only" number="99">Unread</vaadin-badge>
+            <vaadin-tooltip slot="tooltip" text="Notifications" aria-link-mode="none" position="end"></vaadin-tooltip>
+          </vaadin-button>
+          <vaadin-button theme="tertiary" slot="end">
+            <vaadin-side-nav-item>
+              <vaadin-avatar theme="xsmall" name="Olivia" img="https://randomuser.me/api/portraits/thumb/women/10.jpg"
+                slot="prefix"></vaadin-avatar>
+              Olivia
+              <vaadin-badge slot="suffix" theme="dot success">Online</vaadin-badge>
+            </vaadin-side-nav-item>
+            <vaadin-tooltip slot="tooltip" text="Olivia" aria-link-mode="none" position="end"></vaadin-tooltip>
+          </vaadin-button>
+        </vaadin-navigation-layout>
+        <vaadin-navigation-layout slot="drawer" data-custom>
+          <!-- <vaadin-drawer-toggle theme="tertiary"></vaadin-drawer-toggle> -->
+          <vaadin-side-nav>
+            <span slot="label">People</span>
+            <vaadin-side-nav-item path="/dev/playground/app-layout.html?example=vertical-navbar">Directory</vaadin-side-nav-item>
+            <vaadin-side-nav-item path="org-chart">Org Chart</vaadin-side-nav-item>
+            <vaadin-side-nav-item path="time-off">Time Off</vaadin-side-nav-item>
+            <vaadin-side-nav-item path="onboarding">Onboarding</vaadin-side-nav-item>
+            <vaadin-side-nav-item path="benefits">Benefits</vaadin-side-nav-item>
+            <vaadin-side-nav-item path="compensation">Compensation</vaadin-side-nav-item>
+          </vaadin-side-nav>
+        </vaadin-navigation-layout>
+
+        <div style="display: flex; flex-direction: column; padding: var(--vaadin-gap-s); height: 100%;">
+          <vaadin-drawer-toggle theme="tertiary" style="align-self: start;"></vaadin-drawer-toggle>
+          <div style="align-content: center; flex: 1; text-align: center;">
+            View content
+          </div>
+        </div>
       </vaadin-app-layout>
     </template>
 
