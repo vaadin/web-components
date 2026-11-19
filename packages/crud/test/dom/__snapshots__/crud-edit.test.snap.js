@@ -1,7 +1,7 @@
 /* @web/test-runner snapshot v1 */
 export const snapshots = {};
 
-snapshots["vaadin-crud-edit host default"] = 
+snapshots["vaadin-crud-edit default host"] = 
 `<vaadin-crud-edit
   aria-label="Edit"
   role="button"
@@ -9,9 +9,17 @@ snapshots["vaadin-crud-edit host default"] =
 >
 </vaadin-crud-edit>
 `;
-/* end snapshot vaadin-crud-edit host default */
+/* end snapshot vaadin-crud-edit default host */
 
-snapshots["vaadin-crud-edit host custom aria-label"] = 
+snapshots["vaadin-crud-edit default shadow"] = 
+`<div part="icon">
+</div>
+<slot name="tooltip">
+</slot>
+`;
+/* end snapshot vaadin-crud-edit default shadow */
+
+snapshots["vaadin-crud-edit custom aria-label"] = 
 `<vaadin-crud-edit
   aria-label="Edit item"
   role="button"
@@ -19,5 +27,5 @@ snapshots["vaadin-crud-edit host custom aria-label"] =
 >
 </vaadin-crud-edit>
 `;
-/* end snapshot vaadin-crud-edit host custom aria-label */
+/* end snapshot vaadin-crud-edit custom aria-label */
 
