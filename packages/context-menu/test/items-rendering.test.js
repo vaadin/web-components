@@ -115,6 +115,35 @@ describe('items rendering', () => {
       expect(getMenuItems(subMenu)[0].hasAttribute('menu-item-checked')).to.be.false;
     });
 
+    it('should have menuitemcheckbox role on a checked item', async () => {
+      await openRoot();
+      subMenu = await openSubMenu(rootMenu);
+      expect(getMenuItems(subMenu)[0].getAttribute('role')).to.equal('menuitemcheckbox');
+    });
+
+    it('should set aria-checked to true on a checked item', async () => {
+      await openRoot();
+      subMenu = await openSubMenu(rootMenu);
+      expect(getMenuItems(subMenu)[0].getAttribute('aria-checked')).to.equal('true');
+    });
+
+    it('should set aria-checked to false on an unchecked checkable item', async () => {
+      rootMenu.items[0].children[0].checked = false;
+      await openRoot();
+      subMenu = await openSubMenu(rootMenu);
+      const item = getMenuItems(subMenu)[0];
+      expect(item.getAttribute('role')).to.equal('menuitemcheckbox');
+      expect(item.getAttribute('aria-checked')).to.equal('false');
+    });
+
+    it('should not set aria-checked on a non-checkable item', async () => {
+      await openRoot();
+      subMenu = await openSubMenu(rootMenu);
+      const item = getMenuItems(subMenu)[1];
+      expect(item.getAttribute('role')).to.equal('menuitem');
+      expect(item.hasAttribute('aria-checked')).to.be.false;
+    });
+
     it('should have a disabled item', async () => {
       await openRoot();
       subMenu = await openSubMenu(rootMenu);

@@ -45,7 +45,10 @@ class MenuBarItem extends ItemMixin(ThemableMixin(DirMixin(PolylitMixin(LumoInje
 
     // Set role in `connectedCallback()` instead of `ready()`
     // because the role is removed when teleporting to button.
-    this.setAttribute('role', 'menuitem');
+    // Preserve the role if already set, e.g. `menuitemcheckbox`.
+    if (!this.hasAttribute('role')) {
+      this.setAttribute('role', 'menuitem');
+    }
   }
 
   /** @override */

@@ -74,7 +74,10 @@ class ContextMenuItem extends ItemMixin(ThemableMixin(DirMixin(PolylitMixin(Lumo
   ready() {
     super.ready();
 
-    this.setAttribute('role', 'menuitem');
+    // The role may have been set already to `menuitemcheckbox`
+    if (!this.hasAttribute('role')) {
+      this.setAttribute('role', 'menuitem');
+    }
   }
 
   /** @override */
