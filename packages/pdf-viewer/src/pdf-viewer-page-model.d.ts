@@ -9,7 +9,28 @@
  * license.
  */
 import type { PdfViewerLinkAnnotation } from './pdf-viewer-links.js';
-import type { PdfViewerStructTreeNode } from './pdf-viewer-structure-layer.js';
+
+export interface PdfViewerStructTreeNode {
+  role?: string;
+  type?: string;
+  id?: string;
+  alt?: string;
+  lang?: string;
+  rowSpan?: number;
+  colSpan?: number;
+  scope?: 'Both' | 'Column' | 'Row';
+  children?: PdfViewerStructTreeNode[];
+}
+
+/** An element of the structure layer for a node of the structure tree. */
+export interface PdfViewerStructElement {
+  node: PdfViewerStructTreeNode;
+  role: string | null;
+  level?: string;
+  nodes: PdfViewerStructTreeNode[];
+  owned: PdfViewerStructTreeNode[];
+  children: PdfViewerStructElement[];
+}
 
 export interface PdfViewerPlannedLink {
   id: string;
@@ -33,7 +54,7 @@ export interface PdfViewerStructNode {
 }
 
 export interface PdfViewerLinkPlan {
-  root: object | null;
+  root: PdfViewerStructElement | null;
   links: PdfViewerPlannedLink[];
   linkIds: Set<string>;
   linkContents: Set<PdfViewerStructTreeNode>;
@@ -42,7 +63,7 @@ export interface PdfViewerLinkPlan {
 }
 
 export interface PdfViewerTextMarker {
-  id?: string;
+  id?: string | null;
   isArtifact: boolean;
 }
 

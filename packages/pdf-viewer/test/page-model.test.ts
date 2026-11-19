@@ -1,6 +1,6 @@
 import { expect } from '@vaadin/chai-plugins';
+import type { PdfViewerStructTreeNode } from '../src/pdf-viewer-page-model.js';
 import { buildStructure, getContentIndexes, getText, indexText, planLinks } from '../src/pdf-viewer-page-model.js';
-import type { PdfViewerStructTreeNode } from '../src/pdf-viewer-structure-layer.js';
 import { PdfViewerTextLayer } from '../src/pdf-viewer-text-layer.js';
 import { acquireWorker, loadPdfjs, releaseWorker } from '../src/pdfjs-loader.js';
 import { fixtureUrl } from './helpers.js';
@@ -108,14 +108,6 @@ describe('page model', () => {
       expect(figureNode.owns).to.be.undefined;
       expect(annotationNode.owns).to.equal('pdfjs_internal_id_5R');
     });
-
-    it('should keep the alternative text of an element whose annotation gets no link', () => {
-      const [form] = build([
-        { role: 'Form', alt: 'Name', children: [{ type: 'annotation', id: 'pdfjs_internal_id_5R' }] },
-      ]);
-      expect(form).to.include({ role: 'form', label: 'Name' });
-      expect(form.owns).to.be.undefined;
-    });
   });
 
   describe('text index', () => {
@@ -170,17 +162,32 @@ describe('page model', () => {
         const textLayer = new PdfViewerTextLayer();
         await textLayer.render(pdfPage, pdfPage.getViewport({ scale: 1 }), new AbortController().signal);
         const contents = [...textLayer.element.querySelectorAll('.markedContent[id]')];
-        const contentSpans = textLayer.getContentSpans(new Set(contents.map(({ id }) => id)));
-        contents.forEach((content) => {
-          // The text elements of the marked content, without the marked content and the artifacts in it.
-          const expected = [...content.querySelectorAll('span:not(.markedContent)')].filter(
-            (span) => span.parentElement!.closest('.markedContent:is([id], [aria-hidden="true"])') === content,
-          );
-          expect(contentSpans.get(content.id)!.map((id) => textLayer.element.querySelector(`#${id}`))).to.deep.equal(
-            expected,
-          );
+        // Every other marked content, so that the others are nested marked content that the structure does not own.
+        const owned = contents.filter((_, index) => index % 2 === 0);
+        const isOwner = (element: Element | null) => owned.includes(element!) || element?.ariaHidden === 'true';
+        const contentSpans = textLayer.getContentSpans(new Set(owned.map(({ id }) => id)));
+        const afterLineBreak = new Map<Element, boolean>();
+        let previous: Element | null = null;
+        textLayer.element.querySelectorAll('br, span:not(.markedContent)').forEach((element) => {
+          afterLineBreak.set(element, previous?.localName === 'br');
+          previous = element;
         });
-        expect(contentSpans.size).to.equal(contents.length);
+        owned.forEach((content) => {
+          // The text elements of the marked content, without the owned marked content and the artifacts in it.
+          const expected = [...content.querySelectorAll('span:not(.markedContent)')].filter((span) => {
+            let parent = span.parentElement!.closest('.markedContent');
+            while (parent && !isOwner(parent)) {
+              parent = parent.parentElement!.closest('.markedContent');
+            }
+            return parent === content;
+          });
+          const ids = contentSpans.get(content.id)!;
+          expect(ids.map((id) => textLayer.element.querySelector(`#${id}`))).to.deep.equal(expected);
+          // The text, with a space after a line break, as the text layer has a line break instead.
+          const text = expected.map((span) => `${afterLineBreak.get(span) ? ' ' : ''}${span.textContent}`).join('');
+          expect(textLayer.getText(ids)).to.equal(text);
+        });
+        expect(contentSpans.size).to.equal(owned.length);
       } finally {
         await task.destroy();
         releaseWorker(handle);

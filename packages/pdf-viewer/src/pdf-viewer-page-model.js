@@ -153,7 +153,7 @@ function hasImage(node) {
  * A single content child is owned by the element directly.
  * @param {object} node
  * @param {object[]} parents the ancestors of the node, nearest last
- * @return {{ node: object, role: string | null, level?: string, nodes: object[], owned: object[], children: object[] }}
+ * @return {import('./pdf-viewer-page-model.js').PdfViewerStructElement}
  */
 function toElement(node, parents) {
   let role = null;

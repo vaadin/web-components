@@ -43,6 +43,12 @@ export class PdfViewerPage {
   #linkPlan;
 
   /**
+   * The planned links of `#linkPlan` by their ids.
+   * @type {Map<string, import('./pdf-viewer-page-model.js').PdfViewerPlannedLink>}
+   */
+  #plannedLinks = new Map();
+
+  /**
    * Undefined until the structure of the current text layer has rendered, and null for a page without one.
    * @type {PdfViewerStructureLayer | null | undefined}
    */
@@ -294,48 +300,6 @@ export class PdfViewerPage {
   }
 
   /**
-   * Returns the structure tree of the page, or null without one, loaded once as in pdf.js.
-   * @return {Promise<object | null>}
-   * @private
-   */
-  #loadStructTree() {
-    // A page with a broken structure is shown as untagged.
-    this.#structTree ??= this.pdfPage.getStructTree().catch(() => null);
-    return this.#structTree;
-  }
-
-  /**
-   * Plans the links of the page from its annotations and its structure, see `planLinks()`.
-   * @param {object | null} tree
-   * @param {object[]} annotations
-   * @param {{ isVisible: (group: object) => boolean }} [optionalContentConfig] the visible layers
-   * @private
-   */
-  #planLinks(tree, annotations, optionalContentConfig) {
-    // Links on hidden layers of the document are left out, as in pdf.js.
-    const isRendered = (annotation) =>
-      annotation.subtype === 'Link' &&
-      !(annotation.oc && optionalContentConfig?.isVisible(annotation.oc) === false) &&
-      isSupportedLink(annotation);
-    try {
-      return planLinks(tree, annotations, isRendered);
-    } catch {
-      // As in pdf.js, a structure that fails to render does not break the other layers.
-      return planLinks(null, annotations, isRendered);
-    }
-  }
-
-  /**
-   * Sets the plan of the links, after which the structure renders again, see `#connectLayers()`.
-   * @private
-   */
-  #setLinkPlan(plan) {
-    this.#structureLayer?.element.remove();
-    this.#structureLayer = undefined;
-    this.#linkPlan = plan;
-  }
-
-  /**
    * Renders the links of the page in reading order, positioned relative to the
    * page size so that they need no update when the scale changes. Links on
    * hidden layers of the document are left out, and a page without links gets
@@ -387,7 +351,7 @@ export class PdfViewerPage {
    * @return {string | undefined}
    */
   getLinkAlt(link) {
-    return this.#linkPlan?.links.find(({ id }) => id === link.id)?.alt;
+    return this.#plannedLinks.get(link.id)?.alt;
   }
 
   /**
@@ -422,6 +386,7 @@ export class PdfViewerPage {
     this.#structureLayer = undefined;
     this.linkLayer = null;
     this.#linkPlan = undefined;
+    this.#plannedLinks = new Map();
     this.#renderLayers();
   }
 
@@ -444,7 +409,7 @@ export class PdfViewerPage {
     const plan = this.#linkPlan;
     if (plan && this.textLayer?.rendered && this.#structureLayer === undefined) {
       const contentSpans = this.#createStructureLayer(plan);
-      this.#bindLinks(plan, contentSpans);
+      this.#bindLinks(contentSpans);
     }
     const structureElement = this.#structureLayer?.element;
     // In the canvas as in pdf.js, since VoiceOver in Safari skips the elements, which have no size, outside of it.
@@ -474,15 +439,14 @@ export class PdfViewerPage {
    * before them, so that screen readers read the links in the order of the text.
    * @private
    */
-  #bindLinks(plan, contentSpans) {
+  #bindLinks(contentSpans) {
     if (!this.linkLayer) {
       return;
     }
-    const plannedLinks = new Map(plan.links.map((plannedLink) => [plannedLink.id, plannedLink]));
     const { links } = this.linkLayer;
-    const isOwned = (link) => !!this.#structureLayer && plannedLinks.get(link.id).ownedByStructure;
+    const isOwned = (link) => !!this.#structureLayer && this.#plannedLinks.get(link.id).ownedByStructure;
     links.forEach((link) => {
-      const contentIds = isOwned(link) ? plannedLinks.get(link.id).contentIds : [];
+      const contentIds = isOwned(link) ? this.#plannedLinks.get(link.id).contentIds : [];
       const ids = contentIds.flatMap((id) => contentSpans.get(id) ?? [id]);
       if (ids.length) {
         link.setAttribute('aria-owns', ids.join(' '));
@@ -495,6 +459,49 @@ export class PdfViewerPage {
       links.filter((link) => !isOwned(link)),
       linkTextIds,
     );
+  }
+
+  /**
+   * Returns the structure tree of the page, or null without one, loaded once as in pdf.js.
+   * @return {Promise<object | null>}
+   * @private
+   */
+  #loadStructTree() {
+    // A page with a broken structure is shown as untagged.
+    this.#structTree ??= this.pdfPage.getStructTree().catch(() => null);
+    return this.#structTree;
+  }
+
+  /**
+   * Plans the links of the page from its annotations and its structure, see `planLinks()`.
+   * @param {object | null} tree
+   * @param {object[]} annotations
+   * @param {{ isVisible: (group: object) => boolean }} [optionalContentConfig] the visible layers
+   * @private
+   */
+  #planLinks(tree, annotations, optionalContentConfig) {
+    // Links on hidden layers of the document are left out, as in pdf.js.
+    const isRendered = (annotation) =>
+      annotation.subtype === 'Link' &&
+      !(annotation.oc && optionalContentConfig?.isVisible(annotation.oc) === false) &&
+      isSupportedLink(annotation);
+    try {
+      return planLinks(tree, annotations, isRendered);
+    } catch {
+      // As in pdf.js, a structure that fails to render does not break the other layers.
+      return planLinks(null, annotations, isRendered);
+    }
+  }
+
+  /**
+   * Sets the plan of the links, after which the structure renders again, see `#connectLayers()`.
+   * @private
+   */
+  #setLinkPlan(plan) {
+    this.#structureLayer?.element.remove();
+    this.#structureLayer = undefined;
+    this.#linkPlan = plan;
+    this.#plannedLinks = new Map(plan.links.map((plannedLink) => [plannedLink.id, plannedLink]));
   }
 
   /** @private */

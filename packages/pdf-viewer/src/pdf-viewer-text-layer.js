@@ -19,27 +19,14 @@ import { loadPdfjs } from './pdfjs-loader.js';
  * @return {ReadableStream}
  */
 function recordItems(stream, items) {
-  // With a reader, as Safari 26 and earlier cannot read a stream with `for await`.
-  const reader = stream.getReader();
-  let cancelled = false;
-  return new ReadableStream({
-    async pull(controller) {
-      const { value, done } = await reader.read();
-      if (cancelled) {
-        return;
-      }
-      if (done) {
-        controller.close();
-        return;
-      }
-      value.items.forEach((item) => items.push(item));
-      controller.enqueue(value);
-    },
-    cancel(reason) {
-      cancelled = true;
-      return reader.cancel(reason);
-    },
-  });
+  return stream.pipeThrough(
+    new TransformStream({
+      transform(textContent, controller) {
+        textContent.items.forEach((item) => items.push(item));
+        controller.enqueue(textContent);
+      },
+    }),
+  );
 }
 
 /**

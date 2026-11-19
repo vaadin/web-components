@@ -10,17 +10,7 @@
  */
 import type { PdfViewerStructNode } from './pdf-viewer-page-model.js';
 
-export interface PdfViewerStructTreeNode {
-  role?: string;
-  type?: string;
-  id?: string;
-  alt?: string;
-  lang?: string;
-  rowSpan?: number;
-  colSpan?: number;
-  scope?: 'Both' | 'Column' | 'Row';
-  children?: PdfViewerStructTreeNode[];
-}
+export type { PdfViewerStructTreeNode } from './pdf-viewer-page-model.js';
 
 export declare class PdfViewerStructureLayer {
   constructor(structure: PdfViewerStructNode);
