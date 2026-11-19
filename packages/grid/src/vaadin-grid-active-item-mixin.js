@@ -21,12 +21,7 @@ export const isFocusable = (target) => {
 };
 
 /**
- * True when the click path reaches the cell through a popover element
- * (e.g. a Vaadin overlay) rendered inside that cell. Popover content is
- * rendered in the top layer, where the focus and visibility based checks
- * in `_shouldPreventCellActivationOnClick` are not reliable. Ancestors
- * outside the cell are ignored, so a grid inside an overlay still
- * activates its cells.
+   * Popover content renders in the top layer, so `isFocusable` and `:focus-within` miss clicks inside it.
  *
  * @param {!Event} event
  * @param {!HTMLElement} cell
