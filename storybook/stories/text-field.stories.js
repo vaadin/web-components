@@ -1,8 +1,9 @@
 import '@vaadin/text-field';
 import { html } from 'lit';
 import { fn } from 'storybook/test';
+import preview from '../.storybook/preview';
 
-export default {
+const meta = preview.meta({
   title: 'Fields/Text Field',
   component: 'vaadin-text-field',
   args: {
@@ -31,28 +32,28 @@ export default {
       @change=${args.onChange}
     ></vaadin-text-field>
   `,
-};
+});
 
-export const Default = {};
+export const Default = meta.story();
 
-export const HelperText = {
+export const HelperText = meta.story({
   args: {
     placeholder: 'Mannerheimintie 1',
     helperText: 'Street name and house number',
     clearButtonVisible: true,
   },
-};
+});
 
-export const Required = {
+export const Required = meta.story({
   args: {
     required: true,
     errorMessage: 'Enter a street address',
   },
-};
+});
 
-export const ReadOnly = {
+export const ReadOnly = meta.story({
   args: {
     value: 'Ruukinkatu 2-4',
     readonly: true,
   },
-};
+});

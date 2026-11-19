@@ -4,6 +4,7 @@ import '@vaadin/item';
 import { html } from 'lit';
 import { fn } from 'storybook/test';
 import { selectRenderer } from '@vaadin/select/lit.js';
+import preview from '../.storybook/preview';
 import { people } from './data.js';
 
 const SORT_ITEMS = [
@@ -14,7 +15,7 @@ const SORT_ITEMS = [
   { label: 'Price: high to low', value: 'price-desc', disabled: true },
 ];
 
-export default {
+const meta = preview.meta({
   title: 'Fields/Select',
   component: 'vaadin-select',
   args: {
@@ -40,15 +41,15 @@ export default {
       @change=${args.onChange}
     ></vaadin-select>
   `,
-};
+});
 
-export const Default = {};
+export const Default = meta.story();
 
-export const Preselected = {
+export const Preselected = meta.story({
   args: { value: 'rating-desc' },
-};
+});
 
-export const CustomRenderer = {
+export const CustomRenderer = meta.story({
   args: { label: 'Assignee' },
   render: ({ label }) => html`
     <vaadin-select
@@ -68,4 +69,4 @@ export const CustomRenderer = {
       )}
     ></vaadin-select>
   `,
-};
+});

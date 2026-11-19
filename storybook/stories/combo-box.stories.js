@@ -2,9 +2,10 @@ import '@vaadin/combo-box';
 import { html } from 'lit';
 import { fn } from 'storybook/test';
 import { comboBoxRenderer } from '@vaadin/combo-box/lit.js';
+import preview from '../.storybook/preview';
 import { countries, people } from './data.js';
 
-export default {
+const meta = preview.meta({
   title: 'Fields/Combo Box',
   component: 'vaadin-combo-box',
   args: {
@@ -32,18 +33,18 @@ export default {
       @change=${args.onChange}
     ></vaadin-combo-box>
   `,
-};
+});
 
-export const Default = {};
+export const Default = meta.story();
 
-export const CustomValue = {
+export const CustomValue = meta.story({
   args: {
     allowCustomValue: true,
     helperText: 'Pick a country or type your own',
   },
-};
+});
 
-export const ItemRenderer = {
+export const ItemRenderer = meta.story({
   args: { label: 'Person' },
   render: ({ label }) => html`
     <vaadin-combo-box
@@ -62,4 +63,4 @@ export const ItemRenderer = {
       )}
     ></vaadin-combo-box>
   `,
-};
+});

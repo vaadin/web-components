@@ -49,14 +49,13 @@ addons.register(ADDON_ID, () => {
   addons.add(THEME_TOOL_ID, {
     type: types.TOOL,
     title: 'Vaadin theme',
-    match: ({ tabId }) => !tabId,
     render: ThemeSelect,
   });
 
   addons.add(COLOR_SCHEME_TOOL_ID, {
     type: types.TOOL,
     title: 'Color scheme',
-    match: ({ viewMode, tabId }) => viewMode === 'story' && !tabId,
+    match: ({ viewMode }) => viewMode === 'story',
     render: ColorSchemeToggle,
   });
 });

@@ -1,8 +1,9 @@
 import '@vaadin/slider';
 import { html } from 'lit';
 import { fn } from 'storybook/test';
+import preview from '../.storybook/preview';
 
-export default {
+const meta = preview.meta({
   title: 'Fields/Slider',
   component: 'vaadin-slider',
   args: {
@@ -33,14 +34,14 @@ export default {
       @change=${args.onChange}
     ></vaadin-slider>
   `,
-};
+});
 
-export const Default = {};
+export const Default = meta.story();
 
-export const MinMaxVisible = {
+export const MinMaxVisible = meta.story({
   args: { minMaxVisible: true },
-};
+});
 
-export const Step = {
+export const Step = meta.story({
   args: { label: 'Rating', min: 1, max: 5, step: 1, value: 3, minMaxVisible: true },
-};
+});

@@ -1,7 +1,12 @@
-import type { StorybookConfig } from '@storybook/web-components-vite';
+import { defineMain } from '@storybook/web-components-vite/node';
 
-export default {
-  framework: '@storybook/web-components-vite',
+export default defineMain({
+  framework: {
+    name: '@storybook/web-components-vite',
+    options: {
+      customElementsManifest: '../../custom-elements.json',
+    },
+  },
   stories: ['../stories/**/*.stories.js'],
   addons: [
     '@storybook/addon-docs',
@@ -24,4 +29,4 @@ export default {
       cssTarget: 'esnext',
     },
   }),
-} satisfies StorybookConfig;
+});

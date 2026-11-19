@@ -1,8 +1,9 @@
 import '@vaadin/checkbox';
 import { html } from 'lit';
 import { fn } from 'storybook/test';
+import preview from '../.storybook/preview';
 
-export default {
+const meta = preview.meta({
   title: 'Fields/Checkbox',
   component: 'vaadin-checkbox',
   args: {
@@ -25,18 +26,18 @@ export default {
       @change=${args.onChange}
     ></vaadin-checkbox>
   `,
-};
+});
 
-export const Default = {};
+export const Default = meta.story();
 
-export const Checked = {
+export const Checked = meta.story({
   args: { checked: true },
-};
+});
 
-export const Indeterminate = {
+export const Indeterminate = meta.story({
   args: { label: 'Select all', indeterminate: true },
-};
+});
 
-export const Disabled = {
+export const Disabled = meta.story({
   args: { checked: true, disabled: true },
-};
+});

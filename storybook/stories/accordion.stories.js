@@ -1,6 +1,7 @@
 import '@vaadin/accordion';
 import { html } from 'lit';
 import { fn } from 'storybook/test';
+import preview from '../.storybook/preview';
 
 const PANELS = [
   { summary: 'Personal information', content: 'Name, date of birth and nationality.' },
@@ -8,7 +9,7 @@ const PANELS = [
   { summary: 'Payment', content: 'Card number, expiry date and security code.' },
 ];
 
-export default {
+const meta = preview.meta({
   title: 'Containers/Accordion',
   component: 'vaadin-accordion',
   args: {
@@ -31,14 +32,14 @@ export default {
       )}
     </vaadin-accordion>
   `,
-};
+});
 
-export const Default = {};
+export const Default = meta.story();
 
-export const AllClosed = {
+export const AllClosed = meta.story({
   args: { opened: null },
-};
+});
 
-export const Filled = {
+export const Filled = meta.story({
   args: { theme: 'filled' },
-};
+});

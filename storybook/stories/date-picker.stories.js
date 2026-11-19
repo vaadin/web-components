@@ -1,8 +1,9 @@
 import '@vaadin/date-picker';
 import { html } from 'lit';
 import { fn } from 'storybook/test';
+import preview from '../.storybook/preview';
 
-export default {
+const meta = preview.meta({
   title: 'Fields/Date Picker',
   component: 'vaadin-date-picker',
   args: {
@@ -38,11 +39,11 @@ export default {
       @change=${args.onChange}
     ></vaadin-date-picker>
   `,
-};
+});
 
-export const Default = {};
+export const Default = meta.story();
 
-export const MinAndMax = {
+export const MinAndMax = meta.story({
   args: {
     label: 'Appointment date',
     helperText: 'Within the next 30 days',
@@ -50,12 +51,12 @@ export const MinAndMax = {
     max: '2026-12-18',
     value: '2026-11-20',
   },
-};
+});
 
-export const WeekNumbers = {
+export const WeekNumbers = meta.story({
   args: {
     showWeekNumbers: true,
     // Week numbers show only when weeks start on Monday
     i18n: { firstDayOfWeek: 1 },
   },
-};
+});

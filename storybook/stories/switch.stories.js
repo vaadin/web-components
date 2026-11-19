@@ -1,8 +1,9 @@
 import '@vaadin/switch';
 import { html } from 'lit';
 import { fn } from 'storybook/test';
+import preview from '../.storybook/preview';
 
-export default {
+const meta = preview.meta({
   title: 'Fields/Switch',
   component: 'vaadin-switch',
   args: {
@@ -23,18 +24,18 @@ export default {
       @change=${args.onChange}
     ></vaadin-switch>
   `,
-};
+});
 
-export const Default = {};
+export const Default = meta.story();
 
-export const Checked = {
+export const Checked = meta.story({
   args: { checked: true },
-};
+});
 
-export const HelperText = {
+export const HelperText = meta.story({
   args: { helperText: 'Get an email when someone mentions you' },
-};
+});
 
-export const Disabled = {
+export const Disabled = meta.story({
   args: { checked: true, disabled: true },
-};
+});

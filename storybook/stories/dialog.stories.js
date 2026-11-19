@@ -3,8 +3,9 @@ import '@vaadin/dialog';
 import '@vaadin/text-field';
 import { html } from 'lit';
 import { useArgs } from 'storybook/preview-api';
+import preview from '../.storybook/preview';
 
-export default {
+const meta = preview.meta({
   title: 'Overlays/Dialog',
   component: 'vaadin-dialog',
   args: {
@@ -45,10 +46,10 @@ export default {
       </vaadin-dialog>
     `;
   },
-};
+});
 
-export const Default = {};
+export const Default = meta.story();
 
-export const DraggableAndResizable = {
+export const DraggableAndResizable = meta.story({
   args: { modeless: true, draggable: true, resizable: true },
-};
+});

@@ -1,6 +1,7 @@
 import '@vaadin/button';
 import { html, nothing } from 'lit';
 import { fn } from 'storybook/test';
+import preview from '../.storybook/preview';
 
 const VARIANTS = [
   'primary',
@@ -14,7 +15,7 @@ const VARIANTS = [
   'large',
 ];
 
-export default {
+const meta = preview.meta({
   title: 'Actions/Button',
   component: 'vaadin-button',
   args: {
@@ -30,23 +31,23 @@ export default {
   render: ({ text, theme, disabled, onClick }) => html`
     <vaadin-button theme=${theme || nothing} ?disabled=${disabled} @click=${onClick}>${text}</vaadin-button>
   `,
-};
+});
 
-export const Default = {};
+export const Default = meta.story();
 
-export const Primary = {
+export const Primary = meta.story({
   args: { theme: 'primary' },
-};
+});
 
-export const Disabled = {
+export const Disabled = meta.story({
   args: { disabled: true },
-};
+});
 
-export const Variants = {
+export const Variants = meta.story({
   parameters: { controls: { disable: true } },
   render: () => html`
     <div style="display: flex; flex-wrap: wrap; gap: 1rem; align-items: center">
       ${VARIANTS.map((variant) => html`<vaadin-button theme=${variant}>${variant}</vaadin-button>`)}
     </div>
   `,
-};
+});

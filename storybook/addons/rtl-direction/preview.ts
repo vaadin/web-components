@@ -1,4 +1,5 @@
-import type { Decorator, Preview } from '@storybook/web-components-vite';
+import type { Decorator } from '@storybook/web-components-vite';
+import { definePreviewAddon, type PreviewAddon } from 'storybook/internal/csf';
 import { DEFAULT_DIRECTION, DIRECTION_GLOBAL } from './constants.js';
 
 const withDirection: Decorator = (storyFn, { globals, viewMode }) => {
@@ -7,9 +8,10 @@ const withDirection: Decorator = (storyFn, { globals, viewMode }) => {
   return storyFn();
 };
 
-export default {
-  decorators: [withDirection],
-  initialGlobals: {
-    [DIRECTION_GLOBAL]: DEFAULT_DIRECTION,
-  },
-} satisfies Preview;
+export default (): PreviewAddon =>
+  definePreviewAddon({
+    decorators: [withDirection],
+    initialGlobals: {
+      [DIRECTION_GLOBAL]: DEFAULT_DIRECTION,
+    },
+  });

@@ -24,7 +24,7 @@ addons.register(ADDON_ID, () => {
   addons.add(TOOL_ID, {
     type: types.TOOL,
     title: 'Text direction',
-    match: ({ viewMode, tabId }) => viewMode === 'story' && !tabId,
+    match: ({ viewMode }) => viewMode === 'story',
     render: DirectionToggle,
   });
 });

@@ -1,4 +1,5 @@
-import type { Decorator, Preview } from '@storybook/web-components-vite';
+import type { Decorator } from '@storybook/web-components-vite';
+import { definePreviewAddon, type PreviewAddon } from 'storybook/internal/csf';
 import auraStyles from '@vaadin/aura/aura.css?inline';
 import lumoStyles from '@vaadin/vaadin-lumo-styles/lumo.css?inline';
 import {
@@ -53,10 +54,11 @@ const withVaadinTheme: Decorator = (storyFn, { globals, viewMode }) => {
   return storyFn();
 };
 
-export default {
-  decorators: [withVaadinTheme],
-  initialGlobals: {
-    [THEME_GLOBAL]: DEFAULT_THEME,
-    [COLOR_SCHEME_GLOBAL]: DEFAULT_COLOR_SCHEME,
-  },
-} satisfies Preview;
+export default (): PreviewAddon =>
+  definePreviewAddon({
+    decorators: [withVaadinTheme],
+    initialGlobals: {
+      [THEME_GLOBAL]: DEFAULT_THEME,
+      [COLOR_SCHEME_GLOBAL]: DEFAULT_COLOR_SCHEME,
+    },
+  });

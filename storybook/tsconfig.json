@@ -10,7 +10,6 @@
     "strict": true,
     "noEmit": true,
     "verbatimModuleSyntax": true,
-    "resolveJsonModule": true,
     "skipLibCheck": true,
     "types": ["node", "vite/client"]
   },

@@ -1,6 +1,6 @@
 # Storybook
 
-This workspace holds a Storybook 10 prototype for a selection of Vaadin web components. It uses the `@storybook/web-components-vite` framework.
+This workspace holds a Storybook 11 beta prototype for a selection of Vaadin web components. It uses the `@storybook/web-components-vite` framework.
 
 ## Commands
 
@@ -17,7 +17,7 @@ yarn lint:types:storybook  # Type check the Storybook configuration and the addo
 - `.storybook/`: Storybook configuration in TypeScript
 - `addons/theme-switcher/`: local addon that changes the Vaadin theme of the preview
 - `addons/rtl-direction/`: local addon that changes the text direction of the preview
-- `stories/`: stories in JavaScript, one file for each component
+- `stories/`: stories in JavaScript (CSF 4 format), one file for each component
 
 ## Theme switcher addon
 
@@ -44,12 +44,13 @@ Vaadin components observe it and update without a reload.
 
 To open a story with `dir="rtl"`, modify URL:
 
-
 ```
 ?path=/story/actions-button--primary&globals=direction:rtl
 ```
 
 ## Docs
 
-The docs pages read the API of each component from the root `custom-elements.json`.
-`.storybook/custom-elements.ts` is used to add missing `|` to component JSDoc tables.
+Storybook reads the API of each component on the server, from the root `custom-elements.json`.
+
+The server also builds the code snippets of the stories.
+In Storybook 11.0, these snippets do not update when you change Controls.

@@ -1,8 +1,9 @@
 import '@vaadin/details';
 import { html } from 'lit';
 import { fn } from 'storybook/test';
+import preview from '../.storybook/preview';
 
-export default {
+const meta = preview.meta({
   title: 'Containers/Details',
   component: 'vaadin-details',
   args: {
@@ -28,14 +29,14 @@ export default {
       <div>Finland</div>
     </vaadin-details>
   `,
-};
+});
 
-export const Default = {};
+export const Default = meta.story();
 
-export const Opened = {
+export const Opened = meta.story({
   args: { opened: true },
-};
+});
 
-export const Filled = {
+export const Filled = meta.story({
   args: { opened: true, theme: 'filled' },
-};
+});

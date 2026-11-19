@@ -1,8 +1,9 @@
 import '@vaadin/slider/vaadin-range-slider.js';
 import { html } from 'lit';
 import { fn } from 'storybook/test';
+import preview from '../.storybook/preview';
 
-export default {
+const meta = preview.meta({
   title: 'Fields/Range Slider',
   component: 'vaadin-range-slider',
   args: {
@@ -36,14 +37,14 @@ export default {
       @change=${args.onChange}
     ></vaadin-range-slider>
   `,
-};
+});
 
-export const Default = {};
+export const Default = meta.story();
 
-export const MinMaxVisible = {
+export const MinMaxVisible = meta.story({
   args: { minMaxVisible: true },
-};
+});
 
-export const Disabled = {
+export const Disabled = meta.story({
   args: { disabled: true },
-};
+});

@@ -30,14 +30,15 @@
     "lit": "^3.0.0"
   },
   "devDependencies": {
-    "@storybook/addon-a11y": "^10.6.7",
-    "@storybook/addon-docs": "^10.6.7",
+    "@storybook/addon-a11y": "^11.0.0-beta.3",
+    "@storybook/addon-docs": "^11.0.0-beta.3",
     "@storybook/icons": "^2.0.2",
-    "@storybook/web-components-vite": "^10.6.7",
+    "@storybook/web-components-vite": "^11.0.0-beta.3",
     "@types/node": "^22.15.17",
     "@types/react": "^19.1.13",
     "react": "^19.3.0",
-    "storybook": "^10.6.7",
+    "storybook": "^11.0.0-beta.3",
+    "typescript": "^6.0.3",
     "vite": "^8.3.8"
   }
 }
