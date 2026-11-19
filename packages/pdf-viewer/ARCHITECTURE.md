@@ -147,8 +147,8 @@ how to generate them.
   names a link by its content. The link then takes the place of the figure, so the alternative text is read once.
   A link that also shows text is named by its text, so its name holds what it shows.
 - Chromium writes an annotation for each line of a link, and for the line and the image of a linked image.
-  The first link of a structure element owns its text and stands for the others. The others stay clickable,
-  but screen readers and Tab skip them.
+  The annotations of one structure element render as one link, with an area for each annotation, as the
+  quadrilaterals of a link that wraps. When the structure renders after the links, the links stay apart.
 - A link that covers no text, such as a thin link in a table of contents, gets the text that it owns in the
   structure as its name. In pdf.js, this text names such a link, as pdf.js gives it no name.
 - As in pdf.js, a link of the structure owns the text of its structure element. Other links are added to the

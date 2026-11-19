@@ -205,17 +205,11 @@ export class PdfViewerStructureLayer {
     this.#linksBound = true;
     const linksById = new Map(links.map((link) => [link.id, link]));
     this.#linkAnnotations.forEach((ids, element) => {
-      const [link, ...otherLinks] = ids.map((id) => linksById.get(id)).filter(Boolean);
+      // The first link, as the link layer renders the annotations of an element as one link, see `getLinkGroups()`.
+      const link = ids.map((id) => linksById.get(id)).find(Boolean);
       if (!link) {
         return;
       }
-      // The first link stands for the others, such as the second line of a wrapped link. They stay clickable.
-      otherLinks.forEach((otherLink) => {
-        otherLink.setAttribute('aria-hidden', 'true');
-        otherLink.tabIndex = -1;
-        // A click does not focus it, as focus must not be hidden from screen readers.
-        otherLink.addEventListener('mousedown', (event) => event.preventDefault());
-      });
       // Unlike in pdf.js, a link owns its text, as Chrome ignores aria-owns of an element that a link owns.
       const owners = [...element.querySelectorAll('[aria-owns]')];
       if (owners.length) {
@@ -235,6 +229,14 @@ export class PdfViewerStructureLayer {
         removeAlt(element);
       }
     });
+  }
+
+  /**
+   * Returns the annotations of each `Link` element that has several, such as one for each line of a wrapped link.
+   * @return {string[][]}
+   */
+  getLinkGroups() {
+    return [...this.#linkAnnotations.values()].filter((ids) => ids.length > 1);
   }
 
   /**
