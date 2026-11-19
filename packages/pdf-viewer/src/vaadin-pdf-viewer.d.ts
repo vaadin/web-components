@@ -33,6 +33,7 @@ export interface PdfViewerI18n {
   goToPage?: string;
   externalLink?: string;
   download?: string;
+  print?: string;
 }
 
 /**
@@ -56,6 +57,16 @@ export type PdfViewerPageChangedEvent = CustomEvent<{ value: number }>;
 export type PdfViewerPageCountChangedEvent = CustomEvent<{ value: number }>;
 
 /**
+ * Fired when the pages start to be prepared for printing.
+ */
+export type PdfViewerPrintStartEvent = CustomEvent;
+
+/**
+ * Fired when printing ends, with the reason in `detail.reason`.
+ */
+export type PdfViewerPrintEndEvent = CustomEvent<{ reason: 'closed' | 'cancelled' | 'failed'; error?: unknown }>;
+
+/**
  * Fired when the `toolbarCollapsed` property changes.
  */
 export type PdfViewerToolbarCollapsedChangedEvent = CustomEvent<{ value: boolean }>;
@@ -73,6 +84,10 @@ export interface PdfViewerCustomEventMap {
   'page-changed': PdfViewerPageChangedEvent;
 
   'page-count-changed': PdfViewerPageCountChangedEvent;
+
+  'print-end': PdfViewerPrintEndEvent;
+
+  'print-start': PdfViewerPrintStartEvent;
 
   'toolbar-collapsed-changed': PdfViewerToolbarCollapsedChangedEvent;
 
@@ -101,7 +116,7 @@ export interface PdfViewerEventMap extends HTMLElementEventMap, PdfViewerCustomE
  *
  * Slot name         | Description
  * ------------------|-------------
- * `toolbar-actions` | Application controls, e.g. buttons, at the end of the toolbar, before the download button.
+ * `toolbar-actions` | Application controls, e.g. buttons, at the end of the toolbar, before the download and print buttons.
  *
  * #### Example
  *
@@ -133,13 +148,14 @@ export interface PdfViewerEventMap extends HTMLElementEventMap, PdfViewerCustomE
  * `toolbar-group` | A group of related controls in the toolbar: navigation, zoom and actions.
  * `content`       | The scrollable area that contains the pages.
  * `page`          | A page of the document.
- * `loader`        | The loading indicator shown while the document loads.
+ * `loader`        | The loading indicator shown while the document loads or is prepared for printing.
  *
  * The following state attributes are available for styling:
  *
  * Attribute    | Description
  * -------------|------------
  * `loading`    | Set while the document is loading.
+ * `printing`   | Set while the document is prepared for printing.
  * `has-error`  | Set when the document could not be loaded.
  * `focused`    | Set when the page area is focused.
  * `focus-ring` | Set when the page area is focused using the keyboard.
@@ -166,6 +182,8 @@ export interface PdfViewerEventMap extends HTMLElementEventMap, PdfViewerCustomE
  * @fires {CustomEvent} document-load - Fired when the document has loaded.
  * @fires {CustomEvent} page-changed - Fired when the `page` property changes.
  * @fires {CustomEvent} page-count-changed - Fired when the `pageCount` property changes.
+ * @fires {CustomEvent} print-end - Fired when printing ends, with the reason in `detail.reason`.
+ * @fires {CustomEvent} print-start - Fired when the pages start to be prepared for printing.
  * @fires {CustomEvent} toolbar-collapsed-changed - Fired when the `toolbarCollapsed` property changes.
  * @fires {CustomEvent} zoom-changed - Fired when the `zoom` property changes.
  */
@@ -214,7 +232,9 @@ declare class PdfViewer extends PdfViewerMixin(
    *   // Accessible name of a link that opens in a new tab. {text} is replaced with the text of the link, or its URL.
    *   externalLink: '{text} (opens in a new tab)',
    *   // Tooltip and accessible name of the download button.
-   *   download: 'Download'
+   *   download: 'Download',
+   *   // Tooltip and accessible name of the print button.
+   *   print: 'Print'
    * }
    * ```
    */
