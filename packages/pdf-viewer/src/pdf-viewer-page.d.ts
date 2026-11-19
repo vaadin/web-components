@@ -74,6 +74,10 @@ export declare class PdfViewerPage {
     optionalContentConfig?: Awaited<ReturnType<PDFDocumentProxy['getOptionalContentConfig']>>,
   ): Promise<Array<{ link: HTMLAnchorElement; annotation: PdfViewerLinkAnnotation }>>;
 
+  getLinkAlt(link: HTMLElement): string | undefined;
+
+  getLinkText(link: HTMLElement): string | undefined;
+
   cancel(): void;
 
   release(): void;

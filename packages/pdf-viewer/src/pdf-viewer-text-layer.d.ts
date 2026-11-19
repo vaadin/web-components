@@ -21,7 +21,7 @@ export declare class PdfViewerTextLayer {
 
   render(pdfPage: PDFPageProxy, viewport: PageViewport, signal: AbortSignal): Promise<void>;
 
-  bindLinks(links: HTMLElement[]): void;
+  bindLinks(links: HTMLElement[], linkTextIds?: Set<string>): void;
 
   update(viewport: PageViewport): void;
 

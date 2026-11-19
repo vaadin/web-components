@@ -195,6 +195,15 @@ export type PdfPage = {
 };
 
 /**
+ * Returns the dictionary of a link annotation that opens the URI, for `PdfPage.annotations`.
+ * `entries` are more entries of the dictionary, e.g. `/OC 5 0 R`.
+ */
+export function uriLink(rect: number[], uri = 'https://vaadin.com/', entries = ''): string {
+  const extra = entries ? `${entries} ` : '';
+  return `<< /Type /Annot /Subtype /Link /Rect [${rect.join(' ')}] /Border [0 0 0] ${extra}/A << /S /URI /URI (${uri}) >> >>`;
+}
+
+/**
  * Creates a PDF with the given pages in memory, and returns an object URL for it.
  * `dests` is the content of the named destinations dictionary, `lang` the language of the document.
  * `layers` are the optional content groups, objects 5 and up in their order, e.g. `/OC 5 0 R`.

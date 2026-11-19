@@ -34,8 +34,11 @@ export class PdfViewerPage {
    */
   #structTree = null;
 
-  /** @type {PdfViewerStructureLayer | null} */
-  #structureLayer = null;
+  /**
+   * Undefined until the structure of the current text layer has rendered, and null for a page without one.
+   * @type {PdfViewerStructureLayer | null | undefined}
+   */
+  #structureLayer;
 
   /**
    * @param {number} pageNumber
@@ -298,7 +301,7 @@ export class PdfViewerPage {
     if (signal.aborted) {
       return;
     }
-    this.#structureLayer = tree && this.#createStructureLayer(tree);
+    this.#structureLayer = tree ? this.#createStructureLayer(tree) : null;
     this.#connectLayers();
   }
 
@@ -344,6 +347,37 @@ export class PdfViewerPage {
     return links;
   }
 
+  /**
+   * Returns the alternative text that the structure of a tagged PDF gives a link of this page.
+   * @param {HTMLElement} link
+   * @return {string | undefined}
+   */
+  getLinkAlt(link) {
+    return this.#structureLayer?.getLinkAlt(link.id);
+  }
+
+  /**
+   * Returns the text that a link of this page owns in the structure of a tagged PDF, with a space between its lines,
+   * as the text layer has a line break between them instead.
+   * @param {HTMLElement} link
+   * @return {string | undefined}
+   */
+  getLinkText(link) {
+    const ids = link.getAttribute('aria-owns')?.split(' ');
+    if (!ids) {
+      return undefined;
+    }
+    const texts = new Map();
+    let afterLineBreak = false;
+    this.textLayer.element.querySelectorAll('br, span:not(.markedContent)').forEach((element) => {
+      if (ids.includes(element.id)) {
+        texts.set(element.id, `${afterLineBreak ? ' ' : ''}${element.textContent}`);
+      }
+      afterLineBreak = element.localName === 'br';
+    });
+    return ids.map((id) => texts.get(id)).join('');
+  }
+
   cancel() {
     if (this.renderTask) {
       this.renderTask.cancel();
@@ -362,7 +396,7 @@ export class PdfViewerPage {
     }
     this.canvas = null;
     this.textLayer = null;
-    this.#structureLayer = null;
+    this.#structureLayer = undefined;
     this.linkLayer = null;
     this.#renderLayers();
   }
@@ -387,8 +421,12 @@ export class PdfViewerPage {
     if (structureElement && this.canvas && structureElement.parentNode !== this.canvas) {
       this.canvas.append(structureElement);
     }
-    if (this.linkLayer && this.textLayer?.rendered) {
-      this.textLayer.bindLinks(this.linkLayer.links);
+    if (this.linkLayer && this.#structureLayer !== undefined) {
+      const { links } = this.linkLayer;
+      this.#structureLayer?.bindLinks(links);
+      const textLinks = links.filter((link) => !this.#structureLayer?.hasLink(link));
+      const linkTextIds = new Set(links.flatMap((link) => link.getAttribute('aria-owns')?.split(' ') ?? []));
+      this.textLayer.bindLinks(textLinks, linkTextIds);
     }
   }
 
