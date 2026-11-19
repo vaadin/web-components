@@ -244,6 +244,16 @@ describe('radio-group', () => {
       expect(document.activeElement).to.equal(buttons[2].inputElement);
     });
 
+    it('should set focus-ring on the group when focus() is called', () => {
+      group.focus();
+      expect(group.hasAttribute('focus-ring')).to.be.true;
+    });
+
+    it('should not set focus-ring when focusVisible is false', () => {
+      group.focus({ focusVisible: false });
+      expect(group.hasAttribute('focus-ring')).to.be.false;
+    });
+
     it('should not move focus when all radio buttons are disabled', () => {
       group.disabled = true;
       group.focus();

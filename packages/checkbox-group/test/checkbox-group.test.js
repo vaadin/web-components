@@ -277,6 +277,16 @@ describe('vaadin-checkbox-group', () => {
       expect(checkboxes[1].hasAttribute('focused')).to.be.true;
     });
 
+    it('should set focus-ring on the group when focus() is called', () => {
+      group.focus();
+      expect(group.hasAttribute('focus-ring')).to.be.true;
+    });
+
+    it('should not set focus-ring when focusVisible is false', () => {
+      group.focus({ focusVisible: false });
+      expect(group.hasAttribute('focus-ring')).to.be.false;
+    });
+
     it('should not move focus when all checkboxes are disabled', () => {
       group.disabled = true;
       group.focus();

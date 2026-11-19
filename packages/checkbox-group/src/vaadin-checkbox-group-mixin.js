@@ -86,10 +86,16 @@ export const CheckboxGroupMixin = (superclass) =>
      * @override
      */
     focus(options) {
+      if (this.disabled) {
+        return;
+      }
+
       const target = this.__checkboxes.find((checkbox) => !checkbox.disabled);
       if (target) {
         target.focus(options);
       }
+
+      super.focus(options);
     }
 
     /** @protected */
