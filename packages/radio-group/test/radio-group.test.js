@@ -218,6 +218,56 @@ describe('radio-group', () => {
     });
   });
 
+  describe('focus()', () => {
+    beforeEach(async () => {
+      group = fixtureSync(`
+        <vaadin-radio-group>
+          <vaadin-radio-button value="1" label="Button 1" disabled></vaadin-radio-button>
+          <vaadin-radio-button value="2" label="Button 2"></vaadin-radio-button>
+          <vaadin-radio-button value="3" label="Button 3"></vaadin-radio-button>
+        </vaadin-radio-group>
+      `);
+      await nextFrame();
+      buttons = [...group.querySelectorAll('vaadin-radio-button')];
+    });
+
+    it('should focus the first enabled radio button when none is checked', () => {
+      group.focus();
+      expect(document.activeElement).to.equal(buttons[1].inputElement);
+      expect(buttons[1].hasAttribute('focused')).to.be.true;
+    });
+
+    it('should focus the checked radio button', async () => {
+      group.value = '3';
+      await nextUpdate(group);
+      group.focus();
+      expect(document.activeElement).to.equal(buttons[2].inputElement);
+    });
+
+    it('should set focus-ring on the group when focus() is called', () => {
+      group.focus();
+      expect(group.hasAttribute('focus-ring')).to.be.true;
+    });
+
+    it('should not set focus-ring when focusVisible is false', () => {
+      group.focus({ focusVisible: false });
+      expect(group.hasAttribute('focus-ring')).to.be.false;
+    });
+
+    it('should not move focus when all radio buttons are disabled', () => {
+      group.disabled = true;
+      group.focus();
+      expect(document.activeElement).to.equal(document.body);
+    });
+
+    it('should not set focus-ring when no radio button is focusable', () => {
+      group.readonly = true;
+      group.focus();
+      expect(group.hasAttribute('focus-ring')).to.be.false;
+      expect(document.activeElement).to.equal(document.body);
+    });
+  });
+
   describe('focused state', () => {
     let firstGlobalFocusable;
 
