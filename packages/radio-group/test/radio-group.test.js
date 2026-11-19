@@ -259,6 +259,13 @@ describe('radio-group', () => {
       group.focus();
       expect(document.activeElement).to.equal(document.body);
     });
+
+    it('should not set focus-ring when no radio button is focusable', () => {
+      group.readonly = true;
+      group.focus();
+      expect(group.hasAttribute('focus-ring')).to.be.false;
+      expect(document.activeElement).to.equal(document.body);
+    });
   });
 
   describe('focused state', () => {

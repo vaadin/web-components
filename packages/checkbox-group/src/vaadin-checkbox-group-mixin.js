@@ -93,9 +93,8 @@ export const CheckboxGroupMixin = (superclass) =>
       const target = this.__checkboxes.find((checkbox) => !checkbox.disabled);
       if (target) {
         target.focus(options);
+        super.focus(options);
       }
-
-      super.focus(options);
     }
 
     /** @protected */

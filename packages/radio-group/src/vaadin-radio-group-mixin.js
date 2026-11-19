@@ -111,9 +111,8 @@ export const RadioGroupMixin = (superclass) =>
       const target = selected && !selected.disabled ? selected : this.__radioButtons.find((radio) => !radio.disabled);
       if (target) {
         target.focus(options);
+        super.focus(options);
       }
-
-      super.focus(options);
     }
 
     /**
