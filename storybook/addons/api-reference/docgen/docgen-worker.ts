@@ -1,10 +1,9 @@
-import { readFileSync, statSync } from 'node:fs';
 import { dirname, resolve } from 'node:path';
 import { logger } from 'storybook/internal/node-logger';
-import type { DocgenMiddleware, DocgenPayload, StrictArgTypes, StrictInputType } from 'storybook/internal/types';
-import type { TypeContext } from '../../../../api-docs/types.ts';
-import { type ElementEntry, getElementEntries } from '../../../../manifest/lib/cem-helpers.js';
+import type { DocgenMiddleware, DocgenPayload } from 'storybook/internal/types';
+import { updateArgTypes } from './arg-types.ts';
 import { readDocsIds, rewriteElementLinks } from './links.ts';
+import { findElement } from './manifest.ts';
 
 export interface ApiReferenceOptions {
   storiesDir: string;
@@ -13,82 +12,6 @@ export interface ApiReferenceOptions {
 interface ManifestEntry {
   manifestPath: string;
   declaration: { tagName: string };
-}
-
-interface TableType {
-  summary: string;
-  detail?: string;
-}
-
-interface ArgTypeContext {
-  tagName: string;
-  typeContext: TypeContext;
-  fixLinks(markdown: string): string;
-}
-
-const manifestCache = new Map<string, { mtimeMs: number; elements: ElementEntry[] }>();
-
-function readElements(manifestFile: string): ElementEntry[] {
-  const { mtimeMs } = statSync(manifestFile);
-  let cached = manifestCache.get(manifestFile);
-  if (cached?.mtimeMs !== mtimeMs) {
-    cached = { mtimeMs, elements: getElementEntries(JSON.parse(readFileSync(manifestFile, 'utf8'))) };
-    manifestCache.set(manifestFile, cached);
-  }
-  return cached.elements;
-}
-
-/** Reads the declaration from the file, as the one of the payload also has inherited members. */
-function findElement(manifestFile: string, tagName: string): ElementEntry {
-  const entry = readElements(manifestFile).find(({ declaration }) => declaration.tagName === tagName);
-  if (!entry) {
-    throw new Error(`no module declares <${tagName}> in ${manifestFile}`);
-  }
-  return entry;
-}
-
-function propertyType(typeContext: TypeContext, name: string): TableType {
-  const summary = typeContext.getMemberType(name);
-  const related = typeContext.findRelatedTypes(summary);
-  const detail = related.map((type) => type.declarationText.trim()).join('\n\n');
-  return detail ? { summary, detail } : { summary };
-}
-
-function eventType(typeContext: TypeContext, name: string): TableType | undefined {
-  const type = typeContext.findEventType(name);
-  return type ? { summary: type.name, detail: type.declarationText.trim() } : undefined;
-}
-
-function tableType(argType: StrictInputType, typeContext: TypeContext): TableType | undefined {
-  switch (argType.table?.category) {
-    case 'properties':
-      return propertyType(typeContext, argType.name);
-    case 'methods':
-      return { summary: typeContext.getMemberType(argType.name) };
-    case 'events':
-      return eventType(typeContext, argType.name);
-    default:
-      // Attributes, slots, CSS parts and CSS properties have no TypeScript type
-      return undefined;
-  }
-}
-
-function updateArgType(argType: StrictInputType, { tagName, typeContext, fixLinks }: ArgTypeContext): StrictInputType {
-  let type: TableType | undefined;
-  try {
-    type = tableType(argType, typeContext);
-  } catch (error) {
-    logger.debug(`No TypeScript type for <${tagName}> ${argType.name}: ${String(error)}`);
-  }
-  return {
-    ...argType,
-    description: argType.description && fixLinks(argType.description),
-    table: type ? { ...argType.table, type: { ...argType.table?.type, ...type } } : argType.table,
-  };
-}
-
-function updateArgTypes(argTypes: StrictArgTypes, context: ArgTypeContext): StrictArgTypes {
-  return Object.fromEntries(Object.entries(argTypes).map(([key, argType]) => [key, updateArgType(argType, context)]));
 }
 
 async function renderApiReference(
