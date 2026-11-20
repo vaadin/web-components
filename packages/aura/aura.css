@@ -4,8 +4,9 @@
 @import './src/shadow.css';
 @import './src/size.css';
 @import './src/surface.css';
-@import './src/table.css';
 @import './src/typography.css';
+/* After surface.css, so that a native form control can adjust its own surface opacity */
+@import './src/html-elements.css';
 
 @import './src/components/overlay.css';
 @import './src/components/item-overlay.css';
