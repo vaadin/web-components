@@ -106,6 +106,33 @@ describe('vaadin-pdf-viewer', () => {
     });
   });
 
+  describe('height', () => {
+    let wrapper: HTMLDivElement;
+
+    beforeEach(async () => {
+      wrapper = fixtureSync(`
+        <div style="display: flex; flex-direction: column">
+          <vaadin-pdf-viewer></vaadin-pdf-viewer>
+        </div>
+      `);
+      viewer = wrapper.querySelector('vaadin-pdf-viewer')!;
+      await nextRender();
+    });
+
+    it('should show the content with a relative height when the parent has no height', () => {
+      viewer.style.height = '100%';
+      const content = viewer.shadowRoot!.querySelector('[part="content"]')!;
+      expect(content.getBoundingClientRect().height).to.be.above(100);
+    });
+
+    it('should keep a small fixed height without clipping the toolbar', () => {
+      viewer.style.height = '150px';
+      expect(viewer.getBoundingClientRect().height).to.equal(150);
+      const topArea = viewer.shadowRoot!.querySelector('.top-area')!;
+      expect(topArea.scrollHeight).to.equal(topArea.clientHeight);
+    });
+  });
+
   describe('src set before attach', () => {
     let element: PdfViewer;
 
