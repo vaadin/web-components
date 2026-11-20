@@ -13,6 +13,8 @@
     // Node runs the docgen worker and the tests without a build step
     "allowImportingTsExtensions": true,
     "erasableSyntaxOnly": true,
+    // Reads the types of the JavaScript manifest helpers from their JSDoc
+    "allowJs": true,
     "skipLibCheck": true,
     "types": ["node", "vite/client"]
   },

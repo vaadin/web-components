@@ -1,7 +1,7 @@
 import assert from 'node:assert/strict';
 import path from 'node:path';
 import { test } from 'node:test';
-import { getElements, isPrimitiveType, listPackageDirs, packageDir } from '../lib/cem-helpers.js';
+import { getElementEntries, getElements, isPrimitiveType, listPackageDirs, packageDir } from '../lib/cem-helpers.js';
 import { createTree } from './create-tree.js';
 
 const files = (...paths) => Object.fromEntries(paths.map((file) => [file, '']));
@@ -24,6 +24,32 @@ test('getElements collects the custom elements of all modules', () => {
   assert.deepEqual(
     getElements(manifest).map((element) => element.tagName),
     ['vaadin-a', 'vaadin-b'],
+  );
+});
+
+test('getElementEntries pairs each custom element with the path of its module', () => {
+  const manifest = {
+    modules: [
+      {
+        path: 'src/vaadin-a.js',
+        declarations: [
+          { kind: 'class', customElement: true, tagName: 'vaadin-a', name: 'A' },
+          { kind: 'class', name: 'Base' },
+        ],
+      },
+      { path: 'src/no-declarations.js' },
+      {
+        path: 'src/vaadin-b.js',
+        declarations: [{ kind: 'class', customElement: true, tagName: 'vaadin-b', name: 'B' }],
+      },
+    ],
+  };
+  assert.deepEqual(
+    getElementEntries(manifest).map((entry) => [entry.declaration.tagName, entry.path]),
+    [
+      ['vaadin-a', 'src/vaadin-a.js'],
+      ['vaadin-b', 'src/vaadin-b.js'],
+    ],
   );
 });
 

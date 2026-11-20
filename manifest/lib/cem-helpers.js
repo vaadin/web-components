@@ -103,17 +103,43 @@ export function readManifest(dir) {
 }
 
 /**
- * @param {object} declaration
- * @return {boolean}
+ * @typedef {import('custom-elements-manifest/schema').Package} Package
+ * @typedef {import('custom-elements-manifest/schema').Declaration} Declaration
+ */
+
+/**
+ * Schema 1.0.0 declares `CustomElementDeclaration` without the `CustomElement` fields.
+ * @typedef {import('custom-elements-manifest/schema').ClassDeclaration & import('custom-elements-manifest/schema').CustomElement} ElementDeclaration
+ */
+
+/**
+ * @typedef {object} ElementEntry
+ * @property {ElementDeclaration} declaration
+ * @property {string} path the path of the module that declares the element
+ */
+
+/**
+ * @param {Declaration} declaration
+ * @return {declaration is ElementDeclaration}
  */
 export function isElement(declaration) {
   return declaration.kind === 'class' && !!declaration.customElement && !!declaration.tagName;
 }
 
 /**
- * @param {object} manifest
- * @return {object[]} the custom element declarations
+ * @param {Package} manifest
+ * @return {ElementEntry[]} the custom element declarations with the paths of their modules
+ */
+export function getElementEntries(manifest) {
+  return manifest.modules.flatMap((module) =>
+    (module.declarations || []).filter(isElement).map((declaration) => ({ declaration, path: module.path })),
+  );
+}
+
+/**
+ * @param {Package} manifest
+ * @return {ElementDeclaration[]} the custom element declarations
  */
 export function getElements(manifest) {
-  return manifest.modules.flatMap((module) => (module.declarations || []).filter(isElement));
+  return getElementEntries(manifest).map((entry) => entry.declaration);
 }

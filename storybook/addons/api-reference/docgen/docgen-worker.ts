@@ -1,9 +1,9 @@
-import type { ClassDeclaration, CustomElement, Declaration, Package } from 'custom-elements-manifest/schema';
 import { readFileSync, statSync } from 'node:fs';
 import { dirname, resolve } from 'node:path';
 import { logger } from 'storybook/internal/node-logger';
 import type { DocgenMiddleware, DocgenPayload, StrictArgTypes, StrictInputType } from 'storybook/internal/types';
 import type { TypeContext } from '../../../../api-docs/types.ts';
+import { type ElementEntry, getElementEntries } from '../../../../manifest/lib/cem-helpers.js';
 import { readDocsIds, rewriteElementLinks } from './links.ts';
 
 export interface ApiReferenceOptions {
@@ -14,9 +14,6 @@ interface ManifestEntry {
   manifestPath: string;
   declaration: { tagName: string };
 }
-
-// Schema 1.0.0 declares `CustomElementDeclaration` without the `CustomElement` fields
-type ElementDeclaration = ClassDeclaration & CustomElement;
 
 interface TableType {
   summary: string;
@@ -29,31 +26,25 @@ interface ArgTypeContext {
   fixLinks(markdown: string): string;
 }
 
-const manifestCache = new Map<string, { mtimeMs: number; modules: Package['modules'] }>();
+const manifestCache = new Map<string, { mtimeMs: number; elements: ElementEntry[] }>();
 
-function readManifestModules(manifestFile: string): Package['modules'] {
+function readElements(manifestFile: string): ElementEntry[] {
   const { mtimeMs } = statSync(manifestFile);
-  let manifest = manifestCache.get(manifestFile);
-  if (manifest?.mtimeMs !== mtimeMs) {
-    manifest = { mtimeMs, modules: JSON.parse(readFileSync(manifestFile, 'utf8')).modules };
-    manifestCache.set(manifestFile, manifest);
+  let cached = manifestCache.get(manifestFile);
+  if (cached?.mtimeMs !== mtimeMs) {
+    cached = { mtimeMs, elements: getElementEntries(JSON.parse(readFileSync(manifestFile, 'utf8'))) };
+    manifestCache.set(manifestFile, cached);
   }
-  return manifest.modules;
-}
-
-function isElement(decl: Declaration, tagName: string): decl is ElementDeclaration {
-  return 'customElement' in decl && 'tagName' in decl && decl.tagName === tagName;
+  return cached.elements;
 }
 
 /** Reads the declaration from the file, as the one of the payload also has inherited members. */
-function findElement(manifestFile: string, tagName: string): { declaration: ElementDeclaration; path: string } {
-  for (const module of readManifestModules(manifestFile)) {
-    const declaration = module.declarations?.find((decl) => isElement(decl, tagName));
-    if (declaration) {
-      return { declaration, path: module.path };
-    }
+function findElement(manifestFile: string, tagName: string): ElementEntry {
+  const entry = readElements(manifestFile).find(({ declaration }) => declaration.tagName === tagName);
+  if (!entry) {
+    throw new Error(`no module declares <${tagName}> in ${manifestFile}`);
   }
-  throw new Error(`no module declares <${tagName}> in ${manifestFile}`);
+  return entry;
 }
 
 function propertyType(typeContext: TypeContext, name: string): TableType {

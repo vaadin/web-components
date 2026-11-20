@@ -1,5 +1,6 @@
 import { existsSync, mkdirSync, readFileSync, writeFileSync } from 'fs';
 import { join, resolve } from 'path';
+import { getElementEntries } from '../manifest/lib/cem-helpers.js';
 import { renderElement, sortByName, toElement } from './render.ts';
 
 function generate() {
@@ -29,15 +30,7 @@ function generate() {
     }
   }
 
-  // Extract public elements from CEM modules
-  const elements: any[] = [];
-  for (const mod of manifest.modules) {
-    for (const decl of mod.declarations || []) {
-      if (!decl.tagName || !decl.customElement) continue;
-
-      elements.push(toElement(decl, mod.path));
-    }
-  }
+  const elements = getElementEntries(manifest).map(({ declaration, path }) => toElement(declaration, path));
 
   sortByName(elements).forEach((element: any) => {
     const docFile = join(docsPath, `${element.tagname}.md`);
