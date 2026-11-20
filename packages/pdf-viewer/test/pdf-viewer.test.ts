@@ -106,20 +106,28 @@ describe('vaadin-pdf-viewer', () => {
     });
   });
 
-  describe('relative height', () => {
+  describe('height', () => {
+    let wrapper: HTMLDivElement;
+
     beforeEach(async () => {
-      const wrapper = fixtureSync(`
+      wrapper = fixtureSync(`
         <div style="display: flex; flex-direction: column">
-          <vaadin-pdf-viewer style="height: 100%"></vaadin-pdf-viewer>
+          <vaadin-pdf-viewer></vaadin-pdf-viewer>
         </div>
       `);
       viewer = wrapper.querySelector('vaadin-pdf-viewer')!;
       await nextRender();
     });
 
-    it('should show the content when the parent has no height', () => {
+    it('should show the content with a relative height when the parent has no height', () => {
+      viewer.style.height = '100%';
       const content = viewer.shadowRoot!.querySelector('[part="content"]')!;
       expect(content.getBoundingClientRect().height).to.be.above(100);
+    });
+
+    it('should keep a small fixed height', () => {
+      viewer.style.height = '150px';
+      expect(viewer.getBoundingClientRect().height).to.equal(150);
     });
   });
 

@@ -17,8 +17,6 @@ const pdfViewerBaseStyles = css`
     display: flex;
     flex-direction: column;
     height: 400px;
-    /* Keeps the content visible when a relative height resolves to auto, e.g. in a parent without height */
-    min-height: 200px;
     box-sizing: border-box;
     overflow: hidden;
     position: relative;
@@ -40,7 +38,8 @@ const pdfViewerBaseStyles = css`
 
   .main-area {
     display: flex;
-    flex: 1 1 0;
+    /* A non-zero basis keeps the content visible when the host height resolves to auto, e.g. height: 100% in a parent without height */
+    flex: 1 1 200px;
     min-height: 40%;
   }
 
