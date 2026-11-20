@@ -92,13 +92,31 @@ class AccordionHeading extends ActiveMixin(DirMixin(ThemableMixin(PolylitMixin(L
         sync: true,
         value: false,
       },
+
+      /**
+       * The content elements of the parent `<vaadin-accordion-panel>`.
+       * The button refers to the first one with `aria-controls`.
+       *
+       * @protected
+       */
+      _contentElements: {
+        type: Array,
+      },
     };
   }
 
   /** @protected */
   render() {
+    const [content] = this._contentElements || [];
+
     return html`
-      <button id="button" part="content" ?disabled="${this.disabled}" aria-expanded="${this.opened ? 'true' : 'false'}">
+      <button
+        id="button"
+        part="content"
+        ?disabled="${this.disabled}"
+        aria-expanded="${this.opened ? 'true' : 'false'}"
+        .ariaControlsElements="${content ? [content] : null}"
+      >
         <span part="toggle" aria-hidden="true"></span>
         <slot></slot>
       </button>

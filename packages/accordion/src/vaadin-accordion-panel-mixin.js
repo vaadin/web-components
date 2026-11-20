@@ -5,7 +5,6 @@
  */
 import { DelegateFocusMixin } from '@vaadin/a11y-base/src/delegate-focus-mixin.js';
 import { DelegateStateMixin } from '@vaadin/component-base/src/delegate-state-mixin.js';
-import { setOrRemoveAttribute } from '@vaadin/component-base/src/dom-utils.js';
 import { TooltipController } from '@vaadin/component-base/src/tooltip-controller.js';
 import { CollapsibleMixin } from '@vaadin/details/src/collapsible-mixin.js';
 import { SummaryController } from '@vaadin/details/src/summary-controller.js';
@@ -43,7 +42,7 @@ export const AccordionPanelMixin = (superClass) =>
     }
 
     static get delegateProps() {
-      return ['disabled', 'opened', '_theme', '_headingLevel'];
+      return ['disabled', 'opened', '_theme', '_headingLevel', '_contentElements'];
     }
 
     constructor() {
@@ -135,8 +134,6 @@ export const AccordionPanelMixin = (superClass) =>
           node.setAttribute('role', 'region');
           node.setAttribute('aria-labelledby', focusElement.id);
         }
-
-        setOrRemoveAttribute(focusElement, 'aria-controls', node?.id);
       }
     }
   };
