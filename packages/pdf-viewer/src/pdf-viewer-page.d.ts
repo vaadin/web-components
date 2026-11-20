@@ -20,6 +20,11 @@ import type { PdfViewerTextLayer } from './pdf-viewer-text-layer.js';
 export declare const MAX_CANVAS_PIXELS: number;
 
 /**
+ * Frees the memory of a canvas that is no longer shown.
+ */
+export declare function freeCanvas(canvas: HTMLCanvasElement): void;
+
+/**
  * Manages the DOM of a single page of the document: a placeholder sized to
  * the page, and the canvas and the text and link layers the page is rendered
  * to once it is needed.

@@ -60,7 +60,7 @@ how to generate them.
 - `PdfViewerDownloadMixin` adds `download()`. It uses only the document mixin, so it comes right after it.
   - A download keeps its data for a minute, also when the viewer is detached meanwhile. Some browsers fail a
     download whose URL is released right after the click.
-- `PdfViewerRenderMixin` owns the page views, their sizes, the render queue and the device pixel ratio. It calls `_pageSizesChanged()` at most once per frame when pages get their own size.
+- `PdfViewerRenderMixin` owns the page views, their sizes, the render queue and the device pixel ratio. It calls `_pageSizesChanged()` at most once per frame when pages get their own size, and `_pixelRatioChanged()` when the device pixel ratio changes.
 - `PdfViewerScrollMixin` owns the scale `_scale`, the anchor, the visible pages and `page`. It asks for
   rendering only with `_renderVisible()` and `_cancelRender()`. It gets the scale from `_getScaleForSize()`, which
   fits the width of the current page by default.
@@ -90,6 +90,12 @@ how to generate them.
   - The render queue renders a page again only once its layers are done. One signal therefore covers the time
     between two releases.
 - `PdfViewerKeyboardMixin` handles the keyboard shortcuts.
+- `PdfViewerSidebarMixin` adds `sidebarOpened`, the sidebar button and the sidebar next to the pages.
+  - `PdfViewerThumbnailsController` fills the sidebar with a thumbnail for each page. It renders the thumbnails
+    near the visible part of the list one at a time, apart from the render queue of the pages.
+  - A thumbnail can render at the same time as a page. The pdf.js viewer renders thumbnails only while no page waits.
+  - The thumbnails are created when the sidebar first opens for a document, so a closed sidebar costs nothing.
+  - Rendering stops while the sidebar is hidden. When it shows again, the thumbnails that left the view are released.
 - `PdfViewerToolbarMixin` renders the header and the toolbar. Its controls are in the light DOM, so a theme
   styles the page field like any other `vaadin-integer-field`. The `slotContent()` directive renders them, so
   application children added later keep their place.

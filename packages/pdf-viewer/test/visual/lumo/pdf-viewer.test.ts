@@ -13,7 +13,7 @@ import '../../../vaadin-pdf-viewer.js';
 import type { IntegerField } from '@vaadin/integer-field';
 import { Tooltip } from '@vaadin/tooltip/src/vaadin-tooltip.js';
 import type { PdfViewer } from '../../../vaadin-pdf-viewer.js';
-import { createPdf, loadAndRender } from '../../helpers.js';
+import { createPdf, loadAndRender, openSidebar } from '../../helpers.js';
 
 describe('pdf-viewer', () => {
   let div: HTMLDivElement;
@@ -53,6 +53,19 @@ describe('pdf-viewer', () => {
     viewer.appendChild(button);
     await load();
     await visualDiff(div, 'actions');
+  });
+
+  it('sidebar', async () => {
+    await load();
+    await openSidebar(viewer);
+    await visualDiff(div, 'sidebar');
+  });
+
+  it('sidebar RTL', async () => {
+    viewer.setAttribute('dir', 'rtl');
+    await load();
+    await openSidebar(viewer);
+    await visualDiff(div, 'sidebar-rtl');
   });
 
   it('page error', async () => {
