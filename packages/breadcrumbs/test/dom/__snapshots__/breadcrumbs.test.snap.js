@@ -39,6 +39,7 @@ snapshots["vaadin-breadcrumbs empty shadow default"] =
   no-vertical-overlap=""
   popover="manual"
   restore-focus-on-close=""
+  role="none"
 >
   <slot name="overlay">
   </slot>
@@ -78,6 +79,7 @@ snapshots["vaadin-breadcrumbs empty shadow i18n"] =
   no-vertical-overlap=""
   popover="manual"
   restore-focus-on-close=""
+  role="none"
 >
   <slot name="overlay">
   </slot>
@@ -196,6 +198,7 @@ snapshots["vaadin-breadcrumbs overflow shadow"] =
   no-vertical-overlap=""
   popover="manual"
   restore-focus-on-close=""
+  role="none"
 >
   <slot name="overlay">
   </slot>

@@ -15,6 +15,19 @@ describe('vaadin-overlay', () => {
       overlay.opened = false;
     });
 
+    it('should set role none on the overlay when no role is set', async () => {
+      await overlay.updateComplete;
+
+      expect(overlay.getAttribute('role')).to.equal('none');
+    });
+
+    it('should keep the role set on the overlay', async () => {
+      overlay = fixtureSync('<mock-overlay role="dialog">overlay content</mock-overlay>');
+      await overlay.updateComplete;
+
+      expect(overlay.getAttribute('role')).to.equal('dialog');
+    });
+
     it('should show popover when opened property is set to true', async () => {
       expect(overlay.matches(':popover-open')).to.be.false;
 

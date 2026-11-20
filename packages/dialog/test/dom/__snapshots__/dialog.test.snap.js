@@ -157,6 +157,7 @@ snapshots["vaadin-dialog shadow default"] =
   opened=""
   popover="manual"
   restore-focus-on-close=""
+  role="none"
   with-backdrop=""
 >
   <slot
@@ -189,6 +190,7 @@ snapshots["vaadin-dialog shadow modeless"] =
   opened=""
   popover="manual"
   restore-focus-on-close=""
+  role="none"
 >
   <slot
     name="title"
@@ -218,6 +220,7 @@ snapshots["vaadin-dialog shadow noFocusTrap"] =
   opened=""
   popover="manual"
   restore-focus-on-close=""
+  role="none"
   with-backdrop=""
 >
   <slot
@@ -250,6 +253,7 @@ snapshots["vaadin-dialog shadow noAutofocus"] =
   opened=""
   popover="manual"
   restore-focus-on-close=""
+  role="none"
   with-backdrop=""
 >
   <slot
@@ -281,6 +285,7 @@ snapshots["vaadin-dialog shadow modeless noAutofocus"] =
   opened=""
   popover="manual"
   restore-focus-on-close=""
+  role="none"
 >
   <slot
     name="title"
@@ -312,6 +317,7 @@ snapshots["vaadin-dialog shadow theme"] =
   opened=""
   popover="manual"
   restore-focus-on-close=""
+  role="none"
   theme="custom"
   with-backdrop=""
 >
