@@ -38,8 +38,9 @@ const pdfViewerBaseStyles = css`
 
   .main-area {
     display: flex;
-    /* A non-zero basis keeps the content visible when the host height resolves to auto, e.g. height: 100% in a parent without height */
-    flex: 1 100 200px;
+    /* A non-zero basis keeps the content visible when the host height resolves to auto, e.g. height: 100% in a parent without height.
+       The large shrink factor makes the main area shrink before the toolbar, down to its minimum height. */
+    flex: 1 10000 200px;
     min-height: 40%;
   }
 
