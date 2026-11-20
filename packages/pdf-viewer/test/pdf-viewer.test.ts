@@ -125,9 +125,11 @@ describe('vaadin-pdf-viewer', () => {
       expect(content.getBoundingClientRect().height).to.be.above(100);
     });
 
-    it('should keep a small fixed height', () => {
+    it('should keep a small fixed height without clipping the toolbar', () => {
       viewer.style.height = '150px';
       expect(viewer.getBoundingClientRect().height).to.equal(150);
+      const topArea = viewer.shadowRoot!.querySelector('.top-area')!;
+      expect(topArea.scrollHeight).to.equal(topArea.clientHeight);
     });
   });
 

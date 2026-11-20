@@ -46,6 +46,20 @@ describe('pdf-viewer', () => {
     await visualDiff(div, 'document');
   });
 
+  it('relative height', async () => {
+    div.style.display = 'inline-flex';
+    div.style.flexDirection = 'column';
+    viewer.style.height = '100%';
+    await load();
+    await visualDiff(div, 'relative-height');
+  });
+
+  it('small height', async () => {
+    viewer.style.height = '150px';
+    await load();
+    await visualDiff(div, 'small-height');
+  });
+
   it('actions', async () => {
     const button = document.createElement('vaadin-button');
     button.slot = 'toolbar-actions';

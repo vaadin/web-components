@@ -39,7 +39,7 @@ const pdfViewerBaseStyles = css`
   .main-area {
     display: flex;
     /* A non-zero basis keeps the content visible when the host height resolves to auto, e.g. height: 100% in a parent without height */
-    flex: 1 1 200px;
+    flex: 1 100 200px;
     min-height: 40%;
   }
 
