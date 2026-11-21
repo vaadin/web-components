@@ -2,7 +2,7 @@ import '@vaadin/button';
 import '@vaadin/icon';
 import '@vaadin/icons';
 import { html, nothing } from 'lit';
-import { fn } from 'storybook/test';
+import { expect, fn } from 'storybook/test';
 import preview from '../.storybook/preview';
 
 const VARIANTS = ['primary', 'tertiary'];
@@ -25,7 +25,12 @@ const meta = preview.meta({
   `,
 });
 
-export const Default = meta.story();
+export const Default = meta.story({
+  play: async ({ args, canvas, userEvent }) => {
+    await userEvent.click(canvas.getByRole('button', { name: 'Button' }));
+    await expect(args.onClick).toHaveBeenCalledOnce();
+  },
+});
 
 export const Primary = meta.story({
   args: { theme: 'primary' },
@@ -42,6 +47,10 @@ export const Icon = meta.story({
       <vaadin-icon icon="vaadin:plus"></vaadin-icon>
     </vaadin-button>
   `,
+  play: async ({ args, canvas, userEvent }) => {
+    await userEvent.click(canvas.getByRole('button', { name: 'Add item' }));
+    await expect(args.onClick).toHaveBeenCalledOnce();
+  },
 });
 
 export const Disabled = meta.story({

@@ -35,13 +35,18 @@
   "devDependencies": {
     "@storybook/addon-a11y": "^11.0.0-beta.3",
     "@storybook/addon-docs": "^11.0.0-beta.3",
+    "@storybook/addon-vitest": "^11.0.0-beta.3",
     "@storybook/icons": "^2.0.2",
     "@storybook/web-components-vite": "^11.0.0-beta.3",
     "@types/node": "^22.15.17",
     "@types/react": "^19.1.13",
+    "@vitest/browser-playwright": "^5.1.1",
+    "@vitest/coverage-v8": "^5.1.1",
+    "playwright": "1.65.1",
     "react": "^19.3.0",
     "storybook": "^11.0.0-beta.3",
     "typescript": "^6.0.3",
-    "vite": "^8.3.8"
+    "vite": "^8.3.8",
+    "vitest": "^5.1.1"
   }
 }

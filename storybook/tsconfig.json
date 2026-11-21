@@ -19,6 +19,6 @@
     "types": ["node", "vite/client"]
   },
   // Stories stay in JavaScript like the dev pages and tests
-  "include": [".storybook/*.ts", "addons"],
+  "include": [".storybook/*.ts", "addons", "vitest.config.ts"],
   "exclude": ["node_modules", "dist"]
 }

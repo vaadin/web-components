@@ -16,6 +16,7 @@ export default defineMain({
     '../addons/theme-switcher/preset.ts',
     '../addons/rtl-direction/preset.ts',
     '../addons/api-reference/preset.ts',
+    '@storybook/addon-vitest',
   ],
   core: {
     disableTelemetry: true,
