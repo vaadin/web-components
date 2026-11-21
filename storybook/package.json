@@ -21,6 +21,8 @@
     "@vaadin/date-picker": "25.4.0-beta1",
     "@vaadin/details": "25.4.0-beta1",
     "@vaadin/dialog": "25.4.0-beta1",
+    "@vaadin/icon": "25.4.0-beta1",
+    "@vaadin/icons": "25.4.0-beta1",
     "@vaadin/item": "25.4.0-beta1",
     "@vaadin/list-box": "25.4.0-beta1",
     "@vaadin/select": "25.4.0-beta1",
