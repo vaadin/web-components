@@ -607,8 +607,6 @@ export const gridStyles = css`
     outline: 0;
   }
 
-  .row:focus-visible::after,
-  .cell:focus-visible::after,
   :host([navigating]) .row:focus::after,
   :host([navigating]) .cell:focus::after {
     content: '';
