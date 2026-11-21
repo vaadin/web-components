@@ -16,6 +16,8 @@
  *   parameters and the return value of its signature. Static members come from
  *   the class. A member that the declaration file lacks keeps its JSDoc types,
  *   also when the default library declares it, like `autocorrect` of `HTMLElement`.
+ * - Each type lists the types of the project that its text names in
+ *   `references`, with the module of the declaration file and the position.
  */
 import path from 'node:path';
 import ts from 'typescript';
@@ -119,12 +121,100 @@ function findEventMap(checker, instanceType) {
 }
 
 /**
- * @param {ts.Program} program
+ * Collects the named types that a type uses, such as aliases, interfaces and
+ * classes, without the members of an alias, which the type text does not show.
+ * @param {ts.TypeChecker} checker
+ * @param {ts.Type} type
+ * @param {Set<ts.Symbol>} [symbols]
+ * @param {Set<ts.Type>} [visited]
+ * @return {Set<ts.Symbol>}
+ */
+function collectSymbols(checker, type, symbols = new Set(), visited = new Set()) {
+  if (visited.has(type)) {
+    return symbols;
+  }
+  visited.add(type);
+  const visit = (part) => collectSymbols(checker, part, symbols, visited);
+  if (type.aliasSymbol) {
+    symbols.add(type.aliasSymbol);
+    (type.aliasTypeArguments || []).forEach(visit);
+  } else if (type.isUnionOrIntersection()) {
+    type.types.forEach(visit);
+  } else if (type.flags & ts.TypeFlags.Object) {
+    if (type.objectFlags & ts.ObjectFlags.Reference) {
+      symbols.add(type.target.symbol);
+      checker.getTypeArguments(type).forEach(visit);
+    } else if (
+      type.symbol &&
+      type.symbol.flags & (ts.SymbolFlags.Class | ts.SymbolFlags.Interface | ts.SymbolFlags.Enum)
+    ) {
+      symbols.add(type.symbol);
+    } else {
+      // A function type or an object literal type
+      for (const signature of [...type.getCallSignatures(), ...type.getConstructSignatures()]) {
+        signature.getParameters().forEach((parameter) => visit(checker.getTypeOfSymbol(parameter)));
+        visit(signature.getReturnType());
+      }
+      type.getProperties().forEach((property) => visit(checker.getTypeOfSymbol(property)));
+    }
+  }
+  return symbols;
+}
+
+/**
+ * @param {{ checker: ts.TypeChecker, rootDir: string }} context
+ * @param {ts.Type} type
+ * @param {string} text the printed type
+ * @param {ts.Node | undefined} location the declaration, which has the names of its type in scope
+ * @return {object[]} the CEM type references, in the order of the text
+ */
+function findReferences({ checker, rootDir }, type, text, location) {
+  const symbols = new Map([...collectSymbols(checker, type)].map((symbol) => [symbol.name, symbol]));
+  // A union keeps an alias of its members only for printing, as in `ChartStacking | undefined`
+  for (const [name] of text.matchAll(/(?<![\w$.])[A-Za-z_$][\w$]*/gu)) {
+    const symbol = !symbols.has(name) && location && checker.resolveName(name, location, ts.SymbolFlags.Type, false);
+    if (symbol) {
+      symbols.set(name, symbol.flags & ts.SymbolFlags.Alias ? checker.getAliasedSymbol(symbol) : symbol);
+    }
+  }
+  return [...symbols]
+    .flatMap(([name, symbol]) => {
+      const fileName = symbol.declarations?.[0]?.getSourceFile().fileName;
+      const module = fileName && path.relative(rootDir, fileName);
+      if (!module || module.startsWith('..') || module.includes('node_modules')) {
+        return [];
+      }
+      return [...text.matchAll(new RegExp(`(?<![\\w$.])${name.replace(/\$/gu, '\\$')}(?![\\w$])`, 'gu'))].map(
+        (match) => ({
+          name,
+          module: module.replace(/\.d\.ts$/u, '.js'),
+          start: match.index,
+          end: match.index + name.length,
+        }),
+      );
+    })
+    .sort((a, b) => a.start - b.start);
+}
+
+/**
+ * @param {{ checker: ts.TypeChecker, rootDir: string }} context
+ * @param {ts.Type} type
+ * @param {ts.Node | undefined} location
+ * @return {object} the CEM type
+ */
+function toType(context, type, location) {
+  const text = context.checker.typeToString(type, undefined, FORMAT_FLAGS);
+  const references = findReferences(context, type, text, location);
+  return references.length ? { text, references } : { text };
+}
+
+/**
+ * @param {object} context
  * @param {object} declaration
  * @param {ts.Type} instanceType
  */
-function setEventTypes(program, declaration, instanceType) {
-  const checker = program.getTypeChecker();
+function setEventTypes(context, declaration, instanceType) {
+  const { program, checker } = context;
   const eventMap = findEventMap(checker, instanceType);
   if (!eventMap) {
     return;
@@ -132,59 +222,56 @@ function setEventTypes(program, declaration, instanceType) {
   for (const event of declaration.events || []) {
     const property = event.name && findEvent(program, eventMap, event.name);
     if (property) {
-      event.type = { text: checker.typeToString(checker.getTypeOfSymbol(property), undefined, FORMAT_FLAGS) };
+      event.type = toType(context, checker.getTypeOfSymbol(property), property.declarations?.[0]);
     }
   }
 }
 
 /**
- * @param {ts.TypeChecker} checker
+ * @param {object} context
  * @param {ts.Symbol} parameter
  * @return {object} the CEM parameter, without the description
  */
-function toParameter(checker, parameter) {
+function toParameter(context, parameter) {
+  const { checker } = context;
   const declaration = parameter.valueDeclaration;
   const optional = checker.isOptionalParameter(declaration);
   const rest = !!declaration.dotDotDotToken;
-  const type = checker.getTypeOfSymbol(parameter);
   return {
     name: parameter.name,
     ...(optional && !rest ? { optional: true } : {}),
     ...(rest ? { rest: true } : {}),
-    type: { text: checker.typeToString(type, undefined, FORMAT_FLAGS) },
+    type: toType(context, checker.getTypeOfSymbol(parameter), declaration),
   };
 }
 
 /**
- * @param {ts.TypeChecker} checker
+ * @param {object} context
  * @param {object} method
  * @param {ts.Signature} signature
  */
-function setSignature(checker, method, signature) {
+function setSignature(context, method, signature) {
   const descriptions = new Map((method.parameters || []).map((parameter) => [parameter.name, parameter.description]));
   const parameters = signature.getParameters().map((parameter) => {
     const description = descriptions.get(parameter.name);
-    return { ...toParameter(checker, parameter), ...(description ? { description } : {}) };
+    return { ...toParameter(context, parameter), ...(description ? { description } : {}) };
   });
   if (parameters.length) {
     method.parameters = parameters;
   } else {
     delete method.parameters;
   }
-  method.return = {
-    ...method.return,
-    type: { text: checker.typeToString(signature.getReturnType(), undefined, FORMAT_FLAGS) },
-  };
+  method.return = { ...method.return, type: toType(context, signature.getReturnType(), signature.getDeclaration()) };
 }
 
 /**
- * @param {ts.Program} program
+ * @param {object} context
  * @param {object} declaration
  * @param {ts.Type} instanceType
  * @param {ts.Type} classType
  */
-function setMemberTypes(program, declaration, instanceType, classType) {
-  const checker = program.getTypeChecker();
+function setMemberTypes(context, declaration, instanceType, classType) {
+  const { program, checker } = context;
   for (const member of declaration.members || []) {
     const property = (member.static ? classType : instanceType).getProperty(member.name);
     if (!property || isLibrary(program, property)) {
@@ -192,9 +279,9 @@ function setMemberTypes(program, declaration, instanceType, classType) {
     }
     const type = checker.getTypeOfSymbol(property);
     if (member.kind === 'field') {
-      member.type = { text: checker.typeToString(type, undefined, FORMAT_FLAGS) };
+      member.type = toType(context, type, property.declarations?.[0]);
     } else if (member.kind === 'method' && type.getCallSignatures().length) {
-      setSignature(checker, member, type.getCallSignatures()[0]);
+      setSignature(context, member, type.getCallSignatures()[0]);
     }
   }
 }
@@ -212,8 +299,9 @@ export function typescriptTypesPlugin({ rootDir = defaultRootDir } = {}) {
         rootDir,
         getElementEntries(customElementsManifest),
       )) {
-        setEventTypes(program, entry.declaration, instanceType);
-        setMemberTypes(program, entry.declaration, instanceType, classType);
+        const context = { program, checker: program.getTypeChecker(), rootDir };
+        setEventTypes(context, entry.declaration, instanceType);
+        setMemberTypes(context, entry.declaration, instanceType, classType);
       }
     },
   };

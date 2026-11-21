@@ -15,6 +15,10 @@ const TSCONFIG = JSON.stringify({
 });
 
 const FIELD_DTS = `
+import type { FieldRenderer } from './vaadin-field-mixin.js';
+
+export type FieldMode = 'auto' | 'none';
+
 export type FieldValueChangedEvent = CustomEvent<{ value: string }>;
 
 export type FieldSelectedItemChangedEvent<TItem> = CustomEvent<{ value: TItem }>;
@@ -36,6 +40,10 @@ declare class Field<TItem = any> extends HTMLElement {
 
   items: TItem[] | undefined;
 
+  mode: FieldMode | undefined;
+
+  renderer: FieldRenderer | null;
+
   scrollDirection: 'horizontal' | 'none' | 'vertical';
 
   scrollToIndex(...indexes: number[]): void;
@@ -52,8 +60,10 @@ declare class Field<TItem = any> extends HTMLElement {
 export { Field };
 `;
 
+const MIXIN_DTS = `export type FieldRenderer = (root: HTMLElement) => void;`;
+
 function analyze(t, files, declaration, modulePath = 'src/vaadin-field.js') {
-  const rootDir = createTree(t, { 'tsconfig.json': TSCONFIG, ...files });
+  const rootDir = createTree(t, { 'tsconfig.json': TSCONFIG, 'src/vaadin-field-mixin.d.ts': MIXIN_DTS, ...files });
   const customElementsManifest = { modules: [{ path: modulePath, declarations: [declaration] }] };
   typescriptTypesPlugin({ rootDir }).packageLinkPhase({ customElementsManifest });
   return declaration;
@@ -184,6 +194,37 @@ describe('typescriptTypesPlugin', () => {
     test('should keep the JSDoc type of a member that only the default library declares', (t) => {
       const declaration = analyze(t, { 'src/vaadin-field.d.ts': FIELD_DTS }, element([], fields('autocorrect')));
       assert.deepEqual(declaration.members[0].type, { text: 'object' });
+    });
+  });
+
+  describe('references', () => {
+    const field = (name) => ({ kind: 'field', name, type: { text: 'object' } });
+    const typeOf = (t, member) => analyze(t, { 'src/vaadin-field.d.ts': FIELD_DTS }, element([], [member])).members[0];
+
+    test('should reference an alias of a literal union with its module and position', (t) => {
+      assert.deepEqual(typeOf(t, field('mode')).type, {
+        text: 'FieldMode | undefined',
+        references: [{ name: 'FieldMode', module: 'src/vaadin-field.js', start: 0, end: 9 }],
+      });
+    });
+
+    test('should reference the module that declares the type', (t) => {
+      assert.deepEqual(typeOf(t, field('renderer')).type.references, [
+        { name: 'FieldRenderer', module: 'src/vaadin-field-mixin.js', start: 0, end: 13 },
+      ]);
+    });
+
+    test('should reference a generic alias of an event type', (t) => {
+      const declaration = analyze(t, { 'src/vaadin-field.d.ts': FIELD_DTS }, element(['selected-item-changed']));
+      assert.deepEqual(declaration.events[0].type.references, [
+        { name: 'FieldSelectedItemChangedEvent', module: 'src/vaadin-field.js', start: 0, end: 29 },
+      ]);
+    });
+
+    test('should not reference the types of the default library', (t) => {
+      const method = typeOf(t, { kind: 'method', name: 'setBounds' });
+      assert.deepEqual(method.parameters[0].type, { text: 'DOMRect' });
+      assert.deepEqual(method.return.type, { text: 'void' });
     });
   });
 });
