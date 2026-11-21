@@ -16,7 +16,7 @@ const SORT_ITEMS = [
 ];
 
 const meta = preview.meta({
-  title: 'Fields/Select',
+  title: 'Select',
   component: 'vaadin-select',
   args: {
     label: 'Sort by',

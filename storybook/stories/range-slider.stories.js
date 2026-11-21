@@ -4,7 +4,7 @@ import { fn } from 'storybook/test';
 import preview from '../.storybook/preview';
 
 const meta = preview.meta({
-  title: 'Fields/Range Slider',
+  title: 'Range Slider',
   component: 'vaadin-range-slider',
   args: {
     label: 'Price range',

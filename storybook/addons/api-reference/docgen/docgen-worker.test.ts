@@ -9,9 +9,9 @@ const storiesDir = join(import.meta.dirname, '../../../stories');
 const input: DocgenProviderInput = {
   entry: {
     type: 'docs',
-    id: 'fields-combo-box--docs',
+    id: 'combo-box--docs',
     name: 'Docs',
-    title: 'Fields/Combo Box',
+    title: 'Combo Box',
     importPath: './stories/combo-box.stories.js',
     storiesImports: [],
   },
@@ -37,7 +37,7 @@ describe('createDocgenProvider', () => {
 
   test('should add the API reference and the TypeScript types', async () => {
     const payload: DocgenPayload = {
-      id: 'fields-combo-box',
+      id: 'combo-box',
       name: 'vaadin-combo-box',
       path: './stories/combo-box.stories.js',
       jsDocTags: {},

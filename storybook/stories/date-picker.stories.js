@@ -4,7 +4,7 @@ import { fn } from 'storybook/test';
 import preview from '../.storybook/preview';
 
 const meta = preview.meta({
-  title: 'Fields/Date Picker',
+  title: 'Date Picker',
   component: 'vaadin-date-picker',
   args: {
     label: 'Start date',

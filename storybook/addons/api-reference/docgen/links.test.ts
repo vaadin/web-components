@@ -3,7 +3,7 @@ import { join } from 'node:path';
 import { describe, test } from 'node:test';
 import { readDocsIds, rewriteElementLinks } from './links.ts';
 
-const docsIds = new Map([['vaadin-button', 'actions-button--docs']]);
+const docsIds = new Map([['vaadin-button', 'button--docs']]);
 const rewrite = (markdown: string) => rewriteElementLinks(markdown, { tag: 'vaadin-select', docsIds });
 
 describe('rewriteElementLinks', () => {
@@ -18,9 +18,9 @@ describe('rewriteElementLinks', () => {
   test('should link to the docs page of an element with stories', () => {
     assert.equal(
       rewrite('[`<vaadin-button>`](/elements/vaadin-button)'),
-      '[`<vaadin-button>`](?path=/docs/actions-button--docs)',
+      '[`<vaadin-button>`](?path=/docs/button--docs)',
     );
-    assert.equal(rewrite('[theme](/elements/vaadin-button#theme)'), '[theme](?path=/docs/actions-button--docs#theme)');
+    assert.equal(rewrite('[theme](/elements/vaadin-button#theme)'), '[theme](?path=/docs/button--docs#theme)');
   });
 
   test('should keep the text of a link to an element without stories', () => {
@@ -36,9 +36,9 @@ describe('rewriteElementLinks', () => {
 describe('readDocsIds', () => {
   test('should map the component of each story file to its docs id', () => {
     const ids = readDocsIds(join(import.meta.dirname, '../../../stories'));
-    assert.equal(ids.get('vaadin-combo-box'), 'fields-combo-box--docs');
+    assert.equal(ids.get('vaadin-combo-box'), 'combo-box--docs');
     // The meta component, not the `component` of a subcomponent before the title
-    assert.equal(ids.get('vaadin-select'), 'fields-select--docs');
+    assert.equal(ids.get('vaadin-select'), 'select--docs');
     assert.equal(ids.has('hr'), false);
   });
 });

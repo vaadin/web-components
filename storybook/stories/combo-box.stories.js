@@ -6,7 +6,7 @@ import preview from '../.storybook/preview';
 import { countries, people } from './data.js';
 
 const meta = preview.meta({
-  title: 'Fields/Combo Box',
+  title: 'Combo Box',
   component: 'vaadin-combo-box',
   args: {
     label: 'Country',

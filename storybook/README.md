@@ -34,7 +34,7 @@ Lumo and Aura apply to the rendered components without a reload.
 To open a story with a given theme, modify URL:
 
 ```
-?path=/story/actions-button--primary&globals=vaadinTheme:aura;vaadinColorScheme:dark
+?path=/story/button--primary&globals=vaadinTheme:aura;vaadinColorScheme:dark
 ```
 
 ## RTL direction addon
@@ -47,7 +47,7 @@ Vaadin components observe it and update without a reload.
 To open a story with `dir="rtl"`, modify URL:
 
 ```
-?path=/story/actions-button--primary&globals=direction:rtl
+?path=/story/button--primary&globals=direction:rtl
 ```
 
 ## API reference addon

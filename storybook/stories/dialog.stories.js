@@ -6,7 +6,7 @@ import { useArgs } from 'storybook/preview-api';
 import preview from '../.storybook/preview';
 
 const meta = preview.meta({
-  title: 'Overlays/Dialog',
+  title: 'Dialog',
   component: 'vaadin-dialog',
   args: {
     opened: true,

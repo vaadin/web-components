@@ -10,7 +10,7 @@ const PANELS = [
 ];
 
 const meta = preview.meta({
-  title: 'Containers/Accordion',
+  title: 'Accordion',
   component: 'vaadin-accordion',
   args: {
     opened: 0,

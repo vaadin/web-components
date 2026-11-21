@@ -4,7 +4,7 @@ import { fn } from 'storybook/test';
 import preview from '../.storybook/preview';
 
 const meta = preview.meta({
-  title: 'Fields/Switch',
+  title: 'Switch',
   component: 'vaadin-switch',
   args: {
     label: 'Email notifications',

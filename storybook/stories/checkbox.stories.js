@@ -4,7 +4,7 @@ import { fn } from 'storybook/test';
 import preview from '../.storybook/preview';
 
 const meta = preview.meta({
-  title: 'Fields/Checkbox',
+  title: 'Checkbox',
   component: 'vaadin-checkbox',
   args: {
     label: 'I accept the terms and conditions',

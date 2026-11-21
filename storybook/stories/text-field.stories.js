@@ -4,7 +4,7 @@ import { fn } from 'storybook/test';
 import preview from '../.storybook/preview';
 
 const meta = preview.meta({
-  title: 'Fields/Text Field',
+  title: 'Text Field',
   component: 'vaadin-text-field',
   args: {
     label: 'Street address',

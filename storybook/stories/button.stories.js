@@ -16,7 +16,7 @@ const VARIANTS = [
 ];
 
 const meta = preview.meta({
-  title: 'Actions/Button',
+  title: 'Button',
   component: 'vaadin-button',
   args: {
     text: 'Button',
