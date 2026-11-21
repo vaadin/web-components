@@ -1,6 +1,6 @@
 import assert from 'node:assert/strict';
 import { describe, test } from 'node:test';
-import { createSlugger, headingTexts, slugify } from './slug.ts';
+import { createSlugger, headingTexts, slugify } from '../slug.ts';
 
 describe('slugify', () => {
   test('should create the ids of the api-docs site', () => {

@@ -1,8 +1,8 @@
 import assert from 'node:assert/strict';
 import { describe, test } from 'node:test';
 import type { StrictInputType } from 'storybook/internal/types';
-import type { ManifestEvent, ManifestMember, ManifestType } from '../../../../api-docs/types.ts';
-import { updateArgTypes } from './arg-types.ts';
+import type { ManifestEvent, ManifestMember, ManifestType } from '../../../../../api-docs/types.ts';
+import { updateArgTypes } from '../arg-types.ts';
 
 const members: ManifestMember[] = [
   { kind: 'field', name: 'items', type: { text: 'SelectItem[] | null | undefined' } },

@@ -1,7 +1,7 @@
 import assert from 'node:assert/strict';
 import { join } from 'node:path';
 import { describe, test } from 'node:test';
-import { readDocsIds, rewriteElementLinks } from './links.ts';
+import { readDocsIds, rewriteElementLinks } from '../links.ts';
 
 const docsIds = new Map([['vaadin-button', 'button--docs']]);
 const rewrite = (markdown: string) => rewriteElementLinks(markdown, { tag: 'vaadin-select', docsIds });
@@ -35,7 +35,7 @@ describe('rewriteElementLinks', () => {
 
 describe('readDocsIds', () => {
   test('should map the component of each story file to its docs id', () => {
-    const ids = readDocsIds(join(import.meta.dirname, '../../../stories'));
+    const ids = readDocsIds(join(import.meta.dirname, '../../../../stories'));
     assert.equal(ids.get('vaadin-combo-box'), 'combo-box--docs');
     // The meta component, not the `component` of a subcomponent before the title
     assert.equal(ids.get('vaadin-select'), 'select--docs');

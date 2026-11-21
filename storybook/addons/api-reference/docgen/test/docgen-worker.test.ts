@@ -3,9 +3,9 @@ import { readFileSync } from 'node:fs';
 import { join, relative } from 'node:path';
 import { describe, test } from 'node:test';
 import type { DocgenPayload, DocgenProviderInput } from 'storybook/internal/types';
-import { createDocgenProvider } from './docgen-worker.ts';
+import { createDocgenProvider } from '../docgen-worker.ts';
 
-const storiesDir = join(import.meta.dirname, '../../../stories');
+const storiesDir = join(import.meta.dirname, '../../../../stories');
 const input: DocgenProviderInput = {
   entry: {
     type: 'docs',
@@ -17,7 +17,7 @@ const input: DocgenProviderInput = {
   },
 };
 
-const manifestFile = join(import.meta.dirname, '../../../../custom-elements.json');
+const manifestFile = join(import.meta.dirname, '../../../../../custom-elements.json');
 
 function comboBoxManifest() {
   const { modules } = JSON.parse(readFileSync(manifestFile, 'utf8'));
