@@ -1,6 +1,6 @@
 import { existsSync, mkdirSync, readFileSync, writeFileSync } from 'fs';
 import { join, resolve } from 'path';
-import { getElementEntries } from '../manifest/lib/cem-helpers.js';
+import { getElements } from '../manifest/lib/cem-helpers.js';
 import { renderElement, sortByName, toElement } from './render.ts';
 
 function generate() {
@@ -30,7 +30,7 @@ function generate() {
     }
   }
 
-  const elements = getElementEntries(manifest).map(({ declaration, path }) => toElement(declaration, path));
+  const elements = getElements(manifest).map((declaration) => toElement(declaration));
 
   sortByName(elements).forEach((element: any) => {
     const docFile = join(docsPath, `${element.tagname}.md`);

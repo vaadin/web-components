@@ -26,14 +26,13 @@ function renderRelatedTypes(typeContext: TypeContext, type: ManifestType | undef
   return '';
 }
 
-/** Creates the element schema used by the renderer from a CEM class declaration and its module path. */
-export function toElement(decl: any, path: string): any {
+/** Creates the element schema used by the renderer from a CEM class declaration. */
+export function toElement(decl: any): any {
   const members = decl.members || [];
   return {
     name: decl.name,
     tagname: decl.tagName,
     description: decl.description || '',
-    path,
     properties: members.filter((m: any) => m.kind === 'field'),
     methods: members.filter((m: any) => m.kind === 'method' && !m.static),
     staticMethods: members.filter((m: any) => m.kind === 'method' && m.static),

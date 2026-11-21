@@ -72,7 +72,7 @@ The docs page adds these features:
 - **Single example**: the page shows only the primary story, without the Controls table and the other stories.
 
 Storybook reads the API again only after a story file changes.
-Restart Storybook after a change of a `.d.ts` file.
+After a change of a `.d.ts` file, run `yarn release:cem` and restart Storybook.
 
 ## Docs
 

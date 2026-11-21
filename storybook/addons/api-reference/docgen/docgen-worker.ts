@@ -1,9 +1,9 @@
 import { dirname, resolve } from 'node:path';
 import { logger } from 'storybook/internal/node-logger';
 import type { DocgenMiddleware, DocgenPayload } from 'storybook/internal/types';
+import type { ManifestEvent, ManifestMember } from '../../../../api-docs/types.ts';
 import { updateArgTypes } from './arg-types.ts';
 import { readDocsIds, rewriteElementLinks } from './links.ts';
-import { findElement } from './manifest.ts';
 
 export interface ApiReferenceOptions {
   storiesDir: string;
@@ -11,7 +11,7 @@ export interface ApiReferenceOptions {
 
 interface ManifestEntry {
   manifestPath: string;
-  declaration: { tagName: string };
+  declaration: { tagName: string; members?: ManifestMember[]; events?: ManifestEvent[] };
 }
 
 async function renderApiReference(
@@ -25,12 +25,11 @@ async function renderApiReference(
     import('../../../../api-docs/types.ts'),
   ]);
 
-  const { tagName } = manifestEntry.declaration;
-  const manifestFile = resolve(manifestEntry.manifestPath);
-  const { declaration, path } = findElement(manifestFile, tagName);
-  const element = toElement(declaration, path);
-  // Module paths are relative to the manifest directory, which also holds tsconfig.json
-  const typeContext = new TypeContext({ rootDir: dirname(manifestFile) });
+  const { declaration } = manifestEntry;
+  const { tagName } = declaration;
+  const element = toElement(declaration);
+  // The module paths of the type references are relative to the manifest directory, which also holds tsconfig.json
+  const typeContext = new TypeContext({ rootDir: dirname(resolve(manifestEntry.manifestPath)) });
 
   const links = { tag: tagName, docsIds: readDocsIds(storiesDir) };
   const fixLinks = (markdown: string) => rewriteElementLinks(sanitizeDescription(markdown), links);
