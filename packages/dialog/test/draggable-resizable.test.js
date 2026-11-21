@@ -806,8 +806,8 @@ describe('nested draggable dialogs', () => {
 
     parentContainer = parentDialog.$.overlay.$.resizerContainer;
     childContainer = childDialog.$.overlay.$.resizerContainer;
-    parentHeader = parentDialog.$.overlay.headerTitleElement;
-    childHeader = childDialog.$.overlay.headerTitleElement;
+    parentHeader = parentDialog.querySelector(':scope > [slot="title"]');
+    childHeader = childDialog.querySelector(':scope > [slot="title"]');
     dx = 50;
   });
 

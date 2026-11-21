@@ -15,6 +15,7 @@ import { DialogDraggableMixin } from './vaadin-dialog-draggable-mixin.js';
 import { DialogRendererMixin } from './vaadin-dialog-renderer-mixin.js';
 import { DialogResizableMixin } from './vaadin-dialog-resizable-mixin.js';
 import { DialogSizeMixin } from './vaadin-dialog-size-mixin.js';
+import { TitleController } from './vaadin-dialog-title-controller.js';
 
 export { DialogOverlay } from './vaadin-dialog-overlay.js';
 
@@ -128,6 +129,9 @@ class Dialog extends DialogSizeMixin(
     ),
   ),
 ) {
+  /** @type {TitleController} */
+  #titleController;
+
   static get is() {
     return 'vaadin-dialog';
   }
@@ -160,8 +164,6 @@ class Dialog extends DialogSizeMixin(
         id="overlay"
         .owner="${this}"
         .opened="${this.opened}"
-        .headerTitle="${this.headerTitle}"
-        .headingLevel="${this.headingLevel ?? (this.modeless ? 2 : 1)}"
         .renderer="${this.renderer}"
         .headerRenderer="${this.headerRenderer}"
         .footerRenderer="${this.footerRenderer}"
@@ -187,11 +189,23 @@ class Dialog extends DialogSizeMixin(
   }
 
   /** @protected */
+  firstUpdated(props) {
+    super.firstUpdated(props);
+
+    this.#titleController = new TitleController(this);
+    this.addController(this.#titleController);
+  }
+
+  /** @protected */
   updated(props) {
     super.updated(props);
 
+    if (props.has('headingLevel') || props.has('modeless')) {
+      this.#titleController.setLevel(this.headingLevel ?? (this.modeless ? 2 : 1));
+    }
+
     if (props.has('headerTitle')) {
-      this.ariaLabel = this.headerTitle;
+      this.#titleController.setTitle(this.headerTitle);
     }
   }
 }
