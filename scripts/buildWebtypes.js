@@ -47,19 +47,55 @@ const deprecation = (item) => (item.deprecated ? { deprecated: item.deprecated }
 const defaultValue = (item) => (item.default === undefined ? {} : { default: item.default });
 
 /**
+ * Splits a type at the `|` of its top-level union, so the `|` inside a function
+ * type or a type argument stays in place.
+ * @param {string} text e.g. `((item: any) => string | null) | undefined`
+ * @returns {string[]} e.g. `['((item: any) => string | null)', 'undefined']`
+ */
+function splitUnion(text) {
+  const parts = [];
+  let depth = 0;
+  let start = 0;
+  [...text].forEach((char, i) => {
+    if ('([{<'.includes(char)) {
+      depth += 1;
+    } else if (')]}'.includes(char) || (char === '>' && text[i - 1] !== '=')) {
+      depth -= 1;
+    } else if (char === '|' && depth === 0) {
+      parts.push(text.slice(start, i));
+      start = i + 1;
+    }
+  });
+  parts.push(text.slice(start));
+  return parts.map((part) => part.trim()).filter(Boolean);
+}
+
+/**
+ * @param {string} part a member of a union
+ * @returns {string} the member without the parens that wrap all of it, as in `((item: any) => string)`
+ */
+function unwrap(part) {
+  if (!part.startsWith('(') || !part.endsWith(')')) {
+    return part;
+  }
+  let depth = 0;
+  for (let i = 0; i < part.length - 1; i++) {
+    depth += part[i] === '(' ? 1 : part[i] === ')' ? -1 : 0;
+    if (depth === 0) {
+      return part;
+    }
+  }
+  return part.slice(1, -1).trim();
+}
+
+/**
  * Maps a type such as `'boolean | null | undefined'` into an array of type
- * strings, such as `['boolean', 'null', 'undefined']`
+ * strings, such as `['boolean', 'null', 'undefined']`.
  * @param {{ text: string }} [type] - The type object
  * @returns {string[]}
  */
 function mapType(type) {
-  const typeString = type?.text ?? '';
-  // Closure's `function(X): Y` needs a space between `function` and `X` after
-  // the parens are stripped, so rewrite `(` as a space. `!` (non-null) and `)`
-  // are dropped; consecutive spaces from the rewrite are collapsed.
-  const sanitizedTypeString = typeString.replace(/[!)]/gu, '').replace(/\(/gu, ' ').replace(/ {2,}/gu, ' ');
-  const types = sanitizedTypeString.split('|');
-  return types.map((t) => t.trim());
+  return splitUnion(type?.text ?? '').map(unwrap);
 }
 
 /**
