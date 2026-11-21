@@ -14,15 +14,17 @@ const meta = preview.meta({
   component: 'vaadin-accordion',
   args: {
     opened: 0,
+    headingLevel: 2,
     theme: '',
     onOpenedChanged: fn(),
   },
   argTypes: {
     opened: { control: { type: 'number', min: 0, max: PANELS.length - 1 }, description: 'Index of the opened panel' },
+    headingLevel: { control: { type: 'number', min: 1, max: 6 } },
     theme: { control: 'select', options: ['', 'filled', 'reverse', 'small', 'no-padding'] },
   },
   render: (args) => html`
-    <vaadin-accordion .opened=${args.opened} @opened-changed=${args.onOpenedChanged}>
+    <vaadin-accordion .opened=${args.opened} .headingLevel=${args.headingLevel} @opened-changed=${args.onOpenedChanged}>
       ${PANELS.map(
         ({ summary, content }) => html`
           <vaadin-accordion-panel .summary=${summary} theme=${args.theme}>
@@ -35,11 +37,3 @@ const meta = preview.meta({
 });
 
 export const Default = meta.story();
-
-export const AllClosed = meta.story({
-  args: { opened: null },
-});
-
-export const Filled = meta.story({
-  args: { theme: 'filled' },
-});
