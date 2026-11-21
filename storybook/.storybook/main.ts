@@ -8,6 +8,8 @@ export default defineMain({
     },
   },
   stories: ['../stories/**/*.stories.js'],
+  // serve.json keeps the iframe.html query under `npx serve`
+  staticDirs: ['../public'],
   addons: [
     '@storybook/addon-docs',
     '@storybook/addon-a11y',

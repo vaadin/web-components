@@ -11,6 +11,7 @@ yarn storybook:start       # Generate custom-elements.json, then start Storybook
 yarn storybook:build       # Generate custom-elements.json, then build a static Storybook into storybook/dist
 yarn lint:types:storybook  # Type check the Storybook configuration and the addons
 yarn workspace storybook-tooling test  # Run the Node tests of the addons
+npx serve storybook/dist   # Serve the static Storybook on port 3000
 ```
 
 ## Structure
