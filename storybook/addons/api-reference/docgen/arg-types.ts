@@ -1,6 +1,5 @@
-import { logger } from 'storybook/internal/node-logger';
 import type { StrictArgTypes, StrictInputType } from 'storybook/internal/types';
-import type { TypeContext } from '../../../../api-docs/types.ts';
+import type { ManifestEvent, ManifestMember, TypeContext } from '../../../../api-docs/types.ts';
 
 type TypeLookup = Pick<TypeContext, 'getMemberType' | 'findRelatedTypes' | 'findEventType'>;
 
@@ -10,47 +9,45 @@ interface TableType {
 }
 
 interface ArgTypeContext {
-  tagName: string;
   typeContext: TypeLookup;
+  members: ManifestMember[];
+  events: ManifestEvent[];
   fixLinks(markdown: string): string;
 }
 
-function propertyType(typeContext: TypeLookup, name: string): TableType {
-  const summary = typeContext.getMemberType(name);
-  const related = typeContext.findRelatedTypes(summary);
+function propertyType(typeContext: TypeLookup, member: ManifestMember): TableType {
+  const summary = typeContext.getMemberType(member);
+  const related = typeContext.findRelatedTypes(member.type);
   const detail = related.map((type) => type.declarationText.trim()).join('\n\n');
   return detail ? { summary, detail } : { summary };
 }
 
-function eventType(typeContext: TypeLookup, name: string): TableType | undefined {
-  const type = typeContext.findEventType(name);
+function eventType(typeContext: TypeLookup, event: ManifestEvent): TableType | undefined {
+  const type = typeContext.findEventType(event);
   return type ? { summary: type.name, detail: type.declarationText.trim() } : undefined;
 }
 
-function tableType(argType: StrictInputType, typeContext: TypeLookup): TableType | undefined {
+function tableType(argType: StrictInputType, { typeContext, members, events }: ArgTypeContext): TableType | undefined {
+  const member = members.find((m) => m.name === argType.name);
+  const event = events.find((e) => e.name === argType.name);
   switch (argType.table?.category) {
     case 'properties':
-      return propertyType(typeContext, argType.name);
+      return member && propertyType(typeContext, member);
     case 'methods':
-      return { summary: typeContext.getMemberType(argType.name) };
+      return member && { summary: typeContext.getMemberType(member) };
     case 'events':
-      return eventType(typeContext, argType.name);
+      return event && eventType(typeContext, event);
     default:
       // Attributes, slots, CSS parts and CSS properties have no TypeScript type
       return undefined;
   }
 }
 
-function updateArgType(argType: StrictInputType, { tagName, typeContext, fixLinks }: ArgTypeContext): StrictInputType {
-  let type: TableType | undefined;
-  try {
-    type = tableType(argType, typeContext);
-  } catch (error) {
-    logger.debug(`No TypeScript type for <${tagName}> ${argType.name}: ${String(error)}`);
-  }
+function updateArgType(argType: StrictInputType, context: ArgTypeContext): StrictInputType {
+  const type = tableType(argType, context);
   return {
     ...argType,
-    description: argType.description && fixLinks(argType.description),
+    description: argType.description && context.fixLinks(argType.description),
     table: type ? { ...argType.table, type: { ...argType.table?.type, ...type } } : argType.table,
   };
 }

@@ -1,4 +1,4 @@
-import { TypeContext } from './types.ts';
+import { type ManifestType, TypeContext } from './types.ts';
 
 export function sortByName<T extends { name: string }>(items: T[]): T[] {
   return items.sort((a, b) => a.name.localeCompare(b.name));
@@ -15,8 +15,8 @@ export function sanitizeDescription(description: string = ''): string {
   return description;
 }
 
-function renderRelatedTypes(typeContext: TypeContext, typeString: string) {
-  const relatedTypes = typeContext.findRelatedTypes(typeString);
+function renderRelatedTypes(typeContext: TypeContext, type: ManifestType | undefined) {
+  const relatedTypes = typeContext.findRelatedTypes(type);
 
   if (relatedTypes.length > 0) {
     const typeNames = relatedTypes.map((type) => `[${type.name}](#${type.name.toLowerCase()})`).join(', ');
@@ -51,11 +51,10 @@ export function renderApiSections(element: any, typeContext: TypeContext): strin
     mdContent += `## Properties\n\n`;
 
     properties.forEach((prop: any) => {
-      const propertyType = typeContext.getMemberType(prop.name);
       mdContent += `### ${prop.name}\n\n`;
-      mdContent += `**Type:** \`${propertyType}\`\n\n`;
+      mdContent += `**Type:** \`${typeContext.getMemberType(prop)}\`\n\n`;
       mdContent += `${sanitizeDescription(prop.description)}\n\n`;
-      mdContent += renderRelatedTypes(typeContext, propertyType);
+      mdContent += renderRelatedTypes(typeContext, prop.type);
     });
   }
 
@@ -65,7 +64,7 @@ export function renderApiSections(element: any, typeContext: TypeContext): strin
     mdContent += `## Methods\n\n`;
 
     methods.forEach((method: any) => {
-      const methodType = typeContext.getMemberType(method.name);
+      const methodType = typeContext.getMemberType(method);
       mdContent += `### ${method.name}\n\n`;
       mdContent += `**Type:** \`${methodType}\`\n\n`;
       mdContent += `${sanitizeDescription(method.description)}\n\n`;
@@ -78,7 +77,7 @@ export function renderApiSections(element: any, typeContext: TypeContext): strin
     mdContent += `## Static Methods\n\n`;
 
     staticMethods.forEach((method: any) => {
-      const methodType = typeContext.getMemberType(method.name);
+      const methodType = typeContext.getMemberType(method);
       mdContent += `### ${method.name}\n\n`;
       mdContent += `**Type:** \`${methodType}\`\n\n`;
       mdContent += `${sanitizeDescription(method.description)}\n\n`;
@@ -91,8 +90,10 @@ export function renderApiSections(element: any, typeContext: TypeContext): strin
 
     // Custom events
     sortByName(element.events).forEach((event: any) => {
-      const eventType = typeContext.findEventType(event.name);
-      const eventTypeString = eventType ? `[${eventType.name}](#${eventType.name.toLowerCase()})` : '`CustomEvent`';
+      const eventType = typeContext.findEventType(event);
+      const eventTypeString = eventType
+        ? `[${eventType.name}](#${eventType.name.toLowerCase()})`
+        : `\`${event.type?.text ?? 'CustomEvent'}\``;
       mdContent += `### ${event.name}\n\n`;
       mdContent += `**Type:** ${eventTypeString}\n\n`;
       mdContent += `${sanitizeDescription(event.description)}\n\n`;
@@ -117,7 +118,7 @@ export function renderApiSections(element: any, typeContext: TypeContext): strin
 
 /** Renders the Markdown page of an element: front matter, description and API sections. */
 export function renderElement(element: any): string {
-  const typeContext = new TypeContext(element);
+  const typeContext = new TypeContext();
 
   let mdContent = '';
 

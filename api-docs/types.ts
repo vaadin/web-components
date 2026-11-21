@@ -1,20 +1,33 @@
+import { globSync } from 'node:fs';
 import { join, resolve } from 'node:path';
 import * as ts from 'typescript';
 
 // Repository root, which holds tsconfig.json and the module paths of the manifest
 const ROOT_DIR = resolve(import.meta.dirname, '..');
 
-function findPropertyAccessForMember(node: ts.Node, memberName: string): ts.PropertyAccessExpression | undefined {
-  if (ts.isPropertyAccessExpression(node) && node.name.text === memberName) {
-    return node;
-  }
-  let found: ts.PropertyAccessExpression | undefined;
-  ts.forEachChild(node, (child) => {
-    if (!found) {
-      found = findPropertyAccessForMember(child, memberName);
-    }
-  });
-  return found;
+export interface ManifestTypeReference {
+  name: string;
+  module?: string;
+  package?: string;
+  start?: number;
+}
+
+export interface ManifestType {
+  text: string;
+  references?: ManifestTypeReference[];
+}
+
+export interface ManifestMember {
+  kind: string;
+  name: string;
+  type?: ManifestType;
+  parameters?: Array<{ name: string; optional?: boolean; rest?: boolean; type?: ManifestType }>;
+  return?: { type?: ManifestType };
+}
+
+export interface ManifestEvent {
+  name: string;
+  type?: ManifestType;
 }
 
 type RelatedTypeDeclaration = ts.ClassDeclaration | ts.InterfaceDeclaration | ts.TypeAliasDeclaration;
@@ -24,206 +37,131 @@ interface RelatedTypeInfo {
   declarationText: string;
 }
 
-export class TypeContext {
-  private program: ts.Program;
-  private sourceFile: ts.SourceFile;
-  private checker: ts.TypeChecker;
-  private relatedTypes = new Map<string, RelatedTypeInfo>();
-  private elementSchema: any;
+const programs = new Map<string, ts.Program>();
 
-  constructor(elementSchema: any, { rootDir = ROOT_DIR }: { rootDir?: string } = {}) {
-    this.elementSchema = elementSchema;
-
-    const modulePath = `./${elementSchema.path}`;
-    const className = elementSchema.name;
+/** Compiles the declaration files of the packages once, to read the referenced declarations and resolve their names. */
+function getProgram(rootDir: string): ts.Program {
+  let program = programs.get(rootDir);
+  if (!program) {
     const configPath = ts.findConfigFile(rootDir, ts.sys.fileExists, 'tsconfig.json');
     if (!configPath) throw new Error('tsconfig.json not found');
+    const { config } = ts.readConfigFile(configPath, ts.sys.readFile);
+    const { options } = ts.parseJsonConfigFileContent(config, ts.sys, rootDir);
+    const rootNames = globSync('packages/*/src/**/*.d.ts', { cwd: rootDir }).map((file) => join(rootDir, file));
+    program = ts.createProgram({ rootNames, options });
+    programs.set(rootDir, program);
+  }
+  return program;
+}
 
-    const configFile = ts.readConfigFile(configPath, ts.sys.readFile);
-    const parsed = ts.parseJsonConfigFileContent(configFile.config, ts.sys, rootDir);
-    const accessFileName = join(rootDir, '__api-docs-types__.ts');
+function isRelatedDeclaration(node: ts.Node): node is RelatedTypeDeclaration {
+  if (!(ts.isClassDeclaration(node) || ts.isInterfaceDeclaration(node) || ts.isTypeAliasDeclaration(node))) {
+    return false;
+  }
+  const { fileName } = node.getSourceFile();
+  return (
+    !!node.name &&
+    !/Mixin(Class)?$/u.test(node.name.text) &&
+    !!node.modifiers?.some((modifier) => modifier.kind === ts.SyntaxKind.ExportKeyword) &&
+    fileName.includes('/packages/') &&
+    !fileName.includes('/node_modules/')
+  );
+}
 
-    // Generate and compile a small TS program that just accesses all members of the element class,
-    // which makes retrieving their types easier.
-    const accessExpressions: string[] = [];
+/** Reads the types of an element from the manifest, and the declarations of the types they reference. */
+export class TypeContext {
+  private program: ts.Program;
+  private checker: ts.TypeChecker;
+  private rootDir: string;
+  private relatedTypes = new Map<string, RelatedTypeInfo>();
+  private relatedDeclarations = new Map<string, RelatedTypeDeclaration>();
 
-    elementSchema.properties.forEach((property: any) => {
-      accessExpressions.push(`({} as ${className}).${property.name}`);
-    });
-    elementSchema.methods.forEach((method: any) => {
-      accessExpressions.push(`({} as ${className}).${method.name}`);
-    });
-    elementSchema.staticMethods.forEach((method: any) => {
-      accessExpressions.push(`${className}.${method.name}`);
-    });
-
-    const compilerHost = ts.createCompilerHost({});
-    const originalGetSourceFile = compilerHost.getSourceFile;
-    compilerHost.getSourceFile = (fileName: any, languageVersion: any) => {
-      if (fileName === accessFileName) {
-        return ts.createSourceFile(
-          fileName,
-          `
-        import { ${className} } from '${modulePath}';
-        ${accessExpressions.join(';\n')}
-        `,
-          languageVersion,
-          true,
-          ts.ScriptKind.TS,
-        );
-      }
-      // For all other files, delegate to the original method to load from disk
-      return originalGetSourceFile.call(compilerHost, fileName, languageVersion);
-    };
-    this.program = ts.createProgram({
-      rootNames: [accessFileName],
-      options: parsed.options,
-      host: compilerHost,
-    });
-
-    const sourceFile = this.program.getSourceFile(accessFileName);
-    if (!sourceFile) {
-      throw new Error(`Source file '${accessFileName}' not found in the program.`);
-    }
-    this.sourceFile = sourceFile;
+  constructor({ rootDir = ROOT_DIR }: { rootDir?: string } = {}) {
+    this.rootDir = rootDir;
+    this.program = getProgram(rootDir);
     this.checker = this.program.getTypeChecker();
   }
 
-  getMemberType(memberName: string): string {
-    const accessExpression = findPropertyAccessForMember(this.sourceFile, memberName);
-    if (!accessExpression) {
-      throw new Error(`Property access for member '${memberName}' not found.`);
+  /** Returns the type of a field, or the signature of a method. */
+  getMemberType(member: ManifestMember): string {
+    if (member.kind !== 'method') {
+      return member.type?.text ?? 'any';
     }
-    const type = this.checker.getTypeAtLocation(accessExpression);
-    return this.checker.typeToString(type);
-  }
-
-  private isExported(statement: ts.Statement): boolean {
-    return (
-      'modifiers' in statement &&
-      Array.isArray(statement.modifiers) &&
-      statement.modifiers.some((mod: ts.Modifier) => mod.kind === ts.SyntaxKind.ExportKeyword)
+    const parameters = (member.parameters ?? []).map(
+      (p) => `${p.rest ? '...' : ''}${p.name}${p.optional ? '?' : ''}: ${p.type?.text ?? 'any'}`,
     );
+    return `(${parameters.join(', ')}) => ${member.return?.type?.text ?? 'void'}`;
   }
 
-  private isNamedDeclaration(
-    statement: ts.Statement,
-  ): statement is ts.ClassDeclaration | ts.InterfaceDeclaration | ts.TypeAliasDeclaration {
-    return (
-      (ts.isClassDeclaration(statement) ||
-        ts.isInterfaceDeclaration(statement) ||
-        ts.isTypeAliasDeclaration(statement)) &&
-      !!statement.name
-    );
-  }
-
-  private findDeclaration(typeName: string): RelatedTypeDeclaration | undefined {
-    // Only consider declaration files in monorepo packages
-    const relatedSourceFiles = this.program
-      .getSourceFiles()
-      .filter((file) => file.fileName.includes(`/packages/`))
-      .filter((file) => file.isDeclarationFile);
-
-    const typeNameLower = typeName.toLowerCase();
-    let caseInsensitiveMatch: RelatedTypeDeclaration | undefined;
-
-    for (const sourceFile of relatedSourceFiles) {
-      for (const statement of sourceFile.statements) {
-        if (!this.isNamedDeclaration(statement) || !this.isExported(statement)) continue;
-
-        if (statement.name!.text === typeName) {
-          return statement;
-        }
-
-        // Track case-insensitive match as fallback (e.g., GridDragstartEvent → GridDragStartEvent)
-        if (!caseInsensitiveMatch && statement.name!.text.toLowerCase() === typeNameLower) {
-          caseInsensitiveMatch = statement;
-        }
-      }
-    }
-    return caseInsensitiveMatch;
-  }
-
-  findRelatedTypes(typeString: string): RelatedTypeInfo[] {
-    // Naive approach to extract possible type names from the type string
-    const typeNames = typeString
-      .replace(/[^a-zA-Z0-9_]/gu, ' ')
-      .split(' ')
-      .map((type) => type.trim())
-      .filter((type) => !!type);
-
-    // Filter out some basic types, as well as mixins
-    const basicTypes = new Set([
-      'string',
-      'number',
-      'boolean',
-      'void',
-      'any',
-      'unknown',
-      'null',
-      'undefined',
-      'object',
-      'Array',
-      'Promise',
-      'Function',
-      'Date',
-      'RegExp',
-    ]);
-    const customTypeNames = typeNames
-      .filter((type) => !basicTypes.has(type))
-      .filter((type) => !type.endsWith('Mixin') && !type.endsWith('MixinClass'));
-
-    // Skip types already found
-    const unknownTypeNames = customTypeNames.filter((type) => !this.relatedTypes.has(type));
-    const foundTypeInfos = unknownTypeNames
-      .map((name) => this.findDeclaration(name))
-      .filter((declaration) => !!declaration);
-
-    // Store found results as related types
-    foundTypeInfos.forEach((declaration) => {
-      if (!this.relatedTypes.has(declaration.name!.text)) {
-        const sourceFile = declaration.getSourceFile();
-        const text = sourceFile.text.substring(declaration.pos, declaration.end);
-        const relatedType: RelatedTypeInfo = {
-          name: declaration.name!.text,
-          declarationText: text,
-        };
-        this.relatedTypes.set(declaration.name!.text, relatedType);
-
-        // Scan the declaration for nested type usages
-        this.findRelatedTypes(text);
-      }
+  /** Returns the declarations of the types that a type references, and keeps the types they reference as related. */
+  findRelatedTypes(type: ManifestType | undefined): RelatedTypeInfo[] {
+    const names = new Set<string>();
+    return (type?.references ?? []).flatMap((reference) => {
+      const info = this.addReference(reference);
+      return info && !names.has(info.name) && names.add(info.name) ? [info] : [];
     });
-
-    const typeNamesLower = new Set(typeNames.map((t) => t.toLowerCase()));
-    return Array.from(this.relatedTypes.values().filter((type) => typeNamesLower.has(type.name.toLowerCase())));
   }
 
-  findEventType(eventName: string): RelatedTypeInfo | undefined {
-    // kebab-case to upper camel case conversion
-    const pascalName = eventName
-      .split('-')
-      .map((part) => part.charAt(0).toUpperCase() + part.slice(1))
-      .join('');
-
-    // Try with element name prefix first (e.g., "opened-changed" on AccordionPanel → AccordionPanelOpenedChangedEvent)
-    const prefixedName = `${this.elementSchema.name}${pascalName}Event`;
-    const prefixed = this.findRelatedTypes(prefixedName)[0];
-    if (prefixed) return prefixed;
-
-    // Try with superclass prefix (e.g., "active-item-changed" on GridPro → GridActiveItemChangedEvent)
-    if (this.elementSchema.superclass) {
-      const superPrefixedName = `${this.elementSchema.superclass}${pascalName}Event`;
-      const superPrefixed = this.findRelatedTypes(superPrefixedName)[0];
-      if (superPrefixed) return superPrefixed;
-    }
-
-    // Try without prefix (e.g., "dashboard-item-moved" on Dashboard → DashboardItemMovedEvent)
-    const unprefixedName = `${pascalName}Event`;
-    return this.findRelatedTypes(unprefixedName)[0];
+  /** Returns the declaration of the type of an event, such as `ComboBoxValueChangedEvent`. */
+  findEventType(event: ManifestEvent): RelatedTypeInfo | undefined {
+    const reference = event.type?.references?.find((r) => r.start === 0);
+    return reference && this.addReference(reference);
   }
 
   getRelatedTypes(): RelatedTypeInfo[] {
     return Array.from(this.relatedTypes.values());
+  }
+
+  private addReference(reference: ManifestTypeReference): RelatedTypeInfo | undefined {
+    // A manifest per package names the modules of other packages with a package path
+    const modulePath = reference.module ?? reference.package?.replace(/^@vaadin\/([^/]+)\//u, 'packages/$1/');
+    const sourceFile = modulePath
+      ? this.program.getSourceFile(join(this.rootDir, modulePath.replace(/\.js$/u, '.d.ts')))
+      : undefined;
+    const declaration = sourceFile?.statements.find(
+      (statement): statement is RelatedTypeDeclaration =>
+        isRelatedDeclaration(statement) && statement.name?.text === reference.name,
+    );
+    return declaration && this.addDeclaration(declaration);
+  }
+
+  /**
+   * Keeps a declaration as related. When another declaration has the same name, as with
+   * `import { UploadFile as UploadManagerFile }`, the local name of the import names it.
+   */
+  private addDeclaration(declaration: RelatedTypeDeclaration, localName?: string): RelatedTypeInfo {
+    let name = declaration.name!.text;
+    const known = this.relatedDeclarations.get(name);
+    if (known && known !== declaration && localName && localName !== name) {
+      name = localName;
+    }
+    if (this.relatedDeclarations.has(name)) {
+      return this.relatedTypes.get(name)!;
+    }
+    const sourceFile = declaration.getSourceFile();
+    const info = { name, declarationText: sourceFile.text.substring(declaration.pos, declaration.end) };
+    this.relatedTypes.set(name, info);
+    this.relatedDeclarations.set(name, declaration);
+    this.forEachTypeName(declaration, (typeName) => {
+      let symbol = this.checker.getSymbolAtLocation(typeName);
+      if (symbol && symbol.flags & ts.SymbolFlags.Alias) {
+        symbol = this.checker.getAliasedSymbol(symbol);
+      }
+      const nested = symbol?.declarations?.find(isRelatedDeclaration);
+      if (nested) {
+        this.addDeclaration(nested, typeName.getText());
+      }
+    });
+    return info;
+  }
+
+  /** Calls back with the names of the types that a declaration uses, including the ones it extends. */
+  private forEachTypeName(node: ts.Node, callback: (typeName: ts.Node) => void): void {
+    if (ts.isTypeReferenceNode(node)) {
+      callback(node.typeName);
+    } else if (ts.isExpressionWithTypeArguments(node)) {
+      callback(node.expression);
+    }
+    ts.forEachChild(node, (child) => this.forEachTypeName(child, callback));
   }
 }

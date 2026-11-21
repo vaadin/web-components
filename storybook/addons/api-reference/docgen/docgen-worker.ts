@@ -30,14 +30,19 @@ async function renderApiReference(
   const { declaration, path } = findElement(manifestFile, tagName);
   const element = toElement(declaration, path);
   // Module paths are relative to the manifest directory, which also holds tsconfig.json
-  const typeContext = new TypeContext(element, { rootDir: dirname(manifestFile) });
+  const typeContext = new TypeContext({ rootDir: dirname(manifestFile) });
 
   const links = { tag: tagName, docsIds: readDocsIds(storiesDir) };
   const fixLinks = (markdown: string) => rewriteElementLinks(sanitizeDescription(markdown), links);
 
   return {
     apiDescription: rewriteElementLinks(renderApiSections(element, typeContext), links),
-    argTypes: updateArgTypes(payload.argTypes ?? {}, { tagName, typeContext, fixLinks }),
+    argTypes: updateArgTypes(payload.argTypes ?? {}, {
+      typeContext,
+      members: declaration.members ?? [],
+      events: declaration.events ?? [],
+      fixLinks,
+    }),
     description: payload.description && fixLinks(payload.description),
   };
 }

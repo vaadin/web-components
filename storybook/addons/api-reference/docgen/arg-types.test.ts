@@ -1,35 +1,37 @@
 import assert from 'node:assert/strict';
 import { describe, test } from 'node:test';
 import type { StrictInputType } from 'storybook/internal/types';
+import type { ManifestEvent, ManifestMember, ManifestType } from '../../../../api-docs/types.ts';
 import { updateArgTypes } from './arg-types.ts';
 
-const MEMBER_TYPES = new Map([
-  ['items', 'SelectItem[] | null | undefined'],
-  ['opened', 'boolean'],
-  ['requestContentUpdate', '() => void'],
-]);
+const members: ManifestMember[] = [
+  { kind: 'field', name: 'items', type: { text: 'SelectItem[] | null | undefined' } },
+  { kind: 'field', name: 'opened', type: { text: 'boolean' } },
+  { kind: 'method', name: 'requestContentUpdate' },
+];
+
+const events: ManifestEvent[] = [{ name: 'value-changed' }, { name: 'input' }];
 
 const typeContext = {
-  getMemberType(name: string) {
-    const type = MEMBER_TYPES.get(name);
-    if (!type) {
-      throw new Error(`no member ${name}`);
-    }
-    return type;
+  getMemberType(member: ManifestMember) {
+    return member.kind === 'method' ? '() => void' : member.type!.text;
   },
-  findRelatedTypes(type: string) {
-    return type.includes('SelectItem') ? [{ name: 'SelectItem', declarationText: '\ninterface SelectItem {}\n' }] : [];
+  findRelatedTypes(type?: ManifestType) {
+    return type?.text.includes('SelectItem')
+      ? [{ name: 'SelectItem', declarationText: '\ninterface SelectItem {}\n' }]
+      : [];
   },
-  findEventType(name: string) {
-    return name === 'value-changed'
+  findEventType(event: ManifestEvent) {
+    return event.name === 'value-changed'
       ? { name: 'SelectValueChangedEvent', declarationText: 'type SelectValueChangedEvent = CustomEvent;' }
       : undefined;
   },
 };
 
 const context = {
-  tagName: 'vaadin-select',
   typeContext,
+  members,
+  events,
   fixLinks: (markdown: string) => markdown.replace('/elements/vaadin-select', ''),
 };
 
@@ -65,8 +67,12 @@ describe('updateArgTypes', () => {
     assert.deepEqual(tableTypeOf('prefix', 'slots'), { category: 'slots' });
   });
 
-  test('should keep the table when the type lookup fails', () => {
+  test('should keep the table of a row that the manifest does not list', () => {
     assert.deepEqual(tableTypeOf('unknown', 'properties'), { category: 'properties' });
+  });
+
+  test('should keep the table of an event without a declaration', () => {
+    assert.deepEqual(tableTypeOf('input', 'events'), { category: 'events' });
   });
 
   test('should rewrite the links in the description', () => {
