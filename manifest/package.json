@@ -17,6 +17,7 @@
   "devDependencies": {
     "@custom-elements-manifest/analyzer": "^0.11.0",
     "custom-elements-manifest": "1.0.0",
+    "typescript": "^6.0.3",
     "yaml": "^2.8.2"
   }
 }

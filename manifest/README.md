@@ -37,10 +37,11 @@ yarn workspace @vaadin/manifest-tools compare --base origin/main
 
 The following custom [CEM analyzer plugins](https://custom-elements-manifest.open-wc.org/analyzer/plugins/authoring/) are used:
 
-| Path                         | Purpose                                                                                                   |
-| ---------------------------- | --------------------------------------------------------------------------------------------------------- |
-| `plugins/class-privacy.js`   | Sets the privacy of a class from its `@private` or `@protected` JSDoc tag.                                |
-| `plugins/inheritance.js`     | Applies inheritance from the own items of each class and mixin, nearest first.                            |
-| `plugins/markdown-tables.js` | Adds the missing outer pipes to the rows of Markdown tables in descriptions.                              |
-| `plugins/public-api.js`      | Keeps only the public API: drops private items and internal attributes, sorts, and removes empty modules. |
-| `plugins/readonly.js`        | Marks the fields declared with `readOnly: true` as `readonly`.                                            |
+| Path                          | Purpose                                                                                                   |
+| ----------------------------- | --------------------------------------------------------------------------------------------------------- |
+| `plugins/class-privacy.js`    | Sets the privacy of a class from its `@private` or `@protected` JSDoc tag.                                |
+| `plugins/inheritance.js`      | Applies inheritance from the own items of each class and mixin, nearest first.                            |
+| `plugins/markdown-tables.js`  | Adds the missing outer pipes to the rows of Markdown tables in descriptions.                              |
+| `plugins/public-api.js`       | Keeps only the public API: drops private items and internal attributes, sorts, and removes empty modules. |
+| `plugins/readonly.js`         | Marks the fields declared with `readOnly: true` as `readonly`.                                            |
+| `plugins/typescript-types.js` | Sets the types of the public API of each element from its TypeScript declaration file.                    |

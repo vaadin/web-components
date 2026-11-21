@@ -5,6 +5,7 @@ import { inheritancePlugin } from './plugins/inheritance.js';
 import { markdownTablesPlugin } from './plugins/markdown-tables.js';
 import { publicApiPlugin } from './plugins/public-api.js';
 import { readonlyPlugin } from './plugins/readonly.js';
+import { typescriptTypesPlugin } from './plugins/typescript-types.js';
 
 export default {
   globs: ['packages/**/src/(vaadin-*.js|*-mixin.js)'],
@@ -17,5 +18,12 @@ export default {
       .sort(byName)
       .map((file) => ts.createSourceFile(file, fs.readFileSync(file, 'utf-8'), ts.ScriptTarget.ES2015, true));
   },
-  plugins: [inheritancePlugin(), classPrivacyPlugin(), readonlyPlugin(), publicApiPlugin(), markdownTablesPlugin()],
+  plugins: [
+    inheritancePlugin(),
+    classPrivacyPlugin(),
+    readonlyPlugin(),
+    publicApiPlugin(),
+    typescriptTypesPlugin(),
+    markdownTablesPlugin(),
+  ],
 };
