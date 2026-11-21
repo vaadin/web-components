@@ -3,32 +3,53 @@
  * Copyright (c) 2021 - 2026 Vaadin Ltd.
  * This program is available under Apache License Version 2.0, available at https://vaadin.com/license/
  */
-import { SlotController } from '@vaadin/component-base/src/slot-controller.js';
+import { SlottedContentController } from '@vaadin/component-base/src/slotted-content-controller.js';
 
 /**
  * A controller to create and initialize slotted `<textarea>` element.
  */
-export class TextAreaController extends SlotController {
+export class TextAreaController extends SlottedContentController {
+  #callback;
+
   constructor(host, callback) {
-    super(host, 'textarea', 'textarea', {
-      initializer: (node, host) => {
-        const value = host.getAttribute('value');
-        if (value) {
-          node.value = value;
-        }
+    super(host, 'textarea', { idPrefix: 'textarea' });
 
-        const name = host.getAttribute('name');
-        if (name) {
-          node.setAttribute('name', name);
-        }
+    this.#callback = callback;
+  }
 
-        node.id = this.defaultId;
+  /**
+   * Override method from `SlottedContentController` to create the default textarea element.
+   *
+   * @return {HTMLTextAreaElement}
+   * @protected
+   * @override
+   */
+  createDefaultNode() {
+    return document.createElement('textarea');
+  }
 
-        if (typeof callback === 'function') {
-          callback(node);
-        }
-      },
-      useUniqueId: true,
-    });
+  /**
+   * Override method from `SlottedContentController` to apply the host value
+   * and name attributes to the textarea element, and to pass it to the callback.
+   *
+   * @param {HTMLTextAreaElement} node
+   * @protected
+   * @override
+   */
+  _initNode(node) {
+    const { host } = this;
+    const value = host.getAttribute('value');
+    if (value) {
+      node.value = value;
+    }
+
+    const name = host.getAttribute('name');
+    if (name) {
+      node.setAttribute('name', name);
+    }
+
+    if (typeof this.#callback === 'function') {
+      this.#callback(node);
+    }
   }
 }
