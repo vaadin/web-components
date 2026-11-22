@@ -142,9 +142,31 @@ export const ComboBoxDataProviderMixin = (superClass) =>
 
       if (this._forceNextRequest || this.size === undefined) {
         this._forceNextRequest = false;
-        this.__dataProviderController.loadFirstPage();
+        this.__loadFirstPage();
       } else if (this.size > 0) {
         this.__dataProviderController.ensureFlatIndexLoaded(0);
+      }
+    }
+
+    /**
+     * Requests the first page from the data provider. The overlay isn't opened
+     * for the `loading` state while the data provider is being called, so that
+     * a synchronous data provider that responds with no items doesn't make the
+     * overlay open and close right away.
+     *
+     * @private
+     */
+    __loadFirstPage() {
+      this.__deferLoadingOverlay = true;
+      try {
+        this.__dataProviderController.loadFirstPage();
+      } finally {
+        this.__deferLoadingOverlay = false;
+      }
+
+      // Re-evaluate the overlay state if the data provider is still loading.
+      if (this.loading) {
+        this.requestUpdate('loading', false);
       }
     }
 
@@ -183,7 +205,7 @@ export const ComboBoxDataProviderMixin = (superClass) =>
       // the overlay and re-open it right away.
       if (this._shouldFetchData()) {
         this._forceNextRequest = false;
-        this.__dataProviderController.loadFirstPage();
+        this.__loadFirstPage();
       } else {
         this._forceNextRequest = true;
       }

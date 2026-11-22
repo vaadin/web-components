@@ -165,6 +165,16 @@ describe('data provider filtering', () => {
       expect(openedChangedSpy).to.be.not.called;
     });
 
+    it('should not open overlay on subsequent key presses when no items match with sync data provider', () => {
+      comboBox.dataProvider = syncDataProvider;
+      setInputValue(comboBox, 'q');
+      setInputValue(comboBox, 'qq');
+      setInputValue(comboBox, 'qqq');
+      expect(comboBox.opened).to.be.true;
+      expect(overlay.opened).to.be.false;
+      expect(openedChangedSpy).to.be.not.called;
+    });
+
     it('should open overlay while loading with async data provider', () => {
       // Data provider that does not respond, like a pending server request
       comboBox.dataProvider = sinon.spy();

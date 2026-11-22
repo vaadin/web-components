@@ -172,7 +172,10 @@ export const ComboBoxBaseMixin = (superClass) =>
       if (props.has('opened') || props.has('_dropdownItems') || props.has('loading')) {
         // Close the overlay if there are no items to display.
         // See https://github.com/vaadin/vaadin-combo-box/pull/964
-        this._overlayOpened = this.opened && (!!this.loading || this._hasDropdownItems);
+        // Don't open the overlay for loading while the data provider is being called,
+        // as a synchronous one may respond with no items and close it right away.
+        const loading = !!this.loading && (!this.__deferLoadingOverlay || this._overlayOpened);
+        this._overlayOpened = this.opened && (loading || this._hasDropdownItems);
       }
 
       // Update the scroller only once the overlay is actually opened, so that the
