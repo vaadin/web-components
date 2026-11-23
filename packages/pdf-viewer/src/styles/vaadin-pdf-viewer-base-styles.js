@@ -17,6 +17,8 @@ const pdfViewerBaseStyles = css`
     display: flex;
     flex-direction: column;
     height: 400px;
+    flex: 1 1 auto;
+    align-self: stretch;
     box-sizing: border-box;
     overflow: hidden;
     position: relative;
