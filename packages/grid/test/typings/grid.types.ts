@@ -31,34 +31,34 @@ import type { GridSelectionColumnBaseMixinClass } from '../../src/vaadin-grid-se
 import type { SelectionMixinClass } from '../../src/vaadin-grid-selection-mixin';
 import type { SortMixinClass } from '../../src/vaadin-grid-sort-mixin';
 import type { StylingMixinClass } from '../../src/vaadin-grid-styling-mixin';
-import type {
+import {
   Grid,
-  GridActiveItemChangedEvent,
-  GridBodyRenderer,
-  GridCellActivateEvent,
-  GridCellFocusEvent,
-  GridColumnReorderEvent,
-  GridColumnResizeEvent,
-  GridDataProvider,
-  GridDataProviderCallback,
-  GridDataProviderChangedEvent,
-  GridDragAndDropFilter,
-  GridDragStartEvent,
-  GridDropEvent,
-  GridDropLocation,
-  GridDropMode,
-  GridEventContext,
-  GridExpandedItemsChangedEvent,
-  GridFilterDefinition,
-  GridI18n,
-  GridItemModel,
-  GridItemToggleEvent,
-  GridLoadingChangedEvent,
-  GridRowDetailsRenderer,
-  GridSelectedItemsChangedEvent,
-  GridSizeChangedEvent,
-  GridSorterDefinition,
-  GridSorterDirection,
+  type GridActiveItemChangedEvent,
+  type GridBodyRenderer,
+  type GridCellActivateEvent,
+  type GridCellFocusEvent,
+  type GridColumnReorderEvent,
+  type GridColumnResizeEvent,
+  type GridDataProvider,
+  type GridDataProviderCallback,
+  type GridDataProviderChangedEvent,
+  type GridDragAndDropFilter,
+  type GridDragStartEvent,
+  type GridDropEvent,
+  type GridDropLocation,
+  type GridDropMode,
+  type GridEventContext,
+  type GridExpandedItemsChangedEvent,
+  type GridFilterDefinition,
+  type GridI18n,
+  type GridItemModel,
+  type GridItemToggleEvent,
+  type GridLoadingChangedEvent,
+  type GridRowDetailsRenderer,
+  type GridSelectedItemsChangedEvent,
+  type GridSizeChangedEvent,
+  type GridSorterDefinition,
+  type GridSorterDirection,
 } from '../../vaadin-grid.js';
 import type { ColumnBaseMixinClass, GridColumn, GridColumnTextAlign } from '../../vaadin-grid-column.js';
 
@@ -218,6 +218,7 @@ assertType<(arg0: TestGridItem) => void>(narrowedGrid.deselectItem);
 assertType<boolean>(narrowedGrid.multiSort);
 assertType<'append' | 'prepend'>(narrowedGrid.multiSortPriority);
 assertType<boolean>(narrowedGrid.multiSortOnShiftClick);
+assertType<(priority: 'append' | 'prepend') => void>(Grid.setDefaultMultiSortPriority);
 
 assertType<boolean>(narrowedGrid.allRowsVisible);
 assertType<() => void>(narrowedGrid.recalculateColumnWidths);

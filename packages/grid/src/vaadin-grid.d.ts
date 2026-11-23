@@ -318,6 +318,13 @@ export interface GridI18n {
  */
 declare class Grid<TItem = GridDefaultItem> extends HTMLElement {
   /**
+   * Sets the default multi-sort priority to use for all grid instances.
+   * This method should be called before creating any grid instances.
+   * Changing this setting does not affect the default for existing grids.
+   */
+  static setDefaultMultiSortPriority(priority: 'append' | 'prepend'): void;
+
+  /**
    * The object used to localize this component. To change the default
    * localization, set this to an object that provides all properties, or
    * just the individual properties you want to change.
