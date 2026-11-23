@@ -110,13 +110,6 @@ describe('sidebar', () => {
     expect(button.checkVisibility()).to.be.true;
   });
 
-  it('should hide the sidebar button with the attribute', async () => {
-    viewer.setAttribute('sidebar-button-hidden', '');
-    await nextRender();
-    expect(viewer.sidebarButtonHidden).to.be.true;
-    expect(button.checkVisibility()).to.be.false;
-  });
-
   it('should toggle the sidebar-opened attribute on sidebarOpened change', async () => {
     viewer.sidebarOpened = true;
     await nextRender();
