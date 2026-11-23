@@ -45,7 +45,7 @@ export const PdfViewerSidebarMixin = (superClass) =>
       super.firstUpdated();
 
       this.#thumbnails = new PdfViewerThumbnailsController(this.$.thumbnails, {
-        onSelect: (pageNumber) => this._scrollToPage(pageNumber),
+        onSelect: (pageNumber) => this.#onThumbnailSelect(pageNumber),
       });
       this.addController(this.#thumbnails);
     }
@@ -175,6 +175,12 @@ export const PdfViewerSidebarMixin = (superClass) =>
         const target = button?.checkVisibility() ? button : this.$.content;
         target.focus({ focusVisible: isKeyboardActive() });
       }
+    }
+
+    /** @private */
+    #onThumbnailSelect(page) {
+      this._scrollToPage(page);
+      this.dispatchEvent(new CustomEvent('thumbnail-click', { detail: { page } }));
     }
 
     /** @private */

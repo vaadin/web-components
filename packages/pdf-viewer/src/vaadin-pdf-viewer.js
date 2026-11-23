@@ -137,6 +137,7 @@ const DEFAULT_I18N = {
  * @fires {CustomEvent} page-changed - Fired when the `page` property changes.
  * @fires {CustomEvent} page-count-changed - Fired when the `pageCount` property changes.
  * @fires {CustomEvent} sidebar-opened-changed - Fired when the `sidebarOpened` property changes.
+ * @fires {CustomEvent} thumbnail-click - Fired when the user chooses a thumbnail with a click, Enter or Space.
  * @fires {CustomEvent} toolbar-collapsed-changed - Fired when the `toolbarCollapsed` property changes.
  * @fires {CustomEvent} zoom-changed - Fired when the `zoom` property changes.
  *
