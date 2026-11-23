@@ -42,8 +42,6 @@ const pdfViewerBaseStyles = css`
     display: flex;
     flex: 1 1 0;
     min-height: 40%;
-    /* The pages are sized from the viewer width, so they must not size the viewer in turn */
-    contain: inline-size;
   }
 
   .content-area {

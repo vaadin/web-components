@@ -82,12 +82,12 @@ describe('zoom', () => {
     });
   });
 
-  describe('in a container that sizes to its content', () => {
+  describe('in a flex column that aligns items to the start', () => {
     let container: HTMLElement;
 
     beforeEach(async () => {
       container = fixtureSync(`
-        <div style="display: inline-block">
+        <div style="display: flex; flex-direction: column; align-items: flex-start; width: 800px">
           <vaadin-pdf-viewer></vaadin-pdf-viewer>
         </div>
       `);
