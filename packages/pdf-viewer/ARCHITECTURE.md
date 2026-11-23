@@ -98,6 +98,16 @@ how to generate them.
   - Rendering stops while the sidebar is hidden. When it shows again, the thumbnails that left the view are released.
   - A thumbnail frees the pdf.js data of its page once it has rendered, unless the pages hold that page, as in the
     pdf.js viewer. The canvas keeps the image. The pages free the data of a page when they release it.
+  - A viewer narrower than three sidebars shows the sidebar over the pages. The sidebar width comes from
+    `--vaadin-pdf-viewer-sidebar-width`, so the default threshold is 30rem. `ResizeMixin` updates the mode.
+  - In the overlay mode, the sidebar is positioned absolutely at the start side, also in RTL, as the detail of
+    `vaadin-master-detail-layout` is in its overlay mode. The pages keep their width, so they do not render again.
+  - The overlay mode closes the sidebar, and the wide mode opens it again, as the drawer of `vaadin-app-layout` does.
+  - While the sidebar shows over the pages, the pages are `inert`, so focus stays in the toolbar and the sidebar.
+    A click on the pages reaches the area around them and closes the sidebar.
+  - Escape closes the sidebar only from the sidebar or its button. Other toolbar controls, such as the zoom
+    select, close their own overlay first. The handler calls `preventDefault()`, so a surrounding dialog stays open.
+  - A chosen thumbnail closes the sidebar in the overlay mode.
 - `PdfViewerToolbarMixin` renders the header and the toolbar. Its controls are in the light DOM, so a theme
   styles the page field like any other `vaadin-integer-field`. The `slotContent()` directive renders them, so
   application children added later keep their place.

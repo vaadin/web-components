@@ -25,8 +25,16 @@ export const pdfViewerSidebarStyles = css`
     display: none;
   }
 
-  :host([sidebar-opened]) .content-area::after {
+  :host([sidebar-opened]:not([sidebar-overlay])) .content-area::after {
     border-end-start-radius: 0;
+  }
+
+  :host([sidebar-overlay]) [part~='sidebar'] {
+    position: absolute;
+    inset-block: 0;
+    inset-inline-start: 0;
+    z-index: 2;
+    max-width: 100%;
   }
 
   [part~='thumbnails'] {

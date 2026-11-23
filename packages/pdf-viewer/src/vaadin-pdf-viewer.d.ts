@@ -157,13 +157,14 @@ export interface PdfViewerEventMap extends HTMLElementEventMap, PdfViewerCustomE
  *
  * The following state attributes are available for styling:
  *
- * Attribute        | Description
- * -----------------|------------
- * `loading`        | Set while the document is loading.
- * `has-error`      | Set when the document could not be loaded.
- * `focused`        | Set when the page area is focused.
- * `focus-ring`     | Set when the page area is focused using the keyboard.
- * `sidebar-opened` | Set when the sidebar is shown.
+ * Attribute         | Description
+ * ------------------|------------
+ * `loading`         | Set while the document is loading.
+ * `has-error`       | Set when the document could not be loaded.
+ * `focused`         | Set when the page area is focused.
+ * `focus-ring`      | Set when the page area is focused using the keyboard.
+ * `sidebar-opened`  | Set when the sidebar is shown.
+ * `sidebar-overlay` | Set when the sidebar shows over the pages, as the viewer is narrow.
  *
  * The following custom CSS properties are available for styling:
  *

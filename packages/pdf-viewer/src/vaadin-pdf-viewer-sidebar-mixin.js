@@ -13,18 +13,24 @@ import '@vaadin/tooltip/src/vaadin-tooltip.js';
 import './vaadin-pdf-viewer-icon.js';
 import { html } from 'lit';
 import { isKeyboardActive } from '@vaadin/a11y-base/src/focus-utils.js';
+import { ResizeMixin } from '@vaadin/component-base/src/resize-mixin.js';
 import { PdfViewerThumbnailsController } from './pdf-viewer-thumbnails-controller.js';
 
 /**
  * A mixin that adds a sidebar next to the pages with a thumbnail of each
- * page, and a button in the toolbar that shows and hides it.
+ * page, and a button in the toolbar that shows and hides it. In a narrow
+ * viewer, the sidebar shows over the pages.
  */
 export const PdfViewerSidebarMixin = (superClass) =>
-  class PdfViewerSidebarMixinClass extends superClass {
+  class PdfViewerSidebarMixinClass extends ResizeMixin(superClass) {
     static get properties() {
       return {
         /**
          * Whether the sidebar with the page thumbnails is shown.
+         *
+         * In a viewer narrower than three sidebars, the sidebar shows over the
+         * pages. It closes when the viewer becomes narrow, and opens again when
+         * the viewer becomes wide.
          *
          * @attr {boolean} sidebar-opened
          */
@@ -45,11 +51,25 @@ export const PdfViewerSidebarMixin = (superClass) =>
           type: Boolean,
           value: false,
         },
+
+        /**
+         * Whether the sidebar shows over the pages, as the viewer is narrow.
+         * @protected
+         */
+        _sidebarOverlay: {
+          type: Boolean,
+          value: false,
+          reflectToAttribute: true,
+          attribute: 'sidebar-overlay',
+        },
       };
     }
 
     /** @type {PdfViewerThumbnailsController | null} */
     #thumbnails = null;
+
+    /** Whether the sidebar was open when the viewer became narrow, to open it again when it is wide. */
+    #sidebarOpenedBeforeOverlay = false;
 
     /** @protected */
     firstUpdated() {
@@ -63,6 +83,15 @@ export const PdfViewerSidebarMixin = (superClass) =>
         },
       });
       this.addController(this.#thumbnails);
+
+      // The pages are inert under the sidebar, so a click on them reaches the area around them.
+      this.$.content.parentElement.addEventListener('click', () => {
+        if (this._sidebarOverlay) {
+          this.sidebarOpened = false;
+        }
+      });
+
+      this.#updateOverlay();
     }
 
     /** @protected */
@@ -83,11 +112,49 @@ export const PdfViewerSidebarMixin = (superClass) =>
         this.#thumbnails.setLabel(this.__effectiveI18n.thumbnailLabel);
       }
 
+      if (props.has('sidebarOpened') || props.has('_sidebarOverlay')) {
+        this.$.content.inert = this._sidebarOverlay && this.sidebarOpened;
+      }
+
       if ((props.has('pageCount') || props.has('sidebarOpened')) && this.sidebarOpened && this.pageCount) {
         this.#thumbnails.create(this._pdfDocument, this.#getAspectRatios());
         this.#thumbnails.show(this.page);
       } else if (props.has('page')) {
         this.#thumbnails.setPage(this.page);
+      }
+    }
+
+    /**
+     * Override method from `ResizeMixin` to switch the sidebar between
+     * showing next to the pages and over them.
+     * @protected
+     * @override
+     */
+    _onResize() {
+      if (this.hasUpdated) {
+        this.#updateOverlay();
+      }
+    }
+
+    /**
+     * Override method from `KeyboardMixin` to close the sidebar that shows
+     * over the pages with Escape.
+     * @param {KeyboardEvent} event
+     * @protected
+     * @override
+     */
+    _onKeyDown(event) {
+      super._onKeyDown(event);
+
+      if (event.key !== 'Escape' || event.defaultPrevented || !this._sidebarOverlay || !this.sidebarOpened) {
+        return;
+      }
+      // Other controls of the toolbar may close their own overlay with Escape.
+      const path = event.composedPath();
+      if (path.includes(this.$.sidebar) || path.includes(this.#getSidebarButton())) {
+        // Keeps a surrounding dialog open.
+        event.preventDefault();
+        this.sidebarOpened = false;
       }
     }
 
@@ -187,16 +254,46 @@ export const PdfViewerSidebarMixin = (superClass) =>
     #moveFocusOutOfSidebar() {
       const active = this.shadowRoot.activeElement;
       if (active && this.$.sidebar.contains(active)) {
-        const button = this.querySelector(':scope > [slot="toolbar-sidebar"]');
+        const button = this.#getSidebarButton();
         const target = button?.checkVisibility() ? button : this.$.content;
         target.focus({ focusVisible: isKeyboardActive() });
       }
     }
 
     /** @private */
+    #getSidebarButton() {
+      return this.querySelector(':scope > [slot="toolbar-sidebar"]');
+    }
+
+    /**
+     * Shows the sidebar over the pages while the viewer is narrower than
+     * three sidebars. Closes it when the viewer becomes narrow, and opens
+     * it again when the viewer becomes wide, as the drawer of `vaadin-app-layout` does.
+     * @private
+     */
+    #updateOverlay() {
+      // The computed width of the sidebar is known also while it is hidden.
+      const overlay = this.clientWidth < 3 * parseFloat(getComputedStyle(this.$.sidebar).width);
+      if (overlay === this._sidebarOverlay) {
+        return;
+      }
+      if (overlay) {
+        this.#sidebarOpenedBeforeOverlay = this.sidebarOpened;
+        this.sidebarOpened = false;
+      } else if (this.#sidebarOpenedBeforeOverlay) {
+        this.sidebarOpened = true;
+        this.#sidebarOpenedBeforeOverlay = false;
+      }
+      this._sidebarOverlay = overlay;
+    }
+
+    /** @private */
     #onThumbnailSelect(page) {
       this._scrollToPage(page);
       this.dispatchEvent(new CustomEvent('thumbnail-click', { detail: { page } }));
+      if (this._sidebarOverlay) {
+        this.sidebarOpened = false;
+      }
     }
 
     /** @private */

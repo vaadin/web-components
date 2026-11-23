@@ -10,18 +10,24 @@
  */
 import type { Constructor } from '@open-wc/dedupe-mixin';
 import type { TemplateResult } from 'lit';
+import type { ResizeMixinClass } from '@vaadin/component-base/src/resize-mixin.js';
 
 /**
  * A mixin that adds a sidebar next to the pages with a thumbnail of each
- * page, and a button in the toolbar that shows and hides it.
+ * page, and a button in the toolbar that shows and hides it. In a narrow
+ * viewer, the sidebar shows over the pages.
  */
 export declare function PdfViewerSidebarMixin<T extends Constructor<HTMLElement>>(
   base: T,
-): Constructor<PdfViewerSidebarMixinClass> & T;
+): Constructor<PdfViewerSidebarMixinClass> & Constructor<ResizeMixinClass> & T;
 
 export declare class PdfViewerSidebarMixinClass {
   /**
    * Whether the sidebar with the page thumbnails is shown.
+   *
+   * In a viewer narrower than three sidebars, the sidebar shows over the
+   * pages. It closes when the viewer becomes narrow, and opens again when
+   * the viewer becomes wide.
    *
    * @attr {boolean} sidebar-opened
    */
@@ -34,6 +40,11 @@ export declare class PdfViewerSidebarMixinClass {
    * @attr {boolean} sidebar-button-hidden
    */
   sidebarButtonHidden: boolean;
+
+  /**
+   * Whether the sidebar shows over the pages, as the viewer is narrow.
+   */
+  protected readonly _sidebarOverlay: boolean;
 
   /**
    * Returns the template of the button that shows and hides the sidebar,
