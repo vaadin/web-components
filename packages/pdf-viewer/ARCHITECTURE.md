@@ -96,6 +96,8 @@ how to generate them.
   - A thumbnail can render at the same time as a page. The pdf.js viewer renders thumbnails only while no page waits.
   - The thumbnails are created when the sidebar first opens for a document, so a closed sidebar costs nothing.
   - Rendering stops while the sidebar is hidden. When it shows again, the thumbnails that left the view are released.
+  - A thumbnail frees the pdf.js data of its page once it has rendered, as pdf.js does after printing. The canvas
+    keeps the image. pdf.js defers freeing while the same page renders in the pages.
 - `PdfViewerToolbarMixin` renders the header and the toolbar. Its controls are in the light DOM, so a theme
   styles the page field like any other `vaadin-integer-field`. The `slotContent()` directive renders them, so
   application children added later keep their place.

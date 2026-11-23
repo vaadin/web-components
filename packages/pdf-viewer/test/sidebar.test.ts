@@ -451,6 +451,15 @@ describe('sidebar', () => {
         expect(list.scrollTop).to.equal(scrollTop);
       });
 
+      it('should free the pdf.js data of a page once its thumbnail has rendered', async () => {
+        const cleanup = sinon.spy(await getPdfPagePrototype(), 'cleanup');
+        thumbnails[99].scrollIntoView();
+        await waitUntil(() => isRendered(100));
+        const index = cleanup.thisValues.findIndex((pdfPage: PDFPageProxy) => pdfPage.pageNumber === 100);
+        // cleanup() returns false when pdf.js only defers freeing the page
+        expect(cleanup.returnValues[index]).to.be.true;
+      });
+
       it('should render the thumbnails of a scrolled-to part of the list when attached again', async () => {
         await waitUntil(() => isRendered(1));
         const parent = viewer.parentElement!;

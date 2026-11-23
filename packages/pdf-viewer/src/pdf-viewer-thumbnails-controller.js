@@ -301,6 +301,9 @@ export class PdfViewerThumbnailsController {
     } catch (error) {
       freeCanvas(canvas);
       throw error;
+    } finally {
+      // Frees the decoded data of the page, which pdf.js defers while the page also renders in the pages.
+      pdfPage.cleanup();
     }
     thumbnail.renderTask = null;
     if (this.#pdfDocument === pdfDocument && this.#visibleThumbnails.has(thumbnail)) {
