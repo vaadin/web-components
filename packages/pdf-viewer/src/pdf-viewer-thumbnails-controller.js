@@ -33,6 +33,9 @@ export class PdfViewerThumbnailsController {
   /** @type {(pageNumber: number) => void} */
   #onSelect;
 
+  /** @type {(pageNumber: number) => boolean} */
+  #isPageInUse;
+
   /** @type {import('pdfjs-dist').PDFDocumentProxy | null} */
   #pdfDocument = null;
 
@@ -54,10 +57,12 @@ export class PdfViewerThumbnailsController {
    * @param {HTMLElement} list the element to show the thumbnails in
    * @param {Object} callbacks
    * @param {(pageNumber: number) => void} callbacks.onSelect called when the user chooses a thumbnail with a click, Enter or Space
+   * @param {(pageNumber: number) => boolean} callbacks.isPageInUse whether the pages hold the page, which then frees its data itself
    */
-  constructor(list, { onSelect }) {
+  constructor(list, { onSelect, isPageInUse }) {
     this.#list = list;
     this.#onSelect = onSelect;
+    this.#isPageInUse = isPageInUse;
     list.addEventListener('click', (event) => this.#onClick(event));
     list.addEventListener('keydown', (event) => this.#onKeyDown(event));
   }
@@ -301,6 +306,11 @@ export class PdfViewerThumbnailsController {
     } catch (error) {
       freeCanvas(canvas);
       throw error;
+    } finally {
+      // As in the pdf.js viewer, the pages free the data of a page they hold when they release it.
+      if (!this.#isPageInUse(thumbnail.pageNumber)) {
+        pdfPage.cleanup();
+      }
     }
     thumbnail.renderTask = null;
     if (this.#pdfDocument === pdfDocument && this.#visibleThumbnails.has(thumbnail)) {

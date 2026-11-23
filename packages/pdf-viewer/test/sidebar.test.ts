@@ -318,6 +318,13 @@ describe('sidebar', () => {
   });
 
   describe('rendering', () => {
+    it('should keep the pdf.js data of a page that the pages show when its thumbnail renders', async () => {
+      const cleanup = sinon.spy(await getPdfPagePrototype(), 'cleanup');
+      await openSidebar(viewer);
+      const pageNumbers = cleanup.thisValues.map((pdfPage: PDFPageProxy) => pdfPage.pageNumber);
+      expect(pageNumbers).to.not.include(1);
+    });
+
     it('should render the thumbnails again when the device pixel ratio changes', async () => {
       // Tall enough for every thumbnail to render, so that none is rendering when the ratio changes.
       viewer.style.height = '1500px';
@@ -449,6 +456,15 @@ describe('sidebar', () => {
         await nextRenderIdle(viewer);
         expect(viewer.page).to.equal(Number(thumbnail.dataset.page));
         expect(list.scrollTop).to.equal(scrollTop);
+      });
+
+      it('should free the pdf.js data of a page once its thumbnail has rendered', async () => {
+        const cleanup = sinon.spy(await getPdfPagePrototype(), 'cleanup');
+        thumbnails[99].scrollIntoView();
+        await waitUntil(() => isRendered(100));
+        const index = cleanup.thisValues.findIndex((pdfPage: PDFPageProxy) => pdfPage.pageNumber === 100);
+        // cleanup() returns false when pdf.js only defers freeing the page
+        expect(cleanup.returnValues[index]).to.be.true;
       });
 
       it('should render the thumbnails of a scrolled-to part of the list when attached again', async () => {
