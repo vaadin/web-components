@@ -155,6 +155,15 @@ describe('sidebar', () => {
       expect(viewer.sidebarOpened).to.be.true;
     });
 
+    it('should fire thumbnail-click with the page on thumbnail click', () => {
+      const spy = sinon.spy();
+      viewer.addEventListener('thumbnail-click', spy);
+      thumbnails[3].click();
+      expect(spy).to.be.calledOnce;
+      expect(spy.firstCall.args[0].detail).to.deep.equal({ page: 4 });
+      expect(viewer.page).to.equal(4);
+    });
+
     it('should use the texts set with i18n', async () => {
       viewer.i18n = { sidebar: 'Sidopanel', thumbnails: 'Miniatyrer', thumbnailLabel: 'Sida {page}' };
       await nextRender();
@@ -219,6 +228,16 @@ describe('sidebar', () => {
         await idle;
         expect(viewer.page).to.equal(3);
         expect(viewer.shadowRoot!.activeElement).to.equal(thumbnails[2]);
+      });
+
+      it('should fire thumbnail-click with the page on Enter and Space', async () => {
+        const spy = sinon.spy();
+        viewer.addEventListener('thumbnail-click', spy);
+        await sendKeys({ press: 'ArrowDown' });
+        await sendKeys({ press: 'Enter' });
+        await sendKeys({ press: 'ArrowDown' });
+        await sendKeys({ press: 'Space' });
+        expect(spy.args.map(([event]) => event.detail.page)).to.deep.equal([2, 3]);
       });
 
       it('should go to the page of the focused thumbnail with Space', async () => {

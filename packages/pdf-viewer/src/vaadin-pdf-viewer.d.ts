@@ -64,6 +64,11 @@ export type PdfViewerPageCountChangedEvent = CustomEvent<{ value: number }>;
 export type PdfViewerSidebarOpenedChangedEvent = CustomEvent<{ value: boolean }>;
 
 /**
+ * Fired when the user chooses a thumbnail with a click, Enter or Space.
+ */
+export type PdfViewerThumbnailClickEvent = CustomEvent<{ page: number }>;
+
+/**
  * Fired when the `toolbarCollapsed` property changes.
  */
 export type PdfViewerToolbarCollapsedChangedEvent = CustomEvent<{ value: boolean }>;
@@ -83,6 +88,8 @@ export interface PdfViewerCustomEventMap {
   'page-count-changed': PdfViewerPageCountChangedEvent;
 
   'sidebar-opened-changed': PdfViewerSidebarOpenedChangedEvent;
+
+  'thumbnail-click': PdfViewerThumbnailClickEvent;
 
   'toolbar-collapsed-changed': PdfViewerToolbarCollapsedChangedEvent;
 
@@ -183,6 +190,7 @@ export interface PdfViewerEventMap extends HTMLElementEventMap, PdfViewerCustomE
  * @fires {CustomEvent} page-changed - Fired when the `page` property changes.
  * @fires {CustomEvent} page-count-changed - Fired when the `pageCount` property changes.
  * @fires {CustomEvent} sidebar-opened-changed - Fired when the `sidebarOpened` property changes.
+ * @fires {CustomEvent} thumbnail-click - Fired when the user chooses a thumbnail with a click, Enter or Space.
  * @fires {CustomEvent} toolbar-collapsed-changed - Fired when the `toolbarCollapsed` property changes.
  * @fires {CustomEvent} zoom-changed - Fired when the `zoom` property changes.
  */

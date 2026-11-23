@@ -11,6 +11,7 @@ import type {
   PdfViewerPageChangedEvent,
   PdfViewerPageCountChangedEvent,
   PdfViewerSidebarOpenedChangedEvent,
+  PdfViewerThumbnailClickEvent,
   PdfViewerToolbarCollapsedChangedEvent,
   PdfViewerZoom,
   PdfViewerZoomChangedEvent,
@@ -90,6 +91,11 @@ viewer.addEventListener('page-changed', (event) => {
 viewer.addEventListener('page-count-changed', (event) => {
   assertType<PdfViewerPageCountChangedEvent>(event);
   assertType<number>(event.detail.value);
+});
+
+viewer.addEventListener('thumbnail-click', (event) => {
+  assertType<PdfViewerThumbnailClickEvent>(event);
+  assertType<number>(event.detail.page);
 });
 
 viewer.addEventListener('sidebar-opened-changed', (event) => {

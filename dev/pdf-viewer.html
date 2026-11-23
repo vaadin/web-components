@@ -114,6 +114,9 @@
       viewer.addEventListener('document-error', (e) => {
         log.textContent = `document-error: ${e.detail.reason}`;
       });
+      viewer.addEventListener('thumbnail-click', (e) => {
+        log.textContent = `thumbnail-click: ${JSON.stringify(e.detail)}`;
+      });
 
       update();
     </script>
