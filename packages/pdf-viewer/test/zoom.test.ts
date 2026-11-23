@@ -87,28 +87,21 @@ describe('zoom', () => {
 
     beforeEach(async () => {
       container = fixtureSync(`
-        <div style="display: flex; flex-direction: column; align-items: flex-start; width: 800px">
-          <div style="display: inline-block">
-            <vaadin-pdf-viewer></vaadin-pdf-viewer>
-          </div>
+        <div style="display: inline-block">
           <vaadin-pdf-viewer></vaadin-pdf-viewer>
         </div>
       `);
+      viewer = container.firstElementChild as PdfViewer;
       await nextRender();
-    });
-
-    it('should stretch to the width of a flex column', async () => {
-      const viewer = container.lastElementChild as PdfViewer;
+      content = viewer.shadowRoot!.querySelector<HTMLElement>('[part="content"]')!;
       await loadAndRender(viewer, fixtureUrl('multi-page.pdf'));
-      expect(viewer.offsetWidth).to.equal(800);
     });
 
     it('should not change its width with the zoom', async () => {
-      const viewer = container.querySelector<PdfViewer>('div > vaadin-pdf-viewer')!;
-      await loadAndRender(viewer, fixtureUrl('multi-page.pdf'));
       const widthBefore = viewer.offsetWidth;
       viewer.zoom = 2;
       await nextRenderIdle(viewer);
+      expect(content.scrollWidth).to.be.above(content.clientWidth);
       expect(viewer.offsetWidth).to.equal(widthBefore);
     });
   });

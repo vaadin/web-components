@@ -33,6 +33,31 @@ describe('vaadin-pdf-viewer', () => {
     });
   });
 
+  describe('size in a flex layout', () => {
+    let container: HTMLElement;
+
+    async function loadIn(style: string) {
+      container = fixtureSync(
+        `<div style="display: flex; width: 800px; ${style}"><vaadin-pdf-viewer></vaadin-pdf-viewer></div>`,
+      );
+      viewer = container.firstElementChild as PdfViewer;
+      await nextRender();
+      const rendered = nextRenderIdle(viewer);
+      await loadDocument(viewer, 'multi-page.pdf');
+      await rendered;
+    }
+
+    it('should stretch to the width of a column that aligns items to the start', async () => {
+      await loadIn('flex-direction: column; align-items: flex-start');
+      expect(viewer.offsetWidth).to.equal(800);
+    });
+
+    it('should fill the width of a row', async () => {
+      await loadIn('flex-direction: row');
+      expect(viewer.offsetWidth).to.equal(800);
+    });
+  });
+
   describe('loading', () => {
     it('should have no pages by default', () => {
       expect(viewer.pageCount).to.equal(0);
