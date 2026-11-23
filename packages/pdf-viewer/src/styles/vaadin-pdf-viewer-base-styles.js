@@ -39,7 +39,6 @@ const pdfViewerBaseStyles = css`
 
   .main-area {
     display: flex;
-    /* Used as the content height when the host height resolves to auto, e.g. height: 100% in a parent without height */
     flex: 1 1 400px;
     min-height: 40%;
   }
