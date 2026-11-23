@@ -318,6 +318,13 @@ describe('sidebar', () => {
   });
 
   describe('rendering', () => {
+    it('should keep the pdf.js data of a page that the pages show when its thumbnail renders', async () => {
+      const cleanup = sinon.spy(await getPdfPagePrototype(), 'cleanup');
+      await openSidebar(viewer);
+      const pageNumbers = cleanup.thisValues.map((pdfPage: PDFPageProxy) => pdfPage.pageNumber);
+      expect(pageNumbers).to.not.include(1);
+    });
+
     it('should render the thumbnails again when the device pixel ratio changes', async () => {
       // Tall enough for every thumbnail to render, so that none is rendering when the ratio changes.
       viewer.style.height = '1500px';

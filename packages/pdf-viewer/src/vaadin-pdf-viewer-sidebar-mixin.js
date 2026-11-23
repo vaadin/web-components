@@ -46,6 +46,10 @@ export const PdfViewerSidebarMixin = (superClass) =>
 
       this.#thumbnails = new PdfViewerThumbnailsController(this.$.thumbnails, {
         onSelect: (pageNumber) => this.#onThumbnailSelect(pageNumber),
+        isPageInUse: (pageNumber) => {
+          const page = this.__pages[pageNumber - 1];
+          return !!(page?.canvas || page?.renderTask);
+        },
       });
       this.addController(this.#thumbnails);
     }
