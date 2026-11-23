@@ -31,16 +31,16 @@ const pdfViewerBaseStyles = css`
   }
 
   .top-area {
-    flex: 0 1 auto;
+    flex: none;
+    max-height: 60%;
     overflow-y: auto;
     scroll-padding: calc(var(--vaadin-focus-ring-width) * 2 + 2px);
   }
 
   .main-area {
     display: flex;
-    /* A non-zero basis keeps the content visible when the host height resolves to auto, e.g. height: 100% in a parent without height.
-       The large shrink factor makes the main area shrink before the toolbar, down to its minimum height. */
-    flex: 1 10000 400px;
+    /* Used as the content height when the host height resolves to auto, e.g. height: 100% in a parent without height */
+    flex: 1 1 400px;
     min-height: 40%;
   }
 
