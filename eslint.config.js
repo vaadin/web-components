@@ -183,6 +183,10 @@ export default [
   {
     files: ['dev/**/*.html'],
     plugins: { html },
+    rules: {
+      // Prettier formats dev pages as whole files, see lint:html
+      'prettier/prettier': 'off',
+    },
   },
   {
     files: ['packages/*/src/**/*.js'],

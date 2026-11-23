@@ -105,9 +105,11 @@
       manager._createXhr = xhrCreator({ size: 512, uploadTime: 3000, stepTime: 500 });
 
       // Link components to manager
-      document.querySelectorAll('vaadin-upload-file-list, vaadin-upload-button, vaadin-upload-drop-zone').forEach((el) => {
-        el.manager = manager;
-      });
+      document
+        .querySelectorAll('vaadin-upload-file-list, vaadin-upload-button, vaadin-upload-drop-zone')
+        .forEach((el) => {
+          el.manager = manager;
+        });
 
       document.querySelectorAll('.prompt-button').forEach((button) => {
         button.addEventListener('click', () => {

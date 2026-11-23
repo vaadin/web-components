@@ -14,6 +14,7 @@
     "dev:start": "yarn workspace dev start",
     "lint": "npm-run-all --parallel lint:*",
     "lint:css": "stylelint --ignore-path .gitignore \"packages/**/src/**/*.js\" \"packages/vaadin-lumo-styles/mixins/*.js\" \"packages/**/*.css\" \"dev/**/*.html\"",
+    "lint:html": "prettier --check \"dev/**/*.html\"",
     "lint:js": "eslint",
     "lint:types": "tsc",
     "lint:types:react": "yarn workspace react-components-tooling lint:types",
@@ -90,6 +91,10 @@
     ],
     "*.css": [
       "stylelint --fix",
+      "prettier --write"
+    ],
+    "dev/**/*.html": [
+      "eslint --fix",
       "prettier --write"
     ]
   },
