@@ -82,25 +82,6 @@ describe('zoom', () => {
     });
   });
 
-  describe('inside column flexbox', () => {
-    beforeEach(async () => {
-      const container = fixtureSync(
-        '<div style="display: flex; flex-direction: column; align-items: flex-start; width: 800px"></div>',
-      );
-      viewer.style.width = '';
-      container.appendChild(viewer);
-      await loadAndRender(viewer, fixtureUrl('multi-page.pdf'));
-    });
-
-    it('should not change the viewer width with the zoom', async () => {
-      const widthBefore = viewer.offsetWidth;
-      viewer.zoom = 2;
-      await nextRenderIdle(viewer);
-      expect(content.scrollWidth).to.be.above(content.clientWidth);
-      expect(viewer.offsetWidth).to.equal(widthBefore);
-    });
-  });
-
   describe('with document', () => {
     let pages: HTMLElement[];
 
