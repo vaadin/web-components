@@ -26,6 +26,12 @@ vaadin-message-input:not([readonly], [disabled]) {
   background-color: var(--vaadin-input-field-disabled-background, var(--vaadin-background-container));
 }
 
+[invalid]::part(input-field) {
+  --aura-accent-color-light: var(--vaadin-input-field-error-color);
+  --aura-accent-color-dark: var(--vaadin-input-field-error-color);
+  background-color: var(--vaadin-input-field-invalid-background, var(--aura-accent-surface));
+}
+
 [disabled]::part(helper-text) {
   opacity: 0.5;
 }
