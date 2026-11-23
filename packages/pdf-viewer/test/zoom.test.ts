@@ -82,22 +82,17 @@ describe('zoom', () => {
     });
   });
 
-  describe('in a flex column that aligns items to the start', () => {
-    let container: HTMLElement;
-
+  describe('inside column flexbox', () => {
     beforeEach(async () => {
-      container = fixtureSync(`
-        <div style="display: flex; flex-direction: column; align-items: flex-start; width: 800px">
-          <vaadin-pdf-viewer></vaadin-pdf-viewer>
-        </div>
-      `);
-      viewer = container.firstElementChild as PdfViewer;
-      await nextRender();
-      content = viewer.shadowRoot!.querySelector<HTMLElement>('[part="content"]')!;
+      const container = fixtureSync(
+        '<div style="display: flex; flex-direction: column; align-items: flex-start; width: 800px"></div>',
+      );
+      viewer.style.width = '';
+      container.appendChild(viewer);
       await loadAndRender(viewer, fixtureUrl('multi-page.pdf'));
     });
 
-    it('should not change its width with the zoom', async () => {
+    it('should not change the viewer width with the zoom', async () => {
       const widthBefore = viewer.offsetWidth;
       viewer.zoom = 2;
       await nextRenderIdle(viewer);

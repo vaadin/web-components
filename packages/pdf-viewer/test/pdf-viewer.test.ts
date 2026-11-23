@@ -33,27 +33,23 @@ describe('vaadin-pdf-viewer', () => {
     });
   });
 
-  describe('size in a flex layout', () => {
+  describe('inside flexbox', () => {
     let container: HTMLElement;
 
-    async function loadIn(style: string) {
-      container = fixtureSync(
-        `<div style="display: flex; width: 800px; ${style}"><vaadin-pdf-viewer></vaadin-pdf-viewer></div>`,
-      );
-      viewer = container.firstElementChild as PdfViewer;
-      await nextRender();
-      const rendered = nextRenderIdle(viewer);
-      await loadDocument(viewer, 'multi-page.pdf');
-      await rendered;
-    }
+    beforeEach(() => {
+      container = fixtureSync('<div style="display: flex; width: 800px"></div>');
+      container.appendChild(viewer);
+    });
 
-    it('should stretch to the width of a column that aligns items to the start', async () => {
-      await loadIn('flex-direction: column; align-items: flex-start');
+    it('should not shrink horizontally inside a row flexbox', async () => {
+      await nextRender();
       expect(viewer.offsetWidth).to.equal(800);
     });
 
-    it('should fill the width of a row', async () => {
-      await loadIn('flex-direction: row');
+    it('should stretch inside a column flex container', async () => {
+      container.style.flexDirection = 'column';
+      container.style.alignItems = 'flex-start';
+      await nextRender();
       expect(viewer.offsetWidth).to.equal(800);
     });
   });
