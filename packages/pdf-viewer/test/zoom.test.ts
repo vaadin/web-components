@@ -82,6 +82,37 @@ describe('zoom', () => {
     });
   });
 
+  describe('in a container that sizes to its content', () => {
+    let container: HTMLElement;
+
+    beforeEach(async () => {
+      container = fixtureSync(`
+        <div style="display: flex; flex-direction: column; align-items: flex-start; width: 800px">
+          <div style="display: inline-block">
+            <vaadin-pdf-viewer></vaadin-pdf-viewer>
+          </div>
+          <vaadin-pdf-viewer></vaadin-pdf-viewer>
+        </div>
+      `);
+      await nextRender();
+    });
+
+    it('should stretch to the width of a flex column', async () => {
+      const viewer = container.lastElementChild as PdfViewer;
+      await loadAndRender(viewer, fixtureUrl('multi-page.pdf'));
+      expect(viewer.offsetWidth).to.equal(800);
+    });
+
+    it('should not change its width with the zoom', async () => {
+      const viewer = container.querySelector<PdfViewer>('div > vaadin-pdf-viewer')!;
+      await loadAndRender(viewer, fixtureUrl('multi-page.pdf'));
+      const widthBefore = viewer.offsetWidth;
+      viewer.zoom = 2;
+      await nextRenderIdle(viewer);
+      expect(viewer.offsetWidth).to.equal(widthBefore);
+    });
+  });
+
   describe('with document', () => {
     let pages: HTMLElement[];
 
