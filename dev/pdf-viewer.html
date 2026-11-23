@@ -78,7 +78,7 @@
         viewer.src = fileUrl;
       });
 
-      ['headerHidden', 'toolbarCollapsed', 'downloadButtonHidden', 'sidebarOpened'].forEach((prop) => {
+      ['headerHidden', 'toolbarCollapsed', 'downloadButtonHidden', 'sidebarButtonHidden', 'sidebarOpened'].forEach((prop) => {
         document.getElementById(prop).addEventListener('checked-changed', (e) => {
           viewer[prop] = e.detail.value;
         });
@@ -168,6 +168,11 @@
             id="downloadButtonHidden"
             value="downloadButtonHidden"
             label="Hide download button"
+          ></vaadin-checkbox>
+          <vaadin-checkbox
+            id="sidebarButtonHidden"
+            value="sidebarButtonHidden"
+            label="Hide sidebar button"
           ></vaadin-checkbox>
           <vaadin-checkbox id="sidebarOpened" value="sidebarOpened" label="Open sidebar"></vaadin-checkbox>
         </vaadin-checkbox-group>

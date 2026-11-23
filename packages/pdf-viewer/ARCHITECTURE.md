@@ -90,7 +90,7 @@ how to generate them.
   - The render queue renders a page again only once its layers are done. One signal therefore covers the time
     between two releases.
 - `PdfViewerKeyboardMixin` handles the keyboard shortcuts.
-- `PdfViewerSidebarMixin` adds `sidebarOpened`, the sidebar button and the sidebar next to the pages.
+- `PdfViewerSidebarMixin` adds `sidebarOpened`, `sidebarButtonHidden`, the sidebar button and the sidebar next to the pages.
   - `PdfViewerThumbnailsController` fills the sidebar with a thumbnail for each page. It renders the thumbnails
     near the visible part of the list one at a time, apart from the render queue of the pages.
   - A thumbnail can render at the same time as a page. The pdf.js viewer renders thumbnails only while no page waits.

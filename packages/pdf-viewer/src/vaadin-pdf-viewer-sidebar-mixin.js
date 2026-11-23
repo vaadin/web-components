@@ -34,6 +34,17 @@ export const PdfViewerSidebarMixin = (superClass) =>
           notify: true,
           reflectToAttribute: true,
         },
+
+        /**
+         * Whether the button that shows and hides the sidebar is hidden from
+         * the toolbar. The `sidebarOpened` property works also while it is hidden.
+         *
+         * @attr {boolean} sidebar-button-hidden
+         */
+        sidebarButtonHidden: {
+          type: Boolean,
+          value: false,
+        },
       };
     }
 
@@ -126,6 +137,7 @@ export const PdfViewerSidebarMixin = (superClass) =>
           slot="toolbar-sidebar"
           theme="tertiary icon"
           aria-expanded="${this.sidebarOpened ? 'true' : 'false'}"
+          ?hidden="${this.sidebarButtonHidden}"
           .disabled="${!this.pageCount && !this.sidebarOpened}"
           @click="${this.#onSidebarButtonClick}"
         >
