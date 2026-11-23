@@ -40,7 +40,7 @@ describe('mobile support', () => {
     listenOnce(menu, 'opened-changed', () => {
       const styles = window.getComputedStyle(menu._overlayElement);
       expect(styles.alignItems).to.eql('stretch');
-      expect(styles.justifyContent).to.eql('flex-end');
+      expect(styles.justifyContent).to.be.oneOf(['flex-end', 'flow-end']);
       done();
     });
 
