@@ -40,6 +40,7 @@ assertType<boolean>(viewer.toolbarCollapsed);
 assertType<string | null | undefined>(viewer.fileName);
 assertType<boolean>(viewer.downloadButtonHidden);
 assertType<boolean>(viewer.sidebarOpened);
+assertType<boolean>(viewer.sidebarButtonHidden);
 assertType<number>(viewer.page);
 assertType<number>(viewer.pageCount);
 assertType<(page: number) => void>(viewer.scrollToPage);

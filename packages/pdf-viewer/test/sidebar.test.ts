@@ -101,6 +101,22 @@ describe('sidebar', () => {
     expect(button.getAttribute('aria-expanded')).to.equal('false');
   });
 
+  it('should toggle the sidebar button on sidebarButtonHidden change', async () => {
+    viewer.sidebarButtonHidden = true;
+    await nextRender();
+    expect(button.checkVisibility()).to.be.false;
+    viewer.sidebarButtonHidden = false;
+    await nextRender();
+    expect(button.checkVisibility()).to.be.true;
+  });
+
+  it('should hide the sidebar button with the attribute', async () => {
+    viewer.setAttribute('sidebar-button-hidden', '');
+    await nextRender();
+    expect(viewer.sidebarButtonHidden).to.be.true;
+    expect(button.checkVisibility()).to.be.false;
+  });
+
   it('should toggle the sidebar-opened attribute on sidebarOpened change', async () => {
     viewer.sidebarOpened = true;
     await nextRender();

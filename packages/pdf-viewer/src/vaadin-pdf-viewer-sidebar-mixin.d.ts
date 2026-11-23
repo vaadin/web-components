@@ -28,6 +28,14 @@ export declare class PdfViewerSidebarMixinClass {
   sidebarOpened: boolean;
 
   /**
+   * Whether the button that shows and hides the sidebar is hidden from
+   * the toolbar. The `sidebarOpened` property works also while it is hidden.
+   *
+   * @attr {boolean} sidebar-button-hidden
+   */
+  sidebarButtonHidden: boolean;
+
+  /**
    * Returns the template of the button that shows and hides the sidebar,
    * in the `toolbar-sidebar` slot.
    */
