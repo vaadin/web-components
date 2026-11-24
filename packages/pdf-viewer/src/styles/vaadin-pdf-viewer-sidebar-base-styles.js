@@ -29,11 +29,21 @@ export const pdfViewerSidebarStyles = css`
     border-end-start-radius: 0;
   }
 
+  #sidebarBackdrop {
+    position: absolute;
+    inset: 0;
+    z-index: 2;
+  }
+
+  #sidebarBackdrop[hidden] {
+    display: none;
+  }
+
   :host([sidebar-overlay]) [part~='sidebar'] {
     position: absolute;
     inset-block: 0;
     inset-inline-start: 0;
-    z-index: 2;
+    z-index: 3;
     max-width: 100%;
   }
 

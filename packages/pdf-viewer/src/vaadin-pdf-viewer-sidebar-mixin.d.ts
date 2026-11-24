@@ -13,9 +13,9 @@ import type { TemplateResult } from 'lit';
 import type { ResizeMixinClass } from '@vaadin/component-base/src/resize-mixin.js';
 
 /**
- * A mixin that adds a sidebar next to the pages with a thumbnail of each
- * page, and a button in the toolbar that shows and hides it. In a narrow
- * viewer, the sidebar shows over the pages.
+ * A mixin that adds a sidebar with a thumbnail of each page, and a button
+ * in the toolbar that shows and hides it. The sidebar shows next to the
+ * pages, and over them in a narrow viewer.
  */
 export declare function PdfViewerSidebarMixin<T extends Constructor<HTMLElement>>(
   base: T,
@@ -25,9 +25,9 @@ export declare class PdfViewerSidebarMixinClass {
   /**
    * Whether the sidebar with the page thumbnails is shown.
    *
-   * In a viewer narrower than three sidebars, the sidebar shows over the
-   * pages. It closes when the viewer becomes narrow, and opens again when
-   * the viewer becomes wide.
+   * In a viewer narrower than three times `--vaadin-pdf-viewer-sidebar-width`,
+   * the sidebar shows over the pages. It closes when a wide viewer becomes
+   * narrow, and opens again when the viewer becomes wide.
    *
    * @attr {boolean} sidebar-opened
    */
@@ -53,7 +53,7 @@ export declare class PdfViewerSidebarMixinClass {
   protected _renderSidebarButton(): TemplateResult;
 
   /**
-   * Returns the template of the sidebar next to the pages.
+   * Returns the template of the sidebar with the page thumbnails.
    */
   protected _renderSidebar(): TemplateResult;
 }

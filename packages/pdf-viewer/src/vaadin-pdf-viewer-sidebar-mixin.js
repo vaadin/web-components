@@ -16,10 +16,13 @@ import { isKeyboardActive } from '@vaadin/a11y-base/src/focus-utils.js';
 import { ResizeMixin } from '@vaadin/component-base/src/resize-mixin.js';
 import { PdfViewerThumbnailsController } from './pdf-viewer-thumbnails-controller.js';
 
+/** The sidebar shows over the pages while the viewer is narrower than this many sidebars. */
+const OVERLAY_SIDEBAR_COUNT = 3;
+
 /**
- * A mixin that adds a sidebar next to the pages with a thumbnail of each
- * page, and a button in the toolbar that shows and hides it. In a narrow
- * viewer, the sidebar shows over the pages.
+ * A mixin that adds a sidebar with a thumbnail of each page, and a button
+ * in the toolbar that shows and hides it. The sidebar shows next to the
+ * pages, and over them in a narrow viewer.
  */
 export const PdfViewerSidebarMixin = (superClass) =>
   class PdfViewerSidebarMixinClass extends ResizeMixin(superClass) {
@@ -28,9 +31,9 @@ export const PdfViewerSidebarMixin = (superClass) =>
         /**
          * Whether the sidebar with the page thumbnails is shown.
          *
-         * In a viewer narrower than three sidebars, the sidebar shows over the
-         * pages. It closes when the viewer becomes narrow, and opens again when
-         * the viewer becomes wide.
+         * In a viewer narrower than three times `--vaadin-pdf-viewer-sidebar-width`,
+         * the sidebar shows over the pages. It closes when a wide viewer becomes
+         * narrow, and opens again when the viewer becomes wide.
          *
          * @attr {boolean} sidebar-opened
          */
@@ -58,7 +61,6 @@ export const PdfViewerSidebarMixin = (superClass) =>
          */
         _sidebarOverlay: {
           type: Boolean,
-          value: false,
           reflectToAttribute: true,
           attribute: 'sidebar-overlay',
         },
@@ -70,6 +72,9 @@ export const PdfViewerSidebarMixin = (superClass) =>
 
     /** Whether the sidebar was open when the viewer became narrow, to open it again when it is wide. */
     #sidebarOpenedBeforeOverlay = false;
+
+    /** Whether the sidebar opened over the pages while they had focus, which then moves to the thumbnails. */
+    #focusThumbnails = false;
 
     /** @protected */
     firstUpdated() {
@@ -84,13 +89,6 @@ export const PdfViewerSidebarMixin = (superClass) =>
       });
       this.addController(this.#thumbnails);
 
-      // The pages are inert under the sidebar, so a click on them reaches the area around them.
-      this.$.content.parentElement.addEventListener('click', () => {
-        if (this._sidebarOverlay) {
-          this.sidebarOpened = false;
-        }
-      });
-
       this.#updateOverlay();
     }
 
@@ -102,6 +100,11 @@ export const PdfViewerSidebarMixin = (superClass) =>
       if (props.has('sidebarOpened') && !this.sidebarOpened) {
         this.#moveFocusOutOfSidebar();
       }
+
+      // Focus in the pages would be lost when the sidebar over them makes them inert.
+      if (props.has('sidebarOpened') && this.sidebarOpened && this._sidebarOverlay) {
+        this.#focusThumbnails = this.$.content.matches(':focus-within');
+      }
     }
 
     /** @protected */
@@ -112,15 +115,16 @@ export const PdfViewerSidebarMixin = (superClass) =>
         this.#thumbnails.setLabel(this.__effectiveI18n.thumbnailLabel);
       }
 
-      if (props.has('sidebarOpened') || props.has('_sidebarOverlay')) {
-        this.$.content.inert = this._sidebarOverlay && this.sidebarOpened;
-      }
-
       if ((props.has('pageCount') || props.has('sidebarOpened')) && this.sidebarOpened && this.pageCount) {
         this.#thumbnails.create(this._pdfDocument, this.#getAspectRatios());
         this.#thumbnails.show(this.page);
       } else if (props.has('page')) {
         this.#thumbnails.setPage(this.page);
+      }
+
+      if (this.#focusThumbnails) {
+        this.#focusThumbnails = false;
+        this.$.thumbnails.querySelector('[tabindex="0"]')?.focus({ focusVisible: isKeyboardActive() });
       }
     }
 
@@ -130,7 +134,9 @@ export const PdfViewerSidebarMixin = (superClass) =>
      * @protected
      * @override
      */
-    _onResize() {
+    _onResize(contentRect) {
+      super._onResize(contentRect);
+
       if (this.hasUpdated) {
         this.#updateOverlay();
       }
@@ -143,10 +149,10 @@ export const PdfViewerSidebarMixin = (superClass) =>
      * @protected
      * @override
      */
-    _onKeyDown(event) {
-      super._onKeyDown(event);
+    _onEscape(event) {
+      super._onEscape(event);
 
-      if (event.key !== 'Escape' || event.defaultPrevented || !this._sidebarOverlay || !this.sidebarOpened) {
+      if (event.defaultPrevented || !this._sidebarOverlay || !this.sidebarOpened) {
         return;
       }
       // Other controls of the toolbar may close their own overlay with Escape.
@@ -219,12 +225,18 @@ export const PdfViewerSidebarMixin = (superClass) =>
     }
 
     /**
-     * Returns the template of the sidebar next to the pages.
+     * Returns the template of the sidebar with the page thumbnails.
      * @protected
      */
     _renderSidebar() {
-      // The list has tabindex="-1", so that Firefox does not make the scrollable list a tab stop.
+      // The backdrop takes the clicks on the pages under the sidebar. The list has tabindex="-1",
+      // so that Firefox does not make the scrollable list a tab stop.
       return html`
+        <div
+          id="sidebarBackdrop"
+          ?hidden="${!(this._sidebarOverlay && this.sidebarOpened)}"
+          @click="${this.#onBackdropClick}"
+        ></div>
         <div id="sidebar" part="sidebar" ?hidden="${!this.sidebarOpened}">
           <div
             id="thumbnails"
@@ -256,6 +268,8 @@ export const PdfViewerSidebarMixin = (superClass) =>
       if (active && this.$.sidebar.contains(active)) {
         const button = this.#getSidebarButton();
         const target = button?.checkVisibility() ? button : this.$.content;
+        // The pages are inert under the sidebar until this update renders.
+        this.$.content.inert = false;
         target.focus({ focusVisible: isKeyboardActive() });
       }
     }
@@ -266,25 +280,34 @@ export const PdfViewerSidebarMixin = (superClass) =>
     }
 
     /**
-     * Shows the sidebar over the pages while the viewer is narrower than
-     * three sidebars. Closes it when the viewer becomes narrow, and opens
-     * it again when the viewer becomes wide, as the drawer of `vaadin-app-layout` does.
+     * Shows the sidebar over the pages while the viewer is narrow. Closes it
+     * when a wide viewer becomes narrow, and opens it again when the viewer
+     * becomes wide, as the drawer of `vaadin-app-layout` does.
      * @private
      */
     #updateOverlay() {
+      // A hidden viewer has no width, and keeps its mode until it shows.
+      if (!this.clientWidth) {
+        return;
+      }
       // The computed width of the sidebar is known also while it is hidden.
-      const overlay = this.clientWidth < 3 * parseFloat(getComputedStyle(this.$.sidebar).width);
+      const overlay = this.clientWidth < OVERLAY_SIDEBAR_COUNT * parseFloat(getComputedStyle(this.$.sidebar).width);
       if (overlay === this._sidebarOverlay) {
         return;
       }
-      if (overlay) {
+      // The first mode keeps the open state, so that it is the same when set before or after attach.
+      if (overlay && this._sidebarOverlay === false) {
         this.#sidebarOpenedBeforeOverlay = this.sidebarOpened;
         this.sidebarOpened = false;
-      } else if (this.#sidebarOpenedBeforeOverlay) {
+      } else if (!overlay && this.#sidebarOpenedBeforeOverlay) {
         this.sidebarOpened = true;
-        this.#sidebarOpenedBeforeOverlay = false;
       }
       this._sidebarOverlay = overlay;
+    }
+
+    /** @private */
+    #onBackdropClick() {
+      this.sidebarOpened = false;
     }
 
     /** @private */

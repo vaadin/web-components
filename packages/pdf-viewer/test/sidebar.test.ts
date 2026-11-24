@@ -1,6 +1,6 @@
 import { expect } from '@vaadin/chai-plugins';
-import { sendKeys, sendMouse, sendMouseToElement } from '@vaadin/test-runner-commands';
-import { fixtureSync, nextFrame, nextRender, nextResize, oneEvent } from '@vaadin/testing-helpers';
+import { resetMouse, sendKeys, sendMouse, sendMouseToElement } from '@vaadin/test-runner-commands';
+import { fixtureSync, nextFrame, nextRender, nextResize, nextUpdate, oneEvent } from '@vaadin/testing-helpers';
 import sinon from 'sinon';
 import './enable-feature-flag.js';
 import '../vaadin-pdf-viewer.js';
@@ -42,6 +42,11 @@ describe('sidebar', () => {
 
   function getRenderedThumbnails() {
     return getThumbnails().filter((thumbnail) => thumbnail.querySelector('canvas'));
+  }
+
+  async function setWidth(width: string) {
+    viewer.style.width = width;
+    await nextResize(viewer);
   }
 
   function isRendered(pageNumber: number) {
@@ -137,6 +142,46 @@ describe('sidebar', () => {
     const page = viewer.shadowRoot!.querySelector<HTMLElement>('[part~="page"]')!;
     const padding = parseFloat(getComputedStyle(content).paddingLeft);
     expect(page.offsetWidth).to.be.closeTo(content.clientWidth - 2 * padding, 1);
+  });
+
+  it('should close the sidebar when the viewer becomes narrow and open it again when wide', async () => {
+    const spy = sinon.spy();
+    viewer.addEventListener('sidebar-opened-changed', spy);
+    viewer.sidebarOpened = true;
+    await nextRender();
+    await setWidth('400px');
+    expect(viewer.sidebarOpened).to.be.false;
+    await setWidth('700px');
+    expect(viewer.sidebarOpened).to.be.true;
+    expect(spy.args.map(([event]) => event.detail.value)).to.deep.equal([true, false, true]);
+  });
+
+  it('should keep the sidebar closed when the wide viewer resizes after it was opened again', async () => {
+    viewer.sidebarOpened = true;
+    await nextRender();
+    await setWidth('400px');
+    await setWidth('700px');
+    viewer.sidebarOpened = false;
+    await nextRender();
+    await setWidth('750px');
+    expect(viewer.sidebarOpened).to.be.false;
+  });
+
+  it('should keep the sidebar open while the viewer is hidden', async () => {
+    viewer.sidebarOpened = true;
+    await nextRender();
+    viewer.style.display = 'none';
+    await nextResize(viewer);
+    expect(viewer.sidebarOpened).to.be.true;
+  });
+
+  it('should show the open sidebar of a viewer that is narrow from the start over the pages', async () => {
+    const narrow = fixtureSync<PdfViewer>(
+      '<vaadin-pdf-viewer sidebar-opened style="width: 400px"></vaadin-pdf-viewer>',
+    );
+    await nextUpdate(narrow);
+    expect(narrow.hasAttribute('sidebar-overlay')).to.be.true;
+    expect(narrow.sidebarOpened).to.be.true;
   });
 
   describe('opened', () => {
@@ -334,38 +379,42 @@ describe('sidebar', () => {
   });
 
   describe('overlay', () => {
-    async function setWidth(width: string) {
-      viewer.style.width = width;
-      await nextResize(viewer);
-    }
-
     beforeEach(async () => {
       await setWidth('400px');
+    });
+
+    afterEach(async () => {
+      await resetMouse();
     });
 
     it('should toggle the sidebar-overlay attribute when the viewer resizes', async () => {
       expect(viewer.hasAttribute('sidebar-overlay')).to.be.true;
       await setWidth('700px');
       expect(viewer.hasAttribute('sidebar-overlay')).to.be.false;
-    });
-
-    it('should close the sidebar when the viewer becomes narrow and open it again when wide', async () => {
-      await setWidth('700px');
-      viewer.sidebarOpened = true;
-      await nextRender();
-      await setWidth('400px');
       expect(viewer.sidebarOpened).to.be.false;
-      await setWidth('700px');
-      expect(viewer.sidebarOpened).to.be.true;
     });
 
-    it('should make the pages inert while the sidebar is open', async () => {
+    it('should follow the width of the sidebar', async () => {
+      viewer.style.setProperty('--vaadin-pdf-viewer-sidebar-width', '100px');
+      await setWidth('350px');
+      expect(viewer.hasAttribute('sidebar-overlay')).to.be.false;
+      await setWidth('290px');
+      expect(viewer.hasAttribute('sidebar-overlay')).to.be.true;
+    });
+
+    it('should make the pages inert while the sidebar shows over them', async () => {
       viewer.sidebarOpened = true;
       await nextRender();
       expect(content.inert).to.be.true;
-      viewer.sidebarOpened = false;
-      await nextRender();
+      await setWidth('700px');
       expect(content.inert).to.be.false;
+    });
+
+    it('should move focus from the pages to the current thumbnail when the sidebar opens', async () => {
+      content.focus();
+      viewer.sidebarOpened = true;
+      await nextRender();
+      expect(viewer.shadowRoot!.activeElement).to.equal(getThumbnails()[0]);
     });
 
     describe('opened', () => {
@@ -387,6 +436,15 @@ describe('sidebar', () => {
         expect(document.activeElement).to.equal(button);
         // A surrounding dialog does not close on an Escape that is handled.
         expect(spy.firstCall.args[0].defaultPrevented).to.be.true;
+      });
+
+      it('should move focus to the pages when the sidebar closes on Escape with the toolbar collapsed', async () => {
+        viewer.toolbarCollapsed = true;
+        await nextRender();
+        thumbnails[0].focus();
+        await sendKeys({ press: 'Escape' });
+        await nextRender();
+        expect(viewer.shadowRoot!.activeElement).to.equal(content);
       });
 
       it('should close the sidebar on Escape from the sidebar button', async () => {

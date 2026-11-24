@@ -95,7 +95,7 @@ const DEFAULT_I18N = {
  * `header-toggle` | The icon in the header that shows whether the toolbar is collapsed.
  * `toolbar`       | The toolbar above the pages.
  * `toolbar-group` | A group of related controls in the toolbar: sidebar and navigation, zoom, and actions.
- * `sidebar`       | The sidebar next to the pages, see `sidebarOpened`.
+ * `sidebar`       | The sidebar with the page thumbnails, see `sidebarOpened`.
  * `thumbnails`    | The scrollable list of page thumbnails in the sidebar.
  * `thumbnail`     | A page thumbnail. Also has the `current` part name for the current page.
  * `content`       | The scrollable area that contains the pages.
@@ -255,6 +255,7 @@ class PdfViewer extends PdfViewerMixin(
             aria-labelledby="title"
             aria-busy="${this.__loading ? 'true' : 'false'}"
             tabindex="${this.pageCount ? '0' : '-1'}"
+            ?inert="${this._sidebarOverlay && this.sidebarOpened}"
             @focusin="${this.#onContentFocusIn}"
             @focusout="${this.#onContentFocusOut}"
           >

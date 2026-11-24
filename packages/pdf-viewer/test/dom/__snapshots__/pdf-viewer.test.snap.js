@@ -300,6 +300,11 @@ snapshots["vaadin-pdf-viewer shadow default"] =
 <div class="main-area">
   <div
     hidden=""
+    id="sidebarBackdrop"
+  >
+  </div>
+  <div
+    hidden=""
     id="sidebar"
     part="sidebar"
   >
@@ -384,6 +389,11 @@ snapshots["vaadin-pdf-viewer shadow document"] =
 >
 </div>
 <div class="main-area">
+  <div
+    hidden=""
+    id="sidebarBackdrop"
+  >
+  </div>
   <div
     hidden=""
     id="sidebar"
@@ -592,6 +602,11 @@ snapshots["vaadin-pdf-viewer shadow header title"] =
 >
 </div>
 <div class="main-area">
+  <div
+    hidden=""
+    id="sidebarBackdrop"
+  >
+  </div>
   <div
     hidden=""
     id="sidebar"
@@ -803,6 +818,11 @@ snapshots["vaadin-pdf-viewer shadow header hidden"] =
 <div class="main-area">
   <div
     hidden=""
+    id="sidebarBackdrop"
+  >
+  </div>
+  <div
+    hidden=""
     id="sidebar"
     part="sidebar"
   >
@@ -1010,6 +1030,11 @@ snapshots["vaadin-pdf-viewer shadow toolbar collapsed"] =
 >
 </div>
 <div class="main-area">
+  <div
+    hidden=""
+    id="sidebarBackdrop"
+  >
+  </div>
   <div
     hidden=""
     id="sidebar"
