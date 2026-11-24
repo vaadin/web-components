@@ -52,7 +52,10 @@
     }
 
     &:user-invalid {
+      --aura-accent-color-light: var(--vaadin-input-field-error-color);
+      --aura-accent-color-dark: var(--vaadin-input-field-error-color);
       border-color: var(--vaadin-input-field-error-color);
+      background-color: var(--vaadin-input-field-invalid-background, var(--aura-accent-surface));
     }
 
     /* Not :read-only, which also matches a <select> */
