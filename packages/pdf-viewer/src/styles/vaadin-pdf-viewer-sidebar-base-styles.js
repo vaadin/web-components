@@ -29,13 +29,13 @@ export const pdfViewerSidebarStyles = css`
     border-end-start-radius: 0;
   }
 
-  #sidebarBackdrop {
+  [part~='backdrop'] {
     position: absolute;
     inset: 0;
     z-index: 2;
   }
 
-  #sidebarBackdrop[hidden] {
+  [part~='backdrop'][hidden] {
     display: none;
   }
 

@@ -98,6 +98,7 @@ const DEFAULT_I18N = {
  * `sidebar`       | The sidebar with the page thumbnails, see `sidebarOpened`.
  * `thumbnails`    | The scrollable list of page thumbnails in the sidebar.
  * `thumbnail`     | A page thumbnail. Also has the `current` part name for the current page.
+ * `backdrop`      | The transparent layer over the pages while the sidebar shows over them.
  * `content`       | The scrollable area that contains the pages.
  * `page`          | A page of the document.
  * `loader`        | The loading indicator shown while the document loads.

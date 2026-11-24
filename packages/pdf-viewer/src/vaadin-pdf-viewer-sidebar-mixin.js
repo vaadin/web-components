@@ -233,7 +233,8 @@ export const PdfViewerSidebarMixin = (superClass) =>
       // so that Firefox does not make the scrollable list a tab stop.
       return html`
         <div
-          id="sidebarBackdrop"
+          id="backdrop"
+          part="backdrop"
           ?hidden="${!(this._sidebarOverlay && this.sidebarOpened)}"
           @click="${this.#onBackdropClick}"
         ></div>
