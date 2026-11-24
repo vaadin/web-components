@@ -1,4 +1,5 @@
-import { fixtureSync, oneEvent } from '@vaadin/testing-helpers';
+import { sendKeys } from '@vaadin/test-runner-commands';
+import { fixtureSync, nextRender, oneEvent } from '@vaadin/testing-helpers';
 import { visualDiff } from '@web/test-runner-visual-regression';
 import '@vaadin/vaadin-lumo-styles/src/global/index.css';
 import '@vaadin/vaadin-lumo-styles/src/props/index.css';
@@ -42,5 +43,12 @@ describe('confirm-dialog', () => {
     element.cancelButtonVisible = true;
     element.rejectButtonVisible = true;
     await visualDiff(div, 'cancel-reject');
+  });
+
+  it('focus-visible', async () => {
+    await sendKeys({ press: 'Tab' });
+    element.focus();
+    await nextRender();
+    await visualDiff(div, 'focus-visible');
   });
 });
