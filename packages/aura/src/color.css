@@ -79,6 +79,7 @@ vaadin-side-nav-item::part(content),
 vaadin-select-item,
 vaadin-tab,
 vaadin-upload-file,
+::part(input-field),
 :where(
   .aura-accent-surface,
   .aura-accent-surface-solid,

@@ -38,4 +38,21 @@ describe('text-field', () => {
     element.readonly = true;
     await visualDiff(div, 'readonly');
   });
+
+  it('invalid', async () => {
+    element.invalid = true;
+    await visualDiff(div, 'invalid');
+  });
+
+  it('disabled invalid', async () => {
+    element.disabled = true;
+    element.invalid = true;
+    await visualDiff(div, 'disabled-invalid');
+  });
+
+  it('readonly invalid', async () => {
+    element.readonly = true;
+    element.invalid = true;
+    await visualDiff(div, 'readonly-invalid');
+  });
 });
