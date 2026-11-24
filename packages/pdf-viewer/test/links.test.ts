@@ -20,6 +20,7 @@ import {
   nextRenderIdle,
   type PdfPage,
   scrollSettled,
+  uriLink,
 } from './helpers.js';
 
 describe('links', () => {
@@ -62,10 +63,6 @@ describe('links', () => {
   async function loadPdf(pdfPages: PdfPage[], options?: Parameters<typeof createPdf>[1]) {
     url = createPdf(pdfPages, options);
     await loadAndRender(viewer, url);
-  }
-
-  function uriLink(rect: number[], uri = 'https://vaadin.com/') {
-    return `<< /Type /Annot /Subtype /Link /Rect [${rect.join(' ')}] /Border [0 0 0] /A << /S /URI /URI (${uri}) >> >>`;
   }
 
   function destLink(dest: string, index = 0) {

@@ -95,9 +95,20 @@ export const pdfViewerToolbarStyles = css`
     --vaadin-field-default-width: 9em;
   }
 
+  ::slotted([slot='toolbar-sidebar'][aria-expanded='true']) {
+    --vaadin-button-background: var(--vaadin-background-container-strong);
+    --vaadin-button-tertiary-background: var(--vaadin-background-container-strong);
+  }
+
   @media (forced-colors: active) {
     [part~='header-toggle'] {
       background: CanvasText;
+    }
+
+    ::slotted([slot='toolbar-sidebar'][aria-expanded='true']) {
+      --vaadin-button-background: Highlight;
+      --vaadin-button-tertiary-background: Highlight;
+      --vaadin-icon-color: HighlightText;
     }
   }
 `;

@@ -169,16 +169,16 @@ describe('checkbox', () => {
         await resetMouse();
       });
 
-      it('should focus on checkbox part click when not focused yet', async () => {
-        await sendMouseToElement({ type: 'click', element: checkbox.shadowRoot.querySelector('[part="checkbox"]') });
+      it('should focus on input click when not focused yet', async () => {
+        await sendMouseToElement({ type: 'click', element: input });
         expect(checkbox.hasAttribute('focused')).to.be.true;
       });
 
-      it('should keep focus on checkbox part click when already focused', async () => {
+      it('should keep focus on input click when already focused', async () => {
         const spy = sinon.spy();
         checkbox.addEventListener('focusout', spy);
         input.focus();
-        await sendMouseToElement({ type: 'click', element: checkbox.shadowRoot.querySelector('[part="checkbox"]') });
+        await sendMouseToElement({ type: 'click', element: input });
         expect(spy).to.be.not.called;
       });
     });
@@ -301,15 +301,12 @@ describe('checkbox', () => {
     });
 
     describe('click target', () => {
-      beforeEach(() => {
-        checkbox.style.width = '500px';
-      });
-
       afterEach(async () => {
         await resetMouse();
       });
 
       it('should toggle checked property and set active attribute on mouse press on the empty space next to the label', async () => {
+        checkbox.style.width = '500px';
         const spy = sinon.spy();
         checkbox.addEventListener('click', spy);
         // Middle of the empty space between the label text and the host edge
@@ -325,17 +322,38 @@ describe('checkbox', () => {
         expect(spy).to.be.calledOnce;
       });
 
-      it('should not cover the label link with the input', () => {
+      it('should not cover the input with the label', () => {
+        const { x, y } = middleOfNode(input);
+        expect(document.elementFromPoint(x, y)).to.equal(input);
+      });
+
+      [undefined, 'reverse'].forEach((theme) => {
+        it(`should cover the space above the label when the checkbox is taller${theme ? ` in ${theme} theme` : ''}`, () => {
+          if (theme) {
+            checkbox.setAttribute('theme', theme);
+          }
+          checkbox.style.setProperty('--vaadin-checkbox-size', '40px');
+          const { x } = middleOfNode(label);
+          const y = (checkbox.getBoundingClientRect().top + label.getBoundingClientRect().top) / 2;
+          expect(document.elementFromPoint(x, y)).to.equal(label);
+        });
+      });
+
+      it('should not cover the label link with the label click area', () => {
         const { x, y } = middleOfNode(link);
         expect(document.elementFromPoint(x, y)).to.equal(link);
       });
 
-      it('should not cover the helper text row with the input', async () => {
+      it('should not cover the helper text row', async () => {
         checkbox.helperText = 'Helper';
         await nextUpdate(checkbox);
         const helper = checkbox.querySelector('[slot="helper"]');
         const { x, y } = middleOfNode(helper);
         expect(document.elementFromPoint(x, y)).to.equal(helper);
+
+        // Empty space below the checkbox part
+        const part = checkbox.shadowRoot.querySelector('[part="checkbox"]');
+        expect(document.elementFromPoint(middleOfNode(part).x, y)).to.equal(checkbox);
       });
     });
   });

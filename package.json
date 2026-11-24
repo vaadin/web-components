@@ -14,6 +14,7 @@
     "dev:start": "yarn workspace dev start",
     "lint": "npm-run-all --parallel lint:*",
     "lint:css": "stylelint --ignore-path .gitignore \"packages/**/src/**/*.js\" \"packages/vaadin-lumo-styles/mixins/*.js\" \"packages/**/*.css\" \"dev/**/*.html\"",
+    "lint:html": "prettier --check \"dev/**/*.html\"",
     "lint:js": "eslint",
     "lint:types": "tsc",
     "lint:types:react": "yarn workspace react-components-tooling lint:types",
@@ -55,8 +56,8 @@
     "@web/test-runner": "^1.0.1",
     "@web/test-runner-playwright": "^1.0.2",
     "@web/test-runner-visual-regression": "^1.0.2",
-    "esbuild": "^0.28.1",
-    "eslint": "^10.14.0",
+    "esbuild": "^0.28.2",
+    "eslint": "^10.15.0",
     "eslint-config-vaadin": "^1.0.0-beta.8",
     "eslint-plugin-html": "^8.2.1",
     "eslint-plugin-no-only-tests": "^3.4.0",
@@ -90,6 +91,10 @@
     ],
     "*.css": [
       "stylelint --fix",
+      "prettier --write"
+    ],
+    "dev/**/*.html": [
+      "eslint --fix",
       "prettier --write"
     ]
   },

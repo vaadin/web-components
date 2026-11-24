@@ -33,6 +33,27 @@ describe('vaadin-pdf-viewer', () => {
     });
   });
 
+  describe('inside flexbox', () => {
+    let container: HTMLElement;
+
+    beforeEach(() => {
+      container = fixtureSync('<div style="display: flex; width: 800px"></div>');
+      container.appendChild(viewer);
+    });
+
+    it('should not shrink horizontally inside a row flexbox', async () => {
+      await nextRender();
+      expect(viewer.offsetWidth).to.equal(800);
+    });
+
+    it('should stretch inside a column flex container', async () => {
+      container.style.flexDirection = 'column';
+      container.style.alignItems = 'flex-start';
+      await nextRender();
+      expect(viewer.offsetWidth).to.equal(800);
+    });
+  });
+
   describe('loading', () => {
     it('should have no pages by default', () => {
       expect(viewer.pageCount).to.equal(0);

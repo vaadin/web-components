@@ -5,7 +5,21 @@ snapshots["vaadin-pdf-viewer host default"] =
 `<vaadin-pdf-viewer>
   <vaadin-button
     aria-disabled="true"
+    aria-expanded="false"
     aria-labelledby="vaadin-tooltip-0"
+    disabled=""
+    has-tooltip=""
+    role="button"
+    slot="toolbar-sidebar"
+    tabindex="-1"
+    theme="tertiary icon"
+  >
+    <vaadin-pdf-viewer-icon icon="sidebar">
+    </vaadin-pdf-viewer-icon>
+  </vaadin-button>
+  <vaadin-button
+    aria-disabled="true"
+    aria-labelledby="vaadin-tooltip-1"
     disabled=""
     has-tooltip=""
     role="button"
@@ -18,7 +32,7 @@ snapshots["vaadin-pdf-viewer host default"] =
   </vaadin-button>
   <vaadin-button
     aria-disabled="true"
-    aria-labelledby="vaadin-tooltip-1"
+    aria-labelledby="vaadin-tooltip-2"
     disabled=""
     has-tooltip=""
     role="button"
@@ -41,21 +55,21 @@ snapshots["vaadin-pdf-viewer host default"] =
     <span slot="suffix">
     </span>
     <label
-      for="input-vaadin-integer-field-5"
-      id="label-vaadin-integer-field-2"
+      for="input-vaadin-integer-field-6"
+      id="label-vaadin-integer-field-3"
       slot="label"
     >
     </label>
     <div
       hidden=""
-      id="error-message-vaadin-integer-field-4"
+      id="error-message-vaadin-integer-field-5"
       slot="error-message"
     >
     </div>
     <input
       aria-label="Page"
       disabled=""
-      id="input-vaadin-integer-field-5"
+      id="input-vaadin-integer-field-6"
       max="1"
       min="1"
       slot="input"
@@ -65,7 +79,7 @@ snapshots["vaadin-pdf-viewer host default"] =
   </vaadin-integer-field>
   <vaadin-button
     aria-disabled="true"
-    aria-labelledby="vaadin-tooltip-6"
+    aria-labelledby="vaadin-tooltip-7"
     disabled=""
     has-tooltip=""
     role="button"
@@ -86,7 +100,7 @@ snapshots["vaadin-pdf-viewer host default"] =
   </vaadin-select>
   <vaadin-button
     aria-disabled="true"
-    aria-labelledby="vaadin-tooltip-11"
+    aria-labelledby="vaadin-tooltip-12"
     disabled=""
     has-tooltip=""
     role="button"
@@ -99,7 +113,7 @@ snapshots["vaadin-pdf-viewer host default"] =
   </vaadin-button>
   <vaadin-button
     aria-disabled="true"
-    aria-labelledby="vaadin-tooltip-12"
+    aria-labelledby="vaadin-tooltip-13"
     disabled=""
     has-tooltip=""
     role="button"
@@ -117,8 +131,20 @@ snapshots["vaadin-pdf-viewer host default"] =
 snapshots["vaadin-pdf-viewer host document"] = 
 `<vaadin-pdf-viewer>
   <vaadin-button
-    aria-disabled="true"
+    aria-expanded="false"
     aria-labelledby="vaadin-tooltip-0"
+    has-tooltip=""
+    role="button"
+    slot="toolbar-sidebar"
+    tabindex="0"
+    theme="tertiary icon"
+  >
+    <vaadin-pdf-viewer-icon icon="sidebar">
+    </vaadin-pdf-viewer-icon>
+  </vaadin-button>
+  <vaadin-button
+    aria-disabled="true"
+    aria-labelledby="vaadin-tooltip-1"
     disabled=""
     has-tooltip=""
     role="button"
@@ -130,7 +156,7 @@ snapshots["vaadin-pdf-viewer host document"] =
     </vaadin-pdf-viewer-icon>
   </vaadin-button>
   <vaadin-button
-    aria-labelledby="vaadin-tooltip-1"
+    aria-labelledby="vaadin-tooltip-2"
     has-tooltip=""
     role="button"
     slot="toolbar-next-page"
@@ -152,20 +178,20 @@ snapshots["vaadin-pdf-viewer host document"] =
       / 6
     </span>
     <label
-      for="input-vaadin-integer-field-5"
-      id="label-vaadin-integer-field-2"
+      for="input-vaadin-integer-field-6"
+      id="label-vaadin-integer-field-3"
       slot="label"
     >
     </label>
     <div
       hidden=""
-      id="error-message-vaadin-integer-field-4"
+      id="error-message-vaadin-integer-field-5"
       slot="error-message"
     >
     </div>
     <input
       aria-label="Page"
-      id="input-vaadin-integer-field-5"
+      id="input-vaadin-integer-field-6"
       max="6"
       min="1"
       slot="input"
@@ -175,7 +201,7 @@ snapshots["vaadin-pdf-viewer host document"] =
     >
   </vaadin-integer-field>
   <vaadin-button
-    aria-labelledby="vaadin-tooltip-6"
+    aria-labelledby="vaadin-tooltip-7"
     has-tooltip=""
     role="button"
     slot="toolbar-zoom-out"
@@ -192,7 +218,7 @@ snapshots["vaadin-pdf-viewer host document"] =
   >
   </vaadin-select>
   <vaadin-button
-    aria-labelledby="vaadin-tooltip-11"
+    aria-labelledby="vaadin-tooltip-12"
     has-tooltip=""
     role="button"
     slot="toolbar-zoom-in"
@@ -203,7 +229,7 @@ snapshots["vaadin-pdf-viewer host document"] =
     </vaadin-pdf-viewer-icon>
   </vaadin-button>
   <vaadin-button
-    aria-labelledby="vaadin-tooltip-12"
+    aria-labelledby="vaadin-tooltip-13"
     has-tooltip=""
     role="button"
     slot="toolbar-download"
@@ -240,6 +266,8 @@ snapshots["vaadin-pdf-viewer shadow default"] =
     part="toolbar"
   >
     <div part="toolbar-group">
+      <slot name="toolbar-sidebar">
+      </slot>
       <slot name="toolbar-previous-page">
       </slot>
       <slot name="toolbar-next-page">
@@ -269,16 +297,32 @@ snapshots["vaadin-pdf-viewer shadow default"] =
   role="progressbar"
 >
 </div>
-<div class="content-area">
+<div class="main-area">
   <div
-    aria-busy="false"
-    aria-labelledby="title"
-    id="content"
-    part="content"
-    role="region"
-    tabindex="-1"
+    hidden=""
+    id="sidebar"
+    part="sidebar"
   >
-    <div id="pages">
+    <div
+      aria-label="Page thumbnails"
+      id="thumbnails"
+      part="thumbnails"
+      role="listbox"
+      tabindex="-1"
+    >
+    </div>
+  </div>
+  <div class="content-area">
+    <div
+      aria-busy="false"
+      aria-labelledby="title"
+      id="content"
+      part="content"
+      role="region"
+      tabindex="-1"
+    >
+      <div id="pages">
+      </div>
     </div>
   </div>
 </div>
@@ -308,6 +352,8 @@ snapshots["vaadin-pdf-viewer shadow document"] =
     part="toolbar"
   >
     <div part="toolbar-group">
+      <slot name="toolbar-sidebar">
+      </slot>
       <slot name="toolbar-previous-page">
       </slot>
       <slot name="toolbar-next-page">
@@ -337,137 +383,153 @@ snapshots["vaadin-pdf-viewer shadow document"] =
   role="progressbar"
 >
 </div>
-<div class="content-area">
+<div class="main-area">
   <div
-    aria-busy="false"
-    aria-labelledby="title"
-    id="content"
-    part="content"
-    role="region"
-    tabindex="0"
+    hidden=""
+    id="sidebar"
+    part="sidebar"
   >
-    <div id="pages">
-      <div
-        aria-label="Page 1"
-        part="page"
-        role="region"
-      >
-        <canvas role="presentation">
-        </canvas>
+    <div
+      aria-label="Page thumbnails"
+      id="thumbnails"
+      part="thumbnails"
+      role="listbox"
+      tabindex="-1"
+    >
+    </div>
+  </div>
+  <div class="content-area">
+    <div
+      aria-busy="false"
+      aria-labelledby="title"
+      id="content"
+      part="content"
+      role="region"
+      tabindex="0"
+    >
+      <div id="pages">
         <div
-          class="text-layer"
-          data-main-rotation="0"
+          aria-label="Page 1"
+          part="page"
+          role="region"
         >
-          <span
-            dir="ltr"
-            role="presentation"
+          <canvas role="presentation">
+          </canvas>
+          <div
+            class="text-layer"
+            data-main-rotation="0"
           >
-            Page 1
-          </span>
-          <br role="presentation">
-          <span
-            dir="ltr"
-            role="presentation"
-          >
-            The quick brown fox jumps over the lazy dog. Pack my box with five dozen
-          </span>
-          <br role="presentation">
-          <span
-            dir="ltr"
-            role="presentation"
-          >
-            liquor jugs. How vexingly quick daft zebras jump. Sphinx of black quartz,
-          </span>
-          <br role="presentation">
-          <span
-            dir="ltr"
-            role="presentation"
-          >
-            judge my vow.
-          </span>
-          <br role="presentation">
-          <span
-            dir="ltr"
-            role="presentation"
-          >
-            Unique word on this page: marker1.
-          </span>
-          <div class="end-of-content">
+            <span
+              dir="ltr"
+              role="presentation"
+            >
+              Page 1
+            </span>
+            <br role="presentation">
+            <span
+              dir="ltr"
+              role="presentation"
+            >
+              The quick brown fox jumps over the lazy dog. Pack my box with five dozen
+            </span>
+            <br role="presentation">
+            <span
+              dir="ltr"
+              role="presentation"
+            >
+              liquor jugs. How vexingly quick daft zebras jump. Sphinx of black quartz,
+            </span>
+            <br role="presentation">
+            <span
+              dir="ltr"
+              role="presentation"
+            >
+              judge my vow.
+            </span>
+            <br role="presentation">
+            <span
+              dir="ltr"
+              role="presentation"
+            >
+              Unique word on this page: marker1.
+            </span>
+            <div class="end-of-content">
+            </div>
           </div>
         </div>
-      </div>
-      <div
-        aria-label="Page 2"
-        part="page"
-        role="region"
-      >
-        <canvas role="presentation">
-        </canvas>
         <div
-          class="text-layer"
-          data-main-rotation="0"
+          aria-label="Page 2"
+          part="page"
+          role="region"
         >
-          <span
-            dir="ltr"
-            role="presentation"
+          <canvas role="presentation">
+          </canvas>
+          <div
+            class="text-layer"
+            data-main-rotation="0"
           >
-            Page 2
-          </span>
-          <br role="presentation">
-          <span
-            dir="ltr"
-            role="presentation"
-          >
-            The quick brown fox jumps over the lazy dog. Pack my box with five dozen
-          </span>
-          <br role="presentation">
-          <span
-            dir="ltr"
-            role="presentation"
-          >
-            liquor jugs. How vexingly quick daft zebras jump. Sphinx of black quartz,
-          </span>
-          <br role="presentation">
-          <span
-            dir="ltr"
-            role="presentation"
-          >
-            judge my vow.
-          </span>
-          <br role="presentation">
-          <span
-            dir="ltr"
-            role="presentation"
-          >
-            Unique word on this page: marker2.
-          </span>
-          <div class="end-of-content">
+            <span
+              dir="ltr"
+              role="presentation"
+            >
+              Page 2
+            </span>
+            <br role="presentation">
+            <span
+              dir="ltr"
+              role="presentation"
+            >
+              The quick brown fox jumps over the lazy dog. Pack my box with five dozen
+            </span>
+            <br role="presentation">
+            <span
+              dir="ltr"
+              role="presentation"
+            >
+              liquor jugs. How vexingly quick daft zebras jump. Sphinx of black quartz,
+            </span>
+            <br role="presentation">
+            <span
+              dir="ltr"
+              role="presentation"
+            >
+              judge my vow.
+            </span>
+            <br role="presentation">
+            <span
+              dir="ltr"
+              role="presentation"
+            >
+              Unique word on this page: marker2.
+            </span>
+            <div class="end-of-content">
+            </div>
           </div>
         </div>
-      </div>
-      <div
-        aria-label="Page 3"
-        part="page"
-        role="region"
-      >
-      </div>
-      <div
-        aria-label="Page 4"
-        part="page"
-        role="region"
-      >
-      </div>
-      <div
-        aria-label="Page 5"
-        part="page"
-        role="region"
-      >
-      </div>
-      <div
-        aria-label="Page 6"
-        part="page"
-        role="region"
-      >
+        <div
+          aria-label="Page 3"
+          part="page"
+          role="region"
+        >
+        </div>
+        <div
+          aria-label="Page 4"
+          part="page"
+          role="region"
+        >
+        </div>
+        <div
+          aria-label="Page 5"
+          part="page"
+          role="region"
+        >
+        </div>
+        <div
+          aria-label="Page 6"
+          part="page"
+          role="region"
+        >
+        </div>
       </div>
     </div>
   </div>
@@ -498,6 +560,8 @@ snapshots["vaadin-pdf-viewer shadow header title"] =
     part="toolbar"
   >
     <div part="toolbar-group">
+      <slot name="toolbar-sidebar">
+      </slot>
       <slot name="toolbar-previous-page">
       </slot>
       <slot name="toolbar-next-page">
@@ -527,137 +591,153 @@ snapshots["vaadin-pdf-viewer shadow header title"] =
   role="progressbar"
 >
 </div>
-<div class="content-area">
+<div class="main-area">
   <div
-    aria-busy="false"
-    aria-labelledby="title"
-    id="content"
-    part="content"
-    role="region"
-    tabindex="0"
+    hidden=""
+    id="sidebar"
+    part="sidebar"
   >
-    <div id="pages">
-      <div
-        aria-label="Page 1"
-        part="page"
-        role="region"
-      >
-        <canvas role="presentation">
-        </canvas>
+    <div
+      aria-label="Page thumbnails"
+      id="thumbnails"
+      part="thumbnails"
+      role="listbox"
+      tabindex="-1"
+    >
+    </div>
+  </div>
+  <div class="content-area">
+    <div
+      aria-busy="false"
+      aria-labelledby="title"
+      id="content"
+      part="content"
+      role="region"
+      tabindex="0"
+    >
+      <div id="pages">
         <div
-          class="text-layer"
-          data-main-rotation="0"
+          aria-label="Page 1"
+          part="page"
+          role="region"
         >
-          <span
-            dir="ltr"
-            role="presentation"
+          <canvas role="presentation">
+          </canvas>
+          <div
+            class="text-layer"
+            data-main-rotation="0"
           >
-            Page 1
-          </span>
-          <br role="presentation">
-          <span
-            dir="ltr"
-            role="presentation"
-          >
-            The quick brown fox jumps over the lazy dog. Pack my box with five dozen
-          </span>
-          <br role="presentation">
-          <span
-            dir="ltr"
-            role="presentation"
-          >
-            liquor jugs. How vexingly quick daft zebras jump. Sphinx of black quartz,
-          </span>
-          <br role="presentation">
-          <span
-            dir="ltr"
-            role="presentation"
-          >
-            judge my vow.
-          </span>
-          <br role="presentation">
-          <span
-            dir="ltr"
-            role="presentation"
-          >
-            Unique word on this page: marker1.
-          </span>
-          <div class="end-of-content">
+            <span
+              dir="ltr"
+              role="presentation"
+            >
+              Page 1
+            </span>
+            <br role="presentation">
+            <span
+              dir="ltr"
+              role="presentation"
+            >
+              The quick brown fox jumps over the lazy dog. Pack my box with five dozen
+            </span>
+            <br role="presentation">
+            <span
+              dir="ltr"
+              role="presentation"
+            >
+              liquor jugs. How vexingly quick daft zebras jump. Sphinx of black quartz,
+            </span>
+            <br role="presentation">
+            <span
+              dir="ltr"
+              role="presentation"
+            >
+              judge my vow.
+            </span>
+            <br role="presentation">
+            <span
+              dir="ltr"
+              role="presentation"
+            >
+              Unique word on this page: marker1.
+            </span>
+            <div class="end-of-content">
+            </div>
           </div>
         </div>
-      </div>
-      <div
-        aria-label="Page 2"
-        part="page"
-        role="region"
-      >
-        <canvas role="presentation">
-        </canvas>
         <div
-          class="text-layer"
-          data-main-rotation="0"
+          aria-label="Page 2"
+          part="page"
+          role="region"
         >
-          <span
-            dir="ltr"
-            role="presentation"
+          <canvas role="presentation">
+          </canvas>
+          <div
+            class="text-layer"
+            data-main-rotation="0"
           >
-            Page 2
-          </span>
-          <br role="presentation">
-          <span
-            dir="ltr"
-            role="presentation"
-          >
-            The quick brown fox jumps over the lazy dog. Pack my box with five dozen
-          </span>
-          <br role="presentation">
-          <span
-            dir="ltr"
-            role="presentation"
-          >
-            liquor jugs. How vexingly quick daft zebras jump. Sphinx of black quartz,
-          </span>
-          <br role="presentation">
-          <span
-            dir="ltr"
-            role="presentation"
-          >
-            judge my vow.
-          </span>
-          <br role="presentation">
-          <span
-            dir="ltr"
-            role="presentation"
-          >
-            Unique word on this page: marker2.
-          </span>
-          <div class="end-of-content">
+            <span
+              dir="ltr"
+              role="presentation"
+            >
+              Page 2
+            </span>
+            <br role="presentation">
+            <span
+              dir="ltr"
+              role="presentation"
+            >
+              The quick brown fox jumps over the lazy dog. Pack my box with five dozen
+            </span>
+            <br role="presentation">
+            <span
+              dir="ltr"
+              role="presentation"
+            >
+              liquor jugs. How vexingly quick daft zebras jump. Sphinx of black quartz,
+            </span>
+            <br role="presentation">
+            <span
+              dir="ltr"
+              role="presentation"
+            >
+              judge my vow.
+            </span>
+            <br role="presentation">
+            <span
+              dir="ltr"
+              role="presentation"
+            >
+              Unique word on this page: marker2.
+            </span>
+            <div class="end-of-content">
+            </div>
           </div>
         </div>
-      </div>
-      <div
-        aria-label="Page 3"
-        part="page"
-        role="region"
-      >
-      </div>
-      <div
-        aria-label="Page 4"
-        part="page"
-        role="region"
-      >
-      </div>
-      <div
-        aria-label="Page 5"
-        part="page"
-        role="region"
-      >
-      </div>
-      <div
-        aria-label="Page 6"
-        part="page"
-        role="region"
-      >
+        <div
+          aria-label="Page 3"
+          part="page"
+          role="region"
+        >
+        </div>
+        <div
+          aria-label="Page 4"
+          part="page"
+          role="region"
+        >
+        </div>
+        <div
+          aria-label="Page 5"
+          part="page"
+          role="region"
+        >
+        </div>
+        <div
+          aria-label="Page 6"
+          part="page"
+          role="region"
+        >
+        </div>
       </div>
     </div>
   </div>
@@ -689,6 +769,8 @@ snapshots["vaadin-pdf-viewer shadow header hidden"] =
     part="toolbar"
   >
     <div part="toolbar-group">
+      <slot name="toolbar-sidebar">
+      </slot>
       <slot name="toolbar-previous-page">
       </slot>
       <slot name="toolbar-next-page">
@@ -718,137 +800,153 @@ snapshots["vaadin-pdf-viewer shadow header hidden"] =
   role="progressbar"
 >
 </div>
-<div class="content-area">
+<div class="main-area">
   <div
-    aria-busy="false"
-    aria-labelledby="title"
-    id="content"
-    part="content"
-    role="region"
-    tabindex="0"
+    hidden=""
+    id="sidebar"
+    part="sidebar"
   >
-    <div id="pages">
-      <div
-        aria-label="Page 1"
-        part="page"
-        role="region"
-      >
-        <canvas role="presentation">
-        </canvas>
+    <div
+      aria-label="Page thumbnails"
+      id="thumbnails"
+      part="thumbnails"
+      role="listbox"
+      tabindex="-1"
+    >
+    </div>
+  </div>
+  <div class="content-area">
+    <div
+      aria-busy="false"
+      aria-labelledby="title"
+      id="content"
+      part="content"
+      role="region"
+      tabindex="0"
+    >
+      <div id="pages">
         <div
-          class="text-layer"
-          data-main-rotation="0"
+          aria-label="Page 1"
+          part="page"
+          role="region"
         >
-          <span
-            dir="ltr"
-            role="presentation"
+          <canvas role="presentation">
+          </canvas>
+          <div
+            class="text-layer"
+            data-main-rotation="0"
           >
-            Page 1
-          </span>
-          <br role="presentation">
-          <span
-            dir="ltr"
-            role="presentation"
-          >
-            The quick brown fox jumps over the lazy dog. Pack my box with five dozen
-          </span>
-          <br role="presentation">
-          <span
-            dir="ltr"
-            role="presentation"
-          >
-            liquor jugs. How vexingly quick daft zebras jump. Sphinx of black quartz,
-          </span>
-          <br role="presentation">
-          <span
-            dir="ltr"
-            role="presentation"
-          >
-            judge my vow.
-          </span>
-          <br role="presentation">
-          <span
-            dir="ltr"
-            role="presentation"
-          >
-            Unique word on this page: marker1.
-          </span>
-          <div class="end-of-content">
+            <span
+              dir="ltr"
+              role="presentation"
+            >
+              Page 1
+            </span>
+            <br role="presentation">
+            <span
+              dir="ltr"
+              role="presentation"
+            >
+              The quick brown fox jumps over the lazy dog. Pack my box with five dozen
+            </span>
+            <br role="presentation">
+            <span
+              dir="ltr"
+              role="presentation"
+            >
+              liquor jugs. How vexingly quick daft zebras jump. Sphinx of black quartz,
+            </span>
+            <br role="presentation">
+            <span
+              dir="ltr"
+              role="presentation"
+            >
+              judge my vow.
+            </span>
+            <br role="presentation">
+            <span
+              dir="ltr"
+              role="presentation"
+            >
+              Unique word on this page: marker1.
+            </span>
+            <div class="end-of-content">
+            </div>
           </div>
         </div>
-      </div>
-      <div
-        aria-label="Page 2"
-        part="page"
-        role="region"
-      >
-        <canvas role="presentation">
-        </canvas>
         <div
-          class="text-layer"
-          data-main-rotation="0"
+          aria-label="Page 2"
+          part="page"
+          role="region"
         >
-          <span
-            dir="ltr"
-            role="presentation"
+          <canvas role="presentation">
+          </canvas>
+          <div
+            class="text-layer"
+            data-main-rotation="0"
           >
-            Page 2
-          </span>
-          <br role="presentation">
-          <span
-            dir="ltr"
-            role="presentation"
-          >
-            The quick brown fox jumps over the lazy dog. Pack my box with five dozen
-          </span>
-          <br role="presentation">
-          <span
-            dir="ltr"
-            role="presentation"
-          >
-            liquor jugs. How vexingly quick daft zebras jump. Sphinx of black quartz,
-          </span>
-          <br role="presentation">
-          <span
-            dir="ltr"
-            role="presentation"
-          >
-            judge my vow.
-          </span>
-          <br role="presentation">
-          <span
-            dir="ltr"
-            role="presentation"
-          >
-            Unique word on this page: marker2.
-          </span>
-          <div class="end-of-content">
+            <span
+              dir="ltr"
+              role="presentation"
+            >
+              Page 2
+            </span>
+            <br role="presentation">
+            <span
+              dir="ltr"
+              role="presentation"
+            >
+              The quick brown fox jumps over the lazy dog. Pack my box with five dozen
+            </span>
+            <br role="presentation">
+            <span
+              dir="ltr"
+              role="presentation"
+            >
+              liquor jugs. How vexingly quick daft zebras jump. Sphinx of black quartz,
+            </span>
+            <br role="presentation">
+            <span
+              dir="ltr"
+              role="presentation"
+            >
+              judge my vow.
+            </span>
+            <br role="presentation">
+            <span
+              dir="ltr"
+              role="presentation"
+            >
+              Unique word on this page: marker2.
+            </span>
+            <div class="end-of-content">
+            </div>
           </div>
         </div>
-      </div>
-      <div
-        aria-label="Page 3"
-        part="page"
-        role="region"
-      >
-      </div>
-      <div
-        aria-label="Page 4"
-        part="page"
-        role="region"
-      >
-      </div>
-      <div
-        aria-label="Page 5"
-        part="page"
-        role="region"
-      >
-      </div>
-      <div
-        aria-label="Page 6"
-        part="page"
-        role="region"
-      >
+        <div
+          aria-label="Page 3"
+          part="page"
+          role="region"
+        >
+        </div>
+        <div
+          aria-label="Page 4"
+          part="page"
+          role="region"
+        >
+        </div>
+        <div
+          aria-label="Page 5"
+          part="page"
+          role="region"
+        >
+        </div>
+        <div
+          aria-label="Page 6"
+          part="page"
+          role="region"
+        >
+        </div>
       </div>
     </div>
   </div>
@@ -880,6 +978,8 @@ snapshots["vaadin-pdf-viewer shadow toolbar collapsed"] =
     part="toolbar"
   >
     <div part="toolbar-group">
+      <slot name="toolbar-sidebar">
+      </slot>
       <slot name="toolbar-previous-page">
       </slot>
       <slot name="toolbar-next-page">
@@ -909,143 +1009,273 @@ snapshots["vaadin-pdf-viewer shadow toolbar collapsed"] =
   role="progressbar"
 >
 </div>
-<div class="content-area">
+<div class="main-area">
   <div
-    aria-busy="false"
-    aria-labelledby="title"
-    id="content"
-    part="content"
-    role="region"
-    tabindex="0"
+    hidden=""
+    id="sidebar"
+    part="sidebar"
   >
-    <div id="pages">
-      <div
-        aria-label="Page 1"
-        part="page"
-        role="region"
-      >
-        <canvas role="presentation">
-        </canvas>
+    <div
+      aria-label="Page thumbnails"
+      id="thumbnails"
+      part="thumbnails"
+      role="listbox"
+      tabindex="-1"
+    >
+    </div>
+  </div>
+  <div class="content-area">
+    <div
+      aria-busy="false"
+      aria-labelledby="title"
+      id="content"
+      part="content"
+      role="region"
+      tabindex="0"
+    >
+      <div id="pages">
         <div
-          class="text-layer"
-          data-main-rotation="0"
+          aria-label="Page 1"
+          part="page"
+          role="region"
         >
-          <span
-            dir="ltr"
-            role="presentation"
+          <canvas role="presentation">
+          </canvas>
+          <div
+            class="text-layer"
+            data-main-rotation="0"
           >
-            Page 1
-          </span>
-          <br role="presentation">
-          <span
-            dir="ltr"
-            role="presentation"
-          >
-            The quick brown fox jumps over the lazy dog. Pack my box with five dozen
-          </span>
-          <br role="presentation">
-          <span
-            dir="ltr"
-            role="presentation"
-          >
-            liquor jugs. How vexingly quick daft zebras jump. Sphinx of black quartz,
-          </span>
-          <br role="presentation">
-          <span
-            dir="ltr"
-            role="presentation"
-          >
-            judge my vow.
-          </span>
-          <br role="presentation">
-          <span
-            dir="ltr"
-            role="presentation"
-          >
-            Unique word on this page: marker1.
-          </span>
-          <div class="end-of-content">
+            <span
+              dir="ltr"
+              role="presentation"
+            >
+              Page 1
+            </span>
+            <br role="presentation">
+            <span
+              dir="ltr"
+              role="presentation"
+            >
+              The quick brown fox jumps over the lazy dog. Pack my box with five dozen
+            </span>
+            <br role="presentation">
+            <span
+              dir="ltr"
+              role="presentation"
+            >
+              liquor jugs. How vexingly quick daft zebras jump. Sphinx of black quartz,
+            </span>
+            <br role="presentation">
+            <span
+              dir="ltr"
+              role="presentation"
+            >
+              judge my vow.
+            </span>
+            <br role="presentation">
+            <span
+              dir="ltr"
+              role="presentation"
+            >
+              Unique word on this page: marker1.
+            </span>
+            <div class="end-of-content">
+            </div>
           </div>
         </div>
-      </div>
-      <div
-        aria-label="Page 2"
-        part="page"
-        role="region"
-      >
-        <canvas role="presentation">
-        </canvas>
         <div
-          class="text-layer"
-          data-main-rotation="0"
+          aria-label="Page 2"
+          part="page"
+          role="region"
         >
-          <span
-            dir="ltr"
-            role="presentation"
+          <canvas role="presentation">
+          </canvas>
+          <div
+            class="text-layer"
+            data-main-rotation="0"
           >
-            Page 2
-          </span>
-          <br role="presentation">
-          <span
-            dir="ltr"
-            role="presentation"
-          >
-            The quick brown fox jumps over the lazy dog. Pack my box with five dozen
-          </span>
-          <br role="presentation">
-          <span
-            dir="ltr"
-            role="presentation"
-          >
-            liquor jugs. How vexingly quick daft zebras jump. Sphinx of black quartz,
-          </span>
-          <br role="presentation">
-          <span
-            dir="ltr"
-            role="presentation"
-          >
-            judge my vow.
-          </span>
-          <br role="presentation">
-          <span
-            dir="ltr"
-            role="presentation"
-          >
-            Unique word on this page: marker2.
-          </span>
-          <div class="end-of-content">
+            <span
+              dir="ltr"
+              role="presentation"
+            >
+              Page 2
+            </span>
+            <br role="presentation">
+            <span
+              dir="ltr"
+              role="presentation"
+            >
+              The quick brown fox jumps over the lazy dog. Pack my box with five dozen
+            </span>
+            <br role="presentation">
+            <span
+              dir="ltr"
+              role="presentation"
+            >
+              liquor jugs. How vexingly quick daft zebras jump. Sphinx of black quartz,
+            </span>
+            <br role="presentation">
+            <span
+              dir="ltr"
+              role="presentation"
+            >
+              judge my vow.
+            </span>
+            <br role="presentation">
+            <span
+              dir="ltr"
+              role="presentation"
+            >
+              Unique word on this page: marker2.
+            </span>
+            <div class="end-of-content">
+            </div>
           </div>
         </div>
-      </div>
-      <div
-        aria-label="Page 3"
-        part="page"
-        role="region"
-      >
-      </div>
-      <div
-        aria-label="Page 4"
-        part="page"
-        role="region"
-      >
-      </div>
-      <div
-        aria-label="Page 5"
-        part="page"
-        role="region"
-      >
-      </div>
-      <div
-        aria-label="Page 6"
-        part="page"
-        role="region"
-      >
+        <div
+          aria-label="Page 3"
+          part="page"
+          role="region"
+        >
+        </div>
+        <div
+          aria-label="Page 4"
+          part="page"
+          role="region"
+        >
+        </div>
+        <div
+          aria-label="Page 5"
+          part="page"
+          role="region"
+        >
+        </div>
+        <div
+          aria-label="Page 6"
+          part="page"
+          role="region"
+        >
+        </div>
       </div>
     </div>
   </div>
 </div>
 `;
 /* end snapshot vaadin-pdf-viewer shadow toolbar collapsed */
+
+snapshots["vaadin-pdf-viewer sidebar thumbnails"] = 
+`<div
+  id="sidebar"
+  part="sidebar"
+>
+  <div
+    aria-label="Page thumbnails"
+    id="thumbnails"
+    part="thumbnails"
+    role="listbox"
+    tabindex="-1"
+  >
+    <div
+      aria-label="Page 1"
+      aria-selected="true"
+      data-page="1"
+      part="thumbnail current"
+      role="option"
+      tabindex="0"
+    >
+      <div class="thumbnail-image">
+      </div>
+      <span
+        aria-hidden="true"
+        class="thumbnail-label"
+      >
+        1
+      </span>
+    </div>
+    <div
+      aria-label="Page 2"
+      data-page="2"
+      part="thumbnail"
+      role="option"
+      tabindex="-1"
+    >
+      <div class="thumbnail-image">
+      </div>
+      <span
+        aria-hidden="true"
+        class="thumbnail-label"
+      >
+        2
+      </span>
+    </div>
+    <div
+      aria-label="Page 3"
+      data-page="3"
+      part="thumbnail"
+      role="option"
+      tabindex="-1"
+    >
+      <div class="thumbnail-image">
+      </div>
+      <span
+        aria-hidden="true"
+        class="thumbnail-label"
+      >
+        3
+      </span>
+    </div>
+    <div
+      aria-label="Page 4"
+      data-page="4"
+      part="thumbnail"
+      role="option"
+      tabindex="-1"
+    >
+      <div class="thumbnail-image">
+      </div>
+      <span
+        aria-hidden="true"
+        class="thumbnail-label"
+      >
+        4
+      </span>
+    </div>
+    <div
+      aria-label="Page 5"
+      data-page="5"
+      part="thumbnail"
+      role="option"
+      tabindex="-1"
+    >
+      <div class="thumbnail-image">
+      </div>
+      <span
+        aria-hidden="true"
+        class="thumbnail-label"
+      >
+        5
+      </span>
+    </div>
+    <div
+      aria-label="Page 6"
+      data-page="6"
+      part="thumbnail"
+      role="option"
+      tabindex="-1"
+    >
+      <div class="thumbnail-image">
+      </div>
+      <span
+        aria-hidden="true"
+        class="thumbnail-label"
+      >
+        6
+      </span>
+    </div>
+  </div>
+</div>
+`;
+/* end snapshot vaadin-pdf-viewer sidebar thumbnails */
 
 snapshots["vaadin-pdf-viewer page tagged"] = 
 `<div
@@ -1060,62 +1290,46 @@ snapshots["vaadin-pdf-viewer page tagged"] =
           aria-level="1"
           role="heading"
         >
-          <span role="none">
-            <span aria-owns="p2R_mc1_0">
-            </span>
+          <span aria-owns="p2R_mc1_0">
           </span>
         </span>
         <span role="paragraph">
-          <span role="none">
-            <span aria-owns="p2R_mc2_0">
-            </span>
+          <span aria-owns="p2R_mc2_0">
           </span>
           <span>
-            <span role="none">
-              <span aria-owns="p2R_mc3_0 p2R_mc3_1">
-              </span>
-            </span>
             <span>
             </span>
-          </span>
-          <span role="none">
-            <span aria-owns="p2R_mc4_0">
+            <span aria-owns="pdfjs_internal_id_11R">
             </span>
+          </span>
+          <span aria-owns="p2R_mc4_0">
           </span>
         </span>
         <span
           lang="sv"
           role="paragraph"
         >
-          <span role="none">
-            <span aria-owns="p2R_mc5_0">
-            </span>
+          <span aria-owns="p2R_mc5_0">
           </span>
         </span>
         <span
           aria-level="2"
           role="heading"
         >
-          <span role="none">
-            <span aria-owns="p2R_mc6_0">
-            </span>
+          <span aria-owns="p2R_mc6_0">
           </span>
         </span>
         <span role="list">
           <span role="listitem">
             <span>
             </span>
-            <span role="none">
-              <span aria-owns="p2R_mc8_0">
-              </span>
+            <span aria-owns="p2R_mc8_0">
             </span>
           </span>
           <span role="listitem">
             <span>
             </span>
-            <span role="none">
-              <span aria-owns="p2R_mc10_0">
-              </span>
+            <span aria-owns="p2R_mc10_0">
             </span>
           </span>
         </span>
@@ -1123,51 +1337,37 @@ snapshots["vaadin-pdf-viewer page tagged"] =
           aria-level="2"
           role="heading"
         >
-          <span role="none">
-            <span aria-owns="p2R_mc11_0">
-            </span>
+          <span aria-owns="p2R_mc11_0">
           </span>
         </span>
         <span role="table">
           <span role="row">
             <span role="columnheader">
-              <span role="none">
-                <span aria-owns="p2R_mc12_0">
-                </span>
+              <span aria-owns="p2R_mc12_0">
               </span>
             </span>
             <span role="columnheader">
-              <span role="none">
-                <span aria-owns="p2R_mc13_0 p2R_mc13_1">
-                </span>
+              <span aria-owns="p2R_mc13_0 p2R_mc13_1">
               </span>
             </span>
           </span>
           <span role="row">
             <span role="cell">
-              <span role="none">
-                <span aria-owns="p2R_mc14_0">
-                </span>
+              <span aria-owns="p2R_mc14_0">
               </span>
             </span>
             <span role="cell">
-              <span role="none">
-                <span aria-owns="p2R_mc15_0 p2R_mc15_1">
-                </span>
+              <span aria-owns="p2R_mc15_0 p2R_mc15_1">
               </span>
             </span>
           </span>
           <span role="row">
             <span role="cell">
-              <span role="none">
-                <span aria-owns="p2R_mc16_0">
-                </span>
+              <span aria-owns="p2R_mc16_0">
               </span>
             </span>
             <span role="cell">
-              <span role="none">
-                <span aria-owns="p2R_mc17_0 p2R_mc17_1">
-                </span>
+              <span aria-owns="p2R_mc17_0 p2R_mc17_1">
               </span>
             </span>
           </span>
@@ -1176,9 +1376,7 @@ snapshots["vaadin-pdf-viewer page tagged"] =
           aria-level="2"
           role="heading"
         >
-          <span role="none">
-            <span aria-owns="p2R_mc18_0">
-            </span>
+          <span aria-owns="p2R_mc18_0">
           </span>
         </span>
         <span role="figure">
@@ -1230,7 +1428,6 @@ snapshots["vaadin-pdf-viewer page tagged"] =
       id="p2R_mc3"
     >
       <span
-        aria-owns="pdfjs_internal_id_11R"
         dir="ltr"
         id="p2R_mc3_0"
         role="presentation"
@@ -1451,6 +1648,7 @@ snapshots["vaadin-pdf-viewer page tagged"] =
   >
     <a
       aria-label="Vaadin website (opens in a new tab)"
+      aria-owns="p2R_mc3_0 p2R_mc3_1"
       class="link"
       href="https://vaadin.com/"
       id="pdfjs_internal_id_11R"

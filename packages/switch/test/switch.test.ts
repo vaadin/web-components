@@ -67,18 +67,25 @@ describe('vaadin-switch', () => {
   });
 
   describe('click target', () => {
+    let label: HTMLLabelElement;
+
     beforeEach(async () => {
-      element.label = 'Label';
-      element.style.width = '400px';
+      element.label = 'Label wider than the switch';
       await nextRender();
+      label = element.querySelector('label')!;
     });
 
-    it('should cover the empty space next to the label with the input', () => {
-      const label = element.querySelector('label')!;
+    it('should not cover the input with the label', () => {
+      const { x, y } = middleOfNode(input);
+      expect(document.elementFromPoint(x, y)).to.equal(input);
+    });
+
+    it('should cover the empty space next to the label with the label click area', () => {
+      element.style.width = '400px';
       // Middle of the empty space between the label text and the host edge
       const x = (label.getBoundingClientRect().right + element.getBoundingClientRect().right) / 2;
       const { y } = middleOfNode(label);
-      expect(document.elementFromPoint(x, y)).to.equal(input);
+      expect(document.elementFromPoint(x, y)).to.equal(label);
     });
   });
 });

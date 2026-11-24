@@ -65,6 +65,17 @@ describe('vaadin-pdf-viewer', () => {
     });
   });
 
+  describe('sidebar', () => {
+    it('thumbnails', async () => {
+      viewer.sidebarOpened = true;
+      viewer.src = fixtureUrl('multi-page.pdf');
+      await nextRenderIdle(viewer);
+      const sidebar = viewer.shadowRoot!.querySelector('[part="sidebar"]')!;
+      // The thumbnails near the visible part of the list render one at a time.
+      await expect(sidebar).dom.to.equalSnapshot({ ignoreTags: ['canvas'], ignoreAttributes: ['style'] });
+    });
+  });
+
   describe('page', () => {
     // Sizes and positions depend on the browser and the device pixel ratio
     const ignoreAttributes = ['style', 'width', 'height'];

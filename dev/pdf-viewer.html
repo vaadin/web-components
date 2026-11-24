@@ -78,13 +78,18 @@
         viewer.src = fileUrl;
       });
 
-      ['headerHidden', 'toolbarCollapsed', 'downloadButtonHidden'].forEach((prop) => {
-        document.getElementById(prop).addEventListener('checked-changed', (e) => {
-          viewer[prop] = e.detail.value;
-        });
-      });
+      ['headerHidden', 'toolbarCollapsed', 'downloadButtonHidden', 'sidebarButtonHidden', 'sidebarOpened'].forEach(
+        (prop) => {
+          document.getElementById(prop).addEventListener('checked-changed', (e) => {
+            viewer[prop] = e.detail.value;
+          });
+        },
+      );
       viewer.addEventListener('toolbar-collapsed-changed', (e) => {
         document.getElementById('toolbarCollapsed').checked = e.detail.value;
+      });
+      viewer.addEventListener('sidebar-opened-changed', (e) => {
+        document.getElementById('sidebarOpened').checked = e.detail.value;
       });
 
       ['headerTitle', 'fileName'].forEach((prop) => {
@@ -110,6 +115,9 @@
       });
       viewer.addEventListener('document-error', (e) => {
         log.textContent = `document-error: ${e.detail.reason}`;
+      });
+      viewer.addEventListener('thumbnail-click', (e) => {
+        log.textContent = `thumbnail-click: ${JSON.stringify(e.detail)}`;
       });
 
       update();
@@ -163,6 +171,12 @@
             value="downloadButtonHidden"
             label="Hide download button"
           ></vaadin-checkbox>
+          <vaadin-checkbox
+            id="sidebarButtonHidden"
+            value="sidebarButtonHidden"
+            label="Hide sidebar button"
+          ></vaadin-checkbox>
+          <vaadin-checkbox id="sidebarOpened" value="sidebarOpened" label="Open sidebar"></vaadin-checkbox>
         </vaadin-checkbox-group>
       </div>
       <div class="control-group">

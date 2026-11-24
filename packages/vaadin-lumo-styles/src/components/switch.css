@@ -45,7 +45,6 @@
 
   :host([required]) [part='label'] {
     display: flex;
-    position: relative;
     max-width: max-content;
     padding-inline-end: 0;
   }
@@ -65,19 +64,17 @@
     padding-inline-end: var(--lumo-space-m);
   }
 
+  /* Zero-width anchor that keeps the indicator next to the label text */
   :host([required]) [part='required-indicator'] {
-    width: auto;
-    top: var(--lumo-space-xs);
-    right: var(--lumo-space-xs);
+    position: relative;
+    width: 0;
 
     &::after {
-      position: static;
+      top: var(--lumo-space-xs);
+      inset-inline: auto var(--lumo-space-xs);
+      width: auto;
+      white-space: nowrap;
     }
-  }
-
-  :host([required][dir='rtl']) [part='required-indicator'] {
-    right: auto;
-    left: var(--lumo-space-xs);
   }
 
   [part='helper-text'] {

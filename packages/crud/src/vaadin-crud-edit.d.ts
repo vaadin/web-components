@@ -18,7 +18,9 @@ import { Button } from '@vaadin/button/src/vaadin-button.js';
  * Typical usage is in a `<vaadin-grid-column>` of a custom `<vaadin-grid>` inside
  * a `<vaadin-crud>` to enable editing.
  */
-declare class CrudEdit extends Button {}
+declare class CrudEdit extends Button {
+  ariaLabel: string;
+}
 
 declare global {
   interface HTMLElementTagNameMap {

@@ -17,6 +17,8 @@ const pdfViewerBaseStyles = css`
     display: flex;
     flex-direction: column;
     height: 400px;
+    flex: 1 1 auto;
+    align-self: stretch;
     box-sizing: border-box;
     overflow: hidden;
     position: relative;
@@ -36,11 +38,17 @@ const pdfViewerBaseStyles = css`
     scroll-padding: calc(var(--vaadin-focus-ring-width) * 2 + 2px);
   }
 
-  .content-area {
-    position: relative;
+  .main-area {
     display: flex;
     flex: 1 1 0;
     min-height: 40%;
+  }
+
+  .content-area {
+    position: relative;
+    display: flex;
+    flex: 1 1 auto;
+    min-width: 0;
   }
 
   [part='content'] {

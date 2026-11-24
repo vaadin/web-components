@@ -27,6 +27,11 @@ export declare class PdfViewerRenderMixinClass {
   protected _pageSizesChanged(): void;
 
   /**
+   * Called when the device pixel ratio changes.
+   */
+  protected _pixelRatioChanged(): void;
+
+  /**
    * Renders the layers over the canvas of a page that has just rendered,
    * where overrides await `super` first to keep the mixin order.
    */

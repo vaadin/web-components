@@ -10,6 +10,8 @@ import type {
   PdfViewerI18n,
   PdfViewerPageChangedEvent,
   PdfViewerPageCountChangedEvent,
+  PdfViewerSidebarOpenedChangedEvent,
+  PdfViewerThumbnailClickEvent,
   PdfViewerToolbarCollapsedChangedEvent,
   PdfViewerZoom,
   PdfViewerZoomChangedEvent,
@@ -20,6 +22,7 @@ import type { PdfViewerKeyboardMixinClass } from '../../src/vaadin-pdf-viewer-ke
 import type { PdfViewerLinksMixinClass } from '../../src/vaadin-pdf-viewer-links-mixin.js';
 import type { PdfViewerRenderMixinClass } from '../../src/vaadin-pdf-viewer-render-mixin.js';
 import type { PdfViewerScrollMixinClass } from '../../src/vaadin-pdf-viewer-scroll-mixin.js';
+import type { PdfViewerSidebarMixinClass } from '../../src/vaadin-pdf-viewer-sidebar-mixin.js';
 import type { PdfViewerTextLayerMixinClass } from '../../src/vaadin-pdf-viewer-text-layer-mixin.js';
 import type { PdfViewerToolbarMixinClass } from '../../src/vaadin-pdf-viewer-toolbar-mixin.js';
 import type { PdfViewerZoomMixinClass } from '../../src/vaadin-pdf-viewer-zoom-mixin.js';
@@ -37,6 +40,8 @@ assertType<string | null | undefined>(viewer.headerTitle);
 assertType<boolean>(viewer.toolbarCollapsed);
 assertType<string | null | undefined>(viewer.fileName);
 assertType<boolean>(viewer.downloadButtonHidden);
+assertType<boolean>(viewer.sidebarOpened);
+assertType<boolean>(viewer.sidebarButtonHidden);
 assertType<number>(viewer.page);
 assertType<number>(viewer.pageCount);
 assertType<(page: number) => void>(viewer.scrollToPage);
@@ -45,6 +50,7 @@ assertType<'page-fit' | 'page-width' | number>(viewer.zoom);
 assertType<PdfViewerI18n | undefined>(viewer.i18n);
 assertType<PdfViewerI18n>({ link: 'Link', goToPage: 'Go to page {page}', externalLink: '{text} (opens in a new tab)' });
 assertType<PdfViewerI18n>({ download: 'Download' });
+assertType<PdfViewerI18n>({ sidebar: 'Sidebar', thumbnails: 'Page thumbnails', thumbnailLabel: 'Page {page}' });
 
 // Methods
 assertType<() => void>(viewer.download);
@@ -58,6 +64,7 @@ assertType<PdfViewerTextLayerMixinClass>(viewer);
 assertType<PdfViewerLinksMixinClass>(viewer);
 assertType<PdfViewerZoomMixinClass>(viewer);
 assertType<PdfViewerToolbarMixinClass>(viewer);
+assertType<PdfViewerSidebarMixinClass>(viewer);
 assertType<PdfViewerDownloadMixinClass>(viewer);
 assertType<PdfViewerKeyboardMixinClass>(viewer);
 assertType<FocusMixinClass>(viewer);
@@ -85,6 +92,16 @@ viewer.addEventListener('page-changed', (event) => {
 viewer.addEventListener('page-count-changed', (event) => {
   assertType<PdfViewerPageCountChangedEvent>(event);
   assertType<number>(event.detail.value);
+});
+
+viewer.addEventListener('thumbnail-click', (event) => {
+  assertType<PdfViewerThumbnailClickEvent>(event);
+  assertType<number>(event.detail.page);
+});
+
+viewer.addEventListener('sidebar-opened-changed', (event) => {
+  assertType<PdfViewerSidebarOpenedChangedEvent>(event);
+  assertType<boolean>(event.detail.value);
 });
 
 viewer.addEventListener('toolbar-collapsed-changed', (event) => {

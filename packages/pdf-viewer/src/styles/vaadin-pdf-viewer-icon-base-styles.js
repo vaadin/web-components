@@ -16,7 +16,7 @@ export const pdfViewerIconStyles = css`
     display: block;
     width: var(--vaadin-icon-size, 1lh);
     height: var(--vaadin-icon-size, 1lh);
-    background: currentColor;
+    background: var(--vaadin-icon-color, currentColor);
     mask: var(--_icon) 50% / var(--vaadin-icon-visual-size, 100%) no-repeat;
   }
 
@@ -41,9 +41,17 @@ export const pdfViewerIconStyles = css`
     --_icon: var(--_vaadin-icon-download);
   }
 
+  :host([icon='sidebar']) {
+    --_icon: var(--_vaadin-icon-sidebar);
+  }
+
+  :host([icon='sidebar']:dir(rtl)) {
+    scale: -1 1;
+  }
+
   @media (forced-colors: active) {
     :host {
-      background: CanvasText;
+      background: var(--vaadin-icon-color, CanvasText);
     }
   }
 `;

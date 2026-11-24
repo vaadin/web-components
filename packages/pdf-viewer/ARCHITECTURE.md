@@ -60,7 +60,7 @@ how to generate them.
 - `PdfViewerDownloadMixin` adds `download()`. It uses only the document mixin, so it comes right after it.
   - A download keeps its data for a minute, also when the viewer is detached meanwhile. Some browsers fail a
     download whose URL is released right after the click.
-- `PdfViewerRenderMixin` owns the page views, their sizes, the render queue and the device pixel ratio. It calls `_pageSizesChanged()` at most once per frame when pages get their own size.
+- `PdfViewerRenderMixin` owns the page views, their sizes, the render queue and the device pixel ratio. It calls `_pageSizesChanged()` at most once per frame when pages get their own size, and `_pixelRatioChanged()` when the device pixel ratio changes.
 - `PdfViewerScrollMixin` owns the scale `_scale`, the anchor, the visible pages and `page`. It asks for
   rendering only with `_renderVisible()` and `_cancelRender()`. It gets the scale from `_getScaleForSize()`, which
   fits the width of the current page by default.
@@ -72,9 +72,11 @@ how to generate them.
   pages. A page loads its text each time it renders, as pdf.js' own viewer does.
   - The page renders the structure of a tagged PDF right after its text layer, as pdf.js' own viewer does.
     The structure has no state of the viewer, so it has no mixin.
-  - Unlike in pdf.js, `renderTextLayer()` waits for the structure, so `render-idle` comes once the structure
-    is in place.
+  - Unlike in pdf.js, `renderTextLayer()` waits for the structure. The links mixin names the links by the
+    structure right after their layer renders, so `render-idle` comes once the links have their final names.
 - `PdfViewerLinksMixin` adds the links of each rendered page and follows internal links with `_scrollToPage()`.
+  - The page adds the links to the structure or to the text once both the structure and the links have rendered.
+    A page without structure counts as rendered once its text layer has rendered.
 - After a page canvas renders, `PdfViewerRenderMixin` awaits `_renderPageLayers(page)`. Each override awaits
   `super` first, so the layers render in the order of the mixins: text and structure, then links.
 - The page view owns the DOM of a page. A Lit template renders the canvas, the text layer and the link layer
@@ -82,12 +84,20 @@ how to generate them.
   - `PdfViewerTextLayer` and `PdfViewerLinkLayer` render the content of their layer. The template of the page
     view renders their elements.
   - The layers can render in any order. One method of the page view connects them. It puts the structure in the
-    canvas and passes the links to the text layer, which adds them to its text.
+    canvas. It passes the links that the structure owns to the structure, and the other links to the text layer.
   - A release aborts the signal of the page. The page view checks it after each await, so a released page
     gets no layers. The text layer also checks it before it loads the text.
   - The render queue renders a page again only once its layers are done. One signal therefore covers the time
     between two releases.
 - `PdfViewerKeyboardMixin` handles the keyboard shortcuts.
+- `PdfViewerSidebarMixin` adds `sidebarOpened`, `sidebarButtonHidden`, the sidebar button and the sidebar next to the pages.
+  - `PdfViewerThumbnailsController` fills the sidebar with a thumbnail for each page. It renders the thumbnails
+    near the visible part of the list one at a time, apart from the render queue of the pages.
+  - A thumbnail can render at the same time as a page. The pdf.js viewer renders thumbnails only while no page waits.
+  - The thumbnails are created when the sidebar first opens for a document, so a closed sidebar costs nothing.
+  - Rendering stops while the sidebar is hidden. When it shows again, the thumbnails that left the view are released.
+  - A thumbnail frees the pdf.js data of its page once it has rendered, unless the pages hold that page, as in the
+    pdf.js viewer. The canvas keeps the image. The pages free the data of a page when they release it.
 - `PdfViewerToolbarMixin` renders the header and the toolbar. Its controls are in the light DOM, so a theme
   styles the page field like any other `vaadin-integer-field`. The `slotContent()` directive renders them, so
   application children added later keep their place.
@@ -121,8 +131,10 @@ how to generate them.
   read it.
 - Pages that lose their canvas also lose their text layer, structure and link layer. Screen readers
   therefore reach only the text near the view.
-- Links are in their own layer over the text layer. Each link is named after the text it covers, or
-  after its URL or the page it goes to.
+- Links are in their own layer over the text layer. Each link is named after the first of these that it has:
+  - the alternative text that the structure gives it, or the figure that it only shows
+  - the text it covers, or the text it owns in the structure when that holds the text it covers
+  - its URL, or the page it goes to
 - Only `http:`, `https:` and `mailto:` links open, in a new tab without access to the viewer.
 - Links on layers that the document hides are left out, as in pdf.js.
 - A link that wraps to the next line is clickable only on its words, which the `QuadPoints` of the annotation
@@ -131,14 +143,29 @@ how to generate them.
   canvas exposes it to screen readers. Its elements own the text layer elements with `aria-owns`.
 - The canvas has the `presentation` role, so that its content stays visible to screen readers. Each new
   canvas of the page gets the tree.
-- Outside of the canvas, VoiceOver in Safari skips the elements of the tree. They then have the size of an
-  empty span, not the size of the text that they own.
+- Outside of the canvas, VoiceOver in Safari finds no tables of the tree, and its cursor outlines the whole page.
+  The elements of the tree then have the size of an empty span, not the size of the text that they own.
 - Elements of the tree that are blocks in HTML, such as headings and paragraphs, have `display: block`.
   NVDA starts a new line at them. Otherwise, it reads a heading and the next paragraph as one line.
 - The structure owns the text elements in marked content, not the marked content itself. Marked content has
   `display: contents`, and Chrome ignores `aria-owns` of such elements. Artifacts, such as page numbers, stay hidden.
-- Unlike in pdf.js, a `Link` element of the structure has no role, and the structure does not own its link.
-  The link is added to the text before it, as on an untagged page.
+- The links mixin names all links. It uses the alternative text that the structure gives a link, as in pdf.js.
+  The structure element keeps its alternative text until its link renders, so it keeps it when the links fail.
+- A link without alternative text that shows only a figure gets the alternative text of the figure, as pdf.js
+  names a link by its content. The link then takes the place of the figure, so the alternative text is read once.
+  A link that also shows text is named by its text, so its name holds what it shows.
+- Chromium writes an annotation for each line of a link, and for the line and the image of a linked image.
+  The annotations of one structure element render as one link, with an area for each annotation, as the
+  quadrilaterals of a link that wraps. When the structure renders after the links, the links stay apart.
+- A link that covers no text, such as a thin link in a table of contents, gets the text that it owns in the
+  structure as its name. In pdf.js, this text names such a link, as pdf.js gives it no name.
+- As in pdf.js, a link of the structure owns the text of its structure element. Other links are added to the
+  text before them, so screen readers read them in the order of the text. They skip the text that a link owns,
+  as a link in a link is invalid.
+- Unlike in pdf.js, a `Link` element of the structure has no role, so that only its link is a link. Without a
+  link, such as on a hidden layer, screen readers read its text as text.
+- Unlike in pdf.js, a `NonStruct` element of the structure has no role. In the canvas, VoiceOver in Safari reads
+  no text under an element with the `none` role.
 - When a focused link loses its page, focus moves to the page area.
 
 ## Install size
