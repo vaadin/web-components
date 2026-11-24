@@ -78,11 +78,13 @@
         viewer.src = fileUrl;
       });
 
-      ['headerHidden', 'toolbarCollapsed', 'downloadButtonHidden', 'sidebarButtonHidden', 'sidebarOpened'].forEach((prop) => {
-        document.getElementById(prop).addEventListener('checked-changed', (e) => {
-          viewer[prop] = e.detail.value;
-        });
-      });
+      ['headerHidden', 'toolbarCollapsed', 'downloadButtonHidden', 'sidebarButtonHidden', 'sidebarOpened'].forEach(
+        (prop) => {
+          document.getElementById(prop).addEventListener('checked-changed', (e) => {
+            viewer[prop] = e.detail.value;
+          });
+        },
+      );
       viewer.addEventListener('toolbar-collapsed-changed', (e) => {
         document.getElementById('toolbarCollapsed').checked = e.detail.value;
       });
