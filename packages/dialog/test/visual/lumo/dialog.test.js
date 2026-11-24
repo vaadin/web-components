@@ -1,4 +1,3 @@
-import { sendKeys } from '@vaadin/test-runner-commands';
 import { fixtureSync, nextRender, nextUpdate } from '@vaadin/testing-helpers';
 import { visualDiff } from '@web/test-runner-visual-regression';
 import '@vaadin/vaadin-lumo-styles/src/props/index.css';
@@ -113,10 +112,8 @@ describe('dialog', () => {
 
   describe('focus', () => {
     beforeEach(async () => {
-      element.opened = false;
-      await nextRender();
-      await sendKeys({ press: 'Tab' });
-      element.opened = true;
+      element.blur();
+      element.focus({ focusVisible: true });
       await nextRender();
     });
 
