@@ -39,6 +39,30 @@ describe('text-field', () => {
     await visualDiff(div, 'readonly');
   });
 
+  it('invalid', async () => {
+    element.invalid = true;
+    await visualDiff(div, 'invalid');
+  });
+
+  // The default invalid background is too subtle for the screenshot diff to detect,
+  // so use an opaque color to verify that disabled and readonly take precedence.
+  describe('invalid background', () => {
+    beforeEach(() => {
+      element.style.setProperty('--vaadin-input-field-invalid-background', 'red');
+      element.invalid = true;
+    });
+
+    it('disabled', async () => {
+      element.disabled = true;
+      await visualDiff(div, 'disabled-invalid');
+    });
+
+    it('readonly', async () => {
+      element.readonly = true;
+      await visualDiff(div, 'readonly-invalid');
+    });
+  });
+
   it('label aside', async () => {
     element.setAttribute('theme', 'label-aside');
     element.label = 'Label';
