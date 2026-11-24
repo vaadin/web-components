@@ -79,9 +79,12 @@ vaadin-switch[active]:not([readonly], [disabled])::part(switch)::before {
   background: #000;
 }
 
-vaadin-checkbox[invalid]::part(checkbox) {
+vaadin-checkbox[invalid]:not([readonly], [disabled])::part(checkbox) {
   --aura-accent-color-light: var(--vaadin-input-field-error-color);
   --aura-accent-color-dark: var(--vaadin-input-field-error-color);
+}
+
+vaadin-checkbox[invalid]:not([checked], [indeterminate], [readonly], [disabled])::part(checkbox) {
   --vaadin-checkbox-border-color: var(--vaadin-input-field-error-color);
   --vaadin-checkbox-background: var(--aura-accent-surface);
 }

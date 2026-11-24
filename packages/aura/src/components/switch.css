@@ -64,7 +64,7 @@ vaadin-switch {
     }
   }
 
-  &[invalid] {
+  &[invalid]:not([disabled], [readonly]) {
     --vaadin-switch-border-color: var(--vaadin-input-field-error-color);
     --vaadin-switch-background: color-mix(in oklch, var(--vaadin-input-field-error-color) 50%, transparent);
   }
