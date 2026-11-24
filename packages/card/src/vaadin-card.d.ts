@@ -57,14 +57,21 @@ import { ThemableMixin } from '@vaadin/vaadin-themable-mixin/vaadin-themable-mix
  */
 declare class Card extends ElementMixin(ThemableMixin(HTMLElement)) {
   /**
-   * The title of the card. When set, any custom slotted title is removed and this string-based title is used instead. If this title is used, an `aria-labelledby` attribute that points to the generated title element is set.
+   * The title of the card. A custom slotted title takes precedence over this property. The card is labelled with `aria-labelledby` by the title element in the `title` slot, generated or custom.
    * @attr {string} card-title
    */
   cardTitle: string;
 
   /**
    * Sets the heading level (`aria-level`) for the string-based title. If not set, the level defaults to 2. Setting values outside the range [1, 6] can cause accessibility issues.
+   * @attr {number} heading-level
+   */
+  headingLevel: number | null | undefined;
+
+  /**
+   * Sets the heading level (`aria-level`) for the string-based title.
    * @attr {number} title-heading-level
+   * @deprecated Use `headingLevel` instead. This property will be removed in Vaadin 26.
    */
   titleHeadingLevel: number | null | undefined;
 }

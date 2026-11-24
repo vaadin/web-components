@@ -30,7 +30,7 @@ export const userTagStyles = css`
 
   [part='name'] {
     overflow: hidden;
-    white-space: nowrap;
+    white-space: pre;
     text-overflow: ellipsis;
   }
 `;

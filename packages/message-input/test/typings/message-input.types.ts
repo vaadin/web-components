@@ -10,6 +10,8 @@ const input = document.createElement('vaadin-message-input');
 assertType<FocusMixinClass>(input);
 assertType<I18nMixinClass<MessageInputI18n>>(input);
 
+assertType<boolean>(input.submitDisabled);
+
 input.addEventListener('submit', (event) => {
   assertType<MessageInputSubmitEvent>(event);
   assertType<string>(event.detail.value);

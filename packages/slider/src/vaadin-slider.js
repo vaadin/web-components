@@ -4,11 +4,12 @@
  * This program is available under Apache License Version 2.0, available at https://vaadin.com/license/
  */
 import './vaadin-slider-bubble.js';
-import { css, html, LitElement, render } from 'lit';
+import { css, html, LitElement } from 'lit';
 import { ifDefined } from 'lit/directives/if-defined.js';
 import { styleMap } from 'lit/directives/style-map.js';
 import { FocusMixin } from '@vaadin/a11y-base/src/focus-mixin.js';
 import { defineCustomElement } from '@vaadin/component-base/src/define.js';
+import { slotContent } from '@vaadin/component-base/src/directives/slot-content.js';
 import { ElementMixin } from '@vaadin/component-base/src/element-mixin.js';
 import { PolylitMixin } from '@vaadin/component-base/src/polylit-mixin.js';
 import { generateUniqueId } from '@vaadin/component-base/src/unique-id-utils.js';
@@ -229,8 +230,8 @@ class Slider extends FieldMixin(
             <div part="track-fill"></div>
           </div>
           <div part="thumb"></div>
-          <slot name="input"></slot>
-          <slot name="bubble"></slot>
+          <slot name="input" ${slotContent(this.__renderInput())}></slot>
+          <slot name="bubble" ${slotContent(this.__renderBubble())}></slot>
         </div>
 
         <div part="marks" aria-hidden="true">
@@ -246,6 +247,48 @@ class Slider extends FieldMixin(
           <slot name="error-message"></slot>
         </div>
       </div>
+    `;
+  }
+
+  /** @private */
+  __renderInput() {
+    const [value] = this.__value;
+    const { min, max, step } = this.__getConstraints();
+
+    return html`
+      <input
+        type="range"
+        id="${this.__inputId}"
+        slot="input"
+        .min="${min}"
+        .max="${max}"
+        .value="${value}"
+        .step="${step}"
+        .disabled="${this.disabled}"
+        tabindex="${this.disabled ? -1 : 0}"
+        @pointerenter="${this.__onPointerEnter}"
+        @pointermove="${this.__onPointerMove}"
+        @pointerleave="${this.__onPointerLeave}"
+        @keydown="${this.__onKeyDown}"
+        @input="${this.__onInput}"
+        @change="${this.__onChange}"
+      />
+    `;
+  }
+
+  /** @private */
+  __renderBubble() {
+    const [value] = this.__value;
+
+    return html`
+      <vaadin-slider-bubble
+        slot="bubble"
+        .positionTarget="${this.__thumbElement}"
+        .opened="${this.valueAlwaysVisible || this.__bubbleOpened}"
+        theme="${ifDefined(this._theme)}"
+      >
+        ${value}
+      </vaadin-slider-bubble>
     `;
   }
 
@@ -288,50 +331,6 @@ class Slider extends FieldMixin(
     window.removeEventListener('pointerup', this.__onPointerUp);
     window.removeEventListener('pointercancel', this.__onPointerUp);
     this.removeAttribute('active');
-  }
-
-  /**
-   * Override update to render slotted `<input type="range" />`
-   * into light DOM after rendering shadow DOM.
-   * @protected
-   */
-  update(props) {
-    super.update(props);
-
-    const [value] = this.__value;
-    const { min, max, step } = this.__getConstraints();
-
-    render(
-      html`
-        <input
-          type="range"
-          id="${this.__inputId}"
-          slot="input"
-          .min="${min}"
-          .max="${max}"
-          .value="${value}"
-          .step="${step}"
-          .disabled="${this.disabled}"
-          tabindex="${this.disabled ? -1 : 0}"
-          @pointerenter="${this.__onPointerEnter}"
-          @pointermove="${this.__onPointerMove}"
-          @pointerleave="${this.__onPointerLeave}"
-          @keydown="${this.__onKeyDown}"
-          @input="${this.__onInput}"
-          @change="${this.__onChange}"
-        />
-        <vaadin-slider-bubble
-          slot="bubble"
-          .positionTarget="${this.__thumbElement}"
-          .opened="${this.valueAlwaysVisible || this.__bubbleOpened}"
-          theme="${ifDefined(this._theme)}"
-        >
-          ${value}
-        </vaadin-slider-bubble>
-      `,
-      this,
-      { host: this },
-    );
   }
 
   /** @protected */

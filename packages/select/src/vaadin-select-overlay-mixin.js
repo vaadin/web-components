@@ -27,6 +27,15 @@ export const SelectOverlayMixin = (superClass) =>
     }
 
     /**
+     * Override method from `OverlayFocusMixin` to skip moving focus on open.
+     * The select moves focus to the list box itself, and only uses focus restoration.
+     *
+     * @protected
+     * @override
+     */
+    _initFocus() {}
+
+    /**
      * Override method from OverlayFocusMixin to use the content root that
      * actually holds the focused item, so focus is restored on close.
      *

@@ -2,7 +2,7 @@ import { expect } from '@vaadin/chai-plugins';
 import { resetMouse, sendKeys, sendMouse, sendMouseToElement, setViewport } from '@vaadin/test-runner-commands';
 import { fixtureSync, focusin, focusout, nextRender, tap } from '@vaadin/testing-helpers';
 import '../src/vaadin-date-time-picker.js';
-import { getFocusableCell, open, untilOverlayRendered } from '@vaadin/date-picker/test/helpers.js';
+import { getFocusableDateButton, open, untilOverlayRendered } from '@vaadin/date-picker/test/helpers.js';
 
 describe('focus', () => {
   let dateTimePicker;
@@ -151,7 +151,7 @@ describe('focus', () => {
       await open(datePicker);
       expect(dateTimePicker.hasAttribute('focused')).to.be.true;
 
-      tap(getFocusableCell(datePicker));
+      tap(getFocusableDateButton(datePicker));
       await nextRender();
 
       expect(dateTimePicker.hasAttribute('focused')).to.be.false;

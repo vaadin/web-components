@@ -231,6 +231,18 @@ describe('TooltipController', () => {
       expect(host.hasAttribute('has-tooltip')).to.be.false;
     });
 
+    it('should set has-tooltip attribute on the host when the same tooltip is added again', async () => {
+      host.appendChild(tooltip);
+      await nextFrame();
+
+      host.removeChild(tooltip);
+      await nextFrame();
+
+      host.appendChild(tooltip);
+      await nextFrame();
+      expect(host.hasAttribute('has-tooltip')).to.be.true;
+    });
+
     it('should not set has-tooltip attribute on the host when tooltip is added if manual', async () => {
       controller.setManual(true);
       host.appendChild(tooltip);

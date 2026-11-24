@@ -7,12 +7,12 @@ import type { Slider } from '../../src/vaadin-slider.js';
 describe('vaadin-slider', () => {
   let slider: Slider;
 
-  beforeEach(async () => {
+  beforeEach(() => {
     resetUniqueId();
     slider = fixtureSync('<vaadin-slider></vaadin-slider>');
   });
 
-  describe('host', async () => {
+  describe('host', () => {
     it('default', async () => {
       await expect(slider).dom.to.equalSnapshot();
     });
@@ -93,7 +93,7 @@ describe('vaadin-slider', () => {
     });
   });
 
-  describe('shadow', async () => {
+  describe('shadow', () => {
     it('default', async () => {
       await expect(slider).shadowDom.to.equalSnapshot();
     });

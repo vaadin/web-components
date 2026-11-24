@@ -44,6 +44,19 @@ export const ConfirmDialogMixin = (superClass) =>
         },
 
         /**
+         * The ARIA heading level, used to set the `aria-level` attribute
+         * on the header element. When not set, defaults to `1`.
+         *
+         * This only affects the default header element, a custom slotted
+         * header will not be altered.
+         *
+         * @attr {number} heading-level
+         */
+        headingLevel: {
+          type: Number,
+        },
+
+        /**
          * Set the message or confirmation question.
          */
         message: {
@@ -187,7 +200,7 @@ export const ConfirmDialogMixin = (superClass) =>
       return [
         '__updateConfirmButton(_confirmButton, confirmText, confirmTheme)',
         '__updateCancelButton(_cancelButton, cancelText, cancelTheme, cancelButtonVisible)',
-        '__updateHeaderNode(_headerNode, header)',
+        '__updateHeaderNode(_headerNode, header, headingLevel)',
         '__updateMessageNodes(_messageNodes, message)',
         '__updateRejectButton(_rejectButton, rejectText, rejectTheme, rejectButtonVisible)',
         '__accessibleDescriptionRefChanged(_messageNodes, accessibleDescriptionRef)',
@@ -345,10 +358,11 @@ export const ConfirmDialogMixin = (superClass) =>
     }
 
     /** @private */
-    __updateHeaderNode(headerNode, header) {
-      // Only update text content for the default header node.
+    __updateHeaderNode(headerNode, header, headingLevel) {
+      // Only update the default header node.
       if (headerNode && headerNode === this._headerController.defaultNode) {
         headerNode.textContent = header;
+        headerNode.setAttribute('aria-level', headingLevel ?? 1);
       }
     }
 

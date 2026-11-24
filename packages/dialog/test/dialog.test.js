@@ -304,6 +304,7 @@ describe('vaadin-dialog', () => {
         <div style="height: 200vh"></div>
       `);
       document.body.insertBefore(spacer, document.body.firstChild);
+      await nextRender();
 
       // Scroll to the top
       window.scrollTo(0, 0);
@@ -314,6 +315,32 @@ describe('vaadin-dialog', () => {
 
       // The page should not have scrolled
       expect(window.scrollY).to.equal(0);
+    });
+  });
+
+  describe('autofocus', () => {
+    let dialog;
+
+    beforeEach(async () => {
+      dialog = fixtureSync(`
+        <vaadin-dialog modeless no-autofocus>
+          <input />
+          <input autofocus />
+        </vaadin-dialog>
+      `);
+      await nextRender();
+    });
+
+    afterEach(async () => {
+      dialog.opened = false;
+      await nextRender();
+    });
+
+    it('should focus the element with autofocus on open when no-autofocus is set', async () => {
+      const opened = oneEvent(dialog.$.overlay, 'vaadin-overlay-open');
+      dialog.opened = true;
+      await opened;
+      expect(getDeepActiveElement()).to.equal(dialog.querySelectorAll('input')[1]);
     });
   });
 

@@ -1691,18 +1691,59 @@ describe('ai field marker', () => {
       expect(marker.working).to.be.false;
     });
 
-    it('should apply the working state when added with working set', () => {
-      mark(field, { working: true });
+    it('should apply the working state when added with working set', async () => {
+      const marker = mark(field, { working: true });
+      await nextUpdate(marker);
       expect(field.hasAttribute('ai-working')).to.be.true;
       expect(field.readonly).to.be.true;
       expect(field.inputElement.getAttribute('aria-busy')).to.equal('true');
     });
 
-    it('should set the working state via attribute', () => {
+    it('should set the working state via attribute', async () => {
       const marker = document.createElement('vaadin-ai-field-marker');
       marker.setAttribute('working', '');
       field.appendChild(marker);
+      await nextUpdate(marker);
       expect(field.hasAttribute('ai-working')).to.be.true;
+    });
+
+    it('should restore the read-only state set on the field right after adding', async () => {
+      field.readonly = true;
+      clock = sinon.useFakeTimers({ shouldClearNativeTimers: true, toFake: ['setTimeout', 'clearTimeout'] });
+
+      // The host may still change the field in the same task, the way Flow
+      // applies the read-only state from the same server response after
+      // adding the marker.
+      const marker = mark(field, { working: true });
+      field.readonly = false;
+      await nextUpdate(marker);
+      expect(field.readonly).to.be.true;
+
+      marker.working = false;
+      await nextUpdate(marker);
+      await clock.tickAsync(500);
+      expect(field.readonly).to.be.false;
+    });
+
+    it('should restore the read-only state set on a custom field input right after adding', async () => {
+      const customField = fixtureSync<CustomField>(`
+        <vaadin-custom-field label="License plate">
+          <vaadin-text-field readonly></vaadin-text-field>
+        </vaadin-custom-field>
+      `);
+      await nextRender();
+      const [input] = customField.inputs as TextField[];
+      clock = sinon.useFakeTimers({ shouldClearNativeTimers: true, toFake: ['setTimeout', 'clearTimeout'] });
+
+      const marker = mark(customField, { working: true });
+      input.readonly = false;
+      await nextUpdate(marker);
+      expect(input.readonly).to.be.true;
+
+      marker.working = false;
+      await nextUpdate(marker);
+      await clock.tickAsync(500);
+      expect(input.readonly).to.be.false;
     });
 
     it('should mark the field once it is upgraded', async () => {

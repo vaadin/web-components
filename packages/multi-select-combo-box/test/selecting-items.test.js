@@ -72,6 +72,7 @@ describe('selecting items', () => {
     it('should select item on Enter after internal blur on overlay touch action', async () => {
       comboBox.open();
       touchend(comboBox.$.overlay);
+      comboBox.$.overlay.click();
 
       inputElement.focus();
       await sendKeys({ type: 'apple' });

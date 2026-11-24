@@ -19,6 +19,12 @@ export const selectStyles = css`
     display: contents;
   }
 
+  :host(:is([theme~='label-aside'], [data-form-layout-has-labels-aside])) [part='input-field']::before {
+    content: '\\2003' / '';
+    width: 0;
+    margin-inline-end: calc(var(--vaadin-input-field-gap, var(--vaadin-gap-s)) * -1);
+  }
+
   :host(:not([focus-ring])) [part='input-field'] {
     outline: none;
   }
@@ -65,11 +71,11 @@ export const selectStyles = css`
   }
 
   :host([theme~='align-center']) ::slotted([slot='value']) {
-    justify-content: center;
+    justify-content: safe center;
   }
 
   :host([theme~='align-end']) ::slotted([slot='value']) {
-    justify-content: end;
+    justify-content: safe end;
   }
 
   :host([theme~='align-left']) ::slotted([slot='value']) {

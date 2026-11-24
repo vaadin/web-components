@@ -1,0 +1,322 @@
+/**
+ * @license
+ * Copyright (c) 2000 - 2026 Vaadin Ltd.
+ *
+ * This program is available under Vaadin Commercial License and Service Terms.
+ *
+ *
+ * See https://vaadin.com/commercial-license-and-service-terms for the full
+ * license.
+ */
+import { html, LitElement } from 'lit';
+import { FocusMixin } from '@vaadin/a11y-base/src/focus-mixin.js';
+import { isKeyboardActive } from '@vaadin/a11y-base/src/focus-utils.js';
+import { defineCustomElement } from '@vaadin/component-base/src/define.js';
+import { ElementMixin } from '@vaadin/component-base/src/element-mixin.js';
+import { I18nMixin } from '@vaadin/component-base/src/i18n-mixin.js';
+import { PolylitMixin } from '@vaadin/component-base/src/polylit-mixin.js';
+import { LumoInjectionMixin } from '@vaadin/vaadin-themable-mixin/lumo-injection-mixin.js';
+import { pdfViewerStyles } from './styles/vaadin-pdf-viewer-base-styles.js';
+import { pdfViewerPageStyles } from './styles/vaadin-pdf-viewer-page-base-styles.js';
+import { pdfViewerSidebarStyles } from './styles/vaadin-pdf-viewer-sidebar-base-styles.js';
+import { pdfViewerTextLayerStyles } from './styles/vaadin-pdf-viewer-text-layer-base-styles.js';
+import { pdfViewerToolbarStyles } from './styles/vaadin-pdf-viewer-toolbar-base-styles.js';
+import { PdfViewerMixin } from './vaadin-pdf-viewer-mixin.js';
+
+const DEFAULT_I18N = {
+  previousPage: 'Previous page',
+  nextPage: 'Next page',
+  page: 'Page',
+  pageError: 'Enter 1–{pageCount}',
+  zoomIn: 'Zoom in',
+  zoomOut: 'Zoom out',
+  zoom: 'Zoom',
+  pageWidth: 'Page width',
+  pageFit: 'Page fit',
+  document: 'PDF document',
+  pageLabel: 'Page {page}',
+  loading: 'Loading',
+  link: 'Link',
+  goToPage: 'Go to page {page}',
+  externalLink: '{text} (opens in a new tab)',
+  download: 'Download',
+  sidebar: 'Sidebar',
+  thumbnails: 'Page thumbnails',
+  thumbnailLabel: 'Page {page}',
+};
+
+/**
+ * `<vaadin-pdf-viewer>` is a web component for viewing PDF documents.
+ *
+ * ```html
+ * <vaadin-pdf-viewer src="/files/report.pdf"></vaadin-pdf-viewer>
+ * ```
+ *
+ * The component is experimental and its API may change. To use it, enable
+ * the following feature flag:
+ *
+ * ```js
+ * window.Vaadin.featureFlags.pdfViewerComponent = true;
+ * ```
+ *
+ * ### Customization
+ *
+ * You can add application controls to the toolbar by using `slot` names.
+ *
+ * Slot name         | Description
+ * ------------------|-------------
+ * `toolbar-actions` | Application controls, e.g. buttons, at the end of the toolbar, before the download button.
+ *
+ * #### Example
+ *
+ * A custom button that replaces the download button:
+ *
+ * ```html
+ * <vaadin-pdf-viewer src="/files/report.pdf" download-button-hidden>
+ *   <vaadin-button slot="toolbar-actions">Save a copy</vaadin-button>
+ * </vaadin-pdf-viewer>
+ * ```
+ *
+ * ```js
+ * const viewer = document.querySelector('vaadin-pdf-viewer');
+ * viewer.querySelector('vaadin-button').addEventListener('click', () => {
+ *   viewer.download();
+ * });
+ * ```
+ *
+ * ### Styling
+ *
+ * The following shadow DOM parts are available for styling:
+ *
+ * Part name       | Description
+ * ----------------|------------
+ * `header`        | The header above the toolbar, a button that collapses and expands it, see `headerHidden`.
+ * `title`         | The title in the header.
+ * `header-toggle` | The icon in the header that shows whether the toolbar is collapsed.
+ * `toolbar`       | The toolbar above the pages.
+ * `toolbar-group` | A group of related controls in the toolbar: sidebar and navigation, zoom, and actions.
+ * `sidebar`       | The sidebar next to the pages, see `sidebarOpened`.
+ * `thumbnails`    | The scrollable list of page thumbnails in the sidebar.
+ * `thumbnail`     | A page thumbnail. Also has the `current` part name for the current page.
+ * `content`       | The scrollable area that contains the pages.
+ * `page`          | A page of the document.
+ * `loader`        | The loading indicator shown while the document loads.
+ *
+ * The following state attributes are available for styling:
+ *
+ * Attribute        | Description
+ * -----------------|------------
+ * `loading`        | Set while the document is loading.
+ * `has-error`      | Set when the document could not be loaded.
+ * `focused`        | Set when the page area is focused.
+ * `focus-ring`     | Set when the page area is focused using the keyboard.
+ * `sidebar-opened` | Set when the sidebar is shown.
+ *
+ * The following custom CSS properties are available for styling:
+ *
+ * Custom CSS property                        |
+ * :-------------------------------------------|
+ * | `--vaadin-pdf-viewer-background`          |
+ * | `--vaadin-pdf-viewer-border-color`        |
+ * | `--vaadin-pdf-viewer-border-radius`       |
+ * | `--vaadin-pdf-viewer-padding`             |
+ * | `--vaadin-pdf-viewer-page-background`     |
+ * | `--vaadin-pdf-viewer-page-gap`            |
+ * | `--vaadin-pdf-viewer-page-shadow`         |
+ * | `--vaadin-pdf-viewer-sidebar-background`  |
+ * | `--vaadin-pdf-viewer-sidebar-width`       |
+ * | `--vaadin-pdf-viewer-text-color`          |
+ * | `--vaadin-pdf-viewer-toolbar-background`  |
+ * | `--vaadin-pdf-viewer-toolbar-gap`         |
+ * | `--vaadin-pdf-viewer-toolbar-padding`     |
+ *
+ * See [Styling Components](https://vaadin.com/docs/latest/styling/styling-components) documentation.
+ *
+ * @fires {CustomEvent} document-error - Fired when the document could not be loaded.
+ * @fires {CustomEvent} document-load - Fired when the document has loaded.
+ * @fires {CustomEvent} page-changed - Fired when the `page` property changes.
+ * @fires {CustomEvent} page-count-changed - Fired when the `pageCount` property changes.
+ * @fires {CustomEvent} sidebar-opened-changed - Fired when the `sidebarOpened` property changes.
+ * @fires {CustomEvent} thumbnail-click - Fired when the user chooses a thumbnail with a click, Enter or Space.
+ * @fires {CustomEvent} toolbar-collapsed-changed - Fired when the `toolbarCollapsed` property changes.
+ * @fires {CustomEvent} zoom-changed - Fired when the `zoom` property changes.
+ *
+ * @customElement vaadin-pdf-viewer
+ * @extends HTMLElement
+ */
+class PdfViewer extends PdfViewerMixin(
+  I18nMixin(FocusMixin(ElementMixin(PolylitMixin(LumoInjectionMixin(LitElement))))),
+) {
+  static get is() {
+    return 'vaadin-pdf-viewer';
+  }
+
+  static get cvdlName() {
+    return 'vaadin-pdf-viewer';
+  }
+
+  static get experimental() {
+    return true;
+  }
+
+  static get styles() {
+    return [
+      pdfViewerStyles,
+      pdfViewerToolbarStyles,
+      pdfViewerSidebarStyles,
+      pdfViewerPageStyles,
+      pdfViewerTextLayerStyles,
+    ];
+  }
+
+  static get defaultI18n() {
+    return DEFAULT_I18N;
+  }
+
+  /**
+   * The object used to localize this component. To change the default
+   * localization, set this to an object that provides all properties, or
+   * just the individual properties you want to change.
+   *
+   * When not set, defaults to `undefined`.
+   *
+   * The object has the following JSON structure and default values:
+   *
+   * ```
+   * {
+   *   // Tooltip and accessible name of the previous page button, and accessible name of a link to the previous page.
+   *   previousPage: 'Previous page',
+   *   // Tooltip and accessible name of the next page button, and accessible name of a link to the next page.
+   *   nextPage: 'Next page',
+   *   // Accessible name of the page field.
+   *   page: 'Page',
+   *   // Error shown for a page that does not exist. {pageCount} is replaced with the page count.
+   *   pageError: 'Enter 1–{pageCount}',
+   *   // Tooltip and accessible name of the zoom in button.
+   *   zoomIn: 'Zoom in',
+   *   // Tooltip and accessible name of the zoom out button.
+   *   zoomOut: 'Zoom out',
+   *   // Accessible name of the zoom select.
+   *   zoom: 'Zoom',
+   *   // Zoom select item that fits the page width to the viewer.
+   *   pageWidth: 'Page width',
+   *   // Zoom select item that fits the whole page into the viewer.
+   *   pageFit: 'Page fit',
+   *   // Title of the header for a document without a file name.
+   *   document: 'PDF document',
+   *   // Accessible name of a page. {page} is replaced with the page number.
+   *   pageLabel: 'Page {page}',
+   *   // Accessible name of the loading indicator.
+   *   loading: 'Loading',
+   *   // Accessible name of a link without text whose destination is unknown.
+   *   link: 'Link',
+   *   // Accessible name of a link without text to another page. {page} is replaced with the page number.
+   *   goToPage: 'Go to page {page}',
+   *   // Accessible name of a link that opens in a new tab. {text} is replaced with the text of the link, or its URL.
+   *   externalLink: '{text} (opens in a new tab)',
+   *   // Tooltip and accessible name of the download button.
+   *   download: 'Download',
+   *   // Tooltip and accessible name of the button that shows and hides the sidebar.
+   *   sidebar: 'Sidebar',
+   *   // Accessible name of the list of page thumbnails in the sidebar.
+   *   thumbnails: 'Page thumbnails',
+   *   // Accessible name of a page thumbnail. {page} is replaced with the page number.
+   *   thumbnailLabel: 'Page {page}'
+   * }
+   * ```
+   *
+   * @type {PdfViewerI18n | undefined}
+   */
+  get i18n() {
+    return super.i18n;
+  }
+
+  set i18n(value) {
+    super.i18n = value;
+  }
+
+  /** @protected */
+  render() {
+    return html`
+      <div class="top-area" @focusin="${this.#onTopAreaFocusIn}">${this._renderToolbar()}</div>
+      <div part="loader" role="progressbar" aria-label="${this.__effectiveI18n.loading}"></div>
+      <div class="main-area">
+        ${this._renderSidebar()}
+        <div class="content-area">
+          <div
+            id="content"
+            part="content"
+            role="region"
+            aria-labelledby="title"
+            aria-busy="${this.__loading ? 'true' : 'false'}"
+            tabindex="${this.pageCount ? '0' : '-1'}"
+            @focusin="${this.#onContentFocusIn}"
+            @focusout="${this.#onContentFocusOut}"
+          >
+            <div id="pages"></div>
+          </div>
+        </div>
+      </div>
+    `;
+  }
+
+  /**
+   * Override method from `FocusMixin` to focus the page area,
+   * which is only focusable once a document has loaded.
+   * @param {FocusOptions=} options
+   * @protected
+   * @override
+   */
+  focus(options) {
+    if (!this.pageCount) {
+      return;
+    }
+
+    this.$.content.focus(options);
+
+    super.focus(options);
+  }
+
+  /**
+   * Override method from `FocusMixin` to ignore focus events on the host.
+   * Focus moving inside the shadow root does not reach the host, e.g. from
+   * the page area to a link in a page, so the page area handles them.
+   * @param {FocusEvent} _event
+   * @return {boolean}
+   * @protected
+   * @override
+   */
+  _shouldSetFocus(_event) {
+    return false;
+  }
+
+  /**
+   * Scrolls the header and the toolbar so that a control focused with the
+   * keyboard is visible with its focus ring. Browsers scroll only the focused
+   * element into view, e.g. the input of a field, and WebKit does not scroll
+   * an element that is partly visible already.
+   * @private
+   */
+  #onTopAreaFocusIn(event) {
+    if (isKeyboardActive()) {
+      const control = event.composedPath().find((node) => node.parentNode === this);
+      control?.scrollIntoView({ block: 'nearest', inline: 'nearest' });
+    }
+  }
+
+  /** @private */
+  #onContentFocusIn(event) {
+    if (event.target === this.$.content) {
+      this._setFocused(true);
+    }
+  }
+
+  /** @private */
+  #onContentFocusOut() {
+    this._setFocused(false);
+  }
+}
+
+defineCustomElement(PdfViewer);
+
+export { PdfViewer };

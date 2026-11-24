@@ -7,17 +7,6 @@ import { GridSelectionColumnBaseMixin } from './vaadin-grid-selection-column-bas
 
 export const GridSelectionColumnMixin = (superClass) =>
   class extends GridSelectionColumnBaseMixin(superClass) {
-    static get properties() {
-      return {
-        /**
-         * The previous state of activeItem. When activeItem turns to `null`,
-         * previousActiveItem will have an Object with just unselected activeItem
-         * @private
-         */
-        __previousActiveItem: Object,
-      };
-    }
-
     static get observers() {
       return ['__onSelectAllChanged(selectAll)'];
     }

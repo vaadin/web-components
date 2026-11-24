@@ -1,7 +1,7 @@
 import { expect } from '@vaadin/chai-plugins';
 import { fixtureSync } from '@vaadin/testing-helpers';
 import { html, render } from 'lit';
-import { partMap } from '../src/directives/part-map.js';
+import { parsePartNames, partMap } from '../src/directives/part-map.js';
 
 describe('partMap', () => {
   let container;
@@ -36,6 +36,12 @@ describe('partMap', () => {
 
     it('should remove part names omitted on re-render', () => {
       element = renderPart({ foo: true, bar: true });
+      renderPart({ bar: true });
+      expect([...element.part]).to.have.members(['bar']);
+    });
+
+    it('should remove omitted part names that match inherited object properties', () => {
+      element = renderPart({ constructor: true, toString: true, bar: true });
       renderPart({ bar: true });
       expect([...element.part]).to.have.members(['bar']);
     });
@@ -91,6 +97,18 @@ describe('partMap', () => {
       expect(() => {
         render(html`<div part="${partMap({ foo: true })} ${'bar'}"></div>`, container);
       }).to.throw(/must be the only binding/u);
+    });
+  });
+});
+
+describe('parsePartNames', () => {
+  it('should parse names separated by spaces', () => {
+    expect(parsePartNames('foo bar')).to.deep.equal({ foo: true, bar: true });
+  });
+
+  it('should return an empty map for empty or missing names', () => {
+    ['', '  ', null, undefined].forEach((value) => {
+      expect(parsePartNames(value)).to.deep.equal({});
     });
   });
 });

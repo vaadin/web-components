@@ -53,6 +53,13 @@ describe('multi-select-combo-box', () => {
       await visualDiff(div, 'selected');
     });
 
+    it('overflow two-digit count', async () => {
+      const items = Array.from({ length: 12 }, (_, i) => `Item with a long label ${i + 1}`);
+      element.items = items;
+      element.selectedItems = items;
+      await visualDiff(div, 'selected-overflow-two-digit');
+    });
+
     it('label aside', async () => {
       element.setAttribute('theme', 'label-aside');
       element.label = 'Label';
@@ -67,6 +74,25 @@ describe('multi-select-combo-box', () => {
     it('disabled', async () => {
       element.disabled = true;
       await visualDiff(div, 'selected-disabled');
+    });
+  });
+
+  describe('RTL', () => {
+    before(() => {
+      document.documentElement.setAttribute('dir', 'rtl');
+    });
+
+    after(() => {
+      document.documentElement.removeAttribute('dir');
+    });
+
+    beforeEach(() => {
+      element.style.width = '250px';
+      element.selectedItems = ['Apple', 'Banana', 'Lemon', 'Pear'];
+    });
+
+    it('overflow', async () => {
+      await visualDiff(div, 'selected-overflow-rtl');
     });
   });
 

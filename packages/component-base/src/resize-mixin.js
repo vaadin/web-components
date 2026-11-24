@@ -49,6 +49,9 @@ const ResizeMixinImplementation = (superclass) =>
 
         if (!parent.resizables) {
           parent.resizables = new Set();
+        }
+
+        if (parent.resizables.size === 0) {
           observer.observe(parent);
         }
 

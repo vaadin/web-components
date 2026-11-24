@@ -411,7 +411,7 @@ describe('column groups', () => {
       scrollToEnd(grid);
       await nextFrame();
       const bodyRows = getRows(grid.$.items);
-      const lastRowBottom = bodyRows[bodyRows.length - 1].getBoundingClientRect().bottom;
+      const lastRowBottom = bodyRows.at(-1).getBoundingClientRect().bottom;
       const footerTop = grid.$.footer.getBoundingClientRect().top;
       expect(lastRowBottom).to.be.closeTo(footerTop, 2);
     });

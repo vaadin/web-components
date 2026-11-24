@@ -78,7 +78,7 @@ describe('column auto-width', () => {
       </vaadin-grid>
     `);
     spy = sinon.spy(grid, '_recalculateColumnWidths');
-    columns = grid.querySelectorAll('vaadin-grid-column');
+    columns = [...grid.querySelectorAll('vaadin-grid-column')];
     grid.hidden = false;
     await nextResize(grid);
   });
@@ -338,7 +338,7 @@ describe('column auto-width', () => {
   });
 
   it('should have correct column widths for frozen columns with no items', async () => {
-    const [firstColumn, lastColumn] = [columns[0], columns[columns.length - 1]];
+    const [firstColumn, lastColumn] = [columns[0], columns.at(-1)];
     firstColumn.frozen = true;
     firstColumn.header = 'foo bar baz';
     lastColumn.frozenToEnd = true;

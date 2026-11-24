@@ -28,6 +28,7 @@ const invalidAddresses = [
   'あいうえお@example.com',
   'email@example.com (Joe Smith)',
   'email@example..com',
+  'email@.example.com',
   'email.@example.com',
   '.email@example.com',
   'email@example',
@@ -60,6 +61,7 @@ describe('validation', () => {
           await nextUpdate(emailField);
           emailField.validate();
           expect(emailField.invalid).to.be.true;
+          expect(emailField.inputElement.validity.patternMismatch).to.be.true;
         });
       });
     });

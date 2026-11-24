@@ -8,7 +8,7 @@ permissions:
 jobs:
   lint:
     name: Lint
-    runs-on: ubuntu-latest
+    runs-on: ubuntu-26.04
     steps:
       - uses: actions/checkout@v7
 
@@ -24,14 +24,23 @@ jobs:
       - name: Lint JavaScript
         run: yarn lint:js
 
+      - name: Lint HTML
+        run: yarn lint:html
+
+      - name: Test manifest tooling
+        run: yarn test:manifest
+
       - name: Lint CSS
         run: yarn lint:css
 
       - name: Lint TypeScript
         run: yarn lint:types
+
+      - name: Check meta packages
+        run: yarn release:cem && yarn release:meta --check
   snapshots:
     name: Snapshot tests
-    runs-on: ubuntu-latest
+    runs-on: ubuntu-26.04
     steps:
       - uses: actions/checkout@v7
         with:
@@ -50,7 +59,7 @@ jobs:
         run: yarn test:snapshots
   integration:
     name: Integration tests
-    runs-on: ubuntu-latest
+    runs-on: ubuntu-26.04
     steps:
       - uses: actions/checkout@v7
         with:

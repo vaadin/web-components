@@ -37,6 +37,11 @@ describe('switch', () => {
       await visualDiff(div, 'state-empty');
     });
 
+    it('invalid', async () => {
+      element.invalid = true;
+      await visualDiff(div, 'state-invalid');
+    });
+
     describe('disabled', () => {
       beforeEach(() => {
         element.disabled = true;
@@ -55,6 +60,11 @@ describe('switch', () => {
         element.required = true;
         await visualDiff(div, 'state-disabled-required');
       });
+
+      it('invalid', async () => {
+        element.invalid = true;
+        await visualDiff(div, 'state-disabled-invalid');
+      });
     });
 
     describe('readonly', () => {
@@ -69,6 +79,11 @@ describe('switch', () => {
       it('checked', async () => {
         element.checked = true;
         await visualDiff(div, 'state-readonly-checked');
+      });
+
+      it('invalid', async () => {
+        element.invalid = true;
+        await visualDiff(div, 'state-readonly-invalid');
       });
     });
 

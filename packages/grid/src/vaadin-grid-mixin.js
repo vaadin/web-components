@@ -22,15 +22,7 @@ import { DynamicColumnsMixin } from './vaadin-grid-dynamic-columns-mixin.js';
 import { EventContextMixin } from './vaadin-grid-event-context-mixin.js';
 import { FilterMixin } from './vaadin-grid-filter-mixin.js';
 import { HeaderFooterRenderingMixin } from './vaadin-grid-header-footer-rendering-mixin.js';
-import {
-  getBodyRowCells,
-  getClosestCell,
-  iterateChildren,
-  iterateRowCells,
-  updateBooleanRowStates,
-  updateCellsPart,
-  updatePart,
-} from './vaadin-grid-helpers.js';
+import { getClosestCell, iterateChildren, updateBooleanRowStates } from './vaadin-grid-helpers.js';
 import { KeyboardNavigationMixin } from './vaadin-grid-keyboard-navigation-mixin.js';
 import { ResizeMixin } from './vaadin-grid-resize-mixin.js';
 import { RowDetailsMixin } from './vaadin-grid-row-details-mixin.js';
@@ -78,6 +70,8 @@ export const GridMixin = (superClass) =>
       ),
     ),
   ) {
+    #renderedColumns = [];
+
     static get observers() {
       return ['_columnTreeChanged(_columnTree)', '_flatSizeChanged(_flatSize, __virtualizer, _hasData, _columnTree)'];
     }
@@ -332,18 +326,14 @@ export const GridMixin = (superClass) =>
       for (let i = 0; i < count; i++) {
         const row = this.__createBodyRow();
         if (this._columnTree) {
-          this.__initRow(row, this._columnTree[this._columnTree.length - 1], 'body', true);
+          this.__renderBodyRow(row);
         }
         rows.push(row);
       }
 
-      if (this._columnTree) {
-        this._columnTree[this._columnTree.length - 1].forEach((c) => {
-          if (c.isConnected && c._cells) {
-            c._cells = [...c._cells];
-          }
-        });
-      }
+      this._columnTree?.at(-1).forEach((column) => {
+        column.performUpdate?.();
+      });
 
       return rows;
     }
@@ -379,142 +369,6 @@ export const GridMixin = (superClass) =>
     }
 
     /** @private */
-    _createCell(tagName, column) {
-      const contentId = (this._contentIndex = this._contentIndex + 1 || 0);
-      const slotName = `vaadin-grid-cell-content-${contentId}`;
-
-      const cellContent = document.createElement('vaadin-grid-cell-content');
-      cellContent.setAttribute('slot', slotName);
-
-      const cell = document.createElement(tagName);
-      cell.id = slotName.replace('-content-', '-');
-      cell.setAttribute('role', tagName === 'td' ? 'gridcell' : 'columnheader');
-
-      cell.addEventListener('mouseenter', this.__onCellMouseEnter);
-      cell.addEventListener('mouseleave', this.__onCellMouseLeave);
-      cell.addEventListener('mousedown', this.__onCellMouseDown);
-      cell.addEventListener('keydown', this.__onCellKeyDown);
-
-      const slot = document.createElement('slot');
-      slot.setAttribute('name', slotName);
-
-      if (column?._focusButtonMode) {
-        const div = document.createElement('div');
-        div.setAttribute('role', 'button');
-        div.setAttribute('tabindex', '-1');
-        cell.appendChild(div);
-
-        // Patch `focus()` to use the button
-        cell._focusButton = div;
-        cell.focus = function (options) {
-          cell._focusButton.focus(options);
-        };
-
-        div.appendChild(slot);
-      } else {
-        cell.setAttribute('tabindex', '-1');
-        cell.appendChild(slot);
-      }
-
-      cell._content = cellContent;
-
-      return cell;
-    }
-
-    /**
-     * @param {!HTMLTableRowElement} row
-     * @param {!Array<!GridColumn>} columns
-     * @param {?string} section
-     * @param {boolean} noNotify
-     * @private
-     */
-    __initRow(row, columns, section = 'body', noNotify = false) {
-      const contentsFragment = document.createDocumentFragment();
-
-      iterateRowCells(row, (cell) => {
-        cell._vacant = true;
-      });
-      row.innerHTML = '';
-      if (section === 'body') {
-        // Clear the cached cell references
-        row.__cells = [];
-        if (row.__detailsCell) {
-          this.__teardownDetailsCell(row.__detailsCell);
-        }
-        row.__detailsCell = null;
-      }
-
-      columns
-        .filter((column) => !column.hidden)
-        .toSorted((a, b) => a._order - b._order)
-        .forEach((column, index, cols) => {
-          let cell;
-
-          if (section === 'body') {
-            // Body
-            if (!column._cells) {
-              column._cells = [];
-            }
-            cell = column._cells.find((cell) => cell._vacant);
-            if (!cell) {
-              cell = this._createCell('td', column);
-              column._cells.push(cell);
-            }
-            updatePart(cell, 'cell', true);
-            updatePart(cell, 'body-cell', true);
-            cell.__parentRow = row;
-            // Cache the cell reference
-            row.__cells.push(cell);
-
-            const isSizerRow = row === this.$.sizer;
-            if (!column._bodyContentHidden || isSizerRow) {
-              row.appendChild(cell);
-            }
-
-            if (isSizerRow) {
-              column._sizerCell = cell;
-            }
-
-            if (index === cols.length - 1 && this.rowDetailsRenderer) {
-              // Add details cell as last cell to body rows
-              if (!this._detailsCells) {
-                this._detailsCells = [];
-              }
-              const detailsCell = this._detailsCells.find((cell) => cell._vacant) || this._createCell('td');
-              if (this._detailsCells.indexOf(detailsCell) === -1) {
-                this._detailsCells.push(detailsCell);
-              }
-              if (!detailsCell._content.parentElement) {
-                contentsFragment.appendChild(detailsCell._content);
-              }
-              this._configureDetailsCell(detailsCell);
-              detailsCell.__parentRow = row;
-              row.appendChild(detailsCell);
-              // Cache the details cell reference
-              row.__detailsCell = detailsCell;
-              this.__a11ySetRowDetailsCell(row, detailsCell);
-              detailsCell._vacant = false;
-            }
-
-            if (!noNotify) {
-              column._cells = [...column._cells];
-            }
-          }
-
-          if (!cell._content.parentElement) {
-            contentsFragment.appendChild(cell._content);
-          }
-          cell._vacant = false;
-          cell._column = column;
-        });
-
-      // Might be empty if only cache was used
-      this.appendChild(contentsFragment);
-
-      this._updateFirstAndLastColumnForRow(row);
-    }
-
-    /** @private */
     __updateVirtualizerElement(row, index) {
       this._preventScrollerRotatingCellFocus(row, index);
 
@@ -530,18 +384,16 @@ export const GridMixin = (superClass) =>
 
     /** @private */
     _columnTreeChanged(columnTree) {
-      this._renderColumnTree(columnTree);
-      this.__updateColumnsBodyContentHidden();
-    }
+      const columns = columnTree.at(-1);
+      columns
+        .filter((column) => !this.#renderedColumns.includes(column))
+        .forEach((column) => {
+          column._cells = [];
+        });
+      this.#renderedColumns = columns;
 
-    /** @private */
-    __updateRowOrderParts(row) {
-      updateBooleanRowStates(row, {
-        first: row.index === 0,
-        last: row.index === this._flatSize - 1,
-        odd: row.index % 2 !== 0,
-        even: row.index % 2 === 0,
-      });
+      this._renderColumnTree();
+      this.__updateColumnsBodyContentHidden();
     }
 
     /** @private */
@@ -561,21 +413,27 @@ export const GridMixin = (superClass) =>
     }
 
     /**
-     * @param {!Array<!GridColumn>} columnTree
      * @protected
      */
-    _renderColumnTree(columnTree) {
+    _renderColumnTree() {
+      // This render uses the current hidden state of all columns,
+      // so a pending render from a hidden change is not needed
+      this._debouncerHiddenChanged?.cancel();
+      this.__renderBodyDebouncer?.cancel();
+
       iterateChildren(this.$.items, (row) => {
-        this.__initRow(row, columnTree[columnTree.length - 1], 'body', true);
         this.__updateRow(row);
       });
 
       this.__renderHeaderFooter();
+      this.__renderSizer();
 
-      // Sizer rows
-      this.__initRow(this.$.sizer, columnTree[columnTree.length - 1]);
+      this._columnTree.at(-1).forEach((column) => {
+        column._cells = [...(column._cells ?? [])];
+        column.performUpdate?.();
+      });
 
-      this._resizeHandler();
+      this.__updateHorizontalScrollPosition();
       this.__a11yUpdateHeaderRows();
       this.__a11yUpdateFooterRows();
       this.__updateHeaderAndFooter();
@@ -583,40 +441,22 @@ export const GridMixin = (superClass) =>
 
     /**
      * @param {!HTMLElement} row
-     * @param {boolean} loading
+     * @param {{ skipRenderers?: boolean }} options
      * @private
      */
-    __updateRowCellsLoading(row, loading) {
-      const cells = getBodyRowCells(row);
-
-      // Cells part attribute
-      updateCellsPart(cells, 'loading-row-cell', loading);
-
-      if (loading) {
-        // Run style generators for the loading row to have custom names cleared
-        this._generateCellPartNames(row);
-      }
-    }
-
-    /**
-     * @param {!HTMLElement} row
-     * @private
-     */
-    __updateRow(row) {
-      this.__renderBodyRow(row);
-
-      this.__a11yUpdateRowRowindex(row);
-      this.__updateRowOrderParts(row);
-
+    __updateRow(row, { skipRenderers = false } = {}) {
       const item = this.__getRowItem(row);
       if (item) {
-        this.__updateRowCellsLoading(row, false);
-      } else {
-        this.__updateRowCellsLoading(row, true);
+        // Set the item before rendering, the row template reads the row model
+        row._item = item;
+      }
+
+      this.__renderBodyRow(row);
+
+      if (!item) {
         return;
       }
 
-      row._item = item;
       const model = this.__getRowModel(row);
 
       this._toggleDetailsCell(row, model.detailsOpened);
@@ -626,29 +466,24 @@ export const GridMixin = (superClass) =>
 
       this.__updateRowStateParts(row, model);
 
-      this._generateCellPartNames(row, model);
       this._filterDragAndDrop(row, model);
       this.__updateDragSourceParts(row, model);
 
-      iterateChildren(row, (cell) => {
-        if (cell._column && !cell._column.isConnected) {
-          return;
-        }
-        if (cell._renderer) {
-          const owner = cell._column || this;
-          cell._renderer.call(owner, cell._content, owner, model);
-        }
-      });
+      if (!skipRenderers) {
+        iterateChildren(row, (cell) => {
+          if (cell._column && !cell._column.isConnected) {
+            return;
+          }
+          if (cell._renderer) {
+            const owner = cell._column || this;
+            cell._renderer.call(owner, cell._content, owner, model);
+          }
+        });
+      }
 
       this._updateDetailsCellHeight(row);
 
       this.__a11yUpdateRowExpanded(row, model.expanded);
-    }
-
-    /** @private */
-    _resizeHandler() {
-      this._updateDetailsCellHeights();
-      this.__updateHorizontalScrollPosition();
     }
 
     /**
@@ -678,10 +513,6 @@ export const GridMixin = (superClass) =>
       if (tooltip?.isConnected) {
         const target = event.target;
 
-        if (!this.__isCellFullyVisible(target)) {
-          return;
-        }
-
         this._tooltipController.setTarget(target);
         this._tooltipController.setContext(this.getEventContext(event));
 
@@ -691,33 +522,6 @@ export const GridMixin = (superClass) =>
           hover: event.type === 'mouseenter',
         });
       }
-    }
-
-    /** @private */
-    __isCellFullyVisible(cell) {
-      if (cell.hasAttribute('frozen') || cell.hasAttribute('frozen-to-end')) {
-        // Frozen cells are always fully visible
-        return true;
-      }
-
-      let { left, right } = this.getBoundingClientRect();
-
-      const frozen = [...cell.parentNode.children].find((cell) => cell.hasAttribute('last-frozen'));
-      if (frozen) {
-        const frozenRect = frozen.getBoundingClientRect();
-        left = this.__isRTL ? left : frozenRect.right;
-        right = this.__isRTL ? frozenRect.left : right;
-      }
-
-      const frozenToEnd = [...cell.parentNode.children].find((cell) => cell.hasAttribute('first-frozen-to-end'));
-      if (frozenToEnd) {
-        const frozenToEndRect = frozenToEnd.getBoundingClientRect();
-        left = this.__isRTL ? frozenToEndRect.right : left;
-        right = this.__isRTL ? right : frozenToEndRect.left;
-      }
-
-      const cellRect = cell.getBoundingClientRect();
-      return cellRect.left >= left && cellRect.right <= right;
     }
 
     /** @protected */

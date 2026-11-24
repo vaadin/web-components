@@ -40,6 +40,18 @@ export const MessageInputMixin = (superClass) =>
           sync: true,
         },
 
+        /**
+         * Set to true to prevent submitting the message. The send button is
+         * disabled and pressing Enter does not submit. The user can still type
+         * in the text area and the current value is kept.
+         * @attr {boolean} submit-disabled
+         */
+        submitDisabled: {
+          type: Boolean,
+          value: false,
+          sync: true,
+        },
+
         /** @private */
         _button: {
           type: Object,
@@ -56,7 +68,7 @@ export const MessageInputMixin = (superClass) =>
 
     static get observers() {
       return [
-        '__buttonPropsChanged(_button, disabled, __effectiveI18n, value)',
+        '__buttonPropsChanged(_button, disabled, submitDisabled, __effectiveI18n, value)',
         '__textAreaPropsChanged(_textArea, disabled, __effectiveI18n, value)',
       ];
     }
@@ -112,6 +124,12 @@ export const MessageInputMixin = (superClass) =>
           });
 
           textarea.addEventListener('keydown', (event) => {
+            // Let the IME handle Enter that confirms a composition. Safari fires
+            // compositionend before keydown, so also check the IME key code.
+            if (event.isComposing || event.keyCode === 229) {
+              return;
+            }
+
             if (event.key === 'Enter' && !event.shiftKey) {
               event.preventDefault();
               event.stopImmediatePropagation();
@@ -179,9 +197,9 @@ export const MessageInputMixin = (superClass) =>
     }
 
     /** @private */
-    __buttonPropsChanged(button, disabled, effectiveI18n, value) {
+    __buttonPropsChanged(button, disabled, submitDisabled, effectiveI18n, value) {
       if (button) {
-        button.disabled = disabled || !value;
+        button.disabled = disabled || submitDisabled || !value;
 
         this._buttonController.setLabel(effectiveI18n.send);
       }
@@ -203,9 +221,13 @@ export const MessageInputMixin = (superClass) =>
      * Submits the current value as an custom event named 'submit'.
      * It also clears the text input and refocuses it for sending another message.
      * In UI, can be triggered by pressing the submit button or pressing enter key when field is focused.
-     * It does not submit anything if text is empty.
+     * It does not submit anything if text is empty or `submitDisabled` is true.
      */
     __submit() {
+      if (this.submitDisabled) {
+        return;
+      }
+
       if (this.value !== '') {
         this.dispatchEvent(new CustomEvent('submit', { detail: { value: this.value } }));
         this.value = '';

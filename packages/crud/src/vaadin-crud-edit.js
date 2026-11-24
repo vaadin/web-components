@@ -11,6 +11,7 @@
 import { html } from 'lit';
 import { Button } from '@vaadin/button/src/vaadin-button.js';
 import { defineCustomElement } from '@vaadin/component-base/src/define.js';
+import { getClosestCell } from '@vaadin/grid/src/vaadin-grid-helpers.js';
 import { crudEditStyles } from './styles/vaadin-crud-edit-base-styles.js';
 
 /**
@@ -33,6 +34,22 @@ class CrudEdit extends Button {
     return [super.styles, crudEditStyles];
   }
 
+  static get properties() {
+    return {
+      /**
+       * The accessible name of the button.
+       *
+       * @attr {string} aria-label
+       */
+      ariaLabel: {
+        type: String,
+        value: 'Edit',
+        reflectToAttribute: true,
+        sync: true,
+      },
+    };
+  }
+
   /** @protected */
   render() {
     return html`
@@ -45,12 +62,14 @@ class CrudEdit extends Button {
   ready() {
     super.ready();
     this.addEventListener('click', this.__onClick);
-    this.setAttribute('aria-label', 'Edit');
   }
 
   /** @private */
-  __onClick(e) {
-    const tr = e.target.parentElement.assignedSlot.parentElement.parentElement;
+  __onClick() {
+    const tr = getClosestCell(this)?.__parentRow;
+    if (!tr) {
+      return;
+    }
     /** @internal to not document it in CEM */
     tr.dispatchEvent(
       new CustomEvent('edit', { detail: { item: tr._item, index: tr.index }, bubbles: true, composed: true }),

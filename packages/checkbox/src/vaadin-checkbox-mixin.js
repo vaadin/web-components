@@ -131,7 +131,7 @@ export const CheckboxMixin = (superclass) =>
       const togglesChecked =
         target === this.inputElement ||
         target.part.contains('required-indicator') ||
-        (this._labelNode.contains(target) && !target.closest('a'));
+        (this._labelNode?.contains(target) && !target.closest('a'));
 
       if (this.readonly || !togglesChecked) {
         return false;
@@ -214,6 +214,6 @@ export const CheckboxMixin = (superclass) =>
 
     /** @private */
     _onRequiredIndicatorClick() {
-      this._labelNode.click();
+      this._labelNode?.click();
     }
   };

@@ -38,28 +38,23 @@
     display: grid;
     grid-template-columns: auto 1fr;
     align-items: baseline;
+    position: relative;
+    isolation: isolate;
   }
 
   [part='checkbox'],
   [part='radio'],
   [part='switch'],
   [part='label'],
-  ::slotted(input),
   ::slotted(label) {
     grid-row: 1;
-  }
-
-  [part='checkbox'],
-  [part='radio'],
-  [part='switch'],
-  ::slotted(input) {
-    grid-column: 1;
   }
 
   /* Control container (checkbox, radio button, switch) */
   [part='checkbox'],
   [part='radio'],
   [part='switch'] {
+    grid-column: 1;
     width: var(--_input-size, 1em);
     height: var(--_input-size, 1em);
     --_input-border-width: var(--vaadin-input-field-border-width, 0);
@@ -102,9 +97,26 @@
   ::slotted(input) {
     cursor: inherit;
     margin: 0;
-    align-self: stretch;
     appearance: none;
     width: initial;
     height: initial;
+    position: absolute;
+    grid-row: 1 / 2;
+    grid-column: 1 / 2;
+    inset: 0;
+  }
+
+  /* Make the space next to the label clickable */
+  [part~='label'] {
+    justify-self: start;
+  }
+
+  :host([has-label]) ::slotted(label)::after {
+    content: '';
+    position: absolute;
+    grid-row: 1 / 2;
+    grid-column: 2 / 3;
+    inset: 0;
+    z-index: -1;
   }
 }

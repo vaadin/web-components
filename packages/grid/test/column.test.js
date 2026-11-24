@@ -96,6 +96,18 @@ describe('column', () => {
 
         expect(getContainerCell(grid.$.footer, 0, 0).style.width).to.eql('200px');
       });
+
+      ['null', 'undefined'].forEach((type) => {
+        it(`should restore default width when set to ${type}`, () => {
+          column.width = '200px';
+          column.width = type === 'null' ? null : undefined;
+          flushGrid(grid);
+
+          expect(column.width).to.equal('100px');
+          expect(getContainerCell(grid.$.items, 0, 0).style.width).to.equal('100px');
+          expect(getContainerCell(grid.$.header, 1, 0).style.width).to.equal('100px');
+        });
+      });
     });
 
     describe('text align', () => {
@@ -159,6 +171,7 @@ describe('column', () => {
       it('should detach cells from a hidden column', () => {
         const childCountBefore = grid.childElementCount;
         column.hidden = true;
+        flushGrid(grid);
         const childCountAfter = grid.childElementCount;
         expect(childCountAfter).to.be.below(childCountBefore);
       });
@@ -222,6 +235,25 @@ describe('column', () => {
         expect(() => {
           grid.size = 11;
         }).to.not.throw(Error);
+      });
+
+      describe('all columns hidden', () => {
+        beforeEach(() => {
+          grid.size = 1000;
+          flushGrid(grid);
+          [...columns, emptyColumn].forEach((col) => {
+            col.hidden = true;
+          });
+          flushGrid(grid);
+        });
+
+        it('should not render a row for every item when a column is shown again', async () => {
+          column.hidden = false;
+          await nextFrame();
+          flushGrid(grid);
+
+          expect(grid.$.items.childElementCount).to.be.below(100);
+        });
       });
     });
 
@@ -509,19 +541,6 @@ describe('column', () => {
       expect(content.parentElement).to.equal(grid);
     });
 
-    it('should not throw when the column is detached again before its cells are re-attached', async () => {
-      const group = column.parentElement;
-      const content = getBodyCellContent(grid, 0, 0);
-      column.remove();
-      await nextFrame();
-
-      group.appendChild(column);
-      column.remove();
-      await nextFrame();
-
-      expect(content.parentElement).to.be.null;
-    });
-
     it('should render cell content when column is added back', async () => {
       const group = column.parentElement;
       column.remove();
@@ -534,6 +553,21 @@ describe('column', () => {
       expect(getHeaderCellContent(grid, 1, 0).textContent).to.equal('header1');
       expect(getContainerCellContent(grid.$.footer, 0, 0).textContent).to.equal('footer1');
       expect(getBodyCellContent(grid, 0, 0).textContent).to.equal('cell');
+    });
+
+    it('should not keep cells of a hidden column after it is removed and added back', () => {
+      const cellCount = emptyColumn._cells.length;
+      emptyColumn.hidden = true;
+      flushGrid(grid);
+
+      emptyColumn.remove();
+      flushGrid(grid);
+
+      grid.appendChild(emptyColumn);
+      emptyColumn.hidden = false;
+      flushGrid(grid);
+
+      expect(emptyColumn._cells.length).to.equal(cellCount);
     });
   });
 
@@ -598,5 +632,31 @@ describe('column - simple grid', () => {
 
     expect(getBodyCellContent(grid, 0, 0).textContent.trim()).to.equal('foo0');
     expect(getBodyCellContent(grid, 1, 0).textContent.trim()).to.equal('foo1');
+  });
+
+  it('should render column tree once when adding an initially hidden column', () => {
+    const spy = sinon.spy(grid, '_renderColumnTree');
+    const newColumn = document.createElement('vaadin-grid-column');
+    newColumn.path = 'value';
+    newColumn.hidden = true;
+    grid.appendChild(newColumn);
+    flushGrid(grid);
+    expect(spy).to.be.calledOnce;
+
+    newColumn.hidden = false;
+    flushGrid(grid);
+    expect(getBodyCellContent(grid, 0, 1).textContent.trim()).to.equal('foo0');
+  });
+
+  it('should render column tree once when adding a group with only hidden columns', () => {
+    const spy = sinon.spy(grid, '_renderColumnTree');
+    const group = document.createElement('vaadin-grid-column-group');
+    const newColumn = document.createElement('vaadin-grid-column');
+    newColumn.hidden = true;
+    group.appendChild(newColumn);
+    grid.appendChild(group);
+    flushGrid(grid);
+    expect(group.hidden).to.be.true;
+    expect(spy).to.be.calledOnce;
   });
 });

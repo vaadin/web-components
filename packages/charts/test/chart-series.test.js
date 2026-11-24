@@ -283,12 +283,12 @@ describe('vaadin-chart-series', () => {
     });
 
     it('should work with value-max set with attribute', () => {
-      expect(chart.configuration.yAxis[1].paddedTicks.slice(-1)[0]).to.be.closeTo(40, 5);
+      expect(chart.configuration.yAxis[1].paddedTicks.at(-1)).to.be.closeTo(40, 5);
     });
 
     it('should update series when changing valueMax property', () => {
       chart.children[1].valueMax = 10;
-      expect(chart.configuration.yAxis[1].paddedTicks.slice(-1)[0]).to.be.closeTo(10, 5);
+      expect(chart.configuration.yAxis[1].paddedTicks.at(-1)).to.be.closeTo(10, 5);
     });
   });
 

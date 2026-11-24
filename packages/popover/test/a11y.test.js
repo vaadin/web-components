@@ -226,6 +226,47 @@ describe('a11y', () => {
       await oneEvent(overlay, 'vaadin-overlay-open');
       expect(spy).to.be.calledOnce;
     });
+
+    describe('element with autofocus', () => {
+      let input;
+
+      beforeEach(() => {
+        input = popover.querySelector('input');
+        input.autofocus = true;
+      });
+
+      it('should focus the element with autofocus when opened', async () => {
+        target.click();
+        await oneEvent(overlay, 'vaadin-overlay-open');
+        expect(getDeepActiveElement()).to.equal(input);
+      });
+
+      it('should focus the element with autofocus when opened if autofocus is true', async () => {
+        popover.autofocus = true;
+        target.click();
+        await oneEvent(overlay, 'vaadin-overlay-open');
+        expect(getDeepActiveElement()).to.equal(input);
+      });
+
+      it('should keep the popover opened when focusing the element with trigger set to focus', async () => {
+        popover.trigger = ['focus'];
+        await nextUpdate(popover);
+        target.focus();
+        await oneEvent(overlay, 'vaadin-overlay-open');
+        expect(getDeepActiveElement()).to.equal(input);
+        expect(popover.opened).to.be.true;
+      });
+
+      it('should focus the element with autofocus if autofocus is true in a shadow root', async () => {
+        const host = fixtureSync('<div></div>');
+        host.attachShadow({ mode: 'open' }).append(target, popover);
+        popover.autofocus = true;
+        await nextRender();
+        target.click();
+        await oneEvent(overlay, 'vaadin-overlay-open');
+        expect(getDeepActiveElement()).to.equal(input);
+      });
+    });
   });
 
   describe('focus restoration', () => {

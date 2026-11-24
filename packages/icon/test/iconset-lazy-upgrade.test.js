@@ -25,6 +25,9 @@ describe('vaadin-iconset lazy upgrade', () => {
   });
 
   it('should use correct name and size set as attributes before upgrade', async () => {
+    // WebKit bug: until `customElements` is first read, `document.importNode()`
+    // used by `fixtureSync` gives elements a null registry, so they don't upgrade.
+    expect(customElements.get('vaadin-icon')).to.be.undefined;
     const icon = fixtureSync('<vaadin-icon icon="vaadin:caret-down"></vaadin-icon>');
 
     // Import vaadin-icon, which also imports vaadin-iconset internally.

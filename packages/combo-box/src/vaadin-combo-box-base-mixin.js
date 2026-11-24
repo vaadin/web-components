@@ -102,6 +102,7 @@ export const ComboBoxBaseMixin = (superClass) =>
       this._boundOnClearButtonMouseDown = this.__onClearButtonMouseDown.bind(this);
       this._boundOnClick = this._onClick.bind(this);
       this._boundOnOverlayTouchAction = this._onOverlayTouchAction.bind(this);
+      this._boundOnOverlayClick = this.__onOverlayClick.bind(this);
       this._boundOnTouchend = this._onTouchend.bind(this);
     }
 
@@ -180,7 +181,9 @@ export const ComboBoxBaseMixin = (superClass) =>
         this._updateScroller();
       }
 
-      if (props.has('_highlightState')) {
+      // An item can be highlighted while the overlay is closed, e.g. when filtering
+      // on input. Reference it once the overlay is opened.
+      if (props.has('_highlightState') || (props.has('_overlayOpened') && this._overlayOpened)) {
         this._updateActiveDescendant();
       }
     }
@@ -216,6 +219,9 @@ export const ComboBoxBaseMixin = (superClass) =>
 
       overlay.addEventListener('touchend', this._boundOnOverlayTouchAction);
       overlay.addEventListener('touchmove', this._boundOnOverlayTouchAction);
+
+      // Use capture phase as the scroller stops click propagation
+      overlay.addEventListener('click', this._boundOnOverlayClick, true);
 
       // Prevent blurring the input when clicking inside the overlay
       overlay.addEventListener('mousedown', (e) => e.preventDefault());
@@ -336,6 +342,9 @@ export const ComboBoxBaseMixin = (superClass) =>
           }
         }
       } else {
+        // Reset when a tap was not followed by a click, e.g. at the end of a scroll
+        this.__blurOnClick = false;
+
         if (this.autoselect) {
           // When the dropdown closes, the input remains focused. Mark that the next
           // host click should re-trigger autoselect, since the normal focus event
@@ -355,9 +364,31 @@ export const ComboBoxBaseMixin = (superClass) =>
     }
 
     /** @private */
-    _onOverlayTouchAction() {
-      // On touch devices, blur the input on touch start inside the overlay, in order to hide
-      // the virtual keyboard. But don't close the overlay on this blur.
+    _onOverlayTouchAction(event) {
+      // On tap, wait for the click: hiding the keyboard scrolls the page
+      // before iOS dispatches the click, which then misses its target.
+      if (event.type === 'touchend') {
+        this.__blurOnClick = true;
+        return;
+      }
+
+      this.__blurInputKeepOpened();
+    }
+
+    /** @private */
+    __onOverlayClick() {
+      if (this.__blurOnClick) {
+        this.__blurOnClick = false;
+        this.__blurInputKeepOpened();
+      }
+    }
+
+    /**
+     * Blur the input on touch inside the overlay to hide the virtual keyboard,
+     * but don't close the overlay on this blur.
+     * @private
+     */
+    __blurInputKeepOpened() {
       this._closeOnBlurIsPrevented = true;
       this.inputElement.blur();
       this._closeOnBlurIsPrevented = false;
@@ -774,19 +805,14 @@ export const ComboBoxBaseMixin = (superClass) =>
      * @protected
      */
     _handleFocusOut() {
-      if (isKeyboardActive()) {
-        // Close on Tab key causing blur. With mouse, close on outside click instead.
-        this._closeOrCommit();
+      // With mouse, the outside click closes the visible overlay without committing
+      if (!isKeyboardActive() && this.opened && this._overlayOpened) {
         return;
       }
 
-      if (!this.opened) {
-        this._commitValue();
-      } else if (!this._overlayOpened) {
-        // Combo-box is opened, but overlay is not visible -> custom value was entered.
-        // Make sure we close here as there won't be an "outside click" in this case.
-        this.close();
-      }
+      // When tabbing out or the overlay is already closed, commit the
+      // value instead, also while data provider might still be loading
+      this._closeOrCommit();
     }
 
     /**

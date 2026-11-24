@@ -65,7 +65,7 @@ export const MultiSelectListMixin = (superClass) =>
 
     /** @private */
     _scrollToLastSelectedItem() {
-      const lastSelectedItem = this.selectedValues.slice(-1)[0];
+      const lastSelectedItem = this.selectedValues.at(-1);
       if (lastSelectedItem && !lastSelectedItem.disabled) {
         this._scrollToItem(lastSelectedItem);
       }

@@ -56,6 +56,16 @@ combinations:
 ::part(date selected) { … } /* the selected cell */
 ```
 
+Inside the shadow DOM, the component's own styles and tests must use the
+word selector `[part~='…']` for the same reason. The exact form
+`[part='date']` only matches while `date` is the single part, and stops
+matching silently once a state part is added:
+
+```css
+[part~='date'] { … }                 /* every date cell */
+[part~='date'][part~='focused'] { … } /* the focused cell */
+```
+
 ### `exportparts`
 
 If a component contains another Vaadin component whose parts should remain

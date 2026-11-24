@@ -3,10 +3,20 @@ import { addGlobalStyles } from '@vaadin/component-base/src/css-utils.js';
 import { css, registerStyles } from '@vaadin/vaadin-themable-mixin';
 
 // Highcharts' own animations. The CSS transitions the base styles declare are
-// disabled by the rules below.
+// disabled by the rules below. Series states set their own animation, which
+// overrides `chart.animation` and fades the series in non-styled mode.
 Highcharts.setOptions({
   chart: { animation: false },
-  plotOptions: { series: { animation: false } },
+  plotOptions: {
+    series: {
+      animation: false,
+      states: {
+        hover: { animation: false },
+        inactive: { animation: false },
+        normal: { animation: false },
+      },
+    },
+  },
   tooltip: { animation: false, hideDelay: 0 },
 });
 

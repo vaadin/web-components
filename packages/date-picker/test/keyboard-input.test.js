@@ -5,7 +5,9 @@ import sinon from 'sinon';
 import '../src/vaadin-date-picker.js';
 import { formatISODate, getAdjustedYear, parseDate } from '../src/vaadin-date-picker-helper.js';
 import {
+  getDateButton,
   getFocusableCell,
+  getFocusableDateButton,
   getFocusedCell,
   idleCallback,
   open,
@@ -89,8 +91,7 @@ describe('keyboard', () => {
       datePicker.click();
       await untilOverlayRendered(datePicker);
 
-      const cell = getFocusableCell(datePicker);
-      tap(cell);
+      tap(getFocusableDateButton(datePicker));
 
       datePicker.click();
       await untilOverlayRendered(datePicker);
@@ -215,9 +216,9 @@ describe('keyboard', () => {
       // Move focus to the calendar
       await sendKeys({ press: 'Tab' });
       await untilOverlayRendered(datePicker);
-      const cell = getFocusedCell(datePicker);
+      const button = getDateButton(getFocusedCell(datePicker));
       const spy = sinon.spy(input, 'focus');
-      tap(cell);
+      tap(button);
       expect(spy.calledOnce).to.be.true;
     });
 

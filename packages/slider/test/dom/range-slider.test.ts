@@ -7,12 +7,12 @@ import type { RangeSlider } from '../../src/vaadin-range-slider.js';
 describe('vaadin-range-slider', () => {
   let slider: RangeSlider;
 
-  beforeEach(async () => {
+  beforeEach(() => {
     resetUniqueId();
     slider = fixtureSync('<vaadin-range-slider></vaadin-range-slider>');
   });
 
-  describe('host', async () => {
+  describe('host', () => {
     it('default', async () => {
       await expect(slider).dom.to.equalSnapshot();
     });
@@ -105,7 +105,7 @@ describe('vaadin-range-slider', () => {
     });
   });
 
-  describe('shadow', async () => {
+  describe('shadow', () => {
     it('default', async () => {
       await expect(slider).shadowDom.to.equalSnapshot();
     });

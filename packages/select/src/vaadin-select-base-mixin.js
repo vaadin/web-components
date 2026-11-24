@@ -11,7 +11,6 @@ import { MediaQueryController } from '@vaadin/component-base/src/media-query-con
 import { TooltipController } from '@vaadin/component-base/src/tooltip-controller.js';
 import { generateUniqueId } from '@vaadin/component-base/src/unique-id-utils.js';
 import { FieldMixin } from '@vaadin/field-base/src/field-mixin.js';
-import { LabelController } from '@vaadin/field-base/src/label-controller.js';
 import { ButtonController } from './button-controller.js';
 
 export const SelectBaseMixin = (superClass) =>
@@ -140,6 +139,9 @@ export const SelectBaseMixin = (superClass) =>
         /** @private */
         _items: Object,
 
+        /** @private */
+        _menuElement: Object,
+
         /**
          * The `<vaadin-select-list-box>` slotted directly into the overlay slot.
          * @private
@@ -162,14 +164,6 @@ export const SelectBaseMixin = (superClass) =>
       ];
     }
 
-    constructor() {
-      super();
-
-      this._itemId = `value-${this.localName}-${generateUniqueId()}`;
-      this._srLabelController = new LabelController(this);
-      this._srLabelController.slotName = 'sr-label';
-    }
-
     /** @protected */
     disconnectedCallback() {
       super.disconnectedCallback();
@@ -187,8 +181,6 @@ export const SelectBaseMixin = (superClass) =>
 
       this._valueButtonController = new ButtonController(this);
       this.addController(this._valueButtonController);
-
-      this.addController(this._srLabelController);
 
       this.addController(
         new MediaQueryController(this._phoneMediaQuery, (matches) => {
@@ -233,8 +225,14 @@ export const SelectBaseMixin = (superClass) =>
         }
       }
 
-      if (props.has('accessibleName')) {
-        this._srLabelController.setLabel(this.accessibleName);
+      if (this.focusElement) {
+        if (props.has('opened') || props.has('_menuElement')) {
+          setOrRemoveAttribute(this.focusElement, 'aria-controls', this.opened && this._menuElement?.id);
+        }
+
+        if (props.has('readonly')) {
+          setOrRemoveAttribute(this.focusElement, 'aria-readonly', this.readonly && 'true');
+        }
       }
 
       // Validate when the required constraint is removed.
@@ -276,6 +274,9 @@ export const SelectBaseMixin = (superClass) =>
      */
     _assignMenuElement(menuElement) {
       if (menuElement && menuElement !== this.__lastMenuElement) {
+        if (!menuElement.id) {
+          menuElement.id = `${menuElement.localName}-${generateUniqueId()}`;
+        }
         this._menuElement = menuElement;
 
         // Ensure items are initialized
@@ -486,9 +487,6 @@ export const SelectBaseMixin = (superClass) =>
       labelItem._sourceItem = selected;
 
       this.__appendValueItemElement(labelItem, this.focusElement);
-
-      // Ensure the item gets proper styles
-      labelItem.selected = true;
     }
 
     /**
@@ -519,13 +517,14 @@ export const SelectBaseMixin = (superClass) =>
      */
     __appendValueItemElement(itemElement, parent) {
       parent.appendChild(itemElement);
+      itemElement.removeAttribute('id');
       itemElement.removeAttribute('tabindex');
+      itemElement.removeAttribute('selected');
       itemElement.removeAttribute('aria-selected');
       itemElement.removeAttribute('role');
       itemElement.removeAttribute('focused');
       itemElement.removeAttribute('focus-ring');
       itemElement.removeAttribute('active');
-      itemElement.setAttribute('id', this._itemId);
     }
 
     /** @private */
@@ -558,8 +557,6 @@ export const SelectBaseMixin = (superClass) =>
         }
         delete this._selectedChanging;
       }
-
-      this.__updateFieldAriaControllerLabelledBy();
     }
 
     /** @private */
@@ -654,32 +651,5 @@ export const SelectBaseMixin = (superClass) =>
       this._requestValidation();
       this.dispatchEvent(new CustomEvent('change', { bubbles: true }));
       this.__dispatchChangePending = false;
-    }
-
-    /** @override */
-    __updateFieldAriaControllerLabel() {
-      // NO-OP
-    }
-
-    /** @override */
-    __updateFieldAriaControllerLabelledBy() {
-      let labelId;
-      if (this.accessibleNameRef) {
-        labelId = this.accessibleNameRef;
-      } else if (this.accessibleName) {
-        labelId = this._srLabelController.defaultId;
-      } else if (this.hasAttribute('has-label')) {
-        labelId = this._labelNode?.id;
-      }
-
-      const selectedItem = this._items?.[this._menuElement.selected];
-      const itemId = selectedItem || this.placeholder ? this._itemId : null;
-
-      const ids = [labelId, itemId].filter(Boolean);
-      if (ids.length > 0) {
-        this._fieldAriaController.setLabelledBy(ids.join(' '));
-      } else {
-        this._fieldAriaController.setLabelledBy(null);
-      }
     }
   };

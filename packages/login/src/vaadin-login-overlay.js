@@ -11,6 +11,7 @@ import './vaadin-login-overlay-wrapper.js';
 import { css, html, LitElement } from 'lit';
 import { ifDefined } from 'lit/directives/if-defined.js';
 import { defineCustomElement } from '@vaadin/component-base/src/define.js';
+import { slotContent } from '@vaadin/component-base/src/directives/slot-content.js';
 import { ElementMixin } from '@vaadin/component-base/src/element-mixin.js';
 import { PolylitMixin } from '@vaadin/component-base/src/polylit-mixin.js';
 import { ThemableMixin } from '@vaadin/vaadin-themable-mixin/vaadin-themable-mixin.js';
@@ -135,10 +136,10 @@ class LoginOverlay extends LoginFormMixin(LoginOverlayMixin(ElementMixin(Themabl
           <div id="title" slot="form-title" part="form-title" role="heading" aria-level="${this.headingLevel + 1}">
             ${this.__effectiveI18n.form.title}
           </div>
-          <slot name="form" slot="form"></slot>
+          <slot name="form" slot="form" ${slotContent(this._renderForm())}></slot>
           <slot name="custom-form-area" slot="custom-form-area"></slot>
-          <slot name="submit" slot="submit"></slot>
-          <slot name="forgot-password" slot="forgot-password"></slot>
+          <slot name="submit" slot="submit" ${slotContent(this._renderSubmitButton())}></slot>
+          <slot name="forgot-password" slot="forgot-password" ${slotContent(this._renderForgotPasswordButton())}></slot>
           <slot name="footer" slot="footer"></slot>
         </vaadin-login-form-wrapper>
       </vaadin-login-overlay-wrapper>

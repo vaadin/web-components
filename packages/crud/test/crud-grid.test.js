@@ -1,5 +1,6 @@
 import { expect } from '@vaadin/chai-plugins';
 import { aTimeout, fixtureSync, listenOnce, nextRender } from '@vaadin/testing-helpers';
+import sinon from 'sinon';
 import '../src/vaadin-crud-grid.js';
 import { flushGrid, getBodyCellContent, getHeaderCellContent } from './helpers.js';
 
@@ -198,6 +199,37 @@ describe('crud grid', () => {
           expect(getHeaderCellContent(grid, 2, 0).childElementCount).to.equal(1);
         });
       });
+    });
+  });
+
+  describe('edit button', () => {
+    let column, spy;
+
+    beforeEach(() => {
+      grid = fixtureSync('<vaadin-grid><vaadin-grid-column></vaadin-grid-column></vaadin-grid>');
+      grid.items = [...items, { ...items[0], _id: 2 }];
+      flushGrid(grid);
+      column = grid.querySelector('vaadin-grid-column');
+      spy = sinon.spy();
+      grid.addEventListener('edit', spy);
+    });
+
+    it('should fire edit event with the row item', () => {
+      column.renderer = (root) => {
+        root.innerHTML = '<vaadin-crud-edit></vaadin-crud-edit>';
+      };
+      getBodyCellContent(grid, 1, 0).querySelector('vaadin-crud-edit').click();
+      expect(spy).to.be.calledOnce;
+      expect(spy.firstCall.args[0].detail).to.eql({ item: grid.items[1], index: 1 });
+    });
+
+    it('should fire edit event when the edit button is wrapped in the cell content', () => {
+      column.renderer = (root) => {
+        root.innerHTML = '<div><vaadin-crud-edit></vaadin-crud-edit></div>';
+      };
+      getBodyCellContent(grid, 1, 0).querySelector('vaadin-crud-edit').click();
+      expect(spy).to.be.calledOnce;
+      expect(spy.firstCall.args[0].detail).to.eql({ item: grid.items[1], index: 1 });
     });
   });
 

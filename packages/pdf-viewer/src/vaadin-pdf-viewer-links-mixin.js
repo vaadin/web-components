@@ -1,0 +1,143 @@
+/**
+ * @license
+ * Copyright (c) 2000 - 2026 Vaadin Ltd.
+ *
+ * This program is available under Vaadin Commercial License and Service Terms.
+ *
+ *
+ * See https://vaadin.com/commercial-license-and-service-terms for the full
+ * license.
+ */
+import { isKeyboardActive } from '@vaadin/a11y-base/src/focus-utils.js';
+import { issueWarning } from '@vaadin/component-base/src/warnings.js';
+import { getLinkLabel, resolveDestination } from './pdf-viewer-links.js';
+
+/**
+ * Returns the text with its whitespace collapsed to single spaces, without leading and trailing whitespace.
+ * @param {string | undefined} text
+ * @return {string | undefined}
+ */
+function collapseWhitespace(text) {
+  return text?.replace(/\s+/gu, ' ').trim();
+}
+
+/**
+ * A mixin that adds the links of the rendered pages, and goes to the
+ * destinations of internal links.
+ */
+export const PdfViewerLinksMixin = (superClass) =>
+  class PdfViewerLinksMixinClass extends superClass {
+    /**
+     * What the accessible name of each link is made of, to update it when the localization changes.
+     * @type {WeakMap<HTMLElement, { page: import('./pdf-viewer-page.js').PdfViewerPage, text: string, url?: string, action?: string, targetPage: number | null }>}
+     */
+    #linkLabels = new WeakMap();
+
+    /** @protected */
+    updated(props) {
+      super.updated(props);
+
+      if (props.has('__effectiveI18n')) {
+        this.#updateLinkLabels();
+      }
+    }
+
+    /**
+     * Override method from `PdfViewerRenderMixin` to add the links of the
+     * page over the text layer.
+     * @protected
+     * @override
+     */
+    async _renderPageLayers(page) {
+      await super._renderPageLayers(page);
+
+      try {
+        // The layers that the canvas shows, see `PDFPageProxy.render()`.
+        const optionalContentConfig = await this._pdfDocument?.getOptionalContentConfig({ intent: 'display' });
+        const links = await page.renderLinkLayer((annotation) => this.#followLink(annotation), optionalContentConfig);
+        await this.#nameLinks(page, links);
+      } catch (error) {
+        // The page keeps its canvas and text without links.
+        if (error.name !== 'AbortException' && page.canvas) {
+          issueWarning(`Failed to render the links of page ${page.pageNumber} of the PDF document: ${error.message}`);
+        }
+      }
+    }
+
+    /**
+     * Gives the links of a page their accessible name, also the links that rendered before the structure of the page.
+     * @private
+     */
+    async #nameLinks(page, links) {
+      await Promise.all(
+        links.map(async ({ link, annotation }) => {
+          // As in pdf.js, the text that the link covers, which the worker finds for each link.
+          const text = collapseWhitespace(annotation.overlaidText ?? '');
+          let targetPage = null;
+          if (!text && !annotation.url) {
+            const target = await this.#resolveDestination(annotation);
+            targetPage = target ? target.page : null;
+          }
+          this.#linkLabels.set(link, { page, text, url: annotation.url, action: annotation.action, targetPage });
+        }),
+      );
+      this.#updateLinkLabels(page.element);
+    }
+
+    /**
+     * Names a link by its alternative text in the structure, the text it covers or the text it owns in the structure.
+     * @private
+     */
+    #updateLinkLabel(link) {
+      const { page, ...parts } = this.#linkLabels.get(link);
+      const ownText = collapseWhitespace(page.getLinkText(link));
+      // The text it owns when that holds the text it covers, such as all lines of a wrapped link.
+      const text = collapseWhitespace(page.getLinkAlt(link)) || (ownText?.includes(parts.text) ? ownText : parts.text);
+      link.setAttribute('aria-label', getLinkLabel({ ...parts, text }, this.__effectiveI18n));
+    }
+
+    /** @private */
+    #updateLinkLabels(container = this.$.pages) {
+      container.querySelectorAll('a.link').forEach((link) => {
+        if (this.#linkLabels.has(link)) {
+          this.#updateLinkLabel(link);
+        }
+      });
+    }
+
+    /**
+     * Returns the page and the position on the page that an internal link
+     * points to, or null when it cannot be resolved, see `resolveDestination()`.
+     * @private
+     */
+    #resolveDestination(destination) {
+      return resolveDestination(this._pdfDocument, destination, { page: this.page, pageCount: this.__pages.length });
+    }
+
+    /**
+     * Goes to the destination of an internal link, and moves focus to the
+     * pages, as the page with the link may not stay rendered.
+     * @private
+     */
+    async #followLink(annotation) {
+      const pdfDocument = this._pdfDocument;
+      const target = await this.#resolveDestination(annotation);
+      if (this._pdfDocument !== pdfDocument || !target) {
+        return;
+      }
+      const page = this.__pages[target.page - 1];
+      const hasPosition = target.left !== undefined || target.top !== undefined;
+      if (hasPosition) {
+        // The position depends on the size and the rotation of the page. A page that
+        // fails to load reports the error when it is rendered, and is scrolled to its start.
+        await this._loadPdfPage(page).catch(() => {});
+        if (this._pdfDocument !== pdfDocument) {
+          return;
+        }
+      }
+      const offset =
+        hasPosition && page.pdfPage ? page.getOffset(target.left, target.top, target.right, target.bottom) : undefined;
+      this._scrollToPage(target.page, offset);
+      this.$.content.focus({ preventScroll: true, focusVisible: isKeyboardActive() });
+    }
+  };

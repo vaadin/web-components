@@ -12,9 +12,10 @@ import '@vaadin/confirm-dialog/src/vaadin-confirm-dialog.js';
 import '@vaadin/text-field/src/vaadin-text-field.js';
 import '@vaadin/tooltip/src/vaadin-tooltip.js';
 import './vaadin-rich-text-editor-popup.js';
-import { html, LitElement, render } from 'lit';
+import { html, LitElement } from 'lit';
 import { isKeyboardActive } from '@vaadin/a11y-base/src/focus-utils.js';
 import { defineCustomElement } from '@vaadin/component-base/src/define.js';
+import { slotContent } from '@vaadin/component-base/src/directives/slot-content.js';
 import { ElementMixin } from '@vaadin/component-base/src/element-mixin.js';
 import { PolylitMixin } from '@vaadin/component-base/src/polylit-mixin.js';
 import { LumoInjectionMixin } from '@vaadin/vaadin-themable-mixin/lumo-injection-mixin.js';
@@ -403,71 +404,66 @@ class RichTextEditor extends RichTextEditorMixin(
 
       <slot name="tooltip"></slot>
 
-      <slot name="link-dialog"></slot>
+      <slot name="link-dialog" ${slotContent(this.__renderLinkDialog())}></slot>
 
-      <slot name="color-popup"></slot>
+      <slot name="color-popup" ${slotContent(this.__renderColorPopup())}></slot>
 
-      <slot name="background-popup"></slot>
+      <slot name="background-popup" ${slotContent(this.__renderBackgroundPopup())}></slot>
     `;
   }
 
-  /**
-   * Override update to render slotted overlays into light DOM after rendering shadow DOM.
-   * @param changedProperties
-   * @protected
-   */
-  update(changedProperties) {
-    super.update(changedProperties);
-
-    this.__renderSlottedOverlays();
+  /** @private */
+  __renderLinkDialog() {
+    return html`
+      <vaadin-confirm-dialog
+        slot="link-dialog"
+        cancel-button-visible
+        reject-theme="error"
+        .opened="${this._linkEditing}"
+        .header="${this.__effectiveI18n.linkDialogTitle}"
+        .confirmText="${this.__effectiveI18n.ok}"
+        .rejectText="${this.__effectiveI18n.remove}"
+        .cancelText="${this.__effectiveI18n.cancel}"
+        .rejectButtonVisible="${!!this._linkRange}"
+        @confirm="${this._onLinkEditConfirm}"
+        @cancel="${this._onLinkEditCancel}"
+        @reject="${this._onLinkEditRemove}"
+        @opened-changed="${this._onLinkEditingChanged}"
+      >
+        <vaadin-text-field
+          .value="${this._linkUrl}"
+          style="width: 100%;"
+          @keydown="${this._onLinkKeydown}"
+          @value-changed="${this._onLinkUrlChanged}"
+        ></vaadin-text-field>
+      </vaadin-confirm-dialog>
+    `;
   }
 
   /** @private */
-  __renderSlottedOverlays() {
-    render(
-      html`
-        <vaadin-confirm-dialog
-          slot="link-dialog"
-          cancel-button-visible
-          reject-theme="error"
-          .opened="${this._linkEditing}"
-          .header="${this.__effectiveI18n.linkDialogTitle}"
-          .confirmText="${this.__effectiveI18n.ok}"
-          .rejectText="${this.__effectiveI18n.remove}"
-          .cancelText="${this.__effectiveI18n.cancel}"
-          .rejectButtonVisible="${!!this._linkRange}"
-          @confirm="${this._onLinkEditConfirm}"
-          @cancel="${this._onLinkEditCancel}"
-          @reject="${this._onLinkEditRemove}"
-          @opened-changed="${this._onLinkEditingChanged}"
-        >
-          <vaadin-text-field
-            .value="${this._linkUrl}"
-            style="width: 100%;"
-            @keydown="${this._onLinkKeydown}"
-            @value-changed="${this._onLinkUrlChanged}"
-          ></vaadin-text-field>
-        </vaadin-confirm-dialog>
+  __renderColorPopup() {
+    return html`
+      <vaadin-rich-text-editor-popup
+        slot="color-popup"
+        .colors="${['#000000', ...[...this.colorOptions].filter((c) => c !== '#000000')]}"
+        .opened="${this._colorEditing}"
+        @color-selected="${this.__onColorSelected}"
+        @opened-changed="${this.__onColorEditingChanged}"
+      ></vaadin-rich-text-editor-popup>
+    `;
+  }
 
-        <vaadin-rich-text-editor-popup
-          slot="color-popup"
-          .colors="${['#000000', ...[...this.colorOptions].filter((c) => c !== '#000000')]}"
-          .opened="${this._colorEditing}"
-          @color-selected="${this.__onColorSelected}"
-          @opened-changed="${this.__onColorEditingChanged}"
-        ></vaadin-rich-text-editor-popup>
-
-        <vaadin-rich-text-editor-popup
-          slot="background-popup"
-          .colors="${['#ffffff', ...[...this.colorOptions].filter((c) => c !== '#ffffff')]}"
-          .opened="${this._backgroundEditing}"
-          @color-selected="${this.__onBackgroundSelected}"
-          @opened-changed="${this.__onBackgroundEditingChanged}"
-        ></vaadin-rich-text-editor-popup>
-      `,
-      this,
-      { host: this },
-    );
+  /** @private */
+  __renderBackgroundPopup() {
+    return html`
+      <vaadin-rich-text-editor-popup
+        slot="background-popup"
+        .colors="${['#ffffff', ...[...this.colorOptions].filter((c) => c !== '#ffffff')]}"
+        .opened="${this._backgroundEditing}"
+        @color-selected="${this.__onBackgroundSelected}"
+        @opened-changed="${this.__onBackgroundEditingChanged}"
+      ></vaadin-rich-text-editor-popup>
+    `;
   }
 
   /** @private */

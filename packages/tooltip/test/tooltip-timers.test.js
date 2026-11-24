@@ -703,6 +703,69 @@ describe('timers', () => {
       focusin(targets[0]);
       expect(overlays[0].opened).to.be.false;
     });
+
+    describe('removed during delay', () => {
+      it('should not open after the delay', async () => {
+        tabKeyDown(document.body);
+        focusin(targets[0]);
+        tooltips[0].remove();
+
+        await aTimeout(2);
+        expect(tooltips[0].opened).to.be.not.ok;
+      });
+
+      it('should not open after the delay in manual mode', async () => {
+        // Components like grid open a manual tooltip with a delay through the state controller
+        tooltips[0].manual = true;
+        tooltips[0]._stateController.open({ focus: true });
+        tooltips[0].remove();
+
+        await aTimeout(2);
+        expect(tooltips[0].opened).to.be.not.ok;
+      });
+
+      it('should still open after the delay when added back to the DOM', async () => {
+        tabKeyDown(document.body);
+        focusin(targets[0]);
+        tooltips[0].remove();
+        wrapper.appendChild(tooltips[0]);
+
+        await aTimeout(2);
+        expect(overlays[0].opened).to.be.true;
+      });
+
+      it('should warm up another tooltip requested before the delay ends', async () => {
+        tabKeyDown(document.body);
+        focusin(targets[0]);
+        tooltips[0].remove();
+        focusin(targets[1]);
+
+        await aTimeout(2);
+        expect(overlays[1].opened).to.be.true;
+      });
+
+      it('should not warm up other tooltips after the delay ends', async () => {
+        tabKeyDown(document.body);
+        focusin(targets[0]);
+        tooltips[0].remove();
+        await aTimeout(2);
+
+        focusin(targets[1]);
+        expect(overlays[1].opened).to.be.not.ok;
+
+        await aTimeout(2);
+        expect(overlays[1].opened).to.be.true;
+      });
+
+      it('should still open after the delay when another tooltip is removed', async () => {
+        tabKeyDown(document.body);
+        focusin(targets[0]);
+        tooltips[1].remove();
+
+        await aTimeout(2);
+        expect(overlays[0].opened).to.be.true;
+      });
+    });
   });
 
   describe('state controller', () => {

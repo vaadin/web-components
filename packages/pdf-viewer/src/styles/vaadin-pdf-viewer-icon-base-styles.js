@@ -1,0 +1,57 @@
+/**
+ * @license
+ * Copyright (c) 2000 - 2026 Vaadin Ltd.
+ *
+ * This program is available under Vaadin Commercial License and Service Terms.
+ *
+ *
+ * See https://vaadin.com/commercial-license-and-service-terms for the full
+ * license.
+ */
+import '@vaadin/component-base/src/styles/style-props.js';
+import { css } from 'lit';
+
+export const pdfViewerIconStyles = css`
+  :host {
+    display: block;
+    width: var(--vaadin-icon-size, 1lh);
+    height: var(--vaadin-icon-size, 1lh);
+    background: var(--vaadin-icon-color, currentColor);
+    mask: var(--_icon) 50% / var(--vaadin-icon-visual-size, 100%) no-repeat;
+  }
+
+  :host([icon='previous-page']) {
+    --_icon: var(--_vaadin-icon-chevron-down);
+    scale: 1 -1;
+  }
+
+  :host([icon='next-page']) {
+    --_icon: var(--_vaadin-icon-chevron-down);
+  }
+
+  :host([icon='zoom-out']) {
+    --_icon: var(--_vaadin-icon-minus);
+  }
+
+  :host([icon='zoom-in']) {
+    --_icon: var(--_vaadin-icon-plus);
+  }
+
+  :host([icon='download']) {
+    --_icon: var(--_vaadin-icon-download);
+  }
+
+  :host([icon='sidebar']) {
+    --_icon: var(--_vaadin-icon-sidebar);
+  }
+
+  :host([icon='sidebar']:dir(rtl)) {
+    scale: -1 1;
+  }
+
+  @media (forced-colors: active) {
+    :host {
+      background: var(--vaadin-icon-color, CanvasText);
+    }
+  }
+`;

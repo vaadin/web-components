@@ -96,6 +96,7 @@ describe('validation', () => {
         comboBox.open();
 
         touchend(comboBox.$.overlay);
+        comboBox.$.overlay.click();
 
         expect(validateSpy).to.be.not.called;
       });

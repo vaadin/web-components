@@ -24,9 +24,9 @@ const QuillCodeBlockContainer = Quill.import('formats/code-block-container');
 class CodeBlockContainer extends QuillCodeBlockContainer {
   html(index, length) {
     const markup = super.html(index, length);
-    const tempDiv = document.createElement('div');
-    tempDiv.innerHTML = markup;
-    const preTag = tempDiv.querySelector('pre');
+    const template = document.createElement('template');
+    template.innerHTML = markup;
+    const preTag = template.content.querySelector('pre');
     if (preTag) {
       preTag.setAttribute('spellcheck', 'false');
       return preTag.outerHTML;
@@ -735,16 +735,17 @@ export const RichTextEditorMixin = (superClass) =>
 
     /** @private */
     __processQuillClasses(content) {
-      const tempDiv = document.createElement('div');
-      tempDiv.innerHTML = content;
+      // Use template to parse the content inertly, without loading resources or running handlers
+      const template = document.createElement('template');
+      template.innerHTML = content;
       // Process only elements with align or indent classes
-      const elementsToProcess = tempDiv.querySelectorAll('[class*="ql-align"], [class*="ql-indent"]');
+      const elementsToProcess = template.content.querySelectorAll('[class*="ql-align"], [class*="ql-indent"]');
       elementsToProcess.forEach((element) => {
         this.__processAlignClasses(element);
         this.__processIndentClasses(element);
         element.removeAttribute('class');
       });
-      return tempDiv.innerHTML;
+      return template.innerHTML;
     }
 
     /** @private */

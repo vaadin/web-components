@@ -29,7 +29,7 @@
 
       #input-layout {
         display: flex;
-        align-items: baseline;
+        align-items: center;
         gap: 8px;
       }
 
@@ -142,6 +142,14 @@ Need anything else? Just let me know, and I'll jump right in! ✨`;
       const list = document.querySelector('vaadin-message-list');
       const input = document.querySelector('vaadin-message-input');
 
+      // Prevent sending a message while files are uploading or the assistant is still responding
+      let uploading = false;
+      let responding = false;
+
+      function updateSubmitDisabled() {
+        input.submitDisabled = uploading || responding;
+      }
+
       // Set initial messages
       list.items = [
         {
@@ -201,12 +209,20 @@ Need anything else? Just let me know, and I'll jump right in! ✨`;
         // Create empty assistant message that will be populated gradually
         const newAssistantItem = createItem('', true);
 
+        responding = true;
+        updateSubmitDisabled();
+
         // Simulate AI typing response token by token
-        simulateMessageStream().onNext((token) => {
-          newAssistantItem.text += token;
-          // Force UI update by creating a new array
-          list.items = list.items.includes(newAssistantItem) ? [...list.items] : [...list.items, newAssistantItem];
-        });
+        simulateMessageStream()
+          .onNext((token) => {
+            newAssistantItem.text += token;
+            // Force UI update by creating a new array
+            list.items = list.items.includes(newAssistantItem) ? [...list.items] : [...list.items, newAssistantItem];
+          })
+          .onComplete(() => {
+            responding = false;
+            updateSubmitDisabled();
+          });
       });
 
       // Create the manager
@@ -215,6 +231,11 @@ Need anything else? Just let me know, and I'll jump right in! ✨`;
       });
       // Use mock XHR
       manager._createXhr = xhrCreator({ size: 512, uploadTime: 3000, stepTime: 500 });
+
+      manager.addEventListener('files-changed', () => {
+        uploading = manager.files.some((file) => file.held || file.uploading);
+        updateSubmitDisabled();
+      });
 
       // Link components to manager
       document.querySelectorAll('.upload').forEach((el) => {

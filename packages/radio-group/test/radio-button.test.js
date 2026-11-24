@@ -1,6 +1,6 @@
 import { expect } from '@vaadin/chai-plugins';
 import { resetMouse, sendKeys, sendMouseToElement } from '@vaadin/test-runner-commands';
-import { fire, fixtureSync, mousedown, mouseup, nextRender, nextUpdate } from '@vaadin/testing-helpers';
+import { fire, fixtureSync, middleOfNode, mousedown, mouseup, nextRender, nextUpdate } from '@vaadin/testing-helpers';
 import sinon from 'sinon';
 import '../src/vaadin-radio-button.js';
 
@@ -41,6 +41,47 @@ describe('radio-button', () => {
 
     it('should set value property to "on"', () => {
       expect(radio.value).to.equal('on');
+    });
+
+    describe('click target', () => {
+      beforeEach(() => {
+        radio.style.width = '400px';
+      });
+
+      [undefined, 'reverse'].forEach((theme) => {
+        it(`should cover the gap between the radio part and the label with the input${theme ? ` in ${theme} theme` : ''}`, () => {
+          if (theme) {
+            radio.setAttribute('theme', theme);
+          }
+          const partRect = radio.shadowRoot.querySelector('[part="radio"]').getBoundingClientRect();
+          const labelRect = label.getBoundingClientRect();
+          // Middle of the gap between the radio part and the label
+          const x = (Math.min(partRect.right, labelRect.right) + Math.max(partRect.left, labelRect.left)) / 2;
+          const { y } = middleOfNode(label);
+          expect(document.elementFromPoint(x, y)).to.equal(radio.inputElement);
+        });
+      });
+
+      it('should not cover the input with the label', () => {
+        const { x, y } = middleOfNode(radio.inputElement);
+        expect(document.elementFromPoint(x, y)).to.equal(radio.inputElement);
+      });
+
+      it('should cover the space above the label when the radio button is taller', () => {
+        radio.style.setProperty('--vaadin-radio-button-size', '40px');
+        const { x } = middleOfNode(label);
+        const y = (radio.getBoundingClientRect().top + label.getBoundingClientRect().top) / 2;
+        expect(document.elementFromPoint(x, y)).to.equal(label);
+      });
+
+      it('should not cover the label link with the input', () => {
+        const link = document.createElement('a');
+        link.href = '#';
+        link.textContent = 'link';
+        label.appendChild(link);
+        const { x, y } = middleOfNode(link);
+        expect(document.elementFromPoint(x, y)).to.equal(link);
+      });
     });
   });
 
@@ -273,7 +314,7 @@ describe('radio-button', () => {
     });
   });
 
-  describe('opacity', () => {
+  describe('input styles', () => {
     beforeEach(async () => {
       radio = fixtureSync('<vaadin-radio-button></vaadin-radio-button>');
       await nextRender();
@@ -287,9 +328,25 @@ describe('radio-button', () => {
           input {
             opacity: 1;
           }
-        </script>
+        </style>
       `);
       expect(getComputedStyle(input).opacity).to.equal('0');
+    });
+
+    it('should stretch the slotted input over the radio part', () => {
+      // Emulate fixed size set by iOS UA styles or CSS resets
+      fixtureSync(`
+        <style>
+          input {
+            width: 1rem;
+            height: 1rem;
+          }
+        </style>
+      `);
+      const inputRect = input.getBoundingClientRect();
+      const partRect = radio.shadowRoot.querySelector("[part='radio']").getBoundingClientRect();
+      expect(inputRect.width).to.be.at.least(partRect.width);
+      expect(inputRect.height).to.be.at.least(partRect.height);
     });
   });
 });

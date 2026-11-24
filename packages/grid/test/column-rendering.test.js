@@ -228,21 +228,21 @@ import {
       expect(secondRect.top).to.equal(firstRect.bottom + detailsHeight);
     });
 
-    it('should render new appended column', async () => {
-      grid = fixtureSync(`
-        <vaadin-grid item-id-path="name" column-rendering="lazy">
-          <vaadin-grid-column path="name"></vaadin-grid-column>
-        </vaadin-grid>
-      `);
-      grid.items = [{ name: `Item 1` }];
-      await nextResize(grid);
-      flushGrid(grid);
+    it('should render cells of an appended column when scrolled into view', async () => {
+      const column = document.createElement('vaadin-grid-column');
+      const index = columns.length;
+      column.renderer = Sinon.spy((root) => {
+        root.__columnIndex = index;
+        root.textContent = `${cellContent} ${index}`;
+      });
+      columns.push(column);
 
-      const newColumn = document.createElement('vaadin-grid-column');
-      grid.appendChild(newColumn);
+      grid.appendChild(column);
       await nextFrame();
 
-      expect(isColumnInViewport(newColumn)).to.be.true;
+      await scrollHorizontally(grid.$.table.scrollWidth);
+
+      expectBodyCellUpdated(index);
     });
 
     describe(`scroll horizontally - ${dir}`, () => {
@@ -336,6 +336,17 @@ import {
         await scrollHorizontally(-grid.$.table.scrollWidth);
 
         expect(getBodyCellContent(0).textContent).to.equal('updated 0');
+      });
+
+      it('should not re-render cells of columns that stay in the viewport', async () => {
+        resetRenderers();
+        await scrollHorizontally(-100);
+        expect(columns.at(-1).renderer.called).to.be.false;
+      });
+
+      it('should render cells of columns once on revisit', async () => {
+        await scrollHorizontally(-grid.$.table.scrollWidth);
+        expect(columns[0].renderer.calledOnce).to.be.true;
       });
 
       it('should maintain the sequential DOM order of the cells', async () => {
@@ -499,6 +510,19 @@ import {
         );
         expect(isCellsOnViewportVisible).to.equal(isCellsInViewportVisibleBefore);
       });
+
+      describe('direction change', () => {
+        afterEach(() => {
+          document.documentElement.setAttribute('dir', dir);
+        });
+
+        it('should align body cells with header cells after the direction changes', async () => {
+          document.documentElement.setAttribute('dir', dir === 'rtl' ? 'ltr' : 'rtl');
+          await nextFrame();
+
+          expectCellsVisualOrderToMatchColumnOrder();
+        });
+      });
     });
 
     describe(`keyboard navigation - ${dir}`, () => {
@@ -613,9 +637,8 @@ import {
         // Tab to header
         shiftTab();
 
-        // Scroll to the end
-        await scrollHorizontally(grid.$.table.scrollWidth);
-        await nextFrame();
+        // Scroll to the end without waiting for the content visibility update
+        await scrollHorizontally(grid.$.table.scrollWidth, 0);
 
         const left = grid.$.table.scrollLeft;
         // Tab to body

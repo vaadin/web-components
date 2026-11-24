@@ -147,6 +147,17 @@ describe('vaadin-confirm-dialog', () => {
         const headerNode = confirm.querySelector('[slot="header"]');
         expect(headerNode.textContent.trim()).to.equal('Just go away');
       });
+
+      it('should update aria-level when headingLevel changes', async () => {
+        confirm.headingLevel = 3;
+        await nextFrame();
+        const headerNode = confirm.querySelector('[slot="header"]');
+        expect(headerNode.getAttribute('aria-level')).to.equal('3');
+
+        confirm.headingLevel = null;
+        await nextFrame();
+        expect(headerNode.getAttribute('aria-level')).to.equal('1');
+      });
     });
 
     describe('slot', () => {
@@ -718,6 +729,7 @@ describe('vaadin-confirm-dialog', () => {
         <div style="height: 200vh"></div>
       `);
       document.body.insertBefore(spacer, document.body.firstChild);
+      await nextRender();
 
       // Scroll to the top
       window.scrollTo(0, 0);

@@ -55,11 +55,11 @@ class CrudDialogOverlay extends OverlayMixin(DirMixin(ThemableMixin(PolylitMixin
           <div part="content" id="content">
             <slot name="form"></slot>
           </div>
-          <footer part="footer" role="toolbar">
+          <div part="footer" role="toolbar">
             <slot name="save-button"></slot>
             <slot name="cancel-button"></slot>
             <slot name="delete-button"></slot>
-          </footer>
+          </div>
         </section>
       </div>
     `;

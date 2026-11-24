@@ -34,6 +34,17 @@ describe('checkbox', () => {
       await visualDiff(div, 'active');
     });
 
+    it('invalid', async () => {
+      element.invalid = true;
+      await visualDiff(div, 'invalid');
+    });
+
+    it('checked invalid', async () => {
+      element.checked = true;
+      element.invalid = true;
+      await visualDiff(div, 'checked-invalid');
+    });
+
     describe('disabled', () => {
       beforeEach(() => {
         element.disabled = true;
@@ -51,6 +62,11 @@ describe('checkbox', () => {
       it('indeterminate', async () => {
         element.indeterminate = true;
         await visualDiff(div, 'disabled-indeterminate');
+      });
+
+      it('invalid', async () => {
+        element.invalid = true;
+        await visualDiff(div, 'disabled-invalid');
       });
     });
 
@@ -71,6 +87,11 @@ describe('checkbox', () => {
       it('indeterminate', async () => {
         element.indeterminate = true;
         await visualDiff(div, 'readonly-indeterminate');
+      });
+
+      it('invalid', async () => {
+        element.invalid = true;
+        await visualDiff(div, 'readonly-invalid');
       });
     });
   });

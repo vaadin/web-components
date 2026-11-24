@@ -161,6 +161,7 @@ class Dialog extends DialogSizeMixin(
         .owner="${this}"
         .opened="${this.opened}"
         .headerTitle="${this.headerTitle}"
+        .headingLevel="${this.headingLevel ?? (this.modeless ? 2 : 1)}"
         .renderer="${this.renderer}"
         .headerRenderer="${this.headerRenderer}"
         .footerRenderer="${this.footerRenderer}"

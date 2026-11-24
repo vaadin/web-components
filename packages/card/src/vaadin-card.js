@@ -82,7 +82,7 @@ class Card extends ElementMixin(ThemableMixin(PolylitMixin(LumoInjectionMixin(Li
   static get properties() {
     return {
       /**
-       * The title of the card. When set, any custom slotted title is removed and this string-based title is used instead. If this title is used, an `aria-labelledby` attribute that points to the generated title element is set.
+       * The title of the card. A custom slotted title takes precedence over this property. The card is labelled with `aria-labelledby` by the title element in the `title` slot, generated or custom.
        *
        * @attr {string} card-title
        */
@@ -93,7 +93,18 @@ class Card extends ElementMixin(ThemableMixin(PolylitMixin(LumoInjectionMixin(Li
       /**
        * Sets the heading level (`aria-level`) for the string-based title. If not set, the level defaults to 2. Setting values outside the range [1, 6] can cause accessibility issues.
        *
+       * @attr {number} heading-level
+       */
+      headingLevel: {
+        type: Number,
+        reflectToAttribute: true,
+      },
+
+      /**
+       * Sets the heading level (`aria-level`) for the string-based title.
+       *
        * @attr {number} title-heading-level
+       * @deprecated Use `headingLevel` instead. This property will be removed in Vaadin 26.
        */
       titleHeadingLevel: {
         type: Number,
@@ -147,6 +158,15 @@ class Card extends ElementMixin(ThemableMixin(PolylitMixin(LumoInjectionMixin(Li
   }
 
   /** @protected */
+  willUpdate(props) {
+    super.willUpdate(props);
+
+    if (props.has('titleHeadingLevel')) {
+      this.headingLevel = this.titleHeadingLevel;
+    }
+  }
+
+  /** @protected */
   updated(props) {
     super.updated(props);
 
@@ -154,8 +174,8 @@ class Card extends ElementMixin(ThemableMixin(PolylitMixin(LumoInjectionMixin(Li
       this.__titleController.setTitle(this.cardTitle);
     }
 
-    if (props.has('titleHeadingLevel')) {
-      this.__titleController.setLevel(this.titleHeadingLevel);
+    if (props.has('headingLevel')) {
+      this.__titleController.setLevel(this.headingLevel);
     }
   }
 

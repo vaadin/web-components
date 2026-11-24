@@ -24,6 +24,7 @@ export const dialogOverlayBase = css`
     cursor: default;
     --_overflow-indicator-height: var(--vaadin-dialog-overflow-indicator-height, 1px);
     --_overflow-indicator-color: var(--vaadin-dialog-overflow-indicator-color, var(--vaadin-border-color-secondary));
+    --_focus-ring-space: calc(var(--vaadin-focus-ring-width, 2px) + 2px);
   }
 
   [part='overlay']:focus-visible {
@@ -70,21 +71,23 @@ export const dialogOverlayBase = css`
     padding: 0 !important;
   }
 
+  /* Keep focus outlines inside the scrollable content's clipping area. */
   :host(:is([has-header], [has-title])) [part='content'] {
-    padding-top: 0;
+    padding-top: var(--_focus-ring-space);
   }
 
   :host([has-footer]) [part='content'] {
-    padding-bottom: 0;
+    padding-bottom: var(--_focus-ring-space);
   }
 
   [part='header'] {
     flex-wrap: nowrap;
   }
 
-  ::slotted([slot='header-content']),
-  ::slotted([slot='title']),
-  ::slotted([slot='footer']) {
+  ::slotted(div[slot='header-content']),
+  ::slotted(div[slot='footer']),
+  ::slotted(vaadin-dialog-content[slot]),
+  ::slotted([slot='title']) {
     display: contents;
   }
 

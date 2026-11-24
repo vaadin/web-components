@@ -13,7 +13,9 @@ set -e
 #   ./scripts/run-docker-visual-tests.sh test --config web-test-runner-aura.config.js --dark
 #   ./scripts/run-docker-visual-tests.sh --clean                # Remove cached node_modules volume
 
-IMAGE=$(grep 'image:' "$(dirname "$0")/../.github/workflows/visual-tests.yml" | head -1 | sed 's/.*image: *//')
+# The image must have the same version as the `playwright` package
+PLAYWRIGHT_VERSION=$(node -p "JSON.parse(require('fs').readFileSync(process.argv[1])).resolutions.playwright" "$(dirname "$0")/../package.json")
+IMAGE="mcr.microsoft.com/playwright:v${PLAYWRIGHT_VERSION}-noble"
 
 NODE_MODULES_VOLUME="vaadin-web-components-node-modules"
 

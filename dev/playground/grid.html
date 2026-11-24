@@ -256,7 +256,9 @@
 
       document.getElementById('autoWidthCols').addEventListener('checked-changed', (e) => {
         grid
-          .querySelectorAll('vaadin-grid-column, vaadin-grid-tree-column, vaadin-grid-filter-column, vaadin-grid-sort-column')
+          .querySelectorAll(
+            'vaadin-grid-column, vaadin-grid-tree-column, vaadin-grid-filter-column, vaadin-grid-sort-column',
+          )
           .forEach((col) => {
             col.autoWidth = e.detail.value;
             col.width = e.detail.value ? undefined : '100px';
@@ -267,7 +269,9 @@
 
       document.getElementById('resizable').addEventListener('checked-changed', (e) => {
         grid
-          .querySelectorAll('vaadin-grid-column, vaadin-grid-tree-column, vaadin-grid-filter-column, vaadin-grid-sort-column')
+          .querySelectorAll(
+            'vaadin-grid-column, vaadin-grid-tree-column, vaadin-grid-filter-column, vaadin-grid-sort-column',
+          )
           .forEach((col) => {
             col.resizable = e.detail.value;
           });

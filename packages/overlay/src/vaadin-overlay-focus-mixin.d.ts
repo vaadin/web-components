@@ -29,6 +29,10 @@ export declare class OverlayFocusMixinClass {
    * Focus moves to the first tabbable element in the tab order. This
    * can be the overlay itself if it has `tabindex` attribute set to `0`
    * on the host element or the `overlay` shadow DOM part.
+   *
+   * An element inside the overlay that has `autofocus` set, such as
+   * `<vaadin-text-field autofocus>`, receives focus on open instead,
+   * even when this property is false.
    */
   autofocus: boolean;
 

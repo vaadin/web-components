@@ -690,6 +690,8 @@ export const ChartMixin = (superClass) =>
     __initChart(options) {
       this.__initEventsListeners(options);
       this.__styledMode = options.chart.styledMode;
+      // Highcharts copies this class to the container of an outside tooltip.
+      this.$.chart.classList.toggle('highcharts-styled-mode', !!this.__styledMode);
       if (options.chart.type === 'gantt') {
         this.configuration = Highcharts.ganttChart(this.$.chart, options);
       } else if (this.timeline) {
@@ -698,7 +700,7 @@ export const ChartMixin = (superClass) =>
         this.configuration = Highcharts.chart(this.$.chart, options);
       }
 
-      this.__syncOutsideTooltipColors();
+      this.__syncOutsideTooltipStyles();
       this.__markStickyTooltip();
       this.__redrawOrganizationDataLabels();
     }
@@ -706,26 +708,32 @@ export const ChartMixin = (superClass) =>
     /**
      * A `tooltip: { outside: true }` tooltip renders in `document.body`, so it
      * inherits neither the palette a theme scopes to `vaadin-chart` nor any
-     * `--vaadin-charts-color-*` set on this element. Copy the resolved series
-     * colours onto its container instead.
+     * `--vaadin-charts-color-*` or font size set on this element. Copy the
+     * resolved series colors and font size onto its container instead. Only
+     * styled mode needs them.
+     *
+     * The tooltip creates its container in `getLabel()` and measures its text
+     * right after, so the font size must be in place by then.
      *
      * @private
      */
-    __syncOutsideTooltipColors() {
+    __syncOutsideTooltipStyles() {
       const { tooltip } = this.configuration;
-      if (!tooltip || !tooltip.outside) {
+      if (!tooltip || !tooltip.outside || !this.__styledMode) {
         return;
       }
 
-      Highcharts.addEvent(tooltip, 'refresh', () => {
+      Highcharts.wrap(tooltip, 'getLabel', (proceed, ...args) => {
+        const label = proceed.apply(tooltip, args);
         const { container } = tooltip;
-        if (!container) {
-          return;
+        if (container) {
+          const style = getComputedStyle(this);
+          for (let i = 0; i < 10; i++) {
+            container.style.setProperty(`--_color-${i}`, style.getPropertyValue(`--_color-${i}`));
+          }
+          container.style.setProperty('--vaadin-charts-font-size', style.fontSize);
         }
-        const style = getComputedStyle(this);
-        for (let i = 0; i < 10; i++) {
-          container.style.setProperty(`--_color-${i}`, style.getPropertyValue(`--_color-${i}`));
-        }
+        return label;
       });
     }
 

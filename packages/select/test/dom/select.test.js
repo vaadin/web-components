@@ -43,6 +43,12 @@ describe('vaadin-select', () => {
       await expect(select).dom.to.equalSnapshot();
     });
 
+    it('readonly', async () => {
+      select.readonly = true;
+      await nextUpdate(select);
+      await expect(select).dom.to.equalSnapshot();
+    });
+
     it('value', async () => {
       select.value = 'Option 1';
       await expect(select).dom.to.equalSnapshot();

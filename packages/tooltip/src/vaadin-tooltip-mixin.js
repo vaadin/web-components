@@ -20,6 +20,8 @@ const closing = new Set();
 
 let warmedUp = false;
 let warmUpTimeout = null;
+/** The tooltip that opens when the warm up timeout ends. */
+let warmUpTooltip = null;
 let cooldownTimeout = null;
 
 /**
@@ -32,6 +34,7 @@ export function resetGlobalTooltipState() {
   clearTimeout(warmUpTimeout);
   clearTimeout(cooldownTimeout);
   warmUpTimeout = null;
+  warmUpTooltip = null;
   cooldownTimeout = null;
   closing.clear();
 }
@@ -144,8 +147,9 @@ class TooltipStateController {
       if (warmedUp) {
         // Warmed up, show the tooltip.
         this.__showTooltip();
-      } else if (warmUpTimeout == null) {
-        // Ensure there is no duplicate warm up.
+      } else if (warmUpTimeout == null || !warmUpTooltip.isConnected) {
+        // Ensure there is no duplicate warm up, unless its tooltip was removed.
+        this.__abortWarmUp();
         this.__scheduleWarmUp(isFocus);
       }
     }
@@ -177,6 +181,7 @@ class TooltipStateController {
     if (warmUpTimeout) {
       clearTimeout(warmUpTimeout);
       warmUpTimeout = null;
+      warmUpTooltip = null;
     }
   }
 
@@ -206,10 +211,14 @@ class TooltipStateController {
   /** @private */
   __scheduleWarmUp(isFocus) {
     const delay = isFocus ? this.focusDelay : this.hoverDelay;
+    warmUpTooltip = this.host;
     warmUpTimeout = setTimeout(() => {
       warmUpTimeout = null;
-      warmedUp = true;
-      this.__showTooltip();
+      warmUpTooltip = null;
+      // Do not open a tooltip that was removed while waiting.
+      if (this.host.isConnected) {
+        this.__showTooltip();
+      }
     }, delay);
   }
 }

@@ -8,9 +8,16 @@ import type { DelegateFocusMixinClass } from '@vaadin/a11y-base/src/delegate-foc
 import type { DisabledMixinClass } from '@vaadin/a11y-base/src/disabled-mixin.js';
 import type { FocusMixinClass } from '@vaadin/a11y-base/src/focus-mixin.js';
 import type { KeyboardMixinClass } from '@vaadin/a11y-base/src/keyboard-mixin.js';
+import type { DelegateStateMixinClass } from '@vaadin/component-base/src/delegate-state-mixin.js';
 import type { I18nMixinClass } from '@vaadin/component-base/src/i18n-mixin.js';
+import type { SlotStylesMixinClass } from '@vaadin/component-base/src/slot-styles-mixin.js';
+import type { ClearButtonMixinClass } from '@vaadin/field-base/src/clear-button-mixin.js';
+import type { FieldMixinClass } from '@vaadin/field-base/src/field-mixin.js';
 import type { InputConstraintsMixinClass } from '@vaadin/field-base/src/input-constraints-mixin.js';
+import type { InputControlMixinClass } from '@vaadin/field-base/src/input-control-mixin.js';
 import type { InputMixinClass } from '@vaadin/field-base/src/input-mixin.js';
+import type { LabelMixinClass } from '@vaadin/field-base/src/label-mixin.js';
+import type { ValidateMixinClass } from '@vaadin/field-base/src/validate-mixin.js';
 
 export interface DatePickerDate {
   day: number;
@@ -135,14 +142,21 @@ export interface DatePickerI18n {
 
 export declare function DatePickerMixin<T extends Constructor<HTMLElement>>(
   base: T,
-): Constructor<DatePickerMixinClass> &
+): Constructor<ClearButtonMixinClass> &
+  Constructor<DatePickerMixinClass> &
   Constructor<DelegateFocusMixinClass> &
+  Constructor<DelegateStateMixinClass> &
   Constructor<DisabledMixinClass> &
+  Constructor<FieldMixinClass> &
   Constructor<FocusMixinClass> &
   Constructor<I18nMixinClass<DatePickerI18n>> &
   Constructor<InputConstraintsMixinClass> &
+  Constructor<InputControlMixinClass> &
   Constructor<InputMixinClass> &
   Constructor<KeyboardMixinClass> &
+  Constructor<LabelMixinClass> &
+  Constructor<SlotStylesMixinClass> &
+  Constructor<ValidateMixinClass> &
   T;
 
 export declare class DatePickerMixinClass {

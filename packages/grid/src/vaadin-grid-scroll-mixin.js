@@ -134,6 +134,24 @@ export const ScrollMixin = (superClass) =>
       this.addController(this.__overflowController);
     }
 
+    /** @protected */
+    updated(props) {
+      super.updated(props);
+
+      if (props.has('dir')) {
+        // Transforms calculated for the previous direction can push the
+        // containers and the frozen-to-end cells outside the table and increase
+        // its scroll width, so reset them before calculating the new position.
+        [this.$.header, this.$.items, this.$.footer, ...this._frozenToEndCells].forEach((element) => {
+          element.style.transform = '';
+        });
+        // The columns in the viewport and their offset with lazy column
+        // rendering depend on the direction as well
+        this.__updateColumnsBodyContentHidden();
+        this.__updateHorizontalScrollPosition();
+      }
+    }
+
     /**
      * Scroll to a specific row index in the virtual list. Note that the row index is
      * not always the same for any particular item. For example, sorting or filtering
@@ -310,37 +328,29 @@ export const ScrollMixin = (superClass) =>
       this.__scrollToPendingColumn();
 
       const columnsInOrder = this._getColumnsInOrder();
-      let bodyContentHiddenChanged = false;
+      const changedColumns = [];
 
-      // Remove the column cells from the DOM if the column is outside the viewport.
-      // Add the column cells to the DOM if the column is inside the viewport.
-      //
       // Update the _bodyContentHidden property of the column to reflect the current
-      // visibility state and make it run renderers for the cells if necessary.
+      // visibility state.
       columnsInOrder.forEach((column) => {
         const bodyContentHidden = this._lazyColumns && !this.__isColumnInViewport(column);
 
         if (column._bodyContentHidden !== bodyContentHidden) {
-          bodyContentHiddenChanged = true;
-          column._cells.forEach((cell) => {
-            if (cell !== column._sizerCell) {
-              if (bodyContentHidden) {
-                cell.remove();
-              } else if (cell.__parentRow) {
-                // Add the cell to the correct DOM position in the row
-                const followingColumnCell = [...cell.__parentRow.children].find(
-                  (child) => columnsInOrder.indexOf(child._column) > columnsInOrder.indexOf(column),
-                );
-                cell.__parentRow.insertBefore(cell, followingColumnCell);
-              }
-            }
-          });
+          changedColumns.push(column);
         }
 
         column._bodyContentHidden = bodyContentHidden;
       });
 
-      if (bodyContentHiddenChanged) {
+      if (changedColumns.length > 0) {
+        [...this.$.items.children].forEach((row) => {
+          this.__updateRow(row, { skipRenderers: true });
+        });
+
+        changedColumns.forEach((column) => {
+          column.performUpdate?.();
+        });
+
         // Frozen columns may have changed their visibility
         this._frozenCellsChanged();
       }
@@ -406,7 +416,7 @@ export const ScrollMixin = (superClass) =>
     /** @protected */
     _frozenCellsChanged() {
       this._debouncerCacheElements = Debouncer.debounce(this._debouncerCacheElements, microTask, () => {
-        Array.from(this.shadowRoot.querySelectorAll('[part~="cell"]')).forEach((cell) => {
+        Array.from(this.shadowRoot.querySelectorAll('.cell')).forEach((cell) => {
           cell.style.transform = '';
         });
         this._frozenCells = Array.prototype.slice.call(this.$.table.querySelectorAll('[frozen]'));
@@ -429,7 +439,7 @@ export const ScrollMixin = (superClass) =>
         return;
       }
 
-      const columnsRow = this._columnTree[this._columnTree.length - 1].slice(0);
+      const columnsRow = this._columnTree.at(-1).slice(0);
       columnsRow.sort((a, b) => {
         return a._order - b._order;
       });
@@ -518,18 +528,18 @@ export const ScrollMixin = (superClass) =>
         }
       });
 
-      const focusedRow = this.shadowRoot.querySelector("[part~='row']:focus");
+      const focusedRow = this.shadowRoot.querySelector('.row:focus');
       if (focusedRow) {
         // Update the horizontal scroll position property of the focused row
         this.__updateRowScrollPositionProperty(focusedRow);
       }
 
-      const lastHeaderRow = this.$.header.querySelector("[part~='last-header-row']");
+      const lastHeaderRow = this.$.header.querySelector('.last-header-row');
       if (lastHeaderRow) {
         this.__updateRowScrollPositionProperty(lastHeaderRow);
       }
 
-      const firstFooterRow = this.$.footer.querySelector("[part~='first-footer-row']");
+      const firstFooterRow = this.$.footer.querySelector('.first-footer-row');
       if (firstFooterRow) {
         this.__updateRowScrollPositionProperty(firstFooterRow);
       }

@@ -1,85 +1,59 @@
-import { execSync } from 'node:child_process';
 import fs from 'node:fs';
 import os from 'node:os';
 import path from 'node:path';
+import {
+  byName,
+  getElements,
+  INTERNAL_PACKAGES,
+  listPackages,
+  packageDir,
+  readManifest,
+  readPackageJson,
+} from '../manifest/lib/cem-helpers.js';
 
 const PLAIN_WEB_TYPES_FILE = 'web-types.json';
 const LIT_WEB_TYPES_FILE = 'web-types.lit.json';
 
 const API_DOCS_BASE_PATH = 'https://cdn.vaadin.com/vaadin-web-components';
 
-const blacklistedPackages = [
-  /^vaadin-/u,
-  /^a11y-base/u,
-  /^component-base/u,
-  /^field-base/u,
-  /^field-highlighter/u,
-  /^icons/u,
-  /^input-container/u,
-  /^lit-renderer/u,
-  /^overlay/u,
-  /^aura/u,
-];
-
 /**
- * Get packages using lerna, excluding blacklisted packages
+ * Lists the packages with public custom elements, which get web-types.
+ * @return {{ dir: string, elements: object[] }[]}
  */
-function getRelevantPackages() {
-  const pathToLerna = path.normalize('./node_modules/.bin/lerna');
-  const output = execSync(`${pathToLerna} ls --json --loglevel silent`); // NOSONAR
-  const allPackages = JSON.parse(output.toString()).map((project) => project.name.replace('@vaadin/', ''));
-  return allPackages.filter((pkg) => !blacklistedPackages.some((blacklistedPackage) => pkg.match(blacklistedPackage)));
+function getWebTypesPackages() {
+  return listPackages()
+    .filter((dir) => !INTERNAL_PACKAGES.has(dir))
+    .map((dir) => {
+      const manifest = readManifest(dir);
+      return { dir, elements: manifest ? getElements(manifest) : [] };
+    })
+    .filter(({ elements }) => elements.length > 0);
 }
 
-/**
- * Loads the custom-elements.json manifest for a specific package.
- * Returns null only when the manifest file does not exist; other failures
- * (e.g., corrupt JSON) are rethrown so they fail the build loudly.
- * @param {string} packageName - The package name (e.g., 'button')
- * @returns {object|null} - The manifest object, or null if not found
- */
-function loadCustomElementsManifest(packageName) {
-  const manifestPath = path.resolve(`./packages/${packageName}/custom-elements.json`);
-  try {
-    return JSON.parse(fs.readFileSync(manifestPath, 'utf8'));
-  } catch (error) {
-    if (error.code === 'ENOENT') {
-      return null;
-    }
-    throw error;
-  }
-}
+const byItemName = (a, b) => byName(a.name, b.name);
 
 /**
- * Extracts custom element class declarations from a CEM manifest.
- * @param {object} manifest - The custom-elements.json manifest
- * @returns {object[]} - Array of element declarations with tagName
+ * The `deprecated` flag or message of a manifest item for its web-types entry.
+ * @param {{ deprecated?: boolean | string }} item
+ * @return {{ deprecated?: boolean | string }}
  */
-function getElementsFromManifest(manifest) {
-  return manifest.modules.flatMap((module) =>
-    (module.declarations || []).filter((decl) => decl.kind === 'class' && decl.tagName),
-  );
-}
+const deprecation = (item) => (item.deprecated ? { deprecated: item.deprecated } : {});
 
 /**
- * Extracts the type string from a CEM type object or string.
- * CEM uses `{ text: "boolean" }` format, while older formats use plain strings.
- * @param {object|string} type - The type object or string
- * @returns {string} - The type string
+ * The `default` of a manifest item for its web-types entry, the source text of the value.
+ * @param {{ default?: string }} item
+ * @return {{ default?: string }}
  */
-function getTypeText(type) {
-  if (!type) return '';
-  return typeof type === 'object' ? type.text || '' : type;
-}
+const defaultValue = (item) => (item.default === undefined ? {} : { default: item.default });
 
 /**
- * Maps a type string such as `'boolean | null | undefined'` into an array of type
+ * Maps a type such as `'boolean | null | undefined'` into an array of type
  * strings, such as `['boolean', 'null', 'undefined']`
- * @param {object|string} type - The type object or string
+ * @param {{ text: string }} [type] - The type object
  * @returns {string[]}
  */
 function mapType(type) {
-  const typeString = getTypeText(type);
+  const typeString = type?.text ?? '';
   // Closure's `function(X): Y` needs a space between `function` and `X` after
   // the parens are stripped, so rewrite `(` as a space. `!` (non-null) and `)`
   // are dropped; consecutive spaces from the rewrite are collapsed.
@@ -109,72 +83,55 @@ function transformDescription(packageJson, description) {
   return description;
 }
 
-// Primitive types that can be set via HTML attributes
-const primitiveTypePattern =
-  /^(string|number|boolean|null|undefined)(\s*\|\s*(string|number|boolean|null|undefined))*$/iu;
-
 /**
- * Checks if an attribute is a writable primitive attribute.
- * In CEM, attributes are already filtered to public ones, and we check for primitive types.
- * @param {object} attribute - The attribute object
- * @returns {boolean}
- */
-function isWritablePrimitiveAttribute(attribute) {
-  return primitiveTypePattern.test(getTypeText(attribute.type));
-}
-
-/**
- * Gets public writable field members from a CEM element declaration.
- * CEM already filters to public members based on config, and fields with
- * an `attribute` property are reactive properties.
+ * Gets the writable field members from a CEM element declaration.
+ * The CEM config already filters out the private and protected members.
  * @param {object} elementDeclaration - The element declaration from CEM
  * @returns {object[]}
  */
 function getPublicWritableProperties(elementDeclaration) {
-  const members = elementDeclaration.members || [];
-  // Members without explicit privacy are treated as public (private/protected
-  // are already filtered out by the CEM config).
-  return members.filter(
-    (member) =>
-      member.kind === 'field' && member.privacy !== 'private' && member.privacy !== 'protected' && !member.readonly,
-  );
+  return (elementDeclaration.members || []).filter((member) => member.kind === 'field' && !member.readonly);
 }
 
 function createPlainElementDefinition(packageJson, elementDeclaration) {
-  const readonlyFields = new Set((elementDeclaration.members || []).filter((m) => m.readonly).map((m) => m.name));
-  const elementAttributes = elementDeclaration.attributes || [];
-  const attributes = elementAttributes
-    .filter((attribute) => isWritablePrimitiveAttribute(attribute))
-    .filter((attribute) => !readonlyFields.has(attribute.fieldName))
-    .sort((a, b) => a.name.localeCompare(b.name))
+  // The manifest keeps only attributes with primitive types that are not
+  // read-only. Untyped ones come from `observedAttributes`, e.g. `class` on
+  // `<vaadin-icon>`, and are not listed.
+  const attributes = (elementDeclaration.attributes || [])
+    .filter((attribute) => attribute.type)
+    .sort(byItemName)
     .map((attribute) => ({
       name: attribute.name,
       description: transformDescription(packageJson, attribute.description || ''),
       value: {
         type: mapType(attribute.type),
       },
+      ...defaultValue(attribute),
+      ...deprecation(attribute),
     }));
 
   const properties = getPublicWritableProperties(elementDeclaration)
-    .sort((a, b) => a.name.localeCompare(b.name))
+    .sort(byItemName)
     .map((prop) => ({
       name: prop.name,
       description: transformDescription(packageJson, prop.description || ''),
       value: {
         type: mapType(prop.type),
       },
+      ...defaultValue(prop),
+      ...deprecation(prop),
     }));
 
-  const events = (elementDeclaration.events || [])
-    .sort((a, b) => a.name.localeCompare(b.name))
-    .map((event) => ({
-      name: event.name,
-      description: transformDescription(packageJson, event.description || ''),
-    }));
+  const events = (elementDeclaration.events || []).sort(byItemName).map((event) => ({
+    name: event.name,
+    description: transformDescription(packageJson, event.description || ''),
+    ...deprecation(event),
+  }));
 
   return {
     name: elementDeclaration.tagName,
     description: transformDescription(packageJson, elementDeclaration.description || ''),
+    ...deprecation(elementDeclaration),
     attributes,
     js: {
       properties,
@@ -200,27 +157,26 @@ function createPlainWebTypes(packageJson, packageElements) {
 }
 
 function createLitElementDefinition(packageJson, elementDeclaration) {
-  function toLitAttribute(name, description) {
+  function toLitAttribute(name, item) {
     return {
       name,
-      description: transformDescription(packageJson, description || ''),
+      description: transformDescription(packageJson, item.description || ''),
       // Type checking does not work with template tagged literals.
       // Since this Lit binding should use an expression, just declare it as such.
       value: { kind: 'expression' },
+      ...deprecation(item),
     };
   }
 
   const publicProperties = getPublicWritableProperties(elementDeclaration);
-  const propertyBindings = publicProperties
-    .sort((a, b) => a.name.localeCompare(b.name))
-    .map((prop) => {
-      const prefix = mapType(prop.type).includes('boolean') ? '?' : '.';
-      return toLitAttribute(`${prefix}${prop.name}`, prop.description);
-    });
+  const propertyBindings = publicProperties.sort(byItemName).map((prop) => {
+    const prefix = mapType(prop.type).includes('boolean') ? '?' : '.';
+    return toLitAttribute(`${prefix}${prop.name}`, prop);
+  });
 
   const eventBindings = (elementDeclaration.events || [])
-    .sort((a, b) => a.name.localeCompare(b.name))
-    .map((event) => toLitAttribute(`@${event.name}`, event.description));
+    .sort(byItemName)
+    .map((event) => toLitAttribute(`@${event.name}`, event));
 
   return {
     name: elementDeclaration.tagName,
@@ -266,25 +222,16 @@ function createLitWebTypes(packageJson, packageElements) {
  * attribute syntax.
  */
 function buildWebTypes() {
-  const packages = getRelevantPackages();
+  getWebTypesPackages().forEach(({ dir, elements }) => {
+    const packageJson = readPackageJson(dir);
 
-  packages.forEach((packageName) => {
-    const manifest = loadCustomElementsManifest(packageName);
-    if (!manifest) {
-      console.warn(`No custom-elements.json found for package: ${packageName}`);
-      return;
-    }
-
-    const packageJson = JSON.parse(fs.readFileSync(`./packages/${packageName}/package.json`, 'utf8'));
-    const packageElements = getElementsFromManifest(manifest);
-
-    const plainWebTypes = createPlainWebTypes(packageJson, packageElements);
+    const plainWebTypes = createPlainWebTypes(packageJson, elements);
     const plainWebTypesJson = JSON.stringify(plainWebTypes, null, 2);
-    fs.writeFileSync(path.join('.', 'packages', packageName, PLAIN_WEB_TYPES_FILE), plainWebTypesJson, 'utf8');
+    fs.writeFileSync(path.join(packageDir(dir), PLAIN_WEB_TYPES_FILE), plainWebTypesJson, 'utf8');
 
-    const litWebTypes = createLitWebTypes(packageJson, packageElements);
+    const litWebTypes = createLitWebTypes(packageJson, elements);
     const litWebTypesJson = JSON.stringify(litWebTypes, null, 2);
-    fs.writeFileSync(path.join('.', 'packages', packageName, LIT_WEB_TYPES_FILE), litWebTypesJson, 'utf8');
+    fs.writeFileSync(path.join(packageDir(dir), LIT_WEB_TYPES_FILE), litWebTypesJson, 'utf8');
   });
 }
 
@@ -297,10 +244,8 @@ function buildWebTypes() {
  * command line.
  */
 function modifyPackageJson() {
-  const packages = getRelevantPackages();
-
-  packages.forEach((packageName) => {
-    const packageJson = JSON.parse(fs.readFileSync(`./packages/${packageName}/package.json`, 'utf8'));
+  getWebTypesPackages().forEach(({ dir }) => {
+    const packageJson = readPackageJson(dir);
     // Add web types definitions to published files
     if (!packageJson.files.includes(PLAIN_WEB_TYPES_FILE)) {
       packageJson.files.push(PLAIN_WEB_TYPES_FILE);
@@ -312,7 +257,7 @@ function modifyPackageJson() {
     packageJson['web-types'] = [PLAIN_WEB_TYPES_FILE, LIT_WEB_TYPES_FILE];
 
     const fileContent = JSON.stringify(packageJson, null, 2) + os.EOL;
-    fs.writeFileSync(`./packages/${packageName}/package.json`, fileContent, 'utf8');
+    fs.writeFileSync(path.join(packageDir(dir), 'package.json'), fileContent, 'utf8');
   });
 }
 

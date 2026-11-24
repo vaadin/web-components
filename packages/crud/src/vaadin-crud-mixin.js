@@ -522,7 +522,7 @@ export const CrudMixin = (superClass) =>
 
         // Wait to set label until header node has updated (observer seems to run after this one)
         setTimeout(() => {
-          this.__dialogAriaLabel = this._headerNode.textContent.trim();
+          this.__dialogAriaLabel = this._headerNode?.textContent.trim();
         });
       }
 

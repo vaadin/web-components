@@ -88,6 +88,8 @@ When a CSS custom property only affects one dimension, name it after that dimens
 
 When a selector matches the `theme` attribute, do not match with exact equality so the rule still applies when multiple variants are combined (good: `[theme~='primary']`, bad: `[theme='primary']`).
 
+When a selector matches the `part` attribute, do not match with exact equality so the rule still applies when the element carries additional state parts (good: `[part~='date']`, bad: `[part='date']`, which no longer matches `part="date selected"`).
+
 When implementing RTL support, prefer logical properties (inset-inline/inset-inline-start/end, margin-inline, padding-inline, border-inline) over physical properties (left/right, margin-left/right, padding-left/right, border-left/right), so that RTL works without a separate style rule.
 
 Styles that govern behavior rather than appearance (e.g. `pointer-events: none`), belong in the component's base styles instead of individual themes.
@@ -113,6 +115,8 @@ Prefer to keep private / internal methods in a trailing private block, instead o
 Methods that return a boolean should use an interrogative prefix (`_should...`, `_is...`, `_has...`, or `_can...`), rather than use imperative naming (e.g. `_preventCellActivationOnClick`).
 
 When adding files under `packages/`, `dev/`, or `test/`, name files using dash-case (e.g. `form-layout.types.ts`). Build scripts under `scripts/` are the exception and use camelCase.
+
+The React packages under `packages/react-components*/` are an exception. Component files use the PascalCase component name (`Button.ts`, `GridColumn.tsx`), because the file name is the published import specifier (`@vaadin/react-components/Button.js`). Hooks and utilities use camelCase (`useRenderer.ts`, `createComponent.ts`).
 
 ## JSDoc
 
@@ -151,6 +155,12 @@ Do not carry over `@type` annotations from `.js` modules into `.d.ts` modules, t
 Tests should inspect user-observable outcome instead of internal implementation details (good: inspect rendered list, bad: inspect `el.items`).
 
 Cover DOM structure with snapshots tests, instead of multiple hand-written assertions.
+
+When a change affects styling, cover it with visual tests in the component package's `test/visual/base`, `test/visual/lumo` or `test/visual/aura` folder for every affected style layer, even when the CSS lives in a theme package, instead of asserting computed styles in unit tests (good: `await visualDiff(div, 'disabled')`, bad: `expect(getComputedStyle(el).opacity).to.equal('0.5')`). A screenshot catches layout, clipping and paint issues that a computed value cannot. Add a screenshot for the specific state the change targets (e.g. hover, disabled, RTL) rather than relying on an existing one that does not exercise it.
+
+When JS logic depends on a style value (e.g. a component that reads a CSS custom property to compute its layout), cover it with unit tests that set the style value and assert the resulting outcome.
+
+When a style controls whether an element is shown or interactive (e.g. `display`, `visibility`, `pointer-events`), cover it with unit tests asserting the computed value instead of visual tests, since a screenshot cannot tell a hidden element from a missing one, or show whether an element receives pointer events.
 
 When covering new mixins or mixin behavior with tests, cover it once in the mixin's package with tests against a synthetic element, instead of duplicating tests for all components that implement the mixin.
 

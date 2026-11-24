@@ -16,19 +16,14 @@ export const valueButton = css`
     align-items: center;
   }
 
-  :host::before {
-    content: '\\2003' / '';
-    display: inline-block;
-    width: 0;
-  }
-
   ::slotted(*) {
+    display: inline-flex;
+    vertical-align: top;
     padding: 0;
     cursor: inherit;
   }
 
-  .vaadin-button-container,
-  [part='label'] {
+  .vaadin-button-container {
     display: contents;
   }
 

@@ -10,6 +10,15 @@ import { PositionMixin } from '@vaadin/overlay/src/vaadin-overlay-position-mixin
 export const DatePickerOverlayMixin = (superClass) =>
   class DatePickerOverlayMixin extends PositionMixin(OverlayMixin(superClass)) {
     /**
+     * Override method from `OverlayFocusMixin` to skip moving focus on open.
+     * The date picker moves focus itself, and only uses focus restoration.
+     *
+     * @protected
+     * @override
+     */
+    _initFocus() {}
+
+    /**
      * Override method inherited from `OverlayMixin` to not close on input click.
      * Needed to ignore date-picker's own input in the mousedown listener below.
      *

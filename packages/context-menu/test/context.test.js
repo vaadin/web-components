@@ -2,8 +2,6 @@ import { expect } from '@vaadin/chai-plugins';
 import { aTimeout, fire, fixtureSync, nextRender } from '@vaadin/testing-helpers';
 import sinon from 'sinon';
 import '../src/vaadin-context-menu.js';
-import '@vaadin/item/src/vaadin-item.js';
-import '@vaadin/list-box/src/vaadin-list-box.js';
 
 class XFoo extends HTMLElement {
   constructor() {
@@ -33,11 +31,7 @@ describe('context', () => {
       </vaadin-context-menu>
     `);
     menu.renderer = (root, _, context) => {
-      root.innerHTML = `
-        <vaadin-list-box id="menu">
-          <vaadin-item>The menu target: ${context.target.textContent}</vaadin-item>
-        </vaadin-list-box>
-      `;
+      root.textContent = `The menu target: ${context.target.textContent}`;
     };
     await nextRender();
     overlayContent = menu._overlayElement._contentRoot;

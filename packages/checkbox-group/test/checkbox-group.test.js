@@ -258,6 +258,51 @@ describe('vaadin-checkbox-group', () => {
     });
   });
 
+  describe('focus()', () => {
+    beforeEach(async () => {
+      group = fixtureSync(`
+        <vaadin-checkbox-group>
+          <vaadin-checkbox value="1" label="Checkbox 1" disabled></vaadin-checkbox>
+          <vaadin-checkbox value="2" label="Checkbox 2"></vaadin-checkbox>
+          <vaadin-checkbox value="3" label="Checkbox 3"></vaadin-checkbox>
+        </vaadin-checkbox-group>
+      `);
+      await nextFrame();
+      checkboxes = [...group.querySelectorAll('vaadin-checkbox')];
+    });
+
+    it('should focus the first enabled checkbox', () => {
+      group.focus();
+      expect(document.activeElement).to.equal(checkboxes[1].inputElement);
+      expect(checkboxes[1].hasAttribute('focused')).to.be.true;
+    });
+
+    it('should set focus-ring on the group when focus() is called', () => {
+      group.focus();
+      expect(group.hasAttribute('focus-ring')).to.be.true;
+    });
+
+    it('should not set focus-ring when focusVisible is false', () => {
+      group.focus({ focusVisible: false });
+      expect(group.hasAttribute('focus-ring')).to.be.false;
+    });
+
+    it('should not move focus when all checkboxes are disabled', () => {
+      group.disabled = true;
+      group.focus();
+      expect(document.activeElement).to.equal(document.body);
+    });
+
+    it('should not set focus-ring when all checkboxes are disabled', () => {
+      checkboxes.forEach((checkbox) => {
+        checkbox.disabled = true;
+      });
+      group.focus();
+      expect(group.hasAttribute('focus-ring')).to.be.false;
+      expect(document.activeElement).to.equal(document.body);
+    });
+  });
+
   describe('focused attribute', () => {
     let firstGlobalFocusable;
 

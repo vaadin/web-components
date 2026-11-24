@@ -280,7 +280,7 @@ describe('overflow', () => {
       menu.items = createItems(4);
       await nextResize(menu);
       buttons = menu._buttons;
-      overflow = buttons[buttons.length - 1];
+      overflow = buttons.at(-1);
     });
 
     it('should not set when one button and overflow are only visible', async () => {
@@ -370,7 +370,7 @@ describe('overflow', () => {
       ];
       await nextRender();
       buttons = menu._buttons;
-      overflow = buttons[buttons.length - 1];
+      overflow = buttons.at(-1);
       subMenu = menu._subMenu;
 
       menu.style.width = `${BUTTON_WIDTH * 3}px`;

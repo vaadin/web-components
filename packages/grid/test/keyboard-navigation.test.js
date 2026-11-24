@@ -1159,6 +1159,20 @@ describe('keyboard navigation', () => {
         expect(grid.$.table.scrollLeft).to.be.at.least(100);
       });
 
+      it('should focus the same row when tabbing from header to new column cell outside the viewport', () => {
+        grid.appendChild(document.createElement('vaadin-grid-column'));
+        flushGrid(grid);
+        // Focus the new column cell on the second row
+        getRowCell(1, 3).focus();
+        // Tab to header
+        shiftTab();
+        // Scroll to the start
+        home();
+        // Tab to body
+        tab();
+        expect(getFocusedRowIndex(grid)).to.equal(1);
+      });
+
       it('should not scroll to the start when shift-tabbed from footer to body', () => {
         shiftTabToFooter();
         end();

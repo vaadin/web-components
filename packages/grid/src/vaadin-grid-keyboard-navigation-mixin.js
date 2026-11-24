@@ -17,7 +17,7 @@ function isCell(element) {
 }
 
 function isDetailsCell(element) {
-  return element.matches('[part~="details-cell"]');
+  return element.classList.contains('details-cell');
 }
 
 export const KeyboardNavigationMixin = (superClass) =>
@@ -641,6 +641,8 @@ export const KeyboardNavigationMixin = (superClass) =>
 
     /** @private */
     _predictFocusStepTarget(srcElement, step) {
+      this._debounceColumnContentVisibility?.flush();
+
       const tabOrder = [
         this.$.table,
         this._headerFocusable,
@@ -667,17 +669,20 @@ export const KeyboardNavigationMixin = (superClass) =>
 
       let focusStepTarget = tabOrder[index];
 
+      // In focus button mode, the focusable is a button inside the cell
+      const focusStepCell = isCell(focusStepTarget?.parentElement) ? focusStepTarget.parentElement : focusStepTarget;
+
       // If the target focusable is tied to a column that is not visible,
       // find the first visible column and update the target in order to
       // prevent scrolling to the start of the row.
-      if (focusStepTarget && !this.__isHorizontallyInViewport(focusStepTarget)) {
+      if (focusStepTarget && !this.__isHorizontallyInViewport(focusStepCell)) {
         const firstVisibleColumn = this._getColumnsInOrder().find((column) => this.__isColumnInViewport(column));
         if (firstVisibleColumn) {
           if (focusStepTarget === this._headerFocusable) {
             focusStepTarget = firstVisibleColumn._headerCell;
           } else if (focusStepTarget === this._itemsFocusable) {
-            const rowIndex = focusStepTarget._column._cells.indexOf(focusStepTarget);
-            focusStepTarget = firstVisibleColumn._cells[rowIndex];
+            const row = focusStepCell.parentElement;
+            focusStepTarget = [...row.children].find((cell) => cell._column === firstVisibleColumn);
           } else if (focusStepTarget === this._footerFocusable) {
             focusStepTarget = firstVisibleColumn._footerCell;
           }

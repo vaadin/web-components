@@ -314,7 +314,7 @@ describe('text-area', () => {
             distinctLateHeights.size,
             `expected stable rendered height after shrink, got values: ${[...distinctLateHeights].join(', ')}`,
           ).to.equal(1);
-          expect(lateSamples[lateSamples.length - 1]).to.be.lessThan(grownHeight);
+          expect(lateSamples.at(-1)).to.be.lessThan(grownHeight);
         } finally {
           restore();
         }

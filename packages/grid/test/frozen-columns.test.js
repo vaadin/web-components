@@ -225,6 +225,34 @@ const frozenGridFixture = (frozen, frozenToEnd) => {
       expect(getComputedStyle(sizerCell).transform).to.equal('none');
     });
 
+    it('should position frozen-to-end cells at the end when the direction changes after scrolling', async () => {
+      columns.forEach((column) => {
+        column.footerRenderer = (root) => {
+          root.textContent = 'footer';
+        };
+      });
+      flushGrid(grid);
+      grid.$.table.scrollLeft = isRTL ? -50 : 50;
+      await nextRender();
+
+      document.documentElement.setAttribute('dir', isRTL ? 'ltr' : 'rtl');
+      // Wait for the direction observer to set the dir of the grid, then update
+      // the grid synchronously to check the cells before the next frame
+      await Promise.resolve();
+      flushGrid(grid);
+
+      const table = grid.$.table;
+      const contentLeft = table.getBoundingClientRect().left + table.clientLeft;
+      [grid.$.header, grid.$.items, grid.$.footer].forEach((container) => {
+        const frozenToEndCellRect = getRowCells(getRows(container)[0])[2].getBoundingClientRect();
+        if (isRTL) {
+          expect(frozenToEndCellRect.right).to.equal(contentLeft + table.clientWidth);
+        } else {
+          expect(frozenToEndCellRect.left).to.equal(contentLeft);
+        }
+      });
+    });
+
     it('should update frozen-to-end positioning when scrollbar affects layout during data changes', async () => {
       grid.style.width = '200px';
       // Simulate a wide scrollbar like with Windows

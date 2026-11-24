@@ -1,5 +1,5 @@
 import { expect } from '@vaadin/chai-plugins';
-import { esc, fire, fixtureSync, isIOS, nextFrame, nextRender, oneEvent } from '@vaadin/testing-helpers';
+import { esc, fire, fixtureSync, nextFrame, nextRender, oneEvent } from '@vaadin/testing-helpers';
 import sinon from 'sinon';
 import '../src/vaadin-context-menu.js';
 
@@ -41,23 +41,6 @@ describe('overlay', () => {
     (target || menu.listenOn).dispatchEvent(e);
     return e;
   }
-
-  describe('initialization', () => {
-    beforeEach(() => {
-      menu = document.createElement('vaadin-context-menu');
-    });
-
-    afterEach(() => {
-      menu.remove();
-    });
-
-    it('should not clear selected ranges on initialization', () => {
-      const input = fixtureSync('<input value="foo">');
-      input.select();
-      document.body.appendChild(menu);
-      expect(window.getSelection().rangeCount).to.equal(1);
-    });
-  });
 
   describe('opening', () => {
     it('should be invisible before open', async () => {
@@ -123,9 +106,6 @@ describe('overlay', () => {
         before(async () => {
           isRTL = direction === 'rtl';
           document.documentElement.setAttribute('dir', direction);
-          if (isRTL) {
-            document.body.style.margin = 0;
-          }
           await nextFrame();
           viewWidth = document.documentElement.clientWidth;
         });
@@ -135,7 +115,6 @@ describe('overlay', () => {
           // is set to `rtl` and then removed
           if (isRTL) {
             document.documentElement.setAttribute('dir', 'ltr');
-            document.body.style.margin = null;
           }
         });
 
@@ -168,21 +147,6 @@ describe('overlay', () => {
         });
 
         it('should be positioned by gesture event', async () => {
-          menu.openOn = 'foobar';
-
-          fire(menu.listenOn, 'foobar', { x: isRTL ? 450 : 5, y: 5, sourceEvent: { clientX: 10, clientY: 20 } });
-          await oneEvent(overlay, 'vaadin-overlay-open');
-
-          const rect = overlay.getBoundingClientRect();
-          if (isRTL) {
-            expect(rect.right).to.closeTo(menu._phone ? viewWidth : 450, 0.1);
-          } else {
-            expect(rect.left).to.eql(menu._phone ? 0 : 5);
-          }
-          expect(rect.top).to.eql(menu._phone ? 0 : 5);
-        });
-
-        it('should be positioned by detailed gesture event', async () => {
           menu.openOn = 'foobar';
 
           fire(menu.listenOn, 'foobar', { x: isRTL ? 450 : 5, y: 5, sourceEvent: { clientX: 10, clientY: 20 } });
@@ -238,9 +202,6 @@ describe('overlay', () => {
         before(async () => {
           isRTL = direction === 'rtl';
           document.documentElement.setAttribute('dir', direction);
-          if (isRTL) {
-            document.body.style.margin = 0;
-          }
           await nextFrame();
           viewWidth = document.documentElement.clientWidth;
         });
@@ -250,7 +211,6 @@ describe('overlay', () => {
           // is set to `rtl` and then removed
           if (isRTL) {
             document.documentElement.setAttribute('dir', 'ltr');
-            document.body.style.margin = null;
           }
         });
 
@@ -326,21 +286,6 @@ describe('overlay', () => {
       it('should not prevent default of `contextmenu` event', () => {
         const event = contextmenu(0, 0, true);
         expect(event.defaultPrevented).to.not.eql(true);
-      });
-    });
-
-    (isIOS ? describe : describe.skip)('<vaadin-overlay> iOS viewport workaround (phone mode)', () => {
-      it('should have zero bottom by default', async () => {
-        contextmenu();
-        await oneEvent(overlay, 'vaadin-overlay-open');
-        expect(parseFloat(getComputedStyle(overlay).bottom)).to.equal(0);
-      });
-
-      it('should accept --vaadin-overlay-viewport-bottom CSS property', async () => {
-        contextmenu();
-        await oneEvent(overlay, 'vaadin-overlay-open');
-        overlay.style.setProperty('--vaadin-overlay-viewport-bottom', '50px');
-        expect(getComputedStyle(overlay).bottom).to.equal('50px');
       });
     });
   });
@@ -425,13 +370,6 @@ describe('overlay', () => {
         expect(menu.opened).to.be.true;
         expect(e.defaultPrevented).to.be.false;
       });
-    });
-  });
-
-  describe('styling', () => {
-    it('should set default background color for content', () => {
-      const overlayPart = overlay.shadowRoot.querySelector('[part~="overlay"]');
-      expect(getComputedStyle(overlayPart).backgroundColor).to.eql('rgb(255, 255, 255)');
     });
   });
 

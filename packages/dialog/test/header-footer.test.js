@@ -130,6 +130,20 @@ describe('header/footer feature', () => {
         expect(dialog.hasAttribute('aria-label')).to.be.false;
       });
 
+      it('should update aria-level when headingLevel changes', async () => {
+        dialog.headerTitle = HEADER_TITLE;
+        dialog.headingLevel = 3;
+        dialog.opened = true;
+        await nextRender();
+
+        const title = dialog.querySelector('[slot=title]');
+        expect(title.getAttribute('aria-level')).to.equal('3');
+
+        dialog.headingLevel = null;
+        await nextUpdate(dialog);
+        expect(title.getAttribute('aria-level')).to.equal('1');
+      });
+
       it('should not overwrite the aria-label attribute when no header title is set', async () => {
         const ARIA_LABEL = '__ARIA_LABEL__';
         dialog.ariaLabel = ARIA_LABEL;
@@ -482,6 +496,29 @@ describe('header/footer feature', () => {
       expect(getComputedStyle(headerPart).display).to.be.equal('none');
     });
   });
+
+  describe('content part position', () => {
+    let headerPart, contentPart, footerPart;
+
+    beforeEach(async () => {
+      dialog.headerTitle = 'Title';
+      dialog.footerRenderer = createRenderer('Footer');
+      dialog.renderer = createRenderer('Content');
+      dialog.opened = true;
+      await nextRender();
+      headerPart = overlay.shadowRoot.querySelector('[part="header"]');
+      contentPart = overlay.shadowRoot.querySelector('[part="content"]');
+      footerPart = overlay.shadowRoot.querySelector('[part="footer"]');
+    });
+
+    it('should not overlap content part with header part', () => {
+      expect(contentPart.getBoundingClientRect().top).to.be.closeTo(headerPart.getBoundingClientRect().bottom, 1);
+    });
+
+    it('should not overlap content part with footer part', () => {
+      expect(contentPart.getBoundingClientRect().bottom).to.be.closeTo(footerPart.getBoundingClientRect().top, 1);
+    });
+  });
 });
 
 describe('renderer set before attach', () => {
@@ -638,5 +675,54 @@ describe('slotted footer content', () => {
 
     expect(dialog.hasAttribute('has-footer')).to.be.false;
     expect(overlay.hasAttribute('has-footer')).to.be.false;
+  });
+});
+
+describe('slotted header and footer display', () => {
+  let dialog;
+
+  beforeEach(async () => {
+    dialog = fixtureSync('<vaadin-dialog></vaadin-dialog>');
+    await nextRender();
+  });
+
+  afterEach(async () => {
+    dialog.opened = false;
+    await nextRender();
+  });
+
+  async function open() {
+    dialog.opened = true;
+    await nextRender();
+  }
+
+  ['header-content', 'footer'].forEach((slot) => {
+    it(`should apply display: contents to a div slotted into ${slot}`, async () => {
+      const div = document.createElement('div');
+      div.setAttribute('slot', slot);
+      div.innerHTML = '<button>OK</button>';
+      dialog.appendChild(div);
+      await open();
+      expect(getComputedStyle(div).display).to.equal('contents');
+    });
+
+    it(`should not apply display: contents to a button slotted into ${slot}`, async () => {
+      const button = document.createElement('button');
+      button.setAttribute('slot', slot);
+      button.textContent = 'OK';
+      dialog.appendChild(button);
+      await open();
+      expect(getComputedStyle(button).display).to.not.equal('contents');
+    });
+  });
+
+  it('should apply display: contents to header and footer renderer containers', async () => {
+    dialog.headerRenderer = createRenderer('Header');
+    dialog.footerRenderer = createRenderer('Footer');
+    await open();
+    const header = dialog.querySelector('[slot="header-content"]');
+    const footer = dialog.querySelector('[slot="footer"]');
+    expect(getComputedStyle(header).display).to.equal('contents');
+    expect(getComputedStyle(footer).display).to.equal('contents');
   });
 });

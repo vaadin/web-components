@@ -15,10 +15,6 @@ export const formRowStyles = css`
   }
 
   ::slotted(*) {
-    /* Make form items inherit label position from the layout */
-    --_form-item-labels-above: inherit;
-    --_form-item-labels-aside: inherit;
-
     grid-column: auto / span min(var(--_grid-colspan, 1), var(--_grid-rendered-column-count));
   }
 

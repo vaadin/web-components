@@ -17,6 +17,7 @@ assertType<boolean>(dialog.noCloseOnEsc);
 assertType<boolean>(dialog.cancelButtonVisible);
 assertType<boolean>(dialog.rejectButtonVisible);
 assertType<string>(dialog.header);
+assertType<number | null | undefined>(dialog.headingLevel);
 assertType<string | null | undefined>(dialog.message);
 assertType<string>(dialog.confirmText);
 assertType<string>(dialog.confirmTheme);

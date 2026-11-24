@@ -37,7 +37,7 @@ describe('row details', () => {
     flushGrid(grid);
   }
 
-  it('should not increase row init count', () => {
+  it('should not increase row render count', () => {
     grid = fixtureSync(`
       <vaadin-grid style="width: 50px; height: 400px" size="100">
         <vaadin-grid-column></vaadin-grid-column>
@@ -46,7 +46,7 @@ describe('row details', () => {
     grid.rowDetailsRenderer = simpleDetailsRenderer;
     grid.querySelector('vaadin-grid-column').renderer = indexRenderer;
 
-    const spy = sinon.spy(grid, '__initRow');
+    const spy = sinon.spy(grid, '__renderBodyRow');
     grid.size = 1;
     grid.dataProvider = infiniteDataProvider;
     flushGrid(grid);
@@ -97,10 +97,19 @@ describe('row details', () => {
       expect(getRowCells(bodyRows[1])[1].hidden).to.be.true;
     });
 
-    it('should close details row visually', () => {
+    it('should restore the row height when details are closed', async () => {
+      const rowHeight = bodyRows[1].offsetHeight;
       openRowDetails(1);
       closeRowDetails(1);
-      expect(bodyRows[1].getBoundingClientRect().bottom).to.be.closeTo(bodyRows[2].getBoundingClientRect().top, 1);
+      await nextFrame();
+      expect(bodyRows[1].offsetHeight).to.equal(rowHeight);
+    });
+
+    it('should restore the row height when renderer is cleared', () => {
+      const rowHeight = bodyRows[1].offsetHeight;
+      openRowDetails(1);
+      grid.rowDetailsRenderer = null;
+      expect(bodyRows[1].offsetHeight).to.equal(rowHeight);
     });
 
     it('should render the details', () => {
@@ -171,6 +180,11 @@ describe('row details', () => {
       expect(cells[1].hidden).to.be.false;
       grid.closeItemDetails({ value: 'foo0' });
       expect(cells[1].hidden).to.be.true;
+    });
+
+    it('should remove the details cells when the renderer is cleared', () => {
+      grid.rowDetailsRenderer = null;
+      expect(grid.$.items.querySelector('[part~="details-cell"]')).to.be.null;
     });
   });
 
@@ -412,6 +426,31 @@ describe('row details', () => {
       expect(bodyRows[0].children[0].getAttribute('part')).to.include('first-row-cell');
       expect(bodyRows[1].children[0].getAttribute('part')).to.include('last-row-cell');
     });
+
+    it('should invoke the body renderer once per row', async () => {
+      const renderer = sinon.spy((root, _, { item }) => {
+        root.textContent = item.name;
+      });
+      grid.querySelector('vaadin-grid-column').renderer = renderer;
+      await nextFrame();
+      renderer.resetHistory();
+
+      grid.rowDetailsRenderer = () => {};
+      expect(renderer).to.be.calledTwice;
+    });
+
+    it('should keep the details cell in place when scrolled horizontally', async () => {
+      grid.querySelector('vaadin-grid-column').width = '2000px';
+      grid.detailsOpenedItems = [...grid.items];
+      grid.rowDetailsRenderer = (root) => {
+        root.textContent = 'details';
+      };
+      await nextFrame();
+      grid.$.table.scrollLeft = 100;
+      await nextFrame();
+      const detailsCell = bodyRows[0].querySelector('[part~="details-cell"]');
+      expect(detailsCell.getBoundingClientRect().left).to.be.closeTo(grid.$.table.getBoundingClientRect().left, 1);
+    });
   });
 
   describe('details cell height change', () => {
@@ -449,13 +488,6 @@ describe('row details', () => {
       grid.detailsOpenedItems = [...grid.items];
       await nextFrame();
       expect(bodyRow.offsetHeight).to.equal(detailsRowHeight);
-    });
-
-    it('should clear row padding bottom when opened items are cleared', async () => {
-      grid.detailsOpenedItems = [...grid.items];
-      grid.detailsOpenedItems = [];
-      await nextFrame();
-      expect(bodyRow.style.paddingBottom).to.equal('');
     });
 
     it('should update the row height when details cell height changes', async () => {

@@ -1,4 +1,5 @@
 import prettier from 'eslint-config-vaadin/prettier';
+import react from 'eslint-config-vaadin/react';
 import testing from 'eslint-config-vaadin/testing';
 import typescript from 'eslint-config-vaadin/typescript';
 import html from 'eslint-plugin-html';
@@ -28,7 +29,49 @@ const PRO_LICENSE_HEADER = `
  */
 `;
 
-const PRO_COMPONENTS = ['charts', 'board', 'crud', 'dashboard', 'grid-pro', 'rich-text-editor', 'map'];
+// The React wrappers were started in 2022 in the vaadin/react-components repo.
+const REACT_LICENSE_HEADER = LICENSE_HEADER.replace('2000 - ', '2022 - ');
+const REACT_PRO_LICENSE_HEADER = PRO_LICENSE_HEADER.replace('2000 - ', '2022 - ');
+
+const RESTRICTED_SYNTAX = [
+  {
+    selector: 'ForInStatement',
+    message: 'for..in loops are slower than Object.{keys,values,entries} and have their caveats.',
+  },
+  {
+    selector:
+      "MemberExpression[computed=true][property.type='BinaryExpression'][property.operator='-'][property.left.property.name='length']",
+    message: 'Use .at(-n) instead of arr[arr.length - n].',
+  },
+  {
+    selector:
+      "MemberExpression[computed=true][property.value=0] > CallExpression.object[callee.property.name='slice'][arguments.0.operator='-']",
+    message: 'Use .at(-1) instead of .slice(-1)[0].',
+  },
+];
+
+const PRO_COMPONENTS = [
+  'charts',
+  'board',
+  'crud',
+  'dashboard',
+  'grid-pro',
+  'rich-text-editor',
+  'map',
+  'pdf-viewer',
+  'react-components-pro',
+];
+
+const REACT_FILES = ['packages/react-components*/**/*.{ts,tsx}', 'react/test/**/*.ts', 'react/dev/**/*.tsx'];
+
+/** Turns off every rule of the React preset whose name starts with the given plugin prefix. */
+const reactRulesOff = (prefix) =>
+  Object.fromEntries(
+    react
+      .flatMap((config) => Object.keys(config.rules ?? {}))
+      .filter((rule) => rule.startsWith(prefix))
+      .map((rule) => [rule, 'off']),
+  );
 
 export default [
   {
@@ -40,10 +83,33 @@ export default [
       'packages/**/dist/*.js',
       'packages/**/test/dom/__snapshots__/*.snap.js',
       'packages/**/test/*.generated.test.js',
+      'packages/react-components*/*.{js,d.ts,map}',
+      'packages/react-components*/{generated,renderers,utils,css}/**',
+      'packages/react-components*/src/generated/**',
     ],
   },
   ...typescript,
   ...testing,
+  ...react.map((config) => ({ ...config, files: REACT_FILES })),
+  {
+    files: REACT_FILES,
+    settings: {
+      react: { version: '19' },
+    },
+    rules: {
+      'react/jsx-no-literals': 'off', // Wrappers and tests render plain text
+      'react/destructuring-assignment': 'off', // Wrappers forward props objects as is
+      'react/jsx-pascal-case': 'off', // Generated components use web component class names
+      'react/function-component-definition': 'off', // Wrappers use forwardRef with arrow functions
+      'react/display-name': 'off', // Wrappers set no display name
+      'react/no-this-in-sfc': 'off', // False positives in renderer callbacks
+      '@typescript-eslint/no-empty-object-type': 'off', // Props types extend web component types
+      '@typescript-eslint/explicit-module-boundary-types': 'off', // Return types are inferred from createComponent
+      '@typescript-eslint/no-unsafe-function-type': 'off', // Event handler maps use Function
+      '@typescript-eslint/consistent-type-assertions': 'off', // Ref and element casts are needed
+      ...reactRulesOff('react-perf/'), // Renderer props take inline JSX, functions, arrays and objects
+    },
+  },
   ...prettier,
   {
     plugins: {
@@ -90,6 +156,7 @@ export default [
           ],
         },
       ],
+      'no-restricted-syntax': ['error', ...RESTRICTED_SYNTAX],
       'arrow-body-style': 'off',
       'consistent-return': 'off',
       'func-names': 'off',
@@ -116,16 +183,17 @@ export default [
   {
     files: ['dev/**/*.html'],
     plugins: { html },
+    rules: {
+      // Prettier formats dev pages as whole files, see lint:html
+      'prettier/prettier': 'off',
+    },
   },
   {
     files: ['packages/*/src/**/*.js'],
     rules: {
       'no-restricted-syntax': [
         'error',
-        {
-          selector: 'ForInStatement',
-          message: 'for..in loops are slower than Object.{keys,values,entries} and have their caveats.',
-        },
+        ...RESTRICTED_SYNTAX,
         {
           selector: "CallExpression[callee.property.name='validate']",
           message:
@@ -141,15 +209,27 @@ export default [
     },
   },
   {
-    files: ['packages/*/src/**/*.{ts,js}'],
+    files: ['packages/*/src/**/*.{ts,tsx,js}'],
     rules: {
       'custom-rules/license-header': ['error', { licenseHeader: LICENSE_HEADER }],
     },
   },
   {
-    files: [`packages/@(${PRO_COMPONENTS.join('|')})/src/**/*.{ts,js}`],
+    files: [`packages/@(${PRO_COMPONENTS.join('|')})/src/**/*.{ts,tsx,js}`],
     rules: {
       'custom-rules/license-header': ['error', { licenseHeader: PRO_LICENSE_HEADER }],
+    },
+  },
+  {
+    files: ['packages/react-components/src/**/*.{ts,tsx}'],
+    rules: {
+      'custom-rules/license-header': ['error', { licenseHeader: REACT_LICENSE_HEADER }],
+    },
+  },
+  {
+    files: ['packages/react-components-pro/src/**/*.{ts,tsx}'],
+    rules: {
+      'custom-rules/license-header': ['error', { licenseHeader: REACT_PRO_LICENSE_HEADER }],
     },
   },
   {
@@ -160,6 +240,11 @@ export default [
       'wtr-utils.js',
       'custom-rules/**/*.js',
       'api-docs/.eleventy.js',
+      'api-docs/*.ts',
+      'manifest/**/*.js',
+      'react/scripts/**/*.{js,ts}',
+      'react/*.ts',
+      'react/dev/*.ts',
     ],
     languageOptions: {
       globals: {
@@ -202,6 +287,23 @@ export default [
           ],
         },
       ],
+    },
+  },
+  {
+    files: ['packages/react-components*/test/**', 'react/dev/**'],
+    rules: {
+      ...reactRulesOff('jsx-a11y/'), // Test fixtures and dev pages are not real UI
+      'react/button-has-type': 'off',
+      'react/no-array-index-key': 'off', // Static demo lists
+      'react/jsx-no-useless-fragment': 'off', // Renderers in tests return text-only fragments
+      '@typescript-eslint/no-unused-vars': 'off', // Typings tests declare unused values, specs destructure partially
+      '@typescript-eslint/no-namespace': 'off', // JSX.IntrinsicElements augmentation needs a nested namespace
+    },
+  },
+  {
+    files: ['react/dev/**'],
+    rules: {
+      'no-console': 'off', // Dev pages log events for manual testing
     },
   },
 ];

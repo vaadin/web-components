@@ -114,6 +114,22 @@ describe('select', () => {
       await visualDiff(div, 'value-multiline');
     });
 
+    it('rich content', async () => {
+      element.renderer = (root) => {
+        // Replaced elements such as images have no baseline
+        root.innerHTML = `
+          <vaadin-list-box>
+            <vaadin-item value="rich">
+              <svg width="16" height="16"><circle cx="8" cy="8" r="8" /></svg>
+              Icon and text
+            </vaadin-item>
+          </vaadin-list-box>
+        `;
+      };
+      element.value = 'rich';
+      await visualDiff(div, 'value-rich-content');
+    });
+
     it('label aside', async () => {
       element.setAttribute('theme', 'label-aside');
       element.label = 'Label';
@@ -132,38 +148,57 @@ describe('select', () => {
         document.documentElement.removeAttribute('dir');
       });
 
-      beforeEach(async () => {
-        div.style.height = '200px';
-        div.style.width = '200px';
-        element.value = 'value-1';
-        await sendKeys({ press: 'Tab' });
-        element.opened = true;
-        await nextFrame();
+      describe('opened', () => {
+        beforeEach(async () => {
+          div.style.height = '200px';
+          div.style.width = '200px';
+          element.value = 'value-1';
+          await sendKeys({ press: 'Tab' });
+          element.opened = true;
+          await nextFrame();
+        });
+
+        it('align-start', async () => {
+          element.setAttribute('theme', 'align-start');
+          await visualDiff(div, `${dir}-align-start`);
+        });
+
+        it('align-center', async () => {
+          element.setAttribute('theme', 'align-center');
+          await visualDiff(div, `${dir}-align-center`);
+        });
+
+        it('align-end', async () => {
+          element.setAttribute('theme', 'align-end');
+          await visualDiff(div, `${dir}-align-end`);
+        });
+
+        it('align-left', async () => {
+          element.setAttribute('theme', 'align-left');
+          await visualDiff(div, `${dir}-align-left`);
+        });
+
+        it('align-right', async () => {
+          element.setAttribute('theme', 'align-right');
+          await visualDiff(div, `${dir}-align-right`);
+        });
       });
 
-      it('align-start', async () => {
-        element.setAttribute('theme', 'align-start');
-        await visualDiff(div, `${dir}-align-start`);
-      });
+      describe('overflow', () => {
+        beforeEach(() => {
+          element.style.width = '120px';
+          element.items = [{ label: 'An item with a long label', value: 'long' }];
+          element.value = 'long';
+        });
 
-      it('align-center', async () => {
-        element.setAttribute('theme', 'align-center');
-        await visualDiff(div, `${dir}-align-center`);
-      });
-
-      it('align-end', async () => {
-        element.setAttribute('theme', 'align-end');
-        await visualDiff(div, `${dir}-align-end`);
-      });
-
-      it('align-left', async () => {
-        element.setAttribute('theme', 'align-left');
-        await visualDiff(div, `${dir}-align-left`);
-      });
-
-      it('align-right', async () => {
-        element.setAttribute('theme', 'align-right');
-        await visualDiff(div, `${dir}-align-right`);
+        // Physical alignments keep their side on overflow, which is only visible when it is the end side
+        ['align-center', 'align-end', dir === 'rtl' ? 'align-left' : 'align-right'].forEach((theme) => {
+          it(theme, async () => {
+            element.setAttribute('theme', theme);
+            await nextFrame();
+            await visualDiff(div, `${dir}-${theme}-overflow`);
+          });
+        });
       });
     });
   });

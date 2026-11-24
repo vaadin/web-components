@@ -6,7 +6,7 @@ import type { SliderBubble } from '../../src/vaadin-slider-bubble.js';
 describe('vaadin-slider-bubble', () => {
   let bubble: SliderBubble;
 
-  beforeEach(async () => {
+  beforeEach(() => {
     bubble = fixtureSync('<vaadin-slider-bubble></vaadin-slider-bubble>');
   });
 

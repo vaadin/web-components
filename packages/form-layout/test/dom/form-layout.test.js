@@ -54,6 +54,12 @@ describe('vaadin-form-layout', () => {
           layout.expandFields = true;
           await expect(layout).dom.to.equalSnapshot();
         });
+
+        it('switching to responsiveSteps', async () => {
+          layout.autoResponsive = false;
+          await nextFrame();
+          await expect(layout).dom.to.equalSnapshot();
+        });
       });
 
       describe('shadow', () => {

@@ -32,7 +32,7 @@ const crudDialogOverlay = css`
     overflow: auto;
     overscroll-behavior: contain;
     padding: var(--vaadin-crud-form-padding, var(--vaadin-padding-l));
-    padding-top: 0;
+    padding-top: var(--_focus-ring-space);
   }
 
   ::slotted([slot='form']) {

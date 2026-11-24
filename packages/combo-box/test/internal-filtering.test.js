@@ -148,6 +148,17 @@ describe('internal filtering', () => {
       expect(comboBox.filteredItems).to.eql(['bar', 'baz']);
     });
 
+    it('should not open overlay on input when no items match the filter', () => {
+      const openedChangedSpy = sinon.spy();
+      overlay.addEventListener('opened-changed', openedChangedSpy);
+
+      setInputValue(comboBox, 'qux');
+
+      expect(comboBox.opened).to.be.true;
+      expect(overlay.opened).to.be.false;
+      expect(openedChangedSpy).to.be.not.called;
+    });
+
     it('should filter out all items with a invalid filter', () => {
       setInputValue(comboBox, 'qux');
 
@@ -255,6 +266,16 @@ describe('internal filtering', () => {
       comboBox._scrollIntoView(500);
       comboBox.filter = '1';
       expect(getViewportItems(comboBox)[0].index).to.equal(0);
+    });
+
+    it('should scroll to the exact match when opened on input', async () => {
+      comboBox.items = [...makeItems(50), 'item'];
+      comboBox.inputElement.focus();
+      setInputValue(comboBox, 'item');
+      await nextRender();
+      const focusedItem = getAllItems(comboBox)[getFocusedItemIndex(comboBox)];
+      expect(getViewportItems(comboBox)).to.include(focusedItem);
+      expect(focusedItem.textContent.trim()).to.equal('item');
     });
   });
 

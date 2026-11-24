@@ -49,4 +49,11 @@ describe('vaadin-details', () => {
       await expect(details).shadowDom.to.equalSnapshot();
     });
   });
+
+  describe('summary', () => {
+    it('shadow', async () => {
+      const summary = details.querySelector('vaadin-details-summary');
+      await expect(summary).shadowDom.to.equalSnapshot();
+    });
+  });
 });

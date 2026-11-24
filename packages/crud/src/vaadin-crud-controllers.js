@@ -73,7 +73,7 @@ export class FormSlotController extends SlotController {
 
   /**
    * Override method inherited from `SlotController`
-   * to move slotted form to the overlay if needed.
+   * to store a reference to the slotted form.
    *
    * @param {Node} node
    * @protected
@@ -81,10 +81,6 @@ export class FormSlotController extends SlotController {
    */
   initNode(node) {
     this.host._form = node;
-
-    if (this.host.editorOpened) {
-      this.host.__ensureChildren();
-    }
   }
 }
 

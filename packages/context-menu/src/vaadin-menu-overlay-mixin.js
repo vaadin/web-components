@@ -71,7 +71,7 @@ export const MenuOverlayMixin = (superClass) =>
           if (child && Array.isArray(child.items) && child.items.length) {
             e.preventDefault();
             if (e.keyCode === 38) {
-              child.items[child.items.length - 1].focus();
+              child.items.at(-1).focus();
             } else {
               child.focus();
             }

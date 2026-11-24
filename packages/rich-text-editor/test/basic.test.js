@@ -1,5 +1,5 @@
 import { expect } from '@vaadin/chai-plugins';
-import { fixtureSync, focusout, nextRender, nextUpdate } from '@vaadin/testing-helpers';
+import { fixtureSync, focusout, nextFrame, nextRender, nextUpdate } from '@vaadin/testing-helpers';
 import sinon from 'sinon';
 import '../src/vaadin-rich-text-editor.js';
 
@@ -444,6 +444,73 @@ describe('rich text editor', () => {
           expect(el.style.textAlign).to.equal(align);
           rte.removeAttribute('dir');
         });
+      });
+    });
+
+    describe('video', () => {
+      const payload = 'https://x"><img src=x onerror=window.__rteXss?.()>';
+
+      const expectEscapedLink = (htmlValue) => {
+        const template = document.createElement('template');
+        template.innerHTML = htmlValue;
+        const { childNodes } = template.content;
+        expect(childNodes.length).to.equal(1);
+        expect(childNodes[0].localName).to.equal('a');
+        expect(childNodes[0].getAttribute('href')).to.equal(payload);
+        expect(childNodes[0].textContent).to.equal(payload);
+      };
+
+      beforeEach(() => {
+        window.__rteXss = sinon.spy();
+      });
+
+      afterEach(() => {
+        delete window.__rteXss;
+      });
+
+      it('should export video as a link', () => {
+        rte.value = JSON.stringify([{ insert: { video: 'https://example.com/video' } }]);
+        flushValueDebouncer();
+        expect(rte.htmlValue).to.equal('<a href="https://example.com/video">https://example.com/video</a>');
+      });
+
+      it('should escape video URL when setting value', () => {
+        rte.value = JSON.stringify([{ insert: { video: payload } }]);
+        flushValueDebouncer();
+        expectEscapedLink(rte.htmlValue);
+      });
+
+      it('should escape video URL when dangerously setting htmlValue', () => {
+        rte.dangerouslySetHtmlValue(`<iframe class="ql-video" src='${payload}'></iframe>`);
+        flushValueDebouncer();
+        expectEscapedLink(rte.htmlValue);
+      });
+
+      it('should not run handlers from video URL when updating htmlValue', async () => {
+        rte.value = JSON.stringify([{ insert: { video: payload } }]);
+        flushValueDebouncer();
+        // Wait for an image with the same URL to fail loading
+        await new Promise((resolve) => {
+          const img = new Image();
+          img.onerror = resolve;
+          img.src = 'x';
+        });
+        await nextFrame();
+        expect(window.__rteXss.called).to.be.false;
+      });
+
+      it('should parse semantic HTML inertly when updating htmlValue', async () => {
+        sinon.stub(editor, 'getSemanticHTML').returns('<img src="x" onerror="window.__rteXss?.()">');
+        rte.value = JSON.stringify([{ insert: 'Foo\n' }]);
+        flushValueDebouncer();
+        // Wait for an image with the same URL to fail loading
+        await new Promise((resolve) => {
+          const img = new Image();
+          img.onerror = resolve;
+          img.src = 'x';
+        });
+        await nextFrame();
+        expect(window.__rteXss.called).to.be.false;
       });
     });
   });

@@ -230,6 +230,10 @@ export const DatePickerOverlayContentMixin = (superClass) =>
       return this.calendars.map((calendar) => calendar.focusableDateElement).find(Boolean);
     }
 
+    get focusableDateButton() {
+      return this.calendars.map((calendar) => calendar.focusableDateButton).find(Boolean);
+    }
+
     /** @protected */
     _initControllers() {
       this.addController(
@@ -897,12 +901,12 @@ export const DatePickerOverlayContentMixin = (superClass) =>
     __tryFocusDate() {
       const dateToFocus = this.__pendingDateFocus;
       if (dateToFocus) {
-        // Check the date element with tabindex="0"
+        // Check the cell of the date that has the focusable button
         const dateElement = this.focusableDateElement;
 
         if (dateElement && dateEquals(dateElement.date, this.__pendingDateFocus)) {
           delete this.__pendingDateFocus;
-          dateElement.focus();
+          this.focusableDateButton.focus();
         }
       }
     }

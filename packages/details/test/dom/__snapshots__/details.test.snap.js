@@ -117,3 +117,19 @@ snapshots["vaadin-details shadow opened"] =
 `;
 /* end snapshot vaadin-details shadow opened */
 
+snapshots["vaadin-details summary shadow"] = 
+`<span
+  aria-hidden="true"
+  part="toggle"
+>
+</span>
+<div
+  part="content"
+  role="presentation"
+>
+  <slot>
+  </slot>
+</div>
+`;
+/* end snapshot vaadin-details summary shadow */
+

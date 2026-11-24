@@ -58,6 +58,12 @@ describe('checkbox', () => {
     await visualDiff(div, 'required-empty');
   });
 
+  it('required wide', async () => {
+    element.required = true;
+    element.style.width = '300px';
+    await visualDiff(div, 'required-wide');
+  });
+
   it('invalid focus-ring', async () => {
     element.required = true;
     element.invalid = true;
@@ -181,6 +187,12 @@ describe('checkbox', () => {
     it('empty', async () => {
       element.label = '';
       await visualDiff(div, 'rtl-empty');
+    });
+
+    it('required wide', async () => {
+      element.required = true;
+      element.style.width = '300px';
+      await visualDiff(div, 'rtl-required-wide');
     });
 
     it('required', async () => {

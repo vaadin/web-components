@@ -142,6 +142,12 @@ describe('LabelMixin', () => {
         await nextUpdate(element);
         expect(element._labelNode.textContent).to.equal('Fallback');
       });
+
+      it('should not clear custom label content when removing the custom label', async () => {
+        element.removeChild(label);
+        await nextUpdate(element);
+        expect(label.textContent).to.equal('Custom');
+      });
     });
 
     describe('empty text node', () => {

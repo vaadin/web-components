@@ -284,6 +284,11 @@ export const ComboBoxScrollerMixin = (superClass) =>
         }
 
         this.requestContentUpdate();
+
+        // The focused index can change while closed, when scrolling to it is skipped
+        if (this.focusedIndex >= 0 && !this.loading) {
+          this.scrollIntoView(this.focusedIndex);
+        }
         return;
       }
 

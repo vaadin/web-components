@@ -1,6 +1,14 @@
 import { expect } from '@vaadin/chai-plugins';
-import { resetMouse, sendKeys, sendMouseToElement } from '@vaadin/test-runner-commands';
-import { fixtureSync, mousedown, mouseup, nextFrame, nextRender, nextUpdate } from '@vaadin/testing-helpers';
+import { resetMouse, sendKeys, sendMouse, sendMouseToElement } from '@vaadin/test-runner-commands';
+import {
+  fixtureSync,
+  middleOfNode,
+  mousedown,
+  mouseup,
+  nextFrame,
+  nextRender,
+  nextUpdate,
+} from '@vaadin/testing-helpers';
 import sinon from 'sinon';
 import '../src/vaadin-checkbox.js';
 
@@ -215,6 +223,14 @@ describe('checkbox', () => {
         expect(checkbox.hasAttribute('active')).to.be.false;
       });
 
+      it('should not set active attribute on helper element click after custom label is removed', async () => {
+        label.remove();
+        checkbox.helperText = 'Helper';
+        await nextFrame();
+        mousedown(checkbox.querySelector('[slot="helper"]'));
+        expect(checkbox.hasAttribute('active')).to.be.false;
+      });
+
       it('should not set active attribute on error message element click', async () => {
         checkbox.errorMessage = 'Error';
         checkbox.invalid = true;
@@ -226,11 +242,6 @@ describe('checkbox', () => {
       it('should set active attribute on required indicator mousedown', () => {
         mousedown(checkbox.shadowRoot.querySelector('[part="required-indicator"]'));
         expect(checkbox.hasAttribute('active')).to.be.true;
-      });
-
-      it('should not set active attribute when clicking empty space next to the label', () => {
-        mousedown(checkbox.shadowRoot.querySelector('[part="label"]'));
-        expect(checkbox.hasAttribute('active')).to.be.false;
       });
 
       it('should not set active attribute when clicking empty space below the checkbox', () => {
@@ -288,6 +299,63 @@ describe('checkbox', () => {
         expect(event).to.have.property('composed', false);
       });
     });
+
+    describe('click target', () => {
+      afterEach(async () => {
+        await resetMouse();
+      });
+
+      it('should toggle checked property and set active attribute on mouse press on the empty space next to the label', async () => {
+        checkbox.style.width = '500px';
+        const spy = sinon.spy();
+        checkbox.addEventListener('click', spy);
+        // Middle of the empty space between the label text and the host edge
+        const x = (label.getBoundingClientRect().right + checkbox.getBoundingClientRect().right) / 2;
+        const { y } = middleOfNode(label);
+        await sendMouse({ type: 'move', position: [Math.round(x), Math.round(y)] });
+        await sendMouse({ type: 'down' });
+        expect(checkbox.hasAttribute('active')).to.be.true;
+
+        await sendMouse({ type: 'up' });
+        expect(checkbox.hasAttribute('active')).to.be.false;
+        expect(checkbox.checked).to.be.true;
+        expect(spy).to.be.calledOnce;
+      });
+
+      it('should not cover the input with the label', () => {
+        const { x, y } = middleOfNode(input);
+        expect(document.elementFromPoint(x, y)).to.equal(input);
+      });
+
+      [undefined, 'reverse'].forEach((theme) => {
+        it(`should cover the space above the label when the checkbox is taller${theme ? ` in ${theme} theme` : ''}`, () => {
+          if (theme) {
+            checkbox.setAttribute('theme', theme);
+          }
+          checkbox.style.setProperty('--vaadin-checkbox-size', '40px');
+          const { x } = middleOfNode(label);
+          const y = (checkbox.getBoundingClientRect().top + label.getBoundingClientRect().top) / 2;
+          expect(document.elementFromPoint(x, y)).to.equal(label);
+        });
+      });
+
+      it('should not cover the label link with the label click area', () => {
+        const { x, y } = middleOfNode(link);
+        expect(document.elementFromPoint(x, y)).to.equal(link);
+      });
+
+      it('should not cover the helper text row', async () => {
+        checkbox.helperText = 'Helper';
+        await nextUpdate(checkbox);
+        const helper = checkbox.querySelector('[slot="helper"]');
+        const { x, y } = middleOfNode(helper);
+        expect(document.elementFromPoint(x, y)).to.equal(helper);
+
+        // Empty space below the checkbox part
+        const part = checkbox.shadowRoot.querySelector('[part="checkbox"]');
+        expect(document.elementFromPoint(middleOfNode(part).x, y)).to.equal(checkbox);
+      });
+    });
   });
 
   describe('indeterminate property', () => {
@@ -308,9 +376,9 @@ describe('checkbox', () => {
     });
   });
 
-  describe('opacity', () => {
+  describe('input styles', () => {
     beforeEach(async () => {
-      checkbox = fixtureSync(`<vaadin-checkbox></vaadin-checkbox>`);
+      checkbox = fixtureSync('<vaadin-checkbox></vaadin-checkbox>');
       await nextRender();
       input = checkbox.inputElement;
     });
@@ -322,9 +390,32 @@ describe('checkbox', () => {
           input {
             opacity: 1;
           }
-        </script>
+        </style>
       `);
       expect(getComputedStyle(input).opacity).to.equal('0');
+    });
+
+    it('should stretch the slotted input over the checkbox part', () => {
+      // Emulate fixed size set by iOS UA styles or CSS resets
+      fixtureSync(`
+        <style>
+          input {
+            width: 1rem;
+            height: 1rem;
+          }
+        </style>
+      `);
+      const inputRect = input.getBoundingClientRect();
+      const partRect = checkbox.shadowRoot.querySelector("[part='checkbox']").getBoundingClientRect();
+      expect(inputRect.width).to.be.at.least(partRect.width);
+      expect(inputRect.height).to.be.at.least(partRect.height);
+    });
+
+    it('should make the slotted input at least 24px wide and high', () => {
+      const rect = input.getBoundingClientRect();
+      // Round, as Firefox and WebKit snap the size to a fraction below 24px
+      expect(Math.round(rect.width)).to.be.at.least(24);
+      expect(Math.round(rect.height)).to.be.at.least(24);
     });
   });
 });

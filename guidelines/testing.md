@@ -85,9 +85,16 @@ Baseline screenshots are placed under `screenshots/{name}/baseline/`.
 - **Per-theme `common.js`** disables animations and transitions so
   screenshots are stable across runs.
 - **Prefer visual tests over unit tests for CSS** — a screenshot
-  catches what a `getComputedStyle` assertion can't. Exception: a
-  component's logic that _reads_ a CSS custom property from JS, where
-  a unit test can assert the value directly.
+  catches what a `getComputedStyle` assertion can't. Cover every
+  affected style layer, and add a screenshot for the specific state
+  the change targets (e.g. hover, disabled, RTL).
+- **Use unit tests when JS logic depends on a style value** (e.g. a
+  component that reads a CSS custom property to compute its layout):
+  set the style value and assert the resulting outcome.
+- **Use unit tests for styles that control whether an element is
+  shown or interactive** (e.g. `display`, `visibility`, `pointer-events`):
+  assert the computed value, since a screenshot can't tell a hidden
+  element from a missing one, or show pointer event handling.
 - **Don't duplicate `field-base` coverage** — shared base styles
   (label, helper, error, focus ring, validity) already have visual
   tests in `field-base`. Per-component visual tests should focus on

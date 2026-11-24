@@ -27,6 +27,12 @@ describe('vaadin-confirm-dialog', () => {
     await expect(dialog).dom.to.equalSnapshot(SNAPSHOT_CONFIG);
   });
 
+  it('headingLevel', async () => {
+    dialog.headingLevel = 2;
+    await nextUpdate(dialog);
+    await expect(dialog).dom.to.equalSnapshot(SNAPSHOT_CONFIG);
+  });
+
   it('shadow', async () => {
     await expect(dialog).shadowDom.to.equalSnapshot(SNAPSHOT_CONFIG);
   });

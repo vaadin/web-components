@@ -127,6 +127,11 @@ export const gridStyles = css`
     box-sizing: border-box;
     margin: 0;
     position: relative;
+    /* Browser default tr styles use vertical-align: inherit and border-color: inherit,
+       which force every row to restyle when #items, #header or #footer gets a new
+       transform on horizontal scroll. Resetting them makes horizontal scrolling faster. */
+    vertical-align: initial;
+    border-color: initial;
   }
 
   .row:not(:focus-within) {
@@ -226,7 +231,7 @@ export const gridStyles = css`
 
   /* Block borders / Last body row */
 
-  .last-row::after {
+  #table[has-footer] .last-row::after {
     bottom: 0;
   }
 
@@ -237,16 +242,26 @@ export const gridStyles = css`
 
   /* Block borders / Last body row without footer */
 
+  #table:not([has-footer]) {
+    /* Push the bottom border out of the row box, so the row height does not include it */
+    .last-row .details-cell,
+    .last-row-cell {
+      margin-bottom: calc(var(--_row-border-width) * -1);
+    }
+
+    /* Treat the border outside the row box as ink overflow, so it does not extend the scroll range */
+    .last-row {
+      contain: layout;
+    }
+  }
+
   :host([all-rows-visible]),
   :host([overflow~='top']),
   :host([overflow~='bottom']) {
-    #table:not([has-footer]) .last-row .details-cell,
-    #table:not([has-footer]) .last-row-cell:not(.details-opened-row-cell) {
-      border-bottom-style: none;
-
-      &::after {
-        bottom: 0;
-      }
+    #table:not([has-footer]) .last-row::after,
+    #table:not([has-footer]) .last-row .details-cell::after,
+    #table:not([has-footer]) .last-row-cell:not(.details-opened-row-cell)::after {
+      bottom: 0;
     }
   }
 
@@ -312,10 +327,14 @@ export const gridStyles = css`
       var(--vaadin-grid-cell-background-color, transparent)
     );
 
-    background-color: inherit;
+    background-color: var(--vaadin-grid-row-background-color, var(--vaadin-background-color));
     background-repeat: no-repeat;
     background-origin: padding-box;
     background-image: var(--_cell-background-image);
+
+    /* Browser default td styles use vertical-align: inherit, which forces every
+       cell in a row to restyle when the row's style changes. */
+    vertical-align: initial;
   }
 
   .body-cell {

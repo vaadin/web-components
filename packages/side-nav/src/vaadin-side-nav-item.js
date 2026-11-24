@@ -288,7 +288,13 @@ class SideNavItem extends SideNavChildrenMixin(
           aria-labelledby="link i18n"
         ></button>
       </div>
-      <ul part="children" role="list" ?hidden="${!this.expanded}" aria-hidden="${this.expanded ? 'false' : 'true'}">
+      <ul
+        id="children"
+        part="children"
+        role="list"
+        ?hidden="${!this.expanded}"
+        aria-hidden="${this.expanded ? 'false' : 'true'}"
+      >
         <slot name="children"></slot>
       </ul>
       <div hidden id="i18n">${this.__effectiveI18n.toggle}</div>
@@ -326,10 +332,10 @@ class SideNavItem extends SideNavChildrenMixin(
   /** @private */
   _onContentClick(e) {
     // Navigate if path is defined and not clicking on the link directly
-    if (this.path && !e.composedPath().find((el) => el === this.$.link)) {
+    if (this.path != null && !e.composedPath().find((el) => el === this.$.link)) {
       this.$.link.click();
     }
-    // Toggle item expanded state unless the link has a non-empty path
+    // Toggle item expanded state unless path is defined
     else if (this.path == null && this.hasAttribute('has-children') && !this.disabled) {
       this.__toggleExpanded();
     }

@@ -311,7 +311,7 @@ describe('scroll to index', () => {
       };
       flushGrid(grid);
 
-      grid.expandedItems = [parents[parents.length - 1]];
+      grid.expandedItems = [parents.at(-1)];
       grid.scrollToIndex(14);
     });
 

@@ -136,7 +136,7 @@ export const isWithinParentConstraints = (el, parent) => {
 };
 
 export const getRows = (container) => {
-  return container.querySelectorAll('tr');
+  return Array.from(container.querySelectorAll('tr'));
 };
 
 export const getRowCells = (row) => {
@@ -283,7 +283,7 @@ export const makeMultiTouchEvent = (type, touchPoints, node) => {
   const touchEventInit = {
     touches,
     targetTouches: touches,
-    changedTouches: [touches[touches.length - 1]],
+    changedTouches: [touches.at(-1)],
   };
   const event = new CustomEvent(type, { bubbles: true, cancelable: true });
   Object.entries(touchEventInit).forEach(([key, value]) => {

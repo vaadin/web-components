@@ -9,6 +9,7 @@
  */
 import { getDeepActiveElement } from '@vaadin/a11y-base/src/focus-utils.js';
 import { get, set } from '@vaadin/component-base/src/path-utils.js';
+import { getClosestCell } from '@vaadin/grid/src/vaadin-grid-helpers.js';
 
 export const GridProEditColumnMixin = (superClass) =>
   class extends superClass {
@@ -118,7 +119,7 @@ export const GridProEditColumnMixin = (superClass) =>
       this._focusButtonMode = navigator.platform.includes('Mac');
 
       this.__editModeRenderer = function (root, column) {
-        const cell = root.assignedSlot.parentNode;
+        const cell = getClosestCell(root);
 
         const tagName = column._getEditorTagName(cell);
         if (!root.firstElementChild || root.firstElementChild.localName.toLowerCase() !== tagName) {
@@ -254,6 +255,18 @@ export const GridProEditColumnMixin = (superClass) =>
     }
 
     /** @private */
+    __setEditorAccessibleName(editor) {
+      if (this.editorType === 'custom') {
+        return;
+      }
+
+      const name = this._headerCell?._content.textContent.trim();
+      if (name) {
+        editor.accessibleName = name;
+      }
+    }
+
+    /** @private */
     _setEditorValue(editor, value) {
       const path = this.editorType === 'checkbox' ? 'checked' : this.editorValuePath;
       // FIXME(yuriy): Required for the flow counterpart as it is passing the string value to webcomponent
@@ -277,6 +290,7 @@ export const GridProEditColumnMixin = (superClass) =>
       editor.addEventListener('focusin', this._grid.__boundEditorFocusIn);
       this._setEditorOptions(editor);
       this._setEditorValue(editor, get(this.path, model.item));
+      this.__setEditorAccessibleName(editor);
       editor._grid = this._grid;
 
       if (editor.updateComplete) {

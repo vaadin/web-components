@@ -446,7 +446,7 @@ describe('ListMixin', () => {
 
       it('should move focus to the last element on first element ArrowUp', () => {
         arrowUp(list);
-        expect(list.items[list.items.length - 1].focused).to.be.true;
+        expect(list.items.at(-1).focused).to.be.true;
       });
 
       it('should skip disabled items when moving focus on arrow key', () => {

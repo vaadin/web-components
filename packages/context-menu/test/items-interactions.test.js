@@ -143,6 +143,11 @@ describe('items interactions', () => {
       expect(rootMenu.opened).to.be.true;
     });
 
+    it('should close on item click', () => {
+      getMenuItems(rootMenu)[1].click();
+      expect(rootMenu.opened).to.be.false;
+    });
+
     it('should close on backdrop click', () => {
       subOverlay1.$.backdrop.click();
       expect(subMenu.opened).to.be.false;
@@ -298,7 +303,7 @@ describe('items interactions', () => {
       await openSubMenu(rootMenu);
       const items = getMenuItems(subMenu);
       await sendKeys({ press: 'ArrowUp' });
-      expect(getDeepActiveElement()).to.equal(items[items.length - 1]);
+      expect(getDeepActiveElement()).to.equal(items.at(-1));
     });
 
     it('should focus first item after re-opening when using components', async () => {

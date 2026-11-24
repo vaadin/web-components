@@ -103,11 +103,11 @@ describe('accessibility', () => {
     it('should focus the next button on right-arrow', (done) => {
       sinon.stub(buttons[0], 'focus').callsFake(done);
       const e = keyboardEventFor('keydown', 39);
-      buttons[buttons.length - 1].dispatchEvent(e);
+      buttons.at(-1).dispatchEvent(e);
     });
 
     it('should focus the previous button on left-arrow', (done) => {
-      sinon.stub(buttons[buttons.length - 1], 'focus').callsFake(done);
+      sinon.stub(buttons.at(-1), 'focus').callsFake(done);
       const e = keyboardEventFor('keydown', 37);
       buttons[0].dispatchEvent(e);
     });

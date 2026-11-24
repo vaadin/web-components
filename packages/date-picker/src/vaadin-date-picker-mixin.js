@@ -4,14 +4,12 @@
  * This program is available under Apache License Version 2.0, available at https://vaadin.com/license/
  */
 import { hideOthers } from '@vaadin/a11y-base/src/aria-hidden.js';
-import { DelegateFocusMixin } from '@vaadin/a11y-base/src/delegate-focus-mixin.js';
 import { isElementFocused, isKeyboardActive } from '@vaadin/a11y-base/src/focus-utils.js';
-import { KeyboardMixin } from '@vaadin/a11y-base/src/keyboard-mixin.js';
 import { isIOS } from '@vaadin/component-base/src/browser-utils.js';
 import { setOrRemoveAttribute } from '@vaadin/component-base/src/dom-utils.js';
 import { I18nMixin } from '@vaadin/component-base/src/i18n-mixin.js';
 import { MediaQueryController } from '@vaadin/component-base/src/media-query-controller.js';
-import { InputConstraintsMixin } from '@vaadin/field-base/src/input-constraints-mixin.js';
+import { InputControlMixin } from '@vaadin/field-base/src/input-control-mixin.js';
 import { VirtualKeyboardController } from '@vaadin/field-base/src/virtual-keyboard-controller.js';
 import { DateMetadataController } from './vaadin-date-metadata-controller.js';
 import {
@@ -83,7 +81,7 @@ export const datePickerI18nDefaults = Object.freeze({
 });
 
 export const DatePickerMixin = (subclass) =>
-  class DatePickerMixinClass extends I18nMixin(DelegateFocusMixin(InputConstraintsMixin(KeyboardMixin(subclass)))) {
+  class DatePickerMixinClass extends I18nMixin(InputControlMixin(subclass)) {
     static get properties() {
       return {
         /**
