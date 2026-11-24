@@ -63,4 +63,9 @@ vaadin-switch {
       --vaadin-switch-marker-color: var(--vaadin-text-color-secondary);
     }
   }
+
+  &[invalid]:not([disabled], [readonly]) {
+    --vaadin-switch-border-color: var(--vaadin-input-field-error-color);
+    --vaadin-switch-background: color-mix(in oklch, var(--vaadin-input-field-error-color) 50%, transparent);
+  }
 }
