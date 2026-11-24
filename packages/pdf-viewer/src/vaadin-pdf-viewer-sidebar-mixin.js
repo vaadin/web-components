@@ -70,10 +70,10 @@ export const PdfViewerSidebarMixin = (superClass) =>
     /** @type {PdfViewerThumbnailsController | null} */
     #thumbnails = null;
 
-    /** Whether the sidebar was open when the viewer became narrow, to open it again when it is wide. */
+    /** The open state to restore when the viewer becomes wide. */
     #sidebarOpenedBeforeOverlay = false;
 
-    /** Whether the sidebar opened over the pages while they had focus, which then moves to the thumbnails. */
+    /** Set when the sidebar opens over the focused pages. */
     #focusThumbnails = false;
 
     /** @protected */
@@ -229,8 +229,7 @@ export const PdfViewerSidebarMixin = (superClass) =>
      * @protected
      */
     _renderSidebar() {
-      // The backdrop takes the clicks on the pages under the sidebar. The list has tabindex="-1",
-      // so that Firefox does not make the scrollable list a tab stop.
+      // The list has tabindex="-1", so that Firefox does not make the scrollable list a tab stop.
       return html`
         <div
           id="backdrop"
@@ -281,9 +280,8 @@ export const PdfViewerSidebarMixin = (superClass) =>
     }
 
     /**
-     * Shows the sidebar over the pages while the viewer is narrow. Closes it
-     * when a wide viewer becomes narrow, and opens it again when the viewer
-     * becomes wide, as the drawer of `vaadin-app-layout` does.
+     * Shows the sidebar over the pages in a narrow viewer, and saves and
+     * restores the open state as the drawer of `vaadin-app-layout` does.
      * @private
      */
     #updateOverlay() {

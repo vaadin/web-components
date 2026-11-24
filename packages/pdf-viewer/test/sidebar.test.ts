@@ -434,7 +434,6 @@ describe('sidebar', () => {
         await nextRender();
         expect(viewer.sidebarOpened).to.be.false;
         expect(document.activeElement).to.equal(button);
-        // A surrounding dialog does not close on an Escape that is handled.
         expect(spy.firstCall.args[0].defaultPrevented).to.be.true;
       });
 
