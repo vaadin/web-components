@@ -165,7 +165,7 @@ export interface PdfViewerEventMap extends HTMLElementEventMap, PdfViewerCustomE
  * `focused`         | Set when the page area is focused.
  * `focus-ring`      | Set when the page area is focused using the keyboard.
  * `sidebar-opened`  | Set when the sidebar is shown.
- * `sidebar-overlay` | Set when the sidebar shows over the pages, as the viewer is narrow.
+ * `sidebar-overlay` | Set when the sidebar shows over the pages, see `sidebarOpened`.
  *
  * The following custom CSS properties are available for styling:
  *
@@ -179,6 +179,7 @@ export interface PdfViewerEventMap extends HTMLElementEventMap, PdfViewerCustomE
  * | `--vaadin-pdf-viewer-page-gap`            |
  * | `--vaadin-pdf-viewer-page-shadow`         |
  * | `--vaadin-pdf-viewer-sidebar-background`  |
+ * | `--vaadin-pdf-viewer-sidebar-overlay`     |
  * | `--vaadin-pdf-viewer-sidebar-width`       |
  * | `--vaadin-pdf-viewer-text-color`          |
  * | `--vaadin-pdf-viewer-toolbar-background`  |

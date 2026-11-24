@@ -144,35 +144,21 @@ describe('sidebar', () => {
     expect(page.offsetWidth).to.be.closeTo(content.clientWidth - 2 * padding, 1);
   });
 
-  it('should close the sidebar when the viewer becomes narrow and open it again when wide', async () => {
-    const spy = sinon.spy();
-    viewer.addEventListener('sidebar-opened-changed', spy);
+  it('should keep the sidebar open over the pages when the viewer becomes narrow', async () => {
     viewer.sidebarOpened = true;
     await nextRender();
     await setWidth('400px');
-    expect(viewer.sidebarOpened).to.be.false;
-    await setWidth('700px');
+    expect(viewer.hasAttribute('sidebar-overlay')).to.be.true;
     expect(viewer.sidebarOpened).to.be.true;
-    expect(spy.args.map(([event]) => event.detail.value)).to.deep.equal([true, false, true]);
   });
 
-  it('should keep the sidebar closed when the wide viewer resizes after it was opened again', async () => {
+  it('should move focus from the pages to the current thumbnail when the viewer becomes narrow', async () => {
     viewer.sidebarOpened = true;
     await nextRender();
+    content.focus();
     await setWidth('400px');
-    await setWidth('700px');
-    viewer.sidebarOpened = false;
     await nextRender();
-    await setWidth('750px');
-    expect(viewer.sidebarOpened).to.be.false;
-  });
-
-  it('should keep the sidebar open while the viewer is hidden', async () => {
-    viewer.sidebarOpened = true;
-    await nextRender();
-    viewer.style.display = 'none';
-    await nextResize(viewer);
-    expect(viewer.sidebarOpened).to.be.true;
+    expect(viewer.shadowRoot!.activeElement).to.equal(getThumbnails()[0]);
   });
 
   it('should show the open sidebar of a viewer that is narrow from the start over the pages', async () => {
@@ -391,14 +377,23 @@ describe('sidebar', () => {
       expect(viewer.hasAttribute('sidebar-overlay')).to.be.true;
       await setWidth('700px');
       expect(viewer.hasAttribute('sidebar-overlay')).to.be.false;
-      expect(viewer.sidebarOpened).to.be.false;
     });
 
-    it('should follow the width of the sidebar', async () => {
-      viewer.style.setProperty('--vaadin-pdf-viewer-sidebar-width', '100px');
-      await setWidth('350px');
+    it('should keep the sidebar-overlay attribute while the viewer is hidden', async () => {
+      viewer.style.display = 'none';
+      await nextResize(viewer);
+      expect(viewer.hasAttribute('sidebar-overlay')).to.be.true;
+    });
+
+    it('should not show the sidebar over the pages with --vaadin-pdf-viewer-sidebar-overlay: false', async () => {
+      viewer.style.setProperty('--vaadin-pdf-viewer-sidebar-overlay', 'false');
+      await setWidth('390px');
       expect(viewer.hasAttribute('sidebar-overlay')).to.be.false;
-      await setWidth('290px');
+    });
+
+    it('should show the sidebar over the pages with --vaadin-pdf-viewer-sidebar-overlay: true', async () => {
+      viewer.style.setProperty('--vaadin-pdf-viewer-sidebar-overlay', 'true');
+      await setWidth('700px');
       expect(viewer.hasAttribute('sidebar-overlay')).to.be.true;
     });
 

@@ -98,16 +98,18 @@ how to generate them.
   - Rendering stops while the sidebar is hidden. When it shows again, the thumbnails that left the view are released.
   - A thumbnail frees the pdf.js data of its page once it has rendered, unless the pages hold that page, as in the
     pdf.js viewer. The canvas keeps the image. The pages free the data of a page when they release it.
-  - A viewer narrower than three times `--vaadin-pdf-viewer-sidebar-width` shows the sidebar over the pages.
-    The default threshold is 30rem. `ResizeMixin` updates the mode when the viewer resizes, not when only the
-    sidebar width changes. A hidden viewer keeps its mode.
+  - The sidebar shows over the pages while `--vaadin-pdf-viewer-sidebar-overlay` is `true`, as the drawer of
+    `vaadin-app-layout` does with `--vaadin-app-layout-drawer-overlay`.
+    - By default, a container query on `.main-area` sets it below 30rem. The width of `.main-area` does not
+      depend on the mode, unlike the width of the pages.
+    - `ResizeMixin` reads the property when the viewer resizes. A change of the property alone does not
+      update the mode. A hidden viewer keeps its mode.
   - In the overlay mode, the sidebar is positioned absolutely at the start side, also in RTL. The pages keep their
     width, so they do not render again.
-  - A wide viewer that becomes narrow closes the sidebar, and opens it again once wide, as the drawer of
-    `vaadin-app-layout` does. The first mode keeps the open state, so a viewer that is narrow from the start
-    shows an open sidebar over the pages, whether it was opened before or after attach.
+  - A resize does not change `sidebarOpened`. An open sidebar stays open over the pages, as the detail of
+    `vaadin-master-detail-layout` does.
   - While the sidebar shows over the pages, the pages are `inert`, so focus stays in the toolbar and the sidebar.
-    When the sidebar opens while the pages have focus, focus moves to the current thumbnail.
+    When the sidebar covers the pages while they have focus, focus moves to the current thumbnail.
   - A transparent backdrop over the pages takes the clicks on them and closes the sidebar.
   - Escape closes the sidebar only from the sidebar or its button. Escape from other toolbar controls, such as
     the zoom select, leaves the sidebar open. The handler calls `preventDefault()`, so a surrounding dialog stays open.

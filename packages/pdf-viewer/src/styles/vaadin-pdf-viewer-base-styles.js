@@ -41,6 +41,7 @@ const pdfViewerBaseStyles = css`
   .main-area {
     position: relative;
     display: flex;
+    container-type: inline-size;
     flex: 1 1 0;
     min-height: 40%;
   }

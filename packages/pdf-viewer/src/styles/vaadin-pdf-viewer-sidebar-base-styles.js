@@ -21,6 +21,16 @@ export const pdfViewerSidebarStyles = css`
     background: var(--vaadin-pdf-viewer-sidebar-background, var(--vaadin-background-color));
   }
 
+  [part~='content'] {
+    --_sidebar-overlay: var(--vaadin-pdf-viewer-sidebar-overlay, false);
+  }
+
+  @container (width < 30rem) {
+    [part~='content'] {
+      --_sidebar-overlay: var(--vaadin-pdf-viewer-sidebar-overlay, true);
+    }
+  }
+
   [part~='sidebar'][hidden] {
     display: none;
   }

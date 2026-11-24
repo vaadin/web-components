@@ -16,9 +16,6 @@ import { isKeyboardActive } from '@vaadin/a11y-base/src/focus-utils.js';
 import { ResizeMixin } from '@vaadin/component-base/src/resize-mixin.js';
 import { PdfViewerThumbnailsController } from './pdf-viewer-thumbnails-controller.js';
 
-/** The sidebar shows over the pages while the viewer is narrower than this many sidebars. */
-const OVERLAY_SIDEBAR_COUNT = 3;
-
 /**
  * A mixin that adds a sidebar with a thumbnail of each page, and a button
  * in the toolbar that shows and hides it. The sidebar shows next to the
@@ -31,9 +28,8 @@ export const PdfViewerSidebarMixin = (superClass) =>
         /**
          * Whether the sidebar with the page thumbnails is shown.
          *
-         * In a viewer narrower than three times `--vaadin-pdf-viewer-sidebar-width`,
-         * the sidebar shows over the pages. It closes when a wide viewer becomes
-         * narrow, and opens again when the viewer becomes wide.
+         * In a viewer narrower than 30rem, the sidebar shows over the pages.
+         * Set `--vaadin-pdf-viewer-sidebar-overlay` to `true` or `false` to change that.
          *
          * @attr {boolean} sidebar-opened
          */
@@ -56,11 +52,12 @@ export const PdfViewerSidebarMixin = (superClass) =>
         },
 
         /**
-         * Whether the sidebar shows over the pages, as the viewer is narrow.
+         * Whether the sidebar shows over the pages.
          * @protected
          */
         _sidebarOverlay: {
           type: Boolean,
+          value: false,
           reflectToAttribute: true,
           attribute: 'sidebar-overlay',
         },
@@ -70,10 +67,7 @@ export const PdfViewerSidebarMixin = (superClass) =>
     /** @type {PdfViewerThumbnailsController | null} */
     #thumbnails = null;
 
-    /** The open state to restore when the viewer becomes wide. */
-    #sidebarOpenedBeforeOverlay = false;
-
-    /** Set when the sidebar opens over the focused pages. */
+    /** Set when the sidebar covers the focused pages. */
     #focusThumbnails = false;
 
     /** @protected */
@@ -102,7 +96,7 @@ export const PdfViewerSidebarMixin = (superClass) =>
       }
 
       // Focus in the pages would be lost when the sidebar over them makes them inert.
-      if (props.has('sidebarOpened') && this.sidebarOpened && this._sidebarOverlay) {
+      if ((props.has('sidebarOpened') || props.has('_sidebarOverlay')) && this.sidebarOpened && this._sidebarOverlay) {
         this.#focusThumbnails = this.$.content.matches(':focus-within');
       }
     }
@@ -280,28 +274,15 @@ export const PdfViewerSidebarMixin = (superClass) =>
     }
 
     /**
-     * Shows the sidebar over the pages in a narrow viewer, and saves and
-     * restores the open state as the drawer of `vaadin-app-layout` does.
+     * Reads from CSS whether the sidebar shows over the pages, as `vaadin-app-layout` does for its drawer.
      * @private
      */
     #updateOverlay() {
       // A hidden viewer has no width, and keeps its mode until it shows.
-      if (!this.clientWidth) {
-        return;
+      if (this.clientWidth) {
+        this._sidebarOverlay =
+          getComputedStyle(this.$.content).getPropertyValue('--_sidebar-overlay').trim() === 'true';
       }
-      // The computed width of the sidebar is known also while it is hidden.
-      const overlay = this.clientWidth < OVERLAY_SIDEBAR_COUNT * parseFloat(getComputedStyle(this.$.sidebar).width);
-      if (overlay === this._sidebarOverlay) {
-        return;
-      }
-      // The first mode keeps the open state, so that it is the same when set before or after attach.
-      if (overlay && this._sidebarOverlay === false) {
-        this.#sidebarOpenedBeforeOverlay = this.sidebarOpened;
-        this.sidebarOpened = false;
-      } else if (!overlay && this.#sidebarOpenedBeforeOverlay) {
-        this.sidebarOpened = true;
-      }
-      this._sidebarOverlay = overlay;
     }
 
     /** @private */
