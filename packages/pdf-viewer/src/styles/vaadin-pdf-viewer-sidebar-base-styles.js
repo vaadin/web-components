@@ -22,12 +22,12 @@ export const pdfViewerSidebarStyles = css`
   }
 
   [part~='content'] {
-    --_sidebar-overlay: var(--vaadin-pdf-viewer-sidebar-overlay, false);
+    --_sidebar-overlay: false;
   }
 
   @container (width < 30rem) {
     [part~='content'] {
-      --_sidebar-overlay: var(--vaadin-pdf-viewer-sidebar-overlay, true);
+      --_sidebar-overlay: true;
     }
   }
 

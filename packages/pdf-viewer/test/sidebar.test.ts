@@ -385,18 +385,6 @@ describe('sidebar', () => {
       expect(viewer.hasAttribute('sidebar-overlay')).to.be.true;
     });
 
-    it('should not show the sidebar over the pages with --vaadin-pdf-viewer-sidebar-overlay: false', async () => {
-      viewer.style.setProperty('--vaadin-pdf-viewer-sidebar-overlay', 'false');
-      await setWidth('390px');
-      expect(viewer.hasAttribute('sidebar-overlay')).to.be.false;
-    });
-
-    it('should show the sidebar over the pages with --vaadin-pdf-viewer-sidebar-overlay: true', async () => {
-      viewer.style.setProperty('--vaadin-pdf-viewer-sidebar-overlay', 'true');
-      await setWidth('700px');
-      expect(viewer.hasAttribute('sidebar-overlay')).to.be.true;
-    });
-
     it('should make the pages inert while the sidebar shows over them', async () => {
       viewer.sidebarOpened = true;
       await nextRender();

@@ -126,7 +126,6 @@ const DEFAULT_I18N = {
  * | `--vaadin-pdf-viewer-page-gap`            |
  * | `--vaadin-pdf-viewer-page-shadow`         |
  * | `--vaadin-pdf-viewer-sidebar-background`  |
- * | `--vaadin-pdf-viewer-sidebar-overlay`     |
  * | `--vaadin-pdf-viewer-sidebar-width`       |
  * | `--vaadin-pdf-viewer-text-color`          |
  * | `--vaadin-pdf-viewer-toolbar-background`  |

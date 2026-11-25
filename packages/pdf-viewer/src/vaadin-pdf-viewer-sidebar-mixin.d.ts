@@ -26,7 +26,6 @@ export declare class PdfViewerSidebarMixinClass {
    * Whether the sidebar with the page thumbnails is shown.
    *
    * In a viewer narrower than 30rem, the sidebar shows over the pages.
-   * Set `--vaadin-pdf-viewer-sidebar-overlay` to `true` or `false` to change that.
    *
    * @attr {boolean} sidebar-opened
    */
