@@ -179,7 +179,7 @@ export const PdfViewerRenderMixin = (superClass) =>
      * @protected
      */
     _focusPages() {
-      this.$.content.focus({ preventScroll: true, focusVisible: isKeyboardActive() });
+      this.$.focusTarget.focus({ preventScroll: true, focusVisible: isKeyboardActive() });
     }
 
     /**
