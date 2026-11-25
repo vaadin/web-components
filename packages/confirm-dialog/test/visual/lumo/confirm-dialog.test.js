@@ -1,4 +1,3 @@
-import { sendKeys } from '@vaadin/test-runner-commands';
 import { fixtureSync, nextRender, oneEvent } from '@vaadin/testing-helpers';
 import { visualDiff } from '@web/test-runner-visual-regression';
 import '@vaadin/vaadin-lumo-styles/src/global/index.css';
@@ -46,8 +45,7 @@ describe('confirm-dialog', () => {
   });
 
   it('focus-visible', async () => {
-    await sendKeys({ press: 'Tab' });
-    element.focus();
+    element.focus({ focusVisible: true });
     await nextRender();
     await visualDiff(div, 'focus-visible');
   });

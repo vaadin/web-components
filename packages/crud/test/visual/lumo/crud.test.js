@@ -1,4 +1,3 @@
-import { sendKeys } from '@vaadin/test-runner-commands';
 import { fixtureSync, nextRender } from '@vaadin/testing-helpers';
 import { visualDiff } from '@web/test-runner-visual-regression';
 import '@vaadin/vaadin-lumo-styles/src/props/index.css';
@@ -111,8 +110,9 @@ describe('crud', () => {
     it('dialog-focus-visible', async () => {
       element.editedItem = element.items[0];
       await nextRender();
-      await sendKeys({ press: 'Tab' });
-      element.shadowRoot.querySelector('vaadin-crud-dialog').focus();
+      const dialog = element.shadowRoot.querySelector('vaadin-crud-dialog');
+      dialog.blur();
+      dialog.focus({ focusVisible: true });
       await nextRender();
       await visualDiff(div, 'dialog-focus-visible');
     });
