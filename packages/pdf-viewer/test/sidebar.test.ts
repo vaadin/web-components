@@ -512,6 +512,13 @@ describe('sidebar', () => {
           await nextRender();
           expect(viewer.sidebarOpened).to.be.false;
         });
+
+        it('should move focus to the pages on a click on the pages', async () => {
+          thumbnails[0].focus();
+          await sendMouseToElement({ type: 'click', element: content });
+          await nextRender();
+          expect(viewer.shadowRoot!.activeElement).to.equal(content);
+        });
       });
     });
   });

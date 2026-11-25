@@ -299,6 +299,8 @@ export const PdfViewerSidebarMixin = (superClass) =>
     /** @private */
     #onBackdropClick() {
       this.sidebarOpened = false;
+      // A click on the pages focuses them, also through the backdrop.
+      this.updateComplete.then(() => this.$.content.focus({ preventScroll: true, focusVisible: false }));
     }
 
     /** @private */

@@ -111,7 +111,8 @@ how to generate them.
     When the sidebar covers the pages while they have focus, focus moves to the current thumbnail.
     The sidebar button also moves focus to the current thumbnail when it opens the sidebar over the pages, as
     `vaadin-app-layout` does for its drawer. Next to the pages, focus stays on the button.
-  - A backdrop covers the pages, as in `vaadin-master-detail-layout`. It takes the clicks on them and closes the sidebar.
+  - A backdrop covers the pages, as in `vaadin-master-detail-layout`. It takes the clicks on them, closes the sidebar
+    and focuses the pages, as a click on the pages does.
   - Escape closes the sidebar only from the sidebar or its button. Escape from other toolbar controls, such as
     the zoom select, leaves the sidebar open. The handler calls `preventDefault()`, so a surrounding dialog stays open.
   - A chosen thumbnail closes the sidebar in the overlay mode, and focus moves to the pages, as after a followed
