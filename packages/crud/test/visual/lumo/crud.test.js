@@ -20,12 +20,6 @@ describe('crud', () => {
     await visualDiff(div, 'basic');
   });
 
-  it('edit-button-focus', async () => {
-    const button = element.querySelector('vaadin-crud-edit');
-    button.focus();
-    await visualDiff(div, 'edit-button-focus');
-  });
-
   it('no-toolbar', async () => {
     element.noToolbar = true;
     await visualDiff(div, 'no-toolbar');
@@ -103,6 +97,23 @@ describe('crud', () => {
           });
         });
       });
+    });
+  });
+
+  describe('focus', () => {
+    it('edit-button-focus', async () => {
+      const button = element.querySelector('vaadin-crud-edit');
+      button.focus();
+      await visualDiff(div, 'edit-button-focus');
+    });
+
+    it('dialog-focus-visible', async () => {
+      element.editedItem = element.items[0];
+      await nextRender();
+      const dialog = element.shadowRoot.querySelector('vaadin-crud-dialog');
+      dialog.blur();
+      dialog.focus({ focusVisible: true });
+      await visualDiff(div, 'dialog-focus-visible');
     });
   });
 });

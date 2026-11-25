@@ -43,4 +43,9 @@ describe('confirm-dialog', () => {
     element.rejectButtonVisible = true;
     await visualDiff(div, 'cancel-reject');
   });
+
+  it('focus-visible', async () => {
+    element.focus({ focusVisible: true });
+    await visualDiff(div, 'focus-visible');
+  });
 });
