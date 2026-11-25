@@ -249,10 +249,11 @@ class PdfViewer extends PdfViewerMixin(
             role="region"
             aria-labelledby="title"
             aria-busy="${this.__loading ? 'true' : 'false'}"
-            tabindex="${this.pageCount ? '0' : '-1'}"
+            tabindex="-1"
             @focusin="${this.#onContentFocusIn}"
             @focusout="${this.#onContentFocusOut}"
           >
+            <div id="focusTarget" tabindex="${this.pageCount ? '0' : '-1'}"></div>
             <div id="pages"></div>
           </div>
         </div>
@@ -272,7 +273,7 @@ class PdfViewer extends PdfViewerMixin(
       return;
     }
 
-    this.$.content.focus(options);
+    this.$.focusTarget.focus(options);
 
     super.focus(options);
   }
@@ -306,7 +307,7 @@ class PdfViewer extends PdfViewerMixin(
 
   /** @private */
   #onContentFocusIn(event) {
-    if (event.target === this.$.content) {
+    if (event.target === this.$.focusTarget) {
       this._setFocused(true);
     }
   }

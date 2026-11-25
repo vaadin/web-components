@@ -272,7 +272,7 @@ export const PdfViewerRenderMixin = (superClass) =>
      */
     #releasePage(page) {
       if (page.element.contains(this.shadowRoot.activeElement)) {
-        this.$.content.focus({ preventScroll: true, focusVisible: isKeyboardActive() });
+        this.$.focusTarget.focus({ preventScroll: true, focusVisible: isKeyboardActive() });
       }
       page.release();
       // Frees the data that the page keeps after rendering, such as its decoded images.
