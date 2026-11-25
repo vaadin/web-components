@@ -148,7 +148,8 @@ class Dialog extends DialogSizeMixin(
       }
 
       :host(:focus-visible) ::part(overlay) {
-        outline: var(--vaadin-focus-ring-width) solid var(--vaadin-focus-ring-color);
+        outline: var(--_focus-ring-width, var(--vaadin-focus-ring-width)) solid
+          var(--_focus-ring-color, var(--vaadin-focus-ring-color));
       }
     `;
   }
