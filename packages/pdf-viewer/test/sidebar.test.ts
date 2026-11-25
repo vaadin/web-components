@@ -106,6 +106,13 @@ describe('sidebar', () => {
     expect(button.getAttribute('aria-expanded')).to.equal('false');
   });
 
+  it('should keep focus on the sidebar button when it opens the sidebar next to the pages', async () => {
+    button.focus();
+    button.click();
+    await nextRender();
+    expect(document.activeElement).to.equal(button);
+  });
+
   it('should toggle the sidebar button on sidebarButtonHidden change', async () => {
     viewer.sidebarButtonHidden = true;
     await nextRender();
@@ -405,6 +412,15 @@ describe('sidebar', () => {
         viewer.sidebarOpened = true;
         await nextRender();
         expect(content.inert).to.be.true;
+      });
+
+      it('should move focus to the current thumbnail when the sidebar button opens the sidebar', async () => {
+        viewer.scrollToPage(3);
+        await nextRenderIdle(viewer);
+        button.focus();
+        button.click();
+        await nextRender();
+        expect(viewer.shadowRoot!.activeElement).to.equal(getThumbnails()[2]);
       });
 
       it('should move focus from the pages to the current thumbnail when the sidebar opens', async () => {

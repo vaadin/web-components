@@ -307,5 +307,9 @@ export const PdfViewerSidebarMixin = (superClass) =>
     /** @private */
     #onSidebarButtonClick() {
       this.sidebarOpened = !this.sidebarOpened;
+      // The pages are inert under the sidebar, so the user continues in the sidebar.
+      if (this.sidebarOpened && this._sidebarOverlay) {
+        this.#scheduleFocus(this.#thumbnails);
+      }
     }
   };
