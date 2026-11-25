@@ -113,7 +113,6 @@ describe('crud', () => {
       const dialog = element.shadowRoot.querySelector('vaadin-crud-dialog');
       dialog.blur();
       dialog.focus({ focusVisible: true });
-      await nextRender();
       await visualDiff(div, 'dialog-focus-visible');
     });
   });

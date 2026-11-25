@@ -111,10 +111,9 @@ describe('dialog', () => {
   });
 
   describe('focus', () => {
-    beforeEach(async () => {
+    beforeEach(() => {
       element.blur();
       element.focus({ focusVisible: true });
-      await nextRender();
     });
 
     it('focus-visible', async () => {

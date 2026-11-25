@@ -1,4 +1,4 @@
-import { fixtureSync, nextRender, oneEvent } from '@vaadin/testing-helpers';
+import { fixtureSync, oneEvent } from '@vaadin/testing-helpers';
 import { visualDiff } from '@web/test-runner-visual-regression';
 import '@vaadin/vaadin-lumo-styles/src/global/index.css';
 import '@vaadin/vaadin-lumo-styles/src/props/index.css';
@@ -46,7 +46,6 @@ describe('confirm-dialog', () => {
 
   it('focus-visible', async () => {
     element.focus({ focusVisible: true });
-    await nextRender();
     await visualDiff(div, 'focus-visible');
   });
 });
