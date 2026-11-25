@@ -66,9 +66,6 @@ export const PdfViewerSidebarMixin = (superClass) =>
     /** @type {PdfViewerThumbnailsController | null} */
     #thumbnails = null;
 
-    /** Set when the sidebar covers the focused pages. */
-    #focusThumbnails = false;
-
     /** @protected */
     firstUpdated() {
       super.firstUpdated();
@@ -90,13 +87,18 @@ export const PdfViewerSidebarMixin = (superClass) =>
       super.willUpdate(props);
 
       // Focus in the sidebar would be lost when it hides.
-      if (props.has('sidebarOpened') && !this.sidebarOpened) {
+      if (props.get('sidebarOpened') && !this.sidebarOpened) {
         this.#moveFocusOutOfSidebar();
       }
 
       // Focus in the pages would be lost when the sidebar over them makes them inert.
-      if ((props.has('sidebarOpened') || props.has('_sidebarOverlay')) && this.sidebarOpened && this._sidebarOverlay) {
-        this.#focusThumbnails = this.$.content.matches(':focus-within');
+      if (
+        (props.has('sidebarOpened') || props.has('_sidebarOverlay')) &&
+        this.sidebarOpened &&
+        this._sidebarOverlay &&
+        this.$.content.matches(':focus-within')
+      ) {
+        this.#scheduleFocus(this.#thumbnails);
       }
     }
 
@@ -113,11 +115,6 @@ export const PdfViewerSidebarMixin = (superClass) =>
         this.#thumbnails.show(this.page);
       } else if (props.has('page')) {
         this.#thumbnails.setPage(this.page);
-      }
-
-      if (this.#focusThumbnails) {
-        this.#focusThumbnails = false;
-        this.$.thumbnails.querySelector('[tabindex="0"]')?.focus({ focusVisible: isKeyboardActive() });
       }
     }
 
@@ -257,14 +254,23 @@ export const PdfViewerSidebarMixin = (superClass) =>
      * @private
      */
     #moveFocusOutOfSidebar() {
-      const active = this.shadowRoot.activeElement;
-      if (active && this.$.sidebar.contains(active)) {
+      if (this.$.sidebar.matches(':focus-within')) {
         const button = this.#getSidebarButton();
         const target = button?.checkVisibility() ? button : this.$.content;
         // The pages are inert under the sidebar until this update renders.
         this.$.content.inert = false;
         target.focus({ focusVisible: isKeyboardActive() });
       }
+    }
+
+    /**
+     * Focuses the given target once this update has rendered.
+     * @param {{ focus(options: FocusOptions): void }} target
+     * @private
+     */
+    #scheduleFocus(target) {
+      const focusVisible = isKeyboardActive();
+      this.updateComplete.then(() => target.focus({ focusVisible }));
     }
 
     /** @private */
