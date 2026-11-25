@@ -1,3 +1,4 @@
+import { sendKeys } from '@vaadin/test-runner-commands';
 import { fixtureSync, nextRender, nextUpdate } from '@vaadin/testing-helpers';
 import { visualDiff } from '@web/test-runner-visual-regression';
 import '@vaadin/vaadin-lumo-styles/src/global/index.css';
@@ -62,6 +63,25 @@ describe('popover', () => {
           await visualDiff(div, `${dir}-${position}-arrow`);
         });
       });
+    });
+  });
+
+  describe('focus', () => {
+    beforeEach(async () => {
+      element.modal = true;
+      await sendKeys({ press: 'Tab' });
+      target.click();
+      await nextRender();
+    });
+
+    it('focus-visible', async () => {
+      await visualDiff(div, 'focus-visible');
+    });
+
+    it('focus-visible-arrow', async () => {
+      element.setAttribute('theme', 'arrow');
+      await nextUpdate(element);
+      await visualDiff(div, 'focus-visible-arrow');
     });
   });
 

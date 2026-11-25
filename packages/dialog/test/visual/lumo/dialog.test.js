@@ -109,4 +109,15 @@ describe('dialog', () => {
       await visualDiff(div, 'content-no-padding-theme');
     });
   });
+
+  describe('focus', () => {
+    beforeEach(() => {
+      element.blur();
+      element.focus({ focusVisible: true });
+    });
+
+    it('focus-visible', async () => {
+      await visualDiff(div, 'focus-visible');
+    });
+  });
 });
