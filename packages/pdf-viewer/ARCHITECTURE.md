@@ -121,6 +121,7 @@ how to generate them.
 - The page area is not a Tab stop. NVDA reads all text of a focused element that is not a control, so focus on
   the page area reads all rendered pages.
   - Each page has an empty focus target as its first child. Screen readers then read the name of the page only.
+  - The focus target has no role and no name. Screen readers announce the page region, so a name would repeat it.
   - The focus target of the current page is the only Tab stop of the pages. Reading continues on the page that
     the user sees.
   - The focus target is sticky and 1px high, so focus does not scroll. Firefox reads a 0px element as off screen.
