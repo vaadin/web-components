@@ -8,7 +8,6 @@
  * See https://vaadin.com/commercial-license-and-service-terms for the full
  * license.
  */
-import { isKeyboardActive } from '@vaadin/a11y-base/src/focus-utils.js';
 import { issueWarning } from '@vaadin/component-base/src/warnings.js';
 import { getLinkLabel, resolveDestination } from './pdf-viewer-links.js';
 
@@ -138,6 +137,6 @@ export const PdfViewerLinksMixin = (superClass) =>
       const offset =
         hasPosition && page.pdfPage ? page.getOffset(target.left, target.top, target.right, target.bottom) : undefined;
       this._scrollToPage(target.page, offset);
-      this.$.content.focus({ preventScroll: true, focusVisible: isKeyboardActive() });
+      this._focusPages();
     }
   };
