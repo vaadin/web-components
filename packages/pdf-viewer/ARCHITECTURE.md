@@ -111,6 +111,8 @@ how to generate them.
     When the sidebar covers the pages while they have focus, focus moves to the current thumbnail.
     The sidebar button also moves focus to the current thumbnail when it opens the sidebar over the pages, as
     `vaadin-app-layout` does for its drawer. Next to the pages, focus stays on the button.
+  - Over the pages, the sidebar is a dialog with the name from `i18n.sidebar`, as the detail of
+    `vaadin-master-detail-layout`. It has no `aria-modal`, as the toolbar stays reachable.
   - A backdrop covers the pages, as in `vaadin-master-detail-layout`. It takes the clicks on them, closes the sidebar
     and focuses the pages, as a click on the pages does.
   - Escape closes the sidebar only from the sidebar or its button. Escape from other toolbar controls, such as

@@ -11,7 +11,7 @@
 import '@vaadin/button/src/vaadin-button.js';
 import '@vaadin/tooltip/src/vaadin-tooltip.js';
 import './vaadin-pdf-viewer-icon.js';
-import { html } from 'lit';
+import { html, nothing } from 'lit';
 import { isKeyboardActive } from '@vaadin/a11y-base/src/focus-utils.js';
 import { ResizeMixin } from '@vaadin/component-base/src/resize-mixin.js';
 import { PdfViewerThumbnailsController } from './pdf-viewer-thumbnails-controller.js';
@@ -222,15 +222,23 @@ export const PdfViewerSidebarMixin = (superClass) =>
      * @protected
      */
     _renderSidebar() {
+      const overlay = this._sidebarOverlay;
       // The list has tabindex="-1", so that Firefox does not make the scrollable list a tab stop.
+      // Over the pages, the sidebar is a dialog. It is not modal, as the toolbar stays reachable.
       return html`
         <div
           id="backdrop"
           part="backdrop"
-          ?hidden="${!(this._sidebarOverlay && this.sidebarOpened)}"
+          ?hidden="${!(overlay && this.sidebarOpened)}"
           @click="${this.#onBackdropClick}"
         ></div>
-        <div id="sidebar" part="sidebar" ?hidden="${!this.sidebarOpened}">
+        <div
+          id="sidebar"
+          part="sidebar"
+          role="${overlay ? 'dialog' : nothing}"
+          aria-label="${overlay ? this.__effectiveI18n.sidebar : nothing}"
+          ?hidden="${!this.sidebarOpened}"
+        >
           <div
             id="thumbnails"
             part="thumbnails"

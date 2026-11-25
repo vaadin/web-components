@@ -1307,6 +1307,17 @@ snapshots["vaadin-pdf-viewer sidebar thumbnails"] =
 `;
 /* end snapshot vaadin-pdf-viewer sidebar thumbnails */
 
+snapshots["vaadin-pdf-viewer sidebar overlay"] = 
+`<div
+  aria-label="Sidebar"
+  id="sidebar"
+  part="sidebar"
+  role="dialog"
+>
+</div>
+`;
+/* end snapshot vaadin-pdf-viewer sidebar overlay */
+
 snapshots["vaadin-pdf-viewer page tagged"] = 
 `<div
   aria-label="Page 1"
