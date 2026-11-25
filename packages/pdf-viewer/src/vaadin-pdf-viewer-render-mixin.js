@@ -29,6 +29,12 @@ export const PdfViewerRenderMixin = (superClass) =>
      */
     __pages = [];
 
+    /**
+     * The focus target of the page that is the Tab stop of the pages.
+     * @type {HTMLElement | null}
+     */
+    #tabStop = null;
+
     /** Whether all pages have their own size. The layout is not final before. */
     #pageSizesLoaded = true;
 
@@ -69,6 +75,10 @@ export const PdfViewerRenderMixin = (superClass) =>
       if (props.has('__effectiveI18n')) {
         this.#updatePageLabels();
       }
+
+      if (props.has('page')) {
+        this.#updateTabStop();
+      }
     }
 
     /**
@@ -88,6 +98,7 @@ export const PdfViewerRenderMixin = (superClass) =>
       );
       this.__pages[0].setPdfPage(firstPage);
       this.#updatePageLabels();
+      this.#updateTabStop();
       this.$.pages.replaceChildren(...this.__pages.map((page) => page.element));
       this.#renderQueue.setPages(this.__pages);
       // `render-idle` waits for the page sizes, see #notifyIdle().
@@ -115,11 +126,30 @@ export const PdfViewerRenderMixin = (superClass) =>
 
       this.__pages.forEach((page) => page.release());
       this.__pages = [];
+      this.#tabStop = null;
       this.#renderQueue.setPages([]);
       this.#pageSizesLoaded = true;
       cancelAnimationFrame(this.#pageSizesFrame);
       this.#pageSizesFrame = 0;
       this.$.pages.replaceChildren();
+    }
+
+    /**
+     * Makes the focus target of the current page the Tab stop of the pages, so that
+     * screen readers continue to read on the page that the user sees.
+     * @private
+     */
+    #updateTabStop() {
+      const target = this.__pages[this.page - 1]?.focusTarget ?? null;
+      if (target !== this.#tabStop) {
+        if (this.#tabStop) {
+          this.#tabStop.tabIndex = -1;
+        }
+        if (target) {
+          target.tabIndex = 0;
+        }
+        this.#tabStop = target;
+      }
     }
 
     /** @private */
@@ -175,11 +205,11 @@ export const PdfViewerRenderMixin = (superClass) =>
     }
 
     /**
-     * Moves focus to the pages, without scrolling them.
+     * Moves focus to the current page, without scrolling the pages.
      * @protected
      */
     _focusPages() {
-      this.$.content.focus({ preventScroll: true, focusVisible: isKeyboardActive() });
+      this.__pages[this.page - 1]?.focusTarget.focus({ preventScroll: true, focusVisible: isKeyboardActive() });
     }
 
     /**
@@ -279,7 +309,9 @@ export const PdfViewerRenderMixin = (superClass) =>
      * @private
      */
     #releasePage(page) {
-      if (page.element.contains(this.shadowRoot.activeElement)) {
+      const active = this.shadowRoot.activeElement;
+      // The focus target of the page stays, unlike its links.
+      if (active !== page.focusTarget && page.element.contains(active)) {
         this._focusPages();
       }
       page.release();

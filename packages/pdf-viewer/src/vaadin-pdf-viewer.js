@@ -249,7 +249,7 @@ class PdfViewer extends PdfViewerMixin(
             role="region"
             aria-labelledby="title"
             aria-busy="${this.__loading ? 'true' : 'false'}"
-            tabindex="${this.pageCount ? '0' : '-1'}"
+            tabindex="-1"
             @focusin="${this.#onContentFocusIn}"
             @focusout="${this.#onContentFocusOut}"
           >
@@ -261,8 +261,8 @@ class PdfViewer extends PdfViewerMixin(
   }
 
   /**
-   * Override method from `FocusMixin` to focus the page area,
-   * which is only focusable once a document has loaded.
+   * Override method from `FocusMixin` to focus the current page,
+   * which exists only once a document has loaded.
    * @param {FocusOptions=} options
    * @protected
    * @override
@@ -272,7 +272,7 @@ class PdfViewer extends PdfViewerMixin(
       return;
     }
 
-    this.$.content.focus(options);
+    this.__pages[this.page - 1]?.focusTarget.focus(options);
 
     super.focus(options);
   }
@@ -306,7 +306,8 @@ class PdfViewer extends PdfViewerMixin(
 
   /** @private */
   #onContentFocusIn(event) {
-    if (event.target === this.$.content) {
+    // A click on the pages focuses the page area, which is not a Tab stop.
+    if (event.target === this.$.content || event.target.classList.contains('focus-target')) {
       this._setFocused(true);
     }
   }

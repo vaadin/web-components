@@ -30,6 +30,13 @@ export async function loadDocument(viewer: PdfViewer, name: Fixture): Promise<vo
 }
 
 /**
+ * Returns the element that takes focus for a page, by default the current page.
+ */
+export function getPageFocusTarget(viewer: PdfViewer, pageNumber = viewer.page): HTMLElement {
+  return viewer.shadowRoot!.querySelectorAll<HTMLElement>('[part~="page"] > .focus-target')[pageNumber - 1];
+}
+
+/**
  * Waits until the viewer has finished rendering the pages it currently shows.
  */
 export async function nextRenderIdle(viewer: PdfViewer): Promise<void> {

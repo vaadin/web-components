@@ -14,6 +14,7 @@ import {
   failTextOnce,
   type Fixture,
   fixtureUrl,
+  getPageFocusTarget,
   getPdfDocumentPrototype,
   getPdfPagePrototype,
   loadAndRender,
@@ -624,14 +625,14 @@ describe('links', () => {
       link.focus();
       link.click();
       await nextRenderIdle(viewer);
-      expect(viewer.shadowRoot!.activeElement).to.equal(content);
+      expect(viewer.shadowRoot!.activeElement).to.equal(getPageFocusTarget(viewer, 2));
     });
 
     it('should make each link one Tab stop', async () => {
       await load('links.pdf');
       const after = document.createElement('input');
       viewer.after(after);
-      content.focus();
+      viewer.focus();
       const focused: Element[] = [];
       for (let i = 0; i < 3; i++) {
         await sendKeys({ press: 'Tab' });
@@ -643,7 +644,7 @@ describe('links', () => {
 
     it('should show the focus ring of a focused link', async () => {
       await load('links.pdf');
-      content.focus();
+      viewer.focus();
       await sendKeys({ press: 'Tab' });
       const link = viewer.shadowRoot!.activeElement as HTMLAnchorElement;
       expect(getComputedStyle(link).outlineStyle).to.equal('solid');
@@ -651,7 +652,7 @@ describe('links', () => {
 
     it('should show the focus ring around the quadrilaterals of a focused link that wraps', async () => {
       await loadWrappingLink();
-      content.focus();
+      viewer.focus();
       await sendKeys({ press: 'Tab' });
       const link = viewer.shadowRoot!.activeElement as HTMLAnchorElement;
       const areas = [...link.querySelectorAll('.link-area')];
@@ -666,7 +667,7 @@ describe('links', () => {
         { content: '', annotations: [uriLink([50, 780, 200, 800])] },
         { content: '', annotations: [uriLink([50, 410, 200, 430], 'https://vaadin.com/docs')] },
       ]);
-      content.focus();
+      viewer.focus();
       await sendKeys({ press: 'Tab' });
       await sendKeys({ press: 'Tab' });
       const link = viewer.shadowRoot!.activeElement!;
@@ -689,7 +690,7 @@ describe('links', () => {
       content.scrollTop = content.scrollHeight;
       await idle;
       expect(getTextLayer(1)).to.be.null;
-      expect(viewer.shadowRoot!.activeElement).to.equal(content);
+      expect(viewer.shadowRoot!.activeElement).to.equal(getPageFocusTarget(viewer));
     });
 
     it('should not stop a smooth scroll that releases the page of a focused link', async () => {
@@ -701,7 +702,8 @@ describe('links', () => {
       const end = content.scrollHeight - content.clientHeight;
       content.scrollTo({ top: end, behavior: 'smooth' });
       await scrollSettled(content);
-      expect(viewer.shadowRoot!.activeElement).to.equal(content);
+      // The page that was current when the link lost its page.
+      expect(viewer.shadowRoot!.activeElement!.matches('[part~="page"] > .focus-target')).to.be.true;
       expect(content.scrollTop).to.be.closeTo(end, 1);
     });
   });

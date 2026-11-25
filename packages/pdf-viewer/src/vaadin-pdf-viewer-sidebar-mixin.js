@@ -188,8 +188,11 @@ export const PdfViewerSidebarMixin = (superClass) =>
       const active = this.shadowRoot.activeElement;
       if (active && this.$.sidebar.contains(active)) {
         const button = this.querySelector(':scope > [slot="toolbar-sidebar"]');
-        const target = button?.checkVisibility() ? button : this.$.content;
-        target.focus({ focusVisible: isKeyboardActive() });
+        if (button?.checkVisibility()) {
+          button.focus({ focusVisible: isKeyboardActive() });
+        } else {
+          this._focusPages();
+        }
       }
     }
 
