@@ -13,6 +13,7 @@ import {
   createPdf,
   createPdfUrl,
   fixtureUrl,
+  getPageFocusTarget,
   getPdfDocumentPrototype,
   getPdfPagePrototype,
   loadAndRender,
@@ -302,7 +303,7 @@ describe('sidebar', () => {
       thumbnails[0].focus();
       viewer.sidebarOpened = false;
       await nextRender();
-      expect(viewer.shadowRoot!.activeElement).to.equal(content);
+      expect(viewer.shadowRoot!.activeElement).to.equal(getPageFocusTarget(viewer));
     });
 
     it('should move focus to the sidebar button when another document loads', async () => {

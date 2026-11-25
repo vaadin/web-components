@@ -61,14 +61,6 @@ const pdfViewerBaseStyles = css`
     padding: var(--vaadin-pdf-viewer-padding, var(--vaadin-padding-m));
   }
 
-  #focusTarget {
-    position: sticky;
-    top: 0;
-    height: 1px;
-    margin-bottom: -1px;
-    outline: none;
-  }
-
   :host([focus-ring]) .content-area::after {
     content: '';
     position: absolute;

@@ -37,6 +37,7 @@ export declare class PdfViewerPage {
   unscaledWidth: number;
   unscaledHeight: number;
   element: HTMLElement;
+  focusTarget: HTMLElement;
   scale: number;
   canvas: HTMLCanvasElement | null;
   renderTask: RenderTask | null;

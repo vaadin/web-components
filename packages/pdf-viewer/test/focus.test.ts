@@ -4,7 +4,7 @@ import { fixtureSync, nextRender } from '@vaadin/testing-helpers';
 import './enable-feature-flag.js';
 import '../vaadin-pdf-viewer.js';
 import type { PdfViewer } from '../vaadin-pdf-viewer.js';
-import { loadDocument } from './helpers.js';
+import { getPageFocusTarget, loadDocument, waitUntil } from './helpers.js';
 
 describe('focus', () => {
   let viewer: PdfViewer;
@@ -40,29 +40,49 @@ describe('focus', () => {
       await nextRender();
     });
 
-    it('should toggle focused attribute on page area focus', () => {
-      content.focus();
+    it('should toggle focused attribute on page focus', () => {
+      getPageFocusTarget(viewer).focus();
       expect(viewer.hasAttribute('focused')).to.be.true;
-      content.blur();
+      getPageFocusTarget(viewer).blur();
       expect(viewer.hasAttribute('focused')).to.be.false;
     });
 
-    it('should toggle focused attribute when focus moves between the page area and an element in a page', () => {
+    it('should toggle focused attribute when focus moves between the page and an element in a page', () => {
       // Stands in for a link in a page.
       const button = document.createElement('button');
       content.querySelector('[part~="page"]')!.append(button);
-      content.focus();
+      getPageFocusTarget(viewer).focus();
       button.focus();
       expect(viewer.hasAttribute('focused')).to.be.false;
-      content.focus();
+      getPageFocusTarget(viewer).focus();
       expect(viewer.hasAttribute('focused')).to.be.true;
     });
 
-    it('should set focus-ring attribute when the page area is focused using keyboard', async () => {
+    it('should set focus-ring attribute when the page is focused using keyboard', async () => {
       input.focus();
       await sendKeys({ press: 'Shift+Tab' });
-      expect(viewer.shadowRoot!.activeElement).to.equal(content);
+      expect(viewer.shadowRoot!.activeElement).to.equal(getPageFocusTarget(viewer, 1));
       expect(viewer.hasAttribute('focus-ring')).to.be.true;
+    });
+
+    it('should make the current page the only Tab stop of the pages', async () => {
+      viewer.scrollToPage(3);
+      await nextRender();
+      input.focus();
+      await sendKeys({ press: 'Shift+Tab' });
+      expect(viewer.shadowRoot!.activeElement).to.equal(getPageFocusTarget(viewer, 3));
+      const tabStops = [...content.querySelectorAll<HTMLElement>('.focus-target')].filter(
+        (target) => target.tabIndex === 0,
+      );
+      expect(tabStops).to.deep.equal([getPageFocusTarget(viewer, 3)]);
+    });
+
+    it('should keep focus on a page when the page is released', async () => {
+      getPageFocusTarget(viewer, 1).focus();
+      const page = content.querySelector('[part~="page"]')!;
+      content.scrollTop = content.scrollHeight;
+      await waitUntil(() => !page.querySelector('canvas'));
+      expect(viewer.shadowRoot!.activeElement).to.equal(getPageFocusTarget(viewer, 1));
     });
 
     it('should not set focus-ring attribute when the page area is focused using pointer', async () => {
@@ -71,15 +91,15 @@ describe('focus', () => {
       expect(viewer.hasAttribute('focus-ring')).to.be.false;
     });
 
-    it('should focus the page area on focus()', () => {
+    it('should focus the current page on focus()', () => {
       viewer.focus();
-      expect(viewer.shadowRoot!.activeElement).to.equal(content);
+      expect(viewer.shadowRoot!.activeElement).to.equal(getPageFocusTarget(viewer, 1));
       expect(viewer.hasAttribute('focus-ring')).to.be.true;
     });
 
     it('should not set focus-ring attribute on focus() with focusVisible: false', () => {
       viewer.focus({ focusVisible: false });
-      expect(viewer.shadowRoot!.activeElement).to.equal(content);
+      expect(viewer.shadowRoot!.activeElement).to.equal(getPageFocusTarget(viewer, 1));
       expect(viewer.hasAttribute('focus-ring')).to.be.false;
     });
   });

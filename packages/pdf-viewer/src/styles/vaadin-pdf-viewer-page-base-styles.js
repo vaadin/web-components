@@ -33,6 +33,15 @@ export const pdfViewerPageStyles = css`
     box-shadow: var(--vaadin-pdf-viewer-page-shadow, 0 0 0 1px var(--vaadin-border-color-secondary));
   }
 
+  /* Sticky so that focus does not scroll, 1px as Firefox reads a 0px element as off screen */
+  .focus-target {
+    position: sticky;
+    top: 0;
+    height: 1px;
+    margin-bottom: -1px;
+    outline: none;
+  }
+
   [part='page'] canvas {
     display: block;
     width: 100%;

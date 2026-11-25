@@ -118,8 +118,15 @@ how to generate them.
 - The element applies `I18nMixin` and defines the default texts. The mixins read them from `__effectiveI18n`.
 - The element applies `FocusMixin` and owns the focus state. Listeners on the page area in its template set
   `focused` and `focus-ring`, as focus moving inside the shadow root does not reach listeners on the host.
-- The mixins move focus to the pages with `_focusPages()` of `PdfViewerRenderMixin`, such as after a followed
-  link. It keeps the scroll position, and shows the focus ring only after a key press.
+- The page area is not a Tab stop. NVDA reads all text of a focused element that is not a control, so focus on
+  the page area reads all rendered pages.
+  - Each page has an empty focus target as its first child. Screen readers then read the name of the page only.
+  - The focus target of the current page is the only Tab stop of the pages. Reading continues on the page that
+    the user sees.
+  - The focus target is sticky and 1px high, so focus does not scroll. Firefox reads a 0px element as off screen.
+  - A click on the pages focuses the page area, which keeps `tabindex="-1"` for the scroll keys.
+- The mixins move focus to the current page with `_focusPages()` of `PdfViewerRenderMixin`, such as after a
+  followed link. It keeps the scroll position, and shows the focus ring only after a key press.
 - `PdfViewerRenderQueue` decides the render order, the memory budget and the release. It has no host
   reference, and its limits are options.
 - `pdf-viewer-layout.js` has the layout math without DOM access: visible pages, anchor and fit scale.
@@ -168,7 +175,8 @@ how to generate them.
   link, such as on a hidden layer, screen readers read its text as text.
 - Unlike in pdf.js, a `NonStruct` element of the structure has no role. In the canvas, VoiceOver in Safari reads
   no text under an element with the `none` role.
-- When a focused link loses its page, focus moves to the page area.
+- When a focused link loses its page, focus moves to the current page. A focused page keeps focus when it loses
+  its layers.
 
 ## Install size
 

@@ -70,6 +70,16 @@ export class PdfViewerPage {
     // As in pdf.js, each page is a region with a name.
     this.element.setAttribute('role', 'region');
 
+    /**
+     * An empty element that takes focus for the page. Screen readers then read the name of the
+     * page, and not all of its text as for a focused page.
+     */
+    this.focusTarget = document.createElement('div');
+    this.focusTarget.className = 'focus-target';
+    this.focusTarget.tabIndex = -1;
+    // Before the layers, which render after it.
+    this.element.append(this.focusTarget);
+
     /** @type {number} */
     this.scale = 0;
 

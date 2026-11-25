@@ -405,7 +405,7 @@ snapshots["vaadin-pdf-viewer shadow document"] =
       id="content"
       part="content"
       role="region"
-      tabindex="0"
+      tabindex="-1"
     >
       <div id="pages">
         <div
@@ -413,6 +413,11 @@ snapshots["vaadin-pdf-viewer shadow document"] =
           part="page"
           role="region"
         >
+          <div
+            class="focus-target"
+            tabindex="0"
+          >
+          </div>
           <canvas role="presentation">
           </canvas>
           <div
@@ -462,6 +467,11 @@ snapshots["vaadin-pdf-viewer shadow document"] =
           part="page"
           role="region"
         >
+          <div
+            class="focus-target"
+            tabindex="-1"
+          >
+          </div>
           <canvas role="presentation">
           </canvas>
           <div
@@ -511,24 +521,44 @@ snapshots["vaadin-pdf-viewer shadow document"] =
           part="page"
           role="region"
         >
+          <div
+            class="focus-target"
+            tabindex="-1"
+          >
+          </div>
         </div>
         <div
           aria-label="Page 4"
           part="page"
           role="region"
         >
+          <div
+            class="focus-target"
+            tabindex="-1"
+          >
+          </div>
         </div>
         <div
           aria-label="Page 5"
           part="page"
           role="region"
         >
+          <div
+            class="focus-target"
+            tabindex="-1"
+          >
+          </div>
         </div>
         <div
           aria-label="Page 6"
           part="page"
           role="region"
         >
+          <div
+            class="focus-target"
+            tabindex="-1"
+          >
+          </div>
         </div>
       </div>
     </div>
@@ -613,7 +643,7 @@ snapshots["vaadin-pdf-viewer shadow header title"] =
       id="content"
       part="content"
       role="region"
-      tabindex="0"
+      tabindex="-1"
     >
       <div id="pages">
         <div
@@ -621,6 +651,11 @@ snapshots["vaadin-pdf-viewer shadow header title"] =
           part="page"
           role="region"
         >
+          <div
+            class="focus-target"
+            tabindex="0"
+          >
+          </div>
           <canvas role="presentation">
           </canvas>
           <div
@@ -670,6 +705,11 @@ snapshots["vaadin-pdf-viewer shadow header title"] =
           part="page"
           role="region"
         >
+          <div
+            class="focus-target"
+            tabindex="-1"
+          >
+          </div>
           <canvas role="presentation">
           </canvas>
           <div
@@ -719,24 +759,44 @@ snapshots["vaadin-pdf-viewer shadow header title"] =
           part="page"
           role="region"
         >
+          <div
+            class="focus-target"
+            tabindex="-1"
+          >
+          </div>
         </div>
         <div
           aria-label="Page 4"
           part="page"
           role="region"
         >
+          <div
+            class="focus-target"
+            tabindex="-1"
+          >
+          </div>
         </div>
         <div
           aria-label="Page 5"
           part="page"
           role="region"
         >
+          <div
+            class="focus-target"
+            tabindex="-1"
+          >
+          </div>
         </div>
         <div
           aria-label="Page 6"
           part="page"
           role="region"
         >
+          <div
+            class="focus-target"
+            tabindex="-1"
+          >
+          </div>
         </div>
       </div>
     </div>
@@ -822,7 +882,7 @@ snapshots["vaadin-pdf-viewer shadow header hidden"] =
       id="content"
       part="content"
       role="region"
-      tabindex="0"
+      tabindex="-1"
     >
       <div id="pages">
         <div
@@ -830,6 +890,11 @@ snapshots["vaadin-pdf-viewer shadow header hidden"] =
           part="page"
           role="region"
         >
+          <div
+            class="focus-target"
+            tabindex="0"
+          >
+          </div>
           <canvas role="presentation">
           </canvas>
           <div
@@ -879,6 +944,11 @@ snapshots["vaadin-pdf-viewer shadow header hidden"] =
           part="page"
           role="region"
         >
+          <div
+            class="focus-target"
+            tabindex="-1"
+          >
+          </div>
           <canvas role="presentation">
           </canvas>
           <div
@@ -928,24 +998,44 @@ snapshots["vaadin-pdf-viewer shadow header hidden"] =
           part="page"
           role="region"
         >
+          <div
+            class="focus-target"
+            tabindex="-1"
+          >
+          </div>
         </div>
         <div
           aria-label="Page 4"
           part="page"
           role="region"
         >
+          <div
+            class="focus-target"
+            tabindex="-1"
+          >
+          </div>
         </div>
         <div
           aria-label="Page 5"
           part="page"
           role="region"
         >
+          <div
+            class="focus-target"
+            tabindex="-1"
+          >
+          </div>
         </div>
         <div
           aria-label="Page 6"
           part="page"
           role="region"
         >
+          <div
+            class="focus-target"
+            tabindex="-1"
+          >
+          </div>
         </div>
       </div>
     </div>
@@ -1031,7 +1121,7 @@ snapshots["vaadin-pdf-viewer shadow toolbar collapsed"] =
       id="content"
       part="content"
       role="region"
-      tabindex="0"
+      tabindex="-1"
     >
       <div id="pages">
         <div
@@ -1039,6 +1129,11 @@ snapshots["vaadin-pdf-viewer shadow toolbar collapsed"] =
           part="page"
           role="region"
         >
+          <div
+            class="focus-target"
+            tabindex="0"
+          >
+          </div>
           <canvas role="presentation">
           </canvas>
           <div
@@ -1088,6 +1183,11 @@ snapshots["vaadin-pdf-viewer shadow toolbar collapsed"] =
           part="page"
           role="region"
         >
+          <div
+            class="focus-target"
+            tabindex="-1"
+          >
+          </div>
           <canvas role="presentation">
           </canvas>
           <div
@@ -1137,24 +1237,44 @@ snapshots["vaadin-pdf-viewer shadow toolbar collapsed"] =
           part="page"
           role="region"
         >
+          <div
+            class="focus-target"
+            tabindex="-1"
+          >
+          </div>
         </div>
         <div
           aria-label="Page 4"
           part="page"
           role="region"
         >
+          <div
+            class="focus-target"
+            tabindex="-1"
+          >
+          </div>
         </div>
         <div
           aria-label="Page 5"
           part="page"
           role="region"
         >
+          <div
+            class="focus-target"
+            tabindex="-1"
+          >
+          </div>
         </div>
         <div
           aria-label="Page 6"
           part="page"
           role="region"
         >
+          <div
+            class="focus-target"
+            tabindex="-1"
+          >
+          </div>
         </div>
       </div>
     </div>
@@ -1283,6 +1403,11 @@ snapshots["vaadin-pdf-viewer page tagged"] =
   part="page"
   role="region"
 >
+  <div
+    class="focus-target"
+    tabindex="0"
+  >
+  </div>
   <canvas role="presentation">
     <span class="struct-tree">
       <span lang="en">
@@ -1668,6 +1793,11 @@ snapshots["vaadin-pdf-viewer page links"] =
   part="page"
   role="region"
 >
+  <div
+    class="focus-target"
+    tabindex="0"
+  >
+  </div>
   <canvas role="presentation">
   </canvas>
   <div

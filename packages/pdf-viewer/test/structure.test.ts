@@ -162,8 +162,8 @@ describe('structure', () => {
       expect(getPage(1).querySelector('canvas')).to.not.equal(canvas);
       expect(getTree()).to.equal(tree);
       expect(tree.parentElement).to.equal(getPage(1).querySelector('canvas'));
-      // Before the text layer, in reading order.
-      expect(getPage(1).firstElementChild).to.equal(tree.parentElement);
+      // The first layer, before the text layer in reading order.
+      expect(getPage(1).querySelector(':scope > :not(.focus-target)')).to.equal(tree.parentElement);
     });
   });
 
