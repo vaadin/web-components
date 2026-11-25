@@ -43,6 +43,8 @@ export const pdfViewerSidebarStyles = css`
     position: absolute;
     inset: 0;
     z-index: 2;
+    background: var(--vaadin-overlay-backdrop-background, rgba(0, 0, 0, 0.2));
+    forced-color-adjust: none;
   }
 
   [part~='backdrop'][hidden] {

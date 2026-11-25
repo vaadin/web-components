@@ -151,7 +151,7 @@ export interface PdfViewerEventMap extends HTMLElementEventMap, PdfViewerCustomE
  * `sidebar`       | The sidebar with the page thumbnails, see `sidebarOpened`.
  * `thumbnails`    | The scrollable list of page thumbnails in the sidebar.
  * `thumbnail`     | A page thumbnail. Also has the `current` part name for the current page.
- * `backdrop`      | The transparent layer over the pages while the sidebar shows over them.
+ * `backdrop`      | The layer that covers the pages while the sidebar shows over them.
  * `content`       | The scrollable area that contains the pages.
  * `page`          | A page of the document.
  * `loader`        | The loading indicator shown while the document loads.
@@ -185,6 +185,7 @@ export interface PdfViewerEventMap extends HTMLElementEventMap, PdfViewerCustomE
  * | `--vaadin-pdf-viewer-toolbar-background`  |
  * | `--vaadin-pdf-viewer-toolbar-gap`         |
  * | `--vaadin-pdf-viewer-toolbar-padding`     |
+ * | `--vaadin-overlay-backdrop-background`    |
  *
  * See [Styling Components](https://vaadin.com/docs/latest/styling/styling-components) documentation.
  *

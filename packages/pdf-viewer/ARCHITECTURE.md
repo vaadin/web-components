@@ -110,7 +110,7 @@ how to generate them.
     `vaadin-master-detail-layout` does.
   - While the sidebar shows over the pages, the pages are `inert`, so focus stays in the toolbar and the sidebar.
     When the sidebar covers the pages while they have focus, focus moves to the current thumbnail.
-  - A transparent backdrop over the pages takes the clicks on them and closes the sidebar.
+  - A backdrop covers the pages, as in `vaadin-master-detail-layout`. It takes the clicks on them and closes the sidebar.
   - Escape closes the sidebar only from the sidebar or its button. Escape from other toolbar controls, such as
     the zoom select, leaves the sidebar open. The handler calls `preventDefault()`, so a surrounding dialog stays open.
   - A chosen thumbnail closes the sidebar in the overlay mode.
