@@ -9,6 +9,7 @@
  * license.
  */
 import { html, LitElement } from 'lit';
+import { live } from 'lit/directives/live.js';
 import { FocusMixin } from '@vaadin/a11y-base/src/focus-mixin.js';
 import { isKeyboardActive } from '@vaadin/a11y-base/src/focus-utils.js';
 import { defineCustomElement } from '@vaadin/component-base/src/define.js';
@@ -257,7 +258,7 @@ class PdfViewer extends PdfViewerMixin(
             aria-labelledby="title"
             aria-busy="${this.__loading ? 'true' : 'false'}"
             tabindex="${this.pageCount ? '0' : '-1'}"
-            ?inert="${this._sidebarOverlay && this.sidebarOpened}"
+            ?inert="${live(this._sidebarOverlay && this.sidebarOpened)}"
             @focusin="${this.#onContentFocusIn}"
             @focusout="${this.#onContentFocusOut}"
           >

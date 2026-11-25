@@ -450,6 +450,13 @@ describe('sidebar', () => {
         expect(viewer.sidebarOpened).to.be.false;
       });
 
+      it('should keep the pages inert when another document loads', async () => {
+        thumbnails[0].focus();
+        await loadDocument(viewer, 'links.pdf');
+        await nextRender();
+        expect(content.inert).to.be.true;
+      });
+
       it('should close the sidebar on a click on the pages', async () => {
         await sendMouseToElement({ type: 'click', element: content });
         await nextRender();
