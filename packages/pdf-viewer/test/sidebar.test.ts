@@ -144,32 +144,6 @@ describe('sidebar', () => {
     expect(page.offsetWidth).to.be.closeTo(content.clientWidth - 2 * padding, 1);
   });
 
-  it('should keep the sidebar open over the pages when the viewer becomes narrow', async () => {
-    viewer.sidebarOpened = true;
-    await nextRender();
-    await setWidth('400px');
-    expect(viewer.hasAttribute('sidebar-overlay')).to.be.true;
-    expect(viewer.sidebarOpened).to.be.true;
-  });
-
-  it('should move focus from the pages to the current thumbnail when the viewer becomes narrow', async () => {
-    viewer.sidebarOpened = true;
-    await nextRender();
-    content.focus();
-    await setWidth('400px');
-    await nextRender();
-    expect(viewer.shadowRoot!.activeElement).to.equal(getThumbnails()[0]);
-  });
-
-  it('should show the open sidebar of a viewer that is narrow from the start over the pages', async () => {
-    const narrow = fixtureSync<PdfViewer>(
-      '<vaadin-pdf-viewer sidebar-opened style="width: 400px"></vaadin-pdf-viewer>',
-    );
-    await nextUpdate(narrow);
-    expect(narrow.hasAttribute('sidebar-overlay')).to.be.true;
-    expect(narrow.sidebarOpened).to.be.true;
-  });
-
   describe('opened', () => {
     let thumbnails: HTMLElement[];
 
@@ -364,103 +338,144 @@ describe('sidebar', () => {
     });
   });
 
-  describe('overlay', () => {
-    beforeEach(async () => {
-      await setWidth('400px');
-    });
-
+  describe('overlay mode', () => {
     afterEach(async () => {
       await resetMouse();
     });
 
-    it('should toggle the sidebar-overlay attribute when the viewer resizes', async () => {
-      expect(viewer.hasAttribute('sidebar-overlay')).to.be.true;
-      await setWidth('700px');
-      expect(viewer.hasAttribute('sidebar-overlay')).to.be.false;
+    it('should show the open sidebar over the pages in a viewer that is narrow from the start', async () => {
+      const narrow = fixtureSync<PdfViewer>(
+        '<vaadin-pdf-viewer sidebar-opened style="width: 400px"></vaadin-pdf-viewer>',
+      );
+      await nextUpdate(narrow);
+      expect(narrow.hasAttribute('sidebar-overlay')).to.be.true;
+      expect(narrow.sidebarOpened).to.be.true;
     });
 
-    it('should keep the sidebar-overlay attribute while the viewer is hidden', async () => {
-      viewer.style.display = 'none';
-      await nextResize(viewer);
-      expect(viewer.hasAttribute('sidebar-overlay')).to.be.true;
-    });
-
-    it('should make the pages inert while the sidebar shows over them', async () => {
-      viewer.sidebarOpened = true;
-      await nextRender();
-      expect(content.inert).to.be.true;
-      await setWidth('700px');
-      expect(content.inert).to.be.false;
-    });
-
-    it('should move focus from the pages to the current thumbnail when the sidebar opens', async () => {
-      content.focus();
-      viewer.sidebarOpened = true;
-      await nextRender();
-      expect(viewer.shadowRoot!.activeElement).to.equal(getThumbnails()[0]);
-    });
-
-    describe('opened', () => {
-      let thumbnails: HTMLElement[];
-
+    describe('becoming narrow', () => {
       beforeEach(async () => {
         viewer.sidebarOpened = true;
         await nextRender();
-        thumbnails = getThumbnails();
       });
 
-      it('should close the sidebar on Escape and move focus to the sidebar button', async () => {
-        const spy = sinon.spy();
-        viewer.parentElement!.addEventListener('keydown', spy);
-        thumbnails[0].focus();
-        await sendKeys({ press: 'Escape' });
-        await nextRender();
-        expect(viewer.sidebarOpened).to.be.false;
-        expect(document.activeElement).to.equal(button);
-        expect(spy.firstCall.args[0].defaultPrevented).to.be.true;
-      });
-
-      it('should move focus to the pages when the sidebar closes on Escape with the toolbar collapsed', async () => {
-        viewer.toolbarCollapsed = true;
-        await nextRender();
-        thumbnails[0].focus();
-        await sendKeys({ press: 'Escape' });
-        await nextRender();
-        expect(viewer.shadowRoot!.activeElement).to.equal(content);
-      });
-
-      it('should close the sidebar on Escape from the sidebar button', async () => {
-        button.focus();
-        await sendKeys({ press: 'Escape' });
-        await nextRender();
-        expect(viewer.sidebarOpened).to.be.false;
-      });
-
-      it('should not close the sidebar on Escape from other toolbar controls', async () => {
-        viewer.querySelector<HTMLElement>('[slot="toolbar-zoom-in"]')!.focus();
-        await sendKeys({ press: 'Escape' });
-        await nextRender();
+      it('should switch to overlay mode and keep the sidebar open', async () => {
+        await setWidth('400px');
+        expect(viewer.hasAttribute('sidebar-overlay')).to.be.true;
         expect(viewer.sidebarOpened).to.be.true;
       });
 
-      it('should go to the page of a chosen thumbnail and close the sidebar', async () => {
-        thumbnails[3].click();
+      it('should move focus from the pages to the current thumbnail', async () => {
+        content.focus();
+        await setWidth('400px');
         await nextRender();
-        expect(viewer.page).to.equal(4);
-        expect(viewer.sidebarOpened).to.be.false;
+        expect(viewer.shadowRoot!.activeElement).to.equal(getThumbnails()[0]);
+      });
+    });
+
+    describe('becoming wide', () => {
+      beforeEach(async () => {
+        await setWidth('400px');
+        viewer.sidebarOpened = true;
+        await nextRender();
       });
 
-      it('should keep the pages inert when another document loads', async () => {
-        thumbnails[0].focus();
-        await loadDocument(viewer, 'links.pdf');
+      it('should leave overlay mode', async () => {
+        await setWidth('700px');
+        expect(viewer.hasAttribute('sidebar-overlay')).to.be.false;
+      });
+
+      it('should make the pages interactive again', async () => {
+        await setWidth('700px');
+        expect(content.inert).to.be.false;
+      });
+    });
+
+    describe('narrow', () => {
+      beforeEach(async () => {
+        await setWidth('400px');
+      });
+
+      it('should stay in overlay mode while the viewer is hidden', async () => {
+        viewer.style.display = 'none';
+        await nextResize(viewer);
+        expect(viewer.hasAttribute('sidebar-overlay')).to.be.true;
+      });
+
+      it('should make the pages inert while the sidebar shows over them', async () => {
+        viewer.sidebarOpened = true;
         await nextRender();
         expect(content.inert).to.be.true;
       });
 
-      it('should close the sidebar on a click on the pages', async () => {
-        await sendMouseToElement({ type: 'click', element: content });
+      it('should move focus from the pages to the current thumbnail when the sidebar opens', async () => {
+        content.focus();
+        viewer.sidebarOpened = true;
         await nextRender();
-        expect(viewer.sidebarOpened).to.be.false;
+        expect(viewer.shadowRoot!.activeElement).to.equal(getThumbnails()[0]);
+      });
+
+      describe('opened', () => {
+        let thumbnails: HTMLElement[];
+
+        beforeEach(async () => {
+          viewer.sidebarOpened = true;
+          await nextRender();
+          thumbnails = getThumbnails();
+        });
+
+        it('should close the sidebar on Escape and move focus to the sidebar button', async () => {
+          const spy = sinon.spy();
+          viewer.parentElement!.addEventListener('keydown', spy);
+          thumbnails[0].focus();
+          await sendKeys({ press: 'Escape' });
+          await nextRender();
+          expect(viewer.sidebarOpened).to.be.false;
+          expect(document.activeElement).to.equal(button);
+          expect(spy.firstCall.args[0].defaultPrevented).to.be.true;
+        });
+
+        it('should move focus to the pages when the sidebar closes on Escape with the toolbar collapsed', async () => {
+          viewer.toolbarCollapsed = true;
+          await nextRender();
+          thumbnails[0].focus();
+          await sendKeys({ press: 'Escape' });
+          await nextRender();
+          expect(viewer.shadowRoot!.activeElement).to.equal(content);
+        });
+
+        it('should close the sidebar on Escape from the sidebar button', async () => {
+          button.focus();
+          await sendKeys({ press: 'Escape' });
+          await nextRender();
+          expect(viewer.sidebarOpened).to.be.false;
+        });
+
+        it('should not close the sidebar on Escape from other toolbar controls', async () => {
+          viewer.querySelector<HTMLElement>('[slot="toolbar-zoom-in"]')!.focus();
+          await sendKeys({ press: 'Escape' });
+          await nextRender();
+          expect(viewer.sidebarOpened).to.be.true;
+        });
+
+        it('should go to the page of a chosen thumbnail and close the sidebar', async () => {
+          thumbnails[3].click();
+          await nextRender();
+          expect(viewer.page).to.equal(4);
+          expect(viewer.sidebarOpened).to.be.false;
+        });
+
+        it('should keep the pages inert when another document loads', async () => {
+          thumbnails[0].focus();
+          await loadDocument(viewer, 'links.pdf');
+          await nextRender();
+          expect(content.inert).to.be.true;
+        });
+
+        it('should close the sidebar on a click on the pages', async () => {
+          await sendMouseToElement({ type: 'click', element: content });
+          await nextRender();
+          expect(viewer.sidebarOpened).to.be.false;
+        });
       });
     });
   });
