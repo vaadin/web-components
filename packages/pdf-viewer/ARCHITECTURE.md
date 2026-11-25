@@ -114,7 +114,8 @@ how to generate them.
   - A backdrop covers the pages, as in `vaadin-master-detail-layout`. It takes the clicks on them and closes the sidebar.
   - Escape closes the sidebar only from the sidebar or its button. Escape from other toolbar controls, such as
     the zoom select, leaves the sidebar open. The handler calls `preventDefault()`, so a surrounding dialog stays open.
-  - A chosen thumbnail closes the sidebar in the overlay mode.
+  - A chosen thumbnail closes the sidebar in the overlay mode, and focus moves to the pages, as after a followed
+    link. Escape and the sidebar button move focus to the button.
 - `PdfViewerToolbarMixin` renders the header and the toolbar. Its controls are in the light DOM, so a theme
   styles the page field like any other `vaadin-integer-field`. The `slotContent()` directive renders them, so
   application children added later keep their place.

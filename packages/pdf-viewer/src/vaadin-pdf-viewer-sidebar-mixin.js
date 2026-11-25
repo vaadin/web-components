@@ -66,6 +66,9 @@ export const PdfViewerSidebarMixin = (superClass) =>
     /** @type {PdfViewerThumbnailsController | null} */
     #thumbnails = null;
 
+    /** Whether focus moves to the pages instead of the sidebar button when the sidebar closes. */
+    #focusPagesOnClose = false;
+
     /** @protected */
     firstUpdated() {
       super.firstUpdated();
@@ -254,12 +257,15 @@ export const PdfViewerSidebarMixin = (superClass) =>
      * @private
      */
     #moveFocusOutOfSidebar() {
+      const focusPages = this.#focusPagesOnClose;
+      this.#focusPagesOnClose = false;
       if (this.$.sidebar.matches(':focus-within')) {
         const button = this.#getSidebarButton();
-        const target = button?.checkVisibility() ? button : this.$.content;
+        const target = !focusPages && button?.checkVisibility() ? button : this.$.content;
         // The pages are inert under the sidebar until this update renders.
         this.$.content.inert = false;
-        target.focus({ focusVisible: isKeyboardActive() });
+        // The pages have scrolled to the chosen page already.
+        target.focus({ preventScroll: target === this.$.content, focusVisible: isKeyboardActive() });
       }
     }
 
@@ -300,6 +306,8 @@ export const PdfViewerSidebarMixin = (superClass) =>
       this._scrollToPage(page);
       this.dispatchEvent(new CustomEvent('thumbnail-click', { detail: { page } }));
       if (this._sidebarOverlay) {
+        // The user continues on the chosen page, as after following a link.
+        this.#focusPagesOnClose = true;
         this.sidebarOpened = false;
       }
     }

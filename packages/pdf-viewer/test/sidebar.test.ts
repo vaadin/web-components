@@ -480,6 +480,26 @@ describe('sidebar', () => {
           expect(viewer.sidebarOpened).to.be.false;
         });
 
+        it('should move focus to the pages when a thumbnail is chosen with Enter', async () => {
+          thumbnails[0].focus();
+          await sendKeys({ press: 'ArrowDown' });
+          await sendKeys({ press: 'Enter' });
+          await nextRender();
+          expect(viewer.shadowRoot!.activeElement).to.equal(content);
+        });
+
+        it('should move focus to the sidebar button when the sidebar closes after a chosen thumbnail', async () => {
+          thumbnails[3].focus();
+          thumbnails[3].click();
+          await nextRender();
+          viewer.sidebarOpened = true;
+          await nextRender();
+          thumbnails[0].focus();
+          await sendKeys({ press: 'Escape' });
+          await nextRender();
+          expect(document.activeElement).to.equal(button);
+        });
+
         it('should keep the pages inert when another document loads', async () => {
           thumbnails[0].focus();
           await loadDocument(viewer, 'links.pdf');
