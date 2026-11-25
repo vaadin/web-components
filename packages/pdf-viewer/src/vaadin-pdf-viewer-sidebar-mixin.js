@@ -274,7 +274,7 @@ export const PdfViewerSidebarMixin = (superClass) =>
     }
 
     /**
-     * Reads from CSS whether the sidebar shows over the pages, as `vaadin-app-layout` does for its drawer.
+     * Reads from CSS whether the sidebar shows over the pages.
      * @private
      */
     #updateOverlay() {
