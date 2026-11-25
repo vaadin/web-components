@@ -269,11 +269,13 @@ export const PdfViewerSidebarMixin = (superClass) =>
       this.#focusPagesOnClose = false;
       if (this.$.sidebar.matches(':focus-within')) {
         const button = this.#getSidebarButton();
-        const target = !focusPages && button?.checkVisibility() ? button : this.$.content;
-        // The pages are inert under the sidebar until this update renders.
-        this.$.content.inert = false;
-        // The pages have scrolled to the chosen page already.
-        target.focus({ preventScroll: target === this.$.content, focusVisible: isKeyboardActive() });
+        if (!focusPages && button?.checkVisibility()) {
+          button.focus({ focusVisible: isKeyboardActive() });
+        } else {
+          // The pages are inert under the sidebar until this update renders.
+          this.$.content.inert = false;
+          this._focusPages();
+        }
       }
     }
 
@@ -308,7 +310,7 @@ export const PdfViewerSidebarMixin = (superClass) =>
     #onBackdropClick() {
       this.sidebarOpened = false;
       // A click on the pages focuses them, also through the backdrop.
-      this.updateComplete.then(() => this.$.content.focus({ preventScroll: true, focusVisible: false }));
+      this.updateComplete.then(() => this._focusPages());
     }
 
     /** @private */
