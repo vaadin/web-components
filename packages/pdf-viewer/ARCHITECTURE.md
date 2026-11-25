@@ -115,6 +115,12 @@ how to generate them.
     flag it in the DOM.
   - The download button is after `toolbar-actions`. To replace it, an application hides it with
     `downloadButtonHidden` and adds its own button that calls `download()` to `toolbar-actions`.
+  - On a coarse pointer and a screen of at most 450px, the toolbar hides the page buttons, the page field and the
+    zoom select. The breakpoint is the one of the fullscreen `vaadin-date-picker`.
+    - The rule is a media query, not a container query. Inline-size containment on the toolbar would stop it from
+      setting the width of a viewer that takes its width from its content, for example in a dialog.
+    - The rule hides the `<slot>` elements, so the styles of an application can not show the controls again.
+    - The zoom buttons stay for zooming without pinch (WCAG 2.5.1).
 - The element applies `I18nMixin` and defines the default texts. The mixins read them from `__effectiveI18n`.
 - The element applies `FocusMixin` and owns the focus state. Listeners on the page area in its template set
   `focused` and `focus-ring`, as focus moving inside the shadow root does not reach listeners on the host.

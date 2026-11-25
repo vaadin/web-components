@@ -101,6 +101,12 @@ export const pdfViewerToolbarStyles = css`
     --vaadin-button-tertiary-background: var(--vaadin-background-container-strong);
   }
 
+  @media (pointer: coarse) and (max-width: 450px) {
+    slot:is([name='toolbar-previous-page'], [name='toolbar-next-page'], [name='toolbar-page'], [name='toolbar-zoom']) {
+      display: none;
+    }
+  }
+
   @media (forced-colors: active) {
     [part~='header-toggle'] {
       background: CanvasText;
