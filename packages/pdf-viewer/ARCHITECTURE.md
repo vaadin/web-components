@@ -118,6 +118,8 @@ how to generate them.
 - The element applies `I18nMixin` and defines the default texts. The mixins read them from `__effectiveI18n`.
 - The element applies `FocusMixin` and owns the focus state. Listeners on the page area in its template set
   `focused` and `focus-ring`, as focus moving inside the shadow root does not reach listeners on the host.
+- The mixins move focus to the pages with `_focusPages()` of `PdfViewerRenderMixin`, such as after a followed
+  link. It keeps the scroll position, and shows the focus ring only after a key press.
 - `PdfViewerRenderQueue` decides the render order, the memory budget and the release. It has no host
   reference, and its limits are options.
 - `pdf-viewer-layout.js` has the layout math without DOM access: visible pages, anchor and fit scale.
