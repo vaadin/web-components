@@ -228,6 +228,7 @@ export const PdfViewerSidebarMixin = (superClass) =>
         <div
           id="backdrop"
           part="backdrop"
+          aria-hidden="true"
           ?hidden="${!(overlay && this.sidebarOpened)}"
           @click="${this.#onBackdropClick}"
         ></div>
