@@ -588,35 +588,6 @@ describe('toolbar', () => {
       expect(getHeader().getAttribute('aria-expanded')).to.equal('false');
     });
 
-    it('should move focus from a toolbar button to the pages when the toolbar hides', async () => {
-      nextButton.focus();
-      viewer.toolbarHidden = true;
-      await nextFrame();
-      expect(viewer.shadowRoot!.activeElement).to.equal(content);
-    });
-
-    it('should move focus from the page field to the pages when the toolbar hides', async () => {
-      pageField.focus();
-      viewer.toolbarHidden = true;
-      await nextFrame();
-      expect(viewer.shadowRoot!.activeElement).to.equal(content);
-    });
-
-    it('should move focus from the header to the pages when the toolbar hides', async () => {
-      header.focus();
-      viewer.toolbarHidden = true;
-      await nextFrame();
-      expect(viewer.shadowRoot!.activeElement).to.equal(content);
-    });
-
-    it('should not move focus from outside the viewer when the toolbar hides', async () => {
-      const input = fixtureSync<HTMLInputElement>('<input />');
-      input.focus();
-      viewer.toolbarHidden = true;
-      await nextFrame();
-      expect(document.activeElement).to.equal(input);
-    });
-
     describe('set before attach', () => {
       let detached: PdfViewer;
 

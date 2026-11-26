@@ -101,11 +101,6 @@ export const PdfViewerToolbarMixin = (superClass) =>
       if (props.has('zoom') || props.has('__effectiveI18n')) {
         this.#zoomItems = this.#getZoomItems();
       }
-
-      // Focus in the toolbar would be lost when it hides.
-      if (props.has('toolbarHidden') && this.toolbarHidden && this.hasUpdated) {
-        this.#moveFocusOutOfToolbar();
-      }
     }
 
     /**
@@ -321,19 +316,6 @@ export const PdfViewerToolbarMixin = (superClass) =>
           <span part="header-toggle"></span>
         </button>
       `;
-    }
-
-    /**
-     * Moves focus from a control in the toolbar, or from the header button
-     * that a title replaces, to the pages.
-     * @private
-     */
-    #moveFocusOutOfToolbar() {
-      const control = this.getRootNode().activeElement?.closest('[slot^="toolbar-"]');
-      const isHeaderFocused = this.shadowRoot.activeElement?.matches('[part~="header"]');
-      if (control?.parentNode === this || isHeaderFocused) {
-        this._focusPages();
-      }
     }
 
     /** @private */
