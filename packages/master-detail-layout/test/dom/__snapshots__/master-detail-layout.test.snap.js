@@ -86,6 +86,7 @@ snapshots["vaadin-master-detail-layout host expandDetail"] =
 
 snapshots["vaadin-master-detail-layout shadow default"] = 
 `<div
+  aria-hidden="true"
   id="backdrop"
   part="backdrop"
 >
