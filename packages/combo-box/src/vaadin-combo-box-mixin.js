@@ -3,6 +3,7 @@
  * Copyright (c) 2015 - 2026 Vaadin Ltd.
  * This program is available under Apache License Version 2.0, available at https://vaadin.com/license/
  */
+import { get } from '@vaadin/component-base/src/path-utils.js';
 import { ValidateMixin } from '@vaadin/field-base/src/validate-mixin.js';
 import { ComboBoxItemsMixin } from './vaadin-combo-box-items-mixin.js';
 
@@ -78,6 +79,17 @@ export const ComboBoxMixin = (superClass) =>
         itemClassNameGenerator: {
           type: Object,
         },
+
+        /**
+         * Path to the boolean property that disables an item when its value is `true`.
+         * Disabled items remain visible and cannot be selected by the user.
+         * By default, no items are disabled.
+         * @attr {string} item-disabled-path
+         */
+        itemDisabledPath: {
+          type: String,
+          sync: true,
+        },
       };
     }
 
@@ -110,6 +122,20 @@ export const ComboBoxMixin = (superClass) =>
           this._scroller[prop] = this[prop];
         }
       });
+
+      if (props.has('itemDisabledPath')) {
+        this.requestContentUpdate();
+      }
+    }
+
+    /**
+     * Override method from `ComboBoxHighlightMixin` to read the configured disabled flag.
+     * @protected
+     * @override
+     */
+    _isItemDisabled(item) {
+      const path = this.itemDisabledPath;
+      return typeof path === 'string' && path.length > 0 && get(path, item) === true;
     }
 
     /**
@@ -238,7 +264,7 @@ export const ComboBoxMixin = (superClass) =>
     _commitValue() {
       if (this._hasHighlightedItem) {
         const focusedItem = this._highlightedItem;
-        if (this.selectedItem !== focusedItem) {
+        if (this.selectedItem !== focusedItem && !this._isItemDisabled(focusedItem)) {
           this.selectedItem = focusedItem;
         }
         // Make sure input field is updated in case value doesn't change (i.e. FOO -> foo)
@@ -251,9 +277,7 @@ export const ComboBoxMixin = (superClass) =>
           this.value = '';
         }
       } else {
-        // Try to find an item which label matches the input value.
-        const items = [this.selectedItem, ...(this._dropdownItems || [])];
-        const itemMatchingInputValue = items[this.__getItemIndexByLabel(items, this._inputElementValue)];
+        const itemMatchingInputValue = this.__getItemMatchingInputValue();
 
         if (
           this.allowCustomValue &&
@@ -291,6 +315,19 @@ export const ComboBoxMixin = (superClass) =>
       this._clearSelectionRange();
 
       this._clearFilter();
+    }
+
+    /** @private */
+    __getItemMatchingInputValue() {
+      // Closing without editing must preserve the selection even if another item has the same label.
+      if (this.selectedItem && !this.filter && this._getItemLabel(this.selectedItem) === this._inputElementValue) {
+        return this.selectedItem;
+      }
+
+      const items = [this.selectedItem, ...(this._dropdownItems || [])];
+      // A disabled option's label is still a known value when custom values are allowed.
+      const index = this.__getItemIndexByLabel(items, this._inputElementValue, this.allowCustomValue);
+      return items[index];
     }
 
     /**

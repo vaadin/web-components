@@ -51,6 +51,14 @@ export declare class ComboBoxMixinClass<TItem> {
   itemClassNameGenerator: (item: TItem) => string;
 
   /**
+   * Path to the boolean property that disables an item when its value is `true`.
+   * Disabled items remain visible and cannot be selected by the user.
+   * By default, no items are disabled.
+   * @attr {string} item-disabled-path
+   */
+  itemDisabledPath: string | undefined;
+
+  /**
    * If `true`, the user can input a value that is not present in the items list.
    * `value` property will be set to the input value in this case.
    * Also, when `value` is set programmatically, the input value will be set

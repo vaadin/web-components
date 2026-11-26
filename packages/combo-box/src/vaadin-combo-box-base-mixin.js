@@ -769,8 +769,7 @@ export const ComboBoxBaseMixin = (superClass) =>
         return;
       }
 
-      if (e.detail.item instanceof ComboBoxPlaceholder) {
-        // Placeholder items should not be selectable.
+      if (e.detail.item instanceof ComboBoxPlaceholder || this._isItemDisabled(e.detail.item)) {
         return;
       }
 

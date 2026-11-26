@@ -182,6 +182,11 @@ export const ComboBoxItemsMixin = (superClass) =>
         return;
       }
 
+      if (this._isItemDisabled(this._highlightedItem)) {
+        this._clearItemHighlight();
+        this._revertInputValue();
+      }
+
       this._scroller.requestContentUpdate();
 
       this._getItemElements().forEach((item) => {
@@ -398,17 +403,21 @@ export const ComboBoxItemsMixin = (superClass) =>
     }
 
     /**
-     * Returns the first item that matches the provided label.
+     * Returns the index of the first selectable item that matches the provided label.
      * Labels are matched against each other case insensitively.
      * @protected
      */
-    __getItemIndexByLabel(items, label) {
+    __getItemIndexByLabel(items, label, includeDisabled = false) {
       if (!items || !label) {
         return -1;
       }
 
+      const normalizedLabel = label.toString().toLowerCase();
       return findItemIndex(items, (item) => {
-        return this._getItemLabel(item).toString().toLowerCase() === label.toString().toLowerCase();
+        return (
+          (includeDisabled || !this._isItemDisabled(item)) &&
+          this._getItemLabel(item).toString().toLowerCase() === normalizedLabel
+        );
       });
     }
 
@@ -427,7 +436,8 @@ export const ComboBoxItemsMixin = (superClass) =>
       if (this.partialMatchMode === 'first-match' || (this.partialMatchMode === 'only-match' && items.length === 1)) {
         // Skip an item that is not yet loaded. Once the item is loaded,
         // the focused index is updated again.
-        return items[0] instanceof ComboBoxPlaceholder ? -1 : 0;
+        const index = items.findIndex((item) => !this._isItemDisabled(item));
+        return items[index] instanceof ComboBoxPlaceholder ? -1 : index;
       }
 
       return -1;
