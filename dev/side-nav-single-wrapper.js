@@ -1,6 +1,8 @@
 import '@vaadin/icon';
 import '@vaadin/popover';
 import { css, html, LitElement, nothing } from 'lit';
+import { ref } from 'lit/directives/ref.js';
+import { repeat } from 'lit/directives/repeat.js';
 
 // Page-local prototypes. The production Side Nav package is not loaded on this page.
 class SideNavItem extends LitElement {
@@ -87,97 +89,177 @@ class SideNavItem extends LitElement {
   }
 }
 
-class SideNavGroup extends LitElement {
-  static properties = {
-    expanded: { type: Boolean, reflect: true },
-    togglePosition: { attribute: 'toggle-position' },
-    hasEntries: { state: true },
-    itemLabel: { state: true },
-  };
+// Each entry stays in light DOM, projected into its own list item.
+class SideNavList extends LitElement {
+  static shadowRootOptions = { ...LitElement.shadowRootOptions, slotAssignment: 'manual' };
 
   static styles = css`
-    :host {
-      display: block;
+    ul {
+      list-style: none;
+      padding: 0;
+      margin: 0;
     }
 
-    .row {
+    ul:not([hidden]) {
       display: grid;
-      grid-template-columns: auto minmax(0, 1fr) auto;
-    }
-
-    ::slotted([slot='item']) {
-      grid-area: 1 / 1 / 2 / -1;
-      grid-template-columns: subgrid;
-    }
-
-    .start,
-    .end {
-      display: flex;
-      grid-row: 1;
-      z-index: 1;
-    }
-
-    .start {
-      grid-column: 1;
-    }
-    .end {
-      grid-column: 3;
-    }
-
-    button {
-      width: 2.5rem;
-      border: 0;
-      border-radius: 0.4rem;
-      background: transparent;
-      color: inherit;
-      cursor: pointer;
-    }
-
-    button:hover {
-      background: #e3eaf5;
-    }
-    button:focus-visible {
-      outline: 2px solid var(--focus);
-      outline-offset: -2px;
-    }
-
-    button::before {
-      content: '';
-      display: inline-block;
-      width: 0.45rem;
-      height: 0.45rem;
-      border: solid currentColor;
-      border-width: 0 2px 2px 0;
-      transform: rotate(-45deg);
-    }
-
-    button[aria-expanded='true']::before {
-      transform: rotate(45deg);
-    }
-
-    #entries {
-      margin-inline-start: 1.25rem;
+      gap: inherit;
     }
   `;
 
-  updateSlots() {
-    const [item] = this.renderRoot.querySelector('slot[name="item"]').assignedElements();
-    this.itemLabel = item?.textContent.trim();
-    this.hasEntries = this.renderRoot.querySelector('#entries slot').assignedElements().length > 0;
-    this.role = this.hasEntries ? 'group' : null;
-    this.ariaLabel = this.hasEntries ? this.itemLabel : null;
-    if (!this.hasEntries) {
+  constructor() {
+    super();
+    this.childrenObserver = new MutationObserver((records) => {
+      if (
+        records.some((record) =>
+          record.type === 'childList' ? record.target === this : record.target.parentElement === this,
+        )
+      ) {
+        this.requestUpdate();
+      }
+    });
+  }
+
+  connectedCallback() {
+    super.connectedCallback();
+    this.childrenObserver.observe(this, {
+      childList: true,
+      attributes: true,
+      attributeFilter: ['slot'],
+      subtree: true,
+    });
+    this.requestUpdate();
+  }
+
+  disconnectedCallback() {
+    super.disconnectedCallback();
+    this.childrenObserver.disconnect();
+  }
+
+  get entries() {
+    return Array.from(this.children).filter(
+      (child) => !child.slot && child.matches('vaadin-side-nav-item, vaadin-side-nav-group'),
+    );
+  }
+
+  renderList(entries, hidden = false) {
+    return html`
+      <ul id="entries" role="list" ?hidden=${hidden}>
+        ${repeat(
+          entries,
+          (entry) => entry,
+          (entry) => html` <li><slot ${ref((slot) => slot?.assign(entry))}></slot></li> `,
+        )}
+      </ul>
+    `;
+  }
+
+  render() {
+    return this.renderList(this.entries);
+  }
+}
+
+class SideNavGroup extends SideNavList {
+  static properties = {
+    expanded: { type: Boolean, reflect: true },
+    togglePosition: { attribute: 'toggle-position' },
+  };
+
+  static styles = [
+    SideNavList.styles,
+    css`
+      :host {
+        display: block;
+      }
+
+      .row {
+        display: grid;
+        grid-template-columns: auto minmax(0, 1fr) auto;
+      }
+
+      ::slotted([slot='item']) {
+        grid-area: 1 / 1 / 2 / -1;
+        grid-template-columns: subgrid;
+      }
+
+      .start,
+      .end {
+        display: flex;
+        grid-row: 1;
+        z-index: 1;
+      }
+
+      .start {
+        grid-column: 1;
+      }
+
+      .end {
+        grid-column: 3;
+      }
+
+      button {
+        width: 2.5rem;
+        border: 0;
+        border-radius: 0.4rem;
+        background: transparent;
+        color: inherit;
+        cursor: pointer;
+      }
+
+      button:hover {
+        background: #e3eaf5;
+      }
+
+      button:focus-visible {
+        outline: 2px solid var(--focus);
+        outline-offset: -2px;
+      }
+
+      button::before {
+        content: '';
+        display: inline-block;
+        width: 0.45rem;
+        height: 0.45rem;
+        border: solid currentColor;
+        border-width: 0 2px 2px 0;
+        transform: rotate(-45deg);
+      }
+
+      button[aria-expanded='true']::before {
+        transform: rotate(45deg);
+      }
+
+      #entries {
+        margin-inline-start: 1.25rem;
+      }
+    `,
+  ];
+
+  updated() {
+    // Manual assignment also applies to the row's named slots.
+    for (const slot of this.renderRoot.querySelectorAll('slot[name]')) {
+      slot.assign(...Array.from(this.children).filter((child) => child.slot === slot.name));
+    }
+
+    const hasEntries = this.entries.length > 0;
+    this.role = hasEntries ? 'group' : null;
+    this.ariaLabel = hasEntries ? this.itemLabel : null;
+    if (!hasEntries && this.expanded) {
       this.expanded = false;
     }
   }
 
+  get itemLabel() {
+    return this.querySelector(':scope > [slot="item"]')?.textContent.trim();
+  }
+
   render() {
-    const toggle = this.hasEntries
+    const entries = this.entries;
+    const toggle = entries.length
       ? html`<button
           type="button"
           aria-label=${`${this.itemLabel} subpages`}
           aria-controls="entries"
-          aria-expanded=${String(Boolean(this.expanded))}
+          aria-expanded=${Boolean(this.expanded)}
           @click=${() => {
             this.expanded = !this.expanded;
           }}
@@ -187,14 +269,15 @@ class SideNavGroup extends LitElement {
     return html`
       <div class="row">
         <div class="start"><slot name="prefix"></slot>${leading ? toggle : nothing}</div>
-        <slot name="item" @slotchange=${this.updateSlots}></slot>
+        <slot name="item"></slot>
         <div class="end">${leading ? nothing : toggle}<slot name="suffix"></slot></div>
       </div>
-      <div id="entries" ?hidden=${!this.expanded}><slot @slotchange=${this.updateSlots}></slot></div>
+      ${this.renderList(entries, !entries.length || !this.expanded)}
     `;
   }
 }
 
+customElements.define('vaadin-side-nav', SideNavList);
 customElements.define('vaadin-side-nav-item', SideNavItem);
 customElements.define('vaadin-side-nav-group', SideNavGroup);
 
