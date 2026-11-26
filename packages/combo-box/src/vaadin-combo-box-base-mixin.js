@@ -616,6 +616,11 @@ export const ComboBoxBaseMixin = (superClass) =>
       this._closeOrCommit();
     }
 
+    /** @protected */
+    _isItemDisabled(_item) {
+      return false;
+    }
+
     /**
      * Override this method to detect whether valid value is provided.
      * @protected

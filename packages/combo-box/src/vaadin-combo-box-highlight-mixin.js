@@ -50,31 +50,20 @@ const ComboBoxHighlightMixinImplementation = (superClass) =>
 
     /** @protected */
     _highlightNextItem() {
-      this.__highlightInDirection(this._highlightedItemIndex + 1, 1);
-    }
-
-    /** @protected */
-    _highlightPrevItem() {
-      const start = this._hasHighlightedItem ? this._highlightedItemIndex : (this._dropdownItems?.length ?? 0);
-      this.__highlightInDirection(start - 1, -1);
-    }
-
-    /** @private */
-    __highlightInDirection(start, step) {
       const items = this._dropdownItems;
       if (items) {
-        for (let index = start; index >= 0 && index < items.length; index += step) {
-          if (!this._isItemDisabled(items[index])) {
-            this._highlightItemAt(index);
-            return;
-          }
-        }
+        this._highlightItemAt(Math.min(items.length - 1, this._highlightedItemIndex + 1));
       }
     }
 
     /** @protected */
-    _isItemDisabled(_item) {
-      return false;
+    _highlightPrevItem() {
+      const items = this._dropdownItems;
+      if (items) {
+        this._highlightItemAt(
+          this._hasHighlightedItem ? Math.max(0, this._highlightState.index - 1) : items.length - 1,
+        );
+      }
     }
 
     /** @protected */
@@ -85,7 +74,7 @@ const ComboBoxHighlightMixinImplementation = (superClass) =>
 
     /** @protected */
     _highlightItemAt(index) {
-      if (index > -1 && !this._isItemDisabled(this._dropdownItems?.[index])) {
+      if (index > -1) {
         this._setHighlightState({ type: 'item', index });
       } else {
         this._clearItemHighlight();

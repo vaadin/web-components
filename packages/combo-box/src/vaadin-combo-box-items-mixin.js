@@ -182,11 +182,6 @@ export const ComboBoxItemsMixin = (superClass) =>
         return;
       }
 
-      if (this._isItemDisabled(this._highlightedItem)) {
-        this._clearItemHighlight();
-        this._revertInputValue();
-      }
-
       this._scroller.requestContentUpdate();
 
       this._getItemElements().forEach((item) => {

@@ -82,7 +82,7 @@ export const ComboBoxMixin = (superClass) =>
 
         /**
          * Path to the boolean property that disables an item when its value is `true`.
-         * Disabled items remain visible and cannot be selected by the user.
+         * Arrow keys can highlight disabled items, but users cannot select them.
          * By default, no items are disabled.
          * @attr {string} item-disabled-path
          */
@@ -129,7 +129,7 @@ export const ComboBoxMixin = (superClass) =>
     }
 
     /**
-     * Override method from `ComboBoxHighlightMixin` to read the configured disabled flag.
+     * Override method from `ComboBoxBaseMixin` to read the configured disabled flag.
      * @protected
      * @override
      */
@@ -171,10 +171,12 @@ export const ComboBoxMixin = (superClass) =>
      * @override
      */
     _hasValidInputValue() {
+      if (this._hasHighlightedItem) {
+        return !this._isItemDisabled(this._highlightedItem);
+      }
+
       const hasInvalidOption =
-        !this._hasHighlightedItem &&
-        this._inputElementValue !== '' &&
-        this._getItemLabel(this.selectedItem) !== this._inputElementValue;
+        this._inputElementValue !== '' && this._getItemLabel(this.selectedItem) !== this._inputElementValue;
 
       return this.allowCustomValue || !hasInvalidOption;
     }

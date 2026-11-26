@@ -80,48 +80,68 @@ describe('disabled items', () => {
       expect(changeSpy.called).to.be.false;
     });
 
-    it('should skip disabled items when navigating forward and committing with Enter', async () => {
+    it('should highlight a disabled item without selecting it on Enter', async () => {
+      comboBox.value = 'mon';
+      const changeSpy = sinon.spy();
+      comboBox.addEventListener('change', changeSpy);
+
       await sendKeys({ press: 'ArrowDown' });
+      await sendKeys({ press: 'ArrowDown' });
+
+      const option = getOption('Tuesday');
+      expect(comboBox.inputElement.getAttribute('aria-activedescendant')).to.equal(option.id);
+      expect(option.getAttribute('aria-disabled')).to.equal('true');
+      expect(document.activeElement).to.equal(comboBox.inputElement);
+
+      await sendKeys({ press: 'Enter' });
+
+      expect(comboBox.opened).to.be.true;
+      expect(comboBox.selectedItem).to.equal(days[0]);
+      expect(changeSpy.called).to.be.false;
+
       await sendKeys({ press: 'ArrowDown' });
       await sendKeys({ press: 'Enter' });
 
       expect(comboBox.selectedItem).to.equal(days[2]);
     });
 
-    it('should skip disabled items when navigating backward', async () => {
+    it('should highlight a disabled item when navigating backward', async () => {
       await sendKeys({ press: 'ArrowUp' });
       await sendKeys({ press: 'ArrowUp' });
 
-      expect(comboBox.inputElement.getAttribute('aria-activedescendant')).to.equal(getOption('Monday').id);
+      expect(comboBox.inputElement.getAttribute('aria-activedescendant')).to.equal(getOption('Tuesday').id);
     });
 
-    it('should reveal the next enabled option offscreen and let Tab reach the next field', async () => {
+    it('should reveal an offscreen disabled option and let Tab leave without selecting it', async () => {
       const nextField = fixtureSync<HTMLInputElement>('<input>');
       comboBox.items = Array.from({ length: 100 }, (_, index) => ({
         label: `Row ${index}`,
         value: String(index),
-        availability: { disabled: index < 99 },
+        availability: { disabled: index === 99 },
       }));
 
-      await sendKeys({ press: 'ArrowDown' });
+      await sendKeys({ press: 'ArrowUp' });
       await nextRender();
 
       const activeId = comboBox.inputElement.getAttribute('aria-activedescendant');
       const activeOption = comboBox.querySelector(`[id="${activeId}"]`);
       expect(activeOption?.textContent).to.equal('Row 99');
+      expect(activeOption?.getAttribute('aria-disabled')).to.equal('true');
       expect(document.activeElement).to.equal(comboBox.inputElement);
 
       await sendKeys({ press: 'Tab' });
       expect(document.activeElement).to.equal(nextField);
+      expect(comboBox.value).to.equal('');
     });
 
-    it('should leave the list without an active option when all items are disabled', async () => {
+    it('should expose an active option without a selection when all items are disabled', async () => {
       comboBox.items = [days[1]];
 
       await sendKeys({ press: 'ArrowDown' });
-      await sendKeys({ press: 'ArrowUp' });
+      await sendKeys({ press: 'Enter' });
 
-      expect(comboBox.inputElement.hasAttribute('aria-activedescendant')).to.be.false;
+      expect(comboBox.inputElement.getAttribute('aria-activedescendant')).to.equal(getOption('Tuesday').id);
+      expect(comboBox.value).to.equal('');
     });
 
     it('should restore an option when its disabled path is removed', async () => {
@@ -169,7 +189,7 @@ describe('disabled items', () => {
       expect(changeSpy.called).to.be.false;
     });
 
-    it('should restore the input when the highlighted item becomes disabled on refresh', async () => {
+    it('should keep the highlight when an item becomes disabled on refresh', async () => {
       comboBox.value = 'mon';
       days[1].availability = { disabled: false };
       comboBox.requestContentUpdate();
@@ -180,8 +200,9 @@ describe('disabled items', () => {
       comboBox.requestContentUpdate();
       await nextRender();
 
-      expect(comboBox.inputElement.hasAttribute('aria-activedescendant')).to.be.false;
-      expect((comboBox.inputElement as HTMLInputElement).value).to.equal('Monday');
+      const option = getOption('Tuesday');
+      expect(comboBox.inputElement.getAttribute('aria-activedescendant')).to.equal(option.id);
+      expect(option.getAttribute('aria-disabled')).to.equal('true');
 
       await sendKeys({ press: 'Enter' });
       expect(comboBox.value).to.equal('mon');
