@@ -41,19 +41,27 @@ export declare class PdfViewerToolbarMixinClass {
   headerTitle: string | null | undefined;
 
   /**
-   * Whether the toolbar is collapsed. The header collapses and expands
-   * it, so the toolbar collapses only while the header is shown, see
-   * `headerHidden`.
+   * Whether the toolbar is collapsed. The user expands a collapsed toolbar
+   * and collapses it again by clicking the header, so the toolbar collapses
+   * only while the header is shown, see `headerHidden`.
+   *
+   * Use it to save space while the controls stay available to the user.
+   * To remove the controls instead, use `toolbarHidden`.
    *
    * @attr {boolean} toolbar-collapsed
    */
   toolbarCollapsed: boolean;
 
   /**
-   * Whether the toolbar is hidden. A hidden toolbar has no controls,
-   * and it also hides the content of the `toolbar-actions` slot. The
-   * `download()` method, the `zoom` and `sidebarOpened` properties and
-   * the keyboard shortcuts work also while it is hidden.
+   * Whether the toolbar is hidden. Unlike a collapsed toolbar, see
+   * `toolbarCollapsed`, the user can not show a hidden toolbar: it has no
+   * controls, the content of the `toolbar-actions` slot is hidden, and the
+   * header only shows the title.
+   *
+   * Use it when the viewer should not offer the controls to the user. The
+   * `download()` method, the `zoom` and `sidebarOpened` properties and the
+   * keyboard shortcuts work also while the toolbar is hidden. While it is
+   * hidden, `toolbarCollapsed` has no effect.
    *
    * @attr {boolean} toolbar-hidden
    */
