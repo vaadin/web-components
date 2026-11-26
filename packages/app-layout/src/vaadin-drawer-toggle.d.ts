@@ -30,6 +30,7 @@ import { ThemableMixin } from '@vaadin/vaadin-themable-mixin/vaadin-themable-mix
  * -------------|------------
  * `focus-ring` | Set when the element is focused using the keyboard
  * `focused`    | Set when the element is focused
+ * `has-tooltip`| Set when the element has a slotted tooltip
  *
  * The following custom CSS properties are available for styling:
  *

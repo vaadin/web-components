@@ -31,8 +31,9 @@ export const pdfViewerToolbarStyles = css`
   }
 
   [part~='header']:focus-visible {
-    outline: var(--vaadin-focus-ring-width) solid var(--vaadin-focus-ring-color);
-    outline-offset: calc(var(--vaadin-focus-ring-width) * -1);
+    outline: var(--_focus-ring-width, var(--vaadin-focus-ring-width)) solid
+      var(--_focus-ring-color, var(--vaadin-focus-ring-color));
+    outline-offset: calc(var(--_focus-ring-width, var(--vaadin-focus-ring-width)) * -1);
   }
 
   [part~='title'] {

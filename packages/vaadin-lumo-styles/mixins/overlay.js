@@ -10,7 +10,10 @@ issueWarning('Lumo .js mixins are deprecated and will be removed in V26');
 
 const overlay = css`
   :host {
-    inset: var(--vaadin-overlay-viewport-inset, var(--lumo-space-m));
+    inset: max(env(safe-area-inset-top, 0px), var(--vaadin-overlay-viewport-inset, var(--lumo-space-m)))
+      max(env(safe-area-inset-right, 0px), var(--vaadin-overlay-viewport-inset, var(--lumo-space-m)))
+      max(env(safe-area-inset-bottom, 0px), var(--vaadin-overlay-viewport-inset, var(--lumo-space-m)))
+      max(env(safe-area-inset-left, 0px), var(--vaadin-overlay-viewport-inset, var(--lumo-space-m)));
     /* Workaround for Edge issue (only on Surface), where an overflowing vaadin-list-box inside vaadin-select-overlay makes the overlay transparent */
     /* stylelint-disable-next-line */
     outline: 0px solid transparent;

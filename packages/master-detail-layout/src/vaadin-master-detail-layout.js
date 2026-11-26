@@ -246,7 +246,7 @@ class MasterDetailLayout extends ElementMixin(ThemableMixin(PolylitMixin(LitElem
     const isLayoutContained = isOverlay && !isPage;
 
     return html`
-      <div id="backdrop" part="backdrop" @click="${this.__onBackdropClick}"></div>
+      <div id="backdrop" part="backdrop" aria-hidden="true" @click="${this.__onBackdropClick}"></div>
       <div id="master" part="master" ?inert="${isLayoutContained}">
         <slot @slotchange="${this.__onSlotChange}"></slot>
       </div>
