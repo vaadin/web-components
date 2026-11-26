@@ -86,9 +86,9 @@ export const PdfViewerSidebarMixin = (superClass) =>
     willUpdate(props) {
       super.willUpdate(props);
 
-      // Focus in the sidebar would be lost when it hides.
-      if (props.get('sidebarOpened') && !this.sidebarOpened) {
-        this.#moveFocusOutOfSidebar();
+      // Focus in the sidebar would be lost when it hides. It moves once the sidebar button is collapsed.
+      if (props.get('sidebarOpened') && !this.sidebarOpened && this.$.sidebar.matches(':focus-within')) {
+        this.updateComplete.then(() => this.#moveFocusOutOfSidebar());
       }
 
       // Focus in the pages would be lost when the sidebar over them makes them inert.
@@ -185,7 +185,9 @@ export const PdfViewerSidebarMixin = (superClass) =>
      */
     _documentUnloaded() {
       super._documentUnloaded();
-      this.#moveFocusOutOfSidebar();
+      if (this.$.sidebar.matches(':focus-within')) {
+        this.#moveFocusOutOfSidebar();
+      }
       this.#thumbnails.clear();
     }
 
@@ -262,9 +264,6 @@ export const PdfViewerSidebarMixin = (superClass) =>
      * @private
      */
     #moveFocusOutOfSidebar() {
-      if (!this.$.sidebar.matches(':focus-within')) {
-        return;
-      }
       const button = this.#getSidebarButton();
       if (button?.checkVisibility()) {
         button.focus({ focusVisible: isKeyboardActive() });

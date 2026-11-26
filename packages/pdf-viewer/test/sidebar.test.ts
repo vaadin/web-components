@@ -450,6 +450,17 @@ describe('sidebar', () => {
           expect(spy.firstCall.args[0].defaultPrevented).to.be.true;
         });
 
+        it('should collapse the sidebar button before focus moves to it on Escape', async () => {
+          let expanded: string | null = null;
+          button.addEventListener('focus', () => {
+            expanded = button.getAttribute('aria-expanded');
+          });
+          thumbnails[0].focus();
+          await sendKeys({ press: 'Escape' });
+          await nextRender();
+          expect(expanded).to.equal('false');
+        });
+
         it('should move focus to the pages when the sidebar closes on Escape with the toolbar collapsed', async () => {
           viewer.toolbarCollapsed = true;
           await nextRender();
