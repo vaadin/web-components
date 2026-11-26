@@ -66,9 +66,6 @@ export const PdfViewerSidebarMixin = (superClass) =>
     /** @type {PdfViewerThumbnailsController | null} */
     #thumbnails = null;
 
-    /** Whether focus moves to the pages instead of the sidebar button when the sidebar closes. */
-    #focusPagesOnClose = false;
-
     /** @protected */
     firstUpdated() {
       super.firstUpdated();
@@ -265,18 +262,33 @@ export const PdfViewerSidebarMixin = (superClass) =>
      * @private
      */
     #moveFocusOutOfSidebar() {
-      const focusPages = this.#focusPagesOnClose;
-      this.#focusPagesOnClose = false;
-      if (this.$.sidebar.matches(':focus-within')) {
-        const button = this.#getSidebarButton();
-        if (!focusPages && button?.checkVisibility()) {
-          button.focus({ focusVisible: isKeyboardActive() });
-        } else {
-          // The pages are inert under the sidebar until this update renders.
-          this.$.content.inert = false;
-          this._focusPages();
-        }
+      if (!this.$.sidebar.matches(':focus-within')) {
+        return;
       }
+      const button = this.#getSidebarButton();
+      if (button?.checkVisibility()) {
+        button.focus({ focusVisible: isKeyboardActive() });
+      } else {
+        this.#focusPagesUnderSidebar();
+      }
+    }
+
+    /**
+     * Moves focus to the pages, which are inert under the sidebar until the next update renders.
+     * @private
+     */
+    #focusPagesUnderSidebar() {
+      this.$.content.inert = false;
+      this._focusPages();
+    }
+
+    /**
+     * Closes the sidebar, and the user continues on the pages, as after a click on them or a followed link.
+     * @private
+     */
+    #closeSidebarAndFocusPages() {
+      this.#focusPagesUnderSidebar();
+      this.sidebarOpened = false;
     }
 
     /**
@@ -308,9 +320,7 @@ export const PdfViewerSidebarMixin = (superClass) =>
 
     /** @private */
     #onBackdropClick() {
-      this.sidebarOpened = false;
-      // A click on the pages focuses them, also through the backdrop.
-      this.updateComplete.then(() => this._focusPages());
+      this.#closeSidebarAndFocusPages();
     }
 
     /** @private */
@@ -318,9 +328,7 @@ export const PdfViewerSidebarMixin = (superClass) =>
       this._scrollToPage(page);
       this.dispatchEvent(new CustomEvent('thumbnail-click', { detail: { page } }));
       if (this._sidebarOverlay) {
-        // The user continues on the chosen page, as after following a link.
-        this.#focusPagesOnClose = true;
-        this.sidebarOpened = false;
+        this.#closeSidebarAndFocusPages();
       }
     }
 
