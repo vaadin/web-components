@@ -115,10 +115,11 @@ how to generate them.
     `vaadin-master-detail-layout`. It has no `aria-modal`, as the toolbar stays reachable.
   - A backdrop covers the pages, as in `vaadin-master-detail-layout`. It takes the clicks on them, closes the sidebar
     and focuses the pages, as a click on the pages does.
-  - Escape closes the sidebar only from the sidebar or its button. Escape from other toolbar controls, such as
-    the zoom select, leaves the sidebar open. The handler calls `preventDefault()`, so a surrounding dialog stays open.
+  - Escape closes the sidebar only from the sidebar or its button, and focus moves to the button. Escape from other
+    toolbar controls, such as the zoom select, leaves the sidebar open. The handler calls `preventDefault()`, so a
+    surrounding dialog stays open.
   - A chosen thumbnail closes the sidebar in the overlay mode, and focus moves to the pages, as after a followed
-    link. Escape and the sidebar button move focus to the button.
+    link.
 - `PdfViewerToolbarMixin` renders the header and the toolbar. Its controls are in the light DOM, so a theme
   styles the page field like any other `vaadin-integer-field`. The `slotContent()` directive renders them, so
   application children added later keep their place.
