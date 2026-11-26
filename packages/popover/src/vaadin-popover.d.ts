@@ -260,6 +260,13 @@ declare class Popover extends PopoverPositionMixin(PopoverTargetMixin(ThemePrope
    */
   requestContentUpdate(): void;
 
+  /**
+   * Refreshes popup attributes and the focus-return destination for the current target.
+   * Call this after a composite target replaces its internal control, or if it renders
+   * the control asynchronously after the popover has resolved its target.
+   */
+  refreshTarget(): void;
+
   addEventListener<K extends keyof PopoverEventMap>(
     type: K,
     listener: (this: Popover, ev: PopoverEventMap[K]) => void,

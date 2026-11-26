@@ -1,13 +1,11 @@
 import '@vaadin/icon';
 import '@vaadin/popover';
 import { css, html, LitElement, nothing } from 'lit';
-import { ref } from 'lit/directives/ref.js';
-import { repeat } from 'lit/directives/repeat.js';
-
 // Page-local prototypes. The production Side Nav package is not loaded on this page.
 class SideNavItem extends LitElement {
   static properties = {
-    path: { type: String },
+    path: { type: String, reflect: true },
+    disclosureExpanded: { attribute: false },
     current: { type: Boolean, reflect: true },
   };
 
@@ -30,13 +28,23 @@ class SideNavItem extends LitElement {
       background: #e9effa;
     }
 
-    :host(:focus-visible),
-    a:focus-visible {
+    :is(a, button):focus-visible {
       outline: 2px solid var(--focus);
       outline-offset: -2px;
     }
 
-    a {
+    button {
+      appearance: none;
+      border: 0;
+      padding: 0;
+      background: transparent;
+      font: inherit;
+      cursor: inherit;
+      text-align: start;
+    }
+
+    a,
+    button {
       grid-column: 1 / -1;
       display: grid;
       grid-template-columns: subgrid;
@@ -55,44 +63,49 @@ class SideNavItem extends LitElement {
     }
   `;
 
-  connectedCallback() {
-    super.connectedCallback();
-    if (this.role === 'button') {
-      this.tabIndex = 0;
-    }
+  static shadowRootOptions = { ...LitElement.shadowRootOptions, delegatesFocus: true };
+
+  static get observedAttributes() {
+    return [...super.observedAttributes, 'slot'];
   }
 
-  constructor() {
-    super();
-    this.addEventListener('keydown', (event) => {
-      if (this.role === 'button' && ['Enter', ' '].includes(event.key)) {
-        event.preventDefault();
-        if (!event.repeat && event.key === 'Enter') {
-          this.click();
-        }
-      }
-    });
-    this.addEventListener('keyup', (event) => {
-      if (this.role === 'button' && event.key === ' ') {
-        this.click();
-      }
-    });
+  connectedCallback() {
+    super.connectedCallback();
+    this.updateRole();
+  }
+
+  attributeChangedCallback(name, oldValue, value) {
+    super.attributeChangedCallback(name, oldValue, value);
+    if (name === 'slot' && this.isConnected) this.updateRole();
+  }
+
+  updateRole() {
+    this.role = this.slot === 'item' && this.parentElement?.localName === 'vaadin-side-nav-group' ? null : 'listitem';
+  }
+
+  updated(changed) {
+    if (changed.has('path') && this.slot === 'item') this.parentElement?.requestUpdate?.();
+  }
+
+  get focusElement() {
+    return this.renderRoot?.querySelector('a, button');
+  }
+
+  get ariaTarget() {
+    return this.focusElement;
   }
 
   render() {
     const content = html`<span class="content"
       ><slot name="prefix"></slot><slot></slot><slot name="suffix"></slot
     ></span>`;
-    return this.path
+    return this.path != null
       ? html`<a href=${this.path} aria-current=${this.current ? 'page' : nothing}>${content}</a>`
-      : content;
+      : html`<button type="button" aria-expanded=${this.disclosureExpanded ?? nothing}>${content}</button>`;
   }
 }
 
-// Each entry stays in light DOM, projected into its own list item.
 class SideNavList extends LitElement {
-  static shadowRootOptions = { ...LitElement.shadowRootOptions, slotAssignment: 'manual' };
-
   static styles = css`
     ul {
       list-style: none;
@@ -106,55 +119,10 @@ class SideNavList extends LitElement {
     }
   `;
 
-  constructor() {
-    super();
-    this.childrenObserver = new MutationObserver((records) => {
-      if (
-        records.some((record) =>
-          record.type === 'childList' ? record.target === this : record.target.parentElement === this,
-        )
-      ) {
-        this.requestUpdate();
-      }
-    });
-  }
-
-  connectedCallback() {
-    super.connectedCallback();
-    this.childrenObserver.observe(this, {
-      childList: true,
-      attributes: true,
-      attributeFilter: ['slot'],
-      subtree: true,
-    });
-    this.requestUpdate();
-  }
-
-  disconnectedCallback() {
-    super.disconnectedCallback();
-    this.childrenObserver.disconnect();
-  }
-
-  get entries() {
-    return Array.from(this.children).filter(
-      (child) => !child.slot && child.matches('vaadin-side-nav-item, vaadin-side-nav-group'),
-    );
-  }
-
-  renderList(entries, hidden = false) {
-    return html`
-      <ul id="entries" role="list" ?hidden=${hidden}>
-        ${repeat(
-          entries,
-          (entry) => entry,
-          (entry) => html` <li><slot ${ref((slot) => slot?.assign(entry))}></slot></li> `,
-        )}
-      </ul>
-    `;
-  }
-
   render() {
-    return this.renderList(this.entries);
+    return html`<ul role="list"
+      ><slot></slot
+    ></ul>`;
   }
 }
 
@@ -186,6 +154,7 @@ class SideNavGroup extends SideNavList {
         display: flex;
         grid-row: 1;
         z-index: 1;
+        pointer-events: none;
       }
 
       .start {
@@ -194,6 +163,18 @@ class SideNavGroup extends SideNavList {
 
       .end {
         grid-column: 3;
+      }
+
+      button,
+      ::slotted([slot='prefix']),
+      ::slotted([slot='suffix']) {
+        pointer-events: auto;
+      }
+
+      .indicator {
+        display: grid;
+        place-items: center;
+        width: 2.5rem;
       }
 
       button {
@@ -214,7 +195,8 @@ class SideNavGroup extends SideNavList {
         outline-offset: -2px;
       }
 
-      button::before {
+      button::before,
+      .indicator::before {
         content: '';
         display: inline-block;
         width: 0.45rem;
@@ -224,7 +206,7 @@ class SideNavGroup extends SideNavList {
         transform: rotate(-45deg);
       }
 
-      button[aria-expanded='true']::before {
+      :host([expanded]) :is(button, .indicator)::before {
         transform: rotate(45deg);
       }
 
@@ -235,44 +217,77 @@ class SideNavGroup extends SideNavList {
   ];
 
   updated() {
-    // Manual assignment also applies to the row's named slots.
-    for (const slot of this.renderRoot.querySelectorAll('slot[name]')) {
-      slot.assign(...Array.from(this.children).filter((child) => child.slot === slot.name));
+    const hasEntries = this.hasEntries;
+    const disclosureItem = hasEntries ? this.pathlessItem : null;
+    if (this.disclosureItem && this.disclosureItem !== disclosureItem) {
+      this.disclosureItem.disclosureExpanded = undefined;
     }
-
-    const hasEntries = this.entries.length > 0;
-    this.role = hasEntries ? 'group' : null;
-    this.ariaLabel = hasEntries ? this.itemLabel : null;
+    this.disclosureItem = disclosureItem;
+    if (disclosureItem) {
+      disclosureItem.disclosureExpanded = Boolean(this.expanded);
+    }
+    this.role = 'listitem';
     if (!hasEntries && this.expanded) {
       this.expanded = false;
     }
   }
 
+  get hasEntries() {
+    return Boolean(
+      this.querySelector(
+        ':scope > vaadin-side-nav-item:not([slot]), :scope > vaadin-side-nav-group:not([slot]), :scope > [slot=""]',
+      ),
+    );
+  }
+
+  get item() {
+    return this.querySelector(':scope > vaadin-side-nav-item[slot="item"]');
+  }
+
+  get pathlessItem() {
+    const item = this.item;
+    return item?.path != null ? null : item;
+  }
+
+  refresh() {
+    this.requestUpdate();
+  }
+
   get itemLabel() {
-    return this.querySelector(':scope > [slot="item"]')?.textContent.trim();
+    return this.item?.textContent.trim();
+  }
+
+  toggleExpanded() {
+    this.expanded = !this.expanded;
+  }
+
+  renderToggle(itemToggles) {
+    if (itemToggles) {
+      return html`<span class="indicator" aria-hidden="true"></span>`;
+    }
+    return html`<button
+      type="button"
+      aria-label=${`${this.itemLabel} subpages`}
+      aria-controls="entries"
+      aria-expanded=${Boolean(this.expanded)}
+      @click=${this.toggleExpanded}
+    ></button>`;
   }
 
   render() {
-    const entries = this.entries;
-    const toggle = entries.length
-      ? html`<button
-          type="button"
-          aria-label=${`${this.itemLabel} subpages`}
-          aria-controls="entries"
-          aria-expanded=${Boolean(this.expanded)}
-          @click=${() => {
-            this.expanded = !this.expanded;
-          }}
-        ></button>`
-      : nothing;
+    const hasEntries = this.hasEntries;
+    const itemToggles = hasEntries && this.pathlessItem;
+    const toggle = hasEntries ? this.renderToggle(itemToggles) : nothing;
     const leading = this.togglePosition === 'start';
     return html`
       <div class="row">
         <div class="start"><slot name="prefix"></slot>${leading ? toggle : nothing}</div>
-        <slot name="item"></slot>
+        <slot name="item" @slotchange=${this.refresh} @click=${itemToggles ? this.toggleExpanded : nothing}></slot>
         <div class="end">${leading ? nothing : toggle}<slot name="suffix"></slot></div>
       </div>
-      ${this.renderList(entries, !entries.length || !this.expanded)}
+      <ul id="entries" role="list" ?hidden=${!hasEntries || !this.expanded}
+        ><slot @slotchange=${this.refresh}></slot
+      ></ul>
     `;
   }
 }
@@ -287,6 +302,8 @@ const pages = {
   '#weekly': ['Weekly report', 'This report was opened from the Reports actions.'],
   '#people': ['People', 'Expand People to browse the directory and org chart.'],
   '#directory': ['Directory', 'Browse people in the workspace.'],
+  '#appearance': ['Appearance', 'Customize the workspace theme.'],
+  '#preferences': ['Preferences', 'Manage your workspace preferences.'],
   '#org-chart': ['Org Chart', 'Explore the reporting structure.'],
 };
 

@@ -24,6 +24,10 @@ export declare class PopoverTargetMixinClass {
    * Reference to the DOM element used both to trigger the overlay
    * by user interaction and to visually position it on the screen.
    *
+   * A composite target can expose a focusElement for keyboard focus and an
+   * ariaTarget for popup attributes. After replacing either control, call
+   * the popover’s refreshTarget() method once the new control is rendered.
+   *
    * Defaults to an element referenced with `for` attribute, in
    * which case it must be located in the same shadow scope.
    */

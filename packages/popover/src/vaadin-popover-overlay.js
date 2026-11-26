@@ -53,7 +53,17 @@ class PopoverOverlay extends PopoverOverlayMixin(
 
     if (props.has('restoreFocusNode') && this.opened) {
       // Save focus to be restored when target is set while opened
-      if (this.restoreFocusNode && isElementFocused(this.restoreFocusNode.focusElement || this.restoreFocusNode)) {
+      if (
+        this.restoreFocusNode &&
+        !props.has('positionTarget') &&
+        this.__focusRestorationController.focusNode === props.get('restoreFocusNode')
+      ) {
+        // The host is unchanged, but its original control was replaced while open.
+        this.__focusRestorationController.saveFocus(this.restoreFocusNode);
+      } else if (
+        this.restoreFocusNode &&
+        isElementFocused(this.restoreFocusNode.focusElement || this.restoreFocusNode)
+      ) {
         this.__focusRestorationController.saveFocus();
       } else if (!this.restoreFocusNode) {
         // Do not restore focus when target is cleared while opened

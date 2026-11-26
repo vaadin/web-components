@@ -76,6 +76,46 @@ describe('a11y', () => {
       expect(popover.getAttribute('role')).to.equal('alertdialog');
     });
 
+    it('should bind to an ID target and refresh its internal control on request', async () => {
+      const host = fixtureSync('<div id="notifications"></div>');
+      const root = host.attachShadow({ mode: 'open' });
+
+      function renderControl(tag) {
+        const control = document.createElement(tag);
+        control.tabIndex = 0;
+        root.replaceChildren(control);
+        host.focusElement = control;
+        host.ariaTarget = control;
+        return control;
+      }
+
+      const button = renderControl('button');
+      popover.for = host.id;
+      await nextRender();
+      expect(popover.target).to.equal(host);
+      expect(host.hasAttribute('aria-haspopup')).to.be.false;
+      expect(button.ariaControlsElements).to.deep.equal([popover]);
+      button.click();
+      await oneEvent(overlay, 'vaadin-overlay-open');
+      popover.focus();
+
+      const link = renderControl('a');
+      link.href = '#notifications';
+      popover.refreshTarget();
+      await nextRender();
+      expect(button.hasAttribute('aria-haspopup')).to.be.false;
+      expect(button.hasAttribute('aria-expanded')).to.be.false;
+      expect(button.ariaControlsElements).to.be.null;
+      expect(link.ariaExpanded).to.equal('true');
+      expect(link.ariaControlsElements).to.deep.equal([popover]);
+      expect(overlay.positionTarget).to.equal(host);
+
+      await sendKeys({ press: 'Escape' });
+      await nextRender();
+      expect(getDeepActiveElement()).to.equal(link);
+      expect(link.ariaExpanded).to.equal('false');
+    });
+
     ['target', 'ariaTarget'].forEach((prop) => {
       describe(prop, () => {
         let element;

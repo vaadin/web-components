@@ -470,7 +470,7 @@ class Popover extends PopoverPositionMixin(
   }
 
   static get observers() {
-    return ['__updateAriaAttributes(opened, role, target)'];
+    return ['__updateAriaAttributes(opened, role, target, __isConnected)'];
   }
 
   /**
@@ -545,7 +545,7 @@ class Popover extends PopoverPositionMixin(
         @focusout="${this.__onOverlayFocusOut}"
         @opened-changed="${this.__onOpenedChanged}"
         .restoreFocusOnClose="${this.__shouldRestoreFocus}"
-        .restoreFocusNode="${this.target}"
+        .restoreFocusNode="${this.target?.focusElement || this.target}"
         exportparts="backdrop, overlay, content, arrow"
         @vaadin-overlay-escape-press="${this.__onEscapePress}"
         @vaadin-overlay-outside-click="${this.__onOutsideClick}"
@@ -683,27 +683,38 @@ class Popover extends PopoverPositionMixin(
     }
   }
 
+  /**
+   * Refreshes popup attributes and the focus-return destination for the current target.
+   * Call this after a composite target replaces its internal control, or if it renders
+   * the control asynchronously after the popover has resolved its target.
+   */
+  refreshTarget() {
+    this.__updateAriaAttributes(this.opened, this.role, this.target, this.isConnected);
+    this.requestUpdate();
+  }
+
   /** @private */
-  __updateAriaAttributes(opened, role, target) {
-    if (this.__oldTarget) {
-      const oldEffectiveTarget = this.__oldTarget.ariaTarget || this.__oldTarget;
-      oldEffectiveTarget.removeAttribute('aria-haspopup');
-      oldEffectiveTarget.removeAttribute('aria-expanded');
-      oldEffectiveTarget.removeAttribute('aria-controls');
+  __updateAriaAttributes(opened, role, target, connected) {
+    const effectiveTarget = connected && target ? target.ariaTarget || target : null;
+    if (this.__ariaTarget && this.__ariaTarget !== effectiveTarget) {
+      this.__ariaTarget.removeAttribute('aria-haspopup');
+      this.__ariaTarget.removeAttribute('aria-expanded');
+      this.__ariaTarget.removeAttribute('aria-controls');
     }
+    this.__ariaTarget = effectiveTarget;
 
-    if (target) {
-      const effectiveTarget = target.ariaTarget || target;
-
+    if (effectiveTarget) {
       const isDialog = role === 'dialog' || role === 'alertdialog';
       effectiveTarget.setAttribute('aria-haspopup', isDialog ? 'dialog' : 'true');
 
       effectiveTarget.setAttribute('aria-expanded', opened ? 'true' : 'false');
 
       // Always set aria-controls to make VoiceOver + Chrome announce it.
-      effectiveTarget.setAttribute('aria-controls', this.id);
-
-      this.__oldTarget = target;
+      if (effectiveTarget.getRootNode() === this.getRootNode()) {
+        effectiveTarget.setAttribute('aria-controls', this.id);
+      } else {
+        effectiveTarget.ariaControlsElements = [this];
+      }
     }
   }
 
