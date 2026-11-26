@@ -5,6 +5,7 @@ import '@vaadin/vaadin-lumo-styles/src/global/index.css';
 import '@vaadin/vaadin-lumo-styles/src/props/index.css';
 import '@vaadin/vaadin-lumo-styles/components/button.css';
 import '@vaadin/vaadin-lumo-styles/components/integer-field.css';
+import '@vaadin/vaadin-lumo-styles/components/pdf-viewer.css';
 import '@vaadin/vaadin-lumo-styles/components/select.css';
 import '@vaadin/vaadin-lumo-styles/components/tooltip.css';
 import '../not-animated-styles.css';
