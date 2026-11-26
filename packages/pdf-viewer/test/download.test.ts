@@ -114,6 +114,16 @@ describe('download', () => {
       expect(link.download).to.equal('multi-page.pdf');
     });
 
+    it('should download with download() while the toolbar is hidden', async () => {
+      viewer.toolbarHidden = true;
+      await nextUpdate(viewer);
+      expect(getButton()).to.be.null;
+      const download = nextDownload();
+      viewer.download();
+      const { link } = await download;
+      expect(link.download).to.equal('multi-page.pdf');
+    });
+
     it('should not request the document again', async () => {
       performance.clearResourceTimings();
       const url = fixtureUrl('links.pdf');

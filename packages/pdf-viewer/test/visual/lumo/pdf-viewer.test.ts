@@ -56,6 +56,12 @@ describe('pdf-viewer', () => {
     await visualDiff(div, 'actions');
   });
 
+  it('toolbar hidden', async () => {
+    viewer.toolbarHidden = true;
+    await load();
+    await visualDiff(div, 'toolbar-hidden');
+  });
+
   it('sidebar', async () => {
     await load();
     await openSidebar(viewer);

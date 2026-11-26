@@ -103,6 +103,10 @@ how to generate them.
   application children added later keep their place.
   - The header is a button in the shadow DOM that collapses and expands the toolbar. It shows `headerTitle`,
     else `_getDocumentName()` of the document mixin, the name that downloads also use.
+  - With `toolbarHidden`, the controls are not rendered, so the styles of an application can not show them
+    again. The toolbar element stays in the shadow DOM with its slots, as `slotContent()` must always render.
+    - The header is then a `div` with the title, not a button, as it has no toolbar to collapse.
+    - Focus in the toolbar moves to the pages before the toolbar hides.
   - The controls call the methods of the inner mixins, for example `_scrollToPage()`, `_stepZoom()` and
     `download()`.
   - Each icon button is a `vaadin-button` with the `tertiary icon` theme. Themes style it like any other

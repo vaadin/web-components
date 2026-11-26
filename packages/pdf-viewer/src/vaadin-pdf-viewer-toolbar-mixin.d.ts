@@ -23,7 +23,8 @@ export declare class PdfViewerToolbarMixinClass {
   /**
    * Whether the header above the toolbar is hidden. The header shows
    * `headerTitle`, or else the name of the document, and collapses and
-   * expands the toolbar when clicked.
+   * expands the toolbar when clicked. While the toolbar is hidden, see
+   * `toolbarHidden`, the header only shows the title.
    *
    * @attr {boolean} header-hidden
    */
@@ -47,6 +48,16 @@ export declare class PdfViewerToolbarMixinClass {
    * @attr {boolean} toolbar-collapsed
    */
   toolbarCollapsed: boolean;
+
+  /**
+   * Whether the toolbar is hidden. A hidden toolbar has no controls,
+   * and it also hides the content of the `toolbar-actions` slot. The
+   * `download()` method, the `zoom` and `sidebarOpened` properties and
+   * the keyboard shortcuts work also while it is hidden.
+   *
+   * @attr {boolean} toolbar-hidden
+   */
+  toolbarHidden: boolean;
 
   /**
    * Whether the button that downloads the document is hidden from the

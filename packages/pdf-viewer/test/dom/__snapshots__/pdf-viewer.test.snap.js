@@ -1726,3 +1726,212 @@ snapshots["vaadin-pdf-viewer page links"] =
 `;
 /* end snapshot vaadin-pdf-viewer page links */
 
+snapshots["vaadin-pdf-viewer host toolbar hidden"] = 
+`<vaadin-pdf-viewer>
+</vaadin-pdf-viewer>
+`;
+/* end snapshot vaadin-pdf-viewer host toolbar hidden */
+
+snapshots["vaadin-pdf-viewer shadow toolbar hidden"] = 
+`<div class="top-area">
+  <div part="header">
+    <span
+      dir="auto"
+      id="title"
+      part="title"
+      title="multi-page.pdf"
+    >
+      multi-page.pdf
+    </span>
+  </div>
+  <div
+    hidden=""
+    id="toolbar"
+    part="toolbar"
+  >
+    <div part="toolbar-group">
+      <slot name="toolbar-sidebar">
+      </slot>
+      <slot name="toolbar-previous-page">
+      </slot>
+      <slot name="toolbar-next-page">
+      </slot>
+      <slot name="toolbar-page">
+      </slot>
+    </div>
+    <div part="toolbar-group">
+      <slot name="toolbar-zoom-out">
+      </slot>
+      <slot name="toolbar-zoom">
+      </slot>
+      <slot name="toolbar-zoom-in">
+      </slot>
+    </div>
+    <div part="toolbar-group">
+      <slot name="toolbar-actions">
+      </slot>
+      <slot name="toolbar-download">
+      </slot>
+    </div>
+  </div>
+</div>
+<div
+  aria-label="Loading"
+  part="loader"
+  role="progressbar"
+>
+</div>
+<div class="main-area">
+  <div
+    hidden=""
+    id="sidebar"
+    part="sidebar"
+  >
+    <div
+      aria-label="Page thumbnails"
+      id="thumbnails"
+      part="thumbnails"
+      role="listbox"
+      tabindex="-1"
+    >
+    </div>
+  </div>
+  <div class="content-area">
+    <div
+      aria-busy="false"
+      aria-labelledby="title"
+      id="content"
+      part="content"
+      role="region"
+      tabindex="0"
+    >
+      <div id="pages">
+        <div
+          aria-label="Page 1"
+          part="page"
+          role="region"
+        >
+          <canvas role="presentation">
+          </canvas>
+          <div
+            class="text-layer"
+            data-main-rotation="0"
+          >
+            <span
+              dir="ltr"
+              role="presentation"
+            >
+              Page 1
+            </span>
+            <br role="presentation">
+            <span
+              dir="ltr"
+              role="presentation"
+            >
+              The quick brown fox jumps over the lazy dog. Pack my box with five dozen
+            </span>
+            <br role="presentation">
+            <span
+              dir="ltr"
+              role="presentation"
+            >
+              liquor jugs. How vexingly quick daft zebras jump. Sphinx of black quartz,
+            </span>
+            <br role="presentation">
+            <span
+              dir="ltr"
+              role="presentation"
+            >
+              judge my vow.
+            </span>
+            <br role="presentation">
+            <span
+              dir="ltr"
+              role="presentation"
+            >
+              Unique word on this page: marker1.
+            </span>
+            <div class="end-of-content">
+            </div>
+          </div>
+        </div>
+        <div
+          aria-label="Page 2"
+          part="page"
+          role="region"
+        >
+          <canvas role="presentation">
+          </canvas>
+          <div
+            class="text-layer"
+            data-main-rotation="0"
+          >
+            <span
+              dir="ltr"
+              role="presentation"
+            >
+              Page 2
+            </span>
+            <br role="presentation">
+            <span
+              dir="ltr"
+              role="presentation"
+            >
+              The quick brown fox jumps over the lazy dog. Pack my box with five dozen
+            </span>
+            <br role="presentation">
+            <span
+              dir="ltr"
+              role="presentation"
+            >
+              liquor jugs. How vexingly quick daft zebras jump. Sphinx of black quartz,
+            </span>
+            <br role="presentation">
+            <span
+              dir="ltr"
+              role="presentation"
+            >
+              judge my vow.
+            </span>
+            <br role="presentation">
+            <span
+              dir="ltr"
+              role="presentation"
+            >
+              Unique word on this page: marker2.
+            </span>
+            <div class="end-of-content">
+            </div>
+          </div>
+        </div>
+        <div
+          aria-label="Page 3"
+          part="page"
+          role="region"
+        >
+        </div>
+        <div
+          aria-label="Page 4"
+          part="page"
+          role="region"
+        >
+        </div>
+        <div
+          aria-label="Page 5"
+          part="page"
+          role="region"
+        >
+        </div>
+        <div
+          aria-label="Page 6"
+          part="page"
+          role="region"
+        >
+        </div>
+      </div>
+    </div>
+  </div>
+</div>
+`;
+/* end snapshot vaadin-pdf-viewer shadow toolbar hidden */
+

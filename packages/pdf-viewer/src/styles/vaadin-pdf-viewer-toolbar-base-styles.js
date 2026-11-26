@@ -16,6 +16,7 @@ export const pdfViewerToolbarStyles = css`
     display: flex;
     align-items: center;
     gap: var(--vaadin-gap-xs);
+    box-sizing: border-box;
     width: 100%;
     margin: 0;
     padding: var(--vaadin-padding-xs) var(--vaadin-padding-s);
@@ -25,6 +26,9 @@ export const pdfViewerToolbarStyles = css`
     color: inherit;
     font: inherit;
     text-align: start;
+  }
+
+  button[part~='header'] {
     cursor: var(--vaadin-clickable-cursor);
     -webkit-user-select: none;
     user-select: none;
