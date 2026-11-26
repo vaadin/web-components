@@ -118,6 +118,10 @@ how to generate them.
 - The element applies `I18nMixin` and defines the default texts. The mixins read them from `__effectiveI18n`.
 - The element applies `FocusMixin` and owns the focus state. Listeners on the page area in its template set
   `focused` and `focus-ring`, as focus moving inside the shadow root does not reach listeners on the host.
+- The Tab stop of the page area is an empty element at the start of the scrollable area, not the area itself.
+  In browse mode, NVDA reads all text of a focused element, which would be all rendered pages. The arrow keys
+  still scroll, as the element is in the area. A click still focuses the area itself, as moving focus would
+  stop the text selection that the click starts.
 - `PdfViewerRenderQueue` decides the render order, the memory budget and the release. It has no host
   reference, and its limits are options.
 - `pdf-viewer-layout.js` has the layout math without DOM access: visible pages, anchor and fit scale.
@@ -167,6 +171,8 @@ how to generate them.
 - Unlike in pdf.js, a `NonStruct` element of the structure has no role. In the canvas, VoiceOver in Safari reads
   no text under an element with the `none` role.
 - When a focused link loses its page, focus moves to the page area.
+- An internal link moves focus to the destination page, so that screen readers continue reading there. The page
+  is focusable only until it loses focus, so that a click does not focus the page.
 
 ## Install size
 

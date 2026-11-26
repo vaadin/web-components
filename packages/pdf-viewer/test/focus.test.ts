@@ -10,6 +10,7 @@ describe('focus', () => {
   let viewer: PdfViewer;
   let input: HTMLInputElement;
   let content: HTMLElement;
+  let focusTarget: HTMLElement;
 
   beforeEach(async () => {
     const wrapper = fixtureSync(`
@@ -22,10 +23,16 @@ describe('focus', () => {
     viewer = wrapper.querySelector('vaadin-pdf-viewer')!;
     await nextRender();
     content = viewer.shadowRoot!.querySelector<HTMLElement>('[part="content"]')!;
+    focusTarget = viewer.shadowRoot!.querySelector<HTMLElement>('#focusTarget')!;
   });
 
   afterEach(async () => {
     await resetMouse();
+  });
+
+  it('should not have a Tab stop in the page area without a document', () => {
+    expect(content.tabIndex).to.equal(-1);
+    expect(focusTarget.tabIndex).to.equal(-1);
   });
 
   it('should not focus the page area on focus() without a document', () => {
@@ -40,10 +47,16 @@ describe('focus', () => {
       await nextRender();
     });
 
+    it('should have the Tab stop of the page area on an element in it, not on the scrollable area', () => {
+      expect(content.tabIndex).to.equal(-1);
+      expect(focusTarget.tabIndex).to.equal(0);
+      expect(focusTarget.parentElement).to.equal(content);
+    });
+
     it('should toggle focused attribute on page area focus', () => {
-      content.focus();
+      focusTarget.focus();
       expect(viewer.hasAttribute('focused')).to.be.true;
-      content.blur();
+      focusTarget.blur();
       expect(viewer.hasAttribute('focused')).to.be.false;
     });
 
@@ -51,17 +64,17 @@ describe('focus', () => {
       // Stands in for a link in a page.
       const button = document.createElement('button');
       content.querySelector('[part~="page"]')!.append(button);
-      content.focus();
+      focusTarget.focus();
       button.focus();
       expect(viewer.hasAttribute('focused')).to.be.false;
-      content.focus();
+      focusTarget.focus();
       expect(viewer.hasAttribute('focused')).to.be.true;
     });
 
     it('should set focus-ring attribute when the page area is focused using keyboard', async () => {
       input.focus();
       await sendKeys({ press: 'Shift+Tab' });
-      expect(viewer.shadowRoot!.activeElement).to.equal(content);
+      expect(viewer.shadowRoot!.activeElement).to.equal(focusTarget);
       expect(viewer.hasAttribute('focus-ring')).to.be.true;
     });
 
@@ -73,13 +86,13 @@ describe('focus', () => {
 
     it('should focus the page area on focus()', () => {
       viewer.focus();
-      expect(viewer.shadowRoot!.activeElement).to.equal(content);
+      expect(viewer.shadowRoot!.activeElement).to.equal(focusTarget);
       expect(viewer.hasAttribute('focus-ring')).to.be.true;
     });
 
     it('should not set focus-ring attribute on focus() with focusVisible: false', () => {
       viewer.focus({ focusVisible: false });
-      expect(viewer.shadowRoot!.activeElement).to.equal(content);
+      expect(viewer.shadowRoot!.activeElement).to.equal(focusTarget);
       expect(viewer.hasAttribute('focus-ring')).to.be.false;
     });
   });

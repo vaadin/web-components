@@ -253,6 +253,7 @@ class PdfViewer extends PdfViewerMixin(
             @focusin="${this.#onContentFocusIn}"
             @focusout="${this.#onContentFocusOut}"
           >
+            <!-- The Tab stop of the pages. NVDA reads all text of a focused element in browse mode. -->
             <div id="focusTarget" tabindex="${this.pageCount ? '0' : '-1'}"></div>
             <div id="pages"></div>
           </div>
@@ -305,9 +306,15 @@ class PdfViewer extends PdfViewerMixin(
     }
   }
 
-  /** @private */
+  /**
+   * Sets the focus state when the pages or a page get focus. The scrollable
+   * area itself gets focus on click, and keeps it, as moving focus would stop
+   * a text selection that the click starts.
+   * @private
+   */
   #onContentFocusIn(event) {
-    if (event.target === this.$.focusTarget) {
+    const { target } = event;
+    if (target === this.$.content || target === this.$.focusTarget || target.matches('[part~="page"]')) {
       this._setFocused(true);
     }
   }

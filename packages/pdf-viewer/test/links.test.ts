@@ -26,6 +26,7 @@ import {
 describe('links', () => {
   let viewer: PdfViewer;
   let content: HTMLElement;
+  let focusTarget: HTMLElement;
   // A live collection, which follows the pages of the loaded document
   let pages: HTMLCollectionOf<HTMLElement>;
   let url: string | undefined;
@@ -92,6 +93,7 @@ describe('links', () => {
     viewer = fixtureSync('<vaadin-pdf-viewer style="width: 600px; height: 500px"></vaadin-pdf-viewer>');
     await nextRender();
     content = viewer.shadowRoot!.querySelector<HTMLElement>('[part="content"]')!;
+    focusTarget = viewer.shadowRoot!.querySelector<HTMLElement>('#focusTarget')!;
     pages = viewer.shadowRoot!.querySelector('#pages')!.children as HTMLCollectionOf<HTMLElement>;
   });
 
@@ -618,20 +620,32 @@ describe('links', () => {
   });
 
   describe('keyboard', () => {
-    it('should move focus to the pages when following an internal link', async () => {
+    it('should move focus to the destination page when following an internal link', async () => {
       await load('links.pdf');
       const link = getInternalLink();
       link.focus();
       link.click();
       await nextRenderIdle(viewer);
-      expect(viewer.shadowRoot!.activeElement).to.equal(content);
+      expect(viewer.shadowRoot!.activeElement).to.equal(pages[1]);
+      expect(viewer.hasAttribute('focused')).to.be.true;
+    });
+
+    it('should make the destination page not focusable once it loses focus', async () => {
+      await load('links.pdf');
+      const link = getInternalLink();
+      link.focus();
+      link.click();
+      await nextRenderIdle(viewer);
+      expect(pages[1].tabIndex).to.equal(-1);
+      focusTarget.focus();
+      expect(pages[1].hasAttribute('tabindex')).to.be.false;
     });
 
     it('should make each link one Tab stop', async () => {
       await load('links.pdf');
       const after = document.createElement('input');
       viewer.after(after);
-      content.focus();
+      focusTarget.focus();
       const focused: Element[] = [];
       for (let i = 0; i < 3; i++) {
         await sendKeys({ press: 'Tab' });
@@ -643,7 +657,7 @@ describe('links', () => {
 
     it('should show the focus ring of a focused link', async () => {
       await load('links.pdf');
-      content.focus();
+      focusTarget.focus();
       await sendKeys({ press: 'Tab' });
       const link = viewer.shadowRoot!.activeElement as HTMLAnchorElement;
       expect(getComputedStyle(link).outlineStyle).to.equal('solid');
@@ -651,7 +665,7 @@ describe('links', () => {
 
     it('should show the focus ring around the quadrilaterals of a focused link that wraps', async () => {
       await loadWrappingLink();
-      content.focus();
+      focusTarget.focus();
       await sendKeys({ press: 'Tab' });
       const link = viewer.shadowRoot!.activeElement as HTMLAnchorElement;
       const areas = [...link.querySelectorAll('.link-area')];
@@ -666,7 +680,7 @@ describe('links', () => {
         { content: '', annotations: [uriLink([50, 780, 200, 800])] },
         { content: '', annotations: [uriLink([50, 410, 200, 430], 'https://vaadin.com/docs')] },
       ]);
-      content.focus();
+      focusTarget.focus();
       await sendKeys({ press: 'Tab' });
       await sendKeys({ press: 'Tab' });
       const link = viewer.shadowRoot!.activeElement!;
@@ -689,7 +703,7 @@ describe('links', () => {
       content.scrollTop = content.scrollHeight;
       await idle;
       expect(getTextLayer(1)).to.be.null;
-      expect(viewer.shadowRoot!.activeElement).to.equal(content);
+      expect(viewer.shadowRoot!.activeElement).to.equal(focusTarget);
     });
 
     it('should not stop a smooth scroll that releases the page of a focused link', async () => {
@@ -701,7 +715,7 @@ describe('links', () => {
       const end = content.scrollHeight - content.clientHeight;
       content.scrollTo({ top: end, behavior: 'smooth' });
       await scrollSettled(content);
-      expect(viewer.shadowRoot!.activeElement).to.equal(content);
+      expect(viewer.shadowRoot!.activeElement).to.equal(focusTarget);
       expect(content.scrollTop).to.be.closeTo(end, 1);
     });
   });

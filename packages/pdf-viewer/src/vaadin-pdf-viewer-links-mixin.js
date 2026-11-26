@@ -116,7 +116,7 @@ export const PdfViewerLinksMixin = (superClass) =>
 
     /**
      * Goes to the destination of an internal link, and moves focus to the
-     * pages, as the page with the link may not stay rendered.
+     * destination page, as the page with the link may not stay rendered.
      * @private
      */
     async #followLink(annotation) {
@@ -138,6 +138,11 @@ export const PdfViewerLinksMixin = (superClass) =>
       const offset =
         hasPosition && page.pdfPage ? page.getOffset(target.left, target.top, target.right, target.bottom) : undefined;
       this._scrollToPage(target.page, offset);
-      this.$.focusTarget.focus({ preventScroll: true, focusVisible: isKeyboardActive() });
+      // Screen readers continue reading at the focused page. The page takes focus
+      // only until it loses it, so that a click focuses the pages, not the page.
+      const { element } = page;
+      element.tabIndex = -1;
+      element.addEventListener('focusout', () => element.removeAttribute('tabindex'), { once: true });
+      element.focus({ preventScroll: true, focusVisible: isKeyboardActive() });
     }
   };

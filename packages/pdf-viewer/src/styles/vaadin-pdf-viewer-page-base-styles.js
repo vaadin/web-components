@@ -31,6 +31,8 @@ export const pdfViewerPageStyles = css`
     --scale-round-y: 1px;
     background: var(--vaadin-pdf-viewer-page-background, #fff);
     box-shadow: var(--vaadin-pdf-viewer-page-shadow, 0 0 0 1px var(--vaadin-border-color-secondary));
+    /* The focus ring of the pages shows that a page has focus after a link. */
+    outline: none;
   }
 
   [part='page'] canvas {
