@@ -151,6 +151,10 @@ class PdfViewer extends PdfViewerMixin(
     return 'vaadin-pdf-viewer';
   }
 
+  static get lumoInjector() {
+    return { ...super.lumoInjector, includeBaseStyles: true };
+  }
+
   static get cvdlName() {
     return 'vaadin-pdf-viewer';
   }

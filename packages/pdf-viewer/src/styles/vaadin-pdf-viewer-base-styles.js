@@ -35,7 +35,7 @@ const pdfViewerBaseStyles = css`
   .top-area {
     flex: 0 1 auto;
     overflow-y: auto;
-    scroll-padding: calc(var(--vaadin-focus-ring-width) * 2 + 2px);
+    scroll-padding: calc(var(--_focus-ring-width, var(--vaadin-focus-ring-width)) * 2 + 2px);
   }
 
   .main-area {
@@ -70,8 +70,9 @@ const pdfViewerBaseStyles = css`
     border-radius: max(0px, var(--vaadin-pdf-viewer-border-radius, var(--vaadin-radius-m)) - 1px);
     border-start-start-radius: 0;
     border-start-end-radius: 0;
-    outline: var(--vaadin-focus-ring-width) solid var(--vaadin-focus-ring-color);
-    outline-offset: calc(var(--vaadin-focus-ring-width) * -1);
+    outline: var(--_focus-ring-width, var(--vaadin-focus-ring-width)) solid
+      var(--_focus-ring-color, var(--vaadin-focus-ring-color));
+    outline-offset: calc(var(--_focus-ring-width, var(--vaadin-focus-ring-width)) * -1);
   }
 
   [part='loader'] {

@@ -5,6 +5,7 @@ import '@vaadin/vaadin-lumo-styles/src/global/index.css';
 import '@vaadin/vaadin-lumo-styles/src/props/index.css';
 import '@vaadin/vaadin-lumo-styles/components/button.css';
 import '@vaadin/vaadin-lumo-styles/components/integer-field.css';
+import '@vaadin/vaadin-lumo-styles/components/pdf-viewer.css';
 import '@vaadin/vaadin-lumo-styles/components/select.css';
 import '@vaadin/vaadin-lumo-styles/components/tooltip.css';
 import '../not-animated-styles.css';
@@ -13,7 +14,7 @@ import '../../../vaadin-pdf-viewer.js';
 import type { IntegerField } from '@vaadin/integer-field';
 import { Tooltip } from '@vaadin/tooltip/src/vaadin-tooltip.js';
 import type { PdfViewer } from '../../../vaadin-pdf-viewer.js';
-import { createPdf, loadAndRender, openSidebar } from '../../helpers.js';
+import { createPdf, loadAndRender, openSidebar, uriLink } from '../../helpers.js';
 
 describe('pdf-viewer', () => {
   let div: HTMLDivElement;
@@ -79,16 +80,38 @@ describe('pdf-viewer', () => {
     await visualDiff(div, 'page-error');
   });
 
-  it('content focus', async () => {
-    await load();
-    viewer.focus();
-    await visualDiff(div, 'content-focus');
-  });
+  describe('focus', () => {
+    it('content', async () => {
+      await load();
+      viewer.focus();
+      await visualDiff(div, 'content-focus');
+    });
 
-  it('button focus', async () => {
-    await load();
-    viewer.querySelector('vaadin-integer-field')!.focus();
-    await sendKeys({ press: 'Shift+Tab' });
-    await visualDiff(div, 'button-focus');
+    it('button', async () => {
+      await load();
+      viewer.querySelector('vaadin-integer-field')!.focus();
+      await sendKeys({ press: 'Shift+Tab' });
+      await visualDiff(div, 'button-focus');
+    });
+
+    it('header', async () => {
+      await load();
+      viewer.shadowRoot!.querySelector<HTMLElement>('[part="header"]')!.focus({ focusVisible: true });
+      await visualDiff(div, 'header-focus');
+    });
+
+    it('thumbnail', async () => {
+      await load();
+      await openSidebar(viewer);
+      viewer.shadowRoot!.querySelector<HTMLElement>('[part~="thumbnail"]')!.focus({ focusVisible: true });
+      await visualDiff(div, 'thumbnail-focus');
+    });
+
+    it('link', async () => {
+      await loadAndRender(viewer, createPdf([{ content: '', annotations: [uriLink([72, 700, 272, 740])] }]));
+      viewer.focus();
+      await sendKeys({ press: 'Tab' });
+      await visualDiff(div, 'link-focus');
+    });
   });
 });

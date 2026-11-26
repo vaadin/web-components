@@ -61,7 +61,8 @@ export const pdfViewerSidebarStyles = css`
   }
 
   [part~='thumbnail']:focus-visible {
-    outline: var(--vaadin-focus-ring-width) solid var(--vaadin-focus-ring-color);
+    outline: var(--_focus-ring-width, var(--vaadin-focus-ring-width)) solid
+      var(--_focus-ring-color, var(--vaadin-focus-ring-color));
   }
 
   [part~='thumbnail'][part~='current'] {
