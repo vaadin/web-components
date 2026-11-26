@@ -3,6 +3,7 @@ import { resetMouse, sendKeys, sendMouseToElement } from '@vaadin/test-runner-co
 import { fixtureSync, mousedown, nextRender, tabKeyDown } from '@vaadin/testing-helpers';
 import sinon from 'sinon';
 import { AccordionPanel } from '@vaadin/accordion/src/vaadin-accordion-panel.js';
+import { DrawerToggle } from '@vaadin/app-layout/src/vaadin-drawer-toggle.js';
 import { Button } from '@vaadin/button/src/vaadin-button.js';
 import { Checkbox } from '@vaadin/checkbox/src/vaadin-checkbox.js';
 import { CheckboxGroup } from '@vaadin/checkbox-group/src/vaadin-checkbox-group.js';
@@ -79,6 +80,7 @@ before(() => {
     targetSelector: '[slot="summary"]',
     position: 'bottom-start',
   },
+  { tagName: DrawerToggle.is },
   { tagName: EmailField.is, position: 'top', ariaTargetSelector: 'input' },
   { tagName: Icon.is },
   { tagName: IntegerField.is, position: 'top', ariaTargetSelector: 'input' },
