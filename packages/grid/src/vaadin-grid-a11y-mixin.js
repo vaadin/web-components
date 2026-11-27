@@ -85,19 +85,6 @@ export const A11yMixin = (superClass) =>
     }
 
     /**
-     * Returns the `aria-selected` value rendered on a body row and its cells.
-     * It is set on both because Jaws reads selection only for rows, NVDA only
-     * for cells. Rows that have not received an item yet get no value.
-     *
-     * @param {!GridItemModel} model
-     * @return {string | undefined}
-     * @private
-     */
-    __a11yGetRowAriaSelected({ item, selected }) {
-      return item ? String(!!selected) : undefined;
-    }
-
-    /**
      * @param {!HTMLElement} row
      * @private
      */

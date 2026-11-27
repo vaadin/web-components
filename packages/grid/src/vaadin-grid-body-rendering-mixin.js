@@ -83,9 +83,15 @@ export const BodyRenderingMixin = (superClass) =>
       const model = this.__getRowModel(row);
       const isExpanded = !!model.expanded;
       const isCollapsed = !!this.__isRowExpandable(row);
+      const isSelected = !!model.selected;
+      const isNonselectable = this.__isItemSelectable(model.item) === false;
 
       // Set level for the expandable rows itself, and all the nested rows.
       const hasLevel = model.level > 0 || isExpanded || isCollapsed;
+
+      // Rows without an item and non-selectable items that are not selected
+      // get no `aria-selected`: a missing attribute means "not selectable".
+      const hasAriaSelected = !!model.item && (isSelected || !isNonselectable);
 
       return {
         rowId: row.__id,
@@ -93,15 +99,16 @@ export const BodyRenderingMixin = (superClass) =>
         model,
         ariaRowIndex: index === undefined ? undefined : index + this.__a11yGetHeaderRowCount(this._columnTree) + 1,
         ariaLevel: hasLevel ? model.level + 1 : undefined,
-        ariaSelected: this.__a11yGetRowAriaSelected(model),
+        // Rendered on the row and its cells: Jaws reads selection only for rows, NVDA only for cells
+        ariaSelected: hasAriaSelected ? String(isSelected) : undefined,
         isFirstRow: index === 0,
         isLastRow: index === this._flatSize - 1,
         isOddRow: index % 2 === 1,
         isEvenRow: index % 2 === 0,
         isExpanded,
         isCollapsed,
-        isSelected: !!model.selected,
-        isNonselectable: this.__isItemSelectable(model.item) === false,
+        isSelected,
+        isNonselectable,
         isDetailsOpened: !!model.detailsOpened,
         cells: columns.map((column) => {
           return {
