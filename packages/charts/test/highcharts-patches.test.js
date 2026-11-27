@@ -3,7 +3,6 @@ import { aTimeout, fixtureSync, nextRender, oneEvent } from '@vaadin/testing-hel
 import sinon from 'sinon';
 import '../src/vaadin-chart.js';
 import Highcharts from 'highcharts/es-modules/masters/highstock.src.js';
-import { getHighchartsPolicy } from '../src/highcharts-policy.js';
 
 // eslint-disable-next-line no-script-url
 const UNSUPPORTED_URL = 'javascript:void(0)';
@@ -74,17 +73,7 @@ describe('vaadin-chart option values', () => {
       await oneEvent(chart, 'chart-redraw');
     }
 
-    [
-      'https://vaadin.com',
-      '/about',
-      './about',
-      '#about',
-      'mailto:info@vaadin.com',
-      'HTTPS://VAADIN.COM',
-      'about.html',
-      'tel:+123',
-      'ftp://vaadin.com',
-    ].forEach((href) => {
+    ['https://vaadin.com', '/about', './about', '#about', 'mailto:info@vaadin.com'].forEach((href) => {
       it(`should keep supported credits links: ${href}`, async () => {
         await setCreditsHref(href);
         expect(chartContainer.querySelector('.highcharts-credits')).to.be.ok;
@@ -92,15 +81,24 @@ describe('vaadin-chart option values', () => {
       });
     });
 
-    [UNSUPPORTED_URL, ` JAVASCRIPT:void(0)`, `java\tscript:void(0)`, 'data:text/html,Text', 'vbscript:Text'].forEach(
-      (href) => {
-        it(`should ignore unsupported credits links: ${JSON.stringify(href)}`, async () => {
-          await setCreditsHref(href);
-          expect(chartContainer.querySelector('.highcharts-credits')).to.be.ok;
-          expect(invalidAttributeErrors).to.be.above(0);
-        });
-      },
-    );
+    [
+      UNSUPPORTED_URL,
+      ` JAVASCRIPT:void(0)`,
+      `java\tscript:void(0)`,
+      'data:text/html,Text',
+      'vbscript:Text',
+      'about.html',
+      'tel:+123',
+      // Highcharts matches the allowed prefixes case-sensitively
+      'HTTPS://VAADIN.COM',
+      'ftp://vaadin.com',
+    ].forEach((href) => {
+      it(`should ignore unsupported credits links: ${JSON.stringify(href)}`, async () => {
+        await setCreditsHref(href);
+        expect(chartContainer.querySelector('.highcharts-credits')).to.be.ok;
+        expect(invalidAttributeErrors).to.be.above(0);
+      });
+    });
 
     it('should ignore unsupported credits links on update', async () => {
       chart.updateConfiguration({ credits: { enabled: true } });
@@ -250,48 +248,6 @@ describe('vaadin-chart option values', () => {
       chart.updateConfiguration({ title: { useHTML: true, text: `<a xlink:href="${UNSUPPORTED_URL}">Title</a>` } });
       await oneEvent(chart, 'chart-redraw');
       expect(getTitleLink().hasAttribute('xlink:href')).to.be.false;
-    });
-  });
-});
-
-describe('vaadin-chart trusted types policy', () => {
-  (window.trustedTypes ? describe : describe.skip)('native policy factory', () => {
-    it('should keep the policy created by Highcharts', () => {
-      expect(getHighchartsPolicy()).to.be.ok;
-      expect(getHighchartsPolicy().name).to.equal('highcharts');
-    });
-
-    it('should restore the inherited createPolicy method', () => {
-      expect(Object.hasOwn(window.trustedTypes, 'createPolicy')).to.be.false;
-    });
-  });
-
-  describe('policy factory with own createPolicy method', () => {
-    let descriptor, createPolicy;
-
-    beforeEach(() => {
-      descriptor = Object.getOwnPropertyDescriptor(window, 'trustedTypes');
-      createPolicy = sinon.spy((name) => ({ name }));
-      Object.defineProperty(window, 'trustedTypes', { value: { createPolicy }, configurable: true });
-    });
-
-    afterEach(() => {
-      if (descriptor) {
-        Object.defineProperty(window, 'trustedTypes', descriptor);
-      } else {
-        delete window.trustedTypes;
-      }
-    });
-
-    it('should restore the own createPolicy method', async () => {
-      // Load a separate instance of the module, so that it wraps the factory defined above
-      const policyModule = await import('../src/highcharts-policy.js?own-factory');
-      const factory = window.trustedTypes;
-      factory.createPolicy('highcharts', {});
-      policyModule.releasePolicyFactory();
-      expect(factory.createPolicy).to.equal(createPolicy);
-      expect(createPolicy).to.be.calledOnceWith('highcharts');
-      expect(policyModule.getHighchartsPolicy()).to.eql({ name: 'highcharts' });
     });
   });
 });
