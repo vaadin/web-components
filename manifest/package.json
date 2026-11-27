@@ -1,6 +1,6 @@
 {
   "name": "@vaadin/manifest-tools",
-  "version": "25.4.0-beta2",
+  "version": "25.4.0-beta3",
   "private": true,
   "repository": {
     "type": "git",

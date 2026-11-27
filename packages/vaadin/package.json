@@ -1,6 +1,6 @@
 {
   "name": "@vaadin/vaadin",
-  "version": "25.4.0-beta2",
+  "version": "25.4.0-beta3",
   "publishConfig": {
     "access": "public"
   },
@@ -31,17 +31,17 @@
     "web-components"
   ],
   "dependencies": {
-    "@vaadin/board": "25.4.0-beta2",
-    "@vaadin/charts": "25.4.0-beta2",
-    "@vaadin/crud": "25.4.0-beta2",
-    "@vaadin/dashboard": "25.4.0-beta2",
-    "@vaadin/grid-pro": "25.4.0-beta2",
-    "@vaadin/map": "25.4.0-beta2",
-    "@vaadin/pdf-viewer": "25.4.0-beta2",
-    "@vaadin/rich-text-editor": "25.4.0-beta2",
-    "@vaadin/vaadin-core": "25.4.0-beta2"
+    "@vaadin/board": "25.4.0-beta3",
+    "@vaadin/charts": "25.4.0-beta3",
+    "@vaadin/crud": "25.4.0-beta3",
+    "@vaadin/dashboard": "25.4.0-beta3",
+    "@vaadin/grid-pro": "25.4.0-beta3",
+    "@vaadin/map": "25.4.0-beta3",
+    "@vaadin/pdf-viewer": "25.4.0-beta3",
+    "@vaadin/rich-text-editor": "25.4.0-beta3",
+    "@vaadin/vaadin-core": "25.4.0-beta3"
   },
   "devDependencies": {
-    "@vaadin/chai-plugins": "25.4.0-beta2"
+    "@vaadin/chai-plugins": "25.4.0-beta3"
   }
 }
