@@ -80,6 +80,12 @@ vaadin-select-item,
 vaadin-tab,
 vaadin-upload-file,
 ::part(input-field),
+/* Native form controls, keep in sync with form-controls.css and surface.css */
+:where(
+  .vaadin-themed-html
+    :is(button, input, select, textarea):not(.vaadin-unthemed-html, [slot='input'], [slot='textarea']),
+  :is(button, input, select, textarea).vaadin-themed-html:not([slot='input'], [slot='textarea'])
+),
 :where(
   .aura-accent-surface,
   .aura-accent-surface-solid,
