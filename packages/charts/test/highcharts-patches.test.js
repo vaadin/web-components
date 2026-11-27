@@ -108,6 +108,29 @@ describe('vaadin-chart option values', () => {
       chart.configuration.credits.update({ href: UNSUPPORTED_URL });
       expect(invalidAttributeErrors).to.be.above(0);
     });
+
+    it('should follow supported credits links on click', async () => {
+      await setCreditsHref('#chart-credits');
+      chart.configuration.credits.element.dispatchEvent(new MouseEvent('click'));
+      try {
+        expect(location.hash).to.equal('#chart-credits');
+      } finally {
+        history.replaceState(null, '', location.pathname + location.search);
+      }
+    });
+
+    it('should not follow unsupported credits links on click', async () => {
+      window.chartCreditsSpy = sinon.spy();
+      // eslint-disable-next-line no-script-url
+      await setCreditsHref('javascript:window.chartCreditsSpy()');
+      chart.configuration.credits.element.dispatchEvent(new MouseEvent('click'));
+      await aTimeout(50);
+      try {
+        expect(window.chartCreditsSpy).to.be.not.called;
+      } finally {
+        delete window.chartCreditsSpy;
+      }
+    });
   });
 
   describe('style options', () => {

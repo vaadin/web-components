@@ -180,6 +180,31 @@ describe('vaadin-chart exporting', () => {
     expect(document.body.hasAttribute(attributeName)).to.be.false;
   });
 
+  // Highcharts prints through a `matchMedia('print')` listener in Safari instead
+  (Highcharts.isSafari ? it.skip : it)('should copy the shadow styles to the body while printing from the menu', () => {
+    const printStub = sinon.stub(window, 'print');
+    const clock = sinon.useFakeTimers({ toFake: ['setTimeout'] });
+    try {
+      click(chartContainer.querySelector('.highcharts-exporting-group > .highcharts-no-tooltip'));
+      // Print chart
+      click(chartContainer.querySelectorAll('.highcharts-menu-item')[1]);
+      expect(chart.tempBodyStyle.isConnected).to.be.true;
+      expect(document.body.hasAttribute(attributeName)).to.be.true;
+
+      clock.tick(1);
+      expect(printStub).to.be.calledOnce;
+
+      clock.tick(1000);
+      expect(chart.tempBodyStyle).to.be.undefined;
+      expect(document.body.hasAttribute(attributeName)).to.be.false;
+    } finally {
+      // Let Highcharts restore the document body after a failed assertion
+      clock.runAll();
+      clock.restore();
+      printStub.restore();
+    }
+  });
+
   it('should copy the shadow styles to the body for a print', () => {
     const bodyStyles = () => document.body.querySelectorAll(':scope > style').length;
     const initialStyles = bodyStyles();
