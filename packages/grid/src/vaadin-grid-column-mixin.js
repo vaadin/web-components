@@ -259,9 +259,6 @@ export const ColumnBaseMixin = (superClass) =>
         '_textAlignChanged(textAlign)',
         '_lastFrozenChanged(_lastFrozen)',
         '_firstFrozenToEndChanged(_firstFrozenToEnd)',
-        '_onRendererOrBindingChanged(_renderer, _cells, _bodyContentHidden, path)',
-        '_onHeaderRendererOrBindingChanged(_headerRenderer, _headerCell, path, header)',
-        '_onFooterRendererOrBindingChanged(_footerRenderer, _footerCell)',
         '_resizableChanged(resizable)',
         '_reorderStatusChanged(_reorderStatus, _headerCell, _footerCell, _cells)',
         '_hiddenChanged(hidden, _headerCell, _footerCell, _cells)',
@@ -327,9 +324,18 @@ export const ColumnBaseMixin = (superClass) =>
     }
 
     /** @protected */
-    _renderHeaderAndFooter() {
-      this._renderHeaderCellContent(this._headerRenderer, this._headerCell);
-      this._renderFooterCellContent(this._footerRenderer, this._footerCell);
+    updated(props) {
+      super.updated(props);
+
+      if (props.has('_headerRenderer') || props.has('path') || props.has('header')) {
+        this._grid?.__invalidateHeaderCellContent?.({ column: this });
+        this._grid?.__renderHeaderFooter?.();
+      }
+
+      if (props.has('_footerRenderer')) {
+        this._grid?.__invalidateFooterCellContent?.({ column: this });
+        this._grid?.__renderHeaderFooter?.();
+      }
     }
 
     /** @private */
@@ -481,54 +487,6 @@ export const ColumnBaseMixin = (superClass) =>
       this._previousHidden = hidden;
     }
 
-    /** @protected */
-    _runRenderer(renderer, cell, model) {
-      const isVisibleBodyCell = model?.item && !cell.parentElement.hidden;
-      const shouldRender = isVisibleBodyCell || renderer === this._headerRenderer || renderer === this._footerRenderer;
-      if (!shouldRender) {
-        return;
-      }
-
-      const args = [cell._content, this];
-      if (isVisibleBodyCell) {
-        args.push(model);
-      }
-
-      renderer.apply(this, args);
-    }
-
-    /**
-     * Renders the content to the given cells using a renderer.
-     *
-     * @private
-     */
-    __renderCellsContent(renderer, cells) {
-      // Skip if the column is hidden or not attached to a grid.
-      if (this.hidden || !this._grid) {
-        return;
-      }
-
-      cells.forEach((cell) => {
-        if (!cell.parentElement) {
-          return;
-        }
-
-        const model = this._grid.__getRowModel(cell.parentElement);
-
-        if (!renderer) {
-          return;
-        }
-
-        if (cell._renderer !== renderer) {
-          this._clearCellContent(cell);
-        }
-
-        cell._renderer = renderer;
-
-        this._runRenderer(renderer, cell, model);
-      });
-    }
-
     /**
      * Clears the content of a cell.
      *
@@ -542,71 +500,9 @@ export const ColumnBaseMixin = (superClass) =>
       delete cell._content._$litPart$;
     }
 
-    /**
-     * Renders the header cell content using a renderer,
-     * and then updates the visibility of the parent row depending on
-     * whether all its children cells are empty or not.
-     *
-     * @protected
-     */
-    _renderHeaderCellContent(headerRenderer, headerCell) {
-      if (!headerCell || !headerRenderer) {
-        return;
-      }
-
-      this.__renderCellsContent(headerRenderer, [headerCell]);
-
-      this._grid?.__scheduleRenderHeaderFooter?.();
-    }
-
-    /** @protected */
-    _onHeaderRendererOrBindingChanged(headerRenderer, headerCell, ..._bindings) {
-      this._renderHeaderCellContent(headerRenderer, headerCell);
-    }
-
     /** @private */
     __headerFooterPartNameChanged() {
       this._grid?.__scheduleRenderHeaderFooter?.();
-    }
-
-    /**
-     * Renders the content of body cells using a renderer.
-     *
-     * @protected
-     */
-    _renderBodyCellsContent(renderer, cells) {
-      if (!cells || !renderer) {
-        return;
-      }
-
-      this.__renderCellsContent(renderer, cells);
-    }
-
-    /** @protected */
-    _onRendererOrBindingChanged(renderer, cells, ..._bindings) {
-      this._renderBodyCellsContent(renderer, cells);
-    }
-
-    /**
-     * Renders the footer cell content using a renderer
-     * and then updates the visibility of the parent row depending on
-     * whether all its children cells are empty or not.
-     *
-     * @protected
-     */
-    _renderFooterCellContent(footerRenderer, footerCell) {
-      if (!footerCell || !footerRenderer) {
-        return;
-      }
-
-      this.__renderCellsContent(footerRenderer, [footerCell]);
-
-      this._grid?.__scheduleRenderHeaderFooter?.();
-    }
-
-    /** @protected */
-    _onFooterRendererOrBindingChanged(footerRenderer, footerCell) {
-      this._renderFooterCellContent(footerRenderer, footerCell);
     }
 
     /** @private */
@@ -828,6 +724,21 @@ export const GridColumnMixin = (superClass) =>
           type: Array,
         },
       };
+    }
+
+    /** @protected */
+    updated(props) {
+      super.updated(props);
+
+      if (props.has('_renderer') || props.has('path')) {
+        this._grid?.__invalidateBodyCellContent?.({ column: this });
+        this._grid?.__renderBody?.();
+      }
+    }
+
+    /** @protected */
+    _getBodyCellRenderer(_cell) {
+      return this._renderer;
     }
 
     /**

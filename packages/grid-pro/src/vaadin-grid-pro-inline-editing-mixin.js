@@ -567,7 +567,7 @@ export const InlineEditingMixin = (superClass) =>
 
     /**
      * @param {!HTMLElement} row
-     * @param {{ skipRenderers?: boolean }} options
+     * @param {{ invalidateContent?: boolean }} options
      * @private
      */
     __updateRow(row, options) {

@@ -3,7 +3,7 @@ import { fixtureSync, nextFrame } from '@vaadin/testing-helpers';
 import sinon from 'sinon';
 import './grid-test-styles.js';
 import '../src/vaadin-grid.js';
-import { flushGrid, getBodyCellContent, getCell, getContainerCell } from './helpers.js';
+import { flushGrid, getBodyCellContent, getCell, getContainerCell, getPhysicalItems } from './helpers.js';
 
 function getHeaderCell(grid, index = 0) {
   return grid.$.header.querySelectorAll('[part~="cell"]')[index];
@@ -289,6 +289,86 @@ describe('renderers', () => {
       column.footerRenderer = (_root, _column) => {};
 
       expect(footerCell._content.textContent).to.be.empty;
+    });
+  });
+
+  describe('renderer calls', () => {
+    let rowCount;
+
+    beforeEach(() => {
+      // Use more items than fit into the viewport
+      grid.items = Array.from({ length: 100 }, (_, index) => ({ foo: `item ${index}` }));
+      column.renderer = sinon.spy();
+      flushGrid(grid);
+      rowCount = getPhysicalItems(grid).length;
+    });
+
+    it('should run the renderer once for each body cell on initial render', () => {
+      expect(column.renderer).to.have.callCount(rowCount);
+    });
+
+    it('should only run the renderer of the added column when adding a column', async () => {
+      column.renderer.resetHistory();
+
+      const newColumn = document.createElement('vaadin-grid-column');
+      newColumn.renderer = sinon.spy();
+      grid.appendChild(newColumn);
+      await nextFrame();
+
+      expect(newColumn.renderer).to.have.callCount(rowCount);
+      expect(column.renderer).to.be.not.called;
+    });
+
+    it('should not run the renderers when hiding and showing a column', async () => {
+      const otherColumn = document.createElement('vaadin-grid-column');
+      otherColumn.renderer = sinon.spy();
+      grid.appendChild(otherColumn);
+      await nextFrame();
+      column.renderer.resetHistory();
+      otherColumn.renderer.resetHistory();
+
+      column.hidden = true;
+      await nextFrame();
+      column.hidden = false;
+      await nextFrame();
+
+      expect(column.renderer).to.be.not.called;
+      expect(otherColumn.renderer).to.be.not.called;
+    });
+  });
+
+  describe('header and footer renderer calls', () => {
+    let otherColumn;
+
+    beforeEach(async () => {
+      column.headerRenderer = sinon.spy();
+      column.footerRenderer = sinon.spy();
+
+      otherColumn = document.createElement('vaadin-grid-column');
+      otherColumn.headerRenderer = sinon.spy();
+      otherColumn.footerRenderer = sinon.spy();
+      grid.appendChild(otherColumn);
+      await nextFrame();
+
+      [column, otherColumn].forEach((col) => {
+        col.headerRenderer.resetHistory();
+        col.footerRenderer.resetHistory();
+      });
+    });
+
+    it('should only run the header and footer renderers of the added column when adding a column', async () => {
+      const newColumn = document.createElement('vaadin-grid-column');
+      newColumn.headerRenderer = sinon.spy();
+      newColumn.footerRenderer = sinon.spy();
+      grid.appendChild(newColumn);
+      await nextFrame();
+
+      expect(newColumn.headerRenderer).to.be.calledOnce;
+      expect(newColumn.footerRenderer).to.be.calledOnce;
+      [column, otherColumn].forEach((col) => {
+        expect(col.headerRenderer).to.be.not.called;
+        expect(col.footerRenderer).to.be.not.called;
+      });
     });
   });
 

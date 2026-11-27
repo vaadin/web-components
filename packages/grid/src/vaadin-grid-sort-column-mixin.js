@@ -29,8 +29,14 @@ export const GridSortColumnMixin = (superClass) =>
       };
     }
 
-    static get observers() {
-      return ['_onHeaderRendererOrBindingChanged(_headerRenderer, _headerCell, path, header, direction)'];
+    /** @protected */
+    updated(props) {
+      super.updated(props);
+
+      if (props.has('direction')) {
+        this._grid?.__invalidateHeaderCellContent?.({ column: this });
+        this._grid?.__renderHeaderFooter?.();
+      }
     }
 
     constructor() {

@@ -54,6 +54,11 @@ import {
       expect(isBodyCellContentUpToDate(columnIndex)).to.be.true;
     }
 
+    function expectBodyCellRevealed(columnIndex) {
+      expect(isBodyCellContentHidden(columnIndex)).to.be.false;
+      expect(isBodyCellContentUpToDate(columnIndex)).to.be.true;
+    }
+
     function expectBodyCellNotRendered(columnIndex) {
       expect(isBodyCellRendered(columnIndex)).to.be.false;
       expect(isBodyCellContentHidden(columnIndex)).to.be.true;
@@ -292,14 +297,14 @@ import {
       it('should render columns revealed columns on resize', async () => {
         grid.style.width = `${grid.$.table.scrollWidth}px`;
         await nextResize(grid);
-        expectBodyCellUpdated(0);
-        expectBodyCellUpdated(1);
+        expectBodyCellRevealed(0);
+        expectBodyCellRevealed(1);
       });
 
       it('should render frozen columns', async () => {
         columns[0].frozen = true;
         await nextFrame();
-        expectBodyCellUpdated(0);
+        expectBodyCellRevealed(0);
       });
 
       it('should debounce scrolling', async () => {
@@ -321,7 +326,7 @@ import {
 
         // Wait for the second half of the debounce timeout so the debouncer is executed
         await aTimeout(UPDATE_CONTENT_VISIBILITY_DEBOUNCER_TIMEOUT / 2);
-        expectBodyCellUpdated(0);
+        expectBodyCellRevealed(0);
       });
 
       it('should update content of previously rendererd cells on revisit', async () => {
@@ -344,9 +349,10 @@ import {
         expect(columns.at(-1).renderer.called).to.be.false;
       });
 
-      it('should render cells of columns once on revisit', async () => {
+      it('should not re-render unchanged cells of columns on revisit', async () => {
         await scrollHorizontally(-grid.$.table.scrollWidth);
-        expect(columns[0].renderer.calledOnce).to.be.true;
+        expect(columns[0].renderer.called).to.be.false;
+        expectBodyCellRevealed(0);
       });
 
       it('should maintain the sequential DOM order of the cells', async () => {

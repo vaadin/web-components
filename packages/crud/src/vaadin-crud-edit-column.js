@@ -65,8 +65,14 @@ class CrudEditColumn extends GridColumn {
     };
   }
 
-  static get observers() {
-    return ['_onRendererOrBindingChanged(_renderer, _cells, _bodyContentHidden, _cells.*, path, ariaLabel)'];
+  /** @protected */
+  updated(props) {
+    super.updated(props);
+
+    if (props.has('ariaLabel')) {
+      this._grid?.__invalidateBodyCellContent?.({ column: this });
+      this._grid?.__renderBody?.();
+    }
   }
 
   /**

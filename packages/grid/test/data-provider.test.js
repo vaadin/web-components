@@ -636,14 +636,14 @@ describe('data provider', () => {
         await nextFrame();
         // There are currently two __updateRow calls for a row. The extra one (a direct update request)
         // is coming from _expandedItemsChanged.
-        expect(firstRowRendererSpy).to.have.callCount(4);
+        expect(firstRowRendererSpy).to.have.callCount(2);
       });
 
       it('should limit row updates on a small size', async () => {
         grid.size = 3;
         grid.expandedItems = [{ value: '0' }, { value: '1' }, { value: '1-0' }, { value: '2' }];
         await nextFrame();
-        expect(firstRowRendererSpy).to.have.callCount(4);
+        expect(firstRowRendererSpy).to.have.callCount(2);
       });
 
       it('should limit row updates on a small page size', async () => {
@@ -651,14 +651,14 @@ describe('data provider', () => {
         grid.expandedItems = [{ value: '0' }, { value: '1' }, { value: '1-0' }, { value: '2' }];
         await nextFrame();
         // Changing page size causes yet an additional update request
-        expect(firstRowRendererSpy).to.have.callCount(6);
+        expect(firstRowRendererSpy).to.have.callCount(4);
       });
 
       it('should limit row updates on a small page size, reverse property update order', async () => {
         grid.expandedItems = [{ value: '0' }, { value: '1' }, { value: '1-0' }, { value: '2' }];
         grid.pageSize = 1;
         await nextFrame();
-        expect(firstRowRendererSpy).to.have.callCount(6);
+        expect(firstRowRendererSpy).to.have.callCount(4);
       });
     });
   });
