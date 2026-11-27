@@ -7,7 +7,7 @@ import HttpUtilities from 'highcharts/es-modules/Core/HttpUtilities.js';
 import Highcharts from 'highcharts/es-modules/masters/highstock.src.js';
 
 describe('vaadin-chart exporting', () => {
-  let chart, chartContainer, fireEventSpy;
+  let chart, chartContainer, fireEventSpy, postStub;
   const attributeName = 'styled-mode';
 
   function simulateExportToPNG() {
@@ -44,8 +44,8 @@ describe('vaadin-chart exporting', () => {
   }
 
   before(() => {
-    // Prevent downloading on anchor click
-    sinon.stub(HttpUtilities, 'post');
+    // Prevent posting the export to the export server
+    postStub = sinon.stub(HttpUtilities, 'post');
     // Hook into Highcharts events
     fireEventSpy = sinon.spy(Highcharts, 'fireEvent');
   });
@@ -63,6 +63,31 @@ describe('vaadin-chart exporting', () => {
 
   afterEach(() => {
     fireEventSpy.resetHistory();
+    postStub.resetHistory();
+  });
+
+  describe('export path', () => {
+    it('should post the export to the export server by default', async () => {
+      await chart.configuration.exportChart();
+
+      expect(postStub).to.be.calledOnce;
+      expect(postStub.firstCall.args[0]).to.include('export-svg.highcharts.com');
+      expect(postStub.firstCall.args[1].svg).to.include('<svg');
+    });
+
+    it('should post the export from the download menu items', async () => {
+      const exported = oneEvent(chart, 'chart-after-export');
+      simulateExportToPNG();
+      await exported;
+      await nextRender();
+
+      expect(postStub).to.be.calledOnce;
+      expect(postStub.firstCall.args[1].type).to.equal('image/png');
+    });
+  });
+
+  it('should return no value from exportChart', () => {
+    expect(chart.configuration.exportChart()).to.be.undefined;
   });
 
   it('should temporarily copy shadow styles to the body before export', async () => {
@@ -120,6 +145,11 @@ describe('vaadin-chart exporting', () => {
     expect(svg.match(/fill="/gu)).to.have.length.above(20);
   });
 
+  it('should inline paint attributes into the SVG of the deprecated chart method', () => {
+    const svg = chart.configuration.getSVG();
+    expect(svg.match(/fill="/gu)).to.have.length.above(20);
+  });
+
   it('should dispatch export events once per export', () => {
     const events = [];
     chart.addEventListener('chart-before-export', () => events.push('before'));
@@ -150,6 +180,22 @@ describe('vaadin-chart exporting', () => {
     expect(document.body.hasAttribute(attributeName)).to.be.false;
   });
 
-  // TODO add test for print button.
-  // The original issue https://github.com/highcharts/highcharts/issues/13489 is fixed now.
+  it('should copy the shadow styles to the body for a print', () => {
+    const bodyStyles = () => document.body.querySelectorAll(':scope > style').length;
+    const initialStyles = bodyStyles();
+
+    Highcharts.fireEvent(chart.configuration, 'beforePrint');
+    const style = chart.tempBodyStyle;
+    expect(style.isConnected).to.be.true;
+    expect(document.body.hasAttribute(attributeName)).to.be.true;
+
+    // Another print can start before the first one ends
+    Highcharts.fireEvent(chart.configuration, 'beforePrint');
+    expect(bodyStyles()).to.equal(initialStyles + 1);
+
+    Highcharts.fireEvent(chart.configuration, 'afterPrint');
+    expect(style.isConnected).to.be.false;
+    expect(chart.tempBodyStyle).to.be.undefined;
+    expect(document.body.hasAttribute(attributeName)).to.be.false;
+  });
 });
