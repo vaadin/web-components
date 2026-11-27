@@ -30,8 +30,8 @@ yarn workspace @vaadin/manifest-tools compare --base origin/main
 | Path                                 | Purpose                                                                  |
 | ------------------------------------ | ------------------------------------------------------------------------ |
 | `custom-elements-manifest.config.js` | Analyzer config with the Vaadin plugins.                                 |
-| `scripts/split-cem.js`               | Splits the root `custom-elements.json` into one manifest per package.    |
-| `scripts/cem-api.js`                 | Writes API snapshots of both outputs and compares two of them.           |
+| `scripts/split-cem.ts`               | Splits the root `custom-elements.json` into one manifest per package.    |
+| `scripts/cem-api.ts`                 | Writes API snapshots of both outputs and compares two of them.           |
 | `lib/cem-helpers.ts`                 | Shared helpers that read packages and manifests.                         |
 | `lib/split-paths.ts`                 | Functions that map module paths and split the root manifest per package. |
 | `lib/api-snapshot.ts`                | Pure functions that build the snapshots, the diff and the PR comment.    |

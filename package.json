@@ -22,7 +22,7 @@
     "postinstall": "patch-package",
     "prepare": "husky",
     "release": "yarn release:themes && yarn release:cem && yarn release:meta && yarn release:web-types && yarn release:react",
-    "release:cem": "custom-elements-manifest analyze --config manifest/custom-elements-manifest.config.js && node manifest/scripts/split-cem.js",
+    "release:cem": "custom-elements-manifest analyze --config manifest/custom-elements-manifest.config.js && node manifest/scripts/split-cem.ts",
     "release:meta": "node scripts/generateMetaPackages.js",
     "release:react": "yarn workspace @vaadin/react-components build && yarn workspace @vaadin/react-components-pro build",
     "release:themes": "yarn workspace @vaadin/aura build && yarn workspace @vaadin/vaadin-lumo-styles build",

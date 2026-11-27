@@ -85,7 +85,7 @@ const subDirs = (dir: string): string[] =>
 /**
  * Lists the package directory names by scanning the file system, without lerna.
  * Unlike `listPackages()`, it works on any checkout, such as the base worktree
- * of `cem-api.js`.
+ * of `cem-api.ts`.
  * @param root the checkout to scan
  * @return the `packages/*` directories, sorted
  */

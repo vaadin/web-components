@@ -91,7 +91,7 @@ hand-edit them.
 
 | File                   | Generator                                                                                            | Purpose                                                                                             |
 | ---------------------- | ---------------------------------------------------------------------------------------------------- | --------------------------------------------------------------------------------------------------- |
-| `custom-elements.json` | `yarn release:cem` (`manifest/custom-elements-manifest.config.js` + `manifest/scripts/split-cem.js`) | Per-package CEM manifest. Drives `api-docs/`, the web-types files and the React wrapper generation. |
+| `custom-elements.json` | `yarn release:cem` (`manifest/custom-elements-manifest.config.js` + `manifest/scripts/split-cem.ts`) | Per-package CEM manifest. Drives `api-docs/`, the web-types files and the React wrapper generation. |
 | `web-types.json`       | `yarn release:web-types` (`scripts/buildWebtypes.js` reads `custom-elements.json`)          | IDE autocomplete for plain HTML.                                                                    |
 | `web-types.lit.json`   | Same as `web-types.json`                                                                             | IDE autocomplete for Lit 3 binding syntax.                                                          |
 

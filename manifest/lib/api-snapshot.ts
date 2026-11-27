@@ -1,5 +1,5 @@
 /**
- * Pure helpers of `scripts/cem-api.js`: project the manifests to text API
+ * Pure helpers of `scripts/cem-api.ts`: project the manifests to text API
  * snapshots, count and render the differences, and build the PR comment.
  *
  * Each element is a header line with its tag name, followed by one indented

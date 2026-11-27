@@ -11,7 +11,7 @@
   "author": "Vaadin Ltd",
   "type": "module",
   "scripts": {
-    "compare": "node scripts/cem-api.js compare",
+    "compare": "node scripts/cem-api.ts compare",
     "test": "node --test \"test/*.test.ts\"",
     "lint:types": "tsc -p tsconfig.json"
   },

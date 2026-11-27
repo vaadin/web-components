@@ -17,7 +17,7 @@ CEM's output, the per-package `custom-elements.json`, drives three things:
   web components supply the types.
 
 CEM is configured in `manifest/custom-elements-manifest.config.js` with the
-plugins in `manifest/plugins/`; `manifest/scripts/split-cem.js` splits the
+plugins in `manifest/plugins/`; `manifest/scripts/split-cem.ts` splits the
 merged manifest per package, and `scripts/buildWebtypes.js` turns it into the
 two web-types files.
 

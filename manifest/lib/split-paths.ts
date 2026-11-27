@@ -1,5 +1,5 @@
 /**
- * Functions of `split-cem.js`, which maps the module paths of the root
+ * Functions of `split-cem.ts`, which maps the module paths of the root
  * `custom-elements.json` to the packages under `packages/` and writes one
  * manifest per package.
  */
