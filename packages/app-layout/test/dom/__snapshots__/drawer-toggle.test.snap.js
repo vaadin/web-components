@@ -11,6 +11,8 @@ snapshots["vaadin-app-layout default"] =
   part="icon"
 >
 </div>
+<slot name="tooltip">
+</slot>
 `;
 /* end snapshot vaadin-app-layout default */
 

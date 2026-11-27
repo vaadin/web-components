@@ -117,6 +117,12 @@ describe('vaadin-chart exporting', () => {
     });
   });
 
+  it('should return a promise from exportChart', async () => {
+    const result = chart.configuration.exportChart();
+    expect(result).to.be.instanceOf(Promise);
+    await result;
+  });
+
   it('should temporarily copy shadow styles to the body before export', async () => {
     let styleCopiedToBody = false;
     let styleContent;
@@ -356,6 +362,54 @@ describe('vaadin-chart exporting', () => {
     expect(document.body.hasAttribute(attributeName)).to.be.false;
   });
 
-  // TODO add test for print button.
-  // The original issue https://github.com/highcharts/highcharts/issues/13489 is fixed now.
+  it('should copy the shadow styles to the body for a print', () => {
+    const bodyStyles = () => document.body.querySelectorAll(':scope > style').length;
+    const initialStyles = bodyStyles();
+
+    Highcharts.fireEvent(chart.configuration, 'beforePrint');
+    const style = chart.tempBodyStyle;
+    expect(style.isConnected).to.be.true;
+    expect(document.body.hasAttribute(attributeName)).to.be.true;
+
+    // Another print can start before the first one ends
+    Highcharts.fireEvent(chart.configuration, 'beforePrint');
+    expect(bodyStyles()).to.equal(initialStyles + 1);
+
+    Highcharts.fireEvent(chart.configuration, 'afterPrint');
+    expect(style.isConnected).to.be.false;
+    expect(chart.tempBodyStyle).to.be.undefined;
+    expect(document.body.hasAttribute(attributeName)).to.be.false;
+  });
+
+  // Highcharts prints through a `matchMedia('print')` listener in Safari instead
+  (Highcharts.isSafari ? describe.skip : describe)('print from the menu', () => {
+    let printStub, clock;
+
+    beforeEach(() => {
+      printStub = sinon.stub(window, 'print');
+      clock = sinon.useFakeTimers({ toFake: ['setTimeout'] });
+    });
+
+    afterEach(() => {
+      // Let Highcharts restore the document body after a failed assertion
+      clock.runAll();
+      clock.restore();
+      printStub.restore();
+    });
+
+    it('should copy the shadow styles to the body while printing from the menu', () => {
+      click(chartContainer.querySelector('.highcharts-exporting-group > .highcharts-no-tooltip'));
+      // Print chart
+      click(chartContainer.querySelectorAll('.highcharts-menu-item')[1]);
+      expect(chart.tempBodyStyle.isConnected).to.be.true;
+      expect(document.body.hasAttribute(attributeName)).to.be.true;
+
+      clock.tick(1);
+      expect(printStub).to.be.calledOnce;
+
+      clock.tick(1000);
+      expect(chart.tempBodyStyle).to.be.undefined;
+      expect(document.body.hasAttribute(attributeName)).to.be.false;
+    });
+  });
 });

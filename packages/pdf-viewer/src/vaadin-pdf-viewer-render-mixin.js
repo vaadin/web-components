@@ -175,6 +175,14 @@ export const PdfViewerRenderMixin = (superClass) =>
     }
 
     /**
+     * Moves focus to the pages, without scrolling them.
+     * @protected
+     */
+    _focusPages() {
+      this.$.content.focus({ preventScroll: true, focusVisible: isKeyboardActive() });
+    }
+
+    /**
      * Cancels rendering the page being rendered.
      * @protected
      */
@@ -272,7 +280,7 @@ export const PdfViewerRenderMixin = (superClass) =>
      */
     #releasePage(page) {
       if (page.element.contains(this.shadowRoot.activeElement)) {
-        this.$.content.focus({ preventScroll: true, focusVisible: isKeyboardActive() });
+        this._focusPages();
       }
       page.release();
       // Frees the data that the page keeps after rendering, such as its decoded images.

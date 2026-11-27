@@ -1,5 +1,5 @@
 import { sendKeys } from '@vaadin/test-runner-commands';
-import { fixtureSync, nextFrame, nextRender } from '@vaadin/testing-helpers';
+import { fixtureSync, nextFrame, nextRender, nextResize } from '@vaadin/testing-helpers';
 import { visualDiff } from '@web/test-runner-visual-regression';
 import '../not-animated-styles.css';
 import '../../enable-feature-flag.js';
@@ -7,7 +7,7 @@ import '../../../vaadin-pdf-viewer.js';
 import type { IntegerField } from '@vaadin/integer-field';
 import { Tooltip } from '@vaadin/tooltip/src/vaadin-tooltip.js';
 import type { PdfViewer } from '../../../vaadin-pdf-viewer.js';
-import { createPdf, loadAndRender, openSidebar } from '../../helpers.js';
+import { createPdf, loadAndRender, openSidebar, uriLink } from '../../helpers.js';
 
 describe('pdf-viewer', () => {
   let div: HTMLDivElement;
@@ -62,6 +62,23 @@ describe('pdf-viewer', () => {
     await visualDiff(div, 'sidebar-rtl');
   });
 
+  it('sidebar overlay', async () => {
+    viewer.style.width = '400px';
+    await nextResize(viewer);
+    await load();
+    await openSidebar(viewer);
+    await visualDiff(div, 'sidebar-overlay');
+  });
+
+  it('sidebar overlay RTL', async () => {
+    viewer.setAttribute('dir', 'rtl');
+    viewer.style.width = '400px';
+    await nextResize(viewer);
+    await load();
+    await openSidebar(viewer);
+    await visualDiff(div, 'sidebar-overlay-rtl');
+  });
+
   it('page error', async () => {
     await load();
     const field = viewer.querySelector<IntegerField>('[slot="toolbar-page"]')!;
@@ -73,16 +90,38 @@ describe('pdf-viewer', () => {
     await visualDiff(div, 'page-error');
   });
 
-  it('content focus', async () => {
-    await load();
-    viewer.focus();
-    await visualDiff(div, 'content-focus');
-  });
+  describe('focus', () => {
+    it('content', async () => {
+      await load();
+      viewer.focus();
+      await visualDiff(div, 'content-focus');
+    });
 
-  it('button focus', async () => {
-    await load();
-    viewer.querySelector('vaadin-integer-field')!.focus();
-    await sendKeys({ press: 'Shift+Tab' });
-    await visualDiff(div, 'button-focus');
+    it('button', async () => {
+      await load();
+      viewer.querySelector('vaadin-integer-field')!.focus();
+      await sendKeys({ press: 'Shift+Tab' });
+      await visualDiff(div, 'button-focus');
+    });
+
+    it('header', async () => {
+      await load();
+      viewer.shadowRoot!.querySelector<HTMLElement>('[part="header"]')!.focus({ focusVisible: true });
+      await visualDiff(div, 'header-focus');
+    });
+
+    it('thumbnail', async () => {
+      await load();
+      await openSidebar(viewer);
+      viewer.shadowRoot!.querySelector<HTMLElement>('[part~="thumbnail"]')!.focus({ focusVisible: true });
+      await visualDiff(div, 'thumbnail-focus');
+    });
+
+    it('link', async () => {
+      await loadAndRender(viewer, createPdf([{ content: '', annotations: [uriLink([72, 700, 272, 740])] }]));
+      viewer.focus();
+      await sendKeys({ press: 'Tab' });
+      await visualDiff(div, 'link-focus');
+    });
   });
 });

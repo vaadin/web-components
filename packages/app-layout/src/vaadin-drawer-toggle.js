@@ -10,6 +10,7 @@ import { defineCustomElement } from '@vaadin/component-base/src/define.js';
 import { DirMixin } from '@vaadin/component-base/src/dir-mixin.js';
 import { isEmptyTextNode } from '@vaadin/component-base/src/dom-utils.js';
 import { PolylitMixin } from '@vaadin/component-base/src/polylit-mixin.js';
+import { TooltipController } from '@vaadin/component-base/src/tooltip-controller.js';
 import { LumoInjectionMixin } from '@vaadin/vaadin-themable-mixin/lumo-injection-mixin.js';
 import { ThemableMixin } from '@vaadin/vaadin-themable-mixin/vaadin-themable-mixin.js';
 import { drawerToggle } from './styles/vaadin-drawer-toggle-base-styles.js';
@@ -37,6 +38,7 @@ import { drawerToggle } from './styles/vaadin-drawer-toggle-base-styles.js';
  * -------------|------------
  * `focus-ring` | Set when the element is focused using the keyboard
  * `focused`    | Set when the element is focused
+ * `has-tooltip`| Set when the element has a slotted tooltip
  *
  * The following custom CSS properties are available for styling:
  *
@@ -100,6 +102,7 @@ class DrawerToggle extends ButtonMixin(DirMixin(ThemableMixin(PolylitMixin(LumoI
         <div part="icon"></div>
       </slot>
       <div part="icon" ?hidden="${!this._showFallbackIcon}"></div>
+      <slot name="tooltip"></slot>
     `;
   }
 
@@ -108,6 +111,9 @@ class DrawerToggle extends ButtonMixin(DirMixin(ThemableMixin(PolylitMixin(LumoI
     super.ready();
 
     this._toggleFallbackIcon();
+
+    this._tooltipController = new TooltipController(this);
+    this.addController(this._tooltipController);
   }
 
   /** @private */

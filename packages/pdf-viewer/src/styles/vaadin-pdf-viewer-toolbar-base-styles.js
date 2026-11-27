@@ -31,8 +31,9 @@ export const pdfViewerToolbarStyles = css`
   }
 
   [part~='header']:focus-visible {
-    outline: var(--vaadin-focus-ring-width) solid var(--vaadin-focus-ring-color);
-    outline-offset: calc(var(--vaadin-focus-ring-width) * -1);
+    outline: var(--_focus-ring-width, var(--vaadin-focus-ring-width)) solid
+      var(--_focus-ring-color, var(--vaadin-focus-ring-color));
+    outline-offset: calc(var(--_focus-ring-width, var(--vaadin-focus-ring-width)) * -1);
   }
 
   [part~='title'] {
@@ -98,6 +99,12 @@ export const pdfViewerToolbarStyles = css`
   ::slotted([slot='toolbar-sidebar'][aria-expanded='true']) {
     --vaadin-button-background: var(--vaadin-background-container-strong);
     --vaadin-button-tertiary-background: var(--vaadin-background-container-strong);
+  }
+
+  @media (max-width: 450px), (max-height: 450px) {
+    slot:is([name='toolbar-previous-page'], [name='toolbar-next-page'], [name='toolbar-page'], [name='toolbar-zoom']) {
+      display: none;
+    }
   }
 
   @media (forced-colors: active) {

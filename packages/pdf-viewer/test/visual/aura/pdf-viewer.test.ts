@@ -1,5 +1,5 @@
 import { sendKeys } from '@vaadin/test-runner-commands';
-import { fixtureSync, nextFrame, nextRender } from '@vaadin/testing-helpers';
+import { fixtureSync, nextFrame, nextRender, nextResize } from '@vaadin/testing-helpers';
 import { visualDiff } from '@web/test-runner-visual-regression';
 import '@vaadin/aura/aura.css';
 import '../not-animated-styles.css';
@@ -61,6 +61,23 @@ describe('pdf-viewer', () => {
     await load();
     await openSidebar(viewer);
     await visualDiff(div, 'sidebar-rtl');
+  });
+
+  it('sidebar overlay', async () => {
+    viewer.style.width = '400px';
+    await nextResize(viewer);
+    await load();
+    await openSidebar(viewer);
+    await visualDiff(div, 'sidebar-overlay');
+  });
+
+  it('sidebar overlay RTL', async () => {
+    viewer.setAttribute('dir', 'rtl');
+    viewer.style.width = '400px';
+    await nextResize(viewer);
+    await load();
+    await openSidebar(viewer);
+    await visualDiff(div, 'sidebar-overlay-rtl');
   });
 
   it('page error', async () => {

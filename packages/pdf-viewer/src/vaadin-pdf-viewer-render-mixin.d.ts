@@ -51,6 +51,11 @@ export declare class PdfViewerRenderMixinClass {
   protected _renderVisible(visible: Array<{ index: number; ratio: number }>): void;
 
   /**
+   * Moves focus to the pages, without scrolling them.
+   */
+  protected _focusPages(): void;
+
+  /**
    * Cancels rendering the page being rendered.
    */
   protected _cancelRender(): void;

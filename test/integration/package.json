@@ -8,6 +8,7 @@
   "devDependencies": {
     "@vaadin/a11y-base": "25.4.0-beta2",
     "@vaadin/accordion": "25.4.0-beta2",
+    "@vaadin/app-layout": "25.4.0-beta2",
     "@vaadin/badge": "25.4.0-beta2",
     "@vaadin/button": "25.4.0-beta2",
     "@vaadin/chai-plugins": "25.4.0-beta2",

@@ -1,5 +1,5 @@
 import { expect } from '@vaadin/chai-plugins';
-import { sendKeys } from '@vaadin/test-runner-commands';
+import { sendKeys, setViewport } from '@vaadin/test-runner-commands';
 import { fixtureSync, nextFrame, nextRender, nextResize, oneEvent } from '@vaadin/testing-helpers';
 import sinon from 'sinon';
 import './enable-feature-flag.js';
@@ -32,6 +32,10 @@ describe('toolbar', () => {
   let zoomOutButton: Button;
   let zoomInButton: Button;
   let zoomSelect: Select;
+
+  function getControls() {
+    return [...viewer.querySelectorAll<HTMLElement>(':scope > [slot]')].filter((control) => control.checkVisibility());
+  }
 
   function createButton(text: string) {
     const button = document.createElement('button');
@@ -518,6 +522,44 @@ describe('toolbar', () => {
     });
   });
 
+  describe('small screen', () => {
+    let width: number;
+    let height: number;
+
+    before(() => {
+      width = window.innerWidth;
+      height = window.innerHeight;
+    });
+
+    beforeEach(async () => {
+      await loadAndRender(viewer, fixtureUrl('multi-page.pdf'));
+    });
+
+    afterEach(async () => {
+      await setViewport({ width, height });
+    });
+
+    it('should hide the page navigation and the zoom select on a narrow screen', async () => {
+      await setViewport({ width: 400, height });
+      expect(getControls().map((control) => control.slot)).to.have.members([
+        'toolbar-sidebar',
+        'toolbar-zoom-out',
+        'toolbar-zoom-in',
+        'toolbar-download',
+      ]);
+    });
+
+    it('should hide the page navigation and the zoom select on a low screen', async () => {
+      await setViewport({ width, height: 400 });
+      expect(getControls().map((control) => control.slot)).to.have.members([
+        'toolbar-sidebar',
+        'toolbar-zoom-out',
+        'toolbar-zoom-in',
+        'toolbar-download',
+      ]);
+    });
+  });
+
   describe('large text', () => {
     beforeEach(async () => {
       // The toolbar needs more than 60% of the height
@@ -526,12 +568,6 @@ describe('toolbar', () => {
       viewer.style.fontSize = '32px';
       await loadAndRender(viewer, fixtureUrl('multi-page.pdf'));
     });
-
-    function getControls() {
-      return [...viewer.querySelectorAll<HTMLElement>(':scope > [slot]')].filter((control) =>
-        control.checkVisibility(),
-      );
-    }
 
     it('should keep at least 40% of the viewer for the pages', () => {
       expect(content.getBoundingClientRect().height).to.be.at.least(viewer.getBoundingClientRect().height * 0.4 - 2);

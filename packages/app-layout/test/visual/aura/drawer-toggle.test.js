@@ -1,10 +1,17 @@
-import { fixtureSync } from '@vaadin/testing-helpers/dist/fixture.js';
+import { fixtureSync, nextRender } from '@vaadin/testing-helpers';
 import { visualDiff } from '@web/test-runner-visual-regression';
 import '@vaadin/aura/aura.css';
+import '@vaadin/tooltip/test/not-animated-styles.css';
 import '../../../vaadin-drawer-toggle.js';
+import { Tooltip } from '@vaadin/tooltip/src/vaadin-tooltip.js';
+import { mouseenter } from '@vaadin/tooltip/test/helpers.js';
 
 describe('drawer-toggle', () => {
   let div, element;
+
+  before(() => {
+    Tooltip.setDefaultHoverDelay(0);
+  });
 
   beforeEach(() => {
     div = document.createElement('div');
@@ -20,6 +27,17 @@ describe('drawer-toggle', () => {
   it('active', async () => {
     element.setAttribute('active', '');
     await visualDiff(div, 'active');
+  });
+
+  it('tooltip', async () => {
+    div.style.width = '120px';
+    div.style.height = '100px';
+    div.style.textAlign = 'center';
+    element.innerHTML = '<vaadin-tooltip slot="tooltip" text="Toggle"></vaadin-tooltip>';
+    await nextRender();
+    mouseenter(element);
+    await nextRender();
+    await visualDiff(div, 'tooltip');
   });
 
   it('primary', async () => {

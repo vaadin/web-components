@@ -3,6 +3,7 @@ import type { FocusMixinClass } from '@vaadin/a11y-base/src/focus-mixin.js';
 import type { KeyboardMixinClass } from '@vaadin/a11y-base/src/keyboard-mixin.js';
 import type { ElementMixinClass } from '@vaadin/component-base/src/element-mixin.js';
 import type { I18nMixinClass } from '@vaadin/component-base/src/i18n-mixin.js';
+import type { ResizeMixinClass } from '@vaadin/component-base/src/resize-mixin.js';
 import type {
   PdfViewer,
   PdfViewerDocumentErrorEvent,
@@ -69,6 +70,7 @@ assertType<PdfViewerDownloadMixinClass>(viewer);
 assertType<PdfViewerKeyboardMixinClass>(viewer);
 assertType<FocusMixinClass>(viewer);
 assertType<KeyboardMixinClass>(viewer);
+assertType<ResizeMixinClass>(viewer);
 assertType<I18nMixinClass<PdfViewerI18n>>(viewer);
 
 // Events

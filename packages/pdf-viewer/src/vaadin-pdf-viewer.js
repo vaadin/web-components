@@ -9,6 +9,7 @@
  * license.
  */
 import { html, LitElement } from 'lit';
+import { live } from 'lit/directives/live.js';
 import { FocusMixin } from '@vaadin/a11y-base/src/focus-mixin.js';
 import { isKeyboardActive } from '@vaadin/a11y-base/src/focus-utils.js';
 import { defineCustomElement } from '@vaadin/component-base/src/define.js';
@@ -95,22 +96,24 @@ const DEFAULT_I18N = {
  * `header-toggle` | The icon in the header that shows whether the toolbar is collapsed.
  * `toolbar`       | The toolbar above the pages.
  * `toolbar-group` | A group of related controls in the toolbar: sidebar and navigation, zoom, and actions.
- * `sidebar`       | The sidebar next to the pages, see `sidebarOpened`.
+ * `sidebar`       | The sidebar with the page thumbnails, see `sidebarOpened`.
  * `thumbnails`    | The scrollable list of page thumbnails in the sidebar.
  * `thumbnail`     | A page thumbnail. Also has the `current` part name for the current page.
+ * `backdrop`      | The layer that covers the pages while the sidebar shows over them.
  * `content`       | The scrollable area that contains the pages.
  * `page`          | A page of the document.
  * `loader`        | The loading indicator shown while the document loads.
  *
  * The following state attributes are available for styling:
  *
- * Attribute        | Description
- * -----------------|------------
- * `loading`        | Set while the document is loading.
- * `has-error`      | Set when the document could not be loaded.
- * `focused`        | Set when the page area is focused.
- * `focus-ring`     | Set when the page area is focused using the keyboard.
- * `sidebar-opened` | Set when the sidebar is shown.
+ * Attribute         | Description
+ * ------------------|------------
+ * `loading`         | Set while the document is loading.
+ * `has-error`       | Set when the document could not be loaded.
+ * `focused`         | Set when the page area is focused.
+ * `focus-ring`      | Set when the page area is focused using the keyboard.
+ * `sidebar-opened`  | Set when the sidebar is shown.
+ * `sidebar-overlay` | Set when the sidebar shows over the pages, see `sidebarOpened`.
  *
  * The following custom CSS properties are available for styling:
  *
@@ -129,6 +132,7 @@ const DEFAULT_I18N = {
  * | `--vaadin-pdf-viewer-toolbar-background`  |
  * | `--vaadin-pdf-viewer-toolbar-gap`         |
  * | `--vaadin-pdf-viewer-toolbar-padding`     |
+ * | `--vaadin-overlay-backdrop-background`    |
  *
  * See [Styling Components](https://vaadin.com/docs/latest/styling/styling-components) documentation.
  *
@@ -149,6 +153,10 @@ class PdfViewer extends PdfViewerMixin(
 ) {
   static get is() {
     return 'vaadin-pdf-viewer';
+  }
+
+  static get lumoInjector() {
+    return { ...super.lumoInjector, includeBaseStyles: true };
   }
 
   static get cvdlName() {
@@ -250,6 +258,7 @@ class PdfViewer extends PdfViewerMixin(
             aria-labelledby="title"
             aria-busy="${this.__loading ? 'true' : 'false'}"
             tabindex="${this.pageCount ? '0' : '-1'}"
+            ?inert="${live(this._sidebarOverlay && this.sidebarOpened)}"
             @focusin="${this.#onContentFocusIn}"
             @focusout="${this.#onContentFocusOut}"
           >
