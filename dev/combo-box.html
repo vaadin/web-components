@@ -8,12 +8,13 @@
     <script type="module" src="./common.js"></script>
   </head>
   <body>
-    <vaadin-combo-box label="Country"></vaadin-combo-box>
+    <vaadin-combo-box id="country" label="Country"></vaadin-combo-box>
+    <vaadin-combo-box id="appointment" label="Appointment time" item-disabled-path="booked"></vaadin-combo-box>
 
     <script type="module">
       import '@vaadin/combo-box';
 
-      const comboBox = document.querySelector('vaadin-combo-box');
+      const comboBox = document.querySelector('#country');
 
       comboBox.dataProvider = async (params, callback) => {
         const index = params.page * params.pageSize;
@@ -28,6 +29,12 @@
           }, 100);
         }
       };
+
+      document.querySelector('#appointment').items = [
+        { label: '9:00', value: '09:00' },
+        { label: '10:00 (fully booked)', value: '10:00', booked: true },
+        { label: '11:00', value: '11:00' },
+      ];
     </script>
   </body>
 </html>

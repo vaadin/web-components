@@ -31,6 +31,7 @@ import { ComboBoxItemMixin } from './vaadin-combo-box-item-mixin.js';
  * -------------|-------------
  * `selected`   | Set when the item is selected
  * `focused`    | Set when the item is focused
+ * `disabled`   | Set when the item cannot be selected by the user
  *
  * See [Styling Components](https://vaadin.com/docs/latest/styling/styling-components) documentation.
  *

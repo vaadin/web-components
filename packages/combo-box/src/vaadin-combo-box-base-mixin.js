@@ -616,6 +616,11 @@ export const ComboBoxBaseMixin = (superClass) =>
       this._closeOrCommit();
     }
 
+    /** @protected */
+    _isItemDisabled(_item) {
+      return false;
+    }
+
     /**
      * Override this method to detect whether valid value is provided.
      * @protected
@@ -769,8 +774,7 @@ export const ComboBoxBaseMixin = (superClass) =>
         return;
       }
 
-      if (e.detail.item instanceof ComboBoxPlaceholder) {
-        // Placeholder items should not be selectable.
+      if (e.detail.item instanceof ComboBoxPlaceholder || this._isItemDisabled(e.detail.item)) {
         return;
       }
 
