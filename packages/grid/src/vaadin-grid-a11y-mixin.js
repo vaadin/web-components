@@ -91,10 +91,15 @@ export const A11yMixin = (superClass) =>
      * @private
      */
     __a11yUpdateRowSelected(row, selected) {
+      // Non-selectable items that are not selected get no `aria-selected`:
+      // a missing attribute means "not selectable".
+      const hasAriaSelected = selected || this.__isItemSelectable(row._item);
+      const ariaSelected = hasAriaSelected && String(Boolean(selected));
+
       // Jaws reads selection only for rows, NVDA only for cells
-      row.setAttribute('aria-selected', Boolean(selected));
+      setOrRemoveAttribute(row, 'aria-selected', ariaSelected);
       iterateRowCells(row, (cell) => {
-        cell.setAttribute('aria-selected', Boolean(selected));
+        setOrRemoveAttribute(cell, 'aria-selected', ariaSelected);
       });
     }
 
