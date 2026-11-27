@@ -175,6 +175,25 @@ Highcharts.wrap(Highcharts.Tooltip.prototype, 'getPosition', function (proceed, 
   }
   return position;
 });
+
+// An image symbol that fails to load never decrements `asyncCounter`, so the chart copy never
+// loads and the export never finishes. Count a failed image as loaded.
+// TODO: Remove once fixed upstream, see https://github.com/highcharts/highcharts/issues/25709
+Highcharts.wrap(Highcharts.SVGRenderer.prototype, 'symbol', function (proceed, symbol, ...args) {
+  const element = proceed.call(this, symbol, ...args);
+  if (this.forExport && element.isImg && (element.imgwidth === undefined || element.imgheight === undefined)) {
+    const image = new Image();
+    image.onerror = () => {
+      this.asyncCounter -= 1;
+      const chart = Highcharts.charts[this.chartIndex];
+      if (!this.asyncCounter && chart && !chart.hasLoaded) {
+        chart.onload();
+      }
+    };
+    image.src = symbol.match(/^url\((.*?)\)$/u)[1];
+  }
+  return element;
+});
 /* eslint-enable @typescript-eslint/no-invalid-this, prefer-arrow-callback */
 
 // Init Highcharts global language defaults

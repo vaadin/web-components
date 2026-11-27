@@ -231,6 +231,23 @@ describe('vaadin-chart exporting', () => {
     });
   });
 
+  describe('marker image that fails to load', () => {
+    beforeEach(async () => {
+      chart.updateConfiguration({ series: [{ data: [1, 2, 3], marker: { symbol: 'url(missing-marker.png)' } }] });
+      await nextRender();
+    });
+
+    it('should finish the export', async () => {
+      const exported = oneEvent(chart, 'chart-after-export');
+      chart.configuration.exportChart();
+      await exported;
+      await nextRender();
+
+      expect(postStub).to.be.calledOnce;
+      expect(document.body.hasAttribute(attributeName)).to.be.false;
+    });
+  });
+
   describe('overlapping exports', () => {
     let url, stylesPresent, removeListener;
 
