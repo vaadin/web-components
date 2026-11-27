@@ -143,7 +143,8 @@ export const GridSelectionColumnBaseMixin = (superClass) =>
     }
 
     /**
-     * Renders the Select All checkbox to the header cell.
+     * Override method from `ColumnBaseMixin` to render
+     * the Select All checkbox into the header cell.
      *
      * @override
      */
@@ -164,9 +165,8 @@ export const GridSelectionColumnBaseMixin = (superClass) =>
       checkbox.indeterminate = this._indeterminate;
       checkbox.style.visibility = this._selectAllHidden ? 'hidden' : '';
 
-      // When the Select All checkbox is hidden, the header cell would otherwise
-      // be announced as blank. Render a screen-reader-only label into the cell
-      // so that screen readers announce the `selectAllUnavailable` text.
+      // Screen readers announce the header cell as blank when the Select All
+      // checkbox is hidden, so render `selectAllUnavailable` as sr-only text.
       let label = this._headerCell.querySelector(':scope > .sr-only');
       if (this._selectAllHidden && selectAllUnavailable) {
         if (!label) {
@@ -181,7 +181,8 @@ export const GridSelectionColumnBaseMixin = (superClass) =>
     }
 
     /**
-     * Renders the Select Row checkbox to the body cell.
+     * Override method from `ColumnBaseMixin` to render
+     * the Select Row checkbox into the body cell.
      *
      * @override
      */
@@ -211,7 +212,7 @@ export const GridSelectionColumnBaseMixin = (superClass) =>
     /**
      * Sets the Select Row checkbox accessible name based on the grid i18n.
      * The `{rowHeader}` placeholder is replaced with the row header cell text content
-     * or row index if there is no row header column or it's cell is empty.
+     * or row index if there is no row header column or its cell is empty.
      *
      * @private
      */
@@ -222,9 +223,8 @@ export const GridSelectionColumnBaseMixin = (superClass) =>
         return;
       }
 
-      // Defer reading the row header cell text until all cell renderers of
-      // the row have run in the current task, as the selection column may
-      // render before the row header column.
+      // Wait for all cell renderers of the row, as the row header column
+      // may render after the selection column.
       queueMicrotask(() => {
         const row = getClosestCell(root)?.__parentRow;
         if (!checkbox.isConnected || !row) {
@@ -294,7 +294,7 @@ export const GridSelectionColumnBaseMixin = (superClass) =>
         // Start the auto scroller
         this.__dragAutoScroller();
       } else if (event.detail.state === 'end') {
-        // if drag start and end stays within the same item, then toggle its state
+        // If the drag starts and ends on the same item, toggle its state
         if (this.__dragStartItem) {
           this.__toggleItem(this.__dragStartItem, this.__selectOnDrag);
         }
@@ -375,15 +375,12 @@ export const GridSelectionColumnBaseMixin = (superClass) =>
         return;
       }
 
-      // Get the row being hovered over
       const renderedRows = this._grid._getRenderedRows();
       const hoveredRow = renderedRows.find((row) => {
         const rowRect = row.getBoundingClientRect();
         return this.__dragCurrentY >= rowRect.top && this.__dragCurrentY <= rowRect.bottom;
       });
 
-      // Get the index of the row being hovered over or the first/last
-      // visible row if hovering outside the grid
       let hoveredIndex = hoveredRow?.index;
       const scrollableArea = this.__getScrollableArea();
       if (this.__dragCurrentY < scrollableArea.top) {
@@ -497,7 +494,7 @@ export const GridSelectionColumnBaseMixin = (superClass) =>
     }
 
     /**
-     * IOS needs indeterminate + checked at the same time
+     * iOS needs indeterminate + checked at the same time
      * @private
      */
     __isChecked(selectAll, indeterminate) {
