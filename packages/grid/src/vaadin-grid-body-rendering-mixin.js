@@ -80,16 +80,22 @@ export const BodyRenderingMixin = (superClass) =>
       const columns = this._columnTree.at(-1).toSorted((a, b) => a._order - b._order);
       const visibleColumns = columns.filter((column) => !column.hidden);
       const { index } = row;
+      const model = this.__getRowModel(row);
 
       return {
         rowId: row.__id,
         item: this.__getRowItem(row),
-        model: this.__getRowModel(row),
+        model,
         ariaRowIndex: index === undefined ? undefined : index + this.__a11yGetHeaderRowCount(this._columnTree) + 1,
         isFirstRow: index === 0,
         isLastRow: index === this._flatSize - 1,
         isOddRow: index % 2 === 1,
         isEvenRow: index % 2 === 0,
+        isExpanded: !!model.expanded,
+        isCollapsed: !!this.__isRowExpandable(row),
+        isSelected: !!model.selected,
+        isNonselectable: this.__isItemSelectable(model.item) === false,
+        isDetailsOpened: !!model.detailsOpened,
         cells: columns.map((column) => {
           return {
             column,
@@ -109,6 +115,11 @@ export const BodyRenderingMixin = (superClass) =>
       isLastRow,
       isOddRow,
       isEvenRow,
+      isExpanded,
+      isCollapsed,
+      isSelected,
+      isNonselectable,
+      isDetailsOpened,
       cells,
     } = {}) => {
       const rowParts = {
@@ -116,6 +127,11 @@ export const BodyRenderingMixin = (superClass) =>
         'last-row': isLastRow,
         'odd-row': isOddRow,
         'even-row': isEvenRow,
+        'expanded-row': isExpanded,
+        'collapsed-row': isCollapsed,
+        'selected-row': isSelected,
+        'nonselectable-row': isNonselectable,
+        'details-opened-row': isDetailsOpened,
       };
 
       return html`
@@ -129,6 +145,11 @@ export const BodyRenderingMixin = (superClass) =>
           ?last="${isLastRow}"
           ?odd="${isOddRow}"
           ?even="${isEvenRow}"
+          ?expanded="${isExpanded}"
+          ?collapsed="${isCollapsed}"
+          ?selected="${isSelected}"
+          ?nonselectable="${isNonselectable}"
+          ?details-opened="${isDetailsOpened}"
           ?loading="${!item}"
           ${bodyRow()}
         >
@@ -147,6 +168,11 @@ export const BodyRenderingMixin = (superClass) =>
                 'last-row-cell': isLastRow,
                 'odd-row-cell': isOddRow,
                 'even-row-cell': isEvenRow,
+                'expanded-row-cell': isExpanded,
+                'collapsed-row-cell': isCollapsed,
+                'selected-row-cell': isSelected,
+                'nonselectable-row-cell': isNonselectable,
+                'details-opened-row-cell': isDetailsOpened,
                 'loading-row-cell': !item,
               };
 

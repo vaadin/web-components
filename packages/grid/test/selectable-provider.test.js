@@ -63,7 +63,6 @@ describe('selectable-provider', () => {
 
     it('should update checkboxes when changing isItemSelectable', () => {
       grid.isItemSelectable = (item) => item.index < 5;
-      flushGrid(grid);
 
       for (let i = 0; i < grid.items.length; i++) {
         expect(getItemCheckbox(i).checkVisibility({ visibilityProperty: true })).to.equal(i < 5);
