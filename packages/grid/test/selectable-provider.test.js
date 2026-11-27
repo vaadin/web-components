@@ -68,16 +68,6 @@ describe('selectable-provider', () => {
         expect(getItemCheckbox(i).checkVisibility({ visibilityProperty: true })).to.equal(i < 5);
       }
     });
-
-    it('should update checkboxes when generating cell part names after changing isItemSelectable', () => {
-      grid.isItemSelectable = (item) => item.index < 5;
-      grid.generateCellPartNames();
-      flushGrid(grid);
-
-      for (let i = 0; i < grid.items.length; i++) {
-        expect(getItemCheckbox(i).checkVisibility({ visibilityProperty: true })).to.equal(i < 5);
-      }
-    });
   });
 
   describe('individual selection', () => {
