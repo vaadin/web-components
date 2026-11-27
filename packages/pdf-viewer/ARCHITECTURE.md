@@ -115,8 +115,8 @@ how to generate them.
     flag it in the DOM.
   - The download button is after `toolbar-actions`. To replace it, an application hides it with
     `downloadButtonHidden` and adds its own button that calls `download()` to `toolbar-actions`.
-  - On a coarse pointer and a screen of at most 450px, the toolbar hides the page buttons, the page field and the
-    zoom select. The breakpoint is the one of the fullscreen `vaadin-date-picker`.
+  - On a screen of at most 450px wide or high, the toolbar hides the page buttons, the page field and the zoom
+    select. The media query is the one of the fullscreen `vaadin-date-picker`.
     - The rule is a media query, not a container query. Inline-size containment on the toolbar would stop it from
       setting the width of a viewer that takes its width from its content, for example in a dialog.
     - The rule hides the `<slot>` elements, so the styles of an application can not show the controls again.
