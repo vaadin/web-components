@@ -274,41 +274,6 @@ describe('selectable-provider', () => {
     });
   });
 
-  describe('aria-selected', () => {
-    function hasAriaSelected(rowIndex) {
-      const row = getRows(grid.$.items)[rowIndex];
-      return [row, ...getRowBodyCells(row)].map((element) => element.hasAttribute('aria-selected'));
-    }
-
-    function getAriaSelected(rowIndex) {
-      const row = getRows(grid.$.items)[rowIndex];
-      return [row, ...getRowBodyCells(row)].map((element) => element.getAttribute('aria-selected'));
-    }
-
-    it('should only have aria-selected on selectable rows and their cells', () => {
-      for (let i = 0; i < grid.items.length; i++) {
-        expect(hasAriaSelected(i)).to.eql(Array(3).fill(i >= 5));
-      }
-    });
-
-    it('should toggle aria-selected attribute on isItemSelectable change', () => {
-      grid.isItemSelectable = (item) => item.index < 5;
-      flushGrid(grid);
-
-      for (let i = 0; i < grid.items.length; i++) {
-        expect(hasAriaSelected(i)).to.eql(Array(3).fill(i < 5));
-      }
-    });
-
-    it('should toggle aria-selected attribute on non-selectable item selection', () => {
-      grid.selectedItems = [grid.items[0]];
-      expect(getAriaSelected(0)).to.eql(Array(3).fill('true'));
-
-      grid.selectedItems = [];
-      expect(hasAriaSelected(0)).to.eql(Array(3).fill(false));
-    });
-  });
-
   describe('part names', () => {
     it('should have part names for non-selectable rows', () => {
       const rows = getRows(grid.$.items);

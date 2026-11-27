@@ -3,7 +3,7 @@
  * Copyright (c) 2016 - 2026 Vaadin Ltd.
  * This program is available under Apache License Version 2.0, available at https://vaadin.com/license/
  */
-import { findTreeToggleCell, getClosestCell, iterateChildren } from './vaadin-grid-helpers.js';
+import { findTreeToggleCell, getClosestCell, iterateChildren, iterateRowCells } from './vaadin-grid-helpers.js';
 
 export const A11yMixin = (superClass) =>
   class A11yMixin extends superClass {
@@ -81,6 +81,19 @@ export const A11yMixin = (superClass) =>
           'aria-rowindex',
           this.__a11yGetHeaderRowCount(this._columnTree) + bodyRowCount + index + 1,
         );
+      });
+    }
+
+    /**
+     * @param {!HTMLElement} row
+     * @param {boolean} selected
+     * @private
+     */
+    __a11yUpdateRowSelected(row, selected) {
+      // Jaws reads selection only for rows, NVDA only for cells
+      row.setAttribute('aria-selected', Boolean(selected));
+      iterateRowCells(row, (cell) => {
+        cell.setAttribute('aria-selected', Boolean(selected));
       });
     }
 
