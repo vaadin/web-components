@@ -299,6 +299,13 @@ snapshots["vaadin-pdf-viewer shadow default"] =
 </div>
 <div class="main-area">
   <div
+    aria-hidden="true"
+    hidden=""
+    id="backdrop"
+    part="backdrop"
+  >
+  </div>
+  <div
     hidden=""
     id="sidebar"
     part="sidebar"
@@ -384,6 +391,13 @@ snapshots["vaadin-pdf-viewer shadow document"] =
 >
 </div>
 <div class="main-area">
+  <div
+    aria-hidden="true"
+    hidden=""
+    id="backdrop"
+    part="backdrop"
+  >
+  </div>
   <div
     hidden=""
     id="sidebar"
@@ -592,6 +606,13 @@ snapshots["vaadin-pdf-viewer shadow header title"] =
 >
 </div>
 <div class="main-area">
+  <div
+    aria-hidden="true"
+    hidden=""
+    id="backdrop"
+    part="backdrop"
+  >
+  </div>
   <div
     hidden=""
     id="sidebar"
@@ -802,6 +823,13 @@ snapshots["vaadin-pdf-viewer shadow header hidden"] =
 </div>
 <div class="main-area">
   <div
+    aria-hidden="true"
+    hidden=""
+    id="backdrop"
+    part="backdrop"
+  >
+  </div>
+  <div
     hidden=""
     id="sidebar"
     part="sidebar"
@@ -1010,6 +1038,13 @@ snapshots["vaadin-pdf-viewer shadow toolbar collapsed"] =
 >
 </div>
 <div class="main-area">
+  <div
+    aria-hidden="true"
+    hidden=""
+    id="backdrop"
+    part="backdrop"
+  >
+  </div>
   <div
     hidden=""
     id="sidebar"
@@ -1276,6 +1311,17 @@ snapshots["vaadin-pdf-viewer sidebar thumbnails"] =
 </div>
 `;
 /* end snapshot vaadin-pdf-viewer sidebar thumbnails */
+
+snapshots["vaadin-pdf-viewer sidebar overlay"] = 
+`<div
+  aria-label="Sidebar"
+  id="sidebar"
+  part="sidebar"
+  role="dialog"
+>
+</div>
+`;
+/* end snapshot vaadin-pdf-viewer sidebar overlay */
 
 snapshots["vaadin-pdf-viewer page tagged"] = 
 `<div

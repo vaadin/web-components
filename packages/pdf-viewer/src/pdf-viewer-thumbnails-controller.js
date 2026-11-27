@@ -177,6 +177,14 @@ export class PdfViewerThumbnailsController {
     this.#updateLabels();
   }
 
+  /**
+   * Focuses the thumbnail that is in the tab order.
+   * @param {FocusOptions} [options]
+   */
+  focus(options) {
+    this.#list.querySelector('[tabindex="0"]')?.focus(options);
+  }
+
   /** Renders the visible thumbnails again, e.g. at a new device pixel ratio. */
   refresh() {
     this.#renderNext();

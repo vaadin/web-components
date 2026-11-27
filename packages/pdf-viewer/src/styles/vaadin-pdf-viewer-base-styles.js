@@ -39,9 +39,11 @@ const pdfViewerBaseStyles = css`
   }
 
   .main-area {
+    position: relative;
     display: flex;
     flex: 1 1 0;
     min-height: 40%;
+    overflow: clip;
   }
 
   .content-area {

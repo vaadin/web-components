@@ -8,4 +8,13 @@
     --_focus-ring-color: var(--vaadin-focus-ring-color, var(--lumo-primary-color-50pct));
     --_focus-ring-width: var(--vaadin-focus-ring-width, 2px);
   }
+
+  [part~='backdrop'] {
+    background: var(--vaadin-overlay-backdrop-background, var(--lumo-shade-20pct));
+  }
+
+  :host([sidebar-overlay]) [part~='sidebar'] {
+    border-inline-end: none;
+    box-shadow: var(--lumo-box-shadow-s);
+  }
 }

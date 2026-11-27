@@ -90,7 +90,7 @@ how to generate them.
   - The render queue renders a page again only once its layers are done. One signal therefore covers the time
     between two releases.
 - `PdfViewerKeyboardMixin` handles the keyboard shortcuts.
-- `PdfViewerSidebarMixin` adds `sidebarOpened`, `sidebarButtonHidden`, the sidebar button and the sidebar next to the pages.
+- `PdfViewerSidebarMixin` adds `sidebarOpened`, `sidebarButtonHidden`, the sidebar button and the sidebar with the page thumbnails.
   - `PdfViewerThumbnailsController` fills the sidebar with a thumbnail for each page. It renders the thumbnails
     near the visible part of the list one at a time, apart from the render queue of the pages.
   - A thumbnail can render at the same time as a page. The pdf.js viewer renders thumbnails only while no page waits.
@@ -98,6 +98,28 @@ how to generate them.
   - Rendering stops while the sidebar is hidden. When it shows again, the thumbnails that left the view are released.
   - A thumbnail frees the pdf.js data of its page once it has rendered, unless the pages hold that page, as in the
     pdf.js viewer. The canvas keeps the image. The pages free the data of a page when they release it.
+  - A viewer narrower than 30rem shows the sidebar over the pages.
+    - The styles set this width in the registered `--_vaadin-pdf-viewer-sidebar-overlay-width` property, as
+      `vaadin-form-layout` sets `--_min-width-labels-aside`.
+    - `ResizeMixin` compares the viewer width with it when the viewer resizes. The viewer width does not depend
+      on the mode, unlike the width of the pages. A hidden viewer keeps its mode.
+  - In the overlay mode, the sidebar is positioned absolutely at the start side, also in RTL. The pages keep their
+    width, so they do not render again.
+  - A resize does not change `sidebarOpened`. An open sidebar stays open over the pages, as the detail of
+    `vaadin-master-detail-layout` does.
+  - While the sidebar shows over the pages, the pages are `inert`, so focus stays in the toolbar and the sidebar.
+    When the sidebar covers the pages while they have focus, focus moves to the current thumbnail.
+    The sidebar button also moves focus to the current thumbnail when it opens the sidebar over the pages, as
+    `vaadin-app-layout` does for its drawer. Next to the pages, focus stays on the button.
+  - Over the pages, the sidebar is a dialog with the name from `i18n.sidebar`, as the detail of
+    `vaadin-master-detail-layout`. It has no `aria-modal`, as the toolbar stays reachable.
+  - A backdrop covers the pages, as in `vaadin-master-detail-layout`. It takes the clicks on them, closes the sidebar
+    and focuses the pages, as a click on the pages does.
+  - Escape closes the sidebar only from the sidebar or its button, and focus moves to the button. Escape from other
+    toolbar controls, such as the zoom select, leaves the sidebar open. The handler calls `preventDefault()`, so a
+    surrounding dialog stays open.
+  - A chosen thumbnail closes the sidebar in the overlay mode, and focus moves to the pages, as after a followed
+    link.
 - `PdfViewerToolbarMixin` renders the header and the toolbar. Its controls are in the light DOM, so a theme
   styles the page field like any other `vaadin-integer-field`. The `slotContent()` directive renders them, so
   application children added later keep their place.
