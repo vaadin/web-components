@@ -50,8 +50,16 @@ export const BodyRenderingMixin = (superClass) =>
       });
     }
 
-    /** @private */
-    __renderBodyRow(row) {
+    /**
+     * @param {!HTMLTableRowElement} row
+     * @param {{ updateItemStates?: boolean }} options
+     * @private
+     */
+    __renderBodyRow(row, { updateItemStates = false } = {}) {
+      if (updateItemStates) {
+        row.__itemStates = this.#getRowItemStates(row);
+      }
+
       const state = this.#getRowState(row);
       render(this.#bodyRowTemplate(state), row.__renderRoot, { host: this });
 
@@ -90,6 +98,7 @@ export const BodyRenderingMixin = (superClass) =>
         isLastRow: index === this._flatSize - 1,
         isOddRow: index % 2 === 1,
         isEvenRow: index % 2 === 0,
+        ...row.__itemStates,
         cells: columns.map((column) => {
           return {
             column,
@@ -97,6 +106,24 @@ export const BodyRenderingMixin = (superClass) =>
             isLastCell: column === visibleColumns.at(-1),
           };
         }),
+      };
+    }
+
+    /**
+     * Returns the row states that depend on the row item. They are stored
+     * on the row and only refreshed on a full row update, not on every render:
+     * the grid compares the row state attributes with the current item state
+     * to find the rows whose renderers and ARIA attributes are out of date.
+     */
+    #getRowItemStates(row) {
+      const { item, expanded, selected, detailsOpened } = this.__getRowModel(row);
+
+      return {
+        isExpanded: !!expanded,
+        isCollapsed: !!this.__isRowExpandable(row),
+        isSelected: !!selected,
+        isNonselectable: this.__isItemSelectable(item) === false,
+        isDetailsOpened: !!detailsOpened,
       };
     }
 
@@ -109,6 +136,11 @@ export const BodyRenderingMixin = (superClass) =>
       isLastRow,
       isOddRow,
       isEvenRow,
+      isExpanded,
+      isCollapsed,
+      isSelected,
+      isNonselectable,
+      isDetailsOpened,
       cells,
     } = {}) => {
       const rowParts = {
@@ -116,6 +148,11 @@ export const BodyRenderingMixin = (superClass) =>
         'last-row': isLastRow,
         'odd-row': isOddRow,
         'even-row': isEvenRow,
+        'expanded-row': isExpanded,
+        'collapsed-row': isCollapsed,
+        'selected-row': isSelected,
+        'nonselectable-row': isNonselectable,
+        'details-opened-row': isDetailsOpened,
       };
 
       return html`
@@ -129,6 +166,11 @@ export const BodyRenderingMixin = (superClass) =>
           ?last="${isLastRow}"
           ?odd="${isOddRow}"
           ?even="${isEvenRow}"
+          ?expanded="${isExpanded}"
+          ?collapsed="${isCollapsed}"
+          ?selected="${isSelected}"
+          ?nonselectable="${isNonselectable}"
+          ?details-opened="${isDetailsOpened}"
           ?loading="${!item}"
           ${bodyRow()}
         >
@@ -147,6 +189,11 @@ export const BodyRenderingMixin = (superClass) =>
                 'last-row-cell': isLastRow,
                 'odd-row-cell': isOddRow,
                 'even-row-cell': isEvenRow,
+                'expanded-row-cell': isExpanded,
+                'collapsed-row-cell': isCollapsed,
+                'selected-row-cell': isSelected,
+                'nonselectable-row-cell': isNonselectable,
+                'details-opened-row-cell': isDetailsOpened,
                 'loading-row-cell': !item,
               };
 

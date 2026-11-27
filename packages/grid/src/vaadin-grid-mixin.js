@@ -22,7 +22,7 @@ import { DynamicColumnsMixin } from './vaadin-grid-dynamic-columns-mixin.js';
 import { EventContextMixin } from './vaadin-grid-event-context-mixin.js';
 import { FilterMixin } from './vaadin-grid-filter-mixin.js';
 import { HeaderFooterRenderingMixin } from './vaadin-grid-header-footer-rendering-mixin.js';
-import { getClosestCell, iterateChildren, updateBooleanRowStates } from './vaadin-grid-helpers.js';
+import { getClosestCell, iterateChildren } from './vaadin-grid-helpers.js';
 import { KeyboardNavigationMixin } from './vaadin-grid-keyboard-navigation-mixin.js';
 import { ResizeMixin } from './vaadin-grid-resize-mixin.js';
 import { RowDetailsMixin } from './vaadin-grid-row-details-mixin.js';
@@ -397,17 +397,6 @@ export const GridMixin = (superClass) =>
     }
 
     /** @private */
-    __updateRowStateParts(row, { item, expanded, selected, detailsOpened }) {
-      updateBooleanRowStates(row, {
-        expanded,
-        collapsed: this.__isRowExpandable(row),
-        selected,
-        nonselectable: this.__isItemSelectable(item) === false,
-        'details-opened': detailsOpened,
-      });
-    }
-
-    /** @private */
     __computeEmptyState(flatSize, hasEmptyStateContent) {
       return flatSize === 0 && hasEmptyStateContent;
     }
@@ -451,7 +440,7 @@ export const GridMixin = (superClass) =>
         row._item = item;
       }
 
-      this.__renderBodyRow(row);
+      this.__renderBodyRow(row, { updateItemStates: !!item });
 
       if (!item) {
         return;
@@ -463,8 +452,6 @@ export const GridMixin = (superClass) =>
 
       this.__a11yUpdateRowLevel(row, model.level);
       this.__a11yUpdateRowSelected(row, model.selected);
-
-      this.__updateRowStateParts(row, model);
 
       this._filterDragAndDrop(row, model);
       this.__updateDragSourceParts(row, model);
