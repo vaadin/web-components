@@ -39,6 +39,7 @@ export const SelectionMixin = (superClass) =>
          */
         isItemSelectable: {
           type: Function,
+          sync: true,
         },
 
         /**

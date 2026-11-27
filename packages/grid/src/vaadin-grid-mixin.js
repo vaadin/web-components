@@ -440,7 +440,7 @@ export const GridMixin = (superClass) =>
         row._item = item;
       }
 
-      this.__renderBodyRow(row, { updateItemStates: !!item });
+      this.__renderBodyRow(row);
 
       if (!item) {
         return;
