@@ -868,6 +868,7 @@ export const ChartMixin = (superClass) =>
         }
 
         if (this.configuration) {
+          this.__cancelExports();
           this.configuration.destroy();
           this.configuration = undefined;
 
@@ -884,8 +885,20 @@ export const ChartMixin = (superClass) =>
       });
     }
 
+    /**
+     * Destroying the chart removes its event handlers, so a pending export or print would never
+     * fire `afterExport` or `afterPrint` to remove the styles it copied to the body.
+     * @private
+     */
+    __cancelExports() {
+      this.__pendingExports = 0;
+      cleanupExport(this);
+    }
+
     /** @private */
     __resetChart() {
+      // Creating a chart in the same container destroys the previous one
+      this.__cancelExports();
       const initialOptions = { ...this.options, ...this._jsonConfigurationBuffer };
       this.__initChart(initialOptions);
       this._jsonConfigurationBuffer = null;
@@ -1175,12 +1188,12 @@ export const ChartMixin = (superClass) =>
             // Workaround for https://github.com/vaadin/vaadin-charts/issues/389
             // Hook into beforePrint and beforeExport to ensure correct styling
             if (['beforePrint', 'beforeExport'].indexOf(event.type) >= 0) {
-              prepareExport(self);
+              prepareExport(self, event.type === 'beforeExport');
             }
 
             // Hook into afterPrint and afterExport to revert changes made before
             if (['afterPrint', 'afterExport'].indexOf(event.type) >= 0) {
-              cleanupExport(self);
+              cleanupExport(self, event.type === 'afterExport');
             }
 
             self.dispatchEvent(new CustomEvent(eventList[key], customEvent));

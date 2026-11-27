@@ -197,32 +197,149 @@ describe('vaadin-chart exporting', () => {
     expect(events).to.eql(['before', 'after']);
   });
 
-  it('should keep the shadow styles in the body until the chart copy has rendered', async () => {
-    // The chart copy only renders asynchronously while it has an image to load. The
-    // renderer caches image sizes by URL, so the image needs a URL of its own.
-    const url = URL.createObjectURL(
-      new Blob(['<svg xmlns="http://www.w3.org/2000/svg" width="8" height="8"><rect width="8" height="8"/></svg>'], {
-        type: 'image/svg+xml',
-      }),
-    );
-    chart.updateConfiguration({ series: [{ data: [1, 2, 3], marker: { symbol: `url(${url})` } }] });
-    await nextRender();
+  describe('failed export', () => {
+    let afterExportSpy, removeListener;
 
-    // Highcharts fires `getSVG` right after it has inlined the styles of the chart copy
-    const stylesPresent = [];
-    const removeListener = Highcharts.addEvent(chart.configuration, 'getSVG', () => {
-      stylesPresent.push(document.body.hasAttribute(attributeName));
+    beforeEach(() => {
+      afterExportSpy = sinon.spy();
+      chart.addEventListener('chart-after-export', afterExportSpy);
+      removeListener = Highcharts.addEvent(chart.configuration, 'getSVG', () => {
+        throw new Error('Export failed');
+      });
     });
 
-    try {
-      await chart.configuration.exporting.getSVGForExport({}, {});
-    } finally {
+    afterEach(() => {
+      removeListener();
+    });
+
+    it('should remove the shadow styles from the body when a sync export throws', () => {
+      expect(() => chart.configuration.getSVG()).to.throw('Export failed');
+      expect(afterExportSpy).to.be.calledOnce;
+      expect(chart.tempBodyStyle).to.be.undefined;
+      expect(document.body.hasAttribute(attributeName)).to.be.false;
+    });
+
+    it('should remove the shadow styles from the body when an async export rejects', async () => {
+      let error;
+      await chart.configuration.exporting.getSVGForExport({}, {}).catch((e) => {
+        error = e;
+      });
+      expect(error.message).to.equal('Export failed');
+      expect(afterExportSpy).to.be.calledOnce;
+      expect(chart.tempBodyStyle).to.be.undefined;
+      expect(document.body.hasAttribute(attributeName)).to.be.false;
+    });
+  });
+
+  describe('overlapping exports', () => {
+    let url, stylesPresent, removeListener;
+
+    beforeEach(async () => {
+      // The chart copy only renders asynchronously while it has an image to load. The
+      // renderer caches image sizes by URL, so the image needs a URL of its own.
+      url = URL.createObjectURL(
+        new Blob(['<svg xmlns="http://www.w3.org/2000/svg" width="8" height="8"><rect width="8" height="8"/></svg>'], {
+          type: 'image/svg+xml',
+        }),
+      );
+      chart.updateConfiguration({ series: [{ data: [1, 2, 3], marker: { symbol: `url(${url})` } }] });
+      await nextRender();
+      // Once the chart has loaded the image, the chart copy would find its size in the cache
+      delete Highcharts.symbolSizes[url];
+
+      // Highcharts fires `getSVG` right after it has inlined the styles of the chart copy
+      stylesPresent = [];
+      removeListener = Highcharts.addEvent(chart.configuration, 'getSVG', () => {
+        stylesPresent.push(document.body.hasAttribute(attributeName));
+      });
+    });
+
+    afterEach(() => {
       removeListener();
       URL.revokeObjectURL(url);
-    }
+    });
 
-    expect(stylesPresent).to.eql([true]);
-    expect(document.body.hasAttribute(attributeName)).to.be.false;
+    it('should keep the styled-mode attribute on the body until the export of another chart is done', async () => {
+      const otherChart = fixtureSync(`
+        <vaadin-chart>
+          <vaadin-chart-series values="[1, 2, 3]"></vaadin-chart-series>
+        </vaadin-chart>
+      `);
+      await oneEvent(otherChart, 'chart-add-series');
+
+      // The export of the other chart has no image to load, so it finishes first
+      await Promise.all([
+        chart.configuration.exporting.getSVGForExport({}, {}),
+        otherChart.configuration.exporting.getSVGForExport({}, {}),
+      ]);
+
+      expect(stylesPresent).to.eql([true]);
+      expect(document.body.hasAttribute(attributeName)).to.be.false;
+    });
+
+    it('should keep the styled-mode attribute on the body until both exports of the same chart are done', async () => {
+      // The sync export of the same chart finishes while the async one is still rendering
+      const exported = chart.configuration.exporting.getSVGForExport({}, {});
+      chart.configuration.getSVG();
+      await exported;
+
+      expect(stylesPresent).to.eql([true, true]);
+      expect(chart.tempBodyStyle).to.be.undefined;
+      expect(document.body.hasAttribute(attributeName)).to.be.false;
+    });
+
+    it('should keep the styled-mode attribute on the body when a print ends during the export', async () => {
+      const exported = chart.configuration.exporting.getSVGForExport({}, {});
+      Highcharts.fireEvent(chart.configuration, 'beforePrint');
+      Highcharts.fireEvent(chart.configuration, 'afterPrint');
+      await exported;
+
+      expect(stylesPresent).to.eql([true]);
+      expect(chart.tempBodyStyle).to.be.undefined;
+      expect(document.body.hasAttribute(attributeName)).to.be.false;
+    });
+
+    it('should keep the styled-mode attribute on the body when the export ends during a print', async () => {
+      Highcharts.fireEvent(chart.configuration, 'beforePrint');
+      await chart.configuration.exporting.getSVGForExport({}, {});
+
+      expect(chart.tempBodyStyle).to.be.ok;
+      expect(document.body.hasAttribute(attributeName)).to.be.true;
+
+      Highcharts.fireEvent(chart.configuration, 'afterPrint');
+      expect(chart.tempBodyStyle).to.be.undefined;
+      expect(document.body.hasAttribute(attributeName)).to.be.false;
+    });
+
+    ['beforeExport', 'beforePrint'].forEach((event) => {
+      // An export or print that has started and will not fire its after event, as the chart gets destroyed
+      it(`should remove the shadow styles from the body when the chart is reset after ${event}`, async () => {
+        Highcharts.fireEvent(chart.configuration, event);
+        const style = chart.tempBodyStyle;
+        chart.updateConfiguration({ title: { text: 'Reset' } }, true);
+        await Promise.resolve();
+
+        expect(style.isConnected).to.be.false;
+        expect(chart.tempBodyStyle).to.be.undefined;
+        expect(document.body.hasAttribute(attributeName)).to.be.false;
+
+        // Later exports clean up after themselves again
+        await chart.configuration.exporting.getSVGForExport({}, {});
+        expect(chart.tempBodyStyle).to.be.undefined;
+        expect(document.body.hasAttribute(attributeName)).to.be.false;
+      });
+
+      it(`should remove the shadow styles from the body when the chart is detached after ${event}`, async () => {
+        Highcharts.fireEvent(chart.configuration, event);
+        const style = chart.tempBodyStyle;
+        chart.remove();
+        await Promise.resolve();
+
+        expect(style.isConnected).to.be.false;
+        expect(chart.tempBodyStyle).to.be.undefined;
+        expect(document.body.hasAttribute(attributeName)).to.be.false;
+      });
+    });
   });
 
   it('should add styled-mode attribute to body before export and delete it afterwards', async () => {
