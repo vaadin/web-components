@@ -7,6 +7,10 @@ on:
 permissions:
   contents: read
 
+concurrency:
+  group: ${{ github.workflow }}-${{ github.event.pull_request.number || github.ref }}
+  cancel-in-progress: true
+
 env:
   _HEAD_SHA: ${{ github.event.pull_request.head.sha }}
   PLAYWRIGHT_SKIP_BROWSER_DOWNLOAD: 1
