@@ -182,6 +182,18 @@ describe('row details', () => {
       expect(cells[1].hidden).to.be.true;
     });
 
+    it('should toggle details for equaling item on itemIdPath change', () => {
+      const cells = getRowCells(bodyRows[0]);
+      grid.openItemDetails({ value: 'foo0' });
+      expect(cells[1].hidden).to.be.true;
+
+      grid.itemIdPath = 'value';
+      expect(cells[1].hidden).to.be.false;
+
+      grid.itemIdPath = null;
+      expect(cells[1].hidden).to.be.true;
+    });
+
     it('should remove the details cells when the renderer is cleared', () => {
       grid.rowDetailsRenderer = null;
       expect(grid.$.items.querySelector('[part~="details-cell"]')).to.be.null;

@@ -51,7 +51,7 @@ export const RowDetailsMixin = (superClass) =>
 
     static get observers() {
       return [
-        '_detailsOpenedItemsChanged(detailsOpenedItems, rowDetailsRenderer)',
+        '_detailsOpenedItemsChanged(detailsOpenedItems, rowDetailsRenderer, itemIdPath)',
         '_rowDetailsRendererChanged(rowDetailsRenderer)',
       ];
     }
