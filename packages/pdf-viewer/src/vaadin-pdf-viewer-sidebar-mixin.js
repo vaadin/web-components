@@ -284,15 +284,6 @@ export const PdfViewerSidebarMixin = (superClass) =>
     }
 
     /**
-     * Closes the sidebar, and the user continues on the pages, as after a click on them or a followed link.
-     * @private
-     */
-    #closeSidebarAndFocusPages() {
-      this.#focusPagesUnderSidebar();
-      this.sidebarOpened = false;
-    }
-
-    /**
      * Focuses the given target once this update has rendered.
      * @param {{ focus(options: FocusOptions): void }} target
      * @private
@@ -321,7 +312,8 @@ export const PdfViewerSidebarMixin = (superClass) =>
 
     /** @private */
     #onBackdropClick() {
-      this.#closeSidebarAndFocusPages();
+      this.#focusPagesUnderSidebar();
+      this.sidebarOpened = false;
     }
 
     /** @private */
@@ -329,7 +321,8 @@ export const PdfViewerSidebarMixin = (superClass) =>
       this._scrollToPage(page);
       this.dispatchEvent(new CustomEvent('thumbnail-click', { detail: { page } }));
       if (this._sidebarOverlay) {
-        this.#closeSidebarAndFocusPages();
+        this.#focusPagesUnderSidebar();
+        this.sidebarOpened = false;
       }
     }
 
