@@ -293,6 +293,7 @@ describe('selectable-provider', () => {
 
     it('should toggle aria-selected attribute on isItemSelectable change', () => {
       grid.isItemSelectable = (item) => item.index < 5;
+      flushGrid(grid);
 
       for (let i = 0; i < grid.items.length; i++) {
         expect(hasAriaSelected(i)).to.eql(Array(3).fill(i < 5));
