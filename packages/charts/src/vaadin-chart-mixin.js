@@ -113,8 +113,8 @@ Highcharts.wrap(KeyboardNavigation.prototype, 'onMouseUp', withComposedTarget);
 
 // In styled mode Highcharts removes the `highcharts-color-{n}` classes from solid gauge points
 // whenever `yAxis.stops` is set, so that CSS does not override the gradient color it writes as a
-// `fill` attribute. But `stops` always falls back to `[[0, minColor], [1, maxColor]]`, and both
-// colors are undefined in styled mode, so the points lose their classes with no color painted.
+// `fill` attribute. But `stops` always falls back to `[[0, minColor || ''], [1, maxColor || '']]`,
+// and both colors are empty in styled mode, so the points lose their classes with no color painted.
 // Re-apply the class list when the stops carry no usable color. Replacing the list drops stale
 // color classes after `colorIndex` changes, so the point state class is added back explicitly.
 // TODO: Remove once fixed upstream, see https://github.com/highcharts/highcharts/issues/23279
