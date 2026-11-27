@@ -54,6 +54,21 @@ describe('vaadin-chart option values', () => {
   });
 
   describe('credits', () => {
+    let invalidAttributeErrors, removeListener;
+
+    beforeEach(() => {
+      invalidAttributeErrors = 0;
+      removeListener = Highcharts.addEvent(Highcharts, 'displayError', (e) => {
+        if (e.code === 33) {
+          invalidAttributeErrors += 1;
+        }
+      });
+    });
+
+    afterEach(() => {
+      removeListener();
+    });
+
     async function setCreditsHref(href) {
       chart.updateConfiguration({ credits: { enabled: true, href } });
       await oneEvent(chart, 'chart-redraw');
@@ -61,34 +76,37 @@ describe('vaadin-chart option values', () => {
 
     [
       'https://vaadin.com',
+      '/about',
+      './about',
+      '#about',
+      'mailto:info@vaadin.com',
       'HTTPS://VAADIN.COM',
       'about.html',
-      '/about',
-      '#about',
       'tel:+123',
       'ftp://vaadin.com',
     ].forEach((href) => {
       it(`should keep supported credits links: ${href}`, async () => {
         await setCreditsHref(href);
-        expect(chart.configuration.options.credits.href).to.equal(href);
+        expect(chartContainer.querySelector('.highcharts-credits')).to.be.ok;
+        expect(invalidAttributeErrors).to.equal(0);
       });
     });
 
     [UNSUPPORTED_URL, ` JAVASCRIPT:void(0)`, `java\tscript:void(0)`, 'data:text/html,Text', 'vbscript:Text'].forEach(
       (href) => {
-        it(`should ignore credits links that use an unsupported URL scheme: ${JSON.stringify(href)}`, async () => {
+        it(`should ignore unsupported credits links: ${JSON.stringify(href)}`, async () => {
           await setCreditsHref(href);
           expect(chartContainer.querySelector('.highcharts-credits')).to.be.ok;
-          expect(chart.configuration.options.credits.href).to.be.undefined;
+          expect(invalidAttributeErrors).to.be.above(0);
         });
       },
     );
 
-    it('should ignore credits links that use an unsupported URL scheme on update', async () => {
+    it('should ignore unsupported credits links on update', async () => {
       chart.updateConfiguration({ credits: { enabled: true } });
       await oneEvent(chart, 'chart-redraw');
       chart.configuration.credits.update({ href: UNSUPPORTED_URL });
-      expect(chart.configuration.options.credits.href).to.be.undefined;
+      expect(invalidAttributeErrors).to.be.above(0);
     });
   });
 
@@ -167,6 +185,23 @@ describe('vaadin-chart option values', () => {
         new Highcharts.AST('<img src="data:image/png;base64,0" onerror="window.chartMarkupSpy()">');
         await aTimeout(50);
         expect(window.chartMarkupSpy).to.be.not.called;
+      });
+
+      it('should render no markup when the inert document rejects the markup too', () => {
+        // Like an `innerHTML` assignment under Trusted Types enforcement
+        const descriptor = Object.getOwnPropertyDescriptor(Element.prototype, 'innerHTML');
+        Object.defineProperty(Element.prototype, 'innerHTML', {
+          ...descriptor,
+          get: descriptor.get,
+          set() {
+            throw new TypeError('Requires TrustedHTML');
+          },
+        });
+        try {
+          expect(new Highcharts.AST('<b>Text</b>').nodes).to.be.empty;
+        } finally {
+          Object.defineProperty(Element.prototype, 'innerHTML', descriptor);
+        }
       });
     });
   });
