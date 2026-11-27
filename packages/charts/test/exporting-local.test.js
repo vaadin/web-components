@@ -7,14 +7,15 @@ import '../src/vaadin-chart.js';
 // https://github.com/vaadin/web-components/issues/11911
 import 'highcharts/es-modules/masters/modules/offline-exporting.src.js';
 import HttpUtilities from 'highcharts/es-modules/Core/HttpUtilities.js';
-import OfflineExporting from 'highcharts/es-modules/Extensions/OfflineExporting/OfflineExporting.js';
+import { Exporting } from 'highcharts/es-modules/Extensions/Exporting/Exporting.js';
 
 describe('vaadin-chart local exporting', () => {
   let chart, downloadStub, postStub;
 
   before(() => {
-    // Prevent downloading the export
-    downloadStub = sinon.stub(OfflineExporting, 'downloadSVGLocal');
+    // Prevent downloading the export. The local export runs in the core exporting
+    // module, so the download goes through `Exporting` rather than `OfflineExporting`.
+    downloadStub = sinon.stub(Exporting.prototype, 'downloadSVG');
     // Prevent posting the export to the export server
     postStub = sinon.stub(HttpUtilities, 'post');
   });
@@ -31,8 +32,8 @@ describe('vaadin-chart local exporting', () => {
     postStub.resetHistory();
   });
 
-  it('should export locally without throwing', () => {
-    chart.configuration.exportChartLocal();
+  it('should export locally without throwing', async () => {
+    await chart.configuration.exportChartLocal();
 
     expect(downloadStub).to.be.calledOnce;
     expect(postStub).to.be.not.called;
@@ -50,32 +51,51 @@ describe('vaadin-chart local exporting', () => {
     expect(postStub).to.be.not.called;
   });
 
-  it('should post the export to the export server from exportChart', async () => {
+  it('should export locally from exportChart', async () => {
+    // The download menu items call `exportChart()` without options too
+    await chart.configuration.exportChart();
+
+    expect(downloadStub).to.be.calledOnce;
+    expect(postStub).to.be.not.called;
+  });
+
+  it('should post the export to the export server when the chart options set local to false', async () => {
+    chart.updateConfiguration({ exporting: { local: false } });
+    await nextRender();
+
     await chart.configuration.exportChart();
 
     expect(postStub).to.be.calledOnce;
     expect(downloadStub).to.be.not.called;
   });
 
-  it('should dispatch export events once per local export', () => {
+  it('should post the export to the export server when local is false', async () => {
+    await chart.configuration.exportChart({ local: false });
+
+    expect(postStub).to.be.calledOnce;
+    expect(downloadStub).to.be.not.called;
+  });
+
+  it('should dispatch export events once per local export', async () => {
     const events = [];
     chart.addEventListener('chart-before-export', () => events.push('before'));
     chart.addEventListener('chart-after-export', () => events.push('after'));
 
-    chart.configuration.exportChartLocal();
+    await chart.configuration.exportChartLocal();
 
     expect(events).to.eql(['before', 'after']);
   });
 
-  it('should apply the shadow styles to the exported SVG', () => {
-    chart.configuration.exportChartLocal();
+  it('should apply the shadow styles to the exported SVG', async () => {
+    await chart.configuration.exportChartLocal();
 
     // Blue comes from the `:host(#chart)` rule in exporting-styles.js
     expect(downloadStub.firstCall.args[0]).to.include('fill="rgb(0, 0, 255)"');
   });
 
-  it('should not leave the temporary style in the document body', () => {
-    chart.configuration.exportChartLocal();
+  it('should not leave the temporary style in the document body', async () => {
+    await chart.configuration.exportChartLocal();
+
     expect(chart.tempBodyStyle).to.be.undefined;
     expect(document.body.hasAttribute('styled-mode')).to.be.false;
   });
