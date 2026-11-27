@@ -1,39 +1,57 @@
 /**
- * Functions of `split-cem.js`, which maps the module paths of the root
+ * Functions of `split-cem.ts`, which maps the module paths of the root
  * `custom-elements.json` to the packages under `packages/` and writes one
  * manifest per package.
  */
+import type { JavaScriptModule, Package } from 'custom-elements-manifest';
 import fs from 'node:fs';
-import { byName, packageDir, rootDir } from './cem-helpers.js';
+import { byName, packageDir, rootDir } from './cem-helpers.ts';
+
+/** A reference of the manifest, to a module of the package or to another package. */
+export interface ModuleReference {
+  name?: string;
+  module?: string;
+  package?: string;
+}
+
+/** A root entry point and the source module that it re-exports. */
+export interface EntryPoint {
+  path: string;
+  source: string;
+}
 
 const PACKAGE_PATH = /^packages\/([^/]+)\//u;
 
 /**
- * @param {string} modulePath e.g. "packages/button/src/vaadin-button.js"
- * @return {string | null} e.g. "button"
+ * @param modulePath e.g. "packages/button/src/vaadin-button.js"
+ * @return e.g. "button"
  */
-export function extractPackageName(modulePath) {
+export function extractPackageName(modulePath: string): string | null {
   const match = modulePath.match(PACKAGE_PATH);
   return match ? match[1] : null;
 }
 
 /**
- * @param {string} modulePath e.g. "packages/button/src/vaadin-button.js"
- * @return {string} the path inside the package, e.g. "src/vaadin-button.js"
+ * @param modulePath e.g. "packages/button/src/vaadin-button.js"
+ * @return the path inside the package, e.g. "src/vaadin-button.js"
  */
-export function transformModulePath(modulePath) {
+export function transformModulePath(modulePath: string): string {
   return modulePath.replace(PACKAGE_PATH, '');
+}
+
+function isModuleReference(ref: unknown): ref is ModuleReference & { module: string } {
+  return !!ref && typeof ref === 'object' && typeof (ref as ModuleReference).module === 'string';
 }
 
 /**
  * Turns a "module" reference of the root manifest into a path relative to
  * `currentPackage`, or into a "package" reference to another package.
- * @param {object} ref an object with a "module" or "package" property
- * @param {string} currentPackage e.g. "button"
- * @return {object} a new object, or `ref` itself when it is not a reference to a package module
+ * @param ref an object with a "module" or "package" property
+ * @param currentPackage e.g. "button"
+ * @return a new object, or `ref` itself when it is not a reference to a package module
  */
-export function transformReference(ref, currentPackage) {
-  if (!ref || typeof ref !== 'object' || typeof ref.module !== 'string') {
+export function transformReference<T>(ref: T, currentPackage: string): T {
+  if (!isModuleReference(ref)) {
     return ref;
   }
 
@@ -45,7 +63,7 @@ export function transformReference(ref, currentPackage) {
     return ref;
   }
 
-  const transformed = { ...ref };
+  const transformed: ModuleReference = { ...ref };
   const innerPath = transformModulePath(modulePath);
   if (refPackage === currentPackage) {
     transformed.module = innerPath;
@@ -53,16 +71,14 @@ export function transformReference(ref, currentPackage) {
     delete transformed.module;
     transformed.package = `@vaadin/${refPackage}/${innerPath}`;
   }
-  return transformed;
+  return transformed as T;
 }
 
 /**
  * Transforms every module reference in an object tree.
- * @param {any} obj
- * @param {string} currentPackage
- * @return {any}
  */
-export function deepTransform(obj, currentPackage) {
+export function deepTransform<T>(obj: T, currentPackage: string): T;
+export function deepTransform(obj: unknown, currentPackage: string): unknown {
   if (obj === null || typeof obj !== 'object') {
     return obj;
   }
@@ -81,11 +97,10 @@ export function deepTransform(obj, currentPackage) {
  * Lists the root entry points of a package, `vaadin-*.js`, and the source module
  * `src/<file>` that each one is expected to re-export. Sorted by name, so that
  * the output does not depend on the file system order.
- * @param {string} packageName e.g. "button"
- * @param {string} [root] the checkout
- * @return {{ path: string, source: string }[]}
+ * @param packageName e.g. "button"
+ * @param root the checkout
  */
-export function findEntryPoints(packageName, root = rootDir) {
+export function findEntryPoints(packageName: string, root = rootDir): EntryPoint[] {
   return fs
     .readdirSync(packageDir(packageName, root))
     .filter((file) => /^vaadin-.*\.js$/u.test(file))
@@ -94,10 +109,9 @@ export function findEntryPoints(packageName, root = rootDir) {
 }
 
 /**
- * @param {{ path: string, source: string }} entry
- * @return {object} the module of the entry point for the manifest
+ * @return the module of the entry point for the manifest
  */
-export function entryPointModule({ path: entryFile, source }) {
+export function entryPointModule({ path: entryFile, source }: EntryPoint): JavaScriptModule {
   return {
     kind: 'javascript-module',
     path: entryFile,
@@ -118,26 +132,25 @@ export function entryPointModule({ path: entryFile, source }) {
 /**
  * Splits the root manifest into one manifest per package. Each one starts with
  * the entry point modules of the package whose source module is in the manifest.
- * @param {object} rootManifest the root `custom-elements.json`
- * @param {string} [root] the checkout
- * @return {Map<string, object>} the manifest by package directory name, in root manifest order
+ * @param rootManifest the root `custom-elements.json`
+ * @param root the checkout
+ * @return the manifest by package directory name, in root manifest order
  */
-export function splitManifest(rootManifest, root = rootDir) {
-  const packageModules = new Map();
+export function splitManifest(rootManifest: Package, root = rootDir): Map<string, Package> {
+  const packageModules = new Map<string, JavaScriptModule[]>();
   for (const mod of rootManifest.modules) {
     const packageName = extractPackageName(mod.path);
     if (!packageName) {
       console.warn(`Skipping module with unexpected path: ${mod.path}`);
       continue;
     }
-    if (!packageModules.has(packageName)) {
-      packageModules.set(packageName, []);
-    }
-    packageModules.get(packageName).push(mod);
+    const modules = packageModules.get(packageName) ?? [];
+    modules.push(mod);
+    packageModules.set(packageName, modules);
   }
 
   const { schemaVersion, readme } = rootManifest;
-  const manifests = new Map();
+  const manifests = new Map<string, Package>();
   for (const [packageName, modules] of packageModules) {
     const transformedModules = modules.map((mod) => ({
       ...deepTransform(mod, packageName),

@@ -241,7 +241,7 @@ export default [
       'custom-rules/**/*.js',
       'api-docs/.eleventy.js',
       'api-docs/*.ts',
-      'manifest/**/*.js',
+      'manifest/**/*.{js,ts}',
       'react/scripts/**/*.{js,ts}',
       'react/*.ts',
       'react/dev/*.ts',

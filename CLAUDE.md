@@ -128,6 +128,7 @@ React sources are TypeScript. `yarn lint` covers them, root `yarn lint:types` do
 yarn release:cem        # Generate custom-elements.json and split it per package
 yarn release:web-types  # Generate web-types.json per package from the manifests
 yarn test:manifest      # Node unit tests of the manifest tooling
+yarn lint:types:manifest  # Type check the manifest tooling
 yarn workspace @vaadin/manifest-tools compare --base main  # Report how the working tree changes the public API
 ```
 

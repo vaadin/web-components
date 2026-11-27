@@ -1,10 +1,11 @@
+import type { Package } from 'custom-elements-manifest';
 import assert from 'node:assert/strict';
 import path from 'node:path';
 import { test } from 'node:test';
-import { getElements, isPrimitiveType, listPackageDirs, packageDir } from '../lib/cem-helpers.js';
-import { createTree } from './create-tree.js';
+import { getElements, isPrimitiveType, listPackageDirs, packageDir } from '../lib/cem-helpers.ts';
+import { createTree } from './create-tree.ts';
 
-const files = (...paths) => Object.fromEntries(paths.map((file) => [file, '']));
+const files = (...paths: string[]) => Object.fromEntries(paths.map((file) => [file, '']));
 
 test('getElements collects the custom elements of all modules', () => {
   const manifest = {
@@ -22,7 +23,7 @@ test('getElements collects the custom elements of all modules', () => {
     ],
   };
   assert.deepEqual(
-    getElements(manifest).map((element) => element.tagName),
+    getElements(manifest as Package).map((element) => element.tagName),
     ['vaadin-a', 'vaadin-b'],
   );
 });

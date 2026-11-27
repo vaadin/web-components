@@ -1,3 +1,6 @@
+import type { ClassLike, Reference } from 'custom-elements-manifest';
+import type { Plugin } from '../lib/plugin-types.ts';
+
 /**
  * CEM analyzer plugin that applies inheritance from the items each class and
  * mixin declares itself.
@@ -19,25 +22,45 @@
 
 // The arrays of a class or mixin declaration that inheritance applies to. Slots,
 // parts, states and CSS properties are documented on each component class instead.
-const ITEM_FIELDS = ['attributes', 'members', 'events'];
+const ITEM_FIELDS = ['attributes', 'members', 'events'] as const;
+
+type ItemField = (typeof ITEM_FIELDS)[number];
+
+/** An attribute, a member or an event. */
+interface Item {
+  name: string;
+  inheritedFrom?: Reference;
+  resolveInitializer?: unknown;
+  [field: string]: unknown;
+}
+
+/** A class or mixin declaration, with the item fields that inheritance replaces. */
+type ItemHolder = Omit<ClassLike, ItemField> & Partial<Record<ItemField, Item[]>>;
+
+/** What a class or mixin declares itself. */
+interface Snapshot {
+  name: string;
+  module: string;
+  parents: Reference[];
+  items: Record<ItemField, Item[]>;
+}
 
 // Mixin names repeat across packages, so a declaration is identified by its module too
-const declarationKey = (modulePath, name) => `${modulePath}#${name}`;
+const declarationKey = (modulePath: string, name: string): string => `${modulePath}#${name}`;
 
 /**
  * Copies the items of a declaration before the analyzer merges or post-processes them,
  * without `resolveInitializer`, a marker the analyzer deletes in a later step. The marker
  * only occurs on fields assigned from a constructor parameter here.
- * @param {object[]} [items]
- * @return {object[]}
  */
-const copyOwnItems = (items = []) => items.map(({ resolveInitializer, ...item }) => structuredClone(item));
+const copyOwnItems = (items: Item[] = []): Item[] =>
+  items.map(({ resolveInitializer, ...item }) => structuredClone(item));
 
 /**
  * Sets the fields of the item from a nearer declaration that only the item
  * from a farther declaration has, such as the description of an override.
  */
-function fillMissingFields(nearerItem, fartherItem) {
+function fillMissingFields(nearerItem: Item, fartherItem: Item): void {
   for (const [name, value] of Object.entries(fartherItem)) {
     nearerItem[name] ??= value;
   }
@@ -49,10 +72,9 @@ function fillMissingFields(nearerItem, fartherItem) {
  * The analyzer records a relative import with a leading slash, as it resolves
  * it against `file:///`, and a bare import as a package. A `@vaadin/<package>`
  * import points to the workspace of that name under `packages/`.
- * @param {{ name: string, module?: string, package?: string }} reference
- * @return {string | undefined} undefined for a package outside this repo, such as `lit`
+ * @return undefined for a package outside this repo, such as `lit`
  */
-function referencedModulePath(reference) {
+function referencedModulePath(reference: Reference): string | undefined {
   if (reference.module) {
     return reference.module.replace(/^\//u, '');
   }
@@ -62,48 +84,47 @@ function referencedModulePath(reference) {
   return undefined;
 }
 
-export function inheritancePlugin() {
+export function inheritancePlugin(): Plugin {
   // What every class and mixin declares itself, by declaration key
-  const snapshots = new Map();
+  const snapshots = new Map<string, Snapshot>();
 
-  /** @return {object | undefined} the snapshot of the declaration a `mixins` entry or `superclass` points to */
-  function referencedSnapshot(reference) {
+  /** @return the snapshot of the declaration a `mixins` entry or `superclass` points to */
+  function referencedSnapshot(reference: Reference): Snapshot | undefined {
     const modulePath = referencedModulePath(reference);
-    return modulePath && snapshots.get(declarationKey(modulePath, reference.name));
+    return modulePath ? snapshots.get(declarationKey(modulePath, reference.name)) : undefined;
   }
 
   // The ancestors of each snapshot, computed once per snapshot
-  const ancestorsBySnapshot = new Map();
+  const ancestorsBySnapshot = new Map<Snapshot, Snapshot[]>();
 
   /**
    * Lists the snapshots of the ancestors of a declaration nearest first, each once.
    * A mixin applied more than once is listed at its innermost application, as
    * `dedupeMixin` skips the outer ones. The few mixins applied twice without it
    * have no override in between, so the same rule applies to them.
-   * @return {object[]}
    */
-  function ancestorsNearestFirst(snapshot) {
+  function ancestorsNearestFirst(snapshot: Snapshot): Snapshot[] {
     if (!ancestorsBySnapshot.has(snapshot)) {
       // An empty entry ends a cycle of references
       ancestorsBySnapshot.set(snapshot, []);
       const all = snapshot.parents
         .map(referencedSnapshot)
-        .filter(Boolean)
+        .filter((ancestor) => ancestor !== undefined)
         .flatMap((ancestor) => [ancestor, ...ancestorsNearestFirst(ancestor)]);
       ancestorsBySnapshot.set(
         snapshot,
         all.filter((ancestor, index) => ancestor !== snapshot && all.lastIndexOf(ancestor) === index),
       );
     }
-    return ancestorsBySnapshot.get(snapshot);
+    return ancestorsBySnapshot.get(snapshot)!;
   }
 
   /** Replaces the items of the declaration with its own items and the inherited ones. */
-  function applyInheritance(declaration, snapshot) {
+  function applyInheritance(declaration: ItemHolder, snapshot: Snapshot): void {
     const chain = [snapshot, ...ancestorsNearestFirst(snapshot)];
     for (const field of ITEM_FIELDS) {
       // The item of each name from the nearest declaration in the chain, and that declaration
-      const itemsByName = new Map();
+      const itemsByName = new Map<string, { item: Item; declaredBy: Snapshot }>();
       for (const declaredBy of chain) {
         for (const item of declaredBy.items[field]) {
           const nearer = itemsByName.get(item.name);
@@ -138,8 +159,10 @@ export function inheritancePlugin() {
         snapshots.set(declarationKey(moduleDoc.path, declaration.name), {
           name: declaration.name,
           module: moduleDoc.path,
-          parents: [...(declaration.mixins || []), declaration.superclass].filter(Boolean),
-          items: Object.fromEntries(ITEM_FIELDS.map((field) => [field, copyOwnItems(declaration[field])])),
+          parents: [...(declaration.mixins || []), declaration.superclass].filter((parent) => parent !== undefined),
+          items: Object.fromEntries(
+            ITEM_FIELDS.map((field) => [field, copyOwnItems((declaration as ItemHolder)[field])]),
+          ) as Snapshot['items'],
         });
       }
     },
@@ -149,7 +172,7 @@ export function inheritancePlugin() {
         for (const declaration of module.declarations || []) {
           const snapshot = snapshots.get(declarationKey(module.path, declaration.name));
           if (snapshot) {
-            applyInheritance(declaration, snapshot);
+            applyInheritance(declaration as ItemHolder, snapshot);
           }
         }
       }

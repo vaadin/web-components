@@ -6,7 +6,7 @@ import path from 'node:path';
 import { afterEach, beforeEach, test } from 'node:test';
 import { fileURLToPath } from 'node:url';
 import { parse } from 'yaml';
-import { COMMENT_MARKER } from '../lib/api-snapshot.js';
+import { COMMENT_MARKER } from '../lib/api-snapshot.ts';
 
 const WORKFLOW = path.resolve(
   path.dirname(fileURLToPath(import.meta.url)),
@@ -14,7 +14,8 @@ const WORKFLOW = path.resolve(
 );
 const workflow = parse(fs.readFileSync(WORKFLOW, 'utf-8'));
 const job = workflow.jobs.comment;
-const script = job.steps.find((step) => step.uses?.startsWith('actions/github-script')).with.script;
+const script: string = job.steps.find((step: { uses?: string }) => step.uses?.startsWith('actions/github-script')).with
+  .script;
 const AsyncFunction = Object.getPrototypeOf(async () => {}).constructor;
 const runScript = new AsyncFunction('github', 'context', 'core', 'require', 'process', script);
 
@@ -23,8 +24,26 @@ const HEAD_SHA = 'abc1234567abc1234567abc1234567abc1234567';
 const RUN_URL = 'https://github.com/vaadin/web-components/actions/runs/1';
 const BOT = { login: 'github-actions[bot]' };
 
-let cwd;
-let tmp;
+/** The parameters of a GitHub REST call, such as `issue_number` and `body`. */
+type Params = Record<string, unknown>;
+
+interface Comment {
+  id: number;
+  user: { login: string };
+  body: string;
+}
+
+interface Calls {
+  get: Params[];
+  list: Params[];
+  create: Params[];
+  update: Params[];
+  failed: string[];
+  notice: string[];
+}
+
+let cwd: string;
+let tmp: string;
 
 beforeEach(() => {
   cwd = process.cwd();
@@ -36,7 +55,7 @@ afterEach(() => {
   fs.rmSync(tmp, { recursive: true, force: true });
 });
 
-function writeReport(files) {
+function writeReport(files: Record<string, string>) {
   fs.mkdirSync(path.join(tmp, 'report'));
   for (const [name, content] of Object.entries(files)) {
     fs.writeFileSync(path.join(tmp, 'report', name), content);
@@ -49,36 +68,37 @@ const reportFiles = ({ changes = true, body = `${MARKER}\n### Custom elements AP
   'status.json': JSON.stringify({ changes }),
 });
 
-async function run({ conclusion = 'success', headSha = HEAD_SHA, comments = [] } = {}) {
-  const calls = { get: [], list: [], create: [], update: [], failed: [], notice: [] };
+async function run({ conclusion = 'success', headSha = HEAD_SHA, comments = [] as Comment[] } = {}): Promise<Calls> {
+  const calls: Calls = { get: [], list: [], create: [], update: [], failed: [], notice: [] };
   const github = {
     rest: {
       pulls: {
-        get: (params) => {
+        get: (params: Params) => {
           calls.get.push(params);
           return Promise.resolve({ data: { head: { sha: headSha } } });
         },
       },
       issues: {
-        listComments: (params) => {
+        listComments: (params: Params) => {
           calls.list.push(params);
           return Promise.resolve({ data: comments });
         },
-        createComment: (params) => {
+        createComment: (params: Params) => {
           calls.create.push(params);
           return Promise.resolve();
         },
-        updateComment: (params) => {
+        updateComment: (params: Params) => {
           calls.update.push(params);
           return Promise.resolve();
         },
       },
     },
-    paginate: async (method, params) => (await method(params)).data,
+    paginate: async (method: (params: Params) => Promise<{ data: unknown }>, params: Params) =>
+      (await method(params)).data,
   };
   const core = {
-    setFailed: (message) => calls.failed.push(message),
-    notice: (message) => calls.notice.push(message),
+    setFailed: (message: string) => calls.failed.push(message),
+    notice: (message: string) => calls.notice.push(message),
   };
   const context = { repo: { owner: 'vaadin', repo: 'web-components' } };
   const env = { HEAD_SHA, CONCLUSION: conclusion, RUN_URL };
@@ -91,7 +111,7 @@ async function run({ conclusion = 'success', headSha = HEAD_SHA, comments = [] }
   return calls;
 }
 
-const posted = (calls) => calls.create.length + calls.update.length;
+const posted = (calls: Calls) => calls.create.length + calls.update.length;
 
 test('the extracted script uses the marker and the heading of the library', () => {
   assert.equal(MARKER, COMMENT_MARKER);
@@ -104,7 +124,7 @@ test('the job condition rejects a cancelled run', () => {
   // eslint-disable-next-line no-new-func
   const evaluate = new Function('github', `return ${condition.replaceAll(' == ', ' === ')};`);
   // eslint-disable-next-line camelcase
-  const event = (conclusion) => ({ event: { workflow_run: { event: 'pull_request', conclusion } } });
+  const event = (conclusion: string) => ({ event: { workflow_run: { event: 'pull_request', conclusion } } });
   assert.equal(evaluate(event('success')), true);
   assert.equal(evaluate(event('failure')), true);
   assert.equal(evaluate(event('cancelled')), false);
@@ -191,7 +211,7 @@ test('a success with a body that lacks the marker posts nothing', async () => {
   assert.equal(posted(calls), 0);
 });
 
-const bodyOfLength = (length) => `${MARKER}\n${'x'.repeat(length - MARKER.length - 1)}`;
+const bodyOfLength = (length: number) => `${MARKER}\n${'x'.repeat(length - MARKER.length - 1)}`;
 
 test('a body of exactly the GitHub limit is posted', async () => {
   writeReport(reportFiles({ body: bodyOfLength(65536) }));

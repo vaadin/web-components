@@ -1,9 +1,10 @@
+import type { ClassField } from 'custom-elements-manifest';
 import assert from 'node:assert/strict';
 import { describe, test } from 'node:test';
-import { readonlyPlugin } from '../plugins/readonly.js';
-import { analyzeSource } from './analyze-source.js';
+import { readonlyPlugin } from '../plugins/readonly.ts';
+import { analyzeSource } from './analyze-source.ts';
 
-const members = (...names) => names.map((name) => ({ kind: 'field', name }));
+const members = (...names: string[]): ClassField[] => names.map((name) => ({ kind: 'field', name }));
 
 describe('readonlyPlugin', () => {
   test('should mark the fields declared with readOnly: true', () => {

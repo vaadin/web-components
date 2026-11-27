@@ -18,7 +18,7 @@ import {
   readManifest,
   readPackageJson,
   rootDir,
-} from '../manifest/lib/cem-helpers.js';
+} from '../manifest/lib/cem-helpers.ts';
 
 const { version } = lerna;
 

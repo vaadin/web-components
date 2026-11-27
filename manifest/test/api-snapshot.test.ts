@@ -1,3 +1,4 @@
+import type { Package } from 'custom-elements-manifest';
 import assert from 'node:assert/strict';
 import { describe, test } from 'node:test';
 import {
@@ -8,13 +9,22 @@ import {
   renderComment,
   snapshotManifest,
   snapshotWebTypes,
-} from '../lib/api-snapshot.js';
+} from '../lib/api-snapshot.ts';
+import type { ElementDeclaration } from '../lib/cem-helpers.ts';
+import type { WebTypes } from '../lib/web-types-schema.ts';
 
-const manifestOf = (declaration) => ({
-  modules: [{ declarations: [{ kind: 'class', customElement: true, tagName: 'vaadin-x', name: 'X', ...declaration }] }],
+const manifestOf = (declaration: Partial<ElementDeclaration>): Package => ({
+  schemaVersion: '1.0.0',
+  modules: [
+    {
+      kind: 'javascript-module',
+      path: 'src/vaadin-x.js',
+      declarations: [{ kind: 'class', customElement: true, tagName: 'vaadin-x', name: 'X', ...declaration }],
+    },
+  ],
 });
 
-const stats = (base, head) => diffStats(parseSnapshot(base), parseSnapshot(head));
+const stats = (base: string, head: string) => diffStats(parseSnapshot(base), parseSnapshot(head));
 
 const NO_STATS = { elements: 0, removed: 0, added: 0, changed: 0 };
 const LABELS = { base: '`def1234567`', head: '#123 (`abc1234567`)' };
@@ -173,7 +183,7 @@ describe('snapshotWebTypes', () => {
           },
         },
       },
-    ]);
+    ] as WebTypes[]);
     assert.equal(
       snapshot,
       [
@@ -201,7 +211,7 @@ describe('snapshotWebTypes', () => {
           },
         },
       },
-    ]);
+    ] as WebTypes[]);
     assert.equal(
       snapshot,
       ['vaadin-x', '  attribute disabled: boolean | null', '  part label', '  cssprop --vaadin-x-gap', ''].join('\n'),
@@ -211,19 +221,19 @@ describe('snapshotWebTypes', () => {
   test('should add no styling lines without css', () => {
     const snapshot = snapshotWebTypes([
       { contributions: { html: { elements: [{ name: 'vaadin-x', js: { events: [{ name: 'opened-changed' }] } }] } } },
-    ]);
+    ] as WebTypes[]);
     assert.equal(snapshot, 'vaadin-x\n  event opened-changed\n');
   });
 });
 
 describe('parseSnapshot', () => {
   test('should key the default slot without a trailing space', () => {
-    const { items } = parseSnapshot('vaadin-x (X)\n  slot (default)\n  slot prefix [deprecated]\n').get('vaadin-x');
+    const { items } = parseSnapshot('vaadin-x (X)\n  slot (default)\n  slot prefix [deprecated]\n').get('vaadin-x')!;
     assert.deepEqual([...items.keys()], ['slot (default)', 'slot prefix']);
   });
 
   test('should take static-property as the kind', () => {
-    const { items } = parseSnapshot('vaadin-x (X)\n  static-property version: string\n').get('vaadin-x');
+    const { items } = parseSnapshot('vaadin-x (X)\n  static-property version: string\n').get('vaadin-x')!;
     assert.deepEqual([...items.keys()], ['static-property version']);
   });
 
@@ -239,7 +249,7 @@ describe('parseSnapshot', () => {
     const elements = parseSnapshot(snapshot);
     assert.deepEqual([...elements.keys()], ['vaadin-x', 'vaadin-y']);
     assert.deepEqual(
-      [...elements.get('vaadin-x').items.keys()],
+      [...elements.get('vaadin-x')!.items.keys()],
       ['property opened', 'method open', 'cssprop --vaadin-x-gap'],
     );
   });
@@ -351,7 +361,7 @@ describe('renderComment', () => {
   const webTypes = { diff: '@@ vaadin-x @@\n-  part label', stats: { elements: 1, removed: 1, added: 0, changed: 0 } };
   const empty = { diff: '', stats: NO_STATS };
 
-  const sections = (comment) => comment.match(/<details( open)?>[\s\S]*?<\/details>/gu);
+  const sections = (comment: string) => comment.match(/<details( open)?>[\s\S]*?<\/details>/gu)!;
 
   test('should render an open manifest section and a collapsed web-types section with the counts', () => {
     const comment = renderComment(cem, webTypes, LABELS);
@@ -396,13 +406,13 @@ describe('renderComment', () => {
 
   describe('budget', () => {
     const itemLine = `+  property ${'x'.repeat(88)}`;
-    const long = (count) => ['@@ vaadin-x (X) @@', ...Array(count).fill(itemLine)].join('\n');
+    const long = (count: number) => ['@@ vaadin-x (X) @@', ...Array(count).fill(itemLine)].join('\n');
     const longStats = { elements: 1, removed: 0, added: 700, changed: 0 };
 
     test('should cut a long diff on a line boundary and point to the artifact', () => {
       const comment = renderComment({ diff: long(700), stats: longStats }, empty, LABELS);
       const [section] = sections(comment);
-      const fenced = section.match(/```diff\n([\s\S]*)\n```/u)[1];
+      const fenced = section.match(/```diff\n([\s\S]*)\n```/u)![1];
       assert.ok(fenced.length <= 60000);
       assert.ok(fenced.length > 60000 - itemLine.length - 1, 'the cut is at most one line below the budget');
       assert.ok(

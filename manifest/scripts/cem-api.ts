@@ -14,6 +14,7 @@
  * When no input of the manifests changed since <ref>, the generation is
  * skipped and the comment says "No API changes."
  */
+import type { Package } from 'custom-elements-manifest';
 import { execFileSync, spawnSync } from 'node:child_process';
 import fs from 'node:fs';
 import os from 'node:os';
@@ -23,10 +24,22 @@ import {
   parseDiff,
   parseSnapshot,
   renderComment,
+  type Section,
   snapshotManifest,
   snapshotWebTypes,
-} from '../lib/api-snapshot.js';
-import { listPackageDirs, packageDir } from '../lib/cem-helpers.js';
+} from '../lib/api-snapshot.ts';
+import { listPackageDirs, packageDir } from '../lib/cem-helpers.ts';
+import type { WebTypes } from '../lib/web-types-schema.ts';
+
+/** A snapshot diff, with the raw `git diff` output when the inputs changed. */
+interface ReportSection extends Section {
+  raw?: string;
+}
+
+interface Labels {
+  base: string;
+  head: string;
+}
 
 const USAGE =
   'Usage: yarn workspace @vaadin/manifest-tools compare [--base <ref>] [--out <dir>] [--base-label <text>] [--head-label <text>]';
@@ -35,7 +48,7 @@ const USAGE =
 const INPUTS = ['packages/*/src/*', 'manifest', 'scripts/buildWebtypes.js', 'patches', 'yarn.lock'];
 
 const [command, ...args] = process.argv.slice(2);
-const option = (name) => {
+const option = (name: string): string | undefined => {
   const index = args.indexOf(`--${name}`);
   if (index === -1) {
     return undefined;
@@ -48,7 +61,7 @@ const option = (name) => {
   return value;
 };
 
-const run = (cmd, cmdArgs, cwd) =>
+const run = (cmd: string, cmdArgs: string[], cwd?: string): string =>
   execFileSync(cmd, cmdArgs, {
     cwd,
     encoding: 'utf-8',
@@ -58,11 +71,13 @@ const run = (cmd, cmdArgs, cwd) =>
 
 const CONFIG = 'manifest/custom-elements-manifest.config.js';
 
+// A base from before the TypeScript conversion has the JavaScript version
+const SPLIT_SCRIPTS = ['manifest/scripts/split-cem.ts', 'manifest/scripts/split-cem.js'];
+
 /**
- * @param {string} dir the checkout to generate the manifests in
- * @return {{ manifest: object, webTypes: object[] }}
+ * @param dir the checkout to generate the manifests in
  */
-function generate(dir) {
+function generate(dir: string): { manifest: Package; webTypes: WebTypes[] } {
   if (!fs.existsSync(path.join(dir, CONFIG))) {
     throw new Error(`${dir} has no ${CONFIG}, the base is too old to compare`);
   }
@@ -76,11 +91,11 @@ function generate(dir) {
   }
 
   run(path.join(dir, 'node_modules/.bin/custom-elements-manifest'), ['analyze', '--config', CONFIG], dir);
-  run('node', ['manifest/scripts/split-cem.js'], dir);
+  run('node', [SPLIT_SCRIPTS.find((script) => fs.existsSync(path.join(dir, script)))!], dir);
   run('node', ['scripts/buildWebtypes.js'], dir);
 
-  const manifest = JSON.parse(fs.readFileSync(path.join(dir, 'custom-elements.json'), 'utf-8'));
-  const webTypes = [];
+  const manifest: Package = JSON.parse(fs.readFileSync(path.join(dir, 'custom-elements.json'), 'utf-8'));
+  const webTypes: WebTypes[] = [];
   for (const pkg of listPackageDirs(dir)) {
     const filePath = path.join(packageDir(pkg, dir), 'web-types.json');
     if (fs.existsSync(filePath)) {
@@ -90,17 +105,14 @@ function generate(dir) {
   return { manifest, webTypes };
 }
 
-function snapshot(dir, outDir) {
+function snapshot(dir: string, outDir: string): void {
   const { manifest, webTypes } = generate(dir);
   fs.mkdirSync(outDir, { recursive: true });
   fs.writeFileSync(path.join(outDir, 'custom-elements.api'), snapshotManifest(manifest));
   fs.writeFileSync(path.join(outDir, 'web-types.api'), snapshotWebTypes(webTypes));
 }
 
-/**
- * @return {{ raw: string, diff: string, stats: object }}
- */
-function diffFiles(baseFile, headFile) {
+function diffFiles(baseFile: string, headFile: string): Required<ReportSection> {
   const result = spawnSync(
     'git',
     [
@@ -130,7 +142,7 @@ function diffFiles(baseFile, headFile) {
 }
 
 /** Writes `cem-api.diff`, `comment.md` and `status.json` to `outDir` and returns the comment. */
-function report(cem, webTypes, outDir, labels) {
+function report(cem: ReportSection, webTypes: ReportSection, outDir: string, labels: Labels): string {
   const changes = Boolean(cem.diff || webTypes.diff);
   const comment = renderComment(cem, webTypes, labels);
 
@@ -144,29 +156,28 @@ function report(cem, webTypes, outDir, labels) {
   return comment;
 }
 
-function diff(baseDir, headDir, outDir, labels) {
+function diff(baseDir: string, headDir: string, outDir: string, labels: Labels): string {
   const cem = diffFiles(path.join(baseDir, 'custom-elements.api'), path.join(headDir, 'custom-elements.api'));
   const webTypes = diffFiles(path.join(baseDir, 'web-types.api'), path.join(headDir, 'web-types.api'));
   return report(cem, webTypes, outDir, labels);
 }
 
 /**
- * @param {string} rootDir
- * @param {string} sha the base commit
- * @return {boolean} whether a tracked or untracked file under `INPUTS` differs from the base
+ * @param sha the base commit
+ * @return whether a tracked or untracked file under `INPUTS` differs from the base
  */
-function inputsChanged(rootDir, sha) {
+function inputsChanged(rootDir: string, sha: string): boolean {
   const tracked = spawnSync('git', ['diff', '--quiet', sha, '--', ...INPUTS], { cwd: rootDir });
   const untracked = run('git', ['ls-files', '--others', '--exclude-standard', '--', ...INPUTS], rootDir);
   return tracked.status !== 0 || untracked.trim() !== '';
 }
 
-function compare(baseRef, outDir, labels) {
+function compare(baseRef: string, outDir: string | undefined, labels: Partial<Labels>): string {
   const rootDir = run('git', ['rev-parse', '--show-toplevel']).trim();
   // `yarn workspace` runs the script in `manifest/`, so a relative <dir> means the repo root
   const reportDir = outDir && path.resolve(rootDir, outDir);
   const sha = run('git', ['rev-parse', baseRef], rootDir).trim();
-  const resolved = {
+  const resolved: Labels = {
     base: labels.base ?? `\`${baseRef}\` (${sha.slice(0, 10)})`,
     head: labels.head ?? 'the working tree',
   };

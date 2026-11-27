@@ -1,9 +1,9 @@
 import fs from 'node:fs';
-import { byName } from './lib/cem-helpers.js';
-import { classPrivacyPlugin } from './plugins/class-privacy.js';
-import { inheritancePlugin } from './plugins/inheritance.js';
-import { publicApiPlugin } from './plugins/public-api.js';
-import { readonlyPlugin } from './plugins/readonly.js';
+import { byName } from './lib/cem-helpers.ts';
+import { classPrivacyPlugin } from './plugins/class-privacy.ts';
+import { inheritancePlugin } from './plugins/inheritance.ts';
+import { publicApiPlugin } from './plugins/public-api.ts';
+import { readonlyPlugin } from './plugins/readonly.ts';
 
 export default {
   globs: ['packages/**/src/(vaadin-*.js|*-mixin.js)'],
