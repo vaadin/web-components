@@ -265,4 +265,45 @@ describe('vaadin-chart styling', () => {
       });
     });
   });
+
+  describe('solid gauge', () => {
+    let chart;
+
+    function points() {
+      return [...chart.$.chart.querySelectorAll('.highcharts-solidgauge-series .highcharts-point')];
+    }
+
+    async function createChart(yAxis) {
+      chart = fixtureSync('<vaadin-chart type="solidgauge"></vaadin-chart>');
+      chart.additionalOptions = { yAxis: { min: 0, max: 100, ...yAxis } };
+      await oneEvent(chart, 'chart-load');
+      chart.configuration.addSeries({
+        data: [
+          { y: 20, colorIndex: 1 },
+          { y: 50, colorIndex: 3 },
+        ],
+      });
+    }
+
+    it('should keep color classes when stops are defined', async () => {
+      await createChart({
+        stops: [
+          [0, '#ff0000'],
+          [1, '#0000ff'],
+        ],
+      });
+      expect(points().map((point) => point.getAttribute('class'))).to.eql([
+        'highcharts-point highcharts-color-1',
+        'highcharts-point highcharts-color-3',
+      ]);
+    });
+
+    it('should keep color classes when minColor and maxColor are defined', async () => {
+      await createChart({ minColor: '#ff0000', maxColor: '#0000ff' });
+      expect(points().map((point) => point.getAttribute('class'))).to.eql([
+        'highcharts-point highcharts-color-1',
+        'highcharts-point highcharts-color-3',
+      ]);
+    });
+  });
 });
