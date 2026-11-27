@@ -10,6 +10,14 @@
  */
 import '@vaadin/component-base/src/styles/style-props.js';
 import { css } from 'lit';
+import { registerCSSProperty } from '@vaadin/component-base/src/css-utils.js';
+
+registerCSSProperty({
+  name: '--_vaadin-pdf-viewer-sidebar-overlay-width',
+  syntax: '<length>',
+  inherits: false,
+  initialValue: '0px',
+});
 
 export const pdfViewerSidebarStyles = css`
   [part~='sidebar'] {
@@ -21,14 +29,8 @@ export const pdfViewerSidebarStyles = css`
     background: var(--vaadin-pdf-viewer-sidebar-background, var(--vaadin-background-color));
   }
 
-  [part~='content'] {
-    --_sidebar-overlay: false;
-  }
-
-  @container (width < 30rem) {
-    [part~='content'] {
-      --_sidebar-overlay: true;
-    }
+  :host {
+    --_vaadin-pdf-viewer-sidebar-overlay-width: 30rem;
   }
 
   [part~='sidebar'][hidden] {

@@ -99,10 +99,10 @@ how to generate them.
   - A thumbnail frees the pdf.js data of its page once it has rendered, unless the pages hold that page, as in the
     pdf.js viewer. The canvas keeps the image. The pages free the data of a page when they release it.
   - A viewer narrower than 30rem shows the sidebar over the pages.
-    - A container query on `.main-area` sets the private `--_sidebar-overlay` property. The width of
-      `.main-area` does not depend on the mode, unlike the width of the pages.
-    - `ResizeMixin` reads the property when the viewer resizes, as `vaadin-app-layout` reads
-      `--vaadin-app-layout-drawer-overlay`. A hidden viewer keeps its mode.
+    - The styles set this width in the registered `--_vaadin-pdf-viewer-sidebar-overlay-width` property, as
+      `vaadin-form-layout` sets `--_min-width-labels-aside`.
+    - `ResizeMixin` compares the viewer width with it when the viewer resizes. The viewer width does not depend
+      on the mode, unlike the width of the pages. A hidden viewer keeps its mode.
   - In the overlay mode, the sidebar is positioned absolutely at the start side, also in RTL. The pages keep their
     width, so they do not render again.
   - A resize does not change `sidebarOpened`. An open sidebar stays open over the pages, as the detail of

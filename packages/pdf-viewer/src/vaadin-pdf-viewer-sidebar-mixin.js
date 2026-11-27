@@ -308,14 +308,14 @@ export const PdfViewerSidebarMixin = (superClass) =>
     }
 
     /**
-     * Reads from CSS whether the sidebar shows over the pages.
+     * Compares the viewer width with the width from CSS below which the sidebar shows over the pages.
      * @private
      */
     #updateOverlay() {
       // A hidden viewer has no width, and keeps its mode until it shows.
       if (this.clientWidth) {
-        this._sidebarOverlay =
-          getComputedStyle(this.$.content).getPropertyValue('--_sidebar-overlay').trim() === 'true';
+        const overlayWidth = getComputedStyle(this).getPropertyValue('--_vaadin-pdf-viewer-sidebar-overlay-width');
+        this._sidebarOverlay = this.clientWidth < parseFloat(overlayWidth);
       }
     }
 
