@@ -1,5 +1,12 @@
 import { isStaticMember } from '@custom-elements-manifest/analyzer/src/utils/ast-helpers.js';
 import { extractMixinNodes } from '@custom-elements-manifest/analyzer/src/utils/mixins.js';
+import type { ClassField } from 'custom-elements-manifest';
+import type { PropertyName } from 'typescript';
+import type { Plugin } from '../lib/plugin-types.ts';
+
+/** The text of an identifier or a literal name, undefined for a computed one. */
+const nameText = (name: PropertyName | undefined): string | undefined =>
+  name && 'text' in name ? name.text : undefined;
 
 /**
  * CEM analyzer plugin that marks the fields declared with `readOnly: true` in
@@ -7,7 +14,7 @@ import { extractMixinNodes } from '@custom-elements-manifest/analyzer/src/utils/
  * as the setter ignores attribute changes, and the web-types generator leaves
  * them out of the Lit property bindings.
  */
-export function readonlyPlugin() {
+export function readonlyPlugin(): Plugin {
   return {
     name: 'vaadin-readonly',
 
@@ -18,7 +25,7 @@ export function readonlyPlugin() {
 
       // Find `static get properties()` method
       for (const member of classNode.members || []) {
-        if (!ts.isGetAccessorDeclaration(member) || !isStaticMember(member) || member.name?.text !== 'properties') {
+        if (!ts.isGetAccessorDeclaration(member) || !isStaticMember(member) || nameText(member.name) !== 'properties') {
           continue;
         }
 
@@ -29,7 +36,7 @@ export function readonlyPlugin() {
 
         for (const prop of returnObj.properties) {
           if (!ts.isPropertyAssignment(prop)) continue;
-          const propName = prop.name?.text;
+          const propName = nameText(prop.name);
           if (!propName) continue;
 
           // Check if the property config object has `readOnly: true`
@@ -39,16 +46,17 @@ export function readonlyPlugin() {
           const hasReadOnly = configObj.properties.some(
             (p) =>
               ts.isPropertyAssignment(p) &&
-              p.name?.text === 'readOnly' &&
+              nameText(p.name) === 'readOnly' &&
               p.initializer?.kind === ts.SyntaxKind.TrueKeyword,
           );
           if (!hasReadOnly) continue;
 
           // Find the matching member in moduleDoc declarations and mark it readonly
           for (const declaration of moduleDoc.declarations || []) {
-            const cemMember = declaration.members?.find((m) => m.name === propName);
+            const members = 'members' in declaration ? declaration.members : undefined;
+            const cemMember = members?.find((m) => m.name === propName);
             if (cemMember) {
-              cemMember.readonly = true;
+              (cemMember as ClassField).readonly = true;
             }
           }
         }

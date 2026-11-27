@@ -12,7 +12,11 @@
     "verbatimModuleSyntax": true,
     "useUnknownInCatchVariables": true,
     "skipLibCheck": true,
-    "types": ["node"]
+    "types": ["node"],
+    // The plugins get the TypeScript instance of the analyzer, which bundles its own version
+    "paths": {
+      "typescript": ["../node_modules/@custom-elements-manifest/analyzer/node_modules/typescript/lib/typescript.d.ts"]
+    }
   },
   "include": ["**/*.ts"],
   "exclude": ["node_modules"]

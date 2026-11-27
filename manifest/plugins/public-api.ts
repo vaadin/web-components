@@ -1,4 +1,30 @@
+import type {
+  Attribute,
+  ClassLike,
+  ClassMethod,
+  CustomElementField,
+  Event,
+  JavaScriptModule,
+  Privacy,
+  Reference,
+} from 'custom-elements-manifest';
 import { isPrimitiveType } from '../lib/cem-helpers.ts';
+import type { Plugin } from '../lib/plugin-types.ts';
+
+type Member = ClassMethod | CustomElementField;
+
+/** A declaration with the fields this plugin filters, which only classes and mixins have. */
+type Declaration = Omit<ClassLike, 'members'> & {
+  members?: Member[];
+  attributes?: Array<Attribute & InheritedItem>;
+  events?: Array<Event & InheritedItem>;
+  privacy?: Privacy;
+};
+
+/** An item that names the declaration it is inherited from. */
+interface InheritedItem {
+  inheritedFrom?: Reference;
+}
 
 /**
  * CEM analyzer plugin that keeps only the public API in the manifest: it drops
@@ -9,25 +35,25 @@ import { isPrimitiveType } from '../lib/cem-helpers.ts';
  */
 
 /**
- * @param {string} str e.g. "clearButtonVisible"
- * @return {string} e.g. "clear-button-visible"
+ * @param str e.g. "clearButtonVisible"
+ * @return e.g. "clear-button-visible"
  */
-const camelToDash = (str) => str.replace(/([a-z])([A-Z])/gu, '$1-$2').toLowerCase();
+const camelToDash = (str: string): string => str.replace(/([a-z])([A-Z])/gu, '$1-$2').toLowerCase();
 
 /** Compares items by name, ignoring case. */
-function byNameIgnoreCase(a, b) {
+function byNameIgnoreCase(a: { name?: string }, b: { name?: string }): number {
   const nameA = a.name?.toUpperCase();
   const nameB = b.name?.toUpperCase();
-  if (nameA < nameB) {
+  if (nameA! < nameB!) {
     return -1;
   }
-  if (nameA > nameB) {
+  if (nameA! > nameB!) {
     return 1;
   }
   return 0;
 }
 
-const isPublic = (item) => item.privacy !== 'private' && item.privacy !== 'protected';
+const isPublic = (item: { privacy?: Privacy }): boolean => item.privacy !== 'private' && item.privacy !== 'protected';
 
 // Members the analyzer picks up from assignments to the properties of another
 // object, such as `this._controller.slotName = 'sr-label'`
@@ -57,22 +83,23 @@ const ignoredStaticMembers = [
 ];
 
 // Mixins whose inherited items are internal
-const inheritanceDenyList = ['PolylitMixin', 'DirMixin'];
+const inheritanceDenyList: Array<string | undefined> = ['PolylitMixin', 'DirMixin'];
 
-const notFromDeniedMixin = (item) => !inheritanceDenyList.includes(item.inheritedFrom?.name);
+const notFromDeniedMixin = (item: InheritedItem): boolean => !inheritanceDenyList.includes(item.inheritedFrom?.name);
 
-export function publicApiPlugin() {
+export function publicApiPlugin(): Plugin {
   /** Drops the private and protected classes of a module, and their exports. */
-  function removePrivateClasses(module) {
-    const privateClassNames = new Set((module.declarations || []).filter((d) => !isPublic(d)).map((d) => d.name));
+  function removePrivateClasses(module: JavaScriptModule): void {
+    const declarations = (module.declarations || []) as Declaration[];
+    const privateClassNames = new Set(declarations.filter((d) => !isPublic(d)).map((d) => d.name));
     if (privateClassNames.size > 0) {
-      module.declarations = module.declarations.filter((d) => !privateClassNames.has(d.name));
+      module.declarations = module.declarations!.filter((d) => !privateClassNames.has(d.name));
       module.exports = (module.exports || []).filter((e) => !privateClassNames.has(e.declaration?.name));
     }
   }
 
   /** Keeps the public members, with the attribute of a field in dash-case. */
-  function publicMembers(members) {
+  function publicMembers(members: Member[]): Member[] {
     return members
       .filter(isPublic)
       .filter((member) => !member.name.startsWith('_'))
@@ -92,9 +119,11 @@ export function publicApiPlugin() {
    * not read-only, with a primitive type or none, as the untyped ones come from
    * `observedAttributes`. The names become dash-case.
    */
-  function publicAttributes(attributes, members) {
+  function publicAttributes(attributes: Array<Attribute & InheritedItem>, members: Member[]): Attribute[] {
     const publicMemberNames = new Set(members.map((m) => m.name));
-    const readonlyMemberNames = new Set(members.filter((m) => m.readonly).map((m) => m.name));
+    const readonlyMemberNames = new Set<string | undefined>(
+      members.filter((m) => 'readonly' in m && m.readonly).map((m) => m.name),
+    );
     return attributes
       .filter((attr) => !attr.fieldName || publicMemberNames.has(attr.fieldName))
       .filter((attr) => !readonlyMemberNames.has(attr.fieldName))
@@ -106,10 +135,10 @@ export function publicApiPlugin() {
   }
 
   /** A field keeps `attribute` and `reflects` only when its attribute is listed. */
-  function dropUnlistedAttributes(members, attributes) {
+  function dropUnlistedAttributes(members: Member[], attributes: Attribute[]): Member[] {
     const attributeNames = new Set(attributes.map((attr) => attr.name));
     return members.map((member) => {
-      if (member.attribute && !attributeNames.has(member.attribute)) {
+      if ('attribute' in member && member.attribute && !attributeNames.has(member.attribute)) {
         const { attribute, reflects, ...rest } = member;
         return rest;
       }
@@ -118,7 +147,7 @@ export function publicApiPlugin() {
   }
 
   /** Keeps the named events that are not internal. */
-  function publicEvents(events) {
+  function publicEvents(events: Array<Event & InheritedItem>): Event[] {
     return events
       .filter(notFromDeniedMixin)
       .filter((event) => !(event.type?.text === 'CustomEvent' && !event.name))
@@ -132,7 +161,7 @@ export function publicApiPlugin() {
     packageLinkPhase({ customElementsManifest }) {
       for (const module of customElementsManifest.modules) {
         removePrivateClasses(module);
-        for (const declaration of module.declarations || []) {
+        for (const declaration of (module.declarations || []) as Declaration[]) {
           if (declaration.members?.length) {
             declaration.members = publicMembers(declaration.members);
           }

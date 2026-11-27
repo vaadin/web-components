@@ -99,8 +99,8 @@ value: { type: String, notify: true },
 
 Add `@private` or `@protected` to a class's JSDoc to keep the element out
 of generated documentation. CEM's `classPrivacyPlugin`
-(`manifest/plugins/class-privacy.js`) tags the declaration, and
-`publicApiPlugin` (`manifest/plugins/public-api.js`) then strips it — so the
+(`manifest/plugins/class-privacy.ts`) tags the declaration, and
+`publicApiPlugin` (`manifest/plugins/public-api.ts`) then strips it — so the
 class never lands in
 `custom-elements.json`, and consequently never makes it into
 `web-types.json` or the React wrappers either.

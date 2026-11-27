@@ -12,7 +12,7 @@
   "type": "module",
   "scripts": {
     "compare": "node scripts/cem-api.js compare",
-    "test": "node --test \"test/*.test.*\"",
+    "test": "node --test \"test/*.test.ts\"",
     "lint:types": "tsc -p tsconfig.json"
   },
   "devDependencies": {

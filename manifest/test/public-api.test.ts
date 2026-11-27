@@ -1,20 +1,50 @@
+import type { Attribute, CustomElementField, Declaration, Event, Export, Package } from 'custom-elements-manifest';
 import assert from 'node:assert/strict';
 import { describe, test } from 'node:test';
-import { publicApiPlugin } from '../plugins/public-api.js';
+import { publicApiPlugin } from '../plugins/public-api.ts';
 
-const field = (name, extra) => ({ kind: 'field', name, type: { text: 'string' }, ...extra });
-const names = (items = []) => items.map((item) => item.name);
+/** A declaration as the tests read it, with the item arrays it is expected to have. */
+interface TestDeclaration {
+  name: string;
+  members: CustomElementField[];
+  attributes: Attribute[];
+  events: Event[];
+}
+
+interface TestModule {
+  path: string;
+  declarations: TestDeclaration[];
+  exports: Array<{ name: string }>;
+}
+
+const field = (name: string, extra?: Partial<CustomElementField>): CustomElementField => ({
+  kind: 'field',
+  name,
+  type: { text: 'string' },
+  ...extra,
+});
+const names = (items: Array<{ name: string }> = []) => items.map((item) => item.name);
 
 /** Runs the plugin over one module with the given declarations and returns the module. */
-function run(declarations, exports = []) {
-  const manifest = { modules: [{ path: 'a.js', declarations, exports }] };
-  publicApiPlugin().packageLinkPhase({ customElementsManifest: manifest });
-  return manifest.modules[0];
+function run(declarations: object[], exports: object[] = []): TestModule {
+  const manifest: Package = {
+    schemaVersion: '1.0.0',
+    modules: [
+      {
+        kind: 'javascript-module',
+        path: 'a.js',
+        declarations: declarations as Declaration[],
+        exports: exports as Export[],
+      },
+    ],
+  };
+  publicApiPlugin().packageLinkPhase!({ customElementsManifest: manifest });
+  return manifest.modules[0] as TestModule;
 }
 
 describe('publicApiPlugin', () => {
   test('should drop private and protected classes with their exports', () => {
-    const exportOf = (name) => ({ kind: 'js', name, declaration: { name, module: 'a.js' } });
+    const exportOf = (name: string) => ({ kind: 'js', name, declaration: { name, module: 'a.js' } });
     const module = run(
       [
         { kind: 'class', name: 'Shown' },
@@ -124,7 +154,7 @@ describe('publicApiPlugin', () => {
         { path: 'a.js', declarations: [{ kind: 'class', name: 'A' }] },
       ],
     };
-    publicApiPlugin().packageLinkPhase({ customElementsManifest: manifest });
+    publicApiPlugin().packageLinkPhase!({ customElementsManifest: manifest as Package });
     assert.deepEqual(
       manifest.modules.map((m) => m.path),
       ['entry.js', 'a.js'],

@@ -1,28 +1,49 @@
+import type {
+  Attribute,
+  CustomElementField,
+  Event,
+  JavaScriptModule,
+  Package,
+  Reference,
+} from 'custom-elements-manifest';
 import assert from 'node:assert/strict';
 import { describe, test } from 'node:test';
-import { inheritancePlugin } from '../plugins/inheritance.js';
+import { inheritancePlugin } from '../plugins/inheritance.ts';
 
-const field = (name, type, extra) => ({ kind: 'field', name, type: { text: type }, ...extra });
-const ref = (name, module) => ({ name, module });
+/** A declaration as the tests read it, with the item arrays it is expected to have. */
+interface TestDeclaration {
+  name: string;
+  members: CustomElementField[];
+  attributes: Attribute[];
+  events: Event[];
+}
+
+const field = (name: string, type: string, extra?: Partial<CustomElementField>): CustomElementField => ({
+  kind: 'field',
+  name,
+  type: { text: type },
+  ...extra,
+});
+const ref = (name: string, module: string): Reference => ({ name, module });
 
 /**
  * Runs the plugin over the modules like the analyzer does and returns the manifest.
- * @param {object[]} modules
+ * @param modules the modules without `kind`, which the plugin does not read
  */
-function analyze(modules) {
-  const manifest = { modules: structuredClone(modules) };
+function analyze(modules: object[]): Package {
+  const manifest: Package = { schemaVersion: '1.0.0', modules: structuredClone(modules) as JavaScriptModule[] };
   const plugin = inheritancePlugin();
   for (const moduleDoc of manifest.modules) {
-    plugin.moduleLinkPhase({ moduleDoc });
+    plugin.moduleLinkPhase!({ moduleDoc });
   }
-  plugin.packageLinkPhase({ customElementsManifest: manifest });
+  plugin.packageLinkPhase!({ customElementsManifest: manifest });
   return manifest;
 }
 
-const declaration = (manifest, name) =>
-  manifest.modules.flatMap((module) => module.declarations).find((d) => d.name === name);
+const declaration = (manifest: Package, name: string) =>
+  manifest.modules.flatMap((module) => module.declarations).find((d) => d!.name === name) as TestDeclaration;
 
-const names = (items = []) =>
+const names = (items: Array<{ name: string; inheritedFrom?: Reference }> = []) =>
   items.map((item) => `${item.name}${item.inheritedFrom ? `<${item.inheritedFrom.name}` : ''}`);
 
 // EmailField extends TextField, which applies InputFieldMixin, which applies FieldMixin
@@ -136,18 +157,21 @@ describe('inheritancePlugin', () => {
   });
 
   test('should discard what the analyzer merged in after the module link phase', () => {
-    const manifest = { modules: structuredClone(fieldModules) };
+    const manifest: Package = {
+      schemaVersion: '1.0.0',
+      modules: structuredClone(fieldModules) as JavaScriptModule[],
+    };
     const plugin = inheritancePlugin();
     for (const moduleDoc of manifest.modules) {
-      plugin.moduleLinkPhase({ moduleDoc });
+      plugin.moduleLinkPhase!({ moduleDoc });
     }
     const mixin = declaration(manifest, 'InputFieldMixin');
     mixin.members[0].type = { text: 'string | null | undefined' };
     mixin.members[0].inheritedFrom = { name: 'FieldMixin', module: 'packages/field-base/src/field-mixin.js' };
     mixin.members.push({ ...field('invalid', 'boolean'), inheritedFrom: { name: 'Stale', module: 'stale.js' } });
-    plugin.packageLinkPhase({ customElementsManifest: manifest });
+    plugin.packageLinkPhase!({ customElementsManifest: manifest });
     assert.deepEqual(mixin.members[0], field('label', 'string', { description: 'The input label' }));
-    assert.equal(mixin.members[1].inheritedFrom.name, 'FieldMixin');
+    assert.equal(mixin.members[1].inheritedFrom!.name, 'FieldMixin');
   });
 
   test('should leave a declaration without items untouched', () => {
@@ -258,7 +282,7 @@ describe('inheritancePlugin', () => {
     ];
     const [checkValidity] = declaration(analyze(modules), 'A').members;
     assert.equal(checkValidity.description, 'Checks the constraints');
-    assert.equal(checkValidity.inheritedFrom.name, 'ConstraintsMixin');
+    assert.equal(checkValidity.inheritedFrom!.name, 'ConstraintsMixin');
   });
 
   test('should give the same result for any module order', () => {
