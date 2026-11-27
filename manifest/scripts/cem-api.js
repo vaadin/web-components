@@ -25,8 +25,8 @@ import {
   renderComment,
   snapshotManifest,
   snapshotWebTypes,
-} from '../lib/api-snapshot.js';
-import { listPackageDirs, packageDir } from '../lib/cem-helpers.js';
+} from '../lib/api-snapshot.ts';
+import { listPackageDirs, packageDir } from '../lib/cem-helpers.ts';
 
 const USAGE =
   'Usage: yarn workspace @vaadin/manifest-tools compare [--base <ref>] [--out <dir>] [--base-label <text>] [--head-label <text>]';

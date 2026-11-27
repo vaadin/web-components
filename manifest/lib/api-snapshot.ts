@@ -6,7 +6,52 @@
  * line per public item. As the tag name starts with a letter, git's default
  * funcname heuristic puts it in the header of every hunk of a snapshot diff.
  */
-import { byName, getElements } from './cem-helpers.js';
+import type { ClassMember, ClassMethod, CustomElementField, Package, Parameter, Type } from 'custom-elements-manifest';
+import { byName, getElements } from './cem-helpers.ts';
+import type { WebTypes, WebTypesAttribute } from './web-types-schema.ts';
+
+/** A manifest or web-types item that becomes one snapshot line. */
+interface Item {
+  name: string;
+  deprecated?: boolean | string;
+  default?: string;
+}
+
+/** A flag of a snapshot line, written as `[flag]` when truthy. */
+type Flag = string | boolean | undefined;
+
+interface Line {
+  kind: string;
+  name: string;
+  text: string;
+}
+
+interface Block {
+  header: string;
+  lines: Line[];
+}
+
+/** The parsed snapshot of one element. */
+export interface ElementSnapshot {
+  header: string;
+  items: Map<string, string>;
+}
+
+/** The parsed snapshot, by tag name. */
+export type Snapshot = Map<string, ElementSnapshot>;
+
+export interface Stats {
+  elements: number;
+  removed: number;
+  added: number;
+  changed: number;
+}
+
+/** The rendered diff and the stats of one snapshot file. */
+export interface Section {
+  diff: string;
+  stats: Stats;
+}
 
 export const COMMENT_MARKER = '<!-- cem-api -->';
 
@@ -29,30 +74,30 @@ const KIND_ORDER = [
   'cssprop',
 ];
 
-const oneLine = (text) => String(text).replace(/\s+/gu, ' ').trim();
-const isPublic = (item) => item.privacy !== 'private' && item.privacy !== 'protected';
+const oneLine = (text: string): string => String(text).replace(/\s+/gu, ' ').trim();
+const isPublic = (item: ClassMember): boolean => item.privacy !== 'private' && item.privacy !== 'protected';
 
-function line(kind, name, detail = '', flags = []) {
+function line(kind: string, name: string, detail = '', flags: Flag[] = []): Line {
   const suffix = flags.filter(Boolean).map((flag) => ` [${flag}]`);
   return { kind, name, text: `  ${kind} ${name}${detail}${suffix.join('')}` };
 }
 
-function typeDetail(item) {
+function typeDetail(item: { type?: Type }): string {
   return item.type?.text ? `: ${oneLine(item.type.text)}` : '';
 }
 
-function parameter(p) {
+function parameter(p: Parameter): string {
   const name = `${p.rest ? '...' : ''}${p.name}${p.optional ? '?' : ''}`;
   return p.type ? `${name}: ${oneLine(p.type.text)}` : name;
 }
 
-function signature(method) {
+function signature(method: ClassMethod): string {
   const params = (method.parameters || []).map(parameter).join(', ');
   const ret = method.return?.type?.text;
   return ret ? `(${params}): ${oneLine(ret)}` : `(${params})`;
 }
 
-function renderBlocks(blocks) {
+function renderBlocks(blocks: Block[]): string {
   return `${blocks
     .sort((a, b) => byName(a.header, b.header))
     .map(({ header, lines }) =>
@@ -72,22 +117,25 @@ function renderBlocks(blocks) {
 }
 
 /**
- * @param {object[] | undefined} items
- * @param {string} kind
- * @param {(item: object) => string} [detail] e.g. the type, appended to the name
- * @param {(item: object) => (string | false | undefined)[]} [flags] appended as `[flag]`, after `deprecated`
- * @return {{ kind: string, name: string, text: string }[]} one line per item
+ * @param detail e.g. the type, appended to the name
+ * @param flags appended as `[flag]`, after `deprecated`
+ * @return one line per item
  */
-function itemLines(items, kind, detail = () => '', flags = () => []) {
+function itemLines<T extends Item>(
+  items: T[] | undefined,
+  kind: string,
+  detail: (item: T) => string = () => '',
+  flags: (item: T) => Flag[] = () => [],
+): Line[] {
   return (items || []).map((item) =>
     line(kind, item.name, detail(item), [...flags(item), item.deprecated && 'deprecated']),
   );
 }
 
 /** The `default=` flag of an item with a default value, false otherwise. */
-const defaultFlag = (item) => item.default !== undefined && `default=${oneLine(item.default)}`;
+const defaultFlag = (item: Item): Flag => item.default !== undefined && `default=${oneLine(item.default)}`;
 
-function memberLine(member) {
+function memberLine(member: CustomElementField | ClassMethod): Line | undefined {
   const prefix = member.static ? 'static-' : '';
   const deprecated = member.deprecated && 'deprecated';
   if (member.kind === 'method') {
@@ -106,15 +154,18 @@ function memberLine(member) {
 }
 
 /**
- * @param {object} manifest the root `custom-elements.json`
- * @return {string} the public API of every custom element in the manifest
+ * @param manifest the root `custom-elements.json`
+ * @return the public API of every custom element in the manifest
  */
-export function snapshotManifest(manifest) {
+export function snapshotManifest(manifest: Package): string {
   const blocks = getElements(manifest).map((decl) => ({
     header: `${decl.tagName} (${decl.name})${decl.deprecated ? ' [deprecated]' : ''}`,
     lines: [
       ...itemLines(decl.attributes, 'attribute', typeDetail, (attr) => [defaultFlag(attr)]),
-      ...(decl.members || []).filter(isPublic).map(memberLine).filter(Boolean),
+      ...(decl.members || [])
+        .filter(isPublic)
+        .map(memberLine)
+        .filter((l) => l !== undefined),
       ...itemLines(
         decl.events?.filter((event) => event.name),
         'event',
@@ -138,19 +189,19 @@ export function snapshotManifest(manifest) {
 }
 
 /**
- * @param {{ value?: { type?: string | string[] } }} item a web-types attribute or property
- * @return {string} the type as a union, or an empty string
+ * @param item a web-types attribute or property
+ * @return the type as a union, or an empty string
  */
-function unionDetail(item) {
+function unionDetail(item: WebTypesAttribute): string {
   const type = [item.value?.type ?? []].flat().join(' | ');
   return type ? `: ${oneLine(type)}` : '';
 }
 
 /**
- * @param {object[]} files the parsed `web-types.json` files
- * @return {string} the elements of every web-types file
+ * @param files the parsed `web-types.json` files
+ * @return the elements of every web-types file
  */
-export function snapshotWebTypes(files) {
+export function snapshotWebTypes(files: WebTypes[]): string {
   const blocks = files.flatMap((data) =>
     (data.contributions?.html?.elements || []).map((element) => ({
       header: element.name,
@@ -167,28 +218,28 @@ export function snapshotWebTypes(files) {
 }
 
 /**
- * @param {string} text an item line without the leading two spaces, e.g. `method focus(options?: FocusOptions): void`
- * @return {string} the key `kind name`, e.g. `method focus`
+ * @param text an item line without the leading two spaces, e.g. `method focus(options?: FocusOptions): void`
+ * @return the key `kind name`, e.g. `method focus`
  */
-function itemKey(text) {
+function itemKey(text: string): string {
   const [kind, word] = text.split(' ');
   // The default slot is named `(default)`, which the cut would empty
   return `${kind} ${word.split(/[(:]/u)[0] || word}`;
 }
 
 /**
- * @param {string} text a snapshot
- * @return {Map<string, { header: string, items: Map<string, string> }>} the elements by tag name
+ * @param text a snapshot
+ * @return the elements by tag name
  */
-export function parseSnapshot(text) {
-  const elements = new Map();
-  let current;
+export function parseSnapshot(text: string): Snapshot {
+  const elements: Snapshot = new Map();
+  let current: ElementSnapshot | undefined;
   for (const l of text.split('\n')) {
     if (!l.trim()) {
       continue;
     }
     if (l.startsWith('  ')) {
-      current.items.set(itemKey(l.slice(2)), l);
+      current!.items.set(itemKey(l.slice(2)), l);
     } else {
       current = { header: l, items: new Map() };
       elements.set(l.split(' ')[0], current);
@@ -198,9 +249,12 @@ export function parseSnapshot(text) {
 }
 
 /** Counts the item changes of one element. An element without items counts as one change. */
-function elementCounts(before, after) {
+function elementCounts(
+  before: ElementSnapshot | undefined,
+  after: ElementSnapshot | undefined,
+): Omit<Stats, 'elements'> {
   if (!after) {
-    return { removed: before.items.size || 1, added: 0, changed: 0 };
+    return { removed: before!.items.size || 1, added: 0, changed: 0 };
   }
   if (!before) {
     return { removed: 0, added: after.items.size || 1, changed: 0 };
@@ -221,13 +275,8 @@ function elementCounts(before, after) {
   return counts;
 }
 
-/**
- * @param {ReturnType<typeof parseSnapshot>} base
- * @param {ReturnType<typeof parseSnapshot>} head
- * @return {{ elements: number, removed: number, added: number, changed: number }}
- */
-export function diffStats(base, head) {
-  const stats = { elements: 0, removed: 0, added: 0, changed: 0 };
+export function diffStats(base: Snapshot, head: Snapshot): Stats {
+  const stats: Stats = { elements: 0, removed: 0, added: 0, changed: 0 };
   for (const tag of new Set([...base.keys(), ...head.keys()])) {
     const before = base.get(tag);
     const after = head.get(tag);
@@ -245,13 +294,11 @@ export function diffStats(base, head) {
 /**
  * Renders a raw `git diff -U0` of two snapshots with one `@@ element @@`
  * header per element, printed only before its first item line.
- * @param {string} raw
- * @return {string}
  */
-export function parseDiff(raw) {
-  const lines = [];
-  let current;
-  let printed;
+export function parseDiff(raw: string): string {
+  const lines: string[] = [];
+  let current: string | undefined;
+  let printed: string | undefined;
   for (const l of raw.split('\n')) {
     const hunk = /^@@ [^@]+ @@ ?(.*)$/u.exec(l);
     if (hunk) {
@@ -274,7 +321,7 @@ export function parseDiff(raw) {
   return lines.join('\n');
 }
 
-function summary({ elements, removed, added, changed }) {
+function summary({ elements, removed, added, changed }: Stats): string {
   const parts = [removed && `${removed} removed`, added && `${added} added`, changed && `${changed} changed`];
   if (!parts.some(Boolean)) {
     return 'no changes';
@@ -283,9 +330,9 @@ function summary({ elements, removed, added, changed }) {
 }
 
 /**
- * @return {{ lines: string[], used: number }} the section body and the budget it used
+ * @return the section body and the budget it used
  */
-function sectionBody(diff, budget) {
+function sectionBody(diff: string, budget: number): { lines: string[]; used: number } {
   if (!diff) {
     return { lines: ['No changes.'], used: 0 };
   }
@@ -300,12 +347,11 @@ function sectionBody(diff, budget) {
 }
 
 /**
- * @param {{ diff: string, stats: object }} cem the rendered diff and the stats of `custom-elements.api`
- * @param {{ diff: string, stats: object }} webTypes the same for `web-types.api`
- * @param {{ base: string, head: string }} labels
- * @return {string} the body of the PR comment
+ * @param cem the rendered diff and the stats of `custom-elements.api`
+ * @param webTypes the same for `web-types.api`
+ * @return the body of the PR comment
  */
-export function renderComment(cem, webTypes, labels) {
+export function renderComment(cem: Section, webTypes: Section, labels: { base: string; head: string }): string {
   const comment = [COMMENT_MARKER, '### Custom elements API', '', `Compared ${labels.head} with ${labels.base}.`, ''];
   if (!cem.diff && !webTypes.diff) {
     comment.push('No API changes.');
@@ -313,10 +359,11 @@ export function renderComment(cem, webTypes, labels) {
   }
   let budget = MAX_DIFF_LENGTH;
   // The manifest section is open for review, the web-types section mostly repeats it
-  for (const [title, { diff, stats }, open] of [
+  const sections: Array<[string, Section, boolean]> = [
     ['custom-elements.json', cem, true],
     ['web-types.json', webTypes, false],
-  ]) {
+  ];
+  for (const [title, { diff, stats }, open] of sections) {
     const body = sectionBody(diff, budget);
     budget -= body.used;
     comment.push(

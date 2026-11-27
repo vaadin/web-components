@@ -1,3 +1,4 @@
+import type { ClassDeclaration, Package } from 'custom-elements-manifest';
 import assert from 'node:assert/strict';
 import fs from 'node:fs';
 import { mock, test } from 'node:test';
@@ -9,8 +10,8 @@ import {
   splitManifest,
   transformModulePath,
   transformReference,
-} from '../lib/split-paths.js';
-import { createTree } from './create-tree.js';
+} from '../lib/split-paths.ts';
+import { createTree } from './create-tree.ts';
 
 test('extractPackageName reads the package of a module path', () => {
   assert.equal(extractPackageName('packages/button/src/vaadin-button.js'), 'button');
@@ -107,7 +108,7 @@ test('splitManifest builds one manifest per package with the entry points first'
     'packages/a11y-base/src/focus-mixin.js': '',
   });
   // The per-package manifests copy the schema version and readme of the root manifest
-  const rootManifest = {
+  const rootManifest: Package = {
     schemaVersion: '2.1.0',
     readme: 'README.md',
     modules: [
@@ -164,13 +165,13 @@ test('splitManifest builds one manifest per package with the entry points first'
   });
   // `vaadin-button-mixin.js` has no source module in the manifest, so it gets no entry
   assert.deepEqual(
-    manifests.get('button').modules.map((mod) => mod.path),
+    manifests.get('button')!.modules.map((mod) => mod.path),
     ['vaadin-button.js', 'src/vaadin-button.js'],
   );
-  assert.deepEqual(manifests.get('button').modules[1].declarations[0].mixins, [
+  assert.deepEqual((manifests.get('button')!.modules[1].declarations![0] as ClassDeclaration).mixins, [
     { name: 'FocusMixin', package: '@vaadin/a11y-base/src/focus-mixin.js' },
   ]);
-  assert.deepEqual(manifests.get('button').modules[1].exports[0].declaration, {
+  assert.deepEqual(manifests.get('button')!.modules[1].exports![0].declaration, {
     name: 'Button',
     module: 'src/vaadin-button.js',
   });
@@ -180,7 +181,8 @@ test('splitManifest skips and warns about a module outside packages/', (t) => {
   const root = createTree(t, {});
   const warn = mock.method(console, 'warn', () => {});
   t.after(() => warn.mock.restore());
-  const manifests = splitManifest({ schemaVersion: '1.0.0', readme: '', modules: [{ path: 'dev/foo.js' }] }, root);
+  const rootManifest = { schemaVersion: '1.0.0', readme: '', modules: [{ path: 'dev/foo.js' }] };
+  const manifests = splitManifest(rootManifest as Package, root);
   assert.equal(manifests.size, 0);
   assert.equal(warn.mock.callCount(), 1);
   assert.match(warn.mock.calls[0].arguments[0], /dev\/foo\.js/u);

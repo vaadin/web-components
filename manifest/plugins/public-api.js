@@ -1,4 +1,4 @@
-import { isPrimitiveType } from '../lib/cem-helpers.js';
+import { isPrimitiveType } from '../lib/cem-helpers.ts';
 
 /**
  * CEM analyzer plugin that keeps only the public API in the manifest: it drops

@@ -8,8 +8,8 @@
  */
 import fs from 'node:fs';
 import path from 'node:path';
-import { packageDir, rootDir } from '../lib/cem-helpers.js';
-import { splitManifest } from '../lib/split-paths.js';
+import { packageDir, rootDir } from '../lib/cem-helpers.ts';
+import { splitManifest } from '../lib/split-paths.ts';
 
 const rootManifest = JSON.parse(fs.readFileSync(path.join(rootDir, 'custom-elements.json'), 'utf-8'));
 const manifests = splitManifest(rootManifest);

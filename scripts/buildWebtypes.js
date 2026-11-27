@@ -9,7 +9,7 @@ import {
   packageDir,
   readManifest,
   readPackageJson,
-} from '../manifest/lib/cem-helpers.js';
+} from '../manifest/lib/cem-helpers.ts';
 
 const PLAIN_WEB_TYPES_FILE = 'web-types.json';
 const LIT_WEB_TYPES_FILE = 'web-types.lit.json';

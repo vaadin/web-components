@@ -1,5 +1,5 @@
 import fs from 'node:fs';
-import { byName } from './lib/cem-helpers.js';
+import { byName } from './lib/cem-helpers.ts';
 import { classPrivacyPlugin } from './plugins/class-privacy.js';
 import { inheritancePlugin } from './plugins/inheritance.js';
 import { publicApiPlugin } from './plugins/public-api.js';

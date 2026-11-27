@@ -30,6 +30,9 @@ jobs:
       - name: Test manifest tooling
         run: yarn test:manifest
 
+      - name: Lint manifest tooling types
+        run: yarn lint:types:manifest
+
       - name: Lint CSS
         run: yarn lint:css
 

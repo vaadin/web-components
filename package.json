@@ -17,6 +17,7 @@
     "lint:html": "prettier --check \"dev/**/*.html\"",
     "lint:js": "eslint",
     "lint:types": "tsc",
+    "lint:types:manifest": "yarn workspace @vaadin/manifest-tools lint:types",
     "lint:types:react": "yarn workspace react-components-tooling lint:types",
     "postinstall": "patch-package",
     "prepare": "husky",
