@@ -169,7 +169,14 @@ export const ItemsMixin = (superClass) =>
 
       // Support menu-bar / context-menu item
       if (component._hasVaadinItemMixin) {
-        component.setAttribute('role', 'menuitem');
+        // Items with a boolean `checked` value are checkable and act as checkboxes.
+        const checkable = typeof item.checked === 'boolean';
+        component.setAttribute('role', checkable ? 'menuitemcheckbox' : 'menuitem');
+        if (checkable) {
+          component.setAttribute('aria-checked', String(item.checked));
+        } else {
+          component.removeAttribute('aria-checked');
+        }
         component.tabIndex = -1;
       }
 

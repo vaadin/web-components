@@ -113,11 +113,12 @@ snapshots["context-menu items nested"] =
         role="menu"
       >
         <vaadin-context-menu-item
+          aria-checked="true"
           aria-haspopup="false"
           aria-selected="false"
           class="first"
           menu-item-checked=""
-          role="menuitem"
+          role="menuitemcheckbox"
           tabindex="0"
         >
           Menu Item 2-2-1

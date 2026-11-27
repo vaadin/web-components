@@ -10,7 +10,7 @@
     -webkit-user-select: none;
   }
 
-  :host([role='menuitem'][menu-item-checked]) [part='checkmark']::before {
+  :host([menu-item-checked]) [part='checkmark']::before {
     opacity: 1;
   }
 

@@ -467,7 +467,7 @@ export const MenuBarMixin = (superClass) =>
 
         // Teleport item component back from "overflow" sub-menu
         const item = button.item?.component;
-        if (item instanceof HTMLElement && item.getAttribute('role') === 'menuitem') {
+        if (item instanceof HTMLElement && item.getAttribute('role')?.startsWith('menuitem')) {
           this.__restoreItem(button, item);
         }
       });
@@ -491,6 +491,7 @@ export const MenuBarMixin = (superClass) =>
     __restoreItem(button, item) {
       button.appendChild(item);
       item.removeAttribute('role');
+      item.removeAttribute('aria-checked');
       item.removeAttribute('aria-expanded');
       item.removeAttribute('aria-haspopup');
       item.removeAttribute('tabindex');
