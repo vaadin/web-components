@@ -180,6 +180,8 @@ snapshots["vaadin-side-nav-item shadow default"] =
     <slot name="suffix">
     </slot>
   </a>
+  <slot name="actions">
+  </slot>
   <button
     aria-controls="children"
     aria-expanded="false"
@@ -229,6 +231,8 @@ snapshots["vaadin-side-nav-item shadow expanded"] =
     <slot name="suffix">
     </slot>
   </a>
+  <slot name="actions">
+  </slot>
   <button
     aria-controls="children"
     aria-expanded="true"
@@ -278,6 +282,8 @@ snapshots["vaadin-side-nav-item shadow current"] =
     <slot name="suffix">
     </slot>
   </a>
+  <slot name="actions">
+  </slot>
   <button
     aria-controls="children"
     aria-expanded="true"
@@ -327,6 +333,8 @@ snapshots["vaadin-side-nav-item shadow path"] =
     <slot name="suffix">
     </slot>
   </a>
+  <slot name="actions">
+  </slot>
   <button
     aria-controls="children"
     aria-expanded="false"
@@ -376,6 +384,8 @@ snapshots["vaadin-side-nav-item shadow null path"] =
     <slot name="suffix">
     </slot>
   </a>
+  <slot name="actions">
+  </slot>
   <button
     aria-controls="children"
     aria-expanded="false"
@@ -425,6 +435,8 @@ snapshots["vaadin-side-nav-item shadow i18n"] =
     <slot name="suffix">
     </slot>
   </a>
+  <slot name="actions">
+  </slot>
   <button
     aria-controls="children"
     aria-expanded="false"

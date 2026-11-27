@@ -61,8 +61,21 @@ const sideNavItem = css`
     outline: 0;
   }
 
+  /* Extend the native action's hit area into the row padding. */
+  button[part='link']::after {
+    content: '';
+    position: absolute;
+    inset: 0;
+  }
+
   :host(:not([has-children])) [part='toggle-button'] {
     display: none !important;
+  }
+
+  /* Keep secondary actions above the primary button’s extended hit area. */
+  slot[name='actions']::slotted(*) {
+    position: relative;
+    flex: none;
   }
 
   slot:not([name]) {

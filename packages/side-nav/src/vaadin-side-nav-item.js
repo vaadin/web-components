@@ -41,6 +41,7 @@ import { SideNavChildrenMixin } from './vaadin-side-nav-children-mixin.js';
  * ----------|-------------
  * `prefix`  | A slot for content before the label (e.g. an icon).
  * `suffix`  | A slot for content after the label (e.g. an icon).
+ * `actions` | Independent controls after the primary link or button, inside the content row.
  *
  * #### Example
  *
@@ -60,7 +61,7 @@ import { SideNavChildrenMixin } from './vaadin-side-nav-children-mixin.js';
  * ----------------|----------------
  * `content`       | The element that wraps link and toggle button
  * `children`      | The element that wraps child items
- * `link`          | The clickable anchor used for navigation
+ * `link`          | The primary link or action button
  * `toggle-button` | The toggle button
  *
  * The following state attributes are available for styling:
@@ -104,6 +105,9 @@ class SideNavItem extends SideNavChildrenMixin(
 
   static get properties() {
     return {
+      /** Render a pathless leaf as a native action button. */
+      button: { type: Boolean, value: false },
+
       /**
        * The path to navigate to
        */
@@ -206,7 +210,7 @@ class SideNavItem extends SideNavChildrenMixin(
 
   /** @protected */
   get _button() {
-    return this.shadowRoot.querySelector('button');
+    return this.shadowRoot.querySelector('[part=toggle-button]');
   }
 
   /**
@@ -260,25 +264,42 @@ class SideNavItem extends SideNavChildrenMixin(
     window.removeEventListener('side-nav-location-changed', this.__boundUpdateCurrent);
   }
 
+  /** The native control that receives focus and popup accessibility attributes. */
+  get focusElement() {
+    return this.shadowRoot?.querySelector('#link') ?? null;
+  }
+
+  get ariaTarget() {
+    return this.focusElement;
+  }
+
   /** @protected */
   render() {
+    const label = html`
+      <slot name="prefix"></slot>
+      <slot></slot>
+      <div class="sr-only">${this.__tooltipText}</div>
+      <slot name="suffix"></slot>
+    `;
     return html`
       <div id="content" part="content" @click="${this._onContentClick}">
-        <a
-          id="link"
-          ?disabled="${this.disabled}"
-          tabindex="${this.disabled || this.path == null ? '-1' : '0'}"
-          href="${ifDefined(this.disabled ? null : this.path)}"
-          target="${ifDefined(this.target)}"
-          ?router-ignore="${this.routerIgnore}"
-          part="link"
-          aria-current="${this.current ? 'page' : 'false'}"
-        >
-          <slot name="prefix"></slot>
-          <slot></slot>
-          <div class="sr-only">${this.__tooltipText}</div>
-          <slot name="suffix"></slot>
-        </a>
+        ${
+          this.button && this.path == null && !this._itemsCount
+            ? html`<button type="button" id="link" part="link" ?disabled=${this.disabled}>${label}</button>`
+            : html`<a
+                id="link"
+                ?disabled="${this.disabled}"
+                tabindex="${this.disabled || this.path == null ? '-1' : '0'}"
+                href="${ifDefined(this.disabled ? null : this.path)}"
+                target="${ifDefined(this.target)}"
+                ?router-ignore="${this.routerIgnore}"
+                part="link"
+                aria-current="${this.current ? 'page' : 'false'}"
+              >
+                ${label}
+              </a>`
+        }
+        <slot name="actions" @click="${this._onActionsClick}"></slot>
         <button
           part="toggle-button"
           ?disabled="${this.disabled}"
@@ -322,6 +343,12 @@ class SideNavItem extends SideNavChildrenMixin(
   }
 
   /** @private */
+  _onActionsClick(event) {
+    // Keep secondary actions independent of row activation and host click listeners.
+    event.stopPropagation();
+  }
+
+  /** @private */
   _onButtonClick(event) {
     // Prevent the event from being handled
     // by the content click listener below
@@ -332,8 +359,8 @@ class SideNavItem extends SideNavChildrenMixin(
   /** @private */
   _onContentClick(e) {
     // Navigate if path is defined and not clicking on the link directly
-    if (this.path != null && !e.composedPath().find((el) => el === this.$.link)) {
-      this.$.link.click();
+    if (this.path != null && !e.composedPath().includes(this.focusElement)) {
+      this.focusElement.click();
     }
     // Toggle item expanded state unless path is defined
     else if (this.path == null && this.hasAttribute('has-children') && !this.disabled) {

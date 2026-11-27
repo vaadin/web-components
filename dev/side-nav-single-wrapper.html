@@ -3,7 +3,7 @@
   <head>
     <meta charset="utf-8" />
     <meta name="viewport" content="width=device-width, initial-scale=1" />
-    <title>Side Nav · Single wrapper</title>
+    <title>Side Nav · Nested items and actions</title>
     <script type="module" src="./side-nav-single-wrapper.js"></script>
     <style>
       :root {
@@ -63,19 +63,8 @@
         margin-block-start: 0.4rem;
       }
 
-      button[slot='suffix'] {
-        font: inherit;
-        font-weight: 700;
-        background: transparent;
-        color: inherit;
-        border: 0;
-        border-radius: 0.4rem;
-        cursor: pointer;
-        min-width: 2.5rem;
-      }
-
-      button[slot='suffix']:hover {
-        background: #e3eaf5;
+      .leading-toggle::part(toggle-button) {
+        order: -1;
       }
 
       button:focus-visible {
@@ -97,54 +86,44 @@
   </head>
   <body>
     <div class="workspace">
-      <vaadin-side-nav role="navigation" aria-label="Workspace">
-        <vaadin-side-nav-item path="#home">
+      <vaadin-side-nav aria-label="Workspace">
+        <vaadin-side-nav-item path="?view=home">
           <vaadin-icon slot="prefix" src="./assets/lucide-icons/home.svg" aria-hidden="true"></vaadin-icon>
           Home
         </vaadin-side-nav-item>
-        <vaadin-side-nav-item id="notifications">
+        <vaadin-side-nav-item button id="notifications">
           <vaadin-icon slot="prefix" src="./assets/lucide-icons/bell.svg" aria-hidden="true"></vaadin-icon>
           Notifications
         </vaadin-side-nav-item>
-        <vaadin-side-nav-group>
-          <vaadin-side-nav-item slot="item" path="#reports">
-            <vaadin-icon
-              slot="prefix"
-              src="./assets/lucide-icons/chart-column-big.svg"
-              aria-hidden="true"
-            ></vaadin-icon>
-            Reports
-          </vaadin-side-nav-item>
-          <button type="button" slot="suffix" id="more-reports" aria-label="More actions for Reports">⋯</button>
-        </vaadin-side-nav-group>
-        <vaadin-side-nav-group toggle-position="start">
-          <vaadin-side-nav-item slot="item" path="#people">
-            <vaadin-icon slot="prefix" src="./assets/lucide-icons/users.svg" aria-hidden="true"></vaadin-icon>
-            People
-          </vaadin-side-nav-item>
-          <vaadin-side-nav-item path="#directory">
+        <vaadin-side-nav-item path="?view=reports">
+          <vaadin-icon slot="prefix" src="./assets/lucide-icons/chart-column-big.svg" aria-hidden="true"></vaadin-icon>
+          Reports
+          <button slot="actions" type="button" id="more-reports" aria-label="More actions for Reports">⋯</button>
+        </vaadin-side-nav-item>
+        <vaadin-side-nav-item path="?view=people" class="leading-toggle">
+          <vaadin-icon slot="prefix" src="./assets/lucide-icons/users.svg" aria-hidden="true"></vaadin-icon>
+          People
+          <vaadin-side-nav-item slot="children" path="?view=directory">
             <vaadin-icon slot="prefix" src="./assets/lucide-icons/folder.svg" aria-hidden="true"></vaadin-icon>
             Directory
           </vaadin-side-nav-item>
-          <vaadin-side-nav-item path="#org-chart">
+          <vaadin-side-nav-item slot="children" path="?view=org-chart">
             <vaadin-icon slot="prefix" src="./assets/lucide-icons/layers.svg" aria-hidden="true"></vaadin-icon>
             Org Chart
           </vaadin-side-nav-item>
-        </vaadin-side-nav-group>
-        <vaadin-side-nav-group>
-          <vaadin-side-nav-item slot="item">
-            <vaadin-icon slot="prefix" src="./assets/lucide-icons/cog.svg" aria-hidden="true"></vaadin-icon>
-            Settings
-          </vaadin-side-nav-item>
-          <vaadin-side-nav-item path="#appearance">
+        </vaadin-side-nav-item>
+        <vaadin-side-nav-item>
+          <vaadin-icon slot="prefix" src="./assets/lucide-icons/cog.svg" aria-hidden="true"></vaadin-icon>
+          Settings
+          <vaadin-side-nav-item slot="children" path="?view=appearance">
             <vaadin-icon slot="prefix" src="./assets/lucide-icons/palette.svg" aria-hidden="true"></vaadin-icon>
             Appearance
           </vaadin-side-nav-item>
-          <vaadin-side-nav-item path="#preferences">
+          <vaadin-side-nav-item slot="children" path="?view=preferences">
             <vaadin-icon slot="prefix" src="./assets/lucide-icons/list-todo.svg" aria-hidden="true"></vaadin-icon>
             Preferences
           </vaadin-side-nav-item>
-        </vaadin-side-nav-group>
+        </vaadin-side-nav-item>
       </vaadin-side-nav>
       <main aria-live="polite">
         <h1></h1>
@@ -157,7 +136,7 @@
       <p>Your weekly report is ready.</p>
     </vaadin-popover>
     <vaadin-popover id="report-actions" for="more-reports" accessible-name="Report actions">
-      <a href="#weekly">Open weekly report</a>
+      <a href="?view=weekly">Open weekly report</a>
     </vaadin-popover>
   </body>
 </html>

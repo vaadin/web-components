@@ -43,6 +43,7 @@ export type SideNavItemEventMap = HTMLElementEventMap & SideNavItemCustomEventMa
  * ----------|-------------
  * `prefix`  | A slot for content before the label (e.g. an icon).
  * `suffix`  | A slot for content after the label (e.g. an icon).
+ * `actions` | Independent controls after the primary link or button, inside the content row.
  *
  * #### Example
  *
@@ -94,6 +95,12 @@ export type SideNavItemEventMap = HTMLElementEventMap & SideNavItemCustomEventMa
  * @fires {CustomEvent} expanded-changed - Fired when the `expanded` property changes.
  */
 declare class SideNavItem extends SideNavChildrenMixin(DisabledMixin(ElementMixin(ThemableMixin(HTMLElement)))) {
+  /** Render a pathless leaf as a native action button. */
+  button: boolean;
+
+  readonly focusElement: HTMLElement | null;
+  readonly ariaTarget: HTMLElement | null;
+
   /**
    * The path to navigate to
    */

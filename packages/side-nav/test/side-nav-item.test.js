@@ -32,6 +32,48 @@ describe('side-nav-item', () => {
     });
   });
 
+  it('activates a slotted action independently of the row link', async () => {
+    item = fixtureSync(`<vaadin-side-nav-item path="/reports">
+      Reports<button slot="actions">More</button>
+    </vaadin-side-nav-item>`);
+    await nextRender();
+    const action = item.querySelector('button');
+    const onAction = sinon.spy();
+    const onItem = sinon.spy();
+    const onNavigate = sinon.spy((event) => event.preventDefault());
+    action.addEventListener('click', onAction);
+    item.addEventListener('click', onItem);
+    item.focusElement.addEventListener('click', onNavigate);
+    expect(action.assignedSlot.parentElement).to.equal(item.$.content);
+    action.click();
+    expect(onAction).to.have.been.calledOnce;
+    expect(onItem).not.to.have.been.called;
+    expect(onNavigate).not.to.have.been.called;
+  });
+
+  describe('action item', () => {
+    it('exposes the button for a host-targeted popover', async () => {
+      await import('@vaadin/popover');
+      const root = fixtureSync(`<div>
+        <vaadin-side-nav-item button id="action">Notifications</vaadin-side-nav-item>
+        <vaadin-popover for="action">Inbox</vaadin-popover>
+      </div>`);
+      await nextRender();
+      item = root.firstElementChild;
+      const popover = root.lastElementChild;
+      const button = item.focusElement;
+      expect(button.localName).to.equal('button');
+      expect(item.getAttribute('role')).to.equal('listitem');
+      expect(popover.target).to.equal(item);
+      expect(button.ariaControlsElements).to.deep.equal([popover]);
+      button.click();
+      await nextRender();
+      expect(popover.opened).to.be.true;
+      expect(button.getAttribute('aria-expanded')).to.equal('true');
+      expect(popover._overlayElement.restoreFocusNode).to.equal(button);
+    });
+  });
+
   describe('has-children', () => {
     beforeEach(async () => {
       item = fixtureSync('<vaadin-side-nav-item></vaadin-side-nav-item>');
