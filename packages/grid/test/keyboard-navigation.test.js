@@ -1703,6 +1703,40 @@ describe('keyboard navigation', () => {
       expect(getFirstHeaderCell().getAttribute('part')).to.contain('focused-cell');
     });
   });
+
+  describe('focus outline', () => {
+    function hasFocusOutline(element) {
+      return getComputedStyle(element, '::after').content !== 'none';
+    }
+
+    beforeEach(() => {
+      grid.items = undefined;
+      grid.size = 200;
+      grid.dataProvider = infiniteDataProvider;
+      flushGrid(grid);
+    });
+
+    it('should not show the outline on a cell reused for another item', () => {
+      focusItem(5);
+      grid.scrollToIndex(100);
+      flushGrid(grid);
+
+      const cell = grid.shadowRoot.activeElement;
+      expect(cell.parentElement.index).to.not.equal(5);
+      expect(hasFocusOutline(cell)).to.be.false;
+    });
+
+    it('should not show the outline on a row reused for another item', () => {
+      focusItem(5);
+      left();
+      grid.scrollToIndex(100);
+      flushGrid(grid);
+
+      const row = grid.shadowRoot.activeElement;
+      expect(row.index).to.not.equal(5);
+      expect(hasFocusOutline(row)).to.be.false;
+    });
+  });
 });
 
 describe('keyboard navigation on column groups', () => {
