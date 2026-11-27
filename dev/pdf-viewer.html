@@ -78,13 +78,18 @@
         viewer.src = fileUrl;
       });
 
-      ['headerHidden', 'toolbarCollapsed', 'downloadButtonHidden', 'sidebarButtonHidden', 'sidebarOpened'].forEach(
-        (prop) => {
-          document.getElementById(prop).addEventListener('checked-changed', (e) => {
-            viewer[prop] = e.detail.value;
-          });
-        },
-      );
+      [
+        'headerHidden',
+        'toolbarCollapsed',
+        'toolbarHidden',
+        'downloadButtonHidden',
+        'sidebarButtonHidden',
+        'sidebarOpened',
+      ].forEach((prop) => {
+        document.getElementById(prop).addEventListener('checked-changed', (e) => {
+          viewer[prop] = e.detail.value;
+        });
+      });
       viewer.addEventListener('toolbar-collapsed-changed', (e) => {
         document.getElementById('toolbarCollapsed').checked = e.detail.value;
       });
@@ -166,6 +171,7 @@
         <vaadin-checkbox-group label="Options">
           <vaadin-checkbox id="headerHidden" value="headerHidden" label="Hide header"></vaadin-checkbox>
           <vaadin-checkbox id="toolbarCollapsed" value="toolbarCollapsed" label="Collapse toolbar"></vaadin-checkbox>
+          <vaadin-checkbox id="toolbarHidden" value="toolbarHidden" label="Hide toolbar"></vaadin-checkbox>
           <vaadin-checkbox
             id="downloadButtonHidden"
             value="downloadButtonHidden"

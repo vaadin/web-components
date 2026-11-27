@@ -39,6 +39,7 @@ assertType<string | null | undefined>(viewer.src);
 assertType<boolean>(viewer.headerHidden);
 assertType<string | null | undefined>(viewer.headerTitle);
 assertType<boolean>(viewer.toolbarCollapsed);
+assertType<boolean>(viewer.toolbarHidden);
 assertType<string | null | undefined>(viewer.fileName);
 assertType<boolean>(viewer.downloadButtonHidden);
 assertType<boolean>(viewer.sidebarOpened);

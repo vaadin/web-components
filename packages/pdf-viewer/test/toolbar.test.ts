@@ -490,6 +490,127 @@ describe('toolbar', () => {
     });
   });
 
+  describe('hidden toolbar', () => {
+    function getControls() {
+      return [...viewer.querySelectorAll<HTMLElement>(':scope > [slot^="toolbar-"]')];
+    }
+
+    function getHeader() {
+      return viewer.shadowRoot!.querySelector<HTMLElement>('[part~="header"]')!;
+    }
+
+    beforeEach(async () => {
+      await loadAndRender(viewer, fixtureUrl('multi-page.pdf'));
+    });
+
+    it('should not hide the toolbar by default', () => {
+      expect(viewer.toolbarHidden).to.be.false;
+      expect(toolbar.checkVisibility()).to.be.true;
+    });
+
+    it('should toggle the toolbar and its controls on toolbarHidden change', async () => {
+      viewer.toolbarHidden = true;
+      await nextFrame();
+      expect(toolbar.checkVisibility()).to.be.false;
+      expect(getControls()).to.be.empty;
+
+      viewer.toolbarHidden = false;
+      await nextFrame();
+      expect(toolbar.checkVisibility()).to.be.true;
+      expect(getControls()).to.have.lengthOf(8);
+      expect(getControls().every((control) => control.checkVisibility())).to.be.true;
+    });
+
+    it('should hide the toolbar when set as attribute', async () => {
+      viewer.setAttribute('toolbar-hidden', '');
+      await nextFrame();
+      expect(viewer.toolbarHidden).to.be.true;
+      expect(toolbar.checkVisibility()).to.be.false;
+      expect(getControls()).to.be.empty;
+    });
+
+    it('should toggle a child in the toolbar-actions slot on toolbarHidden change', async () => {
+      const approve = createButton('Approve');
+      viewer.appendChild(approve);
+      viewer.toolbarHidden = true;
+      await nextFrame();
+      expect(approve.parentElement).to.equal(viewer);
+      expect(approve.checkVisibility()).to.be.false;
+
+      viewer.toolbarHidden = false;
+      await nextFrame();
+      expect(approve.checkVisibility()).to.be.true;
+    });
+
+    it('should give the space of the toolbar to the pages', async () => {
+      viewer.zoom = 'page-fit';
+      await nextRenderIdle(viewer);
+      viewer.toolbarHidden = true;
+      await nextResize(content);
+      await nextRenderIdle(viewer);
+      const page = viewer.shadowRoot!.querySelector<HTMLElement>('[part~="page"]')!;
+      expect(page.offsetHeight).to.be.closeTo(getContentBoxSize(content).height, 1);
+    });
+
+    it('should show the title in the header', async () => {
+      viewer.toolbarHidden = true;
+      await nextFrame();
+      expect(getHeader().checkVisibility()).to.be.true;
+      expect(getHeader().textContent!.trim()).to.equal('multi-page.pdf');
+    });
+
+    it('should not collapse the toolbar on header click', async () => {
+      viewer.toolbarHidden = true;
+      await nextFrame();
+      getHeader().click();
+      await nextFrame();
+      expect(viewer.toolbarCollapsed).to.be.false;
+    });
+
+    it('should not make the header a tab stop', async () => {
+      viewer.toolbarHidden = true;
+      await nextFrame();
+      content.focus();
+      await sendKeys({ press: 'Shift+Tab' });
+      expect(viewer.contains(getDeepActiveElement())).to.be.false;
+    });
+
+    it('should hide the header with headerHidden', async () => {
+      viewer.toolbarHidden = true;
+      viewer.headerHidden = true;
+      await nextFrame();
+      expect(getHeader().checkVisibility()).to.be.false;
+    });
+
+    it('should keep the toolbar collapsed when it is shown again', async () => {
+      viewer.toolbarCollapsed = true;
+      viewer.toolbarHidden = true;
+      await nextFrame();
+      viewer.toolbarHidden = false;
+      await nextFrame();
+      expect(toolbar.checkVisibility()).to.be.false;
+      expect(getHeader().getAttribute('aria-expanded')).to.equal('false');
+    });
+
+    describe('set before attach', () => {
+      let detached: PdfViewer;
+
+      afterEach(() => {
+        detached.remove();
+      });
+
+      it('should not render the controls', async () => {
+        detached = document.createElement('vaadin-pdf-viewer');
+        detached.toolbarHidden = true;
+        document.body.appendChild(detached);
+        await nextRender();
+        expect(detached.querySelector('[slot^="toolbar-"]')).to.be.null;
+        expect(detached.shadowRoot!.querySelector<HTMLElement>('[part~="toolbar"]')!.checkVisibility()).to.be.false;
+        expect(detached.shadowRoot!.querySelector<HTMLElement>('[part~="header"]')!.checkVisibility()).to.be.true;
+      });
+    });
+  });
+
   describe('toolbar-actions slot', () => {
     let approve: HTMLButtonElement;
 

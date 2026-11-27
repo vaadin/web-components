@@ -91,7 +91,7 @@ const DEFAULT_I18N = {
  *
  * Part name       | Description
  * ----------------|------------
- * `header`        | The header above the toolbar, a button that collapses and expands it, see `headerHidden`.
+ * `header`        | The header above the toolbar, see `headerHidden`. A button that collapses and expands the toolbar, or only a title while the toolbar is hidden.
  * `title`         | The title in the header.
  * `header-toggle` | The icon in the header that shows whether the toolbar is collapsed.
  * `toolbar`       | The toolbar above the pages.

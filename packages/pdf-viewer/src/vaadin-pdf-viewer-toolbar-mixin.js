@@ -13,7 +13,7 @@ import '@vaadin/integer-field/src/vaadin-integer-field.js';
 import '@vaadin/select/src/vaadin-select.js';
 import '@vaadin/tooltip/src/vaadin-tooltip.js';
 import './vaadin-pdf-viewer-icon.js';
-import { html } from 'lit';
+import { html, nothing } from 'lit';
 import { styleMap } from 'lit/directives/style-map.js';
 import { slotContent } from '@vaadin/component-base/src/directives/slot-content.js';
 import { formatZoom, getZoomInLevel, getZoomOutLevel, ZOOM_LEVELS } from './pdf-viewer-zoom-utils.js';
@@ -31,7 +31,8 @@ export const PdfViewerToolbarMixin = (superClass) =>
         /**
          * Whether the header above the toolbar is hidden. The header shows
          * `headerTitle`, or else the name of the document, and collapses and
-         * expands the toolbar when clicked.
+         * expands the toolbar when clicked. While the toolbar is hidden, see
+         * `toolbarHidden`, the header only shows the title.
          *
          * @attr {boolean} header-hidden
          */
@@ -53,9 +54,12 @@ export const PdfViewerToolbarMixin = (superClass) =>
         },
 
         /**
-         * Whether the toolbar is collapsed. The header collapses and expands
-         * it, so the toolbar collapses only while the header is shown, see
-         * `headerHidden`.
+         * Whether the toolbar is collapsed. The user expands a collapsed toolbar
+         * and collapses it again by clicking the header, so the toolbar collapses
+         * only while the header is shown, see `headerHidden`.
+         *
+         * Use it to save space while the controls stay available to the user.
+         * To remove the controls instead, use `toolbarHidden`.
          *
          * @attr {boolean} toolbar-collapsed
          */
@@ -63,6 +67,24 @@ export const PdfViewerToolbarMixin = (superClass) =>
           type: Boolean,
           value: false,
           notify: true,
+        },
+
+        /**
+         * Whether the toolbar is hidden. Unlike a collapsed toolbar, see
+         * `toolbarCollapsed`, the user can not show a hidden toolbar: it has no
+         * controls, the content of the `toolbar-actions` slot is hidden, and the
+         * header only shows the title.
+         *
+         * Use it when the viewer should not offer the controls to the user. The
+         * `download()` method, the `zoom` and `sidebarOpened` properties and the
+         * keyboard shortcuts work also while the toolbar is hidden. While it is
+         * hidden, `toolbarCollapsed` has no effect.
+         *
+         * @attr {boolean} toolbar-hidden
+         */
+        toolbarHidden: {
+          type: Boolean,
+          value: false,
         },
 
         /**
@@ -94,35 +116,28 @@ export const PdfViewerToolbarMixin = (superClass) =>
      * @protected
      */
     _renderToolbar() {
-      const title = this.headerTitle || this._getDocumentName() || this.__effectiveI18n.document;
+      const { toolbarHidden } = this;
       // The toolbar collapses only while the header, which expands it, is shown.
       const collapsed = this.toolbarCollapsed && !this.headerHidden;
+      // A hidden toolbar keeps its slots, as `slotContent()` removes the controls only when it renders `nothing`.
+      const content = (template) => slotContent(toolbarHidden ? nothing : template);
       return html`
-        <button
-          part="header"
-          aria-controls="toolbar"
-          aria-expanded="${collapsed ? 'false' : 'true'}"
-          ?hidden="${this.headerHidden}"
-          @click="${this.#onHeaderClick}"
-        >
-          <span id="title" part="title" dir="auto" title="${title}">${title}</span>
-          <span part="header-toggle"></span>
-        </button>
-        <div id="toolbar" part="toolbar" ?hidden="${collapsed}">
+        ${this.#renderHeader(collapsed)}
+        <div id="toolbar" part="toolbar" ?hidden="${collapsed || toolbarHidden}">
           <div part="toolbar-group">
-            <slot name="toolbar-sidebar" ${slotContent(this._renderSidebarButton())}></slot>
-            <slot name="toolbar-previous-page" ${slotContent(this._renderPreviousPageButton())}></slot>
-            <slot name="toolbar-next-page" ${slotContent(this._renderNextPageButton())}></slot>
-            <slot name="toolbar-page" ${slotContent(this._renderPageField())}></slot>
+            <slot name="toolbar-sidebar" ${content(this._renderSidebarButton())}></slot>
+            <slot name="toolbar-previous-page" ${content(this._renderPreviousPageButton())}></slot>
+            <slot name="toolbar-next-page" ${content(this._renderNextPageButton())}></slot>
+            <slot name="toolbar-page" ${content(this._renderPageField())}></slot>
           </div>
           <div part="toolbar-group">
-            <slot name="toolbar-zoom-out" ${slotContent(this._renderZoomOutButton())}></slot>
-            <slot name="toolbar-zoom" ${slotContent(this._renderZoomSelect())}></slot>
-            <slot name="toolbar-zoom-in" ${slotContent(this._renderZoomInButton())}></slot>
+            <slot name="toolbar-zoom-out" ${content(this._renderZoomOutButton())}></slot>
+            <slot name="toolbar-zoom" ${content(this._renderZoomSelect())}></slot>
+            <slot name="toolbar-zoom-in" ${content(this._renderZoomInButton())}></slot>
           </div>
           <div part="toolbar-group">
             <slot name="toolbar-actions"></slot>
-            <slot name="toolbar-download" ${slotContent(this._renderDownloadButton())}></slot>
+            <slot name="toolbar-download" ${content(this._renderDownloadButton())}></slot>
           </div>
         </div>
       `;
@@ -282,6 +297,32 @@ export const PdfViewerToolbarMixin = (superClass) =>
             .text="${this.__effectiveI18n.download}"
           ></vaadin-tooltip>
         </vaadin-button>
+      `;
+    }
+
+    /**
+     * Returns the template of the header. It is a button that collapses and
+     * expands the toolbar, or only a title while the toolbar is hidden.
+     * @private
+     */
+    #renderHeader(collapsed) {
+      const title = this.headerTitle || this._getDocumentName() || this.__effectiveI18n.document;
+      const titleTemplate = html`<span id="title" part="title" dir="auto" title="${title}">${title}</span>`;
+      if (this.toolbarHidden) {
+        return html`<div part="header" ?hidden="${this.headerHidden}">${titleTemplate}</div>`;
+      }
+
+      return html`
+        <button
+          part="header"
+          aria-controls="toolbar"
+          aria-expanded="${collapsed ? 'false' : 'true'}"
+          ?hidden="${this.headerHidden}"
+          @click="${this.#onHeaderClick}"
+        >
+          ${titleTemplate}
+          <span part="header-toggle"></span>
+        </button>
       `;
     }
 

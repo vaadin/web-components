@@ -131,6 +131,14 @@ describe('sidebar', () => {
     expect(viewer.hasAttribute('sidebar-opened')).to.be.false;
   });
 
+  it('should open the sidebar with sidebarOpened while the toolbar is hidden', async () => {
+    viewer.toolbarHidden = true;
+    viewer.sidebarOpened = true;
+    await nextRender();
+    expect(sidebar.checkVisibility()).to.be.true;
+    expect(getThumbnails()).to.have.lengthOf(viewer.pageCount);
+  });
+
   it('should close the sidebar with the toolbar button without a document', async () => {
     viewer.sidebarOpened = true;
     viewer.src = undefined;
@@ -310,6 +318,15 @@ describe('sidebar', () => {
 
     it('should move focus to the pages when the sidebar closes with the toolbar collapsed', async () => {
       viewer.toolbarCollapsed = true;
+      await nextRender();
+      thumbnails[0].focus();
+      viewer.sidebarOpened = false;
+      await nextRender();
+      expect(viewer.shadowRoot!.activeElement).to.equal(content);
+    });
+
+    it('should move focus to the pages when the sidebar closes with the toolbar hidden', async () => {
+      viewer.toolbarHidden = true;
       await nextRender();
       thumbnails[0].focus();
       viewer.sidebarOpened = false;
