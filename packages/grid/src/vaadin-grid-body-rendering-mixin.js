@@ -81,18 +81,24 @@ export const BodyRenderingMixin = (superClass) =>
       const visibleColumns = columns.filter((column) => !column.hidden);
       const { index } = row;
       const model = this.__getRowModel(row);
+      const isExpanded = !!model.expanded;
+      const isCollapsed = !!this.__isRowExpandable(row);
+
+      // Set level for the expandable rows itself, and all the nested rows.
+      const hasLevel = model.level > 0 || isExpanded || isCollapsed;
 
       return {
         rowId: row.__id,
         item: this.__getRowItem(row),
         model,
         ariaRowIndex: index === undefined ? undefined : index + this.__a11yGetHeaderRowCount(this._columnTree) + 1,
+        ariaLevel: hasLevel ? model.level + 1 : undefined,
         isFirstRow: index === 0,
         isLastRow: index === this._flatSize - 1,
         isOddRow: index % 2 === 1,
         isEvenRow: index % 2 === 0,
-        isExpanded: !!model.expanded,
-        isCollapsed: !!this.__isRowExpandable(row),
+        isExpanded,
+        isCollapsed,
         isSelected: !!model.selected,
         isNonselectable: this.__isItemSelectable(model.item) === false,
         isDetailsOpened: !!model.detailsOpened,
@@ -111,6 +117,7 @@ export const BodyRenderingMixin = (superClass) =>
       item,
       model,
       ariaRowIndex,
+      ariaLevel,
       isFirstRow,
       isLastRow,
       isOddRow,
@@ -141,6 +148,7 @@ export const BodyRenderingMixin = (superClass) =>
           part="row body-row${partMap(rowParts)}"
           class="row body-row${classMap(rowParts)}"
           aria-rowindex="${ifDefined(ariaRowIndex)}"
+          aria-level="${ifDefined(ariaLevel)}"
           ?first="${isFirstRow}"
           ?last="${isLastRow}"
           ?odd="${isOddRow}"

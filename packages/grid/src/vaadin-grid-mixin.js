@@ -450,7 +450,6 @@ export const GridMixin = (superClass) =>
 
       this._toggleDetailsCell(row, model.detailsOpened);
 
-      this.__a11yUpdateRowLevel(row, model.level);
       this.__a11yUpdateRowSelected(row, model.selected);
 
       this._filterDragAndDrop(row, model);
