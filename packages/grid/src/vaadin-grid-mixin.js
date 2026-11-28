@@ -411,9 +411,11 @@ export const GridMixin = (superClass) =>
       this.__renderBodyDebouncer?.cancel();
 
       iterateChildren(this.$.items, (row) => {
-        this.__updateRow(row, { skipRenderers: true });
+        this.__updateRow(row);
       });
 
+      this.__invalidateHeaderCellContent();
+      this.__invalidateFooterCellContent();
       this.__renderHeaderFooter();
       this.__renderSizer();
 
