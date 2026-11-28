@@ -35,6 +35,7 @@ yarn workspace @vaadin/manifest-tools compare --base origin/main
 | `lib/cem-helpers.ts`                 | Shared helpers that read packages and manifests.                         |
 | `lib/split-paths.ts`                 | Functions that map module paths and split the root manifest per package. |
 | `lib/api-snapshot.ts`                | Pure functions that build the snapshots, the diff and the PR comment.    |
+| `lib/web-types.ts`                   | Functions that build the plain and the Lit web-types of a package.       |
 | `lib/web-types-schema.ts`            | Types of the web-types fields that the tooling writes and reads.         |
 | `lib/plugin-types.ts`                | Types of the analyzer plugin hooks, with the items of schema 2.1.0.      |
 | `types/analyzer-utils.d.ts`          | Types of the internal analyzer helpers that the plugins import.          |
