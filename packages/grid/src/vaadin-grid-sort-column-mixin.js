@@ -30,7 +30,7 @@ export const GridSortColumnMixin = (superClass) =>
     }
 
     static get observers() {
-      return ['_onHeaderRendererOrBindingChanged(_headerRenderer, _headerCell, path, header, direction)'];
+      return ['_onHeaderRendererOrBindingChanged(_headerRenderer, path, header, direction)'];
     }
 
     constructor() {

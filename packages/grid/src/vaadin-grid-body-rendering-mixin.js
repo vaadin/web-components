@@ -60,6 +60,25 @@ export const BodyRenderingMixin = (superClass) =>
         cell.__parentRow = row;
       });
       row.__cells = cells.filter((cell) => cell.classList.contains('body-cell'));
+
+      this.#runInvalidatedRenderers(row);
+    }
+
+    /** @private */
+    __invalidateBodyRenderers({ cell, row, column } = {}) {
+      let target;
+      if (cell) {
+        target = cell;
+      } else if (row && column) {
+        target = column._cells?.find((columnCell) => columnCell.__parentRow === row);
+      } else {
+        target = row ?? column ?? this;
+      }
+
+      if (target) {
+        target.__bodyRendererRev ??= 0;
+        target.__bodyRendererRev += 1;
+      }
     }
 
     /** @private */
@@ -221,6 +240,7 @@ export const BodyRenderingMixin = (superClass) =>
                     class="cell details-cell"
                     tabindex="-1"
                     frozen
+                    ?hidden="${!isDetailsOpened}"
                     @keydown="${this.__onCellKeyDown}"
                     @mousedown="${this.__onCellMouseDown}"
                     @mouseenter="${this.__onCellMouseEnter}"
@@ -247,4 +267,35 @@ export const BodyRenderingMixin = (superClass) =>
         `,
       );
     };
+
+    #runInvalidatedRenderers(row) {
+      if (row.hidden || !row._item) {
+        return;
+      }
+
+      const model = this.__getRowModel(row);
+
+      [...row.children].forEach((cell) => {
+        const column = cell._column;
+        const renderer = column ? column._getBodyCellRenderer?.(cell) : this.rowDetailsRenderer;
+        if (!renderer || cell.hidden || column?.isConnected === false) {
+          return;
+        }
+
+        const rev = [this, column, row, cell].map((target) => target?.__bodyRendererRev).join(':');
+        if (rev === cell._renderedRev) {
+          return;
+        }
+
+        if (column && cell._renderer !== renderer) {
+          column._clearCellContent(cell);
+        }
+
+        cell._renderer = renderer;
+        cell._renderedRev = rev;
+
+        const owner = column ?? this;
+        renderer.call(owner, cell._content, owner, model);
+      });
+    }
   };

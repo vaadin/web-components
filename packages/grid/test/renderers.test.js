@@ -3,7 +3,7 @@ import { fixtureSync, nextFrame } from '@vaadin/testing-helpers';
 import sinon from 'sinon';
 import './grid-test-styles.js';
 import '../src/vaadin-grid.js';
-import { flushGrid, getBodyCellContent, getCell, getContainerCell } from './helpers.js';
+import { flushGrid, getBodyCellContent, getCell, getContainerCell, getPhysicalItems } from './helpers.js';
 
 function getHeaderCell(grid, index = 0) {
   return grid.$.header.querySelectorAll('[part~="cell"]')[index];
@@ -290,6 +290,15 @@ describe('renderers', () => {
 
       expect(footerCell._content.textContent).to.be.empty;
     });
+  });
+
+  it('should run the renderer once for each body cell on initial render', () => {
+    // Use more items than fit into the viewport
+    grid.items = Array.from({ length: 100 }, (_, index) => ({ foo: `item ${index}` }));
+    column.renderer = sinon.spy();
+    flushGrid(grid);
+
+    expect(column.renderer).to.have.callCount(getPhysicalItems(grid).length);
   });
 
   it('should run renderers when requesting content update', () => {

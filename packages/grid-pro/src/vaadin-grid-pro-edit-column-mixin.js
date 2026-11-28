@@ -214,37 +214,43 @@ export const GridProEditColumnMixin = (superClass) =>
       return get(path, editor);
     }
 
+    /** @protected */
+    _getBodyCellRenderer(cell) {
+      if (cell === this.__editedCell) {
+        return this.editModeRenderer || this.__editModeRenderer;
+      }
+
+      return super._getBodyCellRenderer(cell);
+    }
+
     /** @private */
-    _renderEditor(cell, model) {
-      cell.__savedRenderer = this._renderer || cell._renderer;
-      cell._renderer = this.editModeRenderer || this.__editModeRenderer;
+    _renderEditor(cell, _model) {
+      this.__editedCell = cell;
 
       // Remove role to avoid announcing button while editing
       if (cell._focusButton) {
         cell._focusButton.removeAttribute('role');
       }
 
-      this._clearCellContent(cell);
-      this._runRenderer(cell._renderer, cell, model);
+      this._grid.__invalidateBodyRenderers({ cell });
+      this._grid.__renderBodyRow(cell.__parentRow);
     }
 
     /** @private */
     _removeEditor(cell, _model) {
-      if (!cell.__savedRenderer) {
+      if (this.__editedCell !== cell) {
         return;
       }
 
-      cell._renderer = cell.__savedRenderer;
-      cell.__savedRenderer = undefined;
-
-      this._clearCellContent(cell);
+      this.__editedCell = undefined;
 
       // Restore previously removed role attribute
       if (cell._focusButton) {
         cell._focusButton.setAttribute('role', 'button');
       }
 
-      this.__renderCellsContent(cell._renderer, [cell]);
+      this._grid.__invalidateBodyRenderers({ cell });
+      this._grid.__renderBodyRow(cell.__parentRow);
     }
 
     /** @private */

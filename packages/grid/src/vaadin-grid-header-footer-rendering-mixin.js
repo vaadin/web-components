@@ -80,6 +80,20 @@ export const HeaderFooterRenderingMixin = (superClass) =>
       this.__a11yUpdateGridSize(this._flatSize, this._columnTree, this.__emptyState);
     }
 
+    /** @private */
+    __invalidateHeaderRenderers({ column } = {}) {
+      const target = column ?? this;
+      target.__headerRendererRev ??= 0;
+      target.__headerRendererRev += 1;
+    }
+
+    /** @private */
+    __invalidateFooterRenderers({ column } = {}) {
+      const target = column ?? this;
+      target.__footerRendererRev ??= 0;
+      target.__footerRendererRev += 1;
+    }
+
     #renderHeader(columnTree) {
       const rows = this.#getRows(columnTree, 'header');
       render(rows.map(this.#headerRowTemplate), this.$.header, { host: this });
@@ -94,6 +108,10 @@ export const HeaderFooterRenderingMixin = (superClass) =>
         } else {
           column._emptyCells.push(cell);
         }
+      });
+
+      columnTree.flat().forEach((column) => {
+        this.#runInvalidatedRenderers(column, column._headerCell, column._headerRenderer, '__headerRendererRev');
       });
     }
 
@@ -177,6 +195,10 @@ export const HeaderFooterRenderingMixin = (superClass) =>
         } else {
           column._emptyCells.push(cell);
         }
+      });
+
+      columnTree.flat().forEach((column) => {
+        this.#runInvalidatedRenderers(column, column._footerCell, column._footerRenderer, '__footerRendererRev');
       });
     }
 
@@ -279,5 +301,25 @@ export const HeaderFooterRenderingMixin = (superClass) =>
           isLastRow: row === visibleRows.at(-1),
         };
       });
+    }
+
+    #runInvalidatedRenderers(column, cell, renderer, revProperty) {
+      if (!cell?.isConnected || !renderer) {
+        return;
+      }
+
+      const rev = [this, column].map((target) => target[revProperty]).join(':');
+      if (rev === cell._renderedRev) {
+        return;
+      }
+
+      if (cell._renderer !== renderer) {
+        column._clearCellContent(cell);
+      }
+
+      cell._renderer = renderer;
+      cell._renderedRev = rev;
+
+      renderer.call(column, cell._content, column);
     }
   };

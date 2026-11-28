@@ -93,30 +93,6 @@ export const RowDetailsMixin = (superClass) =>
       });
     }
 
-    /**
-     * @param {!HTMLElement} row
-     * @param {boolean} detailsOpened
-     * @protected
-     */
-    _toggleDetailsCell(row, detailsOpened) {
-      const cell = row.querySelector('.details-cell');
-      if (!cell) {
-        return;
-      }
-
-      cell.hidden = !detailsOpened;
-
-      if (cell.hidden) {
-        return;
-      }
-
-      // Assigns a renderer when the details cell is opened.
-      // The details cell content is rendered later in the `__updateRow` method.
-      if (this.rowDetailsRenderer) {
-        cell._renderer = this.rowDetailsRenderer;
-      }
-    }
-
     /** @protected */
     _updateDetailsCellHeight(row) {
       this.__updateDetailsRowPadding(row);

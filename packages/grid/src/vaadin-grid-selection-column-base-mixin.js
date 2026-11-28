@@ -102,7 +102,7 @@ export const GridSelectionColumnBaseMixin = (superClass) =>
 
     static get observers() {
       return [
-        '_onHeaderRendererOrBindingChanged(_headerRenderer, _headerCell, path, header, selectAll, _indeterminate, _selectAllHidden)',
+        '_onHeaderRendererOrBindingChanged(_headerRenderer, path, header, selectAll, _indeterminate, _selectAllHidden)',
       ];
     }
 

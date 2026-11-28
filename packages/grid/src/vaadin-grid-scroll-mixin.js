@@ -343,6 +343,10 @@ export const ScrollMixin = (superClass) =>
       });
 
       if (changedColumns.length > 0) {
+        changedColumns.forEach((column) => {
+          this.__invalidateBodyRenderers({ column });
+        });
+
         [...this.$.items.children].forEach((row) => {
           this.__updateRow(row, { skipRenderers: true });
         });

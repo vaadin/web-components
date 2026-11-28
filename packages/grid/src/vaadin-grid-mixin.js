@@ -414,18 +414,18 @@ export const GridMixin = (superClass) =>
         this.__updateRow(row);
       });
 
+      this.__invalidateHeaderRenderers();
+      this.__invalidateFooterRenderers();
       this.__renderHeaderFooter();
       this.__renderSizer();
 
       this._columnTree.at(-1).forEach((column) => {
-        column._cells = [...(column._cells ?? [])];
         column.performUpdate?.();
       });
 
       this.__updateHorizontalScrollPosition();
       this.__a11yUpdateHeaderRows();
       this.__a11yUpdateFooterRows();
-      this.__updateHeaderAndFooter();
     }
 
     /**
@@ -438,6 +438,10 @@ export const GridMixin = (superClass) =>
       if (item) {
         // Set the item before rendering, the row template reads the row model
         row._item = item;
+
+        if (!skipRenderers) {
+          this.__invalidateBodyRenderers({ row });
+        }
       }
 
       this.__renderBodyRow(row);
@@ -448,24 +452,10 @@ export const GridMixin = (superClass) =>
 
       const model = this.__getRowModel(row);
 
-      this._toggleDetailsCell(row, model.detailsOpened);
-
       this.__a11yUpdateRowSelected(row, model.selected);
 
       this._filterDragAndDrop(row, model);
       this.__updateDragSourceParts(row, model);
-
-      if (!skipRenderers) {
-        iterateChildren(row, (cell) => {
-          if (cell._column && !cell._column.isConnected) {
-            return;
-          }
-          if (cell._renderer) {
-            const owner = cell._column || this;
-            cell._renderer.call(owner, cell._content, owner, model);
-          }
-        });
-      }
 
       this._updateDetailsCellHeight(row);
 
@@ -528,21 +518,12 @@ export const GridMixin = (superClass) =>
      */
     requestContentUpdate() {
       // Header and footer renderers
-      this.__updateHeaderAndFooter();
+      this.__invalidateHeaderRenderers();
+      this.__invalidateFooterRenderers();
+      this.__renderHeaderFooter();
 
       // Body and row details renderers
       this.__updateVisibleRows();
-    }
-
-    /** @private */
-    __updateHeaderAndFooter() {
-      (this._columnTree || []).forEach((level) => {
-        level.forEach((column) => {
-          if (column._renderHeaderAndFooter) {
-            column._renderHeaderAndFooter();
-          }
-        });
-      });
     }
 
     /** @protected */
