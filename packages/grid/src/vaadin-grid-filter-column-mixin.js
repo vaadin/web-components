@@ -26,6 +26,10 @@ export const GridFilterColumnMixin = (superClass) =>
       };
     }
 
+    static get observers() {
+      return ['_onHeaderRendererOrBindingChanged(_headerRenderer, _headerCell, path, header)'];
+    }
+
     /**
      * Renders the grid filter with the custom text field to the header cell.
      *
