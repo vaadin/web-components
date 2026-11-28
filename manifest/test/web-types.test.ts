@@ -76,14 +76,20 @@ describe('createPlainWebTypes', () => {
     assert.equal(webTypes.contributions.html!.elements![0].deprecated, true);
   });
 
-  test('should sanitize Closure types of properties', () => {
-    const [element] = createPlainWebTypes(PACKAGE_JSON, [closureElement()]).contributions.html!.elements!;
+  test('should split property types at top-level unions', () => {
+    const cases: Array<[string, string[]]> = [
+      ['function(DatePickerDate): boolean | undefined', ['function(DatePickerDate): boolean', 'undefined']],
+      ['!GridBodyRenderer | null | undefined', ['GridBodyRenderer', 'null', 'undefined']],
+      ['!Array<!ComboBoxItem | string> | undefined', ['Array<ComboBoxItem | string>', 'undefined']],
+      ['(item: GridItem) => boolean', ['(item: GridItem) => boolean']],
+      ['!Array<!AccordionPanel>', ['Array<AccordionPanel>']],
+    ];
+    const members = cases.map(([text], i) => ({ kind: 'field' as const, name: `p${i}`, type: { text } }));
+    const [element] = createPlainWebTypes(PACKAGE_JSON, [{ ...closureElement(), members }]).contributions.html!
+      .elements!;
     assert.deepEqual(
       element.js!.properties!.map((prop) => prop.value!.type),
-      [
-        ['function DatePickerDate: boolean', 'undefined'],
-        ['GridBodyRenderer', 'null', 'undefined'],
-      ],
+      cases.map(([, type]) => type),
     );
   });
 
