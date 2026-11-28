@@ -491,6 +491,10 @@ export const TooltipMixin = (superClass) =>
       target.removeEventListener('mousedown', this.__onMouseDown);
 
       this.__targetVisibilityObserver.unobserve(target);
+
+      // No mouseleave or focusout can be received for this target anymore.
+      this.__hoverInside = false;
+      this.__focusInside = false;
     }
 
     /** @private */

@@ -493,6 +493,45 @@ describe('vaadin-tooltip', () => {
       expect(tooltip.hasAttribute('opened')).to.be.false;
       expect(overlay.opened).to.be.false;
     });
+
+    it('should open on mouseenter after being reattached while hovered', async () => {
+      mouseenter(target);
+
+      const parent = tooltip.parentElement;
+      tooltip.remove();
+      parent.appendChild(tooltip);
+
+      mouseenter(target);
+      await nextUpdate(tooltip);
+      expect(overlay.opened).to.be.true;
+    });
+
+    it('should open on mouseenter of a new target set while hovered', async () => {
+      mouseenter(target);
+
+      const newTarget = fixtureSync('<div></div>');
+      tooltip.target = newTarget;
+      await nextUpdate(tooltip);
+      escKeyDown(document.body);
+
+      mouseenter(newTarget);
+      await nextUpdate(tooltip);
+      expect(overlay.opened).to.be.true;
+    });
+
+    it('should close on mouseleave after being reattached while keyboard focused', async () => {
+      tabKeyDown(target);
+      target.focus();
+
+      const parent = tooltip.parentElement;
+      tooltip.remove();
+      parent.appendChild(tooltip);
+
+      mouseenter(target);
+      mouseleave(target);
+      await nextUpdate(tooltip);
+      expect(overlay.opened).to.be.false;
+    });
   });
 
   describe('inside a scrollable container', () => {
