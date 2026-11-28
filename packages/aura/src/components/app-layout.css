@@ -1,6 +1,6 @@
 :where(:root),
 :where(:host) {
-  --aura-app-layout-inset: 1.5vmin;
+  --aura-app-layout-inset: round(1.5vmin, 1px);
   --aura-app-layout-radius: var(--vaadin-radius-l);
   --aura-app-layout-border-width: 1px;
   --vaadin-app-layout-navbar-padding-top: max(var(--aura-app-layout-inset), var(--vaadin-padding-s));
