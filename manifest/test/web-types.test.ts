@@ -26,6 +26,18 @@ const element = (): ElementDeclaration => ({
   events: [{ name: 'value-changed', type: { text: 'CustomEvent' }, description: 'Fired on change' }],
 });
 
+const closureElement = (): ElementDeclaration => ({
+  kind: 'class',
+  customElement: true,
+  name: 'X',
+  tagName: 'vaadin-x',
+  description: '```html\n<vaadin-x></vaadin-x>\n```\n\n```js\nx.open();\n```',
+  members: [
+    { kind: 'field', name: 'isDateDisabled', type: { text: 'function(DatePickerDate): boolean | undefined' } },
+    { kind: 'field', name: 'renderer', type: { text: '!GridBodyRenderer | null | undefined' } },
+  ],
+});
+
 describe('createPlainWebTypes', () => {
   test('should write the attributes, properties and events of an element', () => {
     assert.deepEqual(createPlainWebTypes(PACKAGE_JSON, [element()]), {
@@ -63,6 +75,22 @@ describe('createPlainWebTypes', () => {
     const webTypes = createPlainWebTypes(PACKAGE_JSON, [{ ...element(), deprecated: true }]);
     assert.equal(webTypes.contributions.html!.elements![0].deprecated, true);
   });
+
+  test('should sanitize Closure types of properties', () => {
+    const [element] = createPlainWebTypes(PACKAGE_JSON, [closureElement()]).contributions.html!.elements!;
+    assert.deepEqual(
+      element.js!.properties!.map((prop) => prop.value!.type),
+      [
+        ['function DatePickerDate: boolean', 'undefined'],
+        ['GridBodyRenderer', 'null', 'undefined'],
+      ],
+    );
+  });
+
+  test('should remove blank lines between code examples in a description', () => {
+    const [element] = createPlainWebTypes(PACKAGE_JSON, [closureElement()]).contributions.html!.elements!;
+    assert.equal(element.description, '```html\n<vaadin-x></vaadin-x>\n```\n```js\nx.open();\n```');
+  });
 });
 
 describe('createLitWebTypes', () => {
@@ -97,5 +125,13 @@ describe('createLitWebTypes', () => {
         },
       },
     });
+  });
+
+  test('should bind a function property that returns boolean as a property', () => {
+    const [element] = createLitWebTypes(PACKAGE_JSON, [closureElement()]).contributions.html!.elements!;
+    assert.deepEqual(
+      element.attributes!.map((attr) => attr.name),
+      ['.isDateDisabled', '.renderer'],
+    );
   });
 });
