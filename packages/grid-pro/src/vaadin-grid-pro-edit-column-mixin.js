@@ -232,7 +232,7 @@ export const GridProEditColumnMixin = (superClass) =>
         cell._focusButton.removeAttribute('role');
       }
 
-      this._grid.__invalidateBodyCellContent({ cell });
+      this._grid.__invalidateBodyRenderers({ cell });
       this._grid.__renderBodyRow(cell.__parentRow);
     }
 
@@ -249,7 +249,7 @@ export const GridProEditColumnMixin = (superClass) =>
         cell._focusButton.setAttribute('role', 'button');
       }
 
-      this._grid.__invalidateBodyCellContent({ cell });
+      this._grid.__invalidateBodyRenderers({ cell });
       this._grid.__renderBodyRow(cell.__parentRow);
     }
 

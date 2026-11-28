@@ -414,8 +414,8 @@ export const GridMixin = (superClass) =>
         this.__updateRow(row);
       });
 
-      this.__invalidateHeaderCellContent();
-      this.__invalidateFooterCellContent();
+      this.__invalidateHeaderRenderers();
+      this.__invalidateFooterRenderers();
       this.__renderHeaderFooter();
       this.__renderSizer();
 
@@ -440,7 +440,7 @@ export const GridMixin = (superClass) =>
         row._item = item;
 
         if (!skipRenderers) {
-          this.__invalidateBodyCellContent({ row });
+          this.__invalidateBodyRenderers({ row });
         }
       }
 
@@ -518,8 +518,8 @@ export const GridMixin = (superClass) =>
      */
     requestContentUpdate() {
       // Header and footer renderers
-      this.__invalidateHeaderCellContent();
-      this.__invalidateFooterCellContent();
+      this.__invalidateHeaderRenderers();
+      this.__invalidateFooterRenderers();
       this.__renderHeaderFooter();
 
       // Body and row details renderers

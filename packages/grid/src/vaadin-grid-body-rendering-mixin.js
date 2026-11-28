@@ -61,11 +61,11 @@ export const BodyRenderingMixin = (superClass) =>
       });
       row.__cells = cells.filter((cell) => cell.classList.contains('body-cell'));
 
-      this.#renderBodyRowCellContent(row);
+      this.#runInvalidatedRenderers(row);
     }
 
     /** @private */
-    __invalidateBodyCellContent({ cell, row, column } = {}) {
+    __invalidateBodyRenderers({ cell, row, column } = {}) {
       let target;
       if (cell) {
         target = cell;
@@ -76,8 +76,8 @@ export const BodyRenderingMixin = (superClass) =>
       }
 
       if (target) {
-        target.__bodyCellContentRev ??= 0;
-        target.__bodyCellContentRev += 1;
+        target.__bodyRendererRev ??= 0;
+        target.__bodyRendererRev += 1;
       }
     }
 
@@ -268,7 +268,7 @@ export const BodyRenderingMixin = (superClass) =>
       );
     };
 
-    #renderBodyRowCellContent(row) {
+    #runInvalidatedRenderers(row) {
       if (row.hidden || !row._item) {
         return;
       }
@@ -282,7 +282,7 @@ export const BodyRenderingMixin = (superClass) =>
           return;
         }
 
-        const rev = [this, column, row, cell].map((target) => target?.__bodyCellContentRev).join(':');
+        const rev = [this, column, row, cell].map((target) => target?.__bodyRendererRev).join(':');
         if (rev === cell._renderedRev) {
           return;
         }

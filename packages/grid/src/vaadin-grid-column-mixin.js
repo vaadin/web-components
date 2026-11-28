@@ -490,19 +490,19 @@ export const ColumnBaseMixin = (superClass) =>
 
     /** @protected */
     _onRendererOrBindingChanged() {
-      this._grid?.__invalidateBodyCellContent?.({ column: this });
+      this._grid?.__invalidateBodyRenderers?.({ column: this });
       this._grid?.__renderBody?.();
     }
 
     /** @protected */
     _onHeaderRendererOrBindingChanged() {
-      this._grid?.__invalidateHeaderCellContent?.({ column: this });
+      this._grid?.__invalidateHeaderRenderers?.({ column: this });
       this._grid?.__renderHeaderFooter?.();
     }
 
     /** @protected */
     _onFooterRendererOrBindingChanged() {
-      this._grid?.__invalidateFooterCellContent?.({ column: this });
+      this._grid?.__invalidateFooterRenderers?.({ column: this });
       this._grid?.__renderHeaderFooter?.();
     }
 

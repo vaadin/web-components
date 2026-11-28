@@ -81,17 +81,17 @@ export const HeaderFooterRenderingMixin = (superClass) =>
     }
 
     /** @private */
-    __invalidateHeaderCellContent({ column } = {}) {
+    __invalidateHeaderRenderers({ column } = {}) {
       const target = column ?? this;
-      target.__headerCellContentRev ??= 0;
-      target.__headerCellContentRev += 1;
+      target.__headerRendererRev ??= 0;
+      target.__headerRendererRev += 1;
     }
 
     /** @private */
-    __invalidateFooterCellContent({ column } = {}) {
+    __invalidateFooterRenderers({ column } = {}) {
       const target = column ?? this;
-      target.__footerCellContentRev ??= 0;
-      target.__footerCellContentRev += 1;
+      target.__footerRendererRev ??= 0;
+      target.__footerRendererRev += 1;
     }
 
     #renderHeader(columnTree) {
@@ -111,12 +111,7 @@ export const HeaderFooterRenderingMixin = (superClass) =>
       });
 
       columnTree.flat().forEach((column) => {
-        this.#renderHeaderFooterCellContent(
-          column,
-          column._headerCell,
-          column._headerRenderer,
-          '__headerCellContentRev',
-        );
+        this.#runInvalidatedRenderers(column, column._headerCell, column._headerRenderer, '__headerRendererRev');
       });
     }
 
@@ -203,12 +198,7 @@ export const HeaderFooterRenderingMixin = (superClass) =>
       });
 
       columnTree.flat().forEach((column) => {
-        this.#renderHeaderFooterCellContent(
-          column,
-          column._footerCell,
-          column._footerRenderer,
-          '__footerCellContentRev',
-        );
+        this.#runInvalidatedRenderers(column, column._footerCell, column._footerRenderer, '__footerRendererRev');
       });
     }
 
@@ -313,7 +303,7 @@ export const HeaderFooterRenderingMixin = (superClass) =>
       });
     }
 
-    #renderHeaderFooterCellContent(column, cell, renderer, revProperty) {
+    #runInvalidatedRenderers(column, cell, renderer, revProperty) {
       if (!cell?.isConnected || !renderer) {
         return;
       }
