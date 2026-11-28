@@ -259,6 +259,9 @@ export const ColumnBaseMixin = (superClass) =>
         '_textAlignChanged(textAlign)',
         '_lastFrozenChanged(_lastFrozen)',
         '_firstFrozenToEndChanged(_firstFrozenToEnd)',
+        '_onRendererOrBindingChanged(_renderer, path)',
+        '_onHeaderRendererOrBindingChanged(_headerRenderer, path, header)',
+        '_onFooterRendererOrBindingChanged(_footerRenderer)',
         '_resizableChanged(resizable)',
         '_reorderStatusChanged(_reorderStatus, _headerCell, _footerCell, _cells)',
         '_hiddenChanged(hidden, _headerCell, _footerCell, _cells)',
@@ -321,21 +324,6 @@ export const ColumnBaseMixin = (superClass) =>
         el = el.assignedSlot ? el.assignedSlot.parentNode : el.parentNode;
       }
       return el || undefined;
-    }
-
-    /** @protected */
-    updated(props) {
-      super.updated(props);
-
-      if (props.has('_headerRenderer') || props.has('path') || props.has('header')) {
-        this._grid?.__invalidateHeaderCellContent?.({ column: this });
-        this._grid?.__renderHeaderFooter?.();
-      }
-
-      if (props.has('_footerRenderer')) {
-        this._grid?.__invalidateFooterCellContent?.({ column: this });
-        this._grid?.__renderHeaderFooter?.();
-      }
     }
 
     /** @private */
@@ -498,6 +486,24 @@ export const ColumnBaseMixin = (superClass) =>
       // When clearing the rendered content, this part needs to be manually disposed of.
       // Otherwise, using a Lit-based renderer on the same node will throw an exception or render nothing afterward.
       delete cell._content._$litPart$;
+    }
+
+    /** @protected */
+    _onRendererOrBindingChanged() {
+      this._grid?.__invalidateBodyCellContent?.({ column: this });
+      this._grid?.__renderBody?.();
+    }
+
+    /** @protected */
+    _onHeaderRendererOrBindingChanged() {
+      this._grid?.__invalidateHeaderCellContent?.({ column: this });
+      this._grid?.__renderHeaderFooter?.();
+    }
+
+    /** @protected */
+    _onFooterRendererOrBindingChanged() {
+      this._grid?.__invalidateFooterCellContent?.({ column: this });
+      this._grid?.__renderHeaderFooter?.();
     }
 
     /** @private */
@@ -724,16 +730,6 @@ export const GridColumnMixin = (superClass) =>
           type: Array,
         },
       };
-    }
-
-    /** @protected */
-    updated(props) {
-      super.updated(props);
-
-      if (props.has('_renderer') || props.has('path')) {
-        this._grid?.__invalidateBodyCellContent?.({ column: this });
-        this._grid?.__renderBody?.();
-      }
     }
 
     /** @protected */

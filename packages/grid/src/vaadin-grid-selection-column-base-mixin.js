@@ -100,14 +100,10 @@ export const GridSelectionColumnBaseMixin = (superClass) =>
       };
     }
 
-    /** @protected */
-    updated(props) {
-      super.updated(props);
-
-      if (props.has('selectAll') || props.has('_indeterminate') || props.has('_selectAllHidden')) {
-        this._grid?.__invalidateHeaderCellContent?.({ column: this });
-        this._grid?.__renderHeaderFooter?.();
-      }
+    static get observers() {
+      return [
+        '_onHeaderRendererOrBindingChanged(_headerRenderer, path, header, selectAll, _indeterminate, _selectAllHidden)',
+      ];
     }
 
     constructor() {
