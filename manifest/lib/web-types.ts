@@ -23,17 +23,35 @@ const defaultValue = (item: { default?: string }): { default?: string } =>
   item.default === undefined ? {} : { default: item.default };
 
 /**
+ * Splits a type at the `|` of its top-level union, so the `|` inside a function
+ * type or a type argument stays in place.
+ */
+function splitUnion(text: string): string[] {
+  const parts: string[] = [];
+  let depth = 0;
+  let start = 0;
+  for (let i = 0; i < text.length; i++) {
+    const char = text[i];
+    if ('([{<'.includes(char)) {
+      depth += 1;
+    } else if (')]}'.includes(char) || (char === '>' && text[i - 1] !== '=')) {
+      depth -= 1;
+    } else if (char === '|' && depth === 0) {
+      parts.push(text.slice(start, i));
+      start = i + 1;
+    }
+  }
+  parts.push(text.slice(start));
+  return parts.map((part) => part.trim());
+}
+
+/**
  * Maps a type such as `'boolean | null | undefined'` into an array of type
- * strings, such as `['boolean', 'null', 'undefined']`
+ * strings, such as `['boolean', 'null', 'undefined']`. Drops the `!`
+ * (non-null) of Closure types.
  */
 function mapType(type?: Type): string[] {
-  const typeString = type?.text ?? '';
-  // Closure's `function(X): Y` needs a space between `function` and `X` after
-  // the parens are stripped, so rewrite `(` as a space. `!` (non-null) and `)`
-  // are dropped; consecutive spaces from the rewrite are collapsed.
-  const sanitizedTypeString = typeString.replace(/[!)]/gu, '').replace(/\(/gu, ' ').replace(/ {2,}/gu, ' ');
-  const types = sanitizedTypeString.split('|');
-  return types.map((t) => t.trim());
+  return splitUnion((type?.text ?? '').replace(/!/gu, ''));
 }
 
 /**
