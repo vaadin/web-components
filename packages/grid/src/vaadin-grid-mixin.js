@@ -411,7 +411,7 @@ export const GridMixin = (superClass) =>
       this.__renderBodyDebouncer?.cancel();
 
       iterateChildren(this.$.items, (row) => {
-        this.__updateRow(row, { invalidateContent: false });
+        this.__updateRow(row, { skipRenderers: true });
       });
 
       this.__renderHeaderFooter();
@@ -428,16 +428,16 @@ export const GridMixin = (superClass) =>
 
     /**
      * @param {!HTMLElement} row
-     * @param {{ invalidateContent?: boolean }} options
+     * @param {{ skipRenderers?: boolean }} options
      * @private
      */
-    __updateRow(row, { invalidateContent = true } = {}) {
+    __updateRow(row, { skipRenderers = false } = {}) {
       const item = this.__getRowItem(row);
       if (item) {
         // Set the item before rendering, the row template reads the row model
         row._item = item;
 
-        if (invalidateContent) {
+        if (!skipRenderers) {
           this.__invalidateBodyCellContent({ row });
         }
       }
