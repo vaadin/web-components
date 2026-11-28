@@ -19,10 +19,6 @@ export const GridTreeColumnMixin = (superClass) =>
       };
     }
 
-    static get observers() {
-      return ['_onRendererOrBindingChanged(_renderer, _cells, _bodyContentHidden, _cells.*, path)'];
-    }
-
     constructor() {
       super();
 
